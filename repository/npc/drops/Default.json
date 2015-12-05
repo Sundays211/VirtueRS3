@@ -1,6 +1,0 @@
-{
-  "rolls": 1,
-  "npcIdentifiers": [16028], //Any NPC that doesn't have loot added will not drop loot.
-  "staticDrops": [],
-  "dynamicDrops": []
-}
