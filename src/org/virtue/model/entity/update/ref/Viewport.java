@@ -1,0 +1,413 @@
+/**
+ * Copyright (c) 2014 Virtue Studios
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package org.virtue.model.entity.update.ref;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.virtue.model.World;
+import org.virtue.model.entity.npc.NPC;
+import org.virtue.model.entity.player.Player;
+import org.virtue.model.entity.region.DynamicRegion;
+import org.virtue.model.entity.region.MapSize;
+import org.virtue.model.entity.region.Region;
+import org.virtue.model.entity.region.Tile;
+import org.virtue.model.entity.routefinder.PlayerTraversalMap;
+import org.virtue.model.entity.routefinder.TraversalMap;
+import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.network.event.context.GameEventContext;
+
+/**
+ * @author Im Frizzy <skype:kfriz1998>
+ * @since Oct 18, 2014
+ */
+public class Viewport implements GameEventContext {
+	
+	/**
+	 * Represents an array of players within the current player's view
+	 */
+	private Player[] localPlayers;
+	
+	/**
+	 * Represents the npcs currently within the player's viewport
+	 */
+	private List<NPC> localNpcs;
+	
+	/**
+	 * Represents an array of players' indices within the current player's view
+	 */
+	private int[] localPlayersIndexes;
+	
+	/**
+	 * Represents the amount of local players within the current player's view
+	 */
+	private int localPlayersIndexesCount;
+
+	/**
+	 * Represents an array of players outside the current player's view
+	 */
+	private int[] outPlayersIndexes;
+	
+	/**
+	 * Represents an the amount of players outside the current player's view
+	 */
+	private int outPlayersIndexesCount;
+
+	/**
+	 * Represents an array of region hashes
+	 */
+	private int[] regionHashes;
+	
+	/**
+	 * Represents an array
+	 */
+	private byte[] slotFlags;
+	
+	/**
+	 * Represents the movement types of all active players
+	 */
+	private byte[] movementTypes;
+	
+	/**
+	 * Represents the amount of players added in the current tick
+	 */
+	private int localAddedPlayers;
+	
+	/**
+	 * Represents the array of appearance hashes cached in the current runtime
+	 */
+	private byte[][] cachedAppearencesHashes;
+	
+	/**
+	 * Represents the array of Player head icon hashes cached in the current runtime
+	 */
+	private byte[][] cachedHeadIconsHashes;
+	
+	/**
+	 * Represents the array of NPC head icon hashes cached in the current runtime
+	 */
+	private byte[][] cachedNPCHeadIconsHashes;
+	
+	/**
+	 * Represents the current player
+	 */
+	private Player player;
+	
+	/**
+	 * Represents if the player has a large scene radius
+	 */
+	private boolean largeScene;
+	
+	/**
+	 * Represents the south-western tile of the last loaded map chunk
+	 */
+	private Tile baseTile;
+	
+	/**
+	 * Represents the map regions currently used by the player
+	 */
+	private Set<Region> regions = new HashSet<Region>();
+	
+	/**
+	 * The map used for finding paths for the player
+	 */
+	private PlayerTraversalMap traversalMap;
+	
+	private boolean needsUpdate;
+	
+	public Viewport(Player player) {
+		this.player = player;
+		largeScene = false;
+		slotFlags = new byte[2048];
+		movementTypes = new byte[2048];
+		localPlayers = new Player[2048];
+		localNpcs = new LinkedList<NPC>();
+		localPlayersIndexes = new int[2048];
+		outPlayersIndexes = new int[2048];
+		regionHashes = new int[2048];
+		cachedAppearencesHashes = new byte[2048][];
+		cachedHeadIconsHashes = new byte[2048][];
+		cachedNPCHeadIconsHashes = new byte[32767][];
+		traversalMap = new PlayerTraversalMap(this);
+		player.getMovement().setTraversalMap(traversalMap);
+	}
+
+	/**
+	 * Sends the viewport initialisation.
+	 * @param stream The stream to send the initialisation into
+	 */
+	public synchronized void init(OutboundBuffer stream) {
+		if (player.getIndex() < 1 || player.getIndex() >= 2048) {
+			throw new IllegalStateException("Player index must be set to between 1 and 2047 before calling this method.");
+		}
+		stream.setBitAccess();
+		stream.putBits(30, player.getCurrentTile().getTileHash());
+		System.out.println("Player index="+player.getIndex());
+		localPlayers[player.getIndex()] = player;
+		localPlayersIndexesCount = 0;
+		outPlayersIndexesCount = 0;
+		localPlayersIndexes[localPlayersIndexesCount++] = player.getIndex();
+		for (int playerIndex = 1; playerIndex < 2048; playerIndex++) {
+			if (playerIndex == player.getIndex()) {
+				continue;
+			}
+			Player p = World.getInstance().getPlayers().get(playerIndex);
+			stream.putBits(18, regionHashes[playerIndex] = p == null ? 0 : p.getCurrentTile().getRegionHash());
+			outPlayersIndexes[outPlayersIndexesCount++] = playerIndex;
+		}
+		stream.setByteAccess();
+		moveToRegion(player.getCurrentTile(), MapSize.DEFAULT, false);
+		//baseTile = new Tile(0, 0, 0, player.getCurrentTile().getRegionID());
+	}
+	
+	/**
+	 * Repacks the viewport, in preparation for the next transmit. 
+	 */
+	public synchronized void repack () {
+		localPlayersIndexesCount = 0;
+		outPlayersIndexesCount = 0;
+		localAddedPlayers = 0;
+		for (int playerIndex = 1; playerIndex < 2048; playerIndex++) {
+			slotFlags[playerIndex] >>= 1;
+			Player player = localPlayers[playerIndex];
+			if (player == null) {
+				outPlayersIndexes[outPlayersIndexesCount++] = playerIndex;
+			} else {
+				localPlayersIndexes[localPlayersIndexesCount++] = playerIndex;
+			}
+		}
+	}
+	
+	/**
+	 * Moves the central region of the viewport to the specified tile
+	 * @param tile The tile that will become the central region
+	 * @param mapSize The size of the map
+	 * @param sendUpdate Whether to send the update to the client
+	 */
+	public synchronized void moveToRegion (Tile tile, MapSize mapSize, boolean sendUpdate) {
+		needsUpdate = false;
+		Set<Region> oldRegions = new HashSet<Region>(regions);
+		regions.clear();
+		int actualSize = mapSize.getTileCount();
+		boolean staticRegion = true;
+		for (int x = (tile.getChunkX() - (actualSize >> 4)) / 8; x <= (tile.getChunkX() + (actualSize >> 4)) / 8; x++) {
+			for (int y = (tile.getChunkY() - (actualSize >> 4)) / 8; y <= (tile.getChunkY() + (actualSize >> 4)) / 8; y++) {
+				Region region = World.getInstance().getRegions().getRegionByID(Tile.getMapSquareHash((x << 6), (y << 6)));
+				if (region != null) {
+					regions.add(region);
+					if (region instanceof DynamicRegion) {
+						staticRegion = false;
+					}
+				}
+			}
+		}
+		baseTile = tile;
+		for (Region r : oldRegions) {
+			if (!regions.contains(r)) {
+				r.removePlayer(player);//Removes the player from any region they are no longer in
+			}
+		}
+		traversalMap.reload();
+		if (sendUpdate) {
+			player.getDispatcher().sendSceneGraph(tile, mapSize, false, staticRegion);
+			onMapLoaded();
+		}
+	}
+	
+	/**
+	 * Runs cleanup tasks required on logout
+	 */
+	public synchronized void onLogout () {
+		for (Region r : regions) {
+			r.removePlayer(player);			
+		}
+	}
+	
+	/**
+	 * Performs tasks on map load, such as sending ground items
+	 */
+	public synchronized void onMapLoaded () {
+		for (Region r : regions) {
+			r.addPlayer(player);			
+		}
+	}
+	
+	/**
+	 * Checks whether the client map requires updating
+	 * @return True if the map needs updating, false otherwise
+	 */
+	public boolean needsMapUpdate () {
+		int chunkDeltaX = Math.abs(baseTile.getChunkX() - player.getCurrentTile().getChunkX());
+		int chunkDeltaY = Math.abs(baseTile.getChunkY() - player.getCurrentTile().getChunkY());
+		int size = ((Tile.REGION_SIZES[0] >> 3) / 2) - 1;
+		return needsUpdate || chunkDeltaX >= size || chunkDeltaY >= size;
+	}
+	
+	public void flagUpdate () {
+		needsUpdate = true;
+	}
+	
+	/**
+	 * Gets the map used for finding paths for the player
+	 * @return The {@link TraversalMap}
+	 */
+	public TraversalMap getTraversalMap () {
+		return traversalMap;
+	}
+	
+	/**
+	 * Gets the regions currently loaded in this viewport
+	 * @return A set of regions
+	 */
+	public Set<Region> getRegions () {
+		return regions;
+	}
+	
+	/**
+	 * Gets if the player has a large scene radius
+	 * @return
+	 */
+	public boolean isLargeScene() {
+		return largeScene;
+	}
+	
+	public Tile getBaseTile () {
+		return baseTile;
+	}
+	
+	/**
+	 * Returns the array of players within the current player's view
+	 * @return
+	 */
+	public Player[] getLocalPlayers () {
+		return localPlayers;
+	}	
+	
+	/**
+	 * Returns the set of npcs within the current player's view
+	 * @return
+	 */
+	public List<NPC> getLocalNpcs () {
+		return localNpcs;
+	}
+	
+	/**
+	 * Returns the array of slot flags
+	 * @return
+	 */
+	public byte[] getSlotFlags () {
+		return slotFlags;
+	}
+	
+	/**
+	 * Returns the array of movement types
+	 * @return
+	 */
+	public byte[] getMovementTypes () {
+		return movementTypes;
+	}
+	
+	/**
+	 * Returns the array of region hashes
+	 * @return
+	 */
+	public int[] getRegionHashes () {
+		return regionHashes;
+	}
+	
+	/**
+	 * Returns the array of cached appearances on this runtime
+	 * @return
+	 */
+	public byte[][] getAppearanceHashes () {
+		return cachedAppearencesHashes;
+	}
+	
+	/**
+	 * Returns the array of cached player head icon on this runtime
+	 * @return
+	 */
+	public byte[][] getHeadIconHashes () {
+		return cachedHeadIconsHashes;
+	}
+	
+	/**
+	 * Returns the array of cached npc head icon on this runtime
+	 * @return
+	 */
+	public byte[][] getNPCHeadIconHashes () {
+		return cachedNPCHeadIconsHashes;
+	}
+	
+	/**
+	 * Returns the array of local players indices
+	 * @return
+	 */
+	public int[] getLocalPlayerIndicies () {
+		return localPlayersIndexes;
+	}
+	
+	/**
+	 * Returns the amount of local players within the current player's view
+	 * @return
+	 */
+	public int getLocalPlayerIndexCount () {
+		return localPlayersIndexesCount;
+	}
+	
+	/**
+	 * Returns the array of players' indices outside the current player's view
+	 * @return
+	 */
+	public int[] getOutPlayerIndicies () {
+		return outPlayersIndexes;
+	}
+	
+	/**
+	 * Returns the amount of players outside the current player's view
+	 * @return
+	 */
+	public int getOutPlayerIndexCount () {
+		return outPlayersIndexesCount;
+	}
+	
+	/**
+	 * Adds a player to the current player's local players array
+	 * @param index - index of the player being added
+	 * @param player - the player ebing added to the array
+	 */
+	public synchronized void addLocalPlayer(int index, Player player) {
+		localPlayers[index] = player;
+		localAddedPlayers++;
+	}
+	
+	/**
+	 * Return the amount of local players within the player's view
+	 * @return
+	 */
+	public int getLocalAddedPlayers () {
+		return localAddedPlayers;
+	}
+
+}

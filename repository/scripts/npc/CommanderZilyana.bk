@@ -1,0 +1,139 @@
+/*
+ * James
+ */
+var api;
+var AttackHandler = Java.type('org.virtue.model.entity.combat.impl.AttackHandler');
+var AttackInfo = Java.type('org.virtue.model.entity.combat.AttackInfo');
+var AttackEvent = Java.type('org.virtue.model.entity.combat.AttackEvent');
+var SwitchAttack = Java.type('org.virtue.model.entity.combat.impl.combo.SwitchAttack');
+var SwitchAttackEvent = Java.type('org.virtue.model.entity.combat.impl.combo.SwitchAttackEvent');
+var MeleeAttackHandler = Java.extend(Java.type('org.virtue.model.entity.combat.impl.melee.MeleeAttackHandler'));
+var CombatStyle = Java.type('org.virtue.model.entity.combat.CombatStyle');
+var AbstractNPC = Java.type('org.virtue.model.entity.npc.AbstractNPC');
+var Projectile = Java.type('org.virtue.model.entity.region.packets.Projectile')
+
+var MELEE = new MeleeAttackHandler(700, 1000) {
+	getAttackInfo: function(entity, lock) {
+		return AttackInfo.create(entity, new AnimationBlock(6964), null, Java.super(MELEE).impact(entity, lock, CombatStyle.MELEE, null, null));
+	},
+};
+
+
+var SuperNPC = Java.extend(AbstractNPC);
+var CommanderZilyana = function(id, tile) {
+
+	var attackHandler = new SwitchAttackEvent(
+								new SwitchAttack(CombatStyle.MELEE, MELEE));
+	
+	return new SuperNPC(id, tile) {
+	
+
+		
+		newInstance : function(id, tile) {
+			return Nex(id, tile);
+		},
+		
+		getNextAttack : function(lock) {
+			return attackHandler;
+		},
+		
+		getIds : function() {
+			return [6247];
+		},
+	}
+
+};
+
+var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+
+	/* The location ids to bind to */
+	getIDs: function() {
+		return [84022, 26425, 26341, 26293];
+	},
+
+	/* The first option on an object */
+	handleInteraction: function(player, loc, option) {
+		switch (loc.getID()) {
+		case 26341:
+			if (option == 1) {
+				api.sendMessage(player, "<col=#333333>Welcome to God Wars Dungeon.</col>");
+				api.teleportEntity(player, 2882, 5311, 0);
+				return true;
+			} else {
+				return false;
+			}
+		case 26293:
+			if (option == 1) {
+				api.teleportEntity(player, 2916, 3739, 0);
+				return true;
+			} else {
+				return false;
+			}		
+		case 84022://
+			if (option == 1) {
+				var tile = api.getTile(loc);
+				api.teleportEntity(player, tile.getX()+1, tile.getY(), tile.getPlane());
+				return true;
+			} else {
+				return false;
+			}
+		case 26425://
+			if (option == 1) {
+				api.openDialog(player, "Bandos");
+				return true;
+			} else {
+				return false;
+			}
+			default:
+				return false;
+		}		
+	},
+	
+	/* The range that a player must be within to interact */
+	getInteractRange : function (object, option) {
+		return 1;
+	},
+	
+	/* A backpack item used on the location */
+	handleItemOnLoc : function (player, location, item, invSlot) {
+		return false;
+	}
+
+});
+
+var BandosRoom = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+	startDialog : function (player) {
+		player.getDialogs().sendMultichoice("How would you like to proceed?", ["Solo Mode", "Instanced Mode", "Enter Bandos Room"], [1, 2, 3]);
+	},
+	continueDialog : function (player, option) {
+		switch (player.getDialogs().getStep()) {
+		case -1:
+			return true;
+		case 1:
+			api.sendMessage(player, "Welcome to Bandos.");
+			api.teleportEntity(player, 2863, 5357, 0);
+			return true;
+		case 2:
+			api.sendMessage(player, "Not implemented yet.");
+			return true;
+		case 3:
+			api.sendMessage(player, "Welcome to Bandos.");
+			api.teleportEntity(player, 2863, 5357, 0);
+			return true;
+		default:
+			return true;
+		}
+		
+	},
+	finishDialog : function (player) {
+		
+	}
+});
+
+var listen = function(scriptManager) {
+	api = scriptManager.getApi();	
+	var listener = new LocationListener();
+	scriptManager.registerLocationListener(listener, listener.getIDs());
+	scriptManager.registerDialogListener(new BandosRoom(), "Bandos");
+	CommanderZilyana(6247, null).register();
+};

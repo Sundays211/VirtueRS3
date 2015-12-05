@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<exchange>
+<offer id="6a" isSell="true" owner="151" slot="2">
+<itemID>1511</itemID>
+<amount>19</amount>
+<offerPrice>233</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="69" isSell="true" owner="64b71" slot="5">
+<itemID>1050</itemID>
+<amount>1</amount>
+<offerPrice>127288643</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="6c" isSell="true" owner="2c8" slot="0">
+<itemID>1050</itemID>
+<amount>1</amount>
+<offerPrice>1</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="6c" isSell="true" owner="1dd92b00e0b86" slot="0">
+<itemID>26587</itemID>
+<amount>6</amount>
+<offerPrice>5</offerPrice>
+<processed>1</processed>
+<coinsReceived>22746364</coinsReceived>
+</offer>
+<offer id="6e" isSell="true" owner="1dd92b00e0b86" slot="1">
+<itemID>26579</itemID>
+<amount>1</amount>
+<offerPrice>1</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="66" isSell="true" owner="89cbd6279" slot="2">
+<itemID>1040</itemID>
+<amount>1</amount>
+<offerPrice>1261422299</offerPrice>
+<processed>1</processed>
+<coinsReceived>1261422298</coinsReceived>
+</offer>
+<offer id="68" isSell="false" owner="19c31eedca5b0" slot="0">
+<itemID>21777</itemID>
+<amount>1</amount>
+<offerPrice>9555812</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="69" isSell="false" owner="19c31eedca5b0" slot="1">
+<itemID>1038</itemID>
+<amount>1</amount>
+<offerPrice>1672329776</offerPrice>
+<processed>1</processed>
+<coinsReceived>1672329776</coinsReceived>
+</offer>
+<offer id="67" isSell="false" owner="167a178" slot="2">
+<itemID>11686</itemID>
+<amount>100</amount>
+<offerPrice>461499</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="68" isSell="false" owner="167a178" slot="5">
+<itemID>30099</itemID>
+<amount>1000</amount>
+<offerPrice>658846</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+</exchange>

@@ -1,0 +1,242 @@
+package org.virtue.network.event;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.virtue.model.entity.player.Player;
+import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.network.event.context.GameEventContext;
+import org.virtue.network.event.decoder.GameEventDecoder;
+import org.virtue.network.event.decoder.impl.BugReportEventDecoder;
+import org.virtue.network.event.decoder.impl.ButtonClickEventDecoder;
+import org.virtue.network.event.decoder.impl.ChatFilterEventDecoder;
+import org.virtue.network.event.decoder.impl.ChatModeEventDecoder;
+import org.virtue.network.event.decoder.impl.ChatOptionEventDecoder;
+import org.virtue.network.event.decoder.impl.CommandEventDecoder;
+import org.virtue.network.event.decoder.impl.CreationEventDecoder;
+import org.virtue.network.event.decoder.impl.EmptyEventDecoder;
+import org.virtue.network.event.decoder.impl.InputEventDecoder;
+import org.virtue.network.event.decoder.impl.ItemClickEventDecoder;
+import org.virtue.network.event.decoder.impl.LocationClickEventDecoder;
+import org.virtue.network.event.decoder.impl.NpcClickEventDecoder;
+import org.virtue.network.event.decoder.impl.PlayerClickEventDecoder;
+import org.virtue.network.event.decoder.impl.PrivateMessageEventDecoder;
+import org.virtue.network.event.decoder.impl.PublicMessageEventDecoder;
+import org.virtue.network.event.decoder.impl.SocialEventDecoder;
+import org.virtue.network.event.decoder.impl.UrlRequestEventDecoder;
+import org.virtue.network.event.decoder.impl.VarcTransmitEventDecoder;
+import org.virtue.network.event.decoder.impl.WalkEventDecoder;
+import org.virtue.network.event.decoder.impl.WidgetDragEventDecoder;
+import org.virtue.network.event.decoder.impl.WidgetOnLocEventDecoder;
+import org.virtue.network.event.decoder.impl.WidgetOnNPCDecoder;
+import org.virtue.network.event.decoder.impl.WidgetOnPlayerDecoder;
+import org.virtue.network.event.decoder.impl.WidgetOnWidgetEventDecoder;
+import org.virtue.network.event.decoder.impl.WorldListEventDecoder;
+import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.impl.ClanChannelDeltaEventEncoder;
+import org.virtue.network.event.encoder.impl.ClanChannelEventEncoder;
+import org.virtue.network.event.encoder.impl.ClanSettingsDeltaEventEncoder;
+import org.virtue.network.event.encoder.impl.ClanSettingsEventEncoder;
+import org.virtue.network.event.encoder.impl.ClientScriptEventEncoder;
+import org.virtue.network.event.encoder.impl.CloseWidgetEventEncoder;
+import org.virtue.network.event.encoder.impl.CutsceneEventEncoder;
+import org.virtue.network.event.encoder.impl.EnumEventEncoder;
+import org.virtue.network.event.encoder.impl.ExchangeEventEncoder;
+import org.virtue.network.event.encoder.impl.FriendChatEventEncoder;
+import org.virtue.network.event.encoder.impl.FriendListEventEncoder;
+import org.virtue.network.event.encoder.impl.HideWidgetEventEncoder;
+import org.virtue.network.event.encoder.impl.IgnoreListEventEncoder;
+import org.virtue.network.event.encoder.impl.InvEventEncoder;
+import org.virtue.network.event.encoder.impl.KeepAliveEventEncoder;
+import org.virtue.network.event.encoder.impl.LogoutEventEncoder;
+import org.virtue.network.event.encoder.impl.TargetEventEncoder;
+import org.virtue.network.event.encoder.impl.MessageEventEncoder;
+import org.virtue.network.event.encoder.impl.MusicEventEncoder;
+import org.virtue.network.event.encoder.impl.NpcUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
+import org.virtue.network.event.encoder.impl.PlayerUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
+import org.virtue.network.event.encoder.impl.RootWidgetEventEncoder;
+import org.virtue.network.event.encoder.impl.RunEnergyEventEncoder;
+import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
+import org.virtue.network.event.encoder.impl.SceneGraphEventEncoder;
+import org.virtue.network.event.encoder.impl.SceneUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.SkillEventEncoder;
+import org.virtue.network.event.encoder.impl.SystemUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.UnlockFriendsEventEncoder;
+import org.virtue.network.event.encoder.impl.VarcEventEncoder;
+import org.virtue.network.event.encoder.impl.VarcStringEventEncoder;
+import org.virtue.network.event.encoder.impl.VarpEventEncoder;
+import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
+import org.virtue.network.event.encoder.impl.WidgetExternalSpriteEventEncoder;
+import org.virtue.network.event.encoder.impl.WidgetModelEventEncoder;
+import org.virtue.network.event.encoder.impl.WidgetSettingsEventEncoder;
+import org.virtue.network.event.encoder.impl.WidgetTextEventEncoder;
+import org.virtue.network.event.encoder.impl.WorldListEventEncoder;
+import org.virtue.network.event.handler.GameEventHandler;
+import org.virtue.network.event.handler.impl.BugReportEventHandler;
+import org.virtue.network.event.handler.impl.ButtonClickEventHandler;
+import org.virtue.network.event.handler.impl.ChatFilterEventHandler;
+import org.virtue.network.event.handler.impl.ChatModeEventHandler;
+import org.virtue.network.event.handler.impl.ChatOptionEventHandler;
+import org.virtue.network.event.handler.impl.CommandEventHandler;
+import org.virtue.network.event.handler.impl.CreationEventHandler;
+import org.virtue.network.event.handler.impl.CutsceneEndEventHandler;
+import org.virtue.network.event.handler.impl.InputEventHandler;
+import org.virtue.network.event.handler.impl.ItemClickEventHandler;
+import org.virtue.network.event.handler.impl.KeepAliveEventHandler;
+import org.virtue.network.event.handler.impl.LocationClickEventHandler;
+import org.virtue.network.event.handler.impl.MapBuildCompleteEventHandler;
+import org.virtue.network.event.handler.impl.MessageEventHandler;
+import org.virtue.network.event.handler.impl.NpcClickEventHandler;
+import org.virtue.network.event.handler.impl.PlayerClickEventHandler;
+import org.virtue.network.event.handler.impl.SocialEventHandler;
+import org.virtue.network.event.handler.impl.UrlRequestEventHandler;
+import org.virtue.network.event.handler.impl.VarcTransmitEventHandler;
+import org.virtue.network.event.handler.impl.WalkEventHandler;
+import org.virtue.network.event.handler.impl.WidgetCloseEventHandler;
+import org.virtue.network.event.handler.impl.WidgetDragEventHandler;
+import org.virtue.network.event.handler.impl.WidgetOnLocEventHandler;
+import org.virtue.network.event.handler.impl.WidgetOnNPCHandler;
+import org.virtue.network.event.handler.impl.WidgetOnPlayerEventHandler;
+import org.virtue.network.event.handler.impl.WidgetOnWidgetEventHandler;
+import org.virtue.network.event.handler.impl.WorldListEventHandler;
+
+/**
+ * @author Tom
+ *
+ */
+public class GameEventRepository {
+
+	private Logger logger = LoggerFactory.getLogger(GameEventRepository.class);
+	
+	private Map<Integer, GameEventDefinition> readEvents = new HashMap<>();
+	private Map<Class<?>, GameEventEncoder<? extends GameEventContext>> writeEvents = new HashMap<>();
+	
+	public void load() {
+		registerReadEvent(IncomingEventType.KEEP_ALIVE, new EmptyEventDecoder(), new KeepAliveEventHandler());
+		registerReadEvent(new WorldListEventDecoder(), new WorldListEventHandler());
+		registerReadEvent(new UrlRequestEventDecoder(), new UrlRequestEventHandler());
+		registerReadEvent(new ButtonClickEventDecoder(), new ButtonClickEventHandler());
+		registerReadEvent(new PlayerClickEventDecoder(), new PlayerClickEventHandler());
+		registerReadEvent(new WidgetOnWidgetEventDecoder(), new WidgetOnWidgetEventHandler());
+		registerReadEvent(new WidgetDragEventDecoder(), new WidgetDragEventHandler());
+		registerReadEvent(new WidgetOnLocEventDecoder(), new WidgetOnLocEventHandler());
+		registerReadEvent(new WidgetOnPlayerDecoder(), new WidgetOnPlayerEventHandler());
+		registerReadEvent(new WidgetOnNPCDecoder(), new WidgetOnNPCHandler());
+		registerReadEvent(new CommandEventDecoder(), new CommandEventHandler());
+		registerReadEvent(new SocialEventDecoder(), new SocialEventHandler());
+		registerReadEvent(new WalkEventDecoder(), new WalkEventHandler());
+		registerReadEvent(new PublicMessageEventDecoder(), new MessageEventHandler());
+		registerReadEvent(new PrivateMessageEventDecoder(), new MessageEventHandler());
+		registerReadEvent(new ChatModeEventDecoder(), new ChatModeEventHandler());
+		registerReadEvent(new InputEventDecoder(), new InputEventHandler());
+		registerReadEvent(new ChatFilterEventDecoder(), new ChatFilterEventHandler());
+		registerReadEvent(IncomingEventType.MAP_BUILD_COMPLETE, new EmptyEventDecoder(), new MapBuildCompleteEventHandler());
+		registerReadEvent(IncomingEventType.CLOSE_MODAL, new EmptyEventDecoder(), new WidgetCloseEventHandler());
+		registerReadEvent(new VarcTransmitEventDecoder(), new VarcTransmitEventHandler());
+		registerReadEvent(new ChatOptionEventDecoder(), new ChatOptionEventHandler());
+		registerReadEvent(new LocationClickEventDecoder(), new LocationClickEventHandler());
+		registerReadEvent(new ItemClickEventDecoder(), new ItemClickEventHandler());
+		registerReadEvent(new NpcClickEventDecoder(), new NpcClickEventHandler());
+		registerReadEvent(new BugReportEventDecoder(), new BugReportEventHandler());
+		registerReadEvent(IncomingEventType.CUTSCENE_END, new EmptyEventDecoder(), new CutsceneEndEventHandler());
+				
+		registerReadEvent(new CreationEventDecoder(), new CreationEventHandler());
+		logger.info("Registered " + readEvents.size() + " game read events.");
+		
+		registerWriteEvent(VarpEventEncoder.class);
+		registerWriteEvent(VarcEventEncoder.class);
+		registerWriteEvent(VarcStringEventEncoder.class);
+		registerWriteEvent(KeepAliveEventEncoder.class);
+		registerWriteEvent(WorldListEventEncoder.class);
+		registerWriteEvent(RootWidgetEventEncoder.class);
+		registerWriteEvent(WidgetSubEventEncoder.class);
+		registerWriteEvent(WidgetSettingsEventEncoder.class);
+		registerWriteEvent(SceneGraphEventEncoder.class);
+		registerWriteEvent(WidgetExternalSpriteEventEncoder.class);
+		registerWriteEvent(ResetVarEventEncoder.class);
+		registerWriteEvent(LogoutEventEncoder.class);
+		registerWriteEvent(MessageEventEncoder.class);
+		registerWriteEvent(HideWidgetEventEncoder.class);
+		registerWriteEvent(WidgetTextEventEncoder.class);
+		registerWriteEvent(CloseWidgetEventEncoder.class);
+		registerWriteEvent(WidgetModelEventEncoder.class);
+		//registerWriteEvent(TrayMessageEventEncoder.class);
+		registerWriteEvent(EnumEventEncoder.class);
+		registerWriteEvent(UnlockFriendsEventEncoder.class);
+		registerWriteEvent(FriendListEventEncoder.class);
+		registerWriteEvent(IgnoreListEventEncoder.class);
+		registerWriteEvent(SystemUpdateEventEncoder.class);
+		registerWriteEvent(PlayerUpdateEventEncoder.class);
+		registerWriteEvent(NpcUpdateEventEncoder.class);
+		registerWriteEvent(InvEventEncoder.class);
+		registerWriteEvent(ClientScriptEventEncoder.class);
+		registerWriteEvent(TargetEventEncoder.class);
+		registerWriteEvent(SkillEventEncoder.class);
+		registerWriteEvent(RunEnergyEventEncoder.class);
+		registerWriteEvent(RunWeightEventEncoder.class);
+		registerWriteEvent(SceneUpdateEventEncoder.class);
+		registerWriteEvent(PlayerOptionEventEncoder.class);
+		registerWriteEvent(FriendChatEventEncoder.class);
+		registerWriteEvent(ClanChannelEventEncoder.class);
+		registerWriteEvent(ClanChannelDeltaEventEncoder.class);
+		registerWriteEvent(ClanSettingsEventEncoder.class);
+		registerWriteEvent(ClanSettingsDeltaEventEncoder.class);
+		registerWriteEvent(ExchangeEventEncoder.class);
+		registerWriteEvent(MusicEventEncoder.class);
+		registerWriteEvent(CutsceneEventEncoder.class);
+		logger.info("Registered " + writeEvents.size() + " game write events.");
+	}
+	
+	public GameEventDefinition lookupReadEvent(int opcode) {
+		return readEvents.get(opcode);
+	}
+	
+	public void registerWriteEvent(Class<? extends GameEventEncoder<? extends GameEventContext>> clazz) {
+		try {
+			writeEvents.put(clazz, clazz.newInstance());
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends GameEventContext> GameEventEncoder<T> lookupWriteEvent(Class<?> clazz) {
+		return (GameEventEncoder<T>) writeEvents.get(clazz);
+	}
+	
+	public OutboundBuffer encode(Player player, Class<?> clazz, GameEventContext context) {
+		return lookupWriteEvent(clazz).encode(player, context);
+	}
+	
+	public <T extends GameEventContext> void registerReadEvent(GameEventDecoder<T> event, GameEventHandler<T> handler) {
+		for (IncomingEventType type : event.getTypes()) {
+			registerReadEvent(type, event, handler);
+		}
+	}
+	
+	public <T extends GameEventContext> void registerReadEvent(IncomingEventType type, GameEventDecoder<T> event, GameEventHandler<T> handler) {
+		if (type.getOpcode() != -1) {
+			registerReadEvent(type.getOpcode(), new GameEventDefinition(event, handler));
+		} else {
+			logger.warn("Opcode not identified for "+type+". Please set the correct opcode in IncommingEventType.java");
+		}
+	}
+
+	public <T extends GameEventContext> void registerReadEvent(int[] opcodes, GameEventDecoder<T> event, GameEventHandler<T> handler) {
+		for (int opcode : opcodes) {
+			registerReadEvent(opcode, new GameEventDefinition(event, handler));
+		}
+	}
+	
+	public <T extends GameEventContext> void registerReadEvent(int opcode, GameEventDecoder<T> event, GameEventHandler<T> handler) {
+		registerReadEvent(opcode, new GameEventDefinition(event, handler));
+	}
+
+	public void registerReadEvent(int opcode, GameEventDefinition definition) {
+		readEvents.put(opcode, definition);
+	}
+}
