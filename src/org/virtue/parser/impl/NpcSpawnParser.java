@@ -47,7 +47,7 @@ public class NpcSpawnParser {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(NpcSpawnParser.class);
 	
-	private static File PATH = new File("repository/NPCSpawns.txt");
+	private static File PATH = new File("repository/npc/NPCSpawns.txt");
 	
 	public static void loadNpcs ()  {
 		try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {

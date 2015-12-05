@@ -30,6 +30,10 @@
  * @since 29/11/2015
  */
 
+function getItemName (itemId) {
+	return api.getItemType(itemId).name;
+}
+
 function requestCount (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
 		handle : function (value) {
@@ -65,4 +69,29 @@ function requestString (player, message, callback) {
 
 function sendCommandResponse (player, message, console) {
 	api.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
+}
+
+function requestConfirm (player, message, onConfirm) {
+	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+		handle : function (value) {
+			if (value == 1) {
+				onConfirm();
+			}
+		}
+	});	
+	api.requestMulti(player, message, ["Yes", "No"], [0, 1], new Handler());	
+}
+
+function requestMulti (player, message, options, responses, onSelect) {
+	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+		handle : function (value) {
+			var response = value;
+			if (responses !== undefined) {
+				response = responses[value-1];
+			}
+			onSelect(response);
+		}
+	});
+	
+	api.requestMulti(player, message, options, responses, new Handler());
 }

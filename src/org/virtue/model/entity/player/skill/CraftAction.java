@@ -98,7 +98,7 @@ public class CraftAction implements PlayerActionHandler {
 		player.getInvs().getContainer(ContainerState.BACKPACK).add(product);//Add fletch product
 		player.getInvs().sendContainer(ContainerState.BACKPACK);
 		if (successText != null && !successText.trim().isEmpty()) {
-			player.getDispatcher().sendMessage(successText, ChannelType.GAME_FILTERABLE);
+			player.getDispatcher().sendMessage(successText, ChannelType.GAME_SPAM);
 		}
 	}
 	

@@ -34,7 +34,6 @@ public class MessageEventContext implements GameEventContext {
 
 	public enum ChannelType {
 		GAME(0),
-		GAME_FILTERABLE(109),
 		PUBLIC(1),
 		PUBLIC_UNFILTERABLE(2),
 		PUBLIC_QUICKCHAT(17),
@@ -61,6 +60,7 @@ public class MessageEventContext implements GameEventContext {
 		TRADE(100),
 		REQUEST(101),
 		ASSIST(102),
+		GAME_SPAM(109),
 		CLAN_INVITE(117),
 		BROADCAST(125);
 		

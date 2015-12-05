@@ -17,7 +17,7 @@ public class Shatter extends SpecialAttackHandler {
 		super(CombatStyle.MELEE, 1434);
 		super.animation = new AnimationBlock(1060);
 		super.graphics = new GraphicsBlock(1, 251);
-		super.accuracyModifier = 1.15;
-		super.damageModifier = 1.45;
+		super.accuracyModifier -= 1.12;
+		super.damageModifier = 3.00;
 	}
 }

@@ -137,7 +137,7 @@ function startFish (player, npc) {
 		api.sendMessage(player, "You need a fishing item to fish here.");
 		return;
 	}
-	if (api.getCurrentLevel(player, FISHING_SKILL) < spots.level) {
+	if (api.getStatLevel(player, FISHING_SKILL) < spots.level) {
 		api.sendMessage(player, "You require a fishing level of "+spots.level+"  to fish here.");
 		return;
 	}
@@ -174,7 +174,7 @@ function fishingSuccess (player, spots, npc) {
 }
 
 function getDelay (player, spots, tool) {
-	var timer = spots.baseTime - api.getCurrentLevel(player, FISHING_SKILL) - Math.floor(Math.random() * tool.time);
+	var timer = spots.baseTime - api.getStatLevel(player, FISHING_SKILL) - Math.floor(Math.random() * tool.time);
 	print(timer+"\n");
 	if (timer < 1 + spots.randomTime) {
 		timer = 1 + Math.floor((Math.random() * spots.randomTime));
@@ -186,7 +186,7 @@ function getDelay (player, spots, tool) {
 function getCatch (player, spots) {
 	var possibleCatches = [];
 	for (var i in spots.catchLevels) {
-		if (spots.catchLevels[i] <= api.getCurrentLevel(player, FISHING_SKILL)) {
+		if (spots.catchLevels[i] <= api.getStatLevel(player, FISHING_SKILL)) {
 			possibleCatches.push(spots.catches[i]);
 		}
 	}

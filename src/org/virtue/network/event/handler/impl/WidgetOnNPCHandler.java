@@ -58,6 +58,7 @@ public class WidgetOnNPCHandler implements GameEventHandler<WidgetOnNPCContext> 
 			}
 		}
 		Ability ability = ActionBar.getAbilities().get(context.getWidgetID() << 16 | context.getSlot());
+		player.getDispatcher().sendGameMessage("Ability Button ID: " + context.getSlot());
 		System.out.println("Ability: " + ability);
 		if (ability != null) {
 			player.getCombatSchedule().lock(npc);

@@ -28,35 +28,28 @@
  * @author Sundays211
  * @since 2/20/2015
  */
-var api;
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The commands to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "openge", "ge" ];
-	},
-
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		/*****************************************WARNING****************************************
+		 * DO NOT PUT THIS COMMAND IN PlayerCommands.js! 
+		 * It will eventually be restricted to admin-only, and separating it will be more difficult if it's part of the player command script
+		 */
+		
 		if (api.getAccountType(player) == 6 || api.getAccountType(player) == 7
 				|| api.getAccountType(player) == 8) {
-			player.getDispatcher().sendGameMessage("You cannot use Grand Exchange while being a Iron Man.");
+			api.sendMessage(player, "You cannot use Grand Exchange while an Iron Man.");
 			return false;
 		}
 		api.openCentralWidget(player, 105, false);
 		return true;
-	},
-		
-	adminCommand : function () {
-		return false;
 	}
-	
-
 });
 
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND, "openge", listener);
+	scriptManager.registerListener(EventType.COMMAND, "ge", listener);
 };

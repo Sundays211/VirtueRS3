@@ -27,19 +27,11 @@
  * @author Sundays211
  * @since 05/11/2014
  */
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
 
-	/* The object ids to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "clearall" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
-		var message = "";
-		for (i = 0; i < args.length; i++)
-			message += (i == 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
-		
 		var iterate = Java.type('org.virtue.model.World').getInstance().getPlayers().iterator();
 		var players = null;
 		while (iterate.hasNext()) {
@@ -48,17 +40,11 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.Command
 		}
 		
 		return true;
-	},
-	
-		
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "clearall", listener);
 };

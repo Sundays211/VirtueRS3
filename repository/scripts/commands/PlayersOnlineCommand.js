@@ -31,18 +31,26 @@
 var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
-		var args = scriptArgs.cmdArgs;
-		
-		sendCommandResponse(player, "There are " + Java.type('org.virtue.model.World').getInstance().getPlayerCount() + " player(s) online.", scriptArgs.console);
+
 		var world = api.getWorld();
-		if (api.isAdmin(player)) {
-			/*var iterator = api.getServerPlayers(world).iterator();
-			while (iterator.hasNext()) {
-				api.sendMessage(player, ""+iterator.next());
-			}*/
-		}
+		var lobby = api.getLobby();
 		
-		sendCommandResponse(player, "There are " + Java.type('org.virtue.model.Lobby').getInstance().getPlayerCount() + " player(s) in the lobby.", scriptArgs.console);
+		sendCommandResponse(player, "There are " + api.getPlayerCount(world) + " player(s) online.", scriptArgs.console);
+		if (api.isAdmin(player)) {
+			var iterator = api.getPlayerIterator(world);
+			while (iterator.hasNext()) {
+				var p2 = iterator.next()
+				sendCommandResponse(player, api.getName(p2)+": "+api.getCoords(p2), scriptArgs.console);
+			}
+		}		
+		sendCommandResponse(player, "There are " + api.getPlayerCount(lobby) + " player(s) in the lobby.", scriptArgs.console);
+		if (api.isAdmin(player)) {
+			var iterator = api.getPlayerIterator(lobby);
+			while (iterator.hasNext()) {
+				var p2 = iterator.next()
+				sendCommandResponse(player, api.getName(p2), scriptArgs.console);
+			}
+		}
 
 	}
 });

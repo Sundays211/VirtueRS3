@@ -9,7 +9,6 @@ import org.virtue.model.content.minigame.Minigame;
 import org.virtue.model.content.minigame.impl.pestcontrol.PestData;
 import org.virtue.model.entity.Entity;
 import org.virtue.model.entity.npc.NPC;
-import org.virtue.model.entity.npc.script.pestcontrol.PestPortal;
 import org.virtue.model.entity.player.Player;
 import org.virtue.model.entity.region.DynamicRegion;
 import org.virtue.model.entity.region.RegionTools;
@@ -26,23 +25,14 @@ import org.virtue.utility.text.StringUtility;
  */
 public class PestController implements Controller {
 	
-	private PestData difficulty;
-
-	/**
-	 * Shield activated true/false
-	 */
-	private boolean hasShield = false;
-	private int startX = 2629;
-	private int startY = 2564;
-	private int widthRegions = 8;
-	private int heightRegions = 8;
-	private int pestLimit;
-
-	public int[] PESTS = { 3772, 3762, 3742, 3732, 3747, 3727, 3752, 3773, 3764, 3743, 3734, 3748, 3728, 3754, 3774,
-			3766, 3744, 3736, 3749, 3729, 3756, 3775, 3768, 3745, 3738, 3750, 3730, 3758, 3776, 3770, 3746, 3740, 3751,
-			3731, 3760 };
+	private PestData difficulty = PestData.NOVICE; //default set to novice for testing
 	
-	private long testTime; //just using this to test
+	private int startX = 2629,startY = 2564;
+	private int widthRegions = 8,heightRegions = 8;
+	private int pestLimit;
+	
+	private long spawnPestTime; //just using this to test
+	private int boatTime = 100;
 
 	/*
 	 * (non-Javadoc)
@@ -52,7 +42,6 @@ public class PestController implements Controller {
 	 */
 	@Override
 	public void start(Minigame mini) {
-		this.difficulty = PestData.NOVICE; //default set to novice for testing
 		mini.setStart(System.currentTimeMillis());
 		mini.setLimit(TimeUnit.MINUTES.toMillis(5));
 		mini.setWaiting(false);
@@ -83,9 +72,9 @@ public class PestController implements Controller {
 		addNpc(mini, NPC.create(3782, getSimilar(mini, 2657, 2594)), false); // Knight
 		addNpc(mini, NPC.create(3781, getSimilar(mini, 2656, 2606)), false);// Squire
 		
-		for (PestPortal portal : difficulty.getPortals()) {
-			Tile tile = portal.getCurrentTile();
-			addNpc(mini, NPC.create(portal.getId(), getSimilar(mini, tile.getX(), tile.getY())), false); // Purple
+		for (Object[] portal : difficulty.getPortals()) {
+			Tile tile = ((Tile)portal[1]).getCurrentTile();
+			addNpc(mini, NPC.create((int) portal[0], getSimilar(mini, tile.getX(), tile.getY())), false); // Purple
 		}
 
 	}
@@ -109,6 +98,7 @@ public class PestController implements Controller {
 		for (Player player : mini.getPlayers()) {
 			player.getMovement().teleportTo(2657, 2639, 0);
 			player.setMinigame(null);
+			player.setController(null);
 		}
 
 		for (NPC npc : mini.getNpcs()) {
@@ -133,6 +123,7 @@ public class PestController implements Controller {
 		mini.setStarted(false);
 		mini.setWaiting(false);
 		mini.getPlayers().remove(player);
+		player.setController(null);
 	}
 
 	/*
@@ -148,24 +139,28 @@ public class PestController implements Controller {
 			if ((mini.getStart() + mini.getLimit()) <= System.currentTimeMillis())
 				end(mini);
 
-			if ((System.currentTimeMillis() - testTime) / 1000 >= RandomExt.random(7, 9) && pestLimit < 6) { //todo check time to spawn
-				testTime = System.currentTimeMillis(); //spawn limit later
+			if ((System.currentTimeMillis() - spawnPestTime) / 1000 >= RandomExt.random(7, 9) && pestLimit < 6) { //todo check time to spawn
+				spawnPestTime = System.currentTimeMillis(); //spawn limit later
 				spawnMonsters(mini);
 			}
 
 		} else if (mini.isWaiting()) {
-			if (mini.isAbove()) {
-				System.out.println("Starting");
+			if (mini.isAbove() && boatTime <= 0) {
+				boatTime = 100;
 				start(mini);
 			} else {
+				
+				if (boatTime <= 0)
+					boatTime = 100;
+				boatTime--;
+				
 				for (Player player : mini.getPlayers()) {
 					player.getWidgets().openWidget(1477, 423, 407, true);
-					player.getDispatcher().sendWidgetText(407, 13, "Next Departure: ");
+					player.getDispatcher().sendWidgetText(407, 13, "Next Departure: "+(boatTime/60)+"m "+(boatTime%60)+"s");
 					player.getDispatcher().sendWidgetText(407, 14, "Players Ready: " + mini.getPlayers().size());
 					player.getDispatcher().sendWidgetText(407, 15, "(Need 5 to 25 players)");
-					player.getDispatcher().sendWidgetText(407, 16, "Points: ");
+					player.getDispatcher().sendWidgetText(407, 16, "Points: "+player.getPoints());
 					player.getDispatcher().sendWidgetText(407, 3, StringUtility.formatChatMessage(difficulty.name()));
-					System.out.println("waiting");
 				}
 			}
 		}
@@ -180,9 +175,13 @@ public class PestController implements Controller {
 	 */
 	@Override
 	public void addPlayer(Minigame mini, Player player) {
-		if (mini.isFull())
-			return;
+		if (mini.isFull()) {
+			player.getDispatcher().sendGameMessage("The boat is full.");
+			return;	
+		}
 		mini.getPlayers().add(player);
+		player.getMovement().teleportTo( 2661, 2639, 0);
+		player.getDispatcher().sendGameMessage("WTF");
 
 		// this need to be finished i think
 
@@ -210,7 +209,7 @@ public class PestController implements Controller {
 	public void spawnMonsters(Minigame mini) {
 		for (int portalID = 0; portalID < 4; portalID++) { //spawn 1 per portal
 			int pestID = difficulty.getPests()[RandomExt.random(difficulty.getPests().length)];
-			Tile tile = difficulty.getPortals()[portalID].getCenterTile();
+			Tile tile = (Tile) difficulty.getPortals()[portalID][2];
 			NPC npc = NPC.create(pestID, getSimilar(mini, tile.getX(), tile.getY()));
 			spawnPest(mini, npc);
 			Player closest = mini.getPlayers().get(0);

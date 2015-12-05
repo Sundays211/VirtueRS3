@@ -76,8 +76,6 @@ public class BarrowsController implements Controller {
 
 	@Override
 	public void objectClick(Minigame mini, Player player, SceneLocation loc, OptionButton option) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

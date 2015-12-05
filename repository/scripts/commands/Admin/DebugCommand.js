@@ -34,17 +34,12 @@ var PlayerOption = Java.type('org.virtue.model.entity.player.interactions.Player
  * @author Sundays211
  * @since 05/11/2014
  */
-var api;
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The object ids to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "debugwalk", "uptime", "lock", "unlock", "attack", "star", "removeatk", "object", "mapcoord", "setWings"];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		
 		if (syntax.toLowerCase() == "debugwalk") {
 			player.getMovement().toggleDebug();
 			player.getDispatcher().sendMessage("Movement debugging "+(player.getMovement().isDebug() ? "enabled." : "disabled."), ChannelType.CONSOLE);
@@ -59,10 +54,6 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.Command
 		} else if (syntax.toLowerCase() == "removeatk") {
 			player.getInteractions().addOption(PlayerOption.REMOVE_ATTACK, null);
 			player.getInteractions().sendOptions();
-		} else if (syntax.toLowerCase() == "object") {
-			var obj = parseInt(args[0]);
-			var region = api.getRegion(player.getCurrentTile().getRegionID());
-			region.spawnTempLocation(api.createLocation(obj, new Tile(player.getCurrentTile()), 10, 0), 50);
 		} else if (syntax.toLowerCase() == "mapcoord") {
 			var squareX = api.getSquareX(player.getCurrentTile());
 			var squareY = api.getSquareY(player.getCurrentTile());
@@ -75,17 +66,14 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.Command
 		}
 		
 		return true;
-	},	
-		
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
+	var commands = [ "debugwalk", "lock", "unlock", "attack", "star", "removeatk", "mapcoord", "setWings" ];
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	for (var i in commands) {
+		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);
+	}	
 };

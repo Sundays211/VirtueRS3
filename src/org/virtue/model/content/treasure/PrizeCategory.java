@@ -36,7 +36,6 @@ public enum PrizeCategory {
 	SLAYER_XP,
 	HUNTER_XP,
 	DIVINATION_XP,
-	
 	/**
 	 * Unfreezable categories.
 	 */

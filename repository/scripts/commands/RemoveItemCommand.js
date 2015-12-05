@@ -27,38 +27,35 @@
  * @author Sundays211
  * @since 05/11/2014
  */
-var api;
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The commands to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "removeitem", "delitem", "clearitem", "takeitem" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		
 		if (args.length < 1) {
-			return false;
+			sendCommandResponse(player, "Usage: "+syntax+" [id] [amount]", scriptArgs.console);
+			return;
 		}
 		var amount = 1;
 		var itemID = parseInt(args[0]);
+		if (isNaN(itemID)) {
+			sendCommandResponse(player, "Usage: "+syntax+" [id] [amount]", scriptArgs.console);
+			return;
+		}
+		
 		if (args.length == 2) {
 			amount = parseInt(args[1]);
 		}
 		api.delCarriedItem(player, itemID, amount);
-		return true;
-	},
-		
-	adminCommand : function () {
-		return false;
 	}
-
 });
 
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
+	var commands = [ "removeitem", "delitem", "clearitem", "takeitem" ];
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	for (var i in commands) {
+		scriptManager.registerListener(EventType.COMMAND, commands[i], listener);
+	}
 };

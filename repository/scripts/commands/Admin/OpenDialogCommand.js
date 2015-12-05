@@ -27,30 +27,23 @@
  * @author Sundays211
  * @since 05/11/2014
  */
-var api;
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The commands to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "dialog" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		
+		if (args.length < 1) {
+			sendCommandResponse(player, "Usage: "+syntax+" [name]", scriptArgs.console);
+			return;
+		}
+		
 		api.openDialog(player, args[0]);
-		return true;
-	},
-	
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "dialog", listener);
 };

@@ -16,6 +16,6 @@ var vestaLongsword = new SpecialAttack(CombatStyle.MELEE, [13899]) {
 
 var listen = function(scriptManager) {
 	vestaLongsword.animation = new AnimationBlock(10502);
-	vestaLongsword.damageModifier = 1.20;
+	vestaLongsword.damageModifier = 2.33;
 	SpecialAttackHandler.register(vestaLongsword);
 };

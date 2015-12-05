@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -29,36 +28,28 @@ var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBloc
  * @since 05/11/2014
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The object ids to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "title", "endtitle" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
-		var message = "";
-		for (i = 0; i < args.length; i++)
-			message += (i == 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
-			if (syntax.toLowerCase() == "title") {
-				player.getAppearance().setPrefixTitle(message + "");
-				player.getAppearance().refresh();
-			} else if (syntax.toLowerCase() == "endtitle") {
-				player.getAppearance().setSuffixTitle(message + "");
-				player.getAppearance().refresh();
-			}
-			return true;
-	},
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
 		
-	adminCommand : function () {
-		return false;
+		var message = "";
+		for (i = 0; i < args.length; i++) {
+			message += (i == 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
+		}			
+		if (syntax.toLowerCase() == "title") {
+			player.getAppearance().setPrefixTitle(message + "");
+			player.getAppearance().refresh();
+		} else if (syntax.toLowerCase() == "endtitle") {
+			player.getAppearance().setSuffixTitle(message + "");
+			player.getAppearance().refresh();
+		}
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "title", listener);
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "endtitle", listener);
 };

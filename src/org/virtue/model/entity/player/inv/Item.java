@@ -95,13 +95,21 @@ public class Item extends Node {
 	}
 	
 	/**
+	 * Gets the examine info.
+	 * @return The examine.
+	 */
+	public String getExamine() {
+		if (examine == null) {
+			examine = getType().getDescription()+" (id="+id+", amount="+amount+")";
+		}
+		return examine;
+	}
+	
+	/**
 	 * Handles an "examine" interaction with the item
 	 */
 	public void examine (Player player) {		
 		ItemListener listener = Virtue.getInstance().getScripts().forItemID(id);
-		if (listener != null) {
-			examine = listener.getExamine(player, this);
-		}
 		if (examine == null) {
 			examine = getType().getDescription()+" (id="+id+", amount="+amount+")";
 		}

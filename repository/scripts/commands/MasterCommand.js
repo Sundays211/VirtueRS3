@@ -29,34 +29,22 @@
  * @author Sundays211
  * @since 05/11/2014
  */ 
-var api;
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The commands to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "master", "max"];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		
 		for (skill=0; skill < 7; skill++) {
 			api.addExperience(player, skill, 13034431, false);
 		}
-		player.getImpactHandler().restoreLifepoints();
-		return true;
-	},
-		
-	adminCommand : function () {
-		return false;
+		api.restoreLifePoints(player);
+		return;
 	}
-	
-
 });
 
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND, "master", listener);
+	scriptManager.registerListener(EventType.COMMAND, "max", listener);
 };

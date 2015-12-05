@@ -283,7 +283,7 @@ public class ClipMap implements TraversalMap {
 	 * @param plane The plane of the flags
 	 * @return The flags, or {@link Integer.MIN_VALUE} if the flags could not be found.
 	 */
-	private int getClipFlags (int localX, int localY, int plane) {
+	public int getClipFlags (int localX, int localY, int plane) {
 		if (localX >= 64 || localY >= 64 || localX < 0 || localY < 0) {
 			Tile tile = new Tile(region.getBaseTile().getX()+localX, region.getBaseTile().getY()+localY, plane);
 			if (!World.getInstance().getRegions().regionLoaded(tile.getRegionID())) {

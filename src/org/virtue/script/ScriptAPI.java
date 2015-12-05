@@ -21,7 +21,11 @@
  */
 package org.virtue.script;
 
+import java.util.Iterator;
+
+import org.virtue.Constants;
 import org.virtue.model.Lobby;
+import org.virtue.model.Node;
 import org.virtue.model.ServerNode;
 import org.virtue.model.World;
 import org.virtue.model.content.social.clan.ClanChannelAPI;
@@ -31,6 +35,7 @@ import org.virtue.model.entity.combat.CombatMode;
 import org.virtue.model.entity.npc.NPC;
 import org.virtue.model.entity.player.ExchangeOffer;
 import org.virtue.model.entity.player.Player;
+import org.virtue.model.entity.player.PrivilegeLevel;
 import org.virtue.model.entity.player.dialog.InputEnteredHandler;
 import org.virtue.model.entity.player.event.PlayerActionHandler;
 import org.virtue.model.entity.player.inv.Item;
@@ -73,6 +78,13 @@ public interface ScriptAPI {
 	 * @return The user hash, or null if no player exists
 	 */
 	public Long getUserHash (String name);
+	
+	/**
+	 * Gets the user hash of the specified player
+	 * @param player The player
+	 * @return The user hash
+	 */
+	public Long getUserHash (Player player);
 	
 	/**
 	 * Gets the current display name of the player with the specified hash, or null if no player exists
@@ -144,7 +156,49 @@ public interface ScriptAPI {
 	 */
 	public Player getWorldPlayerByHash (Long userHash);
 	
-	public Iterable<Player> getServerPlayers (ServerNode world);
+	/**
+	 * Gets the player in the specified game world at the specified index
+	 * @param world The game world
+	 * @param index The index (pid) to lookup
+	 * @return The player, or null if no player exists at the given index
+	 */
+	public Player getWorldPlayerByIndex (World world, int index);
+	
+	public NPC getWorldNpcByIndex (World world, int index);
+	
+	/**
+	 * Returns the node ID of the specified server
+	 * @param server The server
+	 * @return The node ID
+	 */
+	public int getNodeId (ServerNode server);
+	
+	/**
+	 * Returns the number of players currently connected to the specified server
+	 * @param server The server node (world or lobby) to fetch the player count from
+	 * @return The number of players on the server
+	 */
+	public int getPlayerCount (ServerNode server);
+	
+	/**
+	 * Returns an iterator used to loop over the players currently connected to the specified server
+	 * @param server The server node (world or lobby) to fetch player data from
+	 * @return An iterator for the server player list 
+	 */
+	public Iterator<Player> getPlayerIterator (ServerNode server);
+	
+	/**
+	 * Returns an iterator used to loop over the NPCs currently loaded on the specified world
+	 * @param world The world to fetch NPC data from
+	 * @return An iterator for the world NPC list 
+	 */
+	public Iterator<NPC> getNpcIterator (World world);
+	
+	/**
+	 * Gets the current server cycle (number of ticks since the server was started.
+	 * @return The current server cycle.
+	 */
+	public int getServerCycle();
 	
 	/**
 	 * Opens the specified widget in the central widget frame. 
@@ -514,6 +568,13 @@ public interface ScriptAPI {
 	public boolean setVarClanSetting (Player player, int key, Object value);
 	
 	/**
+	 * Gets the stat ID for the given name. This method is case-insensitive.
+	 * @param name The stat name
+	 * @return The ID, or -1 if no stat exists with the specified name
+	 */
+	public int getStatByName (String name);
+	
+	/**
 	 * Returns the level of a player in the skill. This level is affected by temporary skill boosts
 	 * @param player The player
 	 * @param skill The name of the skill to add xp to. The name is specified in {@link org.virtue.model.entity.player.skill.SkillType}
@@ -521,22 +582,35 @@ public interface ScriptAPI {
 	 */
 	public int getCurrentLevel (Player player, String skill);
 	
-	public int getCurrentLevel (Player player, int skillID);
+	/**
+	 * Gets the current level of the specified stat (eg 74 in 74/99)
+	 * @param player The player
+	 * @param statId The ID of the stat to get the level of
+	 * @return The current stat level, or -1 if no stat exists with the given ID
+	 */
+	public int getStatLevel (Player player, int statId);
 	
 	/**
-	 * Returns the level of a player in the skill. This level is based only on the amount of experience the player has; it is not affected by temporary boosts.
+	 * Sets the specified stat to the specified level (note: this does not effect the base level, ie y/x where x is base)
 	 * @param player The player
-	 * @param skill The name of the skill to add xp to. The name is specified in {@link org.virtue.model.entity.player.skill.SkillType}
-	 * @return The base skill level
+	 * @param statId The ID of the stat to set the level of
+	 * @param level The desired level
 	 */
-	public int getBaseLevel (Player player, String skill);
+	public void setStatLevel (Player player, int statId, int level);
 	
+	
+	/**
+	 * Returns the level of a player in the stat. This level is based only on the amount of experience the player has; it is not affected by temporary boosts.
+	 * @param player The player
+	 * @param skill The ID of the stat.
+	 * @return The base stat level
+	 */
 	public int getBaseLevel (Player player, int skillID);
 	
 	/**
 	 * Adds experience to the player's skill.
 	 * @param player The player
-	 * @param skill The id of the skill to add xp to
+	 * @param skill The id of the skill to add xp to.
 	 * @param xp The amount of xp to add
 	 * @param boostable Whether bonus xp can be applied to this xp gain. Should be false for one-off xp gains (xp lamps, quest rewards, etc)
 	 */
@@ -552,20 +626,25 @@ public interface ScriptAPI {
 	public void addExperience (Player player, String skill, double xp, boolean boostable);
 	
 	/**
-	 * Temporarily increases the player's skill by the specified amount
+	 * Temporarily increases the player's stat by the specified amount
 	 * @param player The player
-	 * @param skill The name of the skill to boost
+	 * @param skill The id of the stat to boost
 	 * @param amount The number of levels to boost by
 	 */
-	public void boostSkill (Player player, String skill, int amount);
+	public void boostStat (Player player, int statId, int amount);
 	
 	/**
-	 * Temporarily decreases the player's skill by the specified amount
+	 * Resets the specified stat to its base level
 	 * @param player The player
-	 * @param skill The name of the skill to drain
-	 * @param amount The number of levels to drain by
+	 * @param stat The ID of the stat to reset
 	 */
-	public void drainSkill (Player player, String skill, int amount);
+	public void resetStat (Player player, int statId);
+	
+	/**
+	 * Restores the lifepoints of the specified entity to full
+	 * @param entity The entity to restore
+	 */
+	public void restoreLifePoints (Entity entity);
 	
 	/**
 	 * Sends an unfiltered game message to the player
@@ -623,6 +702,7 @@ public interface ScriptAPI {
 	
 	public void requestMulti (Player player, String message, String[] options, int[] steps, InputEnteredHandler callback);
 	
+		
 	public void setAction (Player player, PlayerActionHandler action);
 	
 	/**
@@ -692,6 +772,13 @@ public interface ScriptAPI {
 	
 	public void clearStyleEdit (Player player);
 	
+	/**
+	 * Sets the render base for the specified player
+	 * @param player The player
+	 * @param renderId The desired render animation
+	 */
+	public void setRenderAnim (Player player, int renderId);
+	
 	public void refreshEquipment (Player player);
 	
 	public Player getInteractionTarget (Player player);
@@ -739,6 +826,14 @@ public interface ScriptAPI {
 	/**
 	 * Moves the entity to the specified coordinates
 	 * @param entity The entity to teleport
+	 * @param coords The destination coordinates
+	 * @return True if the teleport was successful, false otherwise
+	 */
+	public boolean teleportEntity (Entity entity, Tile coords);
+	
+	/**
+	 * Moves the entity to the specified coordinates
+	 * @param entity The entity to teleport
 	 * @param x The new x-coordinate of the entity
 	 * @param y The new y-coordinate of the entity
 	 * @param z The new z-coordinate of the entity
@@ -768,6 +863,34 @@ public interface ScriptAPI {
 	public void teleportEntityBy (Entity entity, int xOff, int yOff, byte zOff);
 	
 	public void moveTo (Entity entity, int destX, int destY, Runnable onTarget);
+	
+	/**
+	 * Gets the coordinates for the specified game node
+	 * @param node The game node
+	 * @return The current coords of the node
+	 */
+	public Tile getCoords (Node node);
+	
+	/**
+	 * Gets the x-coord of the specified game node
+	 * @param node The game node
+	 * @return The x-coord
+	 */
+	public int getCoordX (Node node);
+	
+	/**
+	 * Gets the y-coord of the specified game node
+	 * @param node The game node
+	 * @return The y-coord
+	 */
+	public int getCoordY (Node node);
+	
+	/**
+	 * Gets the level of the specified game node
+	 * @param node The game node
+	 * @return The level
+	 */
+	public int getCoordLevel (Node node);
 	
 	/**
 	 * Gets the current tile for the specified entity
@@ -833,12 +956,12 @@ public interface ScriptAPI {
 	 * Creates a new {@link SceneLocation} at the provided tile with the specified data.
 	 * Note that this method does not add the location to the region; this must be done separately
 	 * @param id The locType ID of the new location
-	 * @param tile The tile on which to spawn the location
+	 * @param coord The coordinates on which to spawn the location
 	 * @param type The node type of the location
 	 * @param rotation The rotation
 	 * @return The newly created SceneLocation.
 	 */
-	public SceneLocation createLocation (int id, Tile tile, int type, int rotation);
+	public SceneLocation createLocation (int id, Tile coord, int type, int rotation);
 	
 	public SceneLocation createLocation (int id, int x, int y, int z, int type, int rotation);
 	

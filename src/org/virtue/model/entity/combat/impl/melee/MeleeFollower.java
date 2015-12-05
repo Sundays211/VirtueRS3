@@ -14,13 +14,13 @@ public final class MeleeFollower extends FollowingType {
 
 	@Override
 	public Interaction getInteraction(Entity entity, Entity lock) {
-		int size = entity.getPlayerCount() >> 1;
+		int size = entity.getSize() >> 1;
 		Tile center = entity.getCurrentTile().copyNew(size, size, 0);
-		int targetSize = lock.getPlayerCount() >> 1;
+		int targetSize = lock.getSize() >> 1;
 		Tile targetCenter = lock.getCurrentTile().copyNew(targetSize, targetSize, 0);
 		int distance = Math.max(Math.abs(center.getX() - targetCenter.getX()), Math.abs(center.getY() - targetCenter.getY()));
 		int difference = distance - (size + targetSize);
-		if (entity.getCurrentTile().isDiagonalTo(lock.getCurrentTile(), lock.getPlayerCount()) && lock.getPlayerCount() == 1) {
+		if (entity.getCurrentTile().isDiagonalTo(lock.getCurrentTile(), lock.getSize()) && lock.getSize() == 1) {
 			return Interaction.MOVING;
 		}
 		if (difference == 1) {

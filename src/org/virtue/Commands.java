@@ -6,7 +6,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.PrivilegeLevel;
 import org.virtue.model.entity.player.dialog.InputEnteredHandler;
 import org.virtue.model.entity.region.DynamicRegion;
 import org.virtue.model.entity.region.RegionTools;
@@ -14,7 +13,6 @@ import org.virtue.model.entity.region.Tile;
 import org.virtue.network.event.context.impl.out.MessageEventContext.ChannelType;
 import org.virtue.script.JSListeners;
 import org.virtue.script.ScriptEventType;
-import org.virtue.script.listeners.CommandListener;
 
 public class Commands {
 
@@ -82,12 +80,8 @@ public class Commands {
 			if (scripts.hasBinding(ScriptEventType.COMMAND, syntax)) {
 				scriptType = ScriptEventType.COMMAND;
 			} else {
-				//Try with the old command listeners
-				boolean handled = processLegacy(player, syntax, cmdArgs, console, clientCommand);
-				if (!handled) {
-					String message = "Unknown developer command: "+syntax;
-					player.getDispatcher().sendMessage(message, console ? ChannelType.CONSOLE : ChannelType.GAME);
-				}
+				String message = "Unknown developer command: "+syntax;
+				player.getDispatcher().sendMessage(message, console ? ChannelType.CONSOLE : ChannelType.GAME);
 				return true;
 			}
 		}
@@ -109,30 +103,6 @@ public class Commands {
 		}
 		return true;
 	}
-	
-	private static boolean processLegacy (Player player, String syntax, String[] args, boolean console, boolean clientCommand) {
-		CommandListener listener = Virtue.getInstance().getScripts().forSyntax(syntax);
-		if (listener == null) {
-			return false;
-		}
-		if (listener.adminCommand() && !PrivilegeLevel.ADMINISTRATOR.equals(player.getPrivilegeLevel())) {
-			player.getDispatcher().sendMessage(
-					"This command is restricted to admins only.",
-					ChannelType.CONSOLE);
-			return true;
-		}
-		try {
-			listener.handle(player, syntax, args, false);
-		} catch (Exception ex) {
-			logger.warn("Error processing command "+syntax, ex);
-			String errorMessage = "Error processing developer command "+syntax;
-			if (player.getPrivilegeLevel().getRights() >= 2) {
-				errorMessage += ": "+ex.getMessage();
-			}
-			player.getDispatcher().sendMessage(errorMessage, console ? ChannelType.CONSOLE : ChannelType.GAME);
-		}
-		return true;
-	}
 
 	private static boolean processBuiltinCommand(Player player, String syntax, String[] args,
 			boolean console, boolean clientCommand) {
@@ -142,6 +112,7 @@ public class Commands {
 				return false;
 			}
 		} else {
+			String category = null;			
 			switch (syntax) {
 			case "bscript":
 				player.getDispatcher().sendCS2Script(Integer.parseInt(args[0]),
@@ -151,10 +122,29 @@ public class Commands {
 			case "reboot":
 			case "update":
 				if (args.length < 1) {
-					player.getDispatcher().sendGameMessage("Usage: reboot {delay}");
+					sendCommandResponse(player, "Usage: reboot {delay}", console);
 					return true;
 				}
-				processRebootCommand(player, Integer.parseInt(args[0]));
+				int delay = 100;
+				if (args.length >= 1) {
+					try {
+						delay = Math.abs(Integer.parseInt(args[0]));
+					} catch (NumberFormatException ex) {
+						sendCommandResponse(player, "Invalid delay entered: must be a positive integer.", console);
+						return true;
+					}
+				}
+				processRebootCommand(player, delay, console);
+				return true;
+			case "reload":
+				if (args.length > 0) {
+					category = args[0].trim();
+					if (category.isEmpty()) {
+						category = null;
+					}
+				}
+			case "scripts":
+				reloadScripts(player, category, console);
 				return true;
 			case "script":
 				player.getDispatcher().sendCS2Script(6722,
@@ -163,14 +153,14 @@ public class Commands {
 				return true;
 			case "setvarp":
 				if (args.length < 2) {
-					player.getDispatcher().sendGameMessage("Usage: setvarp {id} {value}");
+					sendCommandResponse(player, "Usage: setvarp {id} {value}", console);
 					return true;
 				}
 				player.getVars().setVarValueInt(Integer.parseInt(args[0]),
 						Integer.parseInt(args[1]));
-				player.getDispatcher().sendGameMessage(
+				sendCommandResponse(player, 
 						"varp=" + Integer.parseInt(args[0]) + ", value="
-								+ Integer.parseInt(args[1]));
+								+ Integer.parseInt(args[1]), console);
 				return true;
 			case "createregion":
 				try {
@@ -214,9 +204,19 @@ public class Commands {
 		}
 	}
 	
-	public static void processRebootCommand (final Player player, final int delay) {
+	private static void sendCommandResponse (Player player, String message, boolean console) {
+		player.getDispatcher().sendMessage(message, console ? ChannelType.CONSOLE : ChannelType.GAME);
+	}
+	
+	/**
+	 * Processes the command to reboot the server. This asks for confirmation before proceding
+	 * @param player The player initiating the command
+	 * @param delay The number of game cycles before the reboot occurs
+	 * @param console True if the command was triggered from the console, false if from the chatbox
+	 */
+	private static void processRebootCommand (final Player player, final int delay, boolean console) {
 		if (player.getPrivilegeLevel().getRights() < 2) {
-			player.getDispatcher().sendGameMessage("You must be an administrator to run this command.");
+			sendCommandResponse(player, "You must be an administrator to run this command.", console);
 			return;
 		}
 		InputEnteredHandler handler = new InputEnteredHandler() {
@@ -231,5 +231,30 @@ public class Commands {
 		};
 		player.getDialogs().sendMultichoice("Are you sure you want to restart the server in "+delay+" ticks?", new String[]{"Yes", "No"}, new int[] {1, 0});
 		player.getDialogs().setInputHandler(handler);
+	}
+
+	public static void reloadScripts (Player player, String category, boolean console) {
+		if (category != null) {
+			if (!Virtue.getInstance().getScripts().categoryExists(category)) {
+				sendCommandResponse(player, "Invalid category: "+category, console);
+				return;
+			}
+			sendCommandResponse(player, "Reloading "+category+" event bindings...", console);
+			boolean success = Virtue.getInstance().getScripts().reload(category);
+			if (success) {
+				sendCommandResponse(player, "Reloaded "+category+" successfully.", console);
+				sendCommandResponse(player, "Note: Use 'scripts' with no arguments to remove existing event bindings.", console);
+			} else {
+				sendCommandResponse(player, "Failed to reload "+category+". Check the server log for more information.", console);
+			}
+		} else {
+			sendCommandResponse(player, "Reloading all event bindings...", console);
+			boolean success = Virtue.getInstance().getScripts().reload();
+			if (success) {
+				sendCommandResponse(player, "Reloaded scripts successfully.", console);
+			} else {
+				sendCommandResponse(player, "Failed to reload scripts. Check the server log for more information.", console);
+			}
+		}
 	}
 }

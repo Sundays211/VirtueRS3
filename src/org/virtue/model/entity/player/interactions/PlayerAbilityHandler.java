@@ -49,7 +49,7 @@ public class PlayerAbilityHandler implements WidgetOnPlayerHandler {
 	@Override
 	public boolean handle(Player player, int interfaceID, int component, int slot, int itemID, Player target) {
 		Ability ability = ActionBar.getAbilities().get(interfaceID << 16 | slot);
-		player.getDispatcher().sendConsoleMessage("Ability: " + ability);
+		player.getDispatcher().sendGameMessage("Ability: " + slot);
 		System.out.println("Ability: " + ability);
 		if (ability != null) {
 			player.getCombatSchedule().run(ability);

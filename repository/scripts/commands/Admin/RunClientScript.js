@@ -27,18 +27,14 @@
  * @author Sundays211
  * @since 05/11/2014
  */
-var api;
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The commands to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "cs2", "cscript" ];		
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
-		if (args.length < 1) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		
+		if (args.length < 1 || isNaN(args[0])) {
+			sendCommandResponse(player, "Usage: "+syntax+" [id] [args]", scriptArgs.console);
 			return false;
 		}
 		var scriptID = parseInt(args[0]);
@@ -56,21 +52,15 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.Command
 				params[i-1] = args[i];
 			}
 		}
-		//api.runClientScript(player, 5561, [1, 2999]);
-		api.sendConsoleMessage(player, "Running client script "+scriptID+" with params "+params);
+		sendCommandResponse(player, "Running client script "+scriptID+" with params "+JSON.stringify(params), scriptArgs.console);
 		api.runClientScript(player, scriptID, params);
 		return true;
-	},
-	
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
-	var commandListener = new CommandListener();
-	scriptManager.registerCommandListener(commandListener, commandListener.getPossibleSyntaxes());
+	var listener = new CommandListener();
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "cs2", listener);
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "cscript", listener);
 };

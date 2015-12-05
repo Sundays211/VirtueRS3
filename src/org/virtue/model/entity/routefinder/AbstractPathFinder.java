@@ -2,18 +2,20 @@ package org.virtue.model.entity.routefinder;
 
 import org.virtue.model.entity.Entity;
 import org.virtue.model.entity.movement.Direction;
+import org.virtue.model.entity.path.Path;
+import org.virtue.model.entity.path.Pathfinder;
 import org.virtue.model.entity.region.SceneLocation;
 import org.virtue.model.entity.region.Tile;
 
 /**
  * @author Graham Edgecombe
  */
-public abstract class PathFinder {
+public abstract class AbstractPathFinder implements Pathfinder {
 	
 	
     protected TraversalMap map;
     
-    public PathFinder (TraversalMap map) {
+    public AbstractPathFinder (TraversalMap map) {
     	this.map = map;
     }
 	
@@ -37,7 +39,7 @@ public abstract class PathFinder {
         int destLocalX = targetTile.getX() - baseLocalX;
         int destLocalY = targetTile.getY() - baseLocalY;
 		
-		return find(new Tile(baseLocalX, baseLocalY, tile.getPlane()), Tile.REGION_SIZES[0], tile.getLocalX(), tile.getLocalY(), destLocalX, destLocalY, target.getPlayerCount(), target.getPlayerCount(), entity.getPlayerCount());
+		return find(new Tile(baseLocalX, baseLocalY, tile.getPlane()), Tile.REGION_SIZES[0], tile.getLocalX(), tile.getLocalY(), destLocalX, destLocalY, target.getSize(), target.getSize(), entity.getSize());
 	}
 	
 	/**
@@ -73,7 +75,7 @@ public abstract class PathFinder {
         int destLocalX = loc.getX() - baseLocalX;
         int destLocalY = loc.getY() - baseLocalY;
 		
-		return find(new Tile(baseLocalX, baseLocalY, tile.getPlane()), Tile.REGION_SIZES[0], tile.getLocalX(), tile.getLocalY(), destLocalX, destLocalY, locWidth, locLength, entity.getPlayerCount());
+		return find(new Tile(baseLocalX, baseLocalY, tile.getPlane()), Tile.REGION_SIZES[0], tile.getLocalX(), tile.getLocalY(), destLocalX, destLocalY, locWidth, locLength, entity.getSize());
 	}
 
 	/**
@@ -98,7 +100,7 @@ public abstract class PathFinder {
         // Calculate the local x and y coordinates
         int destLocalX = destX - baseLocalX, destLocalY = destY - baseLocalY;
 
-        return find(new Tile(baseLocalX, baseLocalY, tile.getPlane()), Tile.REGION_SIZES[0], tile.getLocalX(), tile.getLocalY(), destLocalX, destLocalY, 0, 0, entity.getPlayerCount());
+        return find(new Tile(baseLocalX, baseLocalY, tile.getPlane()), Tile.REGION_SIZES[0], tile.getLocalX(), tile.getLocalY(), destLocalX, destLocalY, 0, 0, entity.getSize());
     }
 
     public Path find(Tile tile, int radius, int srcX, int srcY, int destX, int destY) {

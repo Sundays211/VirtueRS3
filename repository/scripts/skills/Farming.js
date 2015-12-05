@@ -1360,7 +1360,7 @@ Farming.TREES.chopDown = function (player, patchID, tree, emptyStatus) {
 	if (hatchet == null) {
 		api.sendMessage(player, "You need a hatchet to chop this tree.");
 	}
-	if (api.getCurrentLevel(player, WOODCUTTING_SKILL) < tree.level) {
+	if (api.getStatLevel(player, WOODCUTTING_SKILL) < tree.level) {
 		api.sendMessage(player, "You require a woodcutting level of "+tree.level+"  to cut this tree.");
 		return;
 	}

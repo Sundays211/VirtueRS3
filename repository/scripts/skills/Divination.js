@@ -457,7 +457,7 @@ var listen = function(scriptManager) {
 function startHarvest (player, npc) {
 	print(api.getNpcType(npc.getID()).name+"\n");
 	var harvest = forHarvestNPC(npc.getID());
-	if (api.getCurrentLevel(player, DIVINATION_SKILL) < harvest.level) {
+	if (api.getStatLevel(player, DIVINATION_SKILL) < harvest.level) {
 		api.sendMessage(player, "You need a Divination level of "+harvest.level+" to harvest from this " + api.getNpcType(harvest.wispID).name + ".");
 		return;
 	}

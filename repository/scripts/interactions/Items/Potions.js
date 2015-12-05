@@ -68,10 +68,12 @@ function startPotion (player, item, slot) {
 	} else {
 		api.runAnimation(player, 18001);
 	}
-	api.boostSkill(player, "STRENGTH", 16);
-	api.boostSkill(player, "ATTACK", 16);
-	api.boostSkill(player, "MAGIC", 16);
-	api.boostSkill(player, "RANGED", 16);
+	//To get the current level, use api.getStatLevel(player, stat)
+	//To set the current level, use api.setStatLevel(player, stat, level)
+	api.boostStat(player, Stat.STRENGTH, 16);
+	api.boostStat(player, Stat.ATTACK, 16);
+	api.boostStat(player, Stat.MAGIC, 16);
+	api.boostStat(player, Stat.RANGED, 16);
 	api.delCarriedItem(player, item.getID(), 1, slot);
 	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {

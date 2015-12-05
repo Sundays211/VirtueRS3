@@ -28,18 +28,15 @@ var SkillType = Java.type('org.virtue.model.entity.player.skill.SkillType');
  * @author Sundays211
  * @since 05/11/2014
  */
-var api;
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The commands to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "bxp", "bonusxp", "xp" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
-		if ("bxp" == syntax.toLowerCase() || "bonusxp" == syntax.toLowerCase()) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		
+		switch (syntax) {
+		case "bxp":
+		case "bonusxp":
 			try {
 				var skill = SkillType.forID(parseInt(args[0]));
 				if (skill == null) {
@@ -54,44 +51,45 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.Command
 				api.sendConsoleMessage(player, "You have used an invalid syntax. Usage: 'bxp [skillid] [xp]'");
 				return false;
 			}
-		} else if ("xp" == syntax.toLowerCase()) {
-			try {
-				var skill = SkillType.forID(parseInt(args[0]));
-				if (skill == null) {
-					api.sendConsoleMessage(player, "Invalid skill ID! ID must be between 0 (attack) and 25 (divination)");
-					return false;
-				}
-				var xpToAdd = parseInt(args[1]);
-				player.getSkills().addExperience(skill, xpToAdd);
-				api.sendConsoleMessage(player, "Added "+xpToAdd+" experience to "+skill.getName());
-				return true;				
-			} catch (ex) {
-				api.sendConsoleMessage(player, "You have used an invalid syntax. Usage: 'xp [skillid] [xp]'");
-				return false;
+			return;
+		case "xp":
+			if (args.length < 2) {
+				sendCommandResponse(player, "Usage: "+syntax+" [skill] [amount]", scriptArgs.console);
+				return;
 			}
-		} else if ("boost" == syntax.toLowerCase()) {
-			var skill = SkillType.forID(parseInt(args[0]));
-			if (skill == null) {
-				api.sendConsoleMessage(player, "Invalid skill ID! ID must be between 0 (attack) and 25 (divination)");
+			var stat = api.getStatByName(args[0]);
+			if (stat == -1) {
+				api.sendConsoleMessage(player, "Invalid skill: "+args[0]);
+				return;
+			}
+			var xpToAdd = parseInt(args[1]);
+			api.addExperience(player, stat, xpToAdd, false);
+			sendCommandResponse(player, "Added "+xpToAdd+" experience to "+args[0]);
+			return;
+		case "boost":
+			if (args.length < 2) {
+				sendCommandResponse(player, "Usage: "+syntax+" [skill] [boostAmount]", scriptArgs.console);
+				return;
+			}
+			var stat = api.getStatByName(args[0]);
+			if (stat == -1) {
+				api.sendConsoleMessage(player, "Invalid skill: "+args[0]);
 				return false;
 			}
 			var boost = parseInt(args[1]);
-			player.getSkills().boostSkill(skill, boost);
-			api.sendConsoleMessage(player, "Boosted "+skill.getName()+" by "+boost+" levels.");
-			return true;
+			api.boostStat(player, stat, boost);
+			sendCommandResponse(player, "Boosted "+args[0]+" by "+boost+" levels.", scriptArgs.console);
+			return;
 		}
-		return false;
-	},
-		
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
+	var commands = [ "bxp", "bonusxp", "xp", "boost" ];
+	
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	for (var i in commands) {
+		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);
+	}
 };

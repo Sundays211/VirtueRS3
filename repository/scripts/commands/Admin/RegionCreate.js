@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
 var DynamicRegion = Java.type('org.virtue.model.entity.region.DynamicRegion');
 var RegionTools = Java.type('org.virtue.model.entity.region.RegionTools');
 var ClipFlag = Java.type('org.virtue.model.entity.region.ClipFlag');
@@ -29,44 +28,35 @@ var Region = Java.type('org.virtue.model.entity.region.Region');
  * @date 11/17/2015
  */
 
-var CommandListener = Java.extend(Java
-		.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The object ids to bind to */
-	getPossibleSyntaxes : function() {
-		return [ "makeregion", "delregion" ];
-	},
-
-	/* The first option on an object */
-	handle : function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		
 		if (syntax.toLowerCase() == "makeregion") {
 			DynamicRegion = RegionTools.createRegion();
 			for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 				for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-					RegionTools.setChunk(DynamicRegion, xOffSet, yOffSet, 0, 69, 80, 0, 0);
+					RegionTools.setChunk(DynamicRegion, xOffSet, yOffSet, 0, 14, 624, 0, 0);
 				}
 			}
+			RegionTools.setChunk(DynamicRegion, 1, 1, 0, 18, 532, 0, 0);
 			RegionTools.buildRegion(DynamicRegion);
-			player.getMovement().teleportTo(DynamicRegion.getBaseTile());
-			player.setArmarDynamicRegion(DynamicRegion);
+			var squareX = api.getSquareX(DynamicRegion.getBaseTile());
+			var squareY = api.getSquareY(DynamicRegion.getBaseTile());
+			api.teleportEntity(player, 0, squareX, squareY, 10, 10);
 			api.sendMessage(player, "You made a dynamic region!");
 		} else if (syntax.toLowerCase() == "delregion") {
 			DynamicRegion = player.getArmarDynamicRegion();
 			RegionTools.destroyRegion(DynamicRegion);
 			api.sendMessage(player, "Dynamic Region deleted!");
 		}
-		return true;
-	},
-
-	adminCommand : function() {
-		return false;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener
-			.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "makeregion", listener);
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "delregion", listener);
 };

@@ -17,6 +17,6 @@ var graniteMaul = new SpecialAttack(CombatStyle.MELEE, [4153]) {
 var listen = function(scriptManager) {
 	graniteMaul.animation = new AnimationBlock(1667);
 	graniteMaul.graphics = new GraphicsBlock(1, 340);
-	graniteMaul.damageModifier = 1.1;
+	graniteMaul.damageModifier = 1.50;
 	SpecialAttackHandler.register(graniteMaul);
 };

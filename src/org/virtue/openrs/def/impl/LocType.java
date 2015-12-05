@@ -144,6 +144,8 @@ public class LocType {
     //Class537 myList;
     //Interface8 anInterface8_7349;
     public String[] op;
+
+	public int walkingFlag;
     
     LocType(int id) {
 		myid = id;
@@ -261,7 +263,7 @@ public class LocType {
 		    } else if (opcode == 67) {
 		    	anInt7367 = buffer.getShort() & 0xffff;
 		    } else if (opcode == 69) {
-		    	buffer.get();// & 0xff
+		    	walkingFlag = buffer.get() & 0xff;
 		    } else if (opcode == 70) {
 		    	anInt7382 = (buffer.getShort() << 2);
 		    } else if (71 == opcode) {

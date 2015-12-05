@@ -87,7 +87,11 @@ public class MinigameController {
 
 			@Override
 			public void execute() {
-				process();
+				try {
+					process();
+				} catch (Exception e) {
+					this.stop();
+				}
 			}
 			
 		};

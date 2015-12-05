@@ -296,7 +296,7 @@ function selectLogsToAdd (player, fire) {
 function runFiremakingAction (player, item, slot) {
 	var log = forItem(item.getID());//Find the log type
 	//FIREMAKING_SKILL
-	if (api.getCurrentLevel(player, FIREMAKING_SKILL) < log.level) {
+	if (api.getStatLevel(player, FIREMAKING_SKILL) < log.level) {
 		api.sendMessage(player, "You need a firemaking level of "+log.level+" to light these logs.");
 		return;
 	}
@@ -372,7 +372,7 @@ function moveToBonfire(player, item, slot, fire) {
 
 function runBonfireAction (player, item, slot, fire) {
 	var log = forItem(item.getID());//Find the log type
-	if (api.getCurrentLevel(player, FIREMAKING_SKILL) < log.level) {
+	if (api.getStatLevel(player, FIREMAKING_SKILL) < log.level) {
 		api.sendMessage(player, "You need a firemaking level of at least "+log.level+" to add these logs to a bonfire.");
 		return;
 	}

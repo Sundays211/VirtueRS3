@@ -21,9 +21,14 @@
  */
 package org.virtue.script;
 
+import java.util.Collections;
+import java.util.Iterator;
+
+import org.virtue.AccountIndex;
 import org.virtue.AccountInfo;
 import org.virtue.Virtue;
 import org.virtue.model.Lobby;
+import org.virtue.model.Node;
 import org.virtue.model.ServerNode;
 import org.virtue.model.World;
 import org.virtue.model.content.exchange.ExchangeOfferStatus;
@@ -69,6 +74,7 @@ import org.virtue.openrs.def.vartype.VarBitType;
 import org.virtue.utility.EnumTypeList;
 import org.virtue.utility.StructTypeList;
 import org.virtue.utility.TimeUtility;
+import org.virtue.utility.text.Base37Utility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -86,6 +92,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 	public Long getUserHash(String name) {
 		AccountInfo info = Virtue.getInstance().getAccountIndex().lookupByDisplay(name);
 		return info == null ? null : info.getUserHash();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getUserHash(org.virtue.model.entity.player.Player)
+	 */
+	@Override
+	public Long getUserHash(Player player) {
+		return player.getUserHash();
 	}
 
 	/* (non-Javadoc)
@@ -143,7 +157,18 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (desiredName == null || desiredName.length() < 1 || desiredName.length() > 12) {
 			return false;
 		}
-		Virtue.getInstance().getAccountIndex().setDisplayName(userHash, desiredName);
+		AccountIndex index = Virtue.getInstance().getAccountIndex();
+		
+		
+		if (!Base37Utility.decodeBase37(userHash).equalsIgnoreCase(desiredName)
+				&& !index.lookupByHash(userHash).getPrevName().equalsIgnoreCase(desiredName)) {
+			//If the player is reverting to their username or old name, this is OK
+			if (index.lookupByDisplay(desiredName) != null
+					|| index.lookupByUsername(desiredName) != null) {
+				return false;//Don't want players using names which are already taken
+			}
+		}
+		index.setDisplayName(userHash, desiredName);
 		return true;
 	}
 
@@ -177,15 +202,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.script.ScriptAPI#setAccountType(java.lang.Long, int)
 	 */
 	@Override
-	public void setAccountType(Player changedBy, Long userHash, int type) {
-		PrivilegeLevel rights = PrivilegeLevel.forId(type);
-		if (rights == null) {
-			throw new IllegalArgumentException("Invalid account type "+type);
+	public void setAccountType(Player changedBy, Long userHash, int typeId) {
+		PrivilegeLevel type = PrivilegeLevel.forId(typeId);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid account type "+typeId);
 		}
 		if (changedBy == null || changedBy.getPrivilegeLevel().getRights() < 2) {
 			throw new RuntimeException("The specified user does not have the appropriate permissions to change account types.");
 		}
-		Virtue.getInstance().getAccountIndex().setAccountType(userHash, rights);
+		Virtue.getInstance().getAccountIndex().setAccountType(userHash, type);
 	}
 
 	/* (non-Javadoc)
@@ -213,11 +238,59 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getWorldPlayerByIndex(org.virtue.model.World, int)
+	 */
+	@Override
+	public Player getWorldPlayerByIndex(World world, int index) {
+		return world.getPlayers().get(index);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getWorldNpcByIndex(org.virtue.model.World, int)
+	 */
+	@Override
+	public NPC getWorldNpcByIndex(World world, int index) {
+		return world.getNPCs().get(index);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getNodeId(org.virtue.model.ServerNode)
+	 */
+	@Override
+	public int getNodeId(ServerNode server) {
+		return server.getId();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getPlayerCount(org.virtue.model.ServerNode)
+	 */
+	@Override
+	public int getPlayerCount(ServerNode server) {
+		return server.getPlayerCount();
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.script.ScriptAPI#getServerPlayers(org.virtue.model.ServerNode)
 	 */
 	@Override
-	public Iterable<Player> getServerPlayers(ServerNode server) {
-		return server.getPlayers();
+	public Iterator<Player> getPlayerIterator(ServerNode server) {
+		return Collections.unmodifiableCollection(server.getPlayers()).iterator();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getNpcIterator(org.virtue.model.World)
+	 */
+	@Override
+	public Iterator<NPC> getNpcIterator(World world) {
+		return Collections.unmodifiableCollection(world.getNPCs()).iterator();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getServerCycle()
+	 */
+	@Override
+	public int getServerCycle() {
+		return Virtue.getInstance().getEngine().getTicks();
 	}
 
 	/* (non-Javadoc)
@@ -1054,6 +1127,19 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getStatByName(java.lang.String)
+	 */
+	@Override
+	public int getStatByName(String name) {
+		try {
+			SkillType stat = SkillType.valueOf(name.toUpperCase());
+			return stat == null ? -1 : stat.getID();
+		} catch (IllegalArgumentException ex) {
+			return -1;
+		}
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.script.ScriptAPI#getCurrentLevel(org.virtue.model.entity.player.Player, java.lang.String)
 	 */
 	@Override
@@ -1069,21 +1155,21 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.script.ScriptAPI#getCurrentLevel(org.virtue.model.entity.player.Player, int)
 	 */
 	@Override
-	public int getCurrentLevel(Player player, int skillID) {
-		SkillType skill = SkillType.forID(skillID);		
+	public int getStatLevel(Player player, int statId) {
+		SkillType skill = SkillType.forID(statId);		
 		return skill == null ? -1 : player.getSkills().getCurrentLevel(skill);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.script.ScriptAPI#getBaseLevel(org.virtue.model.entity.player.Player, java.lang.String)
+	 * @see org.virtue.script.ScriptAPI#setStatLevel(org.virtue.model.entity.player.Player, int, int)
 	 */
 	@Override
-	public int getBaseLevel(Player player, String skillName) {
-		SkillType skill = SkillType.valueOf(skillName.toUpperCase());
-		if (skill == null) {
-			throw new IllegalArgumentException("Invalid skill: "+skillName);
+	public void setStatLevel(Player player, int statId, int level) {
+		SkillType stat = SkillType.forID(statId);	
+		if (stat == null) {
+			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
-		return player.getSkills().getBaseLevel(skill);
+		player.getSkills().setLevel(stat, level);
 	}
 
 	/* (non-Javadoc)
@@ -1111,36 +1197,44 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.script.ScriptAPI#addExperience(org.virtue.model.entity.player.Player, int, int, boolean)
 	 */
 	@Override
-	public void addExperience(Player player, int skillId, double xp, boolean boostable) {
-		SkillType skill = SkillType.forID(skillId);
+	public void addExperience(Player player, int statId, double xp, boolean boostable) {
+		SkillType skill = SkillType.forID(statId);
 		if (skill == null) {
-			throw new IllegalArgumentException("Invalid skill: "+skillId);
+			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
 		player.getSkills().addExperience(skill, xp);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.script.ScriptAPI#boostSkill(org.virtue.model.entity.player.Player, java.lang.String, int)
+	 * @see org.virtue.script.ScriptAPI#boostStat(org.virtue.model.entity.player.Player, int, int)
 	 */
 	@Override
-	public void boostSkill(Player player, String skillName, int amount) {
-		SkillType skill = SkillType.valueOf(skillName.toUpperCase());
-		if (skill == null) {
-			throw new IllegalArgumentException("Invalid skill: "+skillName);
+	public void boostStat(Player player, int statId, int amount) {
+		SkillType stat = SkillType.forID(statId);
+		if (stat == null) {
+			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
-		player.getSkills().boostSkill(skill, amount);
+		player.getSkills().boostSkill(stat, amount);		
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.script.ScriptAPI#drainSkill(org.virtue.model.entity.player.Player, java.lang.String, int)
+	 * @see org.virtue.script.ScriptAPI#restoreStat(org.virtue.model.entity.player.Player, int)
 	 */
 	@Override
-	public void drainSkill(Player player, String skillName, int amount) {
-		SkillType skill = SkillType.valueOf(skillName.toUpperCase());
-		if (skill == null) {
-			throw new IllegalArgumentException("Invalid skill: "+skillName);
+	public void resetStat(Player player, int statId) {
+		SkillType stat = SkillType.forID(statId);
+		if (stat == null) {
+			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
-		player.getSkills().boostSkill(skill, -amount);
+		player.getSkills().restore(stat);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#restoreLifePoints(org.virtue.model.entity.Entity)
+	 */
+	@Override
+	public void restoreLifePoints(Entity entity) {
+		entity.getImpactHandler().restoreLifepoints();
 	}
 
 	/* (non-Javadoc)
@@ -1165,7 +1259,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void sendFilterMessage(Player player, String message) {
-		player.getDispatcher().sendMessage(message, ChannelType.GAME_FILTERABLE);
+		player.getDispatcher().sendMessage(message, ChannelType.GAME_SPAM);
 	}
 
 	/* (non-Javadoc)
@@ -1335,6 +1429,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 		player.getAppearance().refresh();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#setRenderAnim(org.virtue.model.entity.player.Player, int)
+	 */
+	@Override
+	public void setRenderAnim(Player player, int renderId) {
+		player.getAppearance().setRenderAnimation(renderId);
+		player.getAppearance().refresh();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.virtue.script.ScriptAPI#refreshEquipment(org.virtue.model.entity.player.Player)
@@ -1469,6 +1572,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#teleportEntity(org.virtue.model.entity.Entity, org.virtue.model.entity.region.Tile)
+	 */
+	@Override
+	public boolean teleportEntity(Entity entity, Tile coords) {
+		return entity.getMovement().teleportTo(coords);
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.script.ScriptAPI#teleportEntity(org.virtue.model.entity.Entity, int, int, int)
 	 */
 	@Override
@@ -1507,6 +1618,38 @@ public class VirtueScriptAPI implements ScriptAPI {
 				entity.getMovement().setOnTarget(onTarget);
 			}			
 		});//Run this in here so it doesn't clog up the main thread		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getCoords(org.virtue.model.Node)
+	 */
+	@Override
+	public Tile getCoords(Node node) {
+		return node.getCurrentTile();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getCoordX(org.virtue.model.Node)
+	 */
+	@Override
+	public int getCoordX(Node node) {
+		return node.getCurrentTile().getX();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getCoordY(org.virtue.model.Node)
+	 */
+	@Override
+	public int getCoordY(Node node) {
+		return node.getCurrentTile().getY();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.script.ScriptAPI#getCoordLevel(org.virtue.model.Node)
+	 */
+	@Override
+	public int getCoordLevel(Node node) {
+		return node.getCurrentTile().getPlane();
 	}
 
 	/* (non-Javadoc)

@@ -55,6 +55,20 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 		case 2:
 			player.getTreasureHunter().open();
 			return;
+		case 3://Set display name
+			requestName(player, "Please enter your desired display name: ", function (name) {
+				var userHash = api.getUserHash(player);
+				var oldName = api.getName(userHash);
+				var success = api.setDisplayName(player, userHash, name);
+				if (success) {
+					api.sendMessage(player, "Your display name has been changed from "+oldName+" to "+name+".");
+					api.sendMessage(player, "You might need to log out for the change to take effect.");
+					api.sendMessage(player, "NOTE: This change has no effect on the name you use to log in.");
+				} else {
+					api.sendMessage(player, "Sorry, "+name+" is not available.");
+				}
+			});
+			return;
 		}
 	}
 });

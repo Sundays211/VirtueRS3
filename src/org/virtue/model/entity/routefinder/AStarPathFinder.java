@@ -3,13 +3,14 @@ package org.virtue.model.entity.routefinder;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.virtue.model.entity.path.Path;
+import org.virtue.model.entity.path.Point;
 import org.virtue.model.entity.region.Tile;
-import org.virtue.model.entity.routefinder.Path.Step;
 
 /**
  * @author Graham Edgecombe
  */
-public final class AStarPathFinder extends PathFinder {
+public final class AStarPathFinder extends AbstractPathFinder {
 
     /**
      * The cost of moving in a straight line.
@@ -172,6 +173,19 @@ public final class AStarPathFinder extends PathFinder {
     	super(map);
     }
 
+	/* (non-Javadoc)
+	 * @see org.virtue.model.entity.path.Pathfinder#find(org.virtue.model.entity.region.Tile, int, org.virtue.model.entity.region.Tile, int, int, int, int, int, boolean)
+	 */
+	@Override
+	public Path find(Tile start, int size, Tile end, int sizeX,
+			int sizeY, int rotation, int type, int walkingFlag, boolean near) {
+		int srcX = start.getX();
+		int srcY = start.getY();
+		int dstX = end.getX();
+		int dstY = end.getY();
+		return find(start, Tile.REGION_SIZES[0], srcX, srcY, dstX, dstY, sizeX, sizeY, size);
+	}
+
     @Override
     public Path find(Tile position, int radius, int srcX, int srcY, int dstX, int dstY, int objWidth, int objLength, int size) {
         int width = radius * 2, length = width * 2;
@@ -297,7 +311,7 @@ public final class AStarPathFinder extends PathFinder {
         Path p = new Path();
         Node n = nodes[dstX][dstY];
         while(n != nodes[srcX][srcY]) {
-        	p.addFirst(new Step(n.getX() + position.getX() - radius, n.getY() + position.getY() - radius));
+        	p.getPoints().addFirst(new Point(n.getX() + position.getX() - radius, n.getY() + position.getY() - radius));
             n = n.getParent();
         }
         return p;

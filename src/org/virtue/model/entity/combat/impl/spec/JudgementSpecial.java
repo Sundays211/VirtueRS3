@@ -19,7 +19,7 @@ public final class JudgementSpecial extends SpecialAttackHandler {
 		super(CombatStyle.MELEE, 11694);
 		super.animation = new AnimationBlock(11989);
 		super.graphics = new GraphicsBlock(1, 2113);
-		super.accuracyModifier = 50;
+		//super.accuracyModifier = 50;
 		super.damageModifier = 2.50;
 	}
 

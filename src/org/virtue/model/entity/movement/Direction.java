@@ -139,27 +139,37 @@ public enum Direction {
 	 * @return {@code True} if so.
 	 */
 	public boolean canMove(Tile l) {
-    	int plane = l.getPlane();
-    	int x = l.getX() + dx;
-    	int y = l.getY() + dy;
+    	return canMove(l, 1);
+	}
+	
+	/**
+	 * Checks if traversal is permitted for this direction.
+	 * @param coords The start coords.
+	 * @param size The mover size.
+	 * @return {@code True} if so.
+	 */
+	public boolean canMove(Tile coords, int size) {
+    	int plane = coords.getPlane();
+    	int x = coords.getX() + dx;
+    	int y = coords.getY() + dy;
     	RegionManager map = World.getInstance().getRegions();
     	switch (this) {
 		case EAST:
-			return map.isTraversableEast(plane, x, y, 1);
+			return map.isTraversableEast(plane, x, y, size);
 		case NORTH:
-			return map.isTraversableNorth(plane, x, y, 1);
+			return map.isTraversableNorth(plane, x, y, size);
 		case NORTHEAST:
-			return map.isTraversableNorthEast(plane, x, y, 1);
+			return map.isTraversableNorthEast(plane, x, y, size);
 		case NORTHWEST:
-			return map.isTraversableNorthWest(plane, x, y, 1);
+			return map.isTraversableNorthWest(plane, x, y, size);
 		case SOUTH:
-			return map.isTraversableSouth(plane, x, y, 1);
+			return map.isTraversableSouth(plane, x, y, size);
 		case SOUTHEAST:
-			return map.isTraversableSouthEast(plane, x, y, 1);
+			return map.isTraversableSouthEast(plane, x, y, size);
 		case SOUTHWEST:
-			return map.isTraversableSouthWest(plane, x, y, 1);
+			return map.isTraversableSouthWest(plane, x, y, size);
 		case WEST:
-			return map.isTraversableWest(plane, x, y, 1);
+			return map.isTraversableWest(plane, x, y, size);
     	}
     	return true;
 	}

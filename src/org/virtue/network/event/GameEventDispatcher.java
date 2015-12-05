@@ -145,14 +145,18 @@ public class GameEventDispatcher {
 			break;
 		case LOGIN_WORLD:
 			player.setGameState(GameState.WORLD);
-			sendSceneGraph(player.getCurrentTile(), MapSize.DEFAULT, true,
-					false);
+			sendSceneGraph(player.getCurrentTile(), MapSize.DEFAULT, true, false);
 			if (Virtue.getInstance().hasUpdate()) {
 				sendSystemUpdate(Virtue.getInstance().getUpdateTime() - 2);
 				// Subtract a couple of ticks to account for delay
 			}
 			player.setGameState(GameState.WORLD_READY);
 			player.getViewport().onMapLoaded();
+			
+			//if (player.getLastLogin() == 0) {
+				//sendRootWidget(1507); // Welcome Screen
+				//break;
+			//}
 			sendGameMessage("Welcome to " + Messages.ServerName + ".");
 			sendGameMessage(
 					"<col=#333333>Commands: ::item, ::godwars, ::vorago, ::edge, ::tele, ::home, ::yell ::players");
@@ -164,8 +168,7 @@ public class GameEventDispatcher {
 			player.updateWeight();
 			sendRunEnergy(player.getRunEnergy());
 			if (player.getClanHash() != 0L) {
-				Virtue.getInstance().getClans().getSettings()
-						.registerPlayer(player.getChat(), false);
+				Virtue.getInstance().getClans().getSettings().registerPlayer(player.getChat(), false);
 			}
 			switch (player.getMode()) {
 			case EOC:
@@ -180,15 +183,12 @@ public class GameEventDispatcher {
 			player.getInteractions().initialise();
 			player.getExchangeOffers().init();
 			player.getCombat().setAdrenaline(0);
-			player.getCombatSchedule().setRetaliating(
-					player.getVars().getVarValueInt(
-							VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
-			player.getImpactHandler().setMaximumLifepoints(player.getSkills().getBaseLevel(SkillType.CONSTITUTION) * 100);
+			player.getCombatSchedule()
+					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
+			player.getImpactHandler()
+					.setMaximumLifepoints(player.getSkills().getBaseLevel(SkillType.CONSTITUTION) * 100);
 			player.getImpactHandler().restoreLifepoints();
-			player.getCombat()
-					.getPrayer()
-					.setPrayerPoints(
-							player.getSkills().getBaseLevel(SkillType.PRAYER) * 10);
+			player.getCombat().getPrayer().setPrayerPoints(player.getSkills().getBaseLevel(SkillType.PRAYER) * 10);
 			player.getMoneyPouch().refresh(false);
 			player.getVars().processLogin(player.getLastLogin());
 			sendMusic(36067, 100);
@@ -201,8 +201,7 @@ public class GameEventDispatcher {
 		player.getChat().getIgnoreList().sendIgnores();
 		player.getChat().getFriendsList().sendFriendsList();
 		if (player.getClanHash() != 0L) {
-			Virtue.getInstance().getClans().getChannels()
-					.joinMyChannel(player.getChat());
+			Virtue.getInstance().getClans().getChannels().joinMyChannel(player.getChat());
 		}
 	}
 

@@ -21,6 +21,7 @@
  */
 package org.virtue.model.entity.region;
 
+import org.virtue.model.Node;
 import org.virtue.model.World;
 import org.virtue.model.entity.player.Player;
 import org.virtue.model.entity.player.PrivilegeLevel;
@@ -34,14 +35,13 @@ import org.virtue.openrs.def.impl.LocType;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class SceneLocation {
+public class SceneLocation extends Node {
 	
 	public static SceneLocation create (int id, Tile tile, int type, int rotation) {
 		SceneLocation object = new SceneLocation(id, tile, type, rotation);
 		return object;
 	}
 	
-	private int id;
 	
 	private int originalID;
 	
@@ -53,15 +53,25 @@ public class SceneLocation {
 	
 	private int rotation;
 	
-	private LocType objType;
+	private LocType locType;
 	
 	private boolean exists = true;
 	
 	protected SceneLocation (int id, Tile tile, int nodeType, int rotation) {
-		this.id = this.originalID = id;
+		super(id);
+		super.currentTile = tile;
+		this.originalID = id;
 		this.baseTile = tile;
 		this.nodeType = nodeType;
 		this.rotation = rotation;
+		super.name = getLocType().name;
+		if ((rotation & 2) == 0) {
+			super.setSizeX(getLocType().sizeX);
+			super.setSizeY(getLocType().sizeY);
+		} else {
+			super.setSizeX(getLocType().sizeY);
+			super.setSizeY(getLocType().sizeX);
+		}
 	}
 	
 	/**
@@ -102,7 +112,7 @@ public class SceneLocation {
 	 */
 	public void transform (int newID, int revertDelay) {
 		this.id = newID;
-		this.objType = null;
+		this.locType = null;
 		this.respawnTime = revertDelay;
 		Region region = World.getInstance().getRegions().getRegionByID(baseTile.getRegionID());
 		if (region != null) {
@@ -142,10 +152,10 @@ public class SceneLocation {
 	 * @return The cache definition
 	 */
 	public LocType getLocType () {
-		if (objType == null) {
-			objType = LocTypeList.list(id);
+		if (locType == null) {
+			locType = LocTypeList.list(id);
 		}
-		return objType;
+		return locType;
 	}
 	
 	/**
@@ -182,12 +192,12 @@ public class SceneLocation {
 	}
 	
 	/**
-	 * Returns whether the tile is adjacent to this location
-	 * @param tile The title to check
+	 * Returns whether the coords are directly adjacent to this location
+	 * @param coords The coords to check
 	 * @return True if the tile is adjacent, false otherwise
 	 */
-	public boolean isAdjacentTo (Tile tile) {
-		int tileX = tile.getX();
+	public boolean isAdjacentTo (Tile coords) {
+		int tileX = coords.getX();
 		int minX = baseTile.getX();
 		int maxX = minX + getLocType().sizeX - 1;
 		int dx;
@@ -198,7 +208,7 @@ public class SceneLocation {
 		} else {
 			dx = 0;
 		}
-		int tileY = tile.getY();
+		int tileY = coords.getY();
 		int minY = baseTile.getY();
 		int maxY = minY + getLocType().sizeY - 1;
 		int dy;
@@ -218,15 +228,15 @@ public class SceneLocation {
 		}
 	}
 	
-	public boolean isStandingOn (Tile tile) {
-		int tileX = tile.getX();
+	public boolean isStandingOn (Tile coords) {
+		int coordX = coords.getX();
 		int minX = baseTile.getX();
-		int maxX = minX + getLocType().sizeX;
-		int tileY = tile.getY();
+		int maxX = minX + getLocType().sizeX - 1;
+		int coordY = coords.getY();
 		int minY = baseTile.getY();
-		int maxY = minY + getLocType().sizeY;
-		if (tileX >= minX && tileX <= maxX 
-				&& tileY >= minY && tileY <= maxY) {
+		int maxY = minY + getLocType().sizeY - 1;
+		if (coordX >= minX && coordX <= maxX 
+				&& coordY >= minY && coordY <= maxY) {
 			return true;
 		} else {
 			return false;

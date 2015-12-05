@@ -62,7 +62,7 @@ public abstract class Node {
 	 * Gets the size.
 	 * @return The size.
 	 */
-	public int getPlayerCount() {
+	public int getSize() {
 		return sizeX;
 	}
 

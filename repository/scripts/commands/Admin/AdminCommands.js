@@ -2,6 +2,7 @@ var Virtue = Java.type('org.virtue.Virtue');
 var World = Java.type('org.virtue.model.World');
 
 var NPC = Java.type('org.virtue.model.entity.npc.NPC');
+var NpcDropParser = Java.type('org.virtue.parser.impl.NpcDropParser');
 var Tile = Java.type('org.virtue.model.entity.region.Tile');
 
 var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
@@ -62,7 +63,8 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			}
 			return;
 		case "music":
-			player.getDispatcher().sendMusic(parseInt(args[0]), parseInt(args[1]));
+			api.sendMessage(player, api.getItemType(4151).name.toString());
+			//player.getDispatcher().sendMusic(parseInt(args[0]), parseInt(args[1]));
 			return;
 		case "inter":
 		case "root":
@@ -88,6 +90,10 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 		case "reloadPrice":
 			Virtue.getInstance().getExchange().loadPrices();
 			return;
+		case "reloadNPCDrops":
+			api.sendMessage(player, "Reloaded Npc Drops.");
+			NpcDropParser.loadNpcDrops();
+			return;
 		case "duel":
 		case "challenge":
 			player.test(player);
@@ -112,7 +118,7 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			if (args.length < 1) {
 				return false;
 			}
-			var animID = Integer.parseInt(args[0]);
+			var animID = parseInt(args[0]);
 			player.getAppearance().setRenderAnimation(animID);
 			player.getAppearance().refresh();
 			return;
@@ -146,26 +152,26 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			api.runAnimation(player, 18007);
 			return;
 		case "god":
-			api.boostSkill(player, "STRENGTH", 255);
-			api.boostSkill(player, "ATTACK", 255);
-			api.boostSkill(player, "MAGIC", 255);
-			api.boostSkill(player, "RANGED", 255);
-			api.boostSkill(player, "DEFENCE", 255);
-			api.boostSkill(player, "PRAYER", 255);
-			api.boostSkill(player, "CONSTITUTION", 255);
-			player.getAppearance().setRenderAnimation(2987);
-			player.getAppearance().refresh();
+			api.boostStat(player, Stat.STRENGTH, 255);
+			api.boostStat(player, Stat.ATTACK, 255);
+			api.boostStat(player, Stat.MAGIC, 255);
+			api.boostStat(player, Stat.RANGED, 255);
+			api.boostStat(player, Stat.DEFENCE, 255);
+			api.boostStat(player, Stat.PRAYER, 255);
+			api.boostStat(player, Stat.CONSTITUTION, 255);
+			api.restoreLifePoints(player);
+			api.setRenderAnim(player, 2987);
 			return;
 		case "normal":
-			api.drainSkill(player, "STRENGTH", 156);
-			api.drainSkill(player, "ATTACK", 156);
-			api.drainSkill(player, "MAGIC", 156);
-			api.drainSkill(player, "RANGED", 156);
-			api.drainSkill(player, "DEFENCE", 156);
-			api.drainSkill(player, "PRAYER", 156);
-			api.drainSkill(player, "CONSTITUTION", 156);
-			player.getAppearance().setRenderAnimation(-1);
-			player.getAppearance().refresh();
+			api.resetStat(player, Stat.STRENGTH);
+			api.resetStat(player, Stat.ATTACK);
+			api.resetStat(player, Stat.MAGIC);
+			api.resetStat(player, Stat.RANGED);
+			api.resetStat(player, Stat.DEFENCE);
+			api.resetStat(player, Stat.PRAYER);
+			api.resetStat(player, Stat.CONSTITUTION);
+			api.restoreLifePoints(player);
+			api.setRenderAnim(player, -1);
 			return;
 		case "anim":
 			if (args.length < 1 || isNaN(args[0])) {
@@ -185,9 +191,34 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			player.getAppearance().refresh();
 			return;
 		case "uptime":
-			var ticks = Java.type('org.virtue.Virtue').getInstance().getEngine().getTicks();
+			var ticks = api.getServerCycle();
 			var time = api.getFormattedTime(ticks);
 			sendCommandResponse(player, "Server has been online for "+time+".", scriptArgs.console);
+			return;
+		case "loc":
+		case "location":
+		case "object"://It's not really an object, but so other people don't complain...
+			var locId = parseInt(args[0]);
+			if (args.length < 1 || isNaN(locId)) {
+				sendCommandResponse(player, "Usage: "+syntax+" [locationId]", scriptArgs.console);				
+				return;
+			}
+			var region = api.getRegion(player.getCurrentTile().getRegionID());
+			var location = api.createLocation(locId, api.getCoords(player), 10, 0);
+			region.spawnTempLocation(location, 50);
+			sendCommandResponse(player, "Spawned location "+locId, scriptArgs.console);
+			return;
+		case "ring":
+			var locId = parseInt(args[0]);
+			var type = parseInt(args[1]);
+			if (args.length < 1 || isNaN(locId)) {
+				sendCommandResponse(player, "Usage: "+syntax+" [locationId]", scriptArgs.console);				
+				return;
+			}
+			var region = api.getRegion(player.getCurrentTile().getRegionID());
+			var location = api.createLocation(locId, api.getCoords(player), type, 0);
+			region.spawnTempLocation(location, 50);
+			sendCommandResponse(player, "Spawned location "+locId, scriptArgs.console);
 			return;
 		case "setDisplay":
 			//api.setDisplayName(player, hash, message);
@@ -201,7 +232,8 @@ var listen = function(scriptManager) {
 	var commands = [ "bc", "npc", "gfx", "graphic", "gender", "music", "inter",
 			"root", "widget", "priceReload", "reloadPrice", "adr", "hair",
 			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow",
-			"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "setDisplay" ];
+			"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
+			"loc", "location", "object", "reloadNPCDrops", "ring"];
 	var listener = new EventListener();
 	for (var i in commands) {
 		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);

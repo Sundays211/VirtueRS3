@@ -24,32 +24,21 @@
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
- * @auther Kayla <skype:ashbysmith1996>
+ * @author Kayla <skype:ashbysmith1996>
+ * @author Sam Bartlett
  * @author Sundays211
  * @since 05/11/2014
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The commands to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "coords", "pos", "mypos" ];
+var Listener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		api.sendMessage(player, "Used item with location!");
 	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
-		api.sendMessage(player, api.getName(player)+": "+player.getCurrentTile());
-		return true;
-	},
-		
-	adminCommand : function () {
-		return false;
-	}
-
 });
 
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
-	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	var listener = new Listener();	
+	scriptManager.registerListener(EventType.LOC_OP_ITEMUSE, 38787, listener);
 };

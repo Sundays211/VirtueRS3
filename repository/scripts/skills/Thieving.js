@@ -216,7 +216,7 @@ function ThievingStallStart (player, object) {
 	if (api.isPaused(player)) {
 		return false;
 	}
-	if (api.getCurrentLevel(player, THIEVING_SKILL) < stall.level) {
+	if (api.getStatLevel(player, THIEVING_SKILL) < stall.level) {
 		api.sendMessage(player, "You need a thieving level of "+stall.level+" to steal from this " + api.getLocType(stall.stallID).name + ".");
 		return;
 	}
@@ -281,7 +281,7 @@ function ThievingStart (player, npc) {
 		return;
 	}
 	player.queueUpdateBlock(new FaceEntityBlock(npc));
-	if (api.getCurrentLevel(player, THIEVING_SKILL) < thieving.level) {
+	if (api.getStatLevel(player, THIEVING_SKILL) < thieving.level) {
 		api.sendMessage(player, "You need a thieving level of "+thieving.level+" to steal from this " + api.getNpcType(thieving.npcID).name + ".");
 		return;
 	}

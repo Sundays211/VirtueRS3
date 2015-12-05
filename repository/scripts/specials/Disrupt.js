@@ -8,7 +8,7 @@ var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBl
 var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
 
 var SpecialAttack = Java.extend(SpecialAttackHandler);
-var disrupt = new SpecialAttack(CombatStyle.MAGIC, [19784]) {
+var disrupt = new SpecialAttack(CombatStyle.MELEE, [19784]) {
 	getImpacts : function(entity, lock) {
 		return [Java.super(disrupt).impact(entity, lock, CombatStyle.MAGIC, null, null)];
 	},

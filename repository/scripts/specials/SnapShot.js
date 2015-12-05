@@ -20,6 +20,7 @@ var magicShortbow = new SpecialAttack(CombatStyle.RANGE, [861]) {
 
 var listen = function(scriptManager) {
 	magicShortbow.animation = new AnimationBlock(426);
-	magicShortbow.damageModifier = 1.12;
+	magicShortbow.accuracyModifier -= 0.30;
+	magicShortbow.damageModifier = 2.00;
 	SpecialAttackHandler.register(magicShortbow);
 };

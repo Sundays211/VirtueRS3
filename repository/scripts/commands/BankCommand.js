@@ -31,6 +31,10 @@
 var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
+		/*****************************************WARNING****************************************
+		 * DO NOT PUT THIS COMMAND IN PlayerCommands.js! 
+		 * It will eventually be restricted to admin-only, and separating it will be more difficult if it's part of the player command script
+		 */
 
 		api.openOverlaySub(player, 1017, 762, false);
 	}

@@ -1,17 +1,17 @@
 package org.virtue.model.entity.combat.impl;
 
 import org.virtue.model.Node;
-import org.virtue.model.World;
 import org.virtue.model.entity.Entity;
 import org.virtue.model.entity.combat.impl.melee.MeleeFollower;
 import org.virtue.model.entity.combat.impl.range.RangeFollower;
 import org.virtue.model.entity.movement.Direction;
+import org.virtue.model.entity.path.Path;
+import org.virtue.model.entity.path.Point;
+import org.virtue.model.entity.path.impl.AbstractPathfinder;
+import org.virtue.model.entity.path.impl.DumbPathfinder;
+import org.virtue.model.entity.path.impl.SmartPathfinder;
 import org.virtue.model.entity.player.Player;
 import org.virtue.model.entity.region.Tile;
-import org.virtue.model.entity.routefinder.AStarPathFinder;
-import org.virtue.model.entity.routefinder.Path;
-import org.virtue.model.entity.routefinder.PathFinder;
-import org.virtue.model.entity.routefinder.SimplePathFinder;
 
 /**
  * Interface for combat following handlers.
@@ -34,16 +34,6 @@ public abstract class FollowingType {
 	 * The magic following type.
 	 */
 	public static final FollowingType MAGIC = new RangeFollower();//TODO
-
-	/**
-	 * Dumb path finder.
-	 */
-	private static final PathFinder DUMB = new SimplePathFinder(World.getInstance().getRegions());
-
-	/**
-	 * Smart path finder.
-	 */
-	private static final PathFinder SMART = new AStarPathFinder(World.getInstance().getRegions());
 	
 	/**
 	 * Follows the locked target.
@@ -61,7 +51,6 @@ public abstract class FollowingType {
 			entity.getMovement().reset();
 			return true;
 		}
-		PathFinder pathfinder = entity instanceof Player ? SMART : DUMB;
 		Tile destination = getNextDestination(entity, lock);
 		boolean inside = isInsideEntity(entity.getCurrentTile(), lock);
 		if (inside) {
@@ -70,12 +59,21 @@ public abstract class FollowingType {
 		if (destination == null) {
 			destination = lock.getCurrentTile();
 		}
-		if (!destination.equals(entity.getMovement().getDestination()) && !inside) {
-			Path path = pathfinder.find(entity, destination.getX(), destination.getY());
-			
+		if (!destination.equals(entity.getMovement().getDestination())) {
+			Path path = AbstractPathfinder.find(entity, destination, true, entity instanceof Player ? new SmartPathfinder() : new DumbPathfinder());
 			if (entity.getMovement() != null && path != null) {
-				entity.getMovement().setWalkSteps(path.getPoints());
-				entity.getMovement().setDestination(destination);
+				if (entity instanceof Player) {
+					entity.getMovement().setWalkSteps(path.getPoints());
+					entity.getMovement().setDestination(destination);
+				} else {
+					Point step = path.getPoints().peek();
+					if (step != null) {
+						System.out.println("Roar");
+						entity.getMovement().move(Direction.getLogicalDirection(entity.getCurrentTile(), new Tile(step.getX(), step.getY(), 0)));
+					}
+				}
+			} else {
+				System.out.println("Hurr " + path);
 			}
 		}
 		return interaction == Interaction.MOVING;
@@ -85,9 +83,9 @@ public abstract class FollowingType {
 	 * @return The location to walk to.
 	 */
 	private static Tile findBorderLocation(Entity mover, Entity destination) {
-		int size = destination.getPlayerCount();
+		int size = destination.getSize();
 		Tile centerDest = destination.getCurrentTile().copyNew(size >> 1, size >> 1, 0);
-		Tile center = mover.getCurrentTile().copyNew(mover.getPlayerCount() >> 1, mover.getPlayerCount() >> 1, 0);
+		Tile center = mover.getCurrentTile().copyNew(mover.getSize() >> 1, mover.getSize() >> 1, 0);
 		Direction direction = Direction.getLogicalDirection(centerDest, center);
 		Tile delta = Tile.getDelta(destination.getCurrentTile(), mover.getCurrentTile());
 		main: for (int i = 0; i < 4; i++) {
@@ -100,25 +98,25 @@ public abstract class FollowingType {
 				amount = size - delta.getX();
 				break;
 			case SOUTH:
-				amount = mover.getPlayerCount() + delta.getY();
+				amount = mover.getSize() + delta.getY();
 				break;
 			case WEST:
-				amount = mover.getPlayerCount() + delta.getX();
+				amount = mover.getSize() + delta.getX();
 				break;
 			default:
 				return null;
 			}
 			for (int j = 0; j < amount; j++) {
-				for (int s = 0; s < mover.getPlayerCount(); s++) {
+				for (int s = 0; s < mover.getSize(); s++) {
 					switch (direction) {
 					case NORTH:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(s, j + mover.getPlayerCount(), 0))) {
+						if (!direction.canMove(mover.getCurrentTile().copyNew(s, j + mover.getSize(), 0))) {
 							direction = Direction.get((direction.toInteger() + 1) & 3);
 							continue main;
 						}
 						break;
 					case EAST:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(j + mover.getPlayerCount(), s, 0))) {
+						if (!direction.canMove(mover.getCurrentTile().copyNew(j + mover.getSize(), s, 0))) {
 							direction = Direction.get((direction.toInteger() + 1) & 3);
 							continue main;
 						}
@@ -154,12 +152,12 @@ public abstract class FollowingType {
 	 */
 	public Tile getNextDestination(Entity entity, Entity lock) {
 		Tile l = getClosestTo(entity, lock, lock.getCurrentTile().copyNew(0, -1, 0));
-		if (entity.getPlayerCount() > 1) {
+		if (entity.getSize() > 1) {
 			if (l.getX() < lock.getCurrentTile().getX()) {
-				l = l.copyNew(-(entity.getPlayerCount() - 1), 0, 0);
+				l = l.copyNew(-(entity.getSize() - 1), 0, 0);
 			}
 			if (l.getY() < lock.getCurrentTile().getY()) {
-				l = l.copyNew(0, -(entity.getPlayerCount() - 1), 0);
+				l = l.copyNew(0, -(entity.getSize() - 1), 0);
 			}
 		}
 		return l;
@@ -188,24 +186,24 @@ public abstract class FollowingType {
 		Direction moveDir = Direction.NORTH;
 		if (diffX < 0) {
 			moveDir = Direction.EAST;
-		} else if (diffX >= node.getPlayerCount()) {
+		} else if (diffX >= node.getSize()) {
 			moveDir = Direction.WEST;
-		} else if (diffY >= node.getPlayerCount()) {
+		} else if (diffY >= node.getSize()) {
 			moveDir = Direction.SOUTH;
 		}
 		double distance = 9999.9;
 		Tile destination = suggestion;
 		for (int c = 0; c < 4; c++) {
-			for (int i = 0; i < node.getPlayerCount() + 1; i++) {
+			for (int i = 0; i < node.getSize() + 1; i++) {
 				for (int j = 0; j < (i == 0 ? 1 : 2); j++) {
 					Direction current = Direction.get((moveDir.toInteger() + (j == 1 ? 3 : 1)) % 4);
 					Tile loc = suggestion.copyNew(current.getDeltaX() * i, current.getDeltaY() * i, 0);
 					if (moveDir.toInteger() % 2 == 0) {
-						if (loc.getX() < nl.getX() || loc.getX() > nl.getX() + node.getPlayerCount() - 1) {
+						if (loc.getX() < nl.getX() || loc.getX() > nl.getX() + node.getSize() - 1) {
 							continue;
 						}
 					} else {
-						if (loc.getY() < nl.getY() || loc.getY() > nl.getY() + node.getPlayerCount() - 1) {
+						if (loc.getY() < nl.getY() || loc.getY() > nl.getY() + node.getSize() - 1) {
 							continue;
 						}
 					}
@@ -219,12 +217,12 @@ public abstract class FollowingType {
 				}
 			}
 			moveDir = Direction.get((moveDir.toInteger() + 1) % 4);
-			int offsetX = Math.abs(moveDir.getDeltaY() * (node.getPlayerCount() >> 1)); // Not a mixup between x & y!
-			int offsetY = Math.abs(moveDir.getDeltaX() * (node.getPlayerCount() >> 1));
+			int offsetX = Math.abs(moveDir.getDeltaY() * (node.getSize() >> 1)); // Not a mixup between x & y!
+			int offsetY = Math.abs(moveDir.getDeltaX() * (node.getSize() >> 1));
 			if (moveDir.toInteger() < 2) {
 				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() + offsetX, -moveDir.getDeltaY() + offsetY, 0);
 			} else {
-				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() * node.getPlayerCount() + offsetX, -moveDir.getDeltaY() * node.getPlayerCount() + offsetY, 0);
+				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() * node.getSize() + offsetX, -moveDir.getDeltaY() * node.getSize() + offsetY, 0);
 			}
 		}
 		return destination;
@@ -250,11 +248,11 @@ public abstract class FollowingType {
 			return false;
 		}
 		Tile loc = lock.getCurrentTile();
-		int size = lock.getPlayerCount();
-		if (l.getX() >= size + loc.getX() || lock.getPlayerCount() + l.getX() <= loc.getX()) {
+		int size = lock.getSize();
+		if (l.getX() >= size + loc.getX() || lock.getSize() + l.getX() <= loc.getX()) {
 			return false;
 		}
-		if (loc.getY() + size <= l.getY() || l.getY() + lock.getPlayerCount() <= loc.getY()) {
+		if (loc.getY() + size <= l.getY() || l.getY() + lock.getSize() <= loc.getY()) {
 			return false;
 		}
 		return true;

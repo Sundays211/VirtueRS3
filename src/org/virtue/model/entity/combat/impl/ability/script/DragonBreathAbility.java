@@ -21,7 +21,7 @@ public class DragonBreathAbility extends Ability {
 	 * Constructs a new {@code BackhandAbility} {@code Object}.
 	 */
 	public DragonBreathAbility() {
-		super(FollowingType.MAGIC, AbilityType.BASIC, CombatStyle.MAGIC, 14730, 102, 3, 16);
+		super(FollowingType.MAGIC, AbilityType.BASIC, CombatStyle.MAGIC, 14730, 102, 3, 17);
 		super.animation = new AnimationBlock(18374);
 		super.graphic = new GraphicsBlock(1, 3561);
 	}

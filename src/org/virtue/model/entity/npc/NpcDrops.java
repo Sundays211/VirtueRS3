@@ -1,50 +1,47 @@
 package org.virtue.model.entity.npc;
 
+import java.util.Random;
+
 /**
- * @Author Kayla
- * @Date Nov 24, 2015
+ * @author Kayla
+ * @date 12/3/2015
  */
 public class NpcDrops {
 	
-	public int npcID;
+	private final int itemID;
+	
+	private final int maxAmount;
+	
+	private final int minAmount;
 
-	public int itemID;
+	private final double hitRollCeil;
 	
-	public int itemAmount;
-	
-	public int minimum;
-	
-	public int maximum;
-	
-	public String itemRarity;
-	
-	public NpcDrops (int npcID, int itemID, int itemAmount, int minimum, int maximum, String itemRarity) {
-		this.npcID = npcID;
+	public NpcDrops(final int itemID, final int maxAmount, final int minAmount, final double hitRollCeil) {
 		this.itemID = itemID;
-		this.itemAmount = itemAmount;
-		this.minimum = minimum;
-		this.maximum = maximum;
-		this.itemRarity = itemRarity;
+		this.maxAmount = maxAmount;
+		this.minAmount = minAmount;
+		this.hitRollCeil = hitRollCeil;
 	}
 	
-	public int getItemId() {
+	public int getItemID() {
 		return itemID;
 	}
 	
-	public int getMinimumAmount() {
-		return minimum;
+	public int getMaxAmount() {
+		return maxAmount;
 	}
 
-	public int getExtraAmount() {
-		return maximum - minimum;
+	public int getMinAmount() {
+		return minAmount;
 	}
-
-	public int getMaximumAmount() {
-		return maximum;
+	
+	public double getHitRollCeil() {
+		return hitRollCeil;
 	}
-
-	public String getItemRarity() {
-		return itemRarity;
-	}
-
+	
+	public int getRandomNumberFrom(int min, int max) {
+        Random amount = new Random();
+        int randomNumber = amount.nextInt((max + 1) - min) + min;
+        return randomNumber;
+    }
 }

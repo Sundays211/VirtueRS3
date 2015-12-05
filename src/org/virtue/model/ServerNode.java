@@ -34,7 +34,9 @@ import org.virtue.model.entity.player.Player;
  * @author Sundays211
  * @since 30/11/2015
  */
-public class ServerNode extends Node {
+public class ServerNode {
+	
+	private int id;
 
 	/**
 	 * The {@link EntityList} of {@link Player} instance
@@ -46,7 +48,15 @@ public class ServerNode extends Node {
 	 * @param playerCapacity The maximum number of players allowed on the server
 	 */
 	public ServerNode(int nodeId, int playerCapacity) {
-		super(nodeId);
+		this.id = nodeId;
+	}
+	
+	/**
+	 * Gets the node ID for this server
+	 * @return The node ID
+	 */
+	public int getId () {
+		return id;
 	}
 
 	/**

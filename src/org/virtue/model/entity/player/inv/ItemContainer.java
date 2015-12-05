@@ -499,22 +499,33 @@ public final class ItemContainer implements ScriptVar {
 		return true;
 	}
 
-	private boolean hasSpaceForItem(Item item) {
-		if (alwaysStackable || item.isStackable()) {
-			for (Item aData : data) {
-				if (aData != null) {
-					if (aData.getId() == item.getId()) {
-						return true;
-					}
-				}
+	/**
+	 * Checks if there's space for the item.
+	 * @param item The item to add.
+	 * @return {@code True} if there's space in the container for this item.
+	 */
+	public boolean hasSpaceForItem(Item item) {
+		return getMaximumAdd(item) >= item.getAmount();
+	}
+
+	/**
+	 * Gets the maximum amount of this item that can be added to this container.
+	 * @param item The item.
+	 * @return The maximum amount we can add of this item.
+	 */
+	public int getMaximumAdd(Item item) {
+		int freeSlots = freeSlots();
+		if (item.isStackable() || alwaysStackable) {
+			int slot = lookupSlot(item.getId());
+			int amount = Integer.MAX_VALUE - 1;
+			if (slot > -1) {
+				amount -= data[slot].getAmount();
+			} else if (freeSlots < 1) {
+				return 0;
 			}
-		} else {
-			if (item.getAmount() > 1) {
-				return freeSlots() >= item.getAmount();
-			}
+			return amount;
 		}
-		int index = nextFreeSlot();
-		return index != -1;
+		return freeSlots;
 	}
 	
 	@Override
@@ -522,9 +533,6 @@ public final class ItemContainer implements ScriptVar {
 		return Arrays.toString(data);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.virtue.model.entity.player.var.ScriptVar#scriptValue()
-	 */
 	@Override
 	public int scriptValue() {
 		return invType.getID();

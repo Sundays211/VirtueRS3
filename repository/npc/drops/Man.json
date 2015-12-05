@@ -3,14 +3,23 @@
   "npcIdentifiers": [
       1,
       2,
-      3,
-      49
+      3
   ],
   "staticDrops": [
     {
-      "itemID": 4151,
-      "maxAmount": 3,
-      "minAmount": 2
+      "itemID": 526,
+      "maxAmount": 1,
+      "minAmount": 1
+    },
+     {
+      "itemID": 995,
+      "maxAmount": 400,
+      "minAmount": 100
+    },
+     {
+      "itemID": 11286,
+      "maxAmount": 1,
+      "minAmount": 1
     }
   ],
   "dynamicDrops": [

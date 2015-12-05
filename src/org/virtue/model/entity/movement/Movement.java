@@ -32,15 +32,17 @@ import org.virtue.Virtue;
 import org.virtue.model.World;
 import org.virtue.model.content.minigame.Controller;
 import org.virtue.model.entity.Entity;
+import org.virtue.model.entity.path.Path;
+import org.virtue.model.entity.path.Pathfinder;
+import org.virtue.model.entity.path.Point;
+import org.virtue.model.entity.path.impl.AbstractPathfinder;
+import org.virtue.model.entity.path.impl.SmartPathfinder;
 import org.virtue.model.entity.player.Player;
 import org.virtue.model.entity.region.GroundItem;
 import org.virtue.model.entity.region.MapSize;
+import org.virtue.model.entity.region.RegionManager;
 import org.virtue.model.entity.region.SceneLocation;
 import org.virtue.model.entity.region.Tile;
-import org.virtue.model.entity.routefinder.AStarPathFinder;
-import org.virtue.model.entity.routefinder.Path;
-import org.virtue.model.entity.routefinder.Path.Step;
-import org.virtue.model.entity.routefinder.PathFinder;
 import org.virtue.model.entity.routefinder.TraversalMap;
 import org.virtue.model.entity.update.block.FaceDirectionBlock;
 import org.virtue.model.entity.update.block.FaceEntityBlock;
@@ -61,13 +63,13 @@ public class Movement {
 	
 	private Entity entity;
 	
-	private Queue<Path.Step> walkSteps = new ConcurrentLinkedQueue<Path.Step>();
+	private Queue<Point> walkSteps = new ConcurrentLinkedQueue<Point>();
 	
 	private int nextWalkDirection = -1;
 	
 	private int nextRunDirection = -1;
 	
-	private PathFinder pathFinder = new AStarPathFinder(World.getInstance().getRegions());
+	private Pathfinder pathFinder;
 	
 	private Tile destination;
 	
@@ -93,11 +95,12 @@ public class Movement {
 	
 	public Movement (Entity entity) {
 		this.entity = entity;
-		this.pathFinder = new AStarPathFinder(World.getInstance().getRegions());
+		//this.pathFinder = new AStarPathFinder(World.getInstance().getRegions());
+		this.pathFinder = new SmartPathfinder(World.getInstance().getRegions());
 	}
 	
 	public void setTraversalMap (TraversalMap map) {
-		this.pathFinder = new AStarPathFinder(map);		
+		this.pathFinder = new SmartPathfinder(map);		
 	}
 	
 	/**
@@ -159,12 +162,13 @@ public class Movement {
 		}
 		//System.out.println("Current tile: "+entity.getCurrentTile());
 		//System.out.println("Target: "+new Tile(destX, destY, entity.getCurrentTile().getPlane()));
-		Path path = pathFinder.find(entity, destX, destY);
-		if (path == null) {
+		Path path = AbstractPathfinder.find(entity, new Tile(destX, destY, entity.getCurrentTile().getPlane()), false, pathFinder);
+		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
+		System.out.println("Path " + path.isSuccessful() + ", " + path.isMoveNear());
 		addWalkSteps(path.getPoints());
-		destination = new Tile(path.peekLast().x, path.peekLast().y, entity.getCurrentTile().getPlane());
+		destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
 		//entity.queueUpdateBlock(new FaceEntityBlock(null));
 		return true;
 	}
@@ -179,9 +183,9 @@ public class Movement {
 			return false;
 		}
 		entity.stopAll();
-		if (pathFinder.checkDirection(entity.getCurrentTile(), direction, entity.getPlayerCount())) {
+		if (RegionManager.checkDirection(entity.getCurrentTile(), direction, entity.getSize())) {
 			Tile tile = Tile.edit(entity.getCurrentTile(), direction.getDeltaX(), direction.getDeltaY(), (byte) 0);
-			addWalkStep(new Path.Step(tile.getX(), tile.getY()));
+			addWalkStep(new Point(tile.getX(), tile.getY()));
 			return true;
 		} else {
 			return false;
@@ -203,12 +207,12 @@ public class Movement {
 			destination = entity.getCurrentTile();
 			return true;//Already on an adjacent tile
 		}
-		Path path = pathFinder.find(entity, target.getCurrentTile().getX(), target.getCurrentTile().getY());
+		Path path = AbstractPathfinder.find(entity, target, false, pathFinder);//.find(entity, destX, destY);
 		if (path == null) {
 			return false;
 		}
 		addWalkSteps(path.getPoints());
-		destination = new Tile(path.peekLast().x, path.peekLast().y, entity.getCurrentTile().getPlane());
+		destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
 		//entity.queueUpdateBlock(new FaceEntityBlock(null));
 		return true;
 	}
@@ -232,28 +236,21 @@ public class Movement {
 			return true;//Already on an adjacent tile
 		} else if (location.isStandingOn(entity.getCurrentTile())) {
 			destination = entity.getCurrentTile();
-			//System.out.println("Location tile: "+location.getTile()+", entity tile: "+entity.getCurrentTile());
-			/*this.targetTile = pathFinder.findAdjacent(location.getTile(), location.getLocType().sizeX, location.getLocType().sizeY);
-			if (targetTile == null) {
-				return false;//Unable to find an adjacent tile
-			}
 			entity.queueUpdateBlock(new FaceDirectionBlock(location.getMiddleTile()));
-			addWalkStep(new Path.Step(targetTile.getX(), targetTile.getY()));*/
 			return true;//If the entity is standing on the location, they should still be able to interact
 		}
-		Path path = pathFinder.find(entity, location);
+		Path path = AbstractPathfinder.find(entity, location, false, pathFinder);
 		if (path == null) {
 			return false;
 		}
-		if (path.peekLast().x == location.getTile().getX() 
-				&& path.peekLast().y == location.getTile().getY()) {
-			path.pollLast();//Remove the last position if it's the same as the object's tile.
+		if (path.getPoints().getLast().getX() == location.getTile().getX() 
+				&& path.getPoints().getLast().getY() == location.getTile().getY()) {
+			path.getPoints().pollLast();//Remove the last position if it's the same as the location's tile.
 			//Bit of a hack, but it'll do until someone can figure out how to make the pathfinder stop at an adjacent tile.
 		}
 		addWalkSteps(path.getPoints());
-		destination = new Tile(path.peekLast().x, path.peekLast().y, entity.getCurrentTile().getPlane());
+		destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
 		entity.queueUpdateBlock(new FaceDirectionBlock(location.getMiddleTile()));
-		//entity.queueUpdateBlock(new FaceEntityBlock(null));
 		return true;
 	}
 	
@@ -278,7 +275,7 @@ public class Movement {
 	 * Adds a step to the entities walk queue
 	 * @param step The {@link Path.Step} to add
 	 */
-	private void addWalkStep (Path.Step step) {
+	private void addWalkStep (Point step) {
 		//System.out.println(step);
 		walkSteps.add(step);		
 	}
@@ -287,7 +284,7 @@ public class Movement {
 	 * Clears the current walking queue and sets a new one.
 	 * @param points The points of the path.
 	 */
-	public void setWalkSteps(Deque<Step> points) {
+	public void setWalkSteps(Deque<Point> points) {
 		reset();
 		addWalkSteps(points);
 	}
@@ -296,17 +293,53 @@ public class Movement {
 	 * Adds a series step to the entities walk queue
 	 * @param steps A Collection of {@link Path.Step} to add
 	 */
-	public void addWalkSteps (Collection<Path.Step> steps) {
-		for (Path.Step step : steps) {
-			addWalkStep(step);
+	public void addWalkSteps (Collection<Point> steps) {
+		Point point = new Point(entity.getCurrentTile().getX(), entity.getCurrentTile().getY());
+		for (Point step : steps) {
+			point = fillPath(step.getX(), step.getY(), false, point);
 		}
 	}
 	
 	/**
+	 * Adds a path to the walking queue.
+	 * @param x The last x-coordinate of the path.
+	 * @param y The last y-coordinate of the path.
+	 * @param runDisabled If running is disabled for this walking path.
+	 */
+	public Point fillPath(int x, int y, boolean runDisabled, Point last) {
+//		if (point == null) {
+//			point = new Point(entity.getCurrentTile().getX(), entity.getCurrentTile().getY());
+//		}
+		int diffX = x - last.getX(), diffY = y - last.getY();
+		int max = Math.max(Math.abs(diffX), Math.abs(diffY));
+		for (int i = 0; i < max; i++) {
+			if (diffX < 0) {
+				diffX++;
+			} else if (diffX > 0) {
+				diffX--;
+			}
+			if (diffY < 0) {
+				diffY++;
+			} else if (diffY > 0) {
+				diffY--;
+			}
+			last = addPoint(x - diffX, y - diffY, runDisabled, last);
+		}
+		return last;
+	}
+	
+	private Point addPoint(int x, int y, boolean runDisabled, Point last) {
+		Point point = null;
+		int diffX = x - last.getX(), diffY = y - last.getY();
+		walkSteps.add(point = new Point(x, y, null, diffX, diffY, runDisabled));
+		return point;
+	}
+
+	/**
 	 * Returns and removes the next walk step in the queue.
 	 * @return The next walk step
 	 */
-	private Path.Step getNextStep () {
+	private Point getNextStep () {
 		return walkSteps.poll();
 	}
 	
@@ -419,22 +452,22 @@ public class Movement {
 		if (targetEntity != null) {
 			checkTarget();
 		}
-		Path.Step nextStep = getNextStep();
-		if (nextStep != null && (nextStep.x != entity.getCurrentTile().getX() || nextStep.y != entity.getCurrentTile().getY())) {
+		Point nextStep = getNextStep();
+		if (nextStep != null && (nextStep.getX() != entity.getCurrentTile().getX() || nextStep.getY() != entity.getCurrentTile().getY())) {
 			nextWalkDirection = nextStep.getDirection(entity.getCurrentTile().getX(), entity.getCurrentTile().getY());
 			if (nextWalkDirection == -1) {
 				//changed this here - added line below, commented other
 				//nextWalkDirection = nextStep.getDirection(entity.getLastTile().getX(), entity.getLastTile().getY());
-				System.err.println("Next walk step is more than 1 tile away from the current position of the player! current="+entity.getCurrentTile()+", next={x="+nextStep.x+", y="+nextStep.y+"}");
+				System.err.println("Next walk step is more than 1 tile away from the current position of the player! current="+entity.getCurrentTile()+", next={x="+nextStep.getX()+", y="+nextStep.getY()+"}");
 				return;
 			}
 			entity.setLastTile(entity.getCurrentTile());
 			//entity.getLastTile().copy(entity.getCurrentTile());
-			Tile next = new Tile(nextStep.x, nextStep.y, entity.getCurrentTile().getPlane());
+			Tile next = new Tile(nextStep.getX(), nextStep.getY(), entity.getCurrentTile().getPlane());
 			entity.setCurrentTile(next);
 			//entity.getCurrentTile().copy(next);
 			if (debug) {
-				System.out.println("Direction: "+nextWalkDirection+", x="+nextStep.x+", y="+nextStep.y);
+				System.out.println("Direction: "+nextWalkDirection+", x="+nextStep.getX()+", y="+nextStep.getY());
 			}
 			if (entity instanceof Player) {
 				Player player = (Player) entity;
@@ -446,17 +479,17 @@ public class Movement {
 			}
 			if (running && entity instanceof Player && ((Player) entity).drainRunEnergy()) {
 				nextStep = getNextStep();
-				if (nextStep != null && (nextStep.x != entity.getCurrentTile().getX() || nextStep.y != entity.getCurrentTile().getY())) {
+				if (nextStep != null && (nextStep.getX() != entity.getCurrentTile().getX() || nextStep.getY() != entity.getCurrentTile().getY())) {
 					if (debug) {
-						System.out.println("Direction: "+nextRunDirection+", x="+nextStep.x+", y="+nextStep.y);
+						System.out.println("Direction: "+nextRunDirection+", x="+nextStep.getX()+", y="+nextStep.getY());
 					}
 					nextRunDirection = nextStep.getDirection(entity.getCurrentTile().getX(), entity.getCurrentTile().getY());
 					if (nextRunDirection == -1) {
-						throw new RuntimeException("Next run step is more than 1 tile away from the current position of the player! current="+entity.getCurrentTile()+", next={x="+nextStep.x+", y="+nextStep.y+"}");
+						throw new RuntimeException("Next run step is more than 1 tile away from the current position of the player! current="+entity.getCurrentTile()+", next={x="+nextStep.getX()+", y="+nextStep.getY()+"}");
 					}
 					//entity.setLastTile(entity.getCurrentTile());
 					//entity.getLastTile().copy(entity.getCurrentTile());
-					next = new Tile(nextStep.x, nextStep.y, entity.getCurrentTile().getPlane());
+					next = new Tile(nextStep.getX(), nextStep.getY(), entity.getCurrentTile().getPlane());
 					entity.setCurrentTile(next);
 					//entity.getCurrentTile().copy(next);
 				} else {
@@ -485,13 +518,14 @@ public class Movement {
 	 * Forces the entity to move to an adjacent tile
 	 */
 	public synchronized void moveAdjacent () {
-		this.destination = pathFinder.findAdjacent(entity.getCurrentTile());
+		
+		this.destination = AbstractPathfinder.findAdjacent(entity.getCurrentTile());
 		final Tile lastTile = entity.getCurrentTile();
 		if (destination != null) {
 			if (running) {
 				forceRunToggle();
 			}
-			addWalkStep(new Path.Step(destination.getX(), destination.getY()));
+			addWalkStep(new Point(destination.getX(), destination.getY()));
 		}
 		onTarget = new Runnable () {
 			@Override
@@ -565,23 +599,23 @@ public class Movement {
 		if (!entity.isAdjacentTo(target.getCurrentTile(), true)) {
 			if (entity.getCurrentTile().equals(target.getCurrentTile())) {
 				//Both entities are on the same tile
-				this.destination = pathFinder.findAdjacent(target.getCurrentTile());
+				this.destination = AbstractPathfinder.findAdjacent(target.getCurrentTile());
 				if (destination == null) {
 					return false;//Unable to find an adjacent tile
 				}
-				addWalkStep(new Path.Step(destination.getX(), destination.getY()));
+				addWalkStep(new Point(destination.getX(), destination.getY()));
 			} else {
-				Path path = pathFinder.find(entity, target);
+				Path path = AbstractPathfinder.find(entity, target);
 				if (path == null) {
 					return false;//Unable to find a path to the target entity
 				}
-				if (path.peekLast().x == target.getCurrentTile().getX() 
-						&& path.peekLast().y == target.getCurrentTile().getY()) {
-					path.pollLast();//Remove the last position if it's the same as the entity's current tile.
+				if (path.getPoints().getLast().getX() == target.getCurrentTile().getX() 
+						&& path.getPoints().getLast().getY() == target.getCurrentTile().getY()) {
+					path.getPoints().pollLast();//Remove the last position if it's the same as the entity's current tile.
 					//Bit of a hack, but it'll do until someone can figure out how to make the pathfinder stop at an adjacent tile.
 				}
 				addWalkSteps(path.getPoints());
-				destination = new Tile(path.peekLast().x, path.peekLast().y, entity.getCurrentTile().getPlane());
+				destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
 			}
 		} else {
 			destination = entity.getCurrentTile();			

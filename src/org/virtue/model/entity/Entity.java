@@ -351,11 +351,6 @@ public abstract class Entity extends Node implements ScriptVar {
 	}
 	
 	public abstract int getRenderAnimation ();
-	
-	@Override
-	public String toString () {
-		return new StringBuilder("{").append(getName()).append("}").toString();
-	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.model.entity.player.var.ScriptVar#scriptValue()
@@ -370,6 +365,10 @@ public abstract class Entity extends Node implements ScriptVar {
 	 */
 	public Controller getController() {
 		return controller;
+	}
+	
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
 	
 	/**
@@ -424,6 +423,11 @@ public abstract class Entity extends Node implements ScriptVar {
 	 */
 	public ImpactHandler getImpactHandler() {
 		return impactHandler;
+	}
+	
+	@Override
+	public String toString () {
+		return new StringBuilder("{").append(getName()).append("}").toString();
 	}
 	
 }

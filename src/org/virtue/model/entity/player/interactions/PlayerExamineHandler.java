@@ -68,7 +68,7 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 			clan = Virtue.getInstance().getClans().getClanName(target.getClanHash());
 		}
 		if (clan == null) {
-			clan = "Nokeyne";
+			clan = "None";
 		}
 		player.getDispatcher().sendVarcString(VarKey.Client.PLAYER_INSPECT_CLAN, clan);
 		

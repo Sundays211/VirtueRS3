@@ -21,6 +21,8 @@
  */
 package org.virtue.model.entity.player;
 
+import io.netty.channel.Channel;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -81,8 +83,6 @@ import org.virtue.utility.ISAACCipher;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
 
-import io.netty.channel.Channel;
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Aug 9, 2014
@@ -103,6 +103,12 @@ public class Player extends Entity {
 	 * 
 	 */
 	private boolean isDead = false;
+	
+	private ItemType itemType;
+	
+	public ItemType getItemType() {
+		return itemType;
+	}
 
 	/**
 	 * The IP Address of the player
@@ -258,7 +264,7 @@ public class Player extends Entity {
 	/**
 	 * The hash of the clan the player is in
 	 */
-	private long clanHash;
+	private long clanHash = 0L;
 
 	/**
 	 * The {@link Entity} that is currently following the player
@@ -375,7 +381,7 @@ public class Player extends Entity {
 			 * Tile(3200, 3200, 0)); } }
 			 */
 		}
-
+		
 	}
 	
 	@Override
@@ -1116,7 +1122,7 @@ public class Player extends Entity {
 	 * @see org.virtue.model.entity.Entity#getSize()
 	 */
 	@Override
-	public int getPlayerCount() {
+	public int getSize() {
 		if (Render.NPC.equals(appearance.getRender())) {
 			NpcType npcType = NpcTypeList.list(appearance.getRenderNpc());
 			return npcType != null ? npcType.size : 1;

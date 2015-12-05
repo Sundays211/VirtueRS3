@@ -36,7 +36,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventLi
 		if (syntax == "makeclan") {
 			if (api.getClanHash(player) != null) {
 				sendCommandResponse(player, "You need to leave your current clan before you can use this command (clan="+api.getClanHash(player)+")", scriptArgs.console);
-				return true;
+				return;
 			}
 			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
 				handle : function (value) {
@@ -49,9 +49,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventLi
 			});
 			api.openWidget(player, 1477, 437, 1094, false);
 			api.setInputHandler(player, new Handler());
-			return true;
-		} else {
-			return false;
+			return;
 		}
 	}
 

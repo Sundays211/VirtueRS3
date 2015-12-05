@@ -24,6 +24,7 @@ package org.virtue.model.entity.player.skill;
 import java.util.EnumMap;
 import java.util.List;
 
+import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.model.World;
 import org.virtue.model.entity.player.Player;
@@ -63,6 +64,17 @@ public class SkillManager {
 	}
 	
 	/**
+	 * Sets the current level of the specified skill to the specified level
+	 * @param stat The stat to set the level of
+	 * @param level The desired level (from 0 to 255)
+	 */
+	public void setLevel (SkillType stat, int level) {
+		SkillData skillData = skills.get(stat);
+		skillData.setCurrentLevel(level);
+		player.getDispatcher().sendSkill(skillData);
+	}
+	
+	/**
 	 * Increases (or decreases) the current level of a skill by the specified amount
 	 * @param skillType The skill to increase/decrease
 	 * @param amount The amount to increase by, or a negative value to decrease
@@ -80,11 +92,22 @@ public class SkillManager {
 	}
 	
 	/**
+	 * Restores the specified stat to its base level
+	 * @param stat The stat to restore
+	 */
+	public void restore (SkillType stat) {
+		SkillData statData = skills.get(stat);
+		statData.setCurrentLevel(statData.getBaseLevel());
+		player.getDispatcher().sendSkill(statData);		
+	}
+	
+	/**
 	 * Adds experience to the specified skill
 	 * @param skill	 The skill to add experience to
 	 * @param totalXpToAdd The the amount of experience to add
 	 */
 	public void addExperience (SkillType skillType, double totalXpToAdd) {
+		totalXpToAdd *= Constants.GLOBAL_XP_MULTIPLYER;
 		SkillData skillData = skills.get(skillType);
 		double currentXp = skillData.getExperienceFloat();
 		if (currentXp >= 200_000_000 - totalXpToAdd) {

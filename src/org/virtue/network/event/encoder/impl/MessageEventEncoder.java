@@ -113,7 +113,12 @@ public class MessageEventEncoder implements GameEventEncoder<MessageEventContext
 		if ((flags & 0x2) != 0) {
 			buffer.putString(context.getNameUnfiltered());
 		}
-		buffer.putString(context.getMessage());
+		int maxSize = 255 - buffer.offset();
+		String message = context.getMessage();
+		if (message.length() > maxSize) {
+			message = message.substring(0, maxSize);
+		}
+		buffer.putString(message);
 		buffer.finishVarByte();
 		return buffer;
 	}

@@ -48,7 +48,7 @@ public enum PrivilegeLevel {
 		}
 		
 		PrivilegeLevel(int id, int rights) {
-			this.id = rights;
+			this.id = id;
 			this.rights = rights;
 		}
 		

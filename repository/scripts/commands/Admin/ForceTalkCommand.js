@@ -29,15 +29,11 @@ var ForceTalkBlock = Java.type('org.virtue.model.entity.update.block.ForceTalkBl
  * @author Sundays211
  * @since 05/11/2014
  */
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The object ids to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "forcetalk" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		
 		var message = "";
 		for (i = 0; i < args.length; i++)
 			message += (i == 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
@@ -50,17 +46,11 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.Command
 		}
 		
 		return true;
-	},
-	
-		
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "forcetalk", listener);
 };

@@ -29,49 +29,38 @@ var ForceTalkBlock = Java.type('org.virtue.model.entity.update.block.ForceTalkBl
  * @author Sundays211
  * @since 05/11/2014
  */
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
 
-	/* The object ids to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "forcedance", "forcekick", "toplayer" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
-		var message = "";
-		for (i = 0; i < args.length; i++)
-			message += (i == 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
 		
-		var iterate = Java.type('org.virtue.model.World').getInstance().getPlayers().iterator();
-		var players = null;
+		var iterate = api.getPlayerIterator(api.getWorld());
+		var p2 = null;
 		while (iterate.hasNext()) {
 			var animID = parseInt(args[0]);
-			players = iterate.next();
+			p2 = iterate.next();
 			/*players.queueUpdateBlock(new ForceTalkBlock(message));*/
 			if (syntax.toLowerCase() == "forcedance") {
-				players.getAppearance().setRenderAnimation(3171);
-				players.getAppearance().refresh();
-				//players.queueUpdateBlock(new AnimationBlock(animID));//7071
+				p2.getAppearance().setRenderAnimation(3171);
+				p2.getAppearance().refresh();
+				api.runAnimation(p2, 7071);//7071
 			} else if (syntax.toLowerCase() == "toplayer") {
-				players.getAppearance().setRender(Render.PLAYER);
-				players.getAppearance().refresh();
+				p2.getAppearance().setRender(Render.PLAYER);
+				p2.getAppearance().refresh();
 			} 
 				
 		}
 		
 		return true;
-	},
-	
-		
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
+	var commands = [ "forcedance", "forcekick", "toplayer" ];
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	for (var i in commands) {
+		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);
+	}
 };

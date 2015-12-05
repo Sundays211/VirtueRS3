@@ -2,12 +2,14 @@
  * @Author Kayla
  */
 
+ 
+ 
 var LocationListener = Java.extend(Java
 		.type('org.virtue.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs : function() {
-		return [ 14315, 14314 ];
+		return [ 14315 ];
 	},
 
 	/* The first option on an object */
@@ -17,8 +19,16 @@ var LocationListener = Java.extend(Java
 		}
 		switch (object.getID()) {
 		case 14315:// Novice Lander
-			minigame = Java.type('org.virtue.Virtue').getInstance().getController().createPest(2, 25);
-			minigame.getPlayers().add(player);
+			controller = Java.type('org.virtue.Virtue').getInstance().getController();
+			if(controller != null) {
+				api.sendMessage(player, "Game is already exist");
+				controller.getPlayers().add(player);
+			} else {	
+				api.sendMessage(player, "You should create the instance.");			
+				minigame = Java.type('org.virtue.Virtue').getInstance().getController().createPest(2, 25);
+				minigame.getPlayers().add(player);
+			}
+			//c.getPlayers().add(player);
 			api.teleportEntity(player, 2661, 2639, 0);
 			return true;
 		default:

@@ -40,6 +40,8 @@ import org.virtue.model.entity.update.block.NpcTypeBlock;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.openrs.def.impl.NpcType;
+import org.virtue.parser.impl.NpcDropParser;
+import org.virtue.script.ScriptAPI;
 import org.virtue.script.listeners.CombatHandler;
 import org.virtue.script.listeners.NpcListener;
 import org.virtue.utility.RenderTypeList;
@@ -381,15 +383,28 @@ public class NPC extends Entity {
 		this.respawnTime = respawnDelay;
 	}
 	
+	private ScriptAPI api = Virtue.getInstance().getScripts().getApi();
+	
+	public static int ItemDropCalls[] = { 11286, 21793, 21787, 27481, 27484, 27487, 11702, 11704, 11706, 31719, 31724 };
+	
 	/**
 	 * Handles the NPC drops
-	 * @param visibleTo The player who can see the drops by default (other players can see them after a period of time)
+	 * 
+	 * @param visibleTo
+	 *            The player who can see the drops by default (other players can
+	 *            see them after a period of time)
 	 */
 	public void sendDrop(Player visibleTo) {
-		//Load actual npc drop rates, items from a file, XML or Json?
 		Region region = World.getInstance().getRegions().getRegionByID(this.getCurrentTile().getRegionID());
 		if (region != null && region.isLoaded()) {
-			region.dropItem(526, 1, visibleTo, this.getCurrentTile());//Bones
+			for (NpcDrops loot : NpcDropParser.forID(this.getID()).getLootChance(0)) {
+				if (loot.getItemID() == ItemDropCalls.length) {
+					World.getInstance().sendBroadcast(
+							"Name has received " + api.getItemType(loot.getItemID()).name.toString() + " drop!");
+				}
+				region.dropItem(loot.getItemID(), loot.getRandomNumberFrom(loot.getMinAmount(), loot.getMaxAmount()),
+						visibleTo, this.getCurrentTile());
+			}
 		}
 	}
 	

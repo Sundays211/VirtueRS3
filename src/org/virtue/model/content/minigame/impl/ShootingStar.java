@@ -14,6 +14,11 @@ import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.script.ScriptAPI;
 import org.virtue.utility.RandomExt;
 
+/**
+ * 
+ * @author James
+ *
+ */
 public class ShootingStar implements Controller  {
 	
 	/**

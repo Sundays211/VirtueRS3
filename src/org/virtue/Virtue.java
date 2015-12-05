@@ -23,8 +23,9 @@ package org.virtue;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.ByteBuffer;
-import java.util.Calendar;
+import java.util.Calendar; 
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -70,6 +71,7 @@ import org.virtue.openrs.def.impl.Js5ConfigGroup;
 import org.virtue.parser.ParserRepository;
 import org.virtue.parser.impl.NewsDataParser;
 import org.virtue.parser.impl.NpcDataParser;
+import org.virtue.parser.impl.NpcDropParser;
 import org.virtue.parser.impl.NpcSpawnParser;
 import org.virtue.script.JSListeners;
 import org.virtue.utility.EnumTypeList;
@@ -207,6 +209,18 @@ public class Virtue {//
 		} catch (Exception e) {
 			logger.error("Error launching server.", e);
 		}
+
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread thread, Throwable t) {
+				for (Player player : World.getInstance().getPlayers()) {
+					if (player.getPrivilegeLevel().getRights() >= 2) {
+						player.getDispatcher().sendConsoleMessage(t.getMessage());
+					}
+				}
+				logger.error("Uncaught exception: ", t);
+			}
+		});
 	}
 	
 	private void initLogging () {
@@ -281,6 +295,7 @@ public class Virtue {//
 		ActionBar.init();
 		AbstractNPC.init();
 		NpcSpawnParser.loadNpcs();
+		NpcDropParser.loadNpcDrops();
 		DialogueHandler.handle();
 	}
 	

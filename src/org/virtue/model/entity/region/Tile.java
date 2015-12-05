@@ -29,7 +29,7 @@ import org.virtue.model.entity.region.Region.Chunk;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 3, 2014
  */
-public class Tile {
+public class Tile extends Node {
 	
 	/**
 	 * Represents the possible {@link ClipMap} sizes on the <b>Runescape</b> map.
@@ -69,6 +69,8 @@ public class Tile {
 	 * @param plane The height of the coordinates {@link #x} and {@link #y}.
 	 */
 	public Tile(int x, int y, int plane) {
+		super(-1);
+		super.currentTile = this;
 		this.x = (short) x;
 		this.y = (short) y;
 		this.plane = (byte) plane;
@@ -83,6 +85,8 @@ public class Tile {
 	 * @param squareY	The y-coordinate of the map square
 	 */
 	public Tile(int localX, int localY, int level, int squareX, int squareY) {
+		super(-1);
+		super.currentTile = this;
 		this.x = (short) (localX + ((squareX & 0xff) << 6));
 		this.y = (short) (localY + ((squareY & 0xff) << 6));
 		this.plane = (byte) level;
@@ -96,6 +100,8 @@ public class Tile {
 	 * @param regionID	The ID of the region
 	 */
 	public Tile(int localX, int localY, int plane, int mapSquare) {
+		super(-1);
+		super.currentTile = this;
 		this.x = (short) (localX + (((mapSquare >> 8) & 0xff) << 6));
 		this.y = (short) (localY + ((mapSquare & 0xff) << 6));
 		this.plane = (byte) plane;
@@ -106,6 +112,8 @@ public class Tile {
 	 * @param tile The tile to trasfer.
 	 */
 	public Tile(Tile tile) {
+		super(-1);
+		super.currentTile = this;
 		this.x = tile.x;
 		this.y = tile.y;
 		this.plane = tile.plane;
@@ -116,6 +124,8 @@ public class Tile {
 	 * @param hash The <b>tile's</b> hash on the grid.
 	 */
 	public Tile(int hash) {
+		super(-1);
+		super.currentTile = this;
 		this.x = (short) (hash >> 14 & 0x3fff);
 		this.y = (short) (hash & 0x3fff);
 		this.plane = (byte) (hash >> 28);

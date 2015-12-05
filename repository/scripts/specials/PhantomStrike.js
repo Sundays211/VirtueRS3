@@ -20,6 +20,6 @@ var morrJav = new SpecialAttack(CombatStyle.RANGE, [13879]) {
 var listen = function(scriptManager) {
 	morrJav.animation = new AnimationBlock(10501);
 	morrJav.graphics = new GraphicsBlock(1, 1836);
-	morrJav.damageModifier = 1.25;
+	morrJav.damageModifier = 1.20;
 	SpecialAttackHandler.register(morrJav);
 };

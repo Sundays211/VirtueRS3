@@ -21,6 +21,7 @@
  */
 package org.virtue.model.entity.routefinder;
 
+import org.virtue.model.entity.path.Path;
 import org.virtue.model.entity.region.Tile;
 
 /**
@@ -31,7 +32,7 @@ import org.virtue.model.entity.region.Tile;
  * @author Sundays211
  * @since 15/01/2015
  */
-public class SimplePathFinder extends PathFinder {
+public class SimplePathFinder extends AbstractPathFinder {
 
 	/**
 	 * @param map
@@ -53,6 +54,16 @@ public class SimplePathFinder extends PathFinder {
 		} else if (deltaX < 0) {
 			
 		}
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.model.entity.path.Pathfinder#find(org.virtue.model.entity.region.Tile, int, org.virtue.model.entity.region.Tile, int, int, int, int, int, boolean)
+	 */
+	@Override
+	public Path find(Tile startCoords, int size, Tile end, int sizeX,
+			int sizeY, int rotation, int type, int walkingFlag, boolean near) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

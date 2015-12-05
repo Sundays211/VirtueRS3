@@ -7,6 +7,34 @@
 <processed>0</processed>
 <coinsReceived>0</coinsReceived>
 </offer>
+<offer id="73" isSell="false" owner="2ad581b8d1ec" slot="0">
+<itemID>21369</itemID>
+<amount>1</amount>
+<offerPrice>229165</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="76" isSell="true" owner="2ad581b8d1ec" slot="1">
+<itemID>11694</itemID>
+<amount>1</amount>
+<offerPrice>500000000</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="77" isSell="false" owner="2ad581b8d1ec" slot="2">
+<itemID>11694</itemID>
+<amount>1</amount>
+<offerPrice>4409030</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="78" isSell="false" owner="2ad581b8d1ec" slot="3">
+<itemID>11694</itemID>
+<amount>1</amount>
+<offerPrice>3682216</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
 <offer id="69" isSell="true" owner="64b71" slot="5">
 <itemID>1050</itemID>
 <amount>1</amount>
@@ -67,6 +95,13 @@
 <itemID>30099</itemID>
 <amount>1000</amount>
 <offerPrice>658846</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
+<offer id="74" isSell="false" owner="80286c641" slot="1">
+<itemID>11694</itemID>
+<amount>1</amount>
+<offerPrice>3682216</offerPrice>
 <processed>0</processed>
 <coinsReceived>0</coinsReceived>
 </offer>

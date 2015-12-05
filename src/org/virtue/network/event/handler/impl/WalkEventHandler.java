@@ -32,9 +32,6 @@ import org.virtue.network.event.handler.GameEventHandler;
  */
 public class WalkEventHandler implements GameEventHandler<WalkEventContext> {
 
-	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
-	 */
 	@Override
 	public void handle(Player player, WalkEventContext context) {
 		//logger.warn("Unhandled walk event: targetX=" + context.getBaseX() + ", targetY=" + context.getBaseY() + ", forceRun=" + context.forceRun());

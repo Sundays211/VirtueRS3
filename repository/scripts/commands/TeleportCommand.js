@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -28,45 +27,42 @@ var Tile = Java.type('org.virtue.model.entity.region.Tile');
  * @author Sundays211
  * @since 05/11/2014
  */
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
 
-	/* The object ids to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "tele", "goto", "move" ];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
+		/*****************************************WARNING****************************************
+		 * DO NOT PUT THIS COMMAND IN PlayerCommands.js! 
+		 * It will eventually be restricted to admin-only, and separating it will be more difficult if it's part of the player command script
+		 */
+		
 		if (args.length < 2) {
-			return false;
+			sendCommandResponse(player, "Usage: "+syntax+" [x-coord] [y-coord]", scriptArgs.console);
+			return;
 		}
 		if (args.length >= 5) {
-			var plane = parseInt(args[0]);
-			var regionX = parseInt(args[1]);
-			var regionY = parseInt(args[2]);
+			var level = parseInt(args[0]);
+			var squareX = parseInt(args[1]);
+			var squareY = parseInt(args[2]);
 			var localX = parseInt(args[3]);
 			var localY = parseInt(args[4]);
-			var target = new Tile(localX, localY, plane, ((regionX << 8) | regionY));
-			player.stopAll();
-			player.getMovement().teleportTo(target);
+			
+			api.teleportEntity(player, level, squareX, squareY, localX, localY);
 		} else	if (args.length == 2) {
-			player.getMovement().teleportTo(parseInt(args[0]), parseInt(args[1]), player.getCurrentTile().getPlane());
+			var level = api.getCoordLevel(player);
+			api.teleportEntity(player, parseInt(args[0]), parseInt(args[1]), level);
 		} else {
-			player.getMovement().teleportTo(parseInt(args[0]), parseInt(args[1]), parseInt(args[2]));
+			api.teleportEntity(player, parseInt(args[0]), parseInt(args[1]), parseInt(args[2]));
 		}
-		return true;
-	},
-		
-	adminCommand : function () {
-		return false;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
+	var commands = [ "tele", "goto", "move" ];
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	for (var i in commands) {
+		scriptManager.registerListener(EventType.COMMAND, commands[i], listener);
+	}
 };

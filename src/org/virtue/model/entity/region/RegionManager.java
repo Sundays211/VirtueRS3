@@ -31,6 +31,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.model.World;
+import org.virtue.model.entity.movement.Direction;
 import org.virtue.model.entity.region.Region.LoadStage;
 import org.virtue.model.entity.routefinder.TraversalMap;
 import org.virtue.openrs.Cache;
@@ -398,5 +400,41 @@ public class RegionManager implements TraversalMap {
 		}
 		return region.getClipMap().isTraversableNorthEast(plane,
 				tile.getXInRegion(), tile.getYInRegion(), size);
+	}
+
+	/**
+	 * Gets the clipping flag on the given location.
+	 * @param z The plane.
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @return The clipping flag.
+	 */
+	public static int getClippingFlag(int z, int x, int y) {
+		Tile tile = new Tile(x, y, z);
+		Region region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
+		if (region == null || !region.isLoaded()) {
+			return Integer.MIN_VALUE;
+		}
+		return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), z);
+	}
+
+	/**
+	 * Gets the projectile mapping clipping flag.
+	 * @param z The plane.
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @return The projectile clipping flag.
+	 */
+	public static int getProjectileFlag(int z, int x, int y) {
+		return getClippingFlag(z, x, y); //TODO:
+	}
+	
+	public static boolean checkDirection(int level, int x, int y, Direction direction) {
+		return direction.canMove(new Tile(x, y, level), 1);
+	}
+
+	public static boolean checkDirection(Tile currentTile, Direction direction, int size) {
+		
+		return direction.canMove(currentTile, size);
 	}
 }

@@ -36,6 +36,40 @@ public class TreasureHunterWidget extends Widget {
 	@Override
 	public boolean click(int widgetId, int buttonId, int slotId, int itemId, Player player, OptionButton option) {
 		player.getDispatcher().sendGameMessage("Widget: " + widgetId + ", button: " + buttonId + ", slot: " + slotId + ", item: " + itemId + ".");
+		switch (widgetId) {
+		case 1253:
+			switch (buttonId) {
+			case 40:
+				player.getTreasureHunter().selectReward(0);
+				return true;
+			case 49:
+				player.getTreasureHunter().selectReward(1);
+				return true;
+			case 44:
+				player.getTreasureHunter().selectReward(2);
+				return true;
+			case 35:
+				player.getTreasureHunter().selectReward(3);
+				return true;
+			case 31:
+				player.getTreasureHunter().selectReward(4);
+				return true;
+			case 214:
+				player.getTreasureHunter().claimReward(2);
+				return true;
+			case 222:
+				player.getTreasureHunter().claimReward(0);
+				return true;
+			case 242:
+				player.getTreasureHunter().claimReward(1);
+				return true;
+			case 232:
+			case 664:
+				player.getWidgets().closeWidgets(true);
+				return true;
+			}
+			break;
+		}
 		if (widgetId == 1252 && buttonId == 4) {
 			player.getVars().setVarValueInt(4143, 0);
 			player.getVars().setVarValueInt(1451, 5242880);
@@ -394,9 +428,6 @@ public class TreasureHunterWidget extends Widget {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.virtue.model.entity.player.widget.Widget#getPossibleIds()
-	 */
 	@Override
 	public int[] getStates() {
 		return new int[] { WidgetState.TREASURE_HUNTER_BUTTON_WIDGET.getID(), WidgetState.TREASURE_HUNTER_SCREEN_WIDGET.getID() };

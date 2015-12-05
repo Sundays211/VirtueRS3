@@ -32,6 +32,10 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventLi
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;
+		/*****************************************WARNING****************************************
+		 * DO NOT PUT THIS COMMAND IN PlayerCommands.js! 
+		 * It will eventually be restricted to admin-only, and separating it will be more difficult if it's part of the player command script
+		 */
 		
 		if (args.length < 1 || isNaN(args[0])) {
 			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {

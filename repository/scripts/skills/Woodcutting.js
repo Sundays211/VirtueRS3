@@ -29,11 +29,11 @@
  * @since 05/11/2014
  */
 
-var Trees = {
+var TreeType = {
     NORMAL : {
         level : 1,
-        xp : 45*25,
-        logID : 1511,
+        xp : 25,
+        logId : 1511,
         baseTime : 20,
         randomTime : 4,
         stumpID : 1341,
@@ -42,8 +42,8 @@ var Trees = {
     },
     EVERGREEN : {
         level : 1,
-        xp : 45*25,
-        logID : 1511,
+        xp : 25,
+        logId : 1511,
         baseTime : 20,
         randomTime : 4,
         stumpID : 57931,
@@ -52,8 +52,8 @@ var Trees = {
     },
     DEAD : {
         level : 1,
-        xp : 45*25,
-        logID : 1511,
+        xp : 25,
+        logId : 1511,
         baseTime : 20,
         randomTime : 4,
         stumpID : 12733,
@@ -62,8 +62,8 @@ var Trees = {
     },
     SWAMP : {//TODO Find the correct ids for this tree
         level : 1,
-        xp : 45*25,
-        logID : 1511,
+        xp : 25,
+        logId : 1511,
         baseTime : 20,
         randomTime : 4,
         stumpID : 12733,
@@ -72,8 +72,8 @@ var Trees = {
     },
     OAK : {
         level : 15,
-        xp : 45*35.7,
-        logID : 1521,
+        xp : 35.7,
+        logId : 1521,
         baseTime : 30,
         randomTime : 4,
         stumpID : 78118,
@@ -82,8 +82,8 @@ var Trees = {
     },
     WILLOW : {
         level : 30,
-        xp : 45*67.5,
-        logID : 1519,
+        xp : 67.5,
+        logId : 1519,
         baseTime : 60,
         randomTime : 4,
         stumpID : 1341,
@@ -92,8 +92,8 @@ var Trees = {
     },
     MAPLE : {
         level : 45,
-        xp : 45*100,
-        logID : 1517,
+        xp : 100,
+        logId : 1517,
         baseTime : 83,
         randomTime : 16,
         stumpID : 51843,
@@ -102,8 +102,8 @@ var Trees = {
     },
     YEW : {
         level : 60,
-        xp : 45*175,
-        logID : 1515,
+        xp : 175,
+        logId : 1515,
         baseTime : 120,
         randomTime : 17,
         stumpID : 1341,
@@ -112,8 +112,8 @@ var Trees = {
     },
     IVY : {
         level : 68,
-        xp : 45*332.5,
-        logID : -1,
+        xp : 332.5,
+        logId : -1,
         baseTime : 120,
         randomTime : 17,
         stumpID : 46319,
@@ -122,8 +122,8 @@ var Trees = {
     },
     MAGIC : {
         level : 75,
-        xp : 45*250,
-        logID : 1513,
+        xp : 250,
+        logId : 1513,
         baseTime : 150,
         randomTime : 21,
         stumpID : 37824,
@@ -132,8 +132,8 @@ var Trees = {
     },
     CURSED_MAGIC : {
         level : 82,
-        xp : 45*250,
-        logID : 1513,
+        xp : 250,
+        logId : 1513,
         baseTime : 150,
         randomTime : 21,
         stumpID : 37822,
@@ -142,8 +142,8 @@ var Trees = {
     },
 	ELDER_TREE : {
 		level : 90,
-		xp : 45*500,
-		logID : 29556,
+		xp : 500,
+		logId : 29556,
 		baseTime : 175,
 		randomTime : 21,
 		stumpID : -1,
@@ -152,8 +152,8 @@ var Trees = {
 	},
 	CRYSTAL_TREE : {
 		level : 94,
-		xp : 45*25000,
-		logID : -1,
+		xp : 25000,
+		logId : -1,
 		baseTime : 180,
 		randomTime : 21,
 		stumpID : -1,
@@ -166,86 +166,127 @@ var Hatchet = {
 	BRONZE : {
 		level : 1,
 		time : 1,
-		anim : 879,
+		anim : 21668,
 		itemID : 1351
 	},
 	IRON : {
 		level : 1,
 		time : 2,
-		anim : 877,
+		anim : 21667,
 		itemID : 1349
 	},
 	STEEL : {
 		level : 6,
 		time : 3,
-		anim : 875,
+		anim : 21666,
 		itemID : 1353
 	},
 	BLACK : {
 		level : 11,
 		time : 4,
-		anim : 873,
+		anim : 21665,
 		itemID : 1361
 	},
 	MITHRIL : {
 		level : 21,
 		time : 5,
-		anim : 871,
+		anim : 21664,
 		itemID : 1355
 	},
 	ADAMANT : {
 		level : 31,
 		time : 7,
-		anim : 869,
+		anim : 21663,
 		itemID : 1357
 	},
 	RUNE : {
 		level : 41,
 		time : 10,
-		anim : 867,
+		anim : 21662,
 		itemID : 1359
 	},
 	DRAGON : {
 		level : 61,
 		time : 13,
-		anim : 21192,
+		anim : 21669,
 		itemID : 6739
 	},
 	CRYSTAL : {
 		level : 71,
 		time : 7,
-		anim : 21192,
+		anim : 25182,
 		itemID : 32645
 	}
 };
 
-var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
-	invoke : function (event, syntax, args) {
+var TreeListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
 		var player = args.player;
-		Woodcutting.chopTree(player, args.location);
+		var tree = Woodcutting.getByLocType(locTypeId);
+		var location = args.location;
+		
+		if (tree === undefined) {
+			var type = Woodcutting.typeForTreeName(api.getLocType(args.location).name);
+			tree = {"type":type, "tree":locTypeId, "stump":type.stumpID};			
+		}
+		Woodcutting.chopTree(player, location, tree, function () {
+			Woodcutting.fellTree(location, tree.stump, tree.type.respawnDelay);
+		});	
 	}
 });
 
 /* Listen to the events specified */
 var listen = function(scriptManager) {
-	var listener = new EventListener();
-	var locs = [38760, 38788, 38786, 61192, 47600, 38627, 61191, 38783, 38731, 46322, 46320, 46324, 38732, 38616, 9387, 9355, 87516, 87533];
+	Woodcutting.loadTrees();
+	var listener = new TreeListener();
+	var locs = [33878, 38786, 61192, 47600, 38627, 61191, 38783, 38731, 46322, 46320, 46324, 9387, 9355, 87516, 87533];
+	
+	for (var i in Woodcutting.treeRegistry) {
+		locs.push(Woodcutting.treeRegistry[i].tree);
+	}
 	for (var i in locs) {
 		//Bind option one on all trees to this listener
 		scriptManager.registerListener(EventType.LOC_OP1, locs[i], listener);
 	}
 };
-
+//Regular tree stumps:
+//40350 - Tree stump, models=[[64860]]
+//40351 - Tree stump, models=[[64860]]
+//40352 - Tree stump, models=[[64859]]
+//40353 - Tree stump, models=[[64859]]
+//40354 - Tree stump, models=[[64791]]
+//40355 - Tree stump, models=[[64791]]
+//40356 - Tree stump, models=[[64790]]
+//40357 - Tree stump, models=[[64790]]
 var Woodcutting = {
-		chopTree : function (player, location) {
-			var tree = this.forTree(api.getLocType(location).name);
+		treeRegistry : {},
+		loadTrees : function () {
+			//Add new trees here. Try to find their stump ID if possible..
+			this.registerTree(TreeType.WILLOW, 38616, 38725)
+			this.registerTree(TreeType.OAK, 38732, 38754);
+			this.registerTree(TreeType.YEW, 38755, 38759);
+			this.registerTree(TreeType.NORMAL, 38760, 40350);
+			this.registerTree(TreeType.NORMAL, 38782, 40350);
+			this.registerTree(TreeType.NORMAL, 38783, 40352);
+			this.registerTree(TreeType.NORMAL, 38787, 40356);
+		},
+		registerTree : function (type, treeId, stumpId) {
+			if (stumpId === undefined || stumpId === -1) {
+				stumpId = type.stumpID;
+			}
+			this.treeRegistry[treeId] = {"type":type, "stump":stumpId, "tree":treeId};
+		},
+		getByLocType : function (locTypeId) {
+			return this.treeRegistry[locTypeId];
+		},
+		chopTree : function (player, location, tree, fellTree) {
 			var hatchet = this.forHatchet(player);
 			if (hatchet == null) {
 				api.sendMessage(player, "You need a hatchet to chop this tree.");
 				return;
 			}
-			if (api.getCurrentLevel(player, Stat.WOODCUTTING) < tree.level) {
-				api.sendMessage(player, "You require a woodcutting level of "+tree.level+"  to cut this tree.");
+			if (api.getStatLevel(player, Stat.WOODCUTTING) < tree.type.level) {
+				api.sendMessage(player, "You require a woodcutting level of "+tree.type.level+"  to cut this tree.");
 				return;
 			}
 			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
@@ -253,14 +294,27 @@ var Woodcutting = {
 				return;
 			}
 			api.runAnimation(player, hatchet.anim);
-			api.sendMessage(player, "You begin to swing your axe.", 109);
-			var delay = this.getDelay(player, tree, hatchet);//Calculates the time taken to mine this rock
+			api.sendMessage(player, "You begin to swing your axe.", MesType.GAME_SPAM);
+			var delay = this.getDelay(player, tree.type, hatchet);//Calculates the time taken to mine this rock
 			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
-					process : function (player) {
+				process : function (player) {
+					if (location.getId() != tree.tree) {
+						return false;//This means the tree has already been felled
+					}
 					api.runAnimation(player, hatchet.anim);
-					if(delay <= 0) {
-						Woodcutting.success(player, tree, location);
-						return true;
+					if (delay <= 0) {
+						api.addExperience(player, Stat.WOODCUTTING, tree.type.xp, true);
+						api.addCarriedItem(player, tree.type.logId, 1);
+						api.sendMessage(player, "You cut some " + getItemName(tree.type.logId)+ ".", MesType.GAME_SPAM);
+						if (tree.type == TreeType.NORMAL || Math.random() < 0.2) {//If the tree is not a normal tree, there is a 1 in 5 chance of felling it
+							fellTree();	
+							return true;
+						} else if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
+							api.sendMessage(player, "Not enough space in your inventory.");
+							return true;
+						} else {
+							return false;
+						}						
 					}
 					delay--;
 					return false;
@@ -272,73 +326,87 @@ var Woodcutting = {
 			});
 			player.setAction(new Action());
 		},
-		success : function (player, tree, location) {
-			api.addExperience(player, Stat.WOODCUTTING, tree.xp, true);
-			api.addCarriedItem(player, tree.logID, 1);
-			api.sendMessage(player, "You cut some " + api.getItemType(tree.logID).name + ".", 109);
-			if (tree == Trees.NORMAL || Math.random() < 0.2) {//If the tree is not a normal tree, there is a 1 in 5 chance of felling it
-				api.transformLoc(location, tree.stumpID, tree.respawnDelay);
-				var treeTop = api.getLocationByNodeType(location.getTile().getX(), location.getTile().getY(), location.getTile().getPlane()+1, location.getNodeType());
-				if (treeTop == null) {
-					api.sendMessage(player, "Failed to remove tree top.");
-				} else {
-					api.transformLoc(treeTop, -1, tree.respawnDelay);
+		fellTree : function (location, stumpId, respawnDelay) {
+			api.transformLoc(location, stumpId, respawnDelay);
+			var x = api.getCoordX(location);
+			var y = api.getCoordY(location);
+			var level = api.getCoordLevel(location);
+			var treeTop = api.getLocationByNodeType(x-1, y-1, level+1, location.getNodeType());
+			if (treeTop != null) {
+				api.transformLoc(treeTop, -1, respawnDelay);
+			} else {
+				treeTop = api.getLocationByNodeType(x, y, level+1, location.getNodeType());
+				if (treeTop != null) {
+					api.transformLoc(treeTop, -1, respawnDelay);
 				}
 			}
 		},
 		getDelay : function (player, tree, hatchet) {
-			var timer = tree.baseTime - api.getCurrentLevel(player, Stat.WOODCUTTING) - Math.floor(Math.random() * hatchet.time);
+			var timer = tree.baseTime - api.getStatLevel(player, Stat.WOODCUTTING) - Math.floor(Math.random() * hatchet.time);
 			if (timer < 1 + tree.randomTime) {
 				timer = 1 + Math.floor((Math.random() * tree.randomTime));
 			}
 			return timer;
 		},
-		forTree : function (name) {
+		typeForTreeName : function (name) {
 			switch (name) {
 			case "Tree":
-				return Trees.NORMAL;
+				return TreeType.NORMAL;
 			case "Evergreen":
-				return Trees.EVERGREEN;
+				return TreeType.EVERGREEN;
 			case "Dead tree":
-				return Trees.DEAD;
+				return TreeType.DEAD;
 			case "Swamp tree":
-				return Trees.SWAMP;
+				return TreeType.SWAMP;
 			case "Oak":
-				return Trees.OAK;
+				return TreeType.OAK;
 			case "Willow":
-				return Trees.WILLOW;
+				return TreeType.WILLOW;
 			case "Maple":
-				return Trees.MAPLE;
+				return TreeType.MAPLE;
 			case "Yew":
-				return Trees.YEW;
+				return TreeType.YEW;
 			case "Ivy":
-				return Trees.IVY;
+				return TreeType.IVY;
 			case "Magic":
-				return Trees.MAGIC;
+				return TreeType.MAGIC;
 			case "Cursed Magic":
-				return Trees.CURSED_MAGIC;
+				return TreeType.CURSED_MAGIC;
 			case "Elder Tree":
-				return Trees.ELDER_TREE;
+				return TreeType.ELDER_TREE;
 			case "Crystal Tree":
-				return Trees.CRYSTAL_TREE;
+				return TreeType.CRYSTAL_TREE;
 			}
 		},
+		hatchetsById : null,
 		forHatchet : function(player) {
+			if (this.hatchetsById == null) {
+				this.hatchetsById = {};
+				for (var ordial in Hatchet) {
+					this.hatchetsById[Hatchet[ordial].itemID] = Hatchet[ordial];
+				}
+			}
+			var bestHatchet = null;
+			var item = api.getItem(player, Inv.EQUIPMENT, WearPos.WEAPON);
 			var hatchet;
-			for (var ordial in Hatchet) {
-				hatchet = Hatchet[ordial];//TODO: Run this backwards (from best to worst)
-				if (api.itemTotal(player, Inv.BACKPACK, hatchet.itemID) >= 1) {
+			if (item != null ) {
+				hatchet = this.hatchetsById[item.getId()];
+				if (hatchet !== undefined) {
 					return hatchet;
 				}
 			}
-			return Hatchet.BRONZE;
-			return Hatchet.IRON;
-			return Hatchet.STEEL;
-			return Hatchet.BLACK;
-			return Hatchet.MITHRIL;
-			return Hatchet.ADAMANT;
-			return Hatchet.RUNE;
-			return Hatchet.DRAGON;
-			return Hatcjet.CRYSTAL;
+			for (var slot=0;slot<28;slot++) {
+				item = api.getItem(player, Inv.BACKPACK, slot);
+				if (item == null) {
+					continue;
+				}
+				hatchet = this.hatchetsById[item.getId()];
+				if (hatchet !== undefined) {
+					if (bestHatchet === null || hatchet.time > bestHatchet.time) {
+						bestHatchet = hatchet;
+					}
+				}
+			}
+			return bestHatchet;
 		} 
 }

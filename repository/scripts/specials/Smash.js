@@ -17,6 +17,6 @@ var statiusHammer = new SpecialAttack(CombatStyle.MELEE, [13902]) {
 var listen = function(scriptManager) {
 	statiusHammer.animation = new AnimationBlock(10505);
 	statiusHammer.graphics = new GraphicsBlock(1, 1840);
-	statiusHammer.damageModifier = 1.32;
+	statiusHammer.damageModifier = 0.50;
 	SpecialAttackHandler.register(statiusHammer);
 };

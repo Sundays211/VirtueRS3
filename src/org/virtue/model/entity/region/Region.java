@@ -378,6 +378,19 @@ public class Region {
 	}
 	
 	/**
+	 * Drops an item onto the ground
+	 * @param itemID The type of item to drop
+	 * @param amount The number of the item to drop
+	 * @param owner The player who can pick up the item by default
+	 * @param dropper The entity which dropped the item
+	 */
+	public void dropItem (int npcId, int itemID, int amount, Player owner, Tile tile) {
+		GroundItem groundItem = GroundItem.create(itemID, amount, tile, owner);
+		groundItem.setSpawnTime(Constants.ITEM_REMOVAL_DELAY);
+		addItem(groundItem);
+	}
+	
+	/**
 	 * Adds the specified ground item to the region
 	 * @param item The item to add
 	 */
@@ -502,13 +515,13 @@ public class Region {
 	 * @param plane The plane
 	 * @return A {@link SceneLocation} array for locations at the specified coordinates, or null if no locations exists
 	 */
-	public SceneLocation[] getLocations (int x, int y, int plane) {
-		int hash = getChunkHash(x, y, plane);
+	public SceneLocation[] getLocations (int x, int y, int level) {
+		int hash = getChunkHash(x, y, level);
 		synchronized (chunks) {
 			if (!chunks.containsKey(hash)) {
 				return null;
 			}		
-			SceneLocation[] locations = chunks.get(hash).getLocations(getLocalHash(x, y, plane));
+			SceneLocation[] locations = chunks.get(hash).getLocations(getLocalHash(x, y, level));
 			if (locations == null) {
 				return null;
 			} else {

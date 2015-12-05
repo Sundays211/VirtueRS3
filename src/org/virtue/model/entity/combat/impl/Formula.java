@@ -41,9 +41,8 @@ public class Formula {
 					}
 				}
 				double mhDamage = mainHand.getType().getMeleeDamage();
-				double calcTotal = (strBaseLvl + mhDamage + armourBonus);
-
-				calcTotal *= bonus * 1;
+				double prayerBonus = 1; //TODO
+				double calcTotal = ((strBaseLvl + mhDamage + armourBonus) * prayerBonus) * bonus;
 
 				api.sendMessage(player, "[Melee Max]: " + (int) Math.round(calcTotal));
 				return (int) Math.round(calcTotal);
@@ -77,7 +76,7 @@ public class Formula {
 				if (mainHand.is2H())
 					rngBaseLvl *= 1.5;
 				if (player.getMode().equals(CombatMode.LEGACY))
-					rngBaseLvl *= 8;
+					rngBaseLvl *= 10;
 
 				double mhDamage = mainHand.getType().getBowDamage();
 				double calcTotal = (rngBaseLvl + mhDamage + armourBonus + arrowDamage);

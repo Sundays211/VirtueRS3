@@ -63,7 +63,7 @@ public class KalphiteKing extends AbstractNPC {
 	private final SwitchAttackEvent attackEvent = new SwitchAttackEvent(
 			
 			
-			new SwitchAttack(CombatStyle.MELEE, new MeleeAttackHandler(680, 1000) {
+			new SwitchAttack(CombatStyle.MELEE, new MeleeAttackHandler(750, 10000000) {
 				int minion = RandomExt.random(10);		
 				@Override
 				public AttackInfo getAttackInfo(Entity entity, Entity lock) {

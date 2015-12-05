@@ -1,17 +1,16 @@
 package org.virtue.model.content.minigame.impl.pestcontrol;
 
 import org.virtue.model.entity.npc.NPC;
-import org.virtue.model.entity.npc.script.pestcontrol.PestPortal;
 import org.virtue.model.entity.region.Tile;
 
 public enum PestData {
-
-	NOVICE(new PestPortal[]{
-			new PestPortal(6146, new Tile(2628, 2591, 0), new Tile(2627, 2592, 0)), //purple portal
-			new PestPortal(6147, new Tile(2680, 2588, 0), new Tile(2677, 2588, 0)), //blue portal
-			new PestPortal(6148, new Tile(2669, 2570, 0), new Tile(2666, 2570, 0)), //yellow portal
-			new PestPortal(6149, new Tile(2645, 2569, 0), new Tile(2642, 2569, 0)) //red portal
-			}, new int[] { 
+ 
+	NOVICE(new Object[][] {
+			{new Tile(2628, 2591, 0), new Tile(2627, 2592, 0)}, //purple portal
+			{new Tile(2680, 2588, 0), new Tile(2677, 2588, 0)}, //blue portal
+			{new Tile(2669, 2570, 0), new Tile(2666, 2570, 0)}, //yellow portal
+			{new Tile(2645, 2569, 0), new Tile(2642, 2569, 0)} //red portal
+		}, new int[] { 
 			/* Shifters */ 3732, 3733, 3734, 3735, 
 			/* Ravagers */ 3742, 3743, 3744, 
 			/* Brawler */ 3772, 3773, 
@@ -41,11 +40,11 @@ public enum PestData {
 			/* Defiler */ 3770, 3771 }, new int[] { 3736, 3737, 3738, 3739, 3740, 3741 }, 7);
 
 	private int[] pests, shifters;
-	private PestPortal[] portals;
+	private Object[][] portals;
 	private int reward;
 	private NPC knight;
 
-	private PestData(PestPortal[] portals, int[] pests, int[] shifters, int reward) {
+	private PestData(Object[][] portals, int[] pests, int[] shifters, int reward) {
 		this.portals = portals;
 		this.pests = pests;
 		this.shifters = shifters;
@@ -68,7 +67,7 @@ public enum PestData {
 		return knight;
 	}
 	
-	public PestPortal[] getPortals() {
+	public Object[][] getPortals() {
 		return portals;
 	}
 }

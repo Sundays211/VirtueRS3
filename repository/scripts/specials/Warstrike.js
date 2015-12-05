@@ -17,6 +17,6 @@ var bandosGodsword = new SpecialAttack(CombatStyle.MELEE, [11696]) {
 var listen = function(scriptManager) {
 	bandosGodsword.animation = new AnimationBlock(11991);
 	bandosGodsword.graphics = new GraphicsBlock(1, 2114);
-	bandosGodsword.damageModifier = 1.21;
+	bandosGodsword.damageModifier = 2;
 	SpecialAttackHandler.register(bandosGodsword);
 };

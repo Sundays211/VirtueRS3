@@ -85,7 +85,7 @@ public class MoneyPouch {
 		player.getInvs().getContainer(ContainerState.MONEY_POUCH).get(0).setAmount(amount + currentCoins);
 		player.getInvs().sendContainer(ContainerState.MONEY_POUCH);
 		String formattedAmount = NumberFormat.getInstance().format(amount);
-		player.getDispatcher().sendMessage(formattedAmount +" coins have been added to your money pouch.", ChannelType.GAME_FILTERABLE);
+		player.getDispatcher().sendMessage(formattedAmount +" coins have been added to your money pouch.", ChannelType.GAME_SPAM);
 		player.getDispatcher().sendCS2Script(5561 , new Object[] { 1, amount });
 		player.getDispatcher().sendCS2Script(5560, new Object[] { amount + currentCoins });
 		return true;
@@ -105,7 +105,7 @@ public class MoneyPouch {
 		player.getInvs().getContainer(ContainerState.MONEY_POUCH).get(0).setAmount(currentCoins - amount);
 		player.getInvs().sendContainer(ContainerState.MONEY_POUCH);
 		String formattedAmount = NumberFormat.getInstance().format(amount);
-		player.getDispatcher().sendMessage(formattedAmount +" coins have been removed from your money pouch.", ChannelType.GAME_FILTERABLE);
+		player.getDispatcher().sendMessage(formattedAmount +" coins have been removed from your money pouch.", ChannelType.GAME_SPAM);
 		player.getDispatcher().sendCS2Script(5561 , new Object[] { 0, amount });
 		player.getDispatcher().sendCS2Script(5560, new Object[] { currentCoins - amount });
 		return true;

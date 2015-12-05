@@ -4,71 +4,97 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.Virtue;
-import org.virtue.model.World;
-import org.virtue.model.entity.npc.NPC;
 import org.virtue.model.entity.npc.NpcDrops;
-import org.virtue.model.entity.npc.NpcTypeList;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.region.Region;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.Gson;
 
 /**
  * @Author Kayla
  * @Date Nov 24, 2015
  */
 public class NpcDropParser {
-	
+
 	/**
 	 * The {@link Logger} Instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(NpcDataParser.class);
-	
-	private static File PATH = new File("./repository/NPCDrops.json");
-	
-	public static void loadJsonNpcDrops () {
-		try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {
-			JsonParser parser = new JsonParser();
-			JsonArray array = parser.parse(reader).getAsJsonArray();
-			for (JsonElement element : array) {
-				JsonObject obj = element.getAsJsonObject();
-				int npcID = obj.get("npcID").getAsInt();
-				int itemId = -1;
-				if (obj.has("itemID")) {
-					itemId = obj.get("itemID").getAsInt();
+	private static Logger logger = LoggerFactory.getLogger(NpcDropParser.class);
+
+	private static File PATH = new File("./repository/npc/drops/");
+
+	private final int rolls;
+
+	private final int[] npcIdentifiers;
+
+	private final ArrayList<NpcDrops> staticDrops = new ArrayList<>();
+
+	private final ArrayList<NpcDrops> dynamicDrops = new ArrayList<>();
+
+	public static final int ROLL_MULTIPLIER = 100;
+
+	public static final HashMap<Integer, NpcDropParser> itemDrops = new HashMap<>();
+
+	public NpcDropParser(final int rolls, final int... npcIdentifiers) {
+		this.rolls = rolls;
+		this.npcIdentifiers = npcIdentifiers;
+	}
+
+	private ArrayList<NpcDrops> getRolledLoot(final double chanceOffset) {
+		final ArrayList<NpcDrops> temp = new ArrayList<>(dynamicDrops);
+		final ArrayList<NpcDrops> rolledLoot = new ArrayList<>();
+		final Random random = new Random();
+
+		for (int i = 0; i < rolls; i++) {
+			final double roll = (random.nextDouble() * ROLL_MULTIPLIER);
+			Collections.shuffle(temp);
+
+			for (final NpcDrops loot : temp) {
+				final double _chanceOffset = (loot.getHitRollCeil() * chanceOffset);
+
+				if ((loot.getHitRollCeil() + _chanceOffset) >= roll) {
+					rolledLoot.add(loot);
+					temp.remove(loot);
+					break;
 				}
-				int itemAmount = -1;
-				if (obj.has("itemAmount")) {
-					itemAmount = obj.get("itemAmount").getAsInt();
-				}
-				int minimum = -1;
-				if (obj.has("minimum")) {
-					minimum = obj.get("minimum").getAsInt();
-				}
-				int maximum = -1;
-				if (obj.has("maximum")) {
-					maximum = obj.get("maximum").getAsInt();
-				}
-				String itemRarity = "";
-				if (obj.has("itemRarity")) {
-					itemRarity = obj.get("itemRarity").getAsString();
-				}
-				/*NpcDrops npc = new NpcDrops(itemId, itemAmount, minimum, maximum, itemRarity);
-				Region region = World.getInstance().getRegions().getRegionByID(this.getCurrentTile().getRegionID());
-				if (region != null && region.isLoaded()) {
-					region.dropItem(npc, 1, visibleTo, this.getCurrentTile());//Bones
-				}*/
 			}
-		} catch (IOException ex) {
-			logger.error("Error loading NPC Drops", ex);
-			return;
 		}
+		return rolledLoot;
+	}
+
+	public ArrayList<NpcDrops> getLootChance(final int chanceOffset) {
+		final ArrayList<NpcDrops> lootChance = new ArrayList<>(staticDrops);
+		lootChance.addAll(getRolledLoot(chanceOffset));
+		return lootChance;
+	}
+
+	public static final NpcDropParser forID(final int npcID) {
+		if (!itemDrops.containsKey(npcID))
+			return itemDrops.get(16028);
+
+		return itemDrops.get(npcID);
+	}
+
+	public static final void loadNpcDrops() {
+		final Gson gson = new Gson();
+
+		for (final File file : PATH.listFiles()) {
+			try (final BufferedReader parse = new BufferedReader(new FileReader(file))) {
+				final NpcDropParser table = gson.fromJson(parse, NpcDropParser.class);
+
+				for (final int key : table.npcIdentifiers) {
+					itemDrops.put(key, table);
+				}
+			} catch (IOException e) {
+				logger.error("Error loading NPC Drops", e);
+				return;
+			}
+		}
+		logger.info("Loaded " + itemDrops.size() + " NPC Item Drops.");
 	}
 }

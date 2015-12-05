@@ -120,13 +120,12 @@ var PlayerAction = {
 				}
 			});
 		},
-		requestSetAccountType : function (player) {			
+		requestSetAccountType : function (player) {
 			var message = "Please enter the display name of the player to change the account type of:";
 			this.requestAccountHash(player, message, this.setAccountType);
 		},
 		setAccountType : function (player, userHash) {
 			var curType = api.getAccountType(userHash);
-			api.sendMessage(player, "Type: "+curType);
 			var curTypeName = ACCOUNT_TYPES[curType];
 			var name = api.getName(userHash);
 			if (curTypeName === undefined) {
@@ -136,19 +135,29 @@ var PlayerAction = {
 				api.sendMessage(player, "You cannot change the account type of another administrator.");
 				return;
 			}*/
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
-				handle : function (option) {
-					option = responses[option-1];
-					api.sendMessage(player, name+" is now a(n) "+ACCOUNT_TYPES[option]);
-					api.setAccountType(player, userHash, option);
-				}
-			});
+			
 			var message = "New account type for "+name+" (current="+curTypeName+"):";
-			var responses = [0, 1, 2, 6, 8];
+			var responses = [0, 1, 2, 3, 4];
 			var options = ["null", "null", "null", "null", "null"];
 			for (var pos in responses) {
 				options[pos] = ACCOUNT_TYPES[responses[pos]];
 			}
-			api.requestMulti(player, message, options, responses, new Handler());
+			requestMulti(player, message, options, responses, function (newType) {
+				if (api.getRights(newType) >= 2) {
+					//Double check first for higher rights
+					var message = "Are you sure you want to make "+name+" a(n) "+ACCOUNT_TYPES[newType]+"?";
+					requestConfirm(player, message, function () {
+						api.sendMessage(player, name+" is now a(n) "+ACCOUNT_TYPES[newType]);
+						api.setAccountType(player, userHash, newType);
+					});
+					return;
+				} else {
+					//Just apply it anyways, as it's really easy to change back
+					api.sendMessage(player, name+" is now a(n) "+ACCOUNT_TYPES[newType]);
+					api.setAccountType(player, userHash, newType);
+
+					api.sendMessage(player, "New Type: "+ACCOUNT_TYPES[api.getAccountType(userHash)]);
+				}
+			});
 		}
 }

@@ -23,6 +23,7 @@ package org.virtue.script;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,12 +40,12 @@ import org.slf4j.LoggerFactory;
 import org.virtue.model.entity.combat.impl.ability.ActionBar;
 import org.virtue.model.entity.combat.impl.ability.ScriptedAbility;
 import org.virtue.model.entity.npc.AbstractNPC;
+import org.virtue.model.entity.player.WearPos;
 import org.virtue.model.entity.player.inv.ContainerState;
 import org.virtue.model.entity.player.skill.SkillType;
 import org.virtue.network.event.context.impl.out.MessageEventContext.ChannelType;
 import org.virtue.script.listeners.AbilityListener;
 import org.virtue.script.listeners.CombatHandler;
-import org.virtue.script.listeners.CommandListener;
 import org.virtue.script.listeners.DialogListener;
 import org.virtue.script.listeners.EventListener;
 import org.virtue.script.listeners.ItemListener;
@@ -134,8 +135,6 @@ public class JSListeners {
 	
 	private Map<Integer, ItemListener> itemMap;
 	
-	private Map<String, CommandListener> commandMap;
-	
 	private Map<String, DialogListener> dialogMap;
 	
 	private Map<Integer, VarListener> varMap;
@@ -144,11 +143,13 @@ public class JSListeners {
 
 	private Map<Integer, CombatHandler> combatScriptMap;
 	
-	private Set<VarListener> vars;
+	private Map<Integer, VarListener> vars;
 	
 	private Set<WorldCycleListener> cycleScripts;
 	
 	private ScriptAPI scriptAPI;
+	
+	private ScriptEngine engine;
 	
 	private File scriptDir;
 
@@ -162,10 +163,9 @@ public class JSListeners {
 		npcMap = new HashMap<Integer, NpcListener>();
 		abstractNPCMap = new HashMap<Integer, AbstractNPC>();
 		combatScriptMap = new HashMap<Integer, CombatHandler>();
-		commandMap = new HashMap<String, CommandListener>();
 		dialogMap = new HashMap<String, DialogListener>();
 		varMap = new HashMap<Integer, VarListener>();
-		vars = new HashSet<VarListener>();
+		vars = new HashMap<Integer, VarListener>();
 		cycleScripts = new HashSet<WorldCycleListener>();
 		scriptAPI = new VirtueScriptAPI();
 		scriptDir = new File("./repository/scripts/");
@@ -197,41 +197,58 @@ public class JSListeners {
 			map.put(inv.name(), inv.getID());
 		}
 		engine.put("Inv", map);
+		
+		map = new HashMap<>();
+		for (WearPos wearPos : WearPos.values()) {
+			map.put(wearPos.name(), wearPos.getSlot());
+		}
+		engine.put("WearPos", map);
+		
+		File generalFunctions = new File(scriptDir, "GeneralFunctions.js");
+		if (generalFunctions.exists()) {
+			try {
+				engine.eval(new FileReader(generalFunctions));
+			} catch (Exception ex) {
+				logger.error("Failed to load general functions script.", ex);
+			}
+		}
 	}
 
 	public synchronized boolean load() {
 		boolean success = true;
-		ScriptEngine js = engineManager.getEngineByName("nashorn");
-		if (js == null) {
-			js = engineManager.getEngineByName("JavaScript");//Fall back to Rhino if Nashorn is not available
+		engine = engineManager.getEngineByName("nashorn");
+		if (engine == null) {
+			engine = engineManager.getEngineByName("JavaScript");//Fall back to Rhino if Nashorn is not available
 		}
-		setConstants(js);
-		File generalFunctions = new File(scriptDir, "GeneralFunctions.js");
-		if (generalFunctions.exists()) {
-			try {
-				js.eval(new FileReader(generalFunctions));
-			} catch (Exception ex) {
-				logger.error("Failed to load general functions script.", ex);
-				success = false;
-			}
-		}
+		setConstants(engine);
 		
 		for (File category : scriptDir.listFiles()) {
 			if (category.isDirectory()) {
-				List<File> files = FileUtility.findFiles(category, "js");
-				for (File file : files) {
-					try {
-						js.eval(new FileReader(file));
-						Invocable invoke = (Invocable) js;
-						invoke.invokeFunction("listen", this);
-					} catch (Exception ex) {
-						logger.error("Failed to load script "+file.getName(), ex);
-						success = false;
-					}
+				if (!loadScriptCategory(engine, category)) {
+					success = false;
 				}
 			}			
 		}
-		logger.info("Registerd " + locationMap.size() + " Location Script(s), " + itemOnItemMap.size() + " ItemOnItem Script(s), " + widgetMap.size() + " Widget Script(s), " + commandMap.size() + " Command Script(s).");
+		logger.info("Registerd " + locationMap.size() + " Location Script(s), " + itemOnItemMap.size() + " ItemOnItem Script(s), " + widgetMap.size() + " Widget Script(s).");
+		return success;
+	}
+	
+	private boolean loadScriptCategory (ScriptEngine engine, File folder) {
+		boolean success = true;
+		List<File> files = FileUtility.findFiles(folder, "js");
+		int countBefore = listeners.size();
+		for (File file : files) {
+			try {
+				engine.eval(new FileReader(file));
+				Invocable invoke = (Invocable) engine;
+				invoke.invokeFunction("listen", this);
+			} catch (Exception ex) {
+				logger.error("Failed to load script "+file.getName(), ex);
+				success = false;
+			}
+		}
+		int totalScripts = listeners.size() - countBefore;
+		logger.info("Registered "+totalScripts+" "+folder.getName()+" event listener(s).");
 		return success;
 	}
 
@@ -243,13 +260,21 @@ public class JSListeners {
 		widgetMap.clear();
 		itemMap.clear();
 		npcMap.clear();
-		commandMap.clear();
 		dialogMap.clear();
 		abstractNPCMap.clear();
 		varMap.clear();
 		vars.clear();
 		cycleScripts.clear();
 		return load();
+	}
+	
+	public synchronized boolean reload(String category) {
+		File folder = new File(scriptDir, category);
+		return loadScriptCategory(engine, folder);
+	}
+	
+	public boolean categoryExists (String category) {
+		return new File(scriptDir, category).exists();
 	}
 	
 	/**
@@ -260,6 +285,12 @@ public class JSListeners {
 		return scriptAPI;
 	}
 	
+	/**
+	 * Registers a general event listener of the given type which is bound to the given object
+	 * @param eventTypeId
+	 * @param binding
+	 * @param listener
+	 */
 	public void registerListener (int eventTypeId, Object binding, EventListener listener) {
 		ScriptEventType eventType = ScriptEventType.getById(eventTypeId);
 		if (eventType == null) {
@@ -323,18 +354,6 @@ public class JSListeners {
 	}
 	
 	/**
-	 * Registers a {@link CommandListener} which is called when a player enters a command with one of the provided syntaxes
-	 * @param listener The listener
-	 * @param syntaxes The command strings which will trigger the listener. Note that commands must be all one word, otherwise they will never trigger
-	 */
-	@Deprecated
-	public void registerCommandListener(CommandListener listener, String[] syntaxes) {
-		for (String syntax : syntaxes) {
-			commandMap.put(syntax.toLowerCase(), listener);
-		}
-	}
-	
-	/**
 	 * Registers a {@link DialogListener}, which is triggered by another script to provide a dialog chain
 	 * @param listener The listener
 	 * @param name The name which is used to trigger the dialog
@@ -351,7 +370,7 @@ public class JSListeners {
 	 */
 	public void registerVarListener(VarListener listener, int[] varps) {
 		listener = new VarListenerWrapper(listener);//Use a wrapper to avoid issues with hashing (since the javascript version does not support proper hashing)
-		vars.add(listener);
+		vars.put(Arrays.hashCode(varps), listener);
 		for (int id : varps) {
 			varMap.put(id, listener);
 		}
@@ -463,11 +482,6 @@ public class JSListeners {
 	public ItemOnEntityListener forItemOnEntity (int itemID) {
 		return itemOnEntityMap.get(itemID);
 	}
-
-	@Deprecated
-	public CommandListener forSyntax(String syntax) {
-		return commandMap.get(syntax);
-	}
 	
 	public DialogListener getDialog (String name) {
 		return dialogMap.get(name.toLowerCase());
@@ -478,7 +492,7 @@ public class JSListeners {
 	}
 	
 	public Collection<VarListener> getVarListeners () {
-		return vars;
+		return vars.values();
 	}
 	
 	public Collection<WorldCycleListener> getCycleListeners () {

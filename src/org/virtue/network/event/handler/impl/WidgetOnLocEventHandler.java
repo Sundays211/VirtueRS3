@@ -85,7 +85,6 @@ public class WidgetOnLocEventHandler implements GameEventHandler<WidgetOnLocEven
 			Map<String, Object> args = new HashMap<>();
 			args.put("player", player);
 			args.put("location", location);
-			args.put("loctype", location.getID());
 			if (type == ScriptEventType.LOC_OP_ITEMUSE) {
 				Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(context.getIfSlot());
 				if (item == null || item.getId() != context.getIfItem()) {

@@ -175,6 +175,7 @@ var SkillcapeCustomiser = {
 							break;
 						}
 					}
+					player.getEquipment().refresh(true);
 					api.openCentralWidget(player, 20, false);
 				}
 			});

@@ -25,15 +25,22 @@ public final class Prize {
 	private final Rarity rarity;
 	
 	/**
+	 * The cashout value.
+	 */
+	private final int cashoutValue;
+	
+	/**
 	 * Constructs a new {@code Prize} {@code Object}.
 	 * @param item The item.
 	 * @param rarity The rarity.
 	 * @param category The category.
+	 * @param cashoutValue The cashout value.
 	 */
-	public Prize(Item item, Rarity rarity, PrizeCategory category) {
+	public Prize(Item item, Rarity rarity, PrizeCategory category, int cashoutValue) {
 		this.item = item;
 		this.rarity = rarity;
 		this.category = category;
+		this.cashoutValue = cashoutValue;
 	}
 
 	/**
@@ -58,5 +65,13 @@ public final class Prize {
 	 */
 	public Rarity getRarity() {
 		return rarity;
+	}
+
+	/**
+	 * Gets the cashout value.
+	 * @return The cashout value.
+	 */
+	public int getCashoutValue() {
+		return cashoutValue;
 	}
 }

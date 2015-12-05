@@ -5,15 +5,10 @@ var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBl
  * @Date 11/14/2015
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.CommandListener'), {
-
-	/* The object ids to bind to */
-	getPossibleSyntaxes: function() {
-		return [ "freeze", "unfreeze"];
-	},
-
-	/* The first option on an object */
-	handle: function(player, syntax, args, clientCommand) {
+var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+	invoke : function (event, syntax, scriptArgs) {
+		var player = scriptArgs.player;
+		var args = scriptArgs.cmdArgs;
 		
 		var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
 			handle : function (value) {
@@ -58,18 +53,13 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.Command
 		
 		player.getDialogs().requestString("Please enter the display name of the player you wish to unfreeze:", new Handler());
 		return true;
-	},
-	
-		
-	adminCommand : function () {
-		return true;
 	}
-
 });
 
-/* Listen to the object ids specified */
+/* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var listener = new CommandListener();
-	scriptManager.registerCommandListener(listener, listener.getPossibleSyntaxes());
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "freeze", listener);
+	scriptManager.registerListener(EventType.COMMAND_ADMIN, "unfreeze", listener);
 };
 

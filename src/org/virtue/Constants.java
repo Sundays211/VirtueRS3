@@ -79,6 +79,11 @@ public class Constants {
 	public static final int KICKOUT_TIME = 500;
 	
 	/**
+	 * The rate to multiply all xp gains by, where 1 is the normal RuneScape rate
+	 */
+	public static final float GLOBAL_XP_MULTIPLYER = 45;
+	
+	/**
 	 * Whether or not to lead GE Prices from a JSON File
 	 */
 	public static final boolean CUSTOM_GE_PRICES = true;
@@ -101,7 +106,7 @@ public class Constants {
 	/**
 	 * The packed npc extra data, which includes descriptions and animations
 	 */
-	public static File NPC_DATA = new File("./repository/npc_data_840.dat");
+	public static File NPC_DATA = new File("./repository/npc/npc_data_840.dat");
 	
 	/**
 	 * The packed item extra data, which includes descriptions and weights

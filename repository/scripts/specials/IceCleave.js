@@ -17,6 +17,6 @@ var zamorakGodsword = new SpecialAttack(CombatStyle.MELEE, [11700]) {
 var listen = function(scriptManager) {
 	zamorakGodsword.animation = new AnimationBlock(7070);
 	zamorakGodsword.graphics = new GraphicsBlock(1, 1221);
-	zamorakGodsword.damageModifier = 1.10;
+	zamorakGodsword.damageModifier = 1.75;
 	SpecialAttackHandler.register(zamorakGodsword);
 };

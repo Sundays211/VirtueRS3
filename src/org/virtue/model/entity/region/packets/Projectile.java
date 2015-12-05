@@ -99,7 +99,7 @@ public class Projectile implements SceneUpdatePacket {
 		buffer.putShort(delay);
 		buffer.putShort(duration);
 		buffer.putByte(angle);
-		buffer.putShort(player.getPlayerCount() * 64);
+		buffer.putShort(player.getSize() * 64);
 		buffer.putShort(-1);
 	}
 	

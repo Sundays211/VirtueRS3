@@ -192,7 +192,7 @@ public final class CombatSchedule {
 			drainAdrenaline(150);
 			break;
 		case ULTIMATE:
-			if (adrenaline < 100) {
+			if (adrenaline < 1000) {
 				player.getDispatcher().sendGameMessage("Ultimate abilities require you to have 100% adrenaline before they can be used.");
 				return;
 			}
