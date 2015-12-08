@@ -28,7 +28,7 @@
  * @since 05/11/2014
  */
 
-var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, args) {
 		var player = args.player;
 		if (args.cmdArgs.length < 2) {

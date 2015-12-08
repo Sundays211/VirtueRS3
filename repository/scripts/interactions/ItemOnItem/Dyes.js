@@ -30,7 +30,7 @@
  */
 var api;
 
-var ItemOnItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemOnItemListener'), {
+var ItemOnItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemOnItemListener'), {
 
 	/* The first option on an object */
 	handleInteraction: function(player, item1, slot1, item2, slot2) {

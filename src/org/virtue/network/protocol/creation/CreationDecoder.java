@@ -31,12 +31,12 @@ import java.net.ProtocolException;
 import java.util.List;
 
 import org.virtue.Constants;
-import org.virtue.model.entity.player.GameState;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.PrivilegeLevel;
-import org.virtue.model.entity.player.var.LoginDispatcher;
+import org.virtue.game.entity.player.GameState;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.PrivilegeLevel;
+import org.virtue.game.entity.player.widget.var.LoginDispatcher;
 import org.virtue.network.NetworkHandler;
-import org.virtue.network.protocol.event.GameEventDecoder;
+import org.virtue.network.protocol.ProtocolDecoder;
 import org.virtue.network.session.impl.GameSession;
 import org.virtue.utility.BufferUtility;
 import org.virtue.utility.ISAACCipher;
@@ -155,7 +155,7 @@ public class CreationDecoder extends ByteToMessageDecoder {
 		player.initialize(false);
 		ctx.channel().writeAndFlush(Unpooled.buffer(1).writeByte(2));
 		ctx.channel().pipeline().remove(this);
-		ctx.channel().pipeline().addFirst("decoder", new GameEventDecoder(player.getDecodingCipher()));
+		ctx.channel().pipeline().addFirst("decoder", new ProtocolDecoder(player.getDecodingCipher()));
 		ctx.channel().attr(NetworkHandler.attachment).set(new GameSession(ctx.channel(), player));
 		player.getAppearance().setTemp();
 		player.getAppearance().sendBlock(true);

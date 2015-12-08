@@ -2,15 +2,15 @@
  * @author Kayla
  * @date 11/13/2015
  */ 
-var AttackHandler = Java.type('org.virtue.model.entity.combat.impl.AttackHandler');
-var AttackInfo = Java.type('org.virtue.model.entity.combat.AttackInfo');
-var AttackEvent = Java.type('org.virtue.model.entity.combat.AttackEvent');
-var SwitchAttack = Java.type('org.virtue.model.entity.combat.impl.combo.SwitchAttack');
-var SwitchAttackEvent = Java.type('org.virtue.model.entity.combat.impl.combo.SwitchAttackEvent');
-var MeleeAttackHandler = Java.extend(Java.type('org.virtue.model.entity.combat.impl.melee.MeleeAttackHandler'));
-var CombatStyle = Java.type('org.virtue.model.entity.combat.CombatStyle');
-var AbstractNPC = Java.type('org.virtue.model.entity.npc.AbstractNPC');
-var Projectile = Java.type('org.virtue.model.entity.region.packets.Projectile');
+var AttackHandler = Java.type('org.virtue.game.entity.combat.impl.AttackHandler');
+var AttackInfo = Java.type('org.virtue.game.entity.combat.AttackInfo');
+var AttackEvent = Java.type('org.virtue.game.entity.combat.AttackEvent');
+var SwitchAttack = Java.type('org.virtue.game.entity.combat.impl.combo.SwitchAttack');
+var SwitchAttackEvent = Java.type('org.virtue.game.entity.combat.impl.combo.SwitchAttackEvent');
+var MeleeAttackHandler = Java.extend(Java.type('org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler'));
+var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
+var AbstractNPC = Java.type('org.virtue.game.entity.npc.AbstractNPC');
+var Projectile = Java.type('org.virtue.game.entity.region.packets.Projectile');
 
 var MELEE = new MeleeAttackHandler(500, 1000) {
 	getAttackInfo: function(entity, lock) {

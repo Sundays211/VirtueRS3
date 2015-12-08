@@ -26,7 +26,7 @@ import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.model.World;
+import org.virtue.game.World;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

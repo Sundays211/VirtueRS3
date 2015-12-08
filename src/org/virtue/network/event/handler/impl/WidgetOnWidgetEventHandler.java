@@ -21,10 +21,10 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.inv.ContainerState;
-import org.virtue.model.entity.player.inv.Item;
-import org.virtue.model.entity.player.widget.WidgetState;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.container.ContainerState;
+import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.network.event.context.impl.in.WidgetOnWidgetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -38,7 +38,7 @@ import org.virtue.network.event.handler.GameEventHandler;
 public class WidgetOnWidgetEventHandler implements GameEventHandler<WidgetOnWidgetEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, WidgetOnWidgetEventContext context) {

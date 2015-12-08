@@ -29,7 +29,7 @@
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The object ids to bind to */
 	getIDs: function() {
@@ -140,7 +140,7 @@ function addClanBan (player) {
 		api.sendMessage(player, "You must be a clan admin to do that.");
 		return;
 	}
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			api.sendMessage(player, "Attempting to ban "+value+".");
 			var userHash = api.getUserHash(value);
@@ -173,7 +173,7 @@ function removeClanBan (player, slot) {
 	if (slot != -1) {
 		api.runClientScript(player, 4581, [slot]);
 	}
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			api.sendMessage(player, "Attempting to unban "+value+".");
 			var userHash = api.getUserHash(value);

@@ -29,7 +29,7 @@
  * @since 2/20/2015
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		/*****************************************WARNING****************************************

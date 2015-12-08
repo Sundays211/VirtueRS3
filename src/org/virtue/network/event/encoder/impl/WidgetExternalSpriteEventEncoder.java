@@ -21,19 +21,19 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WidgetExternalSpriteEventContext;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 5, 2014
  */
-public class WidgetExternalSpriteEventEncoder implements GameEventEncoder<WidgetExternalSpriteEventContext> {
+public class WidgetExternalSpriteEventEncoder implements EventEncoder<WidgetExternalSpriteEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.GameEventEncoder#encode(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public OutboundBuffer encode(Player player, WidgetExternalSpriteEventContext context) {

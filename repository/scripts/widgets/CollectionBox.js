@@ -34,7 +34,7 @@ var api;
 var BACKPACK = 93;
 var LOAN_RETURN = 540;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
 	getIDs: function() {

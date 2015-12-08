@@ -21,8 +21,8 @@
  */
 package org.virtue.network.event.context.impl.in;
 
-import org.virtue.network.event.IncomingEventType;
 import org.virtue.network.event.context.GameEventContext;
+import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

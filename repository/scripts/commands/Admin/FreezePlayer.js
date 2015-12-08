@@ -1,16 +1,16 @@
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 /**
  * @Author Kayla
  * @Date 11/14/2015
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;
 		
-		var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 			handle : function (value) {
 				if (syntax.toLowerCase() == "freeze") {
 				if (value.length > 0) {

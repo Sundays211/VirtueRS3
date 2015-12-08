@@ -24,15 +24,15 @@ package org.virtue.network.event.encoder.impl;
 import java.security.MessageDigest;
 import java.util.Iterator;
 
-import org.virtue.model.World;
-import org.virtue.model.entity.npc.NPC;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.update.Block;
-import org.virtue.model.entity.update.block.HeadIconBlock;
-import org.virtue.model.entity.update.ref.Viewport;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.World;
+import org.virtue.game.entity.npc.NPC;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.block.HeadIconBlock;
+import org.virtue.network.protocol.update.ref.Viewport;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,10 +41,10 @@ import org.virtue.network.event.encoder.GameEventEncoder;
  * @author Sundays211
  * @since 14/11/2014
  */
-public class NpcUpdateEventEncoder implements GameEventEncoder<Viewport> {
+public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.GameEventEncoder#encode(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public OutboundBuffer encode(Player player, Viewport context) {

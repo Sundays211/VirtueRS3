@@ -23,27 +23,27 @@ package org.virtue.network.event.encoder.impl;
 
 import java.security.MessageDigest;
 
-import org.virtue.model.World;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.update.Block;
-import org.virtue.model.entity.update.block.AppearenceBlock;
-import org.virtue.model.entity.update.block.HeadIconBlock;
-import org.virtue.model.entity.update.ref.Viewport;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.block.AppearenceBlock;
+import org.virtue.network.protocol.update.block.HeadIconBlock;
+import org.virtue.network.protocol.update.ref.Viewport;
 import org.virtue.utility.DirectionUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 18, 2014
  */
-public class PlayerUpdateEventEncoder implements GameEventEncoder<Viewport> {
+public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 
 	private static final int MAX_PLAYER_ADD = 25;
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.GameEventEncoder#encode(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public OutboundBuffer encode(Player player, Viewport context) {

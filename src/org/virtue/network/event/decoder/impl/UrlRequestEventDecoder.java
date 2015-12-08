@@ -21,11 +21,11 @@
  */
 package org.virtue.network.event.decoder.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.IncomingEventType;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.UrlRequestEventContext;
-import org.virtue.network.event.decoder.GameEventDecoder;
+import org.virtue.network.event.decoder.EventDecoder;
+import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -34,10 +34,10 @@ import org.virtue.network.event.decoder.GameEventDecoder;
  * @author Sundays211
  * @since Oct 26, 2014
  */
-public class UrlRequestEventDecoder implements GameEventDecoder<UrlRequestEventContext> {
+public class UrlRequestEventDecoder implements EventDecoder<UrlRequestEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#createContext(org.virtue.model.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
+	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
 	public UrlRequestEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
@@ -45,7 +45,7 @@ public class UrlRequestEventDecoder implements GameEventDecoder<UrlRequestEventC
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#getTypes()
+	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
 	public IncomingEventType[] getTypes() {

@@ -210,7 +210,7 @@ var Pickaxe = {
 };
 
 
-var MineListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var MineListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;
 
@@ -248,7 +248,7 @@ var Mining = {
 				return;
 			}
 			var delay = this.getMiningDelay(player, rock, pickaxe);//Calculates the time taken to mine this rock
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					api.runAnimation(player, pickaxe.anim);
 					if (delay <= 0) {

@@ -25,19 +25,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.Virtue;
-import org.virtue.model.World;
-import org.virtue.model.content.minigame.Controller;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.event.BenchSitting;
-import org.virtue.model.entity.region.Region;
-import org.virtue.model.entity.region.SceneLocation;
-import org.virtue.model.entity.region.Tile;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
+import org.virtue.engine.script.listeners.LocationListener;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.event.BenchSitting;
+import org.virtue.game.entity.region.Region;
+import org.virtue.game.entity.region.SceneLocation;
+import org.virtue.game.entity.region.Tile;
 import org.virtue.network.event.context.impl.in.LocationClickEventContext;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.handler.GameEventHandler;
-import org.virtue.script.ScriptEventType;
-import org.virtue.script.ScriptManager;
-import org.virtue.script.listeners.LocationListener;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -52,7 +51,7 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model
+	 * org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game
 	 * .entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
@@ -86,13 +85,13 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 	}
 	
 	private void handleInteraction (Player player, SceneLocation location, LocationClickEventContext context) {
-		if (player.getMinigame() != null) {
+		/*if (player.getMinigame() != null) {
 			Controller controller = Virtue.getInstance().getController().getController(player.getMinigame());
 			if (controller != null) {
 				controller.objectClick(player.getMinigame(), player, location, context.getButton());
 				return;
 			}
-		} 
+		}*/
 		
 		if (location.getLocType().name.equalsIgnoreCase("bench")) {
 			player.setAction(new BenchSitting(location));

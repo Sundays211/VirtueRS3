@@ -21,10 +21,10 @@
  */
 
 
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
-var FaceDirectionBlock = Java.type('org.virtue.model.entity.update.block.FaceDirectionBlock');
+var Tile = Java.type('org.virtue.game.entity.region.Tile');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+var FaceDirectionBlock = Java.type('org.virtue.network.protocol.update.block.FaceDirectionBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -163,7 +163,7 @@ var Lodestone = {
  */
 BYPASS_UNLOCK = true;
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The object ids to bind to */
 	getIDs: function() {
@@ -205,7 +205,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.Locati
 
 });
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The object ids to bind to */
 	getIDs: function() {
@@ -267,7 +267,7 @@ function runHomeTeleport (player, dest) {
 	var landSpot = Tile.edit(dest, 0, -1, 0);
 	var gfxType = 1;
 	
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {//The initial emote (drawing circle/reading book)
 				player.queueUpdateBlock(new AnimationBlock(16385));

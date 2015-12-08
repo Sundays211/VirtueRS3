@@ -36,7 +36,7 @@ var TRADE_CONTAINER = 90;
 var LOAN_OFFER = 541;
 var LOAN_RETURN = 540;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
 	getIDs: function() {
@@ -225,7 +225,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 				}
 				return false;
 			case 38://Add from money pouch
-				var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+				var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 					handle : function (value) {
 						Trade.offerCoins(player, value);
 						Trade.refreshTrade(player);
@@ -305,7 +305,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 	}
 });
 
-var VarListener = Java.extend(Java.type('org.virtue.script.listeners.VarListener'), {
+var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarListener'), {
 
 	/* The varp ids to bind to */
 	getIDs: function() {
@@ -486,7 +486,7 @@ var Trade = {
 			}
 		},
 		selectLoanDuration : function (player) {
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 				handle : function (value) {
 					//api.sendMessage(player, "Set duration to: "+value);
 					if (value <= 72) {

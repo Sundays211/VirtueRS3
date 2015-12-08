@@ -21,6 +21,10 @@
  */
 package org.virtue.network;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.virtue.network.protocol.handshake.HandshakeDecoder;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -31,10 +35,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.virtue.network.protocol.handshake.HandshakeDecoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -19,10 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ContainerState = Java.type('org.virtue.model.entity.player.inv.ContainerState');
-var GroundItem = Java.type('org.virtue.model.entity.region.GroundItem');
-var Item = Java.type('org.virtue.model.entity.player.inv.Item');
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
+var GroundItem = Java.type('org.virtue.game.entity.region.GroundItem');
+var Item = Java.type('org.virtue.game.entity.player.container.Item');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -139,42 +137,21 @@ var Log = {
 	}
 }
 
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
-
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		var ids = [];
-		var ordinal = 0;
-		for (var log in Log) {
-			ids[ordinal++] = Log[log].itemID;
+var LogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		var item = args.item;
+		var slot = args.slot;
+		
+		if (event == EventType.ITEM_IOP1) {//Craft
+			Firemaking.openToolDialog(player, item, slot);
+		} else if (event == EventType.ITEM_IOP2) {//Light
+			Firemaking.runFiremakingAction(player, item, slot);
 		}
-		return ids;
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		switch (option) {
-			case 1://Craft
-				Firemaking.openToolDialog(player, item, slot);
-				break;
-			case 2://Light
-				runFiremakingAction(player, item, slot);
-				break;
-			default:
-				api.sendMessage(player, "Unhandled log action: objectid="+item.getID()+", option="+option);
-				break;
-		}
-		return true;
-	},
-	
-	/* Returns the examine text for the item, or "null" to use the default */
-	getExamine : function (player, item) {
-		return null;
 	}
-
 });
 
-var FireListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var FireListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		Firemaking.openFireToolDialog(args.player, args.location);
 	}
@@ -187,231 +164,203 @@ var LOG_IDS = [];
 var listen = function(scriptManager) {	
 	for (var log in Log) {
 		FIRE_IDS.push(Log[log].fireID);
-	}	
-	fireListener = new FireListener();
+	}
+	var fireListener = new FireListener();
 	for (var i in FIRE_IDS) {
 		//Bind option one and five on all fires to this listener (option 1=Add Logs on bonfire, option 5=Use on normal fire)
 		scriptManager.registerListener(EventType.LOC_OP1, FIRE_IDS[i], fireListener);
 		scriptManager.registerListener(EventType.LOC_OP5, FIRE_IDS[i], fireListener);
 	}
 	
-	
-	itemListener = new ItemListener();
-	LOG_IDS = itemListener.getItemIDs();
-	scriptManager.registerItemListener(itemListener, LOG_IDS);
+	for (var log in Log) {
+		LOG_IDS.push(Log[log].itemID);
+	}
+	var logListener = new LogListener();
+	for (var i in LOG_IDS) {
+		//Bind option one and two on all logs to this listener
+		scriptManager.registerListener(EventType.ITEM_IOP1, LOG_IDS[i], logListener);
+		scriptManager.registerListener(EventType.ITEM_IOP2, LOG_IDS[i], logListener);
+	}
 };
 
 var Firemaking = {
 		openToolDialog : function (player, item, slot) {
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.ToolSelectHandler'), {
-				onToolSelected : function (toolID) {
-					switch (toolID) {
-					case 590:
-						runFiremakingAction(player, item, slot);
-						break;
-					case 946:
-						item.handleItemOnItem(player, slot, Item.create(946, 1), -1);//A hacky solution, but it should work
-						break;
-					case 24291://Add logs to a nearby bonfire
-						findBonfire(player, item, slot);
-						break;
-					default:
-						api.sendMessage(player, "Unhandled log tool: logID="+item.getID()+", toolID="+toolID);
-						break;
-					}
-				}
-			});
 			var tools = [590, 946, 24291];
 			if (item.getID() == Log.EUCALYPTUS.itemID) {
 				tools = [590, 24291];
 			}
-			player.getDialogs().requestTool("What do you want to use on the logs?", new Handler(), tools);
-		},
-		openFireToolDialog : function (player, location) {
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.ToolSelectHandler'), {
-				onToolSelected : function (toolID) {
-					switch (toolID) {
-					case 24291://Add logs the bonfire
-						selectLogsToAdd(player, location)
-						break;
-					default:
-						api.sendMessage(player, "Unhandled fire tool: fireID="+location.getID()+", toolID="+toolID);
-						break;
-					}
+			requestTool(player, "What do you want to use on the logs?", tools, function (toolId) {
+				switch (toolId) {
+				case 590://Light
+					Firemaking.runFiremakingAction(player, item, slot);
+					break;
+				case 946://Craft
+					item.handleItemOnItem(player, slot, Item.create(946, 1), -1);//A hacky solution, but it should work
+					break;
+				case 24291://Add logs to a nearby bonfire
+					Firemaking.findBonfire(player, item.getId(), slot);
+					break;
+				default:
+					api.sendMessage(player, "Unhandled log tool: logs="+item+", toolID="+toolId);
+					break;
 				}
 			});
-			player.getDialogs().requestTool("Choose what to do:", new Handler(), [25637, 24291]);
-		}
-}
-
-function selectLogsToAdd (player, fire) {
-	var hasLogs = [];
-	var ordinal = 0;
-	for (var slot in LOG_IDS) {
-		if (api.carriedItemTotal(player, LOG_IDS[slot]) > 0) {
-			hasLogs[ordinal++] = LOG_IDS[slot];
-		}
-	}
-	if (hasLogs.length == 0) {
-		return;//Player does not have any logs to add
-	} else if (hasLogs.length == 1) {
-		runBonfireAction(player, Item.create(hasLogs[0], 1), 0, fire);
-	} else {
-		var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.ToolSelectHandler'), {
-			onToolSelected : function (toolID) {
-				runBonfireAction(player, Item.create(toolID, 1), 0, fire);
-			}
-		});
-		player.getDialogs().requestTool("Which logs do you want to add to the bonfire?", new Handler(), hasLogs);
-	}
-}
-
-function runFiremakingAction (player, item, slot) {
-	var log = forItem(item.getID());//Find the log type
-	//FIREMAKING_SKILL
-	if (api.getStatLevel(player, FIREMAKING_SKILL) < log.level) {
-		api.sendMessage(player, "You need a firemaking level of "+log.level+" to light these logs.");
-		return;
-	}
-	var delay = getFiremakingDelay(player, log);//Calculates the time taken to light this log
-	var region = api.getRegion(player.getCurrentTile().getRegionID());
-	if (region != null) {
-		if (!tileEmpty(player.getCurrentTile(), region)) {
-			api.sendMessage(player, "You can't light a fire here.");
-			return;
-		}
-		item = new GroundItem(item, new Tile(player.getCurrentTile()));
-		region.addItem(item);
-		player.getInvs().getContainer(ContainerState.BACKPACK).clearSlot(slot);//Remove logs from inv
-		player.getInvs().updateContainer(ContainerState.BACKPACK, [slot]);
-		api.sendFilterMessage(player, "You attempt to light the logs.");
-		var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
-			process : function (player) {
-				api.runAnimation(player, 16700);
-				if (delay <= 0) {
-					firemakingSuccess(player, region, log);
-					return true;
+		},
+		openFireToolDialog : function (player, location) {
+			requestTool(player, "Choose what to do:", [25637, 24291], function (toolId) {
+				switch (toolId) {
+				case 24291://Add logs the bonfire
+					Firemaking.selectLogsToAdd(player, location)
+					break;
+				default:
+					api.sendMessage(player, "Unhandled fire tool: fire="+location+", toolID="+toolId);
+					break;
 				}
-				if (!tileEmpty(player.getCurrentTile(), region) || !item.exists()) {
-					return true;//Could not complete as tile is in use
+			});
+		},
+		selectLogsToAdd : function (player, fire) {
+			var hasLogs = [];
+			for (var slot in LOG_IDS) {
+				if (api.carriedItemTotal(player, LOG_IDS[slot]) > 0) {
+					hasLogs.push(LOG_IDS[slot]);
 				}
-				delay--;
-				return false;
-			},
-			stop : function (player) {//Clear the current animation block
-				api.clearAnimation(player);
 			}
-	
-		});
-		player.setAction(new Action());	
-	}
-}
-
-function findBonfire (player, item, slot) {
-	var xOff = player.getCurrentTile().getX() - 5;
-	var yOff = player.getCurrentTile().getY() - 5;
-	var plane = player.getCurrentTile().getPlane();
-	var location;
-	for (var x = xOff; x < xOff+11; x++) {
-		for (var y = yOff; y < yOff+11; y++) {
-			location = api.getLocationByNodeType(x, y, plane, 10);
-			if (location != null && location.exists()) {
-				if (FIRE_IDS.indexOf(location.getID()) !== -1) {
-					moveToBonfire(player, item, slot, location);						
+			if (hasLogs.length == 0) {
+				return;//Player does not have any logs to add
+			} else if (hasLogs.length == 1) {
+				this.runBonfireAction(player, hasLogs[0], 0, fire);
+			} else {
+				requestTool(player, "Which logs do you want to add to the bonfire?", hasLogs, function (toolId) {
+					Firemaking.runBonfireAction(player, toolId, 0, fire);
+				});
+			}
+		},
+		runFiremakingAction : function (player, item, slot) {
+			var log = this.forItem(item.getID());//Find the log type
+			if (api.getStatLevel(player, Stat.FIREMAKING) < log.level) {
+				api.sendMessage(player, "You need a firemaking level of "+log.level+" to light these logs.");
+				return;
+			}
+			var delay = this.getDelay(player, log);//Calculates the time taken to light this log
+			var region = api.getRegion(api.getCoords(player));
+			if (region != null) {
+				if (!this.tileEmpty(api.getCoords(player), region)) {
+					api.sendMessage(player, "You can't light a fire here.");
 					return;
 				}
+				item = new GroundItem(item, api.getCoords(player));
+				region.addItem(item);
+				api.delItem(player, Inv.BACKPACK, item.getId(), 1, slot);//Remove logs from inv
+				api.sendMessage(player, "You attempt to light the logs.", MesType.GAME_SPAM);
+				var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
+					process : function (player) {
+						api.runAnimation(player, 16700);
+						if (delay <= 0) {
+							Firemaking.firemakingSuccess(player, log);
+							return true;
+						}
+						if (!Firemaking.tileEmpty(player.getCurrentTile(), region) || !item.exists()) {
+							return true;//Could not complete as tile is in use
+						}
+						delay--;
+						return false;
+					},
+					stop : function (player) {//Clear the current animation block
+						api.clearAnimation(player);
+					}
+			
+				});
+				player.setAction(new Action());	
 			}
-		}
-	}
-}
-
-function moveToBonfire(player, item, slot, fire) {
-	var OnTarget = Java.extend(Java.type('java.lang.Runnable'), {	
-		run : function () {
-			runBonfireAction(player, item, slot, fire);
-		}
-	})
-	var Task = Java.extend(Java.type('java.lang.Runnable'), {	
-		run : function () {
-			if (!fire.exists() || !player.getMovement().moveTo(fire)) {
-				print(fire.exists()+"\n")
+		},
+		findBonfire : function (player, itemId, slot) {
+			var xOff = api.getCoordX(player) - 5;
+			var yOff = api.getCoordY(player) - 5;
+			var plane = api.getCoordLevel(player);
+			var location;
+			for (var x = xOff; x < xOff+11; x++) {
+				for (var y = yOff; y < yOff+11; y++) {
+					location = api.getLocationByNodeType(x, y, plane, 10);
+					if (location != null && location.exists()) {
+						if (FIRE_IDS.indexOf(location.getID()) !== -1) {
+							this.moveToBonfire(player, itemId, slot, location);						
+							return;
+						}
+					}
+				}
+			}
+		},
+		moveToBonfire : function (player, itemId, slot, fire) {
+			var OnTarget = Java.extend(Java.type('java.lang.Runnable'), {	
+				run : function () {
+					Firemaking.runBonfireAction(player, itemId, slot, fire);
+				}
+			})
+			if (!fire.exists()) {
 				return;//Player cannot reach fire
 			}
-			player.getMovement().setOnTarget(new OnTarget());			
-		}
-	});
-	api.executeTask(new Task());
-}
-
-function runBonfireAction (player, item, slot, fire) {
-	var log = forItem(item.getID());//Find the log type
-	if (api.getStatLevel(player, Stat.FIREMAKING) < log.level) {
-		api.sendMessage(player, "You need a firemaking level of at least "+log.level+" to add these logs to a bonfire.");
-		return;
-	}
-	player.getAppearance().setRenderAnimation(2498);
-	player.getAppearance().refresh();
-	var delay = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
-		process : function (player) {
-			if (delay <= 0) {
-				if (api.carriedItemTotal(player, item.getID()) < 1 || !fire.exists()) {
-					return true;
-				}
-				addLogToFire(player, item.getID(), slot, log);
-				delay = 6;
-			}
-			delay--;
-			return false;
+			api.moveTo(player, fire, new OnTarget());
 		},
-		stop : function (player) {//Clear the current animation block
-			player.getAppearance().setRenderAnimation(-1);
-			player.getAppearance().refresh();
+		runBonfireAction : function (player, itemId, slot, fire) {
+			var log = this.forItem(itemId);//Find the log type
+			if (api.getStatLevel(player, Stat.FIREMAKING) < log.level) {
+				api.sendMessage(player, "You need a firemaking level of at least "+log.level+" to add these logs to a bonfire.");
+				return;
+			}
+			api.setRenderAnim(player, 2498);
+			var delay = 0;
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
+				process : function (player) {
+					if (delay <= 0) {
+						if (api.carriedItemTotal(player, itemId) < 1 || !fire.exists()) {
+							return true;
+						}
+						Firemaking.addLogToFire(player, itemId, slot, log);
+						delay = 6;
+					}
+					delay--;
+					return false;
+				},
+				stop : function (player) {//Clear the current animation block
+					api.setRenderAnim(player, -1);
+				}
+
+			});
+			player.setAction(new Action());
+		},
+		addLogToFire : function (player, itemID, slot, log) {
+			api.delCarriedItem(player, itemID, 1, slot);//Remove logs
+			api.addExperience(player, Stat.FIREMAKING, log.bonfirexp, true);//Add firemaking xp
+			api.runAnimation(player, 16703);
+			api.queueSpot(player, 1, log.bonfireGfx);
+			api.sendMessage(player, "You add a log to the fire.", MesType.GAME_SPAM);
+		},
+		firemakingSuccess : function (player, log) {
+			api.removeDroppedItem(api.getCoords(player), log.itemID);
+			api.spawnLocation(api.createLocation(log.fireID, api.getCoords(player), 10, 0), log.duration);//Spawn the fire
+			api.moveAdjacent(player);
+			api.addExperience(player, Stat.FIREMAKING, log.xp, true);//Add firemaking xp
+			api.sendMessage(player, "The fire catches and the logs begin to burn.", MesType.GAME_SPAM);
+		},
+		blockNodeTypes : [10],
+		tileEmpty : function (coords, region) {
+			for (var type in this.blockNodeTypes) {
+				if (api.getLocationByNodeType(coords.getX(), coords.getY(), coords.getPlane(), this.blockNodeTypes[type]) != null) {
+					return false;
+				}
+			}
+			return true;
+		},
+		forItem : function (itemID) {
+			for (var ordinal in Log) {
+				if (Log[ordinal].itemID == itemID) {
+					return Log[ordinal];
+				}
+			}
+			return null;
+		},
+		getDelay : function (player, log) {
+			return 10;//TODO: Figure out the correct calculation for this
 		}
-
-	});
-	player.setAction(new Action());
-}
-
-function addLogToFire (player, itemID, slot, log) {
-	api.delCarriedItem(player, itemID, 1, slot);//Remove logs
-	api.addExperience(player, Stat.FIREMAKING, log.bonfireXp, true);//Add firemaking xp
-	api.runAnimation(player, 16703);
-	api.queueSpot(player, 1, log.bonfireGfx);
-	api.sendFilterMessage(player, "You add a log to the fire.");
-}
-
-function firemakingSuccess (player, region, log) {
-	region.removeItem(player.getCurrentTile(), log.itemID);
-	region.spawnTempLocation(api.createLocation(log.fireID, new Tile(player.getCurrentTile()), 10, 0), log.duration);//Spawn the fire
-	player.getMovement().moveAdjacent();
-	api.addExperience(player, "firemaking", log.xp, true);//Add firemaking xp
-	//player.getSkills().addExperience(SkillType.FIREMAKING, log.xp);
-	api.sendFilterMessage(player, "The fire catches and the logs begin to burn.");
-	
-}
-
-var blockNodeTypes = [10];
-
-function tileEmpty (tile, region) {
-	for (var type in blockNodeTypes) {
-		if (api.getLocationByNodeType(tile.getX(), tile.getY(), tile.getPlane(), type) != null) {
-			return false;
-		}
-	}
-	return true;
-}
-
-function forItem(itemID) {
-	for (ordinal in Log) {
-		if (Log[ordinal].itemID == itemID) {
-			return Log[ordinal];
-		}
-	}
-	return null;
-}
-
-function getFiremakingDelay (player, log) {
-	return 10;//TODO: Figure out the correct calculation for this
 }
 

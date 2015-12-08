@@ -21,8 +21,8 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.region.Tile;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.region.Tile;
 import org.virtue.network.event.context.impl.in.WalkEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

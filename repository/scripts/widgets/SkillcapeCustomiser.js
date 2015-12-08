@@ -29,7 +29,7 @@
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interface ids to bind to */
 	getIDs: function() {
@@ -155,7 +155,7 @@ var SkillcapeCustomiser = {
 			}
 			api.setVarp(player, 426, prevColour);
 			api.openCentralWidget(player, 19, false);
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 				handle : function (value) {
 					api.closeCentralWidgets(player);
 					//print(value+"\n");
@@ -213,7 +213,7 @@ var SkillcapeCustomiser = {
 			}
 		},
 		handlePreset : function (player, preset, isSave) {
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 				handle : function (value) {
 					if ((value & 0xffff) == 211) {//Confirm
 						if (isSave) {

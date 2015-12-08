@@ -21,17 +21,17 @@
  */
 package org.virtue.network.event.decoder.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.IncomingEventType;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.EmptyEventContext;
-import org.virtue.network.event.decoder.GameEventDecoder;
+import org.virtue.network.event.decoder.EventDecoder;
+import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 5, 2014
  */
-public class EmptyEventDecoder implements GameEventDecoder<EmptyEventContext> {
+public class EmptyEventDecoder implements EventDecoder<EmptyEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.GameEventDecoder#createContext(org.virtue.network.event.buffer.InboundBuffer)
@@ -42,7 +42,7 @@ public class EmptyEventDecoder implements GameEventDecoder<EmptyEventContext> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#getTypes()
+	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
 	public IncomingEventType[] getTypes() {

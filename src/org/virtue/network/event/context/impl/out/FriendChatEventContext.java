@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.model.content.social.ChannelRank;
+import org.virtue.game.content.social.ChannelRank;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

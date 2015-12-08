@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var CraftAction = Java.type('org.virtue.model.entity.player.skill.CraftAction');
+var CraftAction = Java.type('org.virtue.game.content.skills.CraftAction');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -257,7 +257,7 @@ FarmingPatch.prototype = {
 			api.runAnimation(player, 10574);
 			//api.pausePlayer(player, 3);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						var currentStatus = that.getStatus(player);
@@ -296,7 +296,7 @@ FarmingPatch.prototype = {
 			api.runAnimation(player, 24924);
 			api.pausePlayer(player, 3);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						if (that.getStatus(player) == oldStatus) {//Protect against the crop changing status while we're watering it
@@ -325,7 +325,7 @@ FarmingPatch.prototype = {
 			api.runAnimation(player, 11088);
 			api.pausePlayer(player, 3);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						that.setStatus(player, newStatus);
@@ -384,7 +384,7 @@ FarmingPatch.prototype = {
 			api.runAnimation(player, 24926);
 			api.pausePlayer(player, 3);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						api.addExperience(player, "farming", crop.plantXp, true);
@@ -403,7 +403,7 @@ FarmingPatch.prototype = {
 			delay = 2;
 			api.runAnimation(player, 22705);//Probably not the right animation, but at least it shows us doing something...
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						if (api.freeSpaceTotal(player, "backpack") < 1) {
@@ -445,7 +445,7 @@ FarmingPatch.prototype = {
 			var delay = 2;
 			api.runAnimation(player, 24912);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						if (type == 1) {//Regular compost
@@ -469,7 +469,7 @@ FarmingPatch.prototype = {
 			var delay = 2;
 			api.runAnimation(player, 22705);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						that.setEmpty(player);
@@ -623,7 +623,7 @@ FlowerPatch.prototype.harvest = function (player, crop) {
 	delay = 2;//24910?
 	api.runAnimation(player, 22705);//Probably not the right animation, but at least it shows us doing something...
 	var that = this;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 		process : function (player) {
 			if (delay <= 0) {
 				if (api.freeSpaceTotal(player, "backpack") < 1) {
@@ -686,7 +686,7 @@ patches[8151] = new HerbPatch(8151, 125, 130);//Catherby
 patches[8152] = new HerbPatch(8152, 126, 131);//Ardougne
 patches[8153] = new HerbPatch(8153, 127, 132);//Morytania
 
-var VarListener = Java.extend(Java.type('org.virtue.script.listeners.VarListener'), {
+var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarListener'), {
 
 	/* The varp ids to bind to */
 	getIDs: function() {
@@ -748,7 +748,7 @@ var VarListener = Java.extend(Java.type('org.virtue.script.listeners.VarListener
 
 });
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs: function() {
@@ -844,7 +844,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.Locati
 
 });
 
-var ItemOnPatchListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, args) {
 		var player = args.player;
 		var locId = args.loctype;
@@ -898,7 +898,7 @@ var ItemOnPatchListener = Java.extend(Java.type('org.virtue.script.listeners.Eve
 	}
 });
 
-var ItemOnItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemOnItemListener'), {
+var ItemOnItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemOnItemListener'), {
 
 	/* The first option on an object */
 	handleInteraction: function(player, item1, slot1, item2, slot2) {
@@ -1026,7 +1026,7 @@ var Farming = {
 		},
 		fillPot : function (player) {
 			var delay = 2;
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						api.delCarriedItem(player, 5350, 1);
@@ -1053,7 +1053,7 @@ var Farming = {
 			api.setVarp(player, 1169, productCategory);//Sub category (6825=Wood seedlings)
 			api.setVarp(player, 1170, product);//Product ID
 			api.openCentralWidget(player, 1370, false);
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 				
 				handle: function(value) {
 					var productID = api.getVarp(player, 1170);
@@ -1075,7 +1075,7 @@ var Farming = {
 			api.setVarp(player, 1169, productCategory);//Sub category (6826=Wood seedlings)
 			api.setVarp(player, 1170, product);//Product ID
 			api.openCentralWidget(player, 1370, false);
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 				
 				handle: function(value) {
 					var productID = api.getVarp(player, 1170);
@@ -1094,7 +1094,7 @@ var Farming = {
 			var delay = 2;
 			api.runAnimation(player, 11088);
 			api.pausePlayer(player, 3);
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
 						patchType.setStatus(player, patchID, newStatus);
@@ -1124,7 +1124,7 @@ var Farming = {
 					var delay = 2;
 					//api.runAnimation(player, 6584);
 					api.pausePlayer(player, 3);
-					var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+					var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 						process : function (player) {
 							if (delay <= 0) {
 								patchType.setSapling(player, patchID, item.getID());
@@ -1144,7 +1144,7 @@ var Farming = {
 					var delay = 2;
 					api.runAnimation(player, 24926);
 					api.pausePlayer(player, 3);
-					var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+					var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 						process : function (player) {
 							if (delay <= 0) {
 								patchType.setSeed(player, patchID, item.getID());
@@ -1371,7 +1371,7 @@ Farming.TREES.chopDown = function (player, patchID, tree, emptyStatus) {
 	api.runAnimation(player, hatchet.anim);
 	api.sendFilterMessage(player, "You begin to swing your axe.");
 	var delay = Woodcutting.getDelay(player, tree, hatchet);//Calculates the time taken to chop this tree
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 		process : function (player) {
 			api.runAnimation(player, hatchet.anim);
 			if(delay <= 0) {

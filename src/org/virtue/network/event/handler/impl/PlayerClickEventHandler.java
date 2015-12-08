@@ -21,9 +21,9 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.model.World;
-import org.virtue.model.entity.movement.PlayerTarget;
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.region.movement.PlayerTarget;
 import org.virtue.network.event.context.impl.in.PlayerClickEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -38,7 +38,7 @@ import org.virtue.network.event.handler.GameEventHandler;
 public class PlayerClickEventHandler implements GameEventHandler<PlayerClickEventContext> {
 	
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(final Player selfPlayer, final PlayerClickEventContext context) {

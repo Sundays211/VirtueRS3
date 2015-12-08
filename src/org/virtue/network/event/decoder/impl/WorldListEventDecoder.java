@@ -21,20 +21,20 @@
  */
 package org.virtue.network.event.decoder.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.IncomingEventType;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.out.WorldListEventContext;
-import org.virtue.network.event.decoder.GameEventDecoder;
+import org.virtue.network.event.decoder.EventDecoder;
+import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 5, 2014
  */
-public class WorldListEventDecoder implements GameEventDecoder<WorldListEventContext> {
+public class WorldListEventDecoder implements EventDecoder<WorldListEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#createContext(org.virtue.network.event.buffer.InboundBuffer)
+	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
 	public WorldListEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
@@ -43,7 +43,7 @@ public class WorldListEventDecoder implements GameEventDecoder<WorldListEventCon
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#getTypes()
+	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
 	public IncomingEventType[] getTypes() {

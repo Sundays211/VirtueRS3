@@ -23,10 +23,10 @@ package org.virtue.network.event.handler.impl;
 
 import java.util.Map;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.in.VarcTransmitEventContext;
+import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -40,7 +40,7 @@ import org.virtue.network.event.handler.GameEventHandler;
 public class VarcTransmitEventHandler implements GameEventHandler<VarcTransmitEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, VarcTransmitEventContext context) {

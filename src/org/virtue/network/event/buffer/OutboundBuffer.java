@@ -1,7 +1,7 @@
 package org.virtue.network.event.buffer;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.entity.player.Player;
+import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.utility.text.JagStringUtility;
 
 /**

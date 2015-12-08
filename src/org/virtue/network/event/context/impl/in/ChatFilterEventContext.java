@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.in;
 
-import org.virtue.model.content.social.OnlineStatus;
+import org.virtue.game.content.social.OnlineStatus;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

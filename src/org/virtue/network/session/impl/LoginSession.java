@@ -26,24 +26,24 @@ import io.netty.channel.Channel;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.virtue.AccountInfo;
 import org.virtue.Virtue;
 import org.virtue.engine.service.LoginService;
 import org.virtue.engine.service.OnDemandService;
-import org.virtue.model.Lobby;
-import org.virtue.model.World;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.PrivilegeLevel;
-import org.virtue.model.entity.player.var.LoginDispatcher;
+import org.virtue.game.Lobby;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.AccountInfo;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.PrivilegeLevel;
+import org.virtue.game.entity.player.widget.var.LoginDispatcher;
+import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.NetworkHandler;
-import org.virtue.network.protocol.event.GameEventDecoder;
+import org.virtue.network.protocol.ProtocolDecoder;
 import org.virtue.network.protocol.login.LoginDecoder;
 import org.virtue.network.protocol.login.LoginEncoder;
 import org.virtue.network.protocol.message.ResponseTypeMessage;
 import org.virtue.network.protocol.message.login.LoginRequestMessage;
 import org.virtue.network.protocol.message.login.LoginResponseMessage;
 import org.virtue.network.session.Session;
-import org.virtue.parser.ParserDataType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -163,7 +163,7 @@ public class LoginSession extends Session {
 
 			channel.pipeline().remove(LoginDecoder.class);
 			channel.pipeline().remove(LoginEncoder.class);
-			channel.pipeline().addFirst("decoder", new GameEventDecoder(player.getDecodingCipher()));
+			channel.pipeline().addFirst("decoder", new ProtocolDecoder(player.getDecodingCipher()));
 			channel.attr(NetworkHandler.attachment).set(new GameSession(channel, player));
 
 			player.getDispatcher().dispatchLogin(request.getLoginType());

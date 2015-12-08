@@ -21,11 +21,11 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.Commands;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.PrivilegeLevel;
+import org.virtue.game.content.Commands;
+import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.network.event.context.impl.in.CommandEventContext;
-import org.virtue.network.event.context.impl.out.MessageEventContext.ChannelType;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -35,7 +35,7 @@ import org.virtue.network.event.handler.GameEventHandler;
 public class CommandEventHandler implements GameEventHandler<CommandEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, CommandEventContext context) {

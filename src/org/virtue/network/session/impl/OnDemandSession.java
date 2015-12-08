@@ -32,6 +32,7 @@ import java.util.Deque;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.cache.Cache;
 import org.virtue.engine.service.OnDemandService;
 import org.virtue.network.protocol.message.ondemand.OnDemandDropMessage;
 import org.virtue.network.protocol.message.ondemand.OnDemandEncryptionMessage;
@@ -41,7 +42,6 @@ import org.virtue.network.protocol.message.ondemand.OnDemandResponseMessage;
 import org.virtue.network.protocol.message.ondemand.OnDemandStateMessage;
 import org.virtue.network.protocol.ondemand.OnDemandXorEncoder;
 import org.virtue.network.session.Session;
-import org.virtue.openrs.Cache;
 
 /**
  * 

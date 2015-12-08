@@ -28,7 +28,7 @@
  * @author Sundays211
  * @since 24/01/2015
  */
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 	
 	/* The item ids to bind to */
 	getItemIDs: function() {

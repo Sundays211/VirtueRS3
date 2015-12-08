@@ -1,18 +1,18 @@
 var Virtue = Java.type('org.virtue.Virtue');
-var World = Java.type('org.virtue.model.World');
+var World = Java.type('org.virtue.game.World');
 
-var NPC = Java.type('org.virtue.model.entity.npc.NPC');
-var NpcDropParser = Java.type('org.virtue.parser.impl.NpcDropParser');
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
+var NPC = Java.type('org.virtue.game.entity.npc.NPC');
+var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
+var Tile = Java.type('org.virtue.game.entity.region.Tile');
 
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /** An better optimize way, instead having tons of seperate command files.
  * @author Kayla
  * @date 11/28/2015
  */
 
-var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;
@@ -37,7 +37,7 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			var npcID = parseInt(args[0]);
 			var npc = NPC.create(npcID, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			npc.getCombatSchedule().lock(player);
 			return;
 		case "gfx":
@@ -111,7 +111,7 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			NpcDataParser.loadJsonNpcData();
 			return;
 		case "rls":
-			player.getViewport().moveToRegion(player.getCurrentTile(), org.virtue.model.entity.region.MapSize.DEFAULT, false);
+			player.getViewport().moveToRegion(player.getCurrentTile(), org.virtue.game.entity.region.MapSize.DEFAULT, false);
 			player.getDispatcher().sendMessage("Scene graph reloaded!", ChannelType.GAME);
 			return;
 		case "rendanim":
@@ -139,7 +139,7 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			if (args.length < 4)
 				return false;
 			
-			var iterate = Java.type('org.virtue.model.World').getInstance().getPlayers().iterator();
+			var iterate = Java.type('org.virtue.game.World').getInstance().getPlayers().iterator();
 			var players = null;
 			while (iterate.hasNext()) {
 				players = iterate.next();
@@ -221,7 +221,6 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			region.spawnTempLocation(location, 50);
 			sendCommandResponse(player, "Spawned location "+locId, scriptArgs.console);
 			return;
-			
 		case "testRing":
 			var region = api.getRegion(player.getCurrentTile().getRegionID());
 			var north = api.createLocation(13137, 3210, 3258, 0, 0, 3);
@@ -275,8 +274,11 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			region.spawnTempLocation(south2, 100);
 			region.spawnTempLocation(south3, 100);
 			return;
-		case "setDisplay":
-			//api.setDisplayName(player, hash, message);
+		case "setKey":
+			var amount = parseInt(args[0]);
+			player.setKeys(amount);
+			player.getDispatcher().sendVarc(1800, player.getKeys() - 1);
+			api.sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
 			return;
 		}
 	}
@@ -288,7 +290,7 @@ var listen = function(scriptManager) {
 			"root", "widget", "priceReload", "reloadPrice", "adr", "hair",
 			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow",
 			"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
-			"loc", "location", "object", "reloadNPCDrops", "ring", "testRing"];
+			"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey"];
 	var listener = new EventListener();
 	for (var i in commands) {
 		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);

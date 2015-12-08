@@ -116,7 +116,7 @@ var Bury = {
 		}
 	};
 	
-var PrayerListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var PrayerListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, objTypeId, args) {
 		buryBones(args.player, objTypeId, args.slot);
 	}
@@ -149,11 +149,11 @@ var Prayer = {
 			api.sendMessage(player, "You dig a hole in the ground...", MesType.GAME_SPAM);
 			api.runAnimation(player, 827);
 			api.delCarriedItem(player, objTypeId, 1, slot);
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					api.runAnimation(player, 827);
 					if (delay <= 0) {
-						forBuryingBones(player, bones);
+						Prayer.burySuccess(player, bones);
 						return true;
 					}
 					delay--;

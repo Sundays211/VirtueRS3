@@ -23,9 +23,9 @@ package org.virtue.network.event.handler.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.Commands;
 import org.virtue.Virtue;
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.content.Commands;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.InMessageEventContext;
 import org.virtue.network.event.context.impl.in.InQuickMessageEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
@@ -49,7 +49,7 @@ public class MessageEventHandler implements GameEventHandler<InMessageEventConte
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model
+	 * org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game
 	 * .entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override

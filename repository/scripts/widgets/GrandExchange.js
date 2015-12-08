@@ -32,7 +32,7 @@ var api;
 
 var BACKPACK = 93;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
 	getIDs: function() {
@@ -149,7 +149,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 				api.setVarp(player, 137, api.getVarp(player, 140));
 				return true;
 			case 152://Select custom price
-				var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+				var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 					handle : function (value) {
 						if (value > 0) {
 							api.setVarp(player, 137, value);
@@ -301,7 +301,7 @@ var Exchange = {
 			}
 		},
 		searchForItem : function (player) {
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 				handle : function (value) {
 					//print(value);
 					var exchangePrice = api.getItemType(value).getExchangeValue();
@@ -362,7 +362,7 @@ var Exchange = {
 				}	
 				break;
 			case 5://Choose amount
-				var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+				var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 					handle : function (value) {
 						api.setVarp(player, 136, value);				
 					}

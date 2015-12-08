@@ -3,12 +3,12 @@
  * @author Kayla
  *
  */
-var SpecialAttackHandler = Java.type('org.virtue.model.entity.combat.impl.SpecialAttackHandler');
-var CombatStyle = Java.type('org.virtue.model.entity.combat.CombatStyle');
-var AttackInfo = Java.type('org.virtue.model.entity.combat.impl.ImpactInfo');
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
-var Projectile = Java.type('org.virtue.model.entity.region.packets.Projectile');
+var SpecialAttackHandler = Java.type('org.virtue.game.entity.combat.impl.SpecialAttackHandler');
+var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
+var AttackInfo = Java.type('org.virtue.game.entity.combat.impl.ImpactInfo');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+var Projectile = Java.type('org.virtue.game.entity.region.packets.Projectile');
 
 var SpecialAttack = Java.extend(SpecialAttackHandler);
 var magicShortbow = new SpecialAttack(CombatStyle.RANGE, [861]) {

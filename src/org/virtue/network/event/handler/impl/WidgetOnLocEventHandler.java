@@ -25,20 +25,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.Virtue;
-import org.virtue.model.World;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.inv.ContainerState;
-import org.virtue.model.entity.player.inv.Item;
-import org.virtue.model.entity.player.widget.WidgetState;
-import org.virtue.model.entity.region.Region;
-import org.virtue.model.entity.region.SceneLocation;
-import org.virtue.model.entity.region.Tile;
-import org.virtue.model.entity.update.block.FaceDirectionBlock;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
+import org.virtue.engine.script.listeners.LocationListener;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.container.ContainerState;
+import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.widget.WidgetState;
+import org.virtue.game.entity.region.Region;
+import org.virtue.game.entity.region.SceneLocation;
+import org.virtue.game.entity.region.Tile;
 import org.virtue.network.event.context.impl.in.WidgetOnLocEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
-import org.virtue.script.ScriptEventType;
-import org.virtue.script.ScriptManager;
-import org.virtue.script.listeners.LocationListener;
+import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -50,7 +50,7 @@ import org.virtue.script.listeners.LocationListener;
 public class WidgetOnLocEventHandler implements GameEventHandler<WidgetOnLocEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(final Player player, final WidgetOnLocEventContext context) {

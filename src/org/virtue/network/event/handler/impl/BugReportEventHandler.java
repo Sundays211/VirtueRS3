@@ -23,11 +23,11 @@ package org.virtue.network.event.handler.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.parser.impl.LogParser;
+import org.virtue.game.reports.BugReport;
 import org.virtue.network.event.context.impl.in.BugReportEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
-import org.virtue.parser.impl.LogParser;
-import org.virtue.reports.BugReport;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -45,7 +45,7 @@ public class BugReportEventHandler implements GameEventHandler<BugReportEventCon
 	private static Logger logger = LoggerFactory.getLogger(BugReportEventHandler.class);
 	
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, BugReportEventContext context) {

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-var ForceTalkBlock = Java.type('org.virtue.model.entity.update.block.ForceTalkBlock');
+var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -29,7 +29,7 @@ var ForceTalkBlock = Java.type('org.virtue.model.entity.update.block.ForceTalkBl
  * @author Sundays211
  * @since 05/11/2014
  */
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;
@@ -38,7 +38,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventLi
 		for (i = 0; i < args.length; i++)
 			message += (i == 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
 		
-		var iterate = Java.type('org.virtue.model.World').getInstance().getPlayers().iterator();
+		var iterate = Java.type('org.virtue.game.World').getInstance().getPlayers().iterator();
 		var players = null;
 		while (iterate.hasNext()) {
 			players = iterate.next();

@@ -23,8 +23,8 @@ package org.virtue.utility;
 
 import java.nio.ByteBuffer;
 
-import org.virtue.openrs.Archive;
-import org.virtue.openrs.def.impl.RenderType;
+import org.virtue.cache.Archive;
+import org.virtue.cache.def.impl.RenderType;
 
 /**
  * 

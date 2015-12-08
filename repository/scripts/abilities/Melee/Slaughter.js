@@ -22,14 +22,14 @@
 
 var api;
  /* The AnimationBlock for adding ability animations */
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 
-var FollowingType = Java.type('org.virtue.model.entity.combat.impl.FollowingType');
+var FollowingType = Java.type('org.virtue.game.entity.combat.impl.FollowingType');
 
-var CombatStyle = Java.type('org.virtue.model.entity.combat.CombatStyle');
+var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 
 /* The AbilityType for specifying ability types */
-var AbilityType = Java.type('org.virtue.model.entity.combat.impl.ability.AbilityType');
+var AbilityType = Java.type('org.virtue.game.entity.combat.impl.ability.AbilityType');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -40,7 +40,7 @@ var AbilityType = Java.type('org.virtue.model.entity.combat.impl.ability.Ability
  * @since 04/21/2015
  */
 
-var AbilityListener = Java.extend(Java.type('org.virtue.script.listeners.AbilityListener'), {
+var AbilityListener = Java.extend(Java.type('org.virtue.engine.script.listeners.AbilityListener'), {
 
 	/* The ability id to bind to (hash of the ability's widget slot) */
 	getAbilityID: function() {

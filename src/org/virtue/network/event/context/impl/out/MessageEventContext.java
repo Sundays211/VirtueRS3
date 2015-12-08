@@ -23,7 +23,8 @@ package org.virtue.network.event.context.impl.out;
 
 import java.util.Random;
 
-import org.virtue.model.entity.player.PrivilegeLevel;
+import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -31,58 +32,6 @@ import org.virtue.network.event.context.GameEventContext;
  * @since Oct 7, 2014
  */
 public class MessageEventContext implements GameEventContext {
-
-	public enum ChannelType {
-		GAME(0),
-		PUBLIC(1),
-		PUBLIC_UNFILTERABLE(2),
-		PUBLIC_QUICKCHAT(17),
-		PRIVATE(3),
-		PRIVATE_SYSTEM(4),
-		PRIVATE_ECHO(6),
-		PRIVATE_UNFILTERABLE(7),
-		PRIVATE_QUICKCHAT(18),
-		PRIVATE_ECHO_QUICKCHAT(19),
-		FRIENDCHANNEL(9),
-		FRIENDCHANNEL_SYSTEM(11),
-		FRIENDCHANNEL_QUICKCHAT(20),
-		GROUPCHANNEL(24),
-		GROUPCHANNEL_QUICKCHAT(25),
-		GROUPCHANNEL_TEAM(22),
-		GROUPCHANNEL_TEAM_QUICKCHAT(23),
-		CLANCHANNEL(41),
-		CLANCHANNEL_QUICKCHAT(42),
-		CLANCHANNEL_SYSTEM(43),
-		CLANCHANNEL_GUEST(44),
-		CLANCHANNEL_GUEST_QUICKCHAT(45),
-		CLANCHANNEL_GUEST_SYSTEM(46),
-		CONSOLE(99),
-		TRADE(100),
-		REQUEST(101),
-		ASSIST(102),
-		GAME_SPAM(109),
-		CLAN_INVITE(117),
-		BROADCAST(125);
-		
-		private int type;
-		
-		ChannelType(int type) {
-			this.type = type;
-		}
-		
-		public int getType() {
-			return type;
-		}
-		
-		public static ChannelType forID (int id) {
-			for (ChannelType type : ChannelType.values()) {
-				if (type.type == id) {
-					return type;
-				}
-			}
-			return null;
-		}
-	}
 
 	private int playerIndex;
 	private String message;

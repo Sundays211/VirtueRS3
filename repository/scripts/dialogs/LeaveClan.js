@@ -29,7 +29,7 @@
  */
 var api;
 
-var DialogListener = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		var clanHash = api.getClanHash(player);
 		if (clanHash == null) {

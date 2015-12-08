@@ -22,11 +22,11 @@
 package org.virtue;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.ByteBuffer;
-import java.util.Calendar; 
-import java.util.TimeZone;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -37,43 +37,44 @@ import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.cache.Archive;
+import org.virtue.cache.Cache;
+import org.virtue.cache.ChecksumTable;
+import org.virtue.cache.Container;
+import org.virtue.cache.FileStore;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.cache.def.impl.Js5Archive;
+import org.virtue.cache.def.impl.Js5ConfigGroup;
 import org.virtue.engine.GameEngine;
 import org.virtue.engine.cycle.ticks.SystemUpdateTick;
-import org.virtue.model.Lobby;
-import org.virtue.model.World;
-import org.virtue.model.content.dialogue.DialogueHandler;
-import org.virtue.model.content.exchange.GrandExchange;
-import org.virtue.model.content.minigame.MinigameController;
-import org.virtue.model.content.social.clan.ClanManager;
-import org.virtue.model.content.social.clan.ClanSettings;
-import org.virtue.model.entity.combat.impl.SpecialAttackHandler;
-import org.virtue.model.entity.combat.impl.ability.ActionBar;
-import org.virtue.model.entity.npc.AbstractNPC;
-import org.virtue.model.entity.npc.NpcTypeList;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.inv.InvRepository;
-import org.virtue.model.entity.player.inv.ItemTypeList;
-import org.virtue.model.entity.player.var.VarBitTypeList;
-import org.virtue.model.entity.player.var.VarRepository;
-import org.virtue.model.entity.player.widget.WidgetRepository;
-import org.virtue.model.entity.region.LocTypeList;
-import org.virtue.model.entity.region.RegionManager;
+import org.virtue.engine.script.JSListeners;
+import org.virtue.game.Lobby;
+import org.virtue.game.World;
+import org.virtue.game.content.dialogues.DialogueHandler;
+import org.virtue.game.content.exchange.GrandExchange;
+import org.virtue.game.content.minigame.MinigameProcessor;
+import org.virtue.game.content.social.clan.ClanManager;
+import org.virtue.game.content.social.clan.ClanSettings;
+import org.virtue.game.entity.combat.impl.SpecialAttackHandler;
+import org.virtue.game.entity.combat.impl.ability.ActionBar;
+import org.virtue.game.entity.npc.AbstractNPC;
+import org.virtue.game.entity.npc.NpcTypeList;
+import org.virtue.game.entity.player.AccountIndex;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.container.InvRepository;
+import org.virtue.game.entity.player.container.ItemTypeList;
+import org.virtue.game.entity.player.widget.WidgetRepository;
+import org.virtue.game.entity.player.widget.var.VarBitTypeList;
+import org.virtue.game.entity.player.widget.var.VarRepository;
+import org.virtue.game.entity.region.LocTypeList;
+import org.virtue.game.entity.region.RegionManager;
+import org.virtue.game.parser.ParserRepository;
+import org.virtue.game.parser.impl.NewsDataParser;
+import org.virtue.game.parser.impl.NpcDataParser;
+import org.virtue.game.parser.impl.NpcDropParser;
+import org.virtue.game.parser.impl.NpcSpawnParser;
 import org.virtue.network.Network;
-import org.virtue.network.event.GameEventRepository;
-import org.virtue.openrs.Archive;
-import org.virtue.openrs.Cache;
-import org.virtue.openrs.ChecksumTable;
-import org.virtue.openrs.Container;
-import org.virtue.openrs.FileStore;
-import org.virtue.openrs.ReferenceTable;
-import org.virtue.openrs.def.impl.Js5Archive;
-import org.virtue.openrs.def.impl.Js5ConfigGroup;
-import org.virtue.parser.ParserRepository;
-import org.virtue.parser.impl.NewsDataParser;
-import org.virtue.parser.impl.NpcDataParser;
-import org.virtue.parser.impl.NpcDropParser;
-import org.virtue.parser.impl.NpcSpawnParser;
-import org.virtue.script.JSListeners;
+import org.virtue.network.event.EventRepository;
 import org.virtue.utility.EnumTypeList;
 import org.virtue.utility.QuestTypeList;
 import org.virtue.utility.RenderTypeList;
@@ -138,7 +139,7 @@ public class Virtue {//
 	/**
 	 * The {@link PacketRepository} Instance
 	 */
-	private GameEventRepository event;
+	private EventRepository event;
 	
 	/**
 	 * The {@link ParserRepository} instance
@@ -168,12 +169,14 @@ public class Virtue {//
 	/**
 	 * The {@link MinigameController} instance
 	 */
-	private MinigameController controller;
+	private MinigameProcessor controller;
 	
 	/**
 	 * The current number of days since SERVER_DAY_0
 	 */
 	private long serverDay0;
+	
+	private Properties properties;
 	
 	private int updateTimer = -1;
 	
@@ -188,13 +191,13 @@ public class Virtue {//
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
 		instance = getInstance();
+		File propertiesFile = new File("repository/default.properties");
 		if (args.length >= 1) {
-			instance.live = Boolean.parseBoolean(args[0]);
+			propertiesFile = new File(args[0]);
 		}
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		cal.set(Constants.SERVER_YEAR_0, Constants.SERVER_MONTH_0, Constants.SERVER_DAY_0);
-		instance.serverDay0 = cal.getTimeInMillis();
-		//System.out.println(instance.getTickInDay());
+		instance.loadProperties(propertiesFile);
+		instance.serverDay0 = Constants.SERVER_DAY_INITIAL;
+		//instance.serverDay0 =  Long.parseLong(instance.properties.getProperty("serverDate.initial"));
 		try {
 			instance.initLogging();
 			instance.loadEngine();
@@ -221,6 +224,17 @@ public class Virtue {//
 				logger.error("Uncaught exception: ", t);
 			}
 		});
+	}
+	
+	private void loadProperties (File filePath) {
+		properties = new Properties();
+		try {
+			properties.load(new FileReader(filePath));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			logger.error("Failed to load properties file", ex);
+		}
+		
 	}
 	
 	private void initLogging () {
@@ -275,7 +289,7 @@ public class Virtue {//
 	private void loadGame() throws Exception {
 		accountIndex = new AccountIndex();
 		accountIndex.load();
-		event = new GameEventRepository();
+		event = new EventRepository();
 		event.load();
 		parser = new ParserRepository();
 		parser.load();
@@ -287,7 +301,7 @@ public class Virtue {//
 		clans.load();
 		exchange = new GrandExchange();
 		exchange.load();
-		controller = new MinigameController();
+		controller = new MinigameProcessor();
 		controller.start();
 		NewsDataParser.loadJsonNewsData();
 		NpcDataParser.loadJsonNpcData();
@@ -379,7 +393,7 @@ public class Virtue {//
 	/**
 	 * Return the repo of encoders/decoders
 	 */
-	public GameEventRepository getEventRepository() {
+	public EventRepository getEventRepository() {
 		return event;
 	}
 	
@@ -425,7 +439,7 @@ public class Virtue {//
 	 * Returns the grand exchange
 	 * @return
 	 */
-	public MinigameController getController () {
+	public MinigameProcessor getController () {
 		return controller;
 	}
 	

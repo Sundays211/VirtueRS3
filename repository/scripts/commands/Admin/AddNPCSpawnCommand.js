@@ -22,8 +22,8 @@
 
 var BufferedWriter = Java.type('java.io.BufferedWriter');
 var FileWriter = Java.type('java.io.FileWriter');
-var NPC = Java.type('org.virtue.model.entity.npc.NPC');
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
+var NPC = Java.type('org.virtue.game.entity.npc.NPC');
+var Tile = Java.type('org.virtue.game.entity.region.Tile');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,7 +33,7 @@ var Tile = Java.type('org.virtue.model.entity.region.Tile');
  * @since 05/11/2014
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {	
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {	
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;
@@ -60,7 +60,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventLi
 			writer.write("//Added by "+api.getName(player)+": "+api.getNpcType(npcType).name);
 			writer.newLine();
 			writer.write(npcType + " - " + posX + " " + posY + " " + posZ);
-			Java.type('org.virtue.model.World').getInstance().addNPC(NPC.create(npcType, new Tile(posX, posY, posZ)));
+			Java.type('org.virtue.game.World').getInstance().addNPC(NPC.create(npcType, new Tile(posX, posY, posZ)));
 			writer.close();
 		} catch (e) { 
 			if (writer != null) {

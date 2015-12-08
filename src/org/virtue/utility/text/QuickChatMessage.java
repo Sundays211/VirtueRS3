@@ -21,10 +21,10 @@
  */
 package org.virtue.utility.text;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.skill.SkillType;
+import org.virtue.cache.def.impl.QuickChatPhraseType;
+import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
-import org.virtue.openrs.def.impl.QuickChatPhraseType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

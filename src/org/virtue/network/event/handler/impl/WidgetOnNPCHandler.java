@@ -21,14 +21,14 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.model.World;
-import org.virtue.model.entity.combat.impl.ability.Ability;
-import org.virtue.model.entity.combat.impl.ability.ActionBar;
-import org.virtue.model.entity.npc.NPC;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.inv.Item;
-import org.virtue.model.entity.player.skill.magic.MagicSpell;
-import org.virtue.model.entity.player.skill.magic.Spellbook;
+import org.virtue.game.World;
+import org.virtue.game.content.skills.magic.MagicSpell;
+import org.virtue.game.content.skills.magic.Spellbook;
+import org.virtue.game.entity.combat.impl.ability.Ability;
+import org.virtue.game.entity.combat.impl.ability.ActionBar;
+import org.virtue.game.entity.npc.NPC;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.container.Item;
 import org.virtue.network.event.context.impl.in.WidgetOnNPCContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

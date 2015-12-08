@@ -34,7 +34,7 @@ var BACKPACK = 93;
 var PC_CONTAINER = 90;
 var PRICE_VARCS = [ 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727 ];
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
 	getIDs: function() {

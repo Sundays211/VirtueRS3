@@ -35,7 +35,7 @@ function getItemName (itemId) {
 }
 
 function requestCount (player, message, callback) {
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			if (value > 0) {
 				callback(value);
@@ -46,7 +46,7 @@ function requestCount (player, message, callback) {
 }
 
 function requestName (player, message, callback) {
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			if (value.length > 0) {
 				callback(value);
@@ -57,7 +57,7 @@ function requestName (player, message, callback) {
 }
 
 function requestString (player, message, callback) {
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			if (value.length > 0) {
 				callback(value);
@@ -67,12 +67,21 @@ function requestString (player, message, callback) {
 	api.requestString(player, message, new Handler());
 }
 
+function requestTool (player, message, tools, callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.ToolSelectHandler'), {
+		onToolSelected : function (toolID) {
+			callback(toolID);
+		}
+	});
+	player.getDialogs().requestTool(message, new Handler(), tools);
+}
+
 function sendCommandResponse (player, message, console) {
 	api.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
 }
 
 function requestConfirm (player, message, onConfirm) {
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			if (value == 1) {
 				onConfirm();
@@ -83,7 +92,7 @@ function requestConfirm (player, message, onConfirm) {
 }
 
 function requestMulti (player, message, options, responses, onSelect) {
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			var response = value;
 			if (responses !== undefined) {

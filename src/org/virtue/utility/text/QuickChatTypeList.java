@@ -28,13 +28,13 @@ import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.model.entity.region.LocTypeList;
-import org.virtue.openrs.Archive;
-import org.virtue.openrs.Cache;
-import org.virtue.openrs.Container;
-import org.virtue.openrs.ReferenceTable;
-import org.virtue.openrs.def.impl.Js5Archive;
-import org.virtue.openrs.def.impl.QuickChatPhraseType;
+import org.virtue.cache.Archive;
+import org.virtue.cache.Cache;
+import org.virtue.cache.Container;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.cache.def.impl.Js5Archive;
+import org.virtue.cache.def.impl.QuickChatPhraseType;
+import org.virtue.game.entity.region.LocTypeList;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

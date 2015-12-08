@@ -1,6 +1,6 @@
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
-var DynamicRegion = Java.type('org.virtue.model.entity.region.DynamicRegion');
-var RegionTools = Java.type('org.virtue.model.entity.region.RegionTools');
+var Tile = Java.type('org.virtue.game.entity.region.Tile');
+var DynamicRegion = Java.type('org.virtue.game.entity.region.DynamicRegion');
+var RegionTools = Java.type('org.virtue.game.entity.region.RegionTools');
 /**
  * @author Kayla
  * @since 11/17/2015
@@ -82,7 +82,7 @@ var RoomTypes = {
 };
 
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs: function() {
@@ -111,7 +111,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.Locati
 });
 
 
-var DialogListener = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		player.getDialogs().sendMultichoice("Select an Option", ["Go to your house.", "Go to your house (building mode).", "Go to a friend's house.", "Never mind."], [1, 2, 3, 4]);
 	},
@@ -171,7 +171,7 @@ function enterHouse (player) {
 }
 
 function joinHouse(player) {
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			if (value.length > 0) {
 				var hash = api.getUserHash(value);
@@ -198,7 +198,7 @@ function buildRoom(player, object) {
 	
 }
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
 	getIDs: function() {

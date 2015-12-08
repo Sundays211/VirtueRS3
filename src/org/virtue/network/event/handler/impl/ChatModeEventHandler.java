@@ -21,8 +21,8 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.model.content.social.ChatMode;
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.content.social.ChatMode;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -35,7 +35,7 @@ import org.virtue.network.event.handler.GameEventHandler;
 public class ChatModeEventHandler implements GameEventHandler<ChatMode> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, ChatMode context) {

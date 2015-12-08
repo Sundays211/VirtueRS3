@@ -1,6 +1,6 @@
 package org.virtue.network.event.handler;
 
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

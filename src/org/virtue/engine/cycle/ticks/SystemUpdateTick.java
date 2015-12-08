@@ -23,9 +23,9 @@ package org.virtue.engine.cycle.ticks;
 
 import org.virtue.Virtue;
 import org.virtue.engine.cycle.GameTick;
-import org.virtue.model.Lobby;
-import org.virtue.model.World;
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.Lobby;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

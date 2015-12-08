@@ -303,7 +303,7 @@
 	    }	    			    		    		    	   
 };
  
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 	
 	/* The item ids to bind to */
 	getItemIDs: function() {
@@ -360,7 +360,7 @@ function startFood (player, item, slot) {
 	}
 	player.getImpactHandler().heal(food.healAmount, true);
 	api.delCarriedItem(player, item.getID(), 1, slot);
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {
 				if (delay <= 0) {
 					api.sendFilterMessage(player, "It heals some health.");

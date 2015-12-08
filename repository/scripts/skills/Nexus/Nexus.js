@@ -1,8 +1,8 @@
 var api;
 
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
-var FaceDirectionBlock = Java.type('org.virtue.model.entity.update.block.FaceDirectionBlock');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+var FaceDirectionBlock = Java.type('org.virtue.network.protocol.update.block.FaceDirectionBlock');
 
 var PRAYER_SKILL = 5;
 
@@ -13,7 +13,7 @@ var Order = 3;
 var Fealty = 4;
 var charmLimit = 500;
 
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 
 	/* The item ids to bind to */
 	getItemIDs: function() {
@@ -39,7 +39,7 @@ var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListen
 
 });
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs: function() {
@@ -99,7 +99,7 @@ function startNexusCollection(player, object, option) {
 	api.pausePlayer(player, delay+1);
 	api.sendFilterMessage(player, "You collect from the Nexus and receive prayer experience as a reward...");
 	api.runAnimation(player, 20174);
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {
 				api.runAnimation(player, 20174);
 				api.addExperience(player, PRAYER_SKILL, 250, true);
@@ -125,7 +125,7 @@ function startNexusPurification(player, object, option) {
 	api.pausePlayer(player, delay+1);
 	api.sendFilterMessage(player, "You purify the bowls and receive prayer experience...");
 	api.runAnimation(player, 20174);
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {
 				api.runAnimation(player, 20174);
 				api.addExperience(player, PRAYER_SKILL, 150, true);

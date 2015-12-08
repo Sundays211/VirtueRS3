@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
  
-var NPC = Java.type('org.virtue.model.entity.npc.NPC');
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
+var NPC = Java.type('org.virtue.game.entity.npc.NPC');
+var Tile = Java.type('org.virtue.game.entity.region.Tile');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -31,7 +31,7 @@ var Tile = Java.type('org.virtue.model.entity.region.Tile');
  * @author Sundays21
  * @since 24/01/2015
  */
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 	
 	/* The item ids to bind to */
 	getItemIDs: function() {
@@ -71,7 +71,7 @@ var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListen
 
 });
 
-var DialogListener = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		player.getDialogs().sendMultichoice("CM-Tool", ["Open Bank", "Max Stats", "Set Display", "Clear Title", "Log Out"], [1, 2, 3, 4, 5]);
 	},
@@ -130,7 +130,7 @@ var DialogListener = Java.extend(Java.type('org.virtue.script.listeners.DialogLi
 	}
 });
 
-var DialogListener2 = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+var DialogListener2 = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		player.getDialogs().sendMultichoice("Eat", ["Transform me", "Change me back.", "Wipe inventory", "Invisible mode", "Spawn aggressive NPC"], [1, 2, 3, 4, 5]);
 	},
@@ -156,43 +156,43 @@ var DialogListener2 = Java.extend(Java.type('org.virtue.script.listeners.DialogL
 		case 5:
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
 			npc.setCanRespawn(false);
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			return true;
 		default:
 			return true;
@@ -204,7 +204,7 @@ var DialogListener2 = Java.extend(Java.type('org.virtue.script.listeners.DialogL
 	}
 });
 
-var DialogListener3 = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+var DialogListener3 = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		player.getDialogs().sendMultichoice("What would you like to do?", ["Spawn Fake Rare", "Balloon Animals Event", "Nothing", "Nothing", "Spawn List"], [1, 2, 3, 4, 5]);
 	},
@@ -219,7 +219,7 @@ var DialogListener3 = Java.extend(Java.type('org.virtue.script.listeners.DialogL
 			} else {
 				npc.setOwner(player);
 				npc.setCanRespawn(false);
-				//Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+				//Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 				api.runAnimation(player, 827);
 				player.getMovement().moveAdjacent();
 			}
@@ -264,52 +264,52 @@ var DialogListener3 = Java.extend(Java.type('org.virtue.script.listeners.DialogL
 
 function SpawnBalloonEvent(player) {
 			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2275, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2275, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
 			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 }
 
 /* Listen to the item ids specified */

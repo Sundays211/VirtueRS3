@@ -25,10 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Constants;
 import org.virtue.Virtue;
-import org.virtue.model.Lobby;
-import org.virtue.model.World;
-import org.virtue.model.entity.player.Player;
-import org.virtue.parser.impl.LogParser;
+import org.virtue.game.Lobby;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.parser.impl.LogParser;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

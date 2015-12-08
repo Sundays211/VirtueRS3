@@ -28,7 +28,7 @@
  * @since 05/11/2014
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;
@@ -38,7 +38,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventLi
 		 */
 		
 		if (args.length < 1 || isNaN(args[0])) {
-			var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 				handle : function (value) {
 					var amount = 1;
 					if (api.getItemType(value).isStackable()) {

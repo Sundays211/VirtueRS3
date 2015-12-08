@@ -21,10 +21,10 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.MusicEventContext;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,10 +33,10 @@ import org.virtue.network.event.encoder.GameEventEncoder;
  * @author Sundays211
  * @since Mar 5, 2015
  */
-public class MusicEventEncoder implements GameEventEncoder<MusicEventContext> {
+public class MusicEventEncoder implements EventEncoder<MusicEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.GameEventEncoder#encode(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public OutboundBuffer encode(Player player, MusicEventContext context) {

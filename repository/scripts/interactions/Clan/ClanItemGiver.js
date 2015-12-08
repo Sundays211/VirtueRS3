@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ContainerState = Java.type('org.virtue.model.entity.player.inv.ContainerState');
+var ContainerState = Java.type('org.virtue.game.entity.player.container.ContainerState');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -31,7 +31,7 @@ var ContainerState = Java.type('org.virtue.model.entity.player.inv.ContainerStat
  */
 var api;
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {

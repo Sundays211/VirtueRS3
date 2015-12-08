@@ -5,7 +5,7 @@
  
  
 var LocationListener = Java.extend(Java
-		.type('org.virtue.script.listeners.LocationListener'), {
+		.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs : function() {
@@ -19,17 +19,17 @@ var LocationListener = Java.extend(Java
 		}
 		switch (object.getID()) {
 		case 14315:// Novice Lander
-			controller = Java.type('org.virtue.Virtue').getInstance().getController();
-			if(controller != null) {
-				api.sendMessage(player, "Game is already exist");
-				controller.getPlayers().add(player);
-			} else {	
-				api.sendMessage(player, "You should create the instance.");			
-				minigame = Java.type('org.virtue.Virtue').getInstance().getController().createPest(2, 25);
-				minigame.getPlayers().add(player);
+			/*controller = Java.type('org.virtue.Virtue').getInstance().getController().getController(Java.type('org.virtue.game.content.minigame.impl.PestController').class);
+			minigames = Java.type('org.virtue.Virtue').getInstance().getController().getMinigames(Java.type('org.virtue.game.content.minigame.impl.PestController').class);
+			minigame = null;
+			
+			if (minigames.size() == 0) {
+				api.sendMessage(player, "You should create the instance.");
+				minigame = Java.type('org.virtue.Virtue').getInstance().getController().createPest(1, 25);
 			}
-			//c.getPlayers().add(player);
-			api.teleportEntity(player, 2661, 2639, 0);
+			
+			api.sendMessage(player, "Game already exists.");
+			controller.addPlayer(minigames.get(minigames.size() - 1), player);*/
 			return true;
 		default:
 			return false;

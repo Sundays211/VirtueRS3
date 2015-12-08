@@ -30,7 +30,7 @@
  */
 var api;
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs: function() {
@@ -60,7 +60,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.Locati
 
 });
 
-var Dispenser = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+var Dispenser = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		player.getDialogs().sendMultichoice("Which training dummy would you prefer?", ["Range Dummy", "Melee Dummy", "Magic Dummy"], [1, 2, 3]);
 	},

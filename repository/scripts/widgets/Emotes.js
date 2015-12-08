@@ -20,13 +20,13 @@
  * SOFTWARE.
  */
  
-var item = Java.type('org.virtue.model.entity.player.inv.Item');
-var Render = Java.type('org.virtue.model.entity.update.ref.Appearance.Render');
+var item = Java.type('org.virtue.game.entity.player.container.Item');
+var Render = Java.type('org.virtue.network.protocol.update.ref.Appearance.Render');
   /* The AnimationBlock for adding ability animations */
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 
  /* The GraphicsBlock for adding ability graphics */
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,7 +39,7 @@ var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBloc
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
 	getIDs: function() {
@@ -672,7 +672,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 
 function runCompCape (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.runAnimation(player, 356);
@@ -701,7 +701,7 @@ function runCompCape (player) {
 
 function runTrimCompCape (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.runAnimation(player, 356);

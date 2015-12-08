@@ -30,7 +30,7 @@
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 	
 	/* The interface ids to bind to */
 	getIDs: function() {

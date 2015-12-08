@@ -32,7 +32,7 @@ var api;
 
 var BACKPACK = 93;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interface ids to bind to */
 	getIDs: function() {
@@ -69,7 +69,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 		}
 		var canSell = 0;
 		for (var slot=0; slot<28; slot++) {
-			var item = api.getItem(player, BACKPACK, slot);
+			var item = api.getItem(player, Inv.BACKPACK, slot);
 			if (item != null && Shop.canSellTo(player, api.getVarp(player, 304), item.getID())) {
 				canSell |= 1 << slot;
 			}			
@@ -117,7 +117,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 		case 205://Buy/Take/Sell
 			if (api.getVarp(player, 299) == api.getVarp(player, 304)) {
 				Shop.buyItem(player, api.getVarp(player, 300), api.getVarp(player, 302));
-			} else if (api.getVarp(player, 299) == BACKPACK) {
+			} else if (api.getVarp(player, 299) == Inv.BACKPACK) {
 				Shop.sellItem(player, api.getVarp(player, 300), api.getVarp(player, 302));
 			} else if (api.getVarp(player, 299) == api.getVarp(player, 305)) {
 				Shop.takeItem(player, api.getVarp(player, 300), api.getVarp(player, 302));
@@ -222,9 +222,9 @@ var Shop = {
 			
 		},
 		handleSellButton : function (player, slot, option) {
-			Shop.setSelectedItem(player, BACKPACK, slot);
+			Shop.setSelectedItem(player, Inv.BACKPACK, slot);
 			var amount = 0;
-			var itemID = api.getItem(player, BACKPACK, slot).getID();
+			var itemID = api.getItem(player, Inv.BACKPACK, slot).getID();
 			switch (option) {
 			case 2:
 				amount = 1;
@@ -299,8 +299,8 @@ var Shop = {
 				return;//Shop has no stock
 			}
 			if (!api.getItemType(itemID).isStackable()) {
-				amount = Math.min(amount, api.freeSpaceTotal(player, "backpack"));
-			} else if (api.itemTotal(player, invID, itemID) < 1 && api.freeSpaceTotal(player, "backpack") < 1) {
+				amount = Math.min(amount, api.freeSpaceTotal(player, Inv.BACKPACK));
+			} else if (api.itemTotal(player, invID, itemID) < 1 && api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 				Shop.showMessage(player, "You have no inventory space at the moment and cannot buy anything.");
 				return;//Full backpack
 			} 
@@ -333,7 +333,7 @@ var Shop = {
 			if (!Shop.canSellTo(player, shopInv, itemID)) {
 				return;//Can't sell this item
 			}
-			amount = Math.min(amount, api.itemTotal(player, "backpack", itemID));
+			amount = Math.min(amount, api.itemTotal(player, Inv.BACKPACK, itemID));
 			if (api.itemTotal(player, shopInv, itemID) < 1 
 					&& api.defaultItemTotal(player, shopInv, itemID) == -1
 					&& api.freeSpaceTotal(player, shopInv) < 1) {
@@ -346,7 +346,7 @@ var Shop = {
 				api.hideWidget(player, 1265, 63, false);
 				return;
 			}
-			api.delItem(player, "backpack", itemID, amount);
+			api.delItem(player, Inv.BACKPACK, itemID, amount);
 			if (api.getItemType(itemID).certtemplate != -1) {
 				itemID = api.getItemType(itemID).certlink;
 			}
@@ -362,8 +362,8 @@ var Shop = {
 				return;//Shop has no stock
 			}
 			if (!api.getItemType(itemID).isStackable()) {
-				amount = Math.min(amount, api.freeSpaceTotal(player, "backpack"));
-			} else if (api.itemTotal(player, "backpack", itemID) < 1 && api.freeSpaceTotal(player, "backpack") < 1) {
+				amount = Math.min(amount, api.freeSpaceTotal(player, Inv.BACKPACK));
+			} else if (api.itemTotal(player, Inv.BACKPACK, itemID) < 1 && api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 				Shop.showMessage(player, "You don't have enough inventory space to take that.");
 				return;//Full backpack
 			} 
@@ -401,7 +401,7 @@ var Shop = {
 		sendBackpackCanSell : function (player, shopInv) {
 			var canSell = 0;
 			for (var slot=0; slot<28; slot++) {
-				var item = api.getItem(player, "backpack", slot);
+				var item = api.getItem(player, Inv.BACKPACK, slot);
 				if (item != null && Shop.canSellTo(player, shopInv, item.getID())) {
 					canSell |= 1 << slot;
 				}			
@@ -410,11 +410,11 @@ var Shop = {
 		},
 		getMaxBuySellAmount : function (player, itemID) {
 			if (api.getVarp(player, 299) == BACKPACK) {
-				return Math.max(api.itemTotal(player, "backpack", itemID), 1);
+				return Math.max(api.itemTotal(player, Inv.BACKPACK, itemID), 1);
 			} else {
 				var shopStock = api.itemTotal(player, api.getVarp(player, 299), itemID);
 				if (!api.getItemType(itemID).isStackable()) {
-					var freeSpace = api.freeSpaceTotal(player, "backpack");
+					var freeSpace = api.freeSpaceTotal(player, Inv.BACKPACK);
 					return Math.max(Math.min(shopStock, freeSpace), 1);
 				} else {
 					return Math.max(shopStock, 1);

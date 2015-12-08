@@ -23,12 +23,12 @@ package org.virtue.utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.model.entity.player.var.VarDomain;
-import org.virtue.openrs.Archive;
-import org.virtue.openrs.ReferenceTable;
-import org.virtue.openrs.def.ConfigDecoder;
-import org.virtue.openrs.def.impl.Js5ConfigGroup;
-import org.virtue.openrs.def.impl.QuestType;
+import org.virtue.cache.Archive;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.cache.def.ConfigDecoder;
+import org.virtue.cache.def.impl.Js5ConfigGroup;
+import org.virtue.cache.def.impl.QuestType;
+import org.virtue.game.entity.player.widget.var.VarDomain;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

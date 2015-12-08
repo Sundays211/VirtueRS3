@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var SkillType = Java.type('org.virtue.model.entity.player.skill.SkillType');
+var SkillType = Java.type('org.virtue.game.content.skills.SkillType');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -29,7 +29,7 @@ var SkillType = Java.type('org.virtue.model.entity.player.skill.SkillType');
  * @since 05/11/2014
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;

@@ -36,7 +36,7 @@ var MALE_ARMS = 711, FEMALE_ARMS = 693, MALE_WRISTS = 749, FEMALE_WRISTS = 751;
 
 var TOP_COLOURS = 3282, LEG_COLOURS = 3284;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 	
 	/* The interface ids to bind to */
 	getIDs: function() {

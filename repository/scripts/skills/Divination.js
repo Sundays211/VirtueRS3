@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
  
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -247,7 +247,7 @@ var Wisp = {
 };
 
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 
 	/* The npc ids to bind to */
@@ -286,7 +286,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.Locati
 
 });
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 	
 	/* The interface ids to bind to */
 	getIDs: function() {
@@ -337,7 +337,7 @@ function startEnergyRift(player, object) {
 		//return true;
 	//}
 	var delay = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 		process : function (player) {
 			if (delay <= 0) {
 				if (api.carriedItemTotal(player, memoryType.memoryID) < 1) {
@@ -364,7 +364,7 @@ function convertMemories (player, memoryType, convertType) {
 		return;
 	}
 	var delay = 3;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 		process : function (player) {
 			if (delay <= 0) {
 				if (api.carriedItemTotal(player, memoryType.memoryID) < 1) {
@@ -416,7 +416,7 @@ function getCarriedMemory(player) {
 	return null;
 }
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {
@@ -472,7 +472,7 @@ function startHarvest (player, npc) {
 	
 	var stop = getHarvestDelay(player, harvest);
 	var delay = 5;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 		process : function (player) {
 			api.runAnimation(player, 21231);
 
@@ -503,7 +503,7 @@ function startHarvest (player, npc) {
 function openWisp (npc, harvest) {
 	api.transformNpc(npc, harvest.springID);
 	var lifespan = 50;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.npc.NpcAction'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.npc.NpcAction'), {	
 		process : function (npc) {
 			if (lifespan == 3) {
 				api.runAnimation(npc, 21203);

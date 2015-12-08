@@ -21,21 +21,21 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.model.content.social.ignore.Ignore;
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.content.social.ignore.Ignore;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.IgnoreListEventContext;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 13, 2014
  */
-public class IgnoreListEventEncoder implements GameEventEncoder<IgnoreListEventContext> {
+public class IgnoreListEventEncoder implements EventEncoder<IgnoreListEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.GameEventEncoder#encode(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public OutboundBuffer encode(Player player, IgnoreListEventContext context) {

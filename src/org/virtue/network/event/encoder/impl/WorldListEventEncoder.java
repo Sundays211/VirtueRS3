@@ -21,23 +21,23 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.model.World;
-import org.virtue.model.WorldEntry;
-import org.virtue.model.WorldList;
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.world.WorldEntry;
+import org.virtue.game.world.WorldList;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WorldListEventContext;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 5, 2014
  */
-public class WorldListEventEncoder implements GameEventEncoder<WorldListEventContext> {
+public class WorldListEventEncoder implements EventEncoder<WorldListEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.GameEventEncoder#encode(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public OutboundBuffer encode(Player player, WorldListEventContext context) {

@@ -21,12 +21,12 @@
  */
 package org.virtue.network.event.decoder.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.IncomingEventType;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.InMessageEventContext;
 import org.virtue.network.event.context.impl.in.InQuickMessageEventContext;
-import org.virtue.network.event.decoder.GameEventDecoder;
+import org.virtue.network.event.decoder.EventDecoder;
+import org.virtue.network.event.decoder.IncomingEventType;
 import org.virtue.utility.text.Huffman;
 import org.virtue.utility.text.QuickChatMessage;
 
@@ -37,10 +37,10 @@ import org.virtue.utility.text.QuickChatMessage;
  * @author Sundays211
  * @since 2/11/2014
  */
-public class PrivateMessageEventDecoder implements GameEventDecoder<InMessageEventContext> {
+public class PrivateMessageEventDecoder implements EventDecoder<InMessageEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#createContext(org.virtue.model.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
+	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
 	public InMessageEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
@@ -57,7 +57,7 @@ public class PrivateMessageEventDecoder implements GameEventDecoder<InMessageEve
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#getTypes()
+	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
 	public IncomingEventType[] getTypes() {

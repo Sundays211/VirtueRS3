@@ -19,16 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var DynamicRegion = Java.type('org.virtue.model.entity.region.DynamicRegion');
-var RegionTools = Java.type('org.virtue.model.entity.region.RegionTools');
-var ClipFlag = Java.type('org.virtue.model.entity.region.ClipFlag');
-var Region = Java.type('org.virtue.model.entity.region.Region');
+var DynamicRegion = Java.type('org.virtue.game.entity.region.DynamicRegion');
+var RegionTools = Java.type('org.virtue.game.entity.region.RegionTools');
+var ClipFlag = Java.type('org.virtue.game.entity.region.ClipFlag');
+var Region = Java.type('org.virtue.game.entity.region.Region');
 /**
  * @author Kayla
  * @date 11/17/2015
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;

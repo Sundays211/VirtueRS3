@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -86,7 +86,7 @@ var Tool = {
 	}
 };
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {
@@ -149,7 +149,7 @@ function startFish (player, npc) {
 	api.sendFilterMessage(player, "You cast out your " + api.getItemType(tool.itemID).name +"...");
 	api.pausePlayer(player, delay+10);
 	var delay = getDelay(player, spots, tool);//Calculates the time taken to catch a fish
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {
 			if(delay <= 0) {
 				fishingSuccess(player, spots, npc);

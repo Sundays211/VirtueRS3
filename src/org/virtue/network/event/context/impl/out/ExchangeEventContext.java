@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.model.content.exchange.ExchangeOfferStatus;
+import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

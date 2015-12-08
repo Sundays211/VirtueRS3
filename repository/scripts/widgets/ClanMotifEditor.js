@@ -29,7 +29,7 @@
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interface ids to bind to */
 	getIDs: function() {
@@ -203,7 +203,7 @@ function selectMotifColour (player, type) {
 	}
 	api.setVarp(player, 1111, prevColour);
 	api.openCentralWidget(player, 1106, false);
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			api.closeCentralWidgets(player);
 			if (value != 0) {

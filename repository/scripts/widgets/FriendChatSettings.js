@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ChannelRank = Java.type('org.virtue.model.content.social.ChannelRank');
+var ChannelRank = Java.type('org.virtue.game.content.social.ChannelRank');
 var UsernameUtility = Java.type('org.virtue.utility.text.UsernameUtility');
 
 /**
@@ -30,7 +30,7 @@ var UsernameUtility = Java.type('org.virtue.utility.text.UsernameUtility');
  * @since 9/11/2014
  */
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The object ids to bind to */
 	getIDs: function() {
@@ -63,7 +63,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 		case 1://Set prefix/disable
 			if (option == 1) {
 				
-				var InputListener = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+				var InputListener = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 					handle : function (value) {
 						var prefix = UsernameUtility.formatForDisplay(value).trim();
 						if (prefix.isEmpty()) {

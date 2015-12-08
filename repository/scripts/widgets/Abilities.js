@@ -29,7 +29,7 @@
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
 	getIDs: function() {
@@ -64,7 +64,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 			}
 			return false;
 		case 1461://Mage
-			var spell = org.virtue.model.entity.player.skill.magic.Spellbook.MODERN.get(slot);
+			var spell = org.virtue.game.content.skills.magic.Spellbook.MODERN.get(slot);
 			if (player.getCombatSchedule().getAutocastSpell() != null) {
 				player.getCombatSchedule().setAutocastSpell(null);
 				api.sendMessage(player, "Auto-cast spell cleared.");

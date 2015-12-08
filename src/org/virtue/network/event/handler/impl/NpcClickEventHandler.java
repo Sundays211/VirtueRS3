@@ -21,12 +21,10 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.Virtue;
-import org.virtue.model.World;
-import org.virtue.model.content.minigame.Controller;
-import org.virtue.model.entity.movement.NpcTarget;
-import org.virtue.model.entity.npc.NPC;
-import org.virtue.model.entity.player.Player;
+import org.virtue.game.World;
+import org.virtue.game.entity.npc.NPC;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.region.movement.NpcTarget;
 import org.virtue.network.event.context.impl.in.NpcClickEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -38,32 +36,30 @@ import org.virtue.network.event.handler.GameEventHandler;
  * @since 15/11/2014
  */
 public class NpcClickEventHandler implements GameEventHandler<NpcClickEventContext> {
-	
-	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.
+	 * entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(final Player player, final NpcClickEventContext context) {
 		final NPC npc = World.getInstance().getNPCs().get(context.getEntityIndex());
 		if (npc != null) {
 			if (npc.isDistanceOption(context.getButton())) {
-				if (player.getMinigame() != null) {
-					Controller controller = Virtue.getInstance().getController().getController(player.getMinigame());
-					if (controller != null)
-						controller.npcClick(player.getMinigame(), player, npc, context.getButton().getID());
-				} else {
-					if (!npc.interact(player, context.getButton())) {
-						player.getDispatcher().sendConsoleMessage("<col=ffff00>Unhandled NPC option: npc=" + npc.getID()
-								+ ", button=" + context.getButton());
-						player.getMovement().stop();
-					}
+				if (!npc.interact(player, context.getButton())) {
+					player.getDispatcher().sendConsoleMessage(
+							"<col=ffff00>Unhandled NPC option: npc=" + npc.getID() + ", button=" + context.getButton());
+					player.getMovement().stop();
 				}
 			} else {
 				if (!player.getMovement().setTarget(new NpcTarget(player, context.getButton(), npc))) {
 					player.getDispatcher().sendGameMessage("You can't reach that.");
 				}
 			}
-				
+
 		}
 	}
 

@@ -21,17 +21,17 @@
  */
 package org.virtue.network;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandler;
-import io.netty.handler.timeout.ReadTimeoutException;
-import io.netty.util.AttributeKey;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.network.protocol.message.HandshakeMessage;
 import org.virtue.network.session.Session;
 import org.virtue.network.session.impl.LoginSession;
 import org.virtue.network.session.impl.OnDemandSession;
+
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandler;
+import io.netty.handler.timeout.ReadTimeoutException;
+import io.netty.util.AttributeKey;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

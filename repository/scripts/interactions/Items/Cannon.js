@@ -1,8 +1,8 @@
 /**
  * @Author Kayla
  */
-var SceneLocation = Java.type('org.virtue.model.entity.region.SceneLocation');
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var SceneLocation = Java.type('org.virtue.game.entity.region.SceneLocation');
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 	
 	/* The item ids to bind to */
 	getItemIDs: function() {
@@ -33,7 +33,7 @@ var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListen
 
 function ProcessCannon (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.runAnimation(player, 827);
@@ -69,7 +69,7 @@ function ProcessCannon (player) {
 	player.setAction(new Action());
 }
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs : function() {

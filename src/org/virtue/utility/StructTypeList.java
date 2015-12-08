@@ -28,16 +28,16 @@ import java.nio.ByteBuffer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.openrs.Archive;
-import org.virtue.openrs.Cache;
-import org.virtue.openrs.Container;
-import org.virtue.openrs.ReferenceTable;
-import org.virtue.openrs.ReferenceTable.ChildEntry;
-import org.virtue.openrs.ReferenceTable.Entry;
-import org.virtue.openrs.def.impl.Js5Archive;
-import org.virtue.openrs.def.impl.Js5ConfigGroup;
-import org.virtue.openrs.def.impl.StructType;
-import org.virtue.openrs.utility.ByteBufferUtils;
+import org.virtue.cache.Archive;
+import org.virtue.cache.Cache;
+import org.virtue.cache.Container;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.cache.ReferenceTable.ChildEntry;
+import org.virtue.cache.ReferenceTable.Entry;
+import org.virtue.cache.def.impl.Js5Archive;
+import org.virtue.cache.def.impl.Js5ConfigGroup;
+import org.virtue.cache.def.impl.StructType;
+import org.virtue.cache.utility.ByteBufferUtils;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

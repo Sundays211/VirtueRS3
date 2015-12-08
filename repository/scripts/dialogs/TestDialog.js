@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ChatheadEmoteType = Java.type('org.virtue.model.entity.player.dialog.ChatheadEmoteType');
+var ChatheadEmoteType = Java.type('org.virtue.game.content.dialogues.ChatheadEmoteType');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -29,7 +29,7 @@ var ChatheadEmoteType = Java.type('org.virtue.model.entity.player.dialog.Chathea
  * @since 12/12/2014
  */
 
-var DialogListener = Java.extend(Java.type('org.virtue.script.listeners.DialogListener'), {
+var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		player.getDialogs().sendNpcChat("Hi!", 5);
 		player.getDialogs().setStep(1);

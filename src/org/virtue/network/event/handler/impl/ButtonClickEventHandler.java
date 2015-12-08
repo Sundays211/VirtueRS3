@@ -22,10 +22,10 @@
 package org.virtue.network.event.handler.impl;
 
 import org.virtue.Virtue;
-import org.virtue.model.entity.player.Player;
+import org.virtue.engine.script.listeners.WidgetListener;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.ButtonClickEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
-import org.virtue.script.listeners.WidgetListener;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -34,7 +34,7 @@ import org.virtue.script.listeners.WidgetListener;
 public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, ButtonClickEventContext context) {

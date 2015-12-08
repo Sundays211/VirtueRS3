@@ -21,12 +21,12 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.QuickMessageEventContext;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.utility.text.Huffman;
 import org.virtue.utility.text.QuickChatMessage;
 
@@ -34,10 +34,10 @@ import org.virtue.utility.text.QuickChatMessage;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 7, 2014
  */
-public class MessageEventEncoder implements GameEventEncoder<MessageEventContext> {
+public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.GameEventEncoder#encode(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public OutboundBuffer encode(Player player, MessageEventContext context) {

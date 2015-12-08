@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var CombatMode = Java.type('org.virtue.model.entity.combat.CombatMode');
+var CombatMode = Java.type('org.virtue.game.entity.combat.CombatMode');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,7 +27,7 @@ var CombatMode = Java.type('org.virtue.model.entity.combat.CombatMode');
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 	/* The interface ids to bind to */
 	getIDs: function() {
 		return [ 26, 1507 ];//26

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var WidgetState = Java.type('org.virtue.model.entity.player.widget.WidgetState');
+var WidgetState = Java.type('org.virtue.game.entity.player.widget.WidgetState');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -31,7 +31,7 @@ var WidgetState = Java.type('org.virtue.model.entity.player.widget.WidgetState')
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 	
 	/* The interface ids to bind to */
 	getIDs: function() {

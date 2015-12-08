@@ -21,8 +21,8 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.network.event.OutgoingEventType;
 import org.virtue.network.event.context.GameEventContext;
+import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.utility.SerialisableEnum;
 
 /**

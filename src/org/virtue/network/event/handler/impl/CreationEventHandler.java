@@ -23,11 +23,11 @@ package org.virtue.network.event.handler.impl;
 
 import org.virtue.Constants;
 import org.virtue.Virtue;
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.event.context.impl.in.CreationEventContext;
+import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.network.event.handler.GameEventHandler;
-import org.virtue.parser.ParserDataType;
 import org.virtue.utility.SerialisableEnum;
 import org.virtue.utility.text.Base37Utility;
 
@@ -41,7 +41,7 @@ import org.virtue.utility.text.Base37Utility;
 public class CreationEventHandler implements GameEventHandler<CreationEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.model.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, CreationEventContext context) {

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
  
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /**
  * @author Kayla
@@ -158,7 +158,7 @@ var Stall = {
 	    }
 };
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {
@@ -184,7 +184,7 @@ var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener
 
 });
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The object ids to bind to */
 	getIDs: function() {
@@ -227,7 +227,7 @@ function ThievingStallStart (player, object) {
 	api.runAnimation(player, 881);
 		var delay = getThievingStallDelay(player, stall);
 		api.pausePlayer(player, delay+1);
-		var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+		var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 				api.runAnimation(player, 881);
 				if(delay <= 0) {
@@ -299,7 +299,7 @@ function ThievingStart (player, npc) {
 		api.runAnimation(player, 881);
 		var delay = getThievingDelay(player, thieving);
 		api.pausePlayer(player, delay+1);
-		var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+		var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 				api.runAnimation(player, 881);
 				if(delay <= 0) {

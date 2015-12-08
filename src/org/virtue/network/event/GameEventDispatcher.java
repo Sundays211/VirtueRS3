@@ -24,20 +24,22 @@ package org.virtue.network.event;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.virtue.Messages;
+import org.virtue.Constants;
 import org.virtue.Virtue;
-import org.virtue.model.content.social.OnlineStatus;
-import org.virtue.model.content.social.ignore.Ignore;
-import org.virtue.model.entity.Entity;
-import org.virtue.model.entity.player.GameState;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.inv.Item;
-import org.virtue.model.entity.player.skill.SkillData;
-import org.virtue.model.entity.player.skill.SkillType;
-import org.virtue.model.entity.player.var.LoginDispatcher;
-import org.virtue.model.entity.player.var.VarKey;
-import org.virtue.model.entity.region.MapSize;
-import org.virtue.model.entity.region.Tile;
+import org.virtue.cache.utility.crypto.BKDR;
+import org.virtue.game.content.skills.SkillData;
+import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.social.OnlineStatus;
+import org.virtue.game.content.social.ignore.Ignore;
+import org.virtue.game.entity.Entity;
+import org.virtue.game.entity.player.GameState;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.widget.var.LoginDispatcher;
+import org.virtue.game.entity.player.widget.var.VarKey;
+import org.virtue.game.entity.region.MapSize;
+import org.virtue.game.entity.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.GameEventContext;
 import org.virtue.network.event.context.impl.EmptyEventContext;
@@ -51,7 +53,6 @@ import org.virtue.network.event.context.impl.out.IgnoreListEventContext;
 import org.virtue.network.event.context.impl.out.InvEventContext;
 import org.virtue.network.event.context.impl.out.LogoutEventContext;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
-import org.virtue.network.event.context.impl.out.MessageEventContext.ChannelType;
 import org.virtue.network.event.context.impl.out.MusicEventContext;
 import org.virtue.network.event.context.impl.out.PlayerOptionEventContext;
 import org.virtue.network.event.context.impl.out.RootWidgetEventContext;
@@ -69,7 +70,8 @@ import org.virtue.network.event.context.impl.out.WidgetSettingsEventContext;
 import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
 import org.virtue.network.event.context.impl.out.WidgetTextEventContext;
 import org.virtue.network.event.context.impl.out.WorldListEventContext;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.network.event.encoder.impl.ClientScriptEventEncoder;
 import org.virtue.network.event.encoder.impl.CutsceneEventEncoder;
 import org.virtue.network.event.encoder.impl.EnumEventEncoder;
@@ -102,7 +104,6 @@ import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
 import org.virtue.network.event.encoder.impl.WidgetTextEventEncoder;
 import org.virtue.network.event.encoder.impl.WorldListEventEncoder;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
-import org.virtue.openrs.utility.crypto.BKDR;
 import org.virtue.utility.SerialisableEnum;
 
 import io.netty.buffer.ByteBuf;
@@ -140,7 +141,7 @@ public class GameEventDispatcher {
 			if (Virtue.getInstance().hasUpdate()) {
 				sendSystemUpdate(Virtue.getInstance().getUpdateTime() * 12);
 			}
-			sendGameMessage("Welcome to " + Messages.ServerName + ".");
+			sendGameMessage("Welcome to " + Constants.ServerName + ".");
 			LoginDispatcher.onLobbyLogin(player);
 			break;
 		case LOGIN_WORLD:
@@ -155,9 +156,8 @@ public class GameEventDispatcher {
 			
 			//if (player.getLastLogin() == 0) {
 				//sendRootWidget(1507); // Welcome Screen
-				//break;
 			//}
-			sendGameMessage("Welcome to " + Messages.ServerName + ".");
+			sendGameMessage("Welcome to " + Constants.ServerName + ".");
 			sendGameMessage(
 					"<col=#333333>Commands: ::item, ::godwars, ::vorago, ::edge, ::tele, ::home, ::yell ::players");
 			sendGameMessage("<col=#3399FF>Visit our site at www.zrs3.com ");
@@ -182,17 +182,15 @@ public class GameEventDispatcher {
 			}
 			player.getInteractions().initialise();
 			player.getExchangeOffers().init();
-			player.getCombat().setAdrenaline(0);
+			player.getCombatSchedule().increaseAdrenaline(0);
 			player.getCombatSchedule()
 					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
 			player.getImpactHandler()
 					.setMaximumLifepoints(player.getSkills().getBaseLevel(SkillType.CONSTITUTION) * 100);
 			player.getImpactHandler().restoreLifepoints();
-			player.getCombat().getPrayer().setPrayerPoints(player.getSkills().getBaseLevel(SkillType.PRAYER) * 10);
 			player.getMoneyPouch().refresh(false);
 			player.getVars().processLogin(player.getLastLogin());
 			sendMusic(36067, 100);
-			player.wildernessCheck();
 			break;
 		}
 		sendOnlineStatus(player.getChat().getFriendsList().getOnlineStatus());
@@ -212,13 +210,7 @@ public class GameEventDispatcher {
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
-				player.getWidgets().openWidget(1477, 19, 548, true);// 834
-																	// parent
-																	// slot,
-																	// would
-																	// need to
-																	// be found
-																	// for 823
+				player.getWidgets().openWidget(1477, 19, 548, true);
 			}
 		}, 2000);
 	}
@@ -529,12 +521,12 @@ public class GameEventDispatcher {
 	}
 
 	/**
-	 * Sends a GameEventEncoder over the network
+	 * Sends a EventEncoder over the network
 	 * 
 	 * @param clazz
 	 * @param context
 	 */
-	public <T extends GameEventEncoder<?>> ChannelFuture sendEvent(
+	public <T extends EventEncoder<?>> ChannelFuture sendEvent(
 			Class<T> clazz, GameEventContext context) {
 		if (player.getChannel().isActive()) {
 			OutboundBuffer packet = Virtue.getInstance().getEventRepository()

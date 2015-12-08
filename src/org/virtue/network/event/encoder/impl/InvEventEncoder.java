@@ -1,11 +1,11 @@
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.inv.Item;
-import org.virtue.network.event.OutgoingEventType;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.container.Item;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.InvEventContext;
-import org.virtue.network.event.encoder.GameEventEncoder;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
 
 /**
  * 
@@ -16,7 +16,7 @@ import org.virtue.network.event.encoder.GameEventEncoder;
  * @author Sundays211
  * @since 12/02/2015
  */
-public class InvEventEncoder implements GameEventEncoder<InvEventContext> {
+public class InvEventEncoder implements EventEncoder<InvEventContext> {
 
 	@Override
 	public OutboundBuffer encode(Player player, InvEventContext context) {

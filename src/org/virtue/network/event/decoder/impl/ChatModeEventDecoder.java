@@ -21,11 +21,11 @@
  */
 package org.virtue.network.event.decoder.impl;
 
-import org.virtue.model.content.social.ChatMode;
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.IncomingEventType;
+import org.virtue.game.content.social.ChatMode;
+import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
-import org.virtue.network.event.decoder.GameEventDecoder;
+import org.virtue.network.event.decoder.EventDecoder;
+import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -34,10 +34,10 @@ import org.virtue.network.event.decoder.GameEventDecoder;
  * @author Sundays211
  * @since 23/10/2014
  */
-public class ChatModeEventDecoder implements GameEventDecoder<ChatMode> {
+public class ChatModeEventDecoder implements EventDecoder<ChatMode> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#createContext(int, org.virtue.network.event.buffer.InboundBuffer)
+	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
 	public ChatMode createContext(Player player, int opcode, InboundBuffer buffer) {
@@ -45,7 +45,7 @@ public class ChatModeEventDecoder implements GameEventDecoder<ChatMode> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.GameEventDecoder#getTypes()
+	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
 	public IncomingEventType[] getTypes() {

@@ -19,8 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ForceTalkBlock = Java.type('org.virtue.model.entity.update.block.ForceTalkBlock');
-var FaceEntityBlock = Java.type('org.virtue.model.entity.update.block.FaceEntityBlock');
+var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
+var FaceEntityBlock = Java.type('org.virtue.network.protocol.update.block.FaceEntityBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -32,7 +32,7 @@ var FaceEntityBlock = Java.type('org.virtue.model.entity.update.block.FaceEntity
  */
 var api;
 
-var ItemOnEntityListener = Java.extend(Java.type('org.virtue.script.listeners.ItemOnEntityListener'), {
+var ItemOnEntityListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemOnEntityListener'), {
 
 	/* The item ids to bind to */
 	getIDs: function() {

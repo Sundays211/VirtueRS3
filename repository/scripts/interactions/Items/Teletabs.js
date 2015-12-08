@@ -1,10 +1,10 @@
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
+var Tile = Java.type('org.virtue.game.entity.region.Tile');
 
 /**
  * @author Kayla
  * 11/13/2015
  */
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 	
 	/* The item ids to bind to */
 	getItemIDs: function() {
@@ -70,7 +70,7 @@ var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListen
 
 function runVarrockTele (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
@@ -96,7 +96,7 @@ function runVarrockTele (player) {
 
 function runFallyTele (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
@@ -122,7 +122,7 @@ function runFallyTele (player) {
 
 function runCammyTele (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
@@ -148,7 +148,7 @@ function runCammyTele (player) {
 
 function runLummyTele (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
@@ -174,7 +174,7 @@ function runLummyTele (player) {
 
 function runWatchTowerTele (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
@@ -200,7 +200,7 @@ function runWatchTowerTele (player) {
 
 function runGodwarsTele (player) {
 	var frame = 0;
-	var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {
+	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);

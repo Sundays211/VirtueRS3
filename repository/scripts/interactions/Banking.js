@@ -30,7 +30,7 @@
  */
 var api;
 
-var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
 
 	/* The location ids to bind to */
 	getIDs: function() {
@@ -69,7 +69,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.script.listeners.Locati
 
 });
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {

@@ -3,10 +3,10 @@
  * @author Emperor
   *
  */
-var CombatStyle = Java.type('org.virtue.model.entity.combat.CombatStyle');
-var AttackInfo = Java.type('org.virtue.model.entity.combat.impl.ImpactInfo');
-var AnimationBlock = Java.type('org.virtue.model.entity.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
+var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
+var AttackInfo = Java.type('org.virtue.game.entity.combat.impl.ImpactInfo');
+var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 var SpecialAttack = Java.extend(SpecialAttackHandler);
 var sliceAndDice = new SpecialAttack(CombatStyle.MELEE, [14484]) {

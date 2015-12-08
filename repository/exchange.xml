@@ -49,6 +49,13 @@
 <processed>0</processed>
 <coinsReceived>0</coinsReceived>
 </offer>
+<offer id="7c" isSell="true" owner="34d18f2dd349c" slot="1">
+<itemID>1046</itemID>
+<amount>1</amount>
+<offerPrice>1198628405</offerPrice>
+<processed>0</processed>
+<coinsReceived>0</coinsReceived>
+</offer>
 <offer id="6c" isSell="true" owner="1dd92b00e0b86" slot="0">
 <itemID>26587</itemID>
 <amount>6</amount>

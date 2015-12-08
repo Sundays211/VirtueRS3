@@ -2,7 +2,7 @@
  * @author Kayla
  */
 
-var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;

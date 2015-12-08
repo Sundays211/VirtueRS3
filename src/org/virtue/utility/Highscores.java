@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.skill.SkillType;
+import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.entity.player.Player;
  
 public class Highscores implements Runnable {
 

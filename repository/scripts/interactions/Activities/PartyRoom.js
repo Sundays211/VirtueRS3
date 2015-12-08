@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 
-var GroundItem = Java.type('org.virtue.model.entity.region.GroundItem');
-var Region = Java.type('org.virtue.model.entity.region.Region');
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
+var GroundItem = Java.type('org.virtue.game.entity.region.GroundItem');
+var Region = Java.type('org.virtue.game.entity.region.Region');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -50,7 +50,7 @@ var Animals = {
 	    }
 };
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {

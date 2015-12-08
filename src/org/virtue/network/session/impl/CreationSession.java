@@ -26,12 +26,12 @@ import io.netty.channel.Channel;
 
 import java.io.IOException;
 
-import org.virtue.model.entity.player.GameState;
-import org.virtue.model.entity.player.Player;
-import org.virtue.model.entity.player.var.LoginDispatcher;
+import org.virtue.game.entity.player.GameState;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.widget.var.LoginDispatcher;
 import org.virtue.network.NetworkHandler;
+import org.virtue.network.protocol.ProtocolDecoder;
 import org.virtue.network.protocol.creation.CreationDecoder;
-import org.virtue.network.protocol.event.GameEventDecoder;
 import org.virtue.network.protocol.message.creation.CreationRequestMessage;
 import org.virtue.network.session.Session;
 
@@ -64,7 +64,7 @@ public class CreationSession extends Session {
 			player.initialize(false);
 			channel.writeAndFlush(Unpooled.buffer(1).writeByte(2));
 			channel.pipeline().remove(CreationDecoder.class);
-			channel.pipeline().addFirst(new GameEventDecoder(request.getDecodingCipher()));
+			channel.pipeline().addFirst(new ProtocolDecoder(request.getDecodingCipher()));
 			channel.attr(NetworkHandler.attachment).set(new GameSession(channel, player));
 			player.getAppearance().setTemp();
 			player.getAppearance().sendBlock(true);

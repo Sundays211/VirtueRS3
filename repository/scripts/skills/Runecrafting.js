@@ -19,8 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var Tile = Java.type('org.virtue.model.entity.region.Tile');
-var GraphicsBlock = Java.type('org.virtue.model.entity.update.block.GraphicsBlock');
+var Tile = Java.type('org.virtue.game.entity.region.Tile');
+var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,56 +41,56 @@ var MysteriousRunes = {
 		},
 		MIND : {
 			locTypeId : 2453,
-			destination : new Tile(2792, 4827, 0),
+			destination : api.getCoords(2792, 4827, 0),
 			talisman : 1448,
 			tiara : 5529,
 			staff : 13631
 		},
 		WATER : {
 			locTypeId : 2454,
-			destination : new Tile(3482, 4838, 0),
+			destination : api.getCoords(3482, 4838, 0),
 			talisman : 1444,
 			tiara : 5531,
 			staff : 13632
 		},
 		EARTH : {
 			locTypeId : 2455,
-			destination : new Tile(2655, 4830, 0),
+			destination : api.getCoords(2655, 4830, 0),
 			talisman : 1440,
 			tiara : 5535,
 			staff : 13633
 		},
 		FIRE : {
 			locTypeId : 2456,
-			destination : new Tile(2574, 4848, 0),
+			destination : api.getCoords(2574, 4848, 0),
 			talisman : 1442,
 			tiara : 5537,
 			staff : 13634
 		},
 		BODY : {
 			locTypeId : 2457,
-			destination : new Tile(2522, 4835, 0),
+			destination : api.getCoords(2522, 4835, 0),
 			talisman : 1446,
 			tiara : 5533,
 			staff : 13635
 		},
 		COSMIC : {
 			locTypeId : 2458,
-			destination : new Tile(2142, 4853, 0),
+			destination : api.getCoords(2142, 4853, 0),
 			talisman : 1454,
 			tiara : 5539,
 			staff : 13636
 		},
 		CHAOS : {
 			locTypeId : 2461,
-			destination : new Tile(2281, 4837, 0),
+			destination : api.getCoords(2281, 4837, 0),
 			talisman : 1452,
 			tiara : 5543,
 			staff : 13637
 		},
 		NATURE : {
 			locTypeId : 2460,
-			destination : new Tile(2398, 4841, 0),
+			destination : api.getCoords(2398, 4841, 0),
 			talisman : 1462,
 			tiara : 5541,
 			staff : 13638
@@ -221,65 +221,65 @@ var Alter = {
 var ExitPortal = {
 		AIR : {
 			locTypeId : 2465,
-			destination : new Tile(3129, 3407, 0)
+			destination : api.getCoords(3129, 3407, 0)
 		},
 		MIND : {
 			locTypeId : 2466,
-			destination : new Tile(2980, 3515, 0)
+			destination : api.getCoords(2980, 3515, 0)
 		},
 		WATER : {
 			locTypeId : 2467,
-			destination : new Tile(3157, 3160, 0)
+			destination : api.getCoords(3157, 3160, 0)
 		},
 		EARTH : {
 			locTypeId : 2468,
-			destination : new Tile(3304, 3476, 0)
+			destination : api.getCoords(3304, 3476, 0)
 		},
 		FIRE : {
 			locTypeId : 2469,
-			destination : new Tile(3311, 3257, 0)
+			destination : api.getCoords(3311, 3257, 0)
 		},
 		BODY : {
 			locTypeId : 2470,
-			destination : new Tile(3055, 3443, 0)
+			destination : api.getCoords(3055, 3443, 0)
 		},
 		COSMIC : {
 			locTypeId : 2471,
-			destination : new Tile(2406, 4379, 0)
+			destination : api.getCoords(2406, 4379, 0)
 		},
 		CHAOS : {
 			locTypeId : 2474,
-			destination : new Tile(3059, 3588, 0)
+			destination : api.getCoords(3059, 3588, 0)
 		},
 		NATURE : {
 			locTypeId : 2473,
-			destination : new Tile(2867, 3017, 0)
+			destination : api.getCoords(2867, 3017, 0)
 		},
 		LAW : {
 			locTypeId : 2472,
-			destination : new Tile(2856, 3379, 0)
+			destination : api.getCoords(2856, 3379, 0)
 		},
 		DEATH : {
 			locTypeId : 2475,
-			destination : new Tile(1863, 4637, 0)
+			destination : api.getCoords(1863, 4637, 0)
 		},
 		BLOOD : {
 			locTypeId : 2477,
-			destination : new Tile(3560, 9779, 0)
+			destination : api.getCoords(3560, 9779, 0)
 		}
 };
 
-var RunesListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var RunesListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;		
 		var runes = Runecrafting.forRunes(locTypeId);
-		if (runes !== null && canEnter(player, runes)) {
+		if (runes !== null && Runecrafting.canEnter(player, runes)) {
 			api.teleportEntity(player, runes.destination);
 		}
 	}
 });
 
-var PortalListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var PortalListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		var portal = Runecrafting.forPortal(locTypeId);
 		if (portal !== null) {
@@ -288,7 +288,7 @@ var PortalListener = Java.extend(Java.type('org.virtue.script.listeners.EventLis
 	}
 });
 
-var AlterListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var AlterListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		var alter = Runecrafting.forAlter(locTypeId);
 		if (alter !== null) {

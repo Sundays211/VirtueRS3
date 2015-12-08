@@ -52,8 +52,8 @@ public class SocialDecoder extends ByteToMessageDecoder {
 
 		int version = buf.readInt();
 		int subVersion = buf.readInt();
-		
-		if (version != Constants.FRAME_MAJOR && subVersion != Constants.FRAME_MINOR)
+		int antileech = buf.readInt();
+		if (version != Constants.FRAME_MAJOR && subVersion != Constants.FRAME_MINOR && antileech != Constants.ANTILEECH)
 			throw new IllegalStateException("Invalid client version/sub-version!");
 
 		//if (type.equals(LoginTypeMessage.LOGIN_WORLD))

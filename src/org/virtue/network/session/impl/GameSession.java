@@ -28,10 +28,10 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.model.entity.player.Player;
-import org.virtue.network.event.GameEventDefinition;
-import org.virtue.network.event.IncomingEventType;
+import org.virtue.game.entity.player.Player;
+import org.virtue.network.event.EventDefinition;
 import org.virtue.network.event.context.GameEventContext;
+import org.virtue.network.event.decoder.IncomingEventType;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.network.protocol.message.event.GameEventMessage;
 import org.virtue.network.session.Session;
@@ -93,7 +93,7 @@ public class GameSession extends Session {
 		if (message instanceof GameEventMessage) {
 			GameEventMessage request = (GameEventMessage) message;
 			//logger.info("Received Opcode: " + request.getOpcode() + ", " + request.getPayload().length());
-			GameEventDefinition definition = Virtue.getInstance().getEventRepository().lookupReadEvent(request.getOpcode());
+			EventDefinition definition = Virtue.getInstance().getEventRepository().lookupReadEvent(request.getOpcode());
 			if (definition == null) {				
 				if (!FILTER_OPCODES[request.getOpcode()]) {
 					logger.warn("Unhandled Opcode: " + request.getOpcode() + ", " + request.getPayload().length());

@@ -28,9 +28,10 @@
  * @since 05/11/2014
  */
 
-var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
+		var customobjects;
 		var args = scriptArgs.cmdArgs;
 		var stage = 0;
 		if (args.length >= 1) {
@@ -76,6 +77,17 @@ var EventListener = Java.extend(Java.type('org.virtue.script.listeners.EventList
 			}
 			var mesType = args[1];
 			api.sendMessage(player, "Test", mesType);
+			return;
+		case 5:
+			api.createLocation(84873, 3108, 6098, 0, 10, 4);
+			api.createLocation(84871, 3108, 6107, 0, 10, 3);
+			api.createLocation(84873, 3108, 6116, 0, 10, 3);
+			api.createLocation(84871, 3099, 6098, 0, 10, 4);
+			api.createLocation(84869, 3099, 6107, 0, 10, 4);
+			api.createLocation(84871, 3099, 6116, 0, 10, 2);
+			api.createLocation(84873, 3090, 6098, 0, 10, 1);
+			api.createLocation(84871, 3090, 6107, 0, 10, 1);
+			api.createLocation(84873, 3090, 6116, 0, 10, 2);
 			return;
 		}
 	}

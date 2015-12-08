@@ -19,9 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ContainerState = Java.type('org.virtue.model.entity.player.inv.ContainerState');
+var ContainerState = Java.type('org.virtue.game.entity.player.container.ContainerState');
 
-var ForceTalkBlock = Java.type('org.virtue.model.entity.update.block.ForceTalkBlock');
+var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -32,7 +32,7 @@ var ForceTalkBlock = Java.type('org.virtue.model.entity.update.block.ForceTalkBl
  */
 var api;
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {

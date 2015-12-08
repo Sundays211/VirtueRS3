@@ -28,7 +28,7 @@
  * @author Sundays211
  * @since 24/01/2015
  */
-var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 	
 	/* The item ids to bind to */
 	getItemIDs: function() {
@@ -57,7 +57,7 @@ var ItemListener = Java.extend(Java.type('org.virtue.script.listeners.ItemListen
 
 });
 
-var NpcListener = Java.extend(Java.type('org.virtue.script.listeners.NpcListener'), {
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
 	/* The npc ids to bind to */
 	getIDs: function() {
@@ -116,7 +116,7 @@ function placeClanVex (player, item, slot) {
 	} else {
 	   npc.setOwner(player);
 	   npc.setCanRespawn(false);
-	   Java.type('org.virtue.model.World').getInstance().addNPC(npc);
+	   Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 	   api.runAnimation(player, 827);
 	   player.getMovement().moveAdjacent();
 	}

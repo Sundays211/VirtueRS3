@@ -29,7 +29,7 @@
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interface ids to bind to */
 	getIDs: function() {
@@ -80,7 +80,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetLi
 
 });
 
-var WorldMapOpenAction = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+var WorldMapOpenAction = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 	process : function (player) {
 		api.runAnimation(player, 22748);
 		api.setVarc(player, 4197, -1);

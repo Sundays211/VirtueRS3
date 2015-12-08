@@ -30,7 +30,7 @@
  * @since 05/11/2014
  */
 
-var Listener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		api.sendMessage(player, "Used item with location!");

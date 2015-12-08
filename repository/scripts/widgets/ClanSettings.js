@@ -29,7 +29,7 @@
  */
 var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.script.listeners.WidgetListener'), {
+var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The object ids to bind to */
 	getIDs: function() {
@@ -357,7 +357,7 @@ function kickClanMember (player) {
 	var userHash = player.getChat().getSelectedClanMember();
 	var displayName = api.getName(userHash);
 	if (displayName != null) {
-		var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 			handle : function (value) {
 				if (value == 1) {
 					api.getClanSettings().kickClanMember(api.getClanHash(player), player.getChat(), userHash);

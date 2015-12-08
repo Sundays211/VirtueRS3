@@ -13,7 +13,7 @@ import org.virtue.engine.thread.ChannelThreadPool;
 import org.virtue.engine.thread.NetworkThreadPool;
 import org.virtue.engine.thread.ServiceThreadFactory;
 import org.virtue.engine.thread.WorkerThreadPool;
-import org.virtue.model.entity.update.EntityUpdate;
+import org.virtue.network.protocol.update.EntityUpdate;
 import org.virtue.network.session.impl.OnDemandSession;
 import org.virtue.utility.MaintananceThread;
 import org.virtue.utility.PlayerCountThread;

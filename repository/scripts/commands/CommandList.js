@@ -30,7 +30,7 @@
  * @since 05/11/2014
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		sendCommandResponse(scriptArgs.player, "<col=00FFCC>[Player Commands List]</col> ::players, ::item, ::anim, ::gfx, ::tele, ::bank, ::coords, ::max, ::openge", scriptArgs.console);
 	},

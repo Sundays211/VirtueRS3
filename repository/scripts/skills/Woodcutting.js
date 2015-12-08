@@ -219,7 +219,7 @@ var Hatchet = {
 	}
 };
 
-var TreeListener = Java.extend(Java.type('org.virtue.script.listeners.EventListener'), {
+var TreeListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;
 		var tree = Woodcutting.getByLocType(locTypeId);
@@ -296,7 +296,7 @@ var Woodcutting = {
 			api.runAnimation(player, hatchet.anim);
 			api.sendMessage(player, "You begin to swing your axe.", MesType.GAME_SPAM);
 			var delay = this.getDelay(player, tree.type, hatchet);//Calculates the time taken to mine this rock
-			var Action = Java.extend(Java.type('org.virtue.model.entity.player.event.PlayerActionHandler'), {	
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (location.getId() != tree.tree) {
 						return false;//This means the tree has already been felled

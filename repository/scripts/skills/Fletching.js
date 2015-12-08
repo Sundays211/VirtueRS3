@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var CraftAction = Java.type('org.virtue.model.entity.player.skill.CraftAction');
+var CraftAction = Java.type('org.virtue.game.content.skills.CraftAction');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -243,7 +243,7 @@ var FletchMaterial = {
 		}
 }
 
-var ToolListener = Java.extend(Java.type('org.virtue.script.listeners.ItemOnItemListener'), {
+var ToolListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemOnItemListener'), {
 
 	/* The first option on an object */
 	handleInteraction: function(player, item1, slot1, item2, slot2) {
@@ -266,7 +266,7 @@ var ToolListener = Java.extend(Java.type('org.virtue.script.listeners.ItemOnItem
 
 });
 
-var MaterialListner = Java.extend(Java.type('org.virtue.script.listeners.ItemListener'), {
+var MaterialListner = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
 	
 	/* The item ids to bind to */
 	getItemIDs: function() {
@@ -335,7 +335,7 @@ function showFletchingDialog (player, item, slots) {
 	}	
 	api.setVarp(player, 1170, materialType.defaultProduct);//Item ID
 	api.openCentralWidget(player, 1370, false);
-	var Handler = Java.extend(Java.type('org.virtue.model.entity.player.dialog.InputEnteredHandler'), {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		
 		handle: function(value) {
 			api.closeCentralWidgets(player);
