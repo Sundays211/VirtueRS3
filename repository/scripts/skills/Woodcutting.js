@@ -246,7 +246,7 @@ var listen = function(scriptManager) {
 	}
 	for (var i in locs) {
 		//Bind option one on all trees to this listener
-		scriptManager.registerListener(EventType.LOC_OP1, locs[i], listener);
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], listener);
 	}
 };
 //Regular tree stumps:

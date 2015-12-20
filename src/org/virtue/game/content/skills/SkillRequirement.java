@@ -10,7 +10,7 @@ public final class SkillRequirement {
 	/**
 	 * The skill type.
 	 */
-	private final SkillType skill;
+	private final StatType skill;
 	
 	/**
 	 * The level required.
@@ -22,7 +22,7 @@ public final class SkillRequirement {
 	 * @param skill The skill type.
 	 * @param level The level required.
 	 */
-	public SkillRequirement(SkillType skill, int level) {
+	public SkillRequirement(StatType skill, int level) {
 		this.skill = skill;
 		this.level = level;
 	}
@@ -31,7 +31,7 @@ public final class SkillRequirement {
 	 * Gets the skill value.
 	 * @return The skill.
 	 */
-	public SkillType getSkill() {
+	public StatType getSkill() {
 		return skill;
 	}
 

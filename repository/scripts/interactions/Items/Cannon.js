@@ -1,32 +1,13 @@
 /**
  * @Author Kayla
  */
-var SceneLocation = Java.type('org.virtue.game.entity.region.SceneLocation');
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-	
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [ 6 ];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		switch(item.getId()) {
-		case 6://Process Cannon
-			switch (option) {
-			case 1:
-				//api.delCarriedItem(player, item.getId(), 1, slot);
-				//ProcessCannon(player);
-				return true;
-			}
-			return true;
-		default:
-			return false;
-		}
-	},
-	
-	getExamine : function (player, item) {
-		return null;
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, itemTypeId, args) {
+		var player = args.player;
+		var slot = args.slot;
+		
+		//api.delCarriedItem(player, itemTypeId, 1, slot);
+		//ProcessCannon(player);
 	}
 
 });
@@ -37,22 +18,22 @@ function ProcessCannon (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.runAnimation(player, 827);
-				SceneLocation = api.createLocation(7, player.getCurrentTile(), 10, 0);
-				api.spawnLocation(SceneLocation);
+				var loc = api.createLocation(7, player.getCurrentTile(), 10, 0);
+				api.spawnLocation(loc);
 			} else if (frame == 3) {
 				api.runAnimation(player, 827);
-				api.transformLoc(SceneLocation, 8, 999999);
+				api.transformLoc(loc, 8, 999999);
 				api.delCarriedItem(player, 8, 1);
 			} else if (frame == 6) {
 				api.runAnimation(player, 827);
-				api.transformLoc(SceneLocation, 9, 999999);
+				api.transformLoc(loc, 9, 999999);
 				api.delCarriedItem(player, 10, 1);
 			} else if (frame == 9) {
 				api.runAnimation(player, 827);
-				api.transformLoc(SceneLocation, 6, 999999);
+				api.transformLoc(loc, 6, 999999);
 				api.delCarriedItem(player, 12, 1);
 			} else if (frame == 20) {
-				api.destroyLoc(SceneLocation);
+				api.destroyLoc(loc);
 				api.addCarriedItem(player, 6, 1);
 				api.addCarriedItem(player, 8, 1);
 				api.addCarriedItem(player, 10, 1);
@@ -82,17 +63,17 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 			return false;
 		}
 		
-		if (api.freeSpaceTotal(player, "backpack") < 1) {
+		if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 			api.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
 		
 		switch (object.getID()) {
 			case 6://Cannon Full
-				api.destroyLoc(SceneLocation);
+				api.destroyLoc(loc);
 				return true;
 			case 7://Cannon Full
-				api.destroyLoc(SceneLocation);
+				api.destroyLoc(loc);
 				return true;
 			default:
 				return false;
@@ -112,9 +93,9 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 });
 
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var itemListener = new ItemListener();
-	scriptManager.registerItemListener(itemListener, itemListener.getItemIDs());
+	scriptManager.registerListener(EventType.OPHELD1, 6, itemListener);
+	
 	var listener = new LocationListener();
 	scriptManager.registerLocationListener(listener, listener.getIDs());
 }

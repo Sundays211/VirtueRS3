@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-var GroundItem = Java.type('org.virtue.game.entity.region.GroundItem');
-var Region = Java.type('org.virtue.game.entity.region.Region');
+var GroundItem = Java.type('org.virtue.game.world.region.GroundItem');
+var Region = Java.type('org.virtue.game.world.region.Region');
 var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /**

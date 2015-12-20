@@ -39,11 +39,10 @@ import org.virtue.game.content.MoneyPouch;
 import org.virtue.game.content.PVPDrops;
 import org.virtue.game.content.dialogues.DialogManager;
 import org.virtue.game.content.exchange.ExchangeOffers;
-import org.virtue.game.content.minigame.Minigame;
 import org.virtue.game.content.minigame.MinigameType;
 import org.virtue.game.content.quests.QuestManager;
 import org.virtue.game.content.skills.SkillManager;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChatManager;
 import org.virtue.game.content.treasure.TreasureHunter;
 import org.virtue.game.entity.Entity;
@@ -64,14 +63,14 @@ import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.game.entity.player.widget.var.VarKey;
 import org.virtue.game.entity.player.widget.var.VarRepository;
-import org.virtue.game.entity.region.DynamicRegion;
-import org.virtue.game.entity.region.GroundItem;
-import org.virtue.game.entity.region.Region;
-import org.virtue.game.entity.region.Tile;
-import org.virtue.game.entity.region.movement.Direction;
-import org.virtue.game.entity.region.packets.Projectile;
-import org.virtue.game.entity.region.packets.SceneUpdatePacket;
 import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.world.region.DynamicRegion;
+import org.virtue.game.world.region.GroundItem;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.Tile;
+import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.packets.Projectile;
+import org.virtue.game.world.region.packets.SceneUpdatePacket;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.out.SceneUpdateEventContext;
 import org.virtue.network.event.encoder.impl.SceneUpdateEventEncoder;
@@ -79,7 +78,6 @@ import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.ref.Appearance;
 import org.virtue.network.protocol.update.ref.Appearance.Render;
 import org.virtue.network.protocol.update.ref.Viewport;
-import org.virtue.utility.Highscores;
 import org.virtue.utility.ISAACCipher;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
@@ -101,11 +99,6 @@ public class Player extends Entity {
 	 * The {@link Channel} Instance
 	 */
 	private Channel channel;
-
-	/**
-	 * 
-	 */
-	private boolean isDead = false;
 	
 	/**
 	 * New player
@@ -433,7 +426,6 @@ public class Player extends Entity {
 			return;
 		} else {
 			getDispatcher().sendLogout(state);
-			new Thread(new Highscores(this)).start();
 			finish();
 		}
 		
@@ -1055,7 +1047,7 @@ public class Player extends Entity {
 
 	private void restoreRunEnergy() {
 		if (runEnergy < 100) {
-			float increase = 0.20f + skills.getBaseLevel(SkillType.AGILITY) * 0.20f;
+			float increase = 0.20f + skills.getBaseLevel(StatType.AGILITY) * 0.20f;
 			// 99 agility should be about twice as fast as 1 agility
 			runEnergy += increase;
 			if (runEnergy > 100) {
@@ -1286,21 +1278,6 @@ public class Player extends Entity {
 		return (currentX >= 2940 && currentX <= 3395 && currentY <= 3524 && currentY >= 3523);
 	}
 
-	/**
-	 * @return True if the entity is dead, false otherwise
-	 */
-	public boolean isDead() {
-		return isDead;
-	}
-
-	/**
-	 * @param isDead
-	 *            the isDead to set
-	 */
-	public void setDead(boolean isDead) {
-		this.isDead = isDead;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1308,7 +1285,7 @@ public class Player extends Entity {
 	 */
 	@Override
 	public void processDeath(Entity killer) {
-		if (isDead()) {
+		if (this.getImpactHandler().isDead()) {
 			return;// No need to process death twice...
 		}
 		this.lock(3);

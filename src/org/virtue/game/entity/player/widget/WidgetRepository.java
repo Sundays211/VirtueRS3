@@ -40,7 +40,7 @@ import org.virtue.game.entity.player.widget.impl.QuestsListWidget;
 import org.virtue.game.entity.player.widget.impl.RibbonWidget;
 import org.virtue.game.entity.player.widget.impl.TreasureHunterWidget;
 import org.virtue.game.entity.player.widget.impl.WornEquipmentWidget;
-import org.virtue.game.entity.region.SceneLocation;
+import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
 import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
@@ -179,24 +179,15 @@ public final class WidgetRepository {
 	/**
 	 * Handles an interface dragged onto another interface
 	 * 
-	 * @param widget1
-	 *            The dragged widget ID
-	 * @param component1
-	 *            The dragged widget component ID
-	 * @param slot1
-	 *            The dragged widget slot ID
-	 * @param item1
-	 *            The dragged widget item ID
-	 * @param widget2
-	 *            The ID of the widget dragged onto
-	 * @param component2
-	 *            The ID of the widget component dragged onto
-	 * @param slot2
-	 *            The ID of the widget slot dragged onto
-	 * @param item2
-	 *            The ID of the widget item dragged onto
-	 * @param player
-	 *            The player
+	 * @param widget1 The dragged widget ID
+	 * @param component1 The dragged widget component ID
+	 * @param slot1 The dragged widget slot ID
+	 * @param item1 The dragged widget item ID
+	 * @param widget2 The ID of the widget dragged onto
+	 * @param component2 The ID of the widget component dragged onto
+	 * @param slot2 The ID of the widget slot dragged onto
+	 * @param item2 The ID of the widget item dragged onto
+	 * @param player The player
 	 * @return True if the drag was handled successfully, false otherwise
 	 */
 	public boolean handleDrag(int widget1, int component1, int slot1,
@@ -219,6 +210,63 @@ public final class WidgetRepository {
 			return false;
 		}
 	}
+	
+	/**
+	 * Handles an interface used with another interface
+	 * @param widget1 The selected widget ID
+	 * @param component1 The selected widget component ID
+	 * @param slot1 The selected widget slot ID
+	 * @param item1 The selected widget item ID
+	 * @param widget2 The ID of the target widget
+	 * @param component2 The ID of the target widget component
+	 * @param slot2 The ID of the target widget slot
+	 * @param item2 The ID of the target widget item
+	 * @param player The player
+	 * @return True if the use was handled successfully, false otherwise
+	 */
+	public boolean handleUse(int widget1, int component1, int slot1,
+			int item1, int widget2, int component2, int slot2, int item2,
+			Player player) {
+		Widget widget = getInterface(widget1);
+		if (widget == null) {
+			return false;
+		}
+		try {
+			return widget.use(widget1, component1, slot1, item1, widget2,
+					component2, slot2, item2, player);
+		} catch (Exception ex) {
+			logger.error("Failed handling widget use: " + widget1
+					+ ", component: " + component1 + ", slot: " + slot1
+					+ ", item: " + item1, ex);
+			return false;
+		}
+	}
+	
+	/**
+	 * Handles an interface used with a {@link SceneLocation}
+	 * @param widgetId The selected widget ID
+	 * @param component The selected widget component ID
+	 * @param slot The selected widget slot
+	 * @param item The selected widget item ID
+	 * @param location The target location
+	 * @param player The player
+	 * @return True if the use was handled successfully, false otherwise
+	 */
+	public boolean handleUse(int widgetId, int component, int slot,
+			int item, SceneLocation location, Player player) {
+		Widget widget = getInterface(widgetId);
+		if (widget == null) {
+			return false;
+		}
+		try {
+			return widget.use(widgetId, component, slot, item, location, player);
+		} catch (Exception ex) {
+			logger.error("Failed handling widget use: " + widgetId
+					+ ", component: " + component + ", slot: " + slot
+					+ ", item: " + item +", location: "+location, ex);
+			return false;
+		}
+	}
 
 	/**
 	 * Returns an interface corresponding to the given ID.
@@ -229,11 +277,6 @@ public final class WidgetRepository {
 	 */
 	private Widget getInterface(int interfaceId) {
 		return WIDGETS.get(interfaceId);
-		/*
-		 * for (Widget widget : WIDGETS.values()) { for (int id :
-		 * widget.getStates()) { if (id == interfaceId) { return widget; } } }
-		 * return null;
-		 */
 	}
 
 	/**

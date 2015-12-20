@@ -1,72 +1,50 @@
-var Tile = Java.type('org.virtue.game.entity.region.Tile');
-
 /**
  * @author Kayla
  * 11/13/2015
  */
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-	
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [ 8007, 8008, 8009, 8010, 8012, 31665 ];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		api.delCarriedItem(player, item.getId(), 1, slot);
-		switch(item.getId()) {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;
+		var item = args.item;
+		var slot = args.slot;
+		
+		api.delCarriedItem(player, objTypeId, 1, slot);
+		switch (objTypeId) {
 		case 8007://Varrock
-			switch (option) {
-			case 1:
-				runVarrockTele(player);
-				return true;
-			}
-			return true;
+			runVarrockTele(player);
+			return;
 		case 8008://Lummy Teletab
-			switch (option) {
-			case 1:
-				runLummyTele(player);
-				return true;
-			}
-			return true;
+			runLummyTele(player);
+			return;
 		case 8009://Falador Teletab
-			switch (option) {
-			case 1:
-				runFallyTele(player);
-				return true;
-			}
-			return true;
+			runFallyTele(player);
+			return;
 		case 8010://Catherby
-			switch (option) {
-			case 1:
-				runCammyTele(player);
-				return true;
-			}
-			return true;
+			runCammyTele(player);
+			return;
 		case 8012://watchtower
-			switch (option) {
-			case 1:
-				runWatchTowerTele(player);
-				return true;
-			}
-			return true;
+			runWatchTowerTele(player);
+			return;
 		case 31665://Godwars tele
-			switch (option) {
-			case 1:
-				runGodwarsTele(player);
-				return true;
-			}
-			return true;
+			runGodwarsTele(player);
+			return;
 		default:
-			return false;
+			api.sendMessage(player, "Unhandled teleport tablet: "+item);
+			return;
 		}
-	},
-	
-	getExamine : function (player, item) {
-		return null;
 	}
-
 });
+
+
+/* Listen to the item ids specified */
+var listen = function(scriptManager) {
+	var ids = [ 8007, 8008, 8009, 8010, 8012, 31665 ];
+	var itemListener = new ItemListener();
+	for (var i in ids) {
+		//Bind option one on all teleport tablets to this listener
+		scriptManager.registerListener(EventType.OPHELD1, ids[i], itemListener);
+	}
+}
 
 function runVarrockTele (player) {
 	var frame = 0;
@@ -222,12 +200,4 @@ function runGodwarsTele (player) {
 		}
 	});
 	player.setAction(new Action());
-}
-
-
-/* Listen to the item ids specified */
-var listen = function(scriptManager) {
-	api = scriptManager.getApi();
-	var itemListener = new ItemListener();
-	scriptManager.registerItemListener(itemListener, itemListener.getItemIDs());
 }

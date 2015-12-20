@@ -5,7 +5,7 @@ import org.virtue.game.entity.combat.AttackInfo;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.impl.AttackHandler;
 import org.virtue.game.entity.combat.impl.CombatUtils;
-import org.virtue.game.entity.region.packets.Projectile;
+import org.virtue.game.world.region.packets.Projectile;
 
 /**
  * Handles dragonfire attackss.

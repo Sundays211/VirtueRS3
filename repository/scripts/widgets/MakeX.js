@@ -27,8 +27,6 @@
  * @author Sundays211
  * @since 19/11/2014
  */
-var api;
-
 var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interface ids to bind to */
@@ -52,7 +50,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			var category = api.getVarp(player, 1169);
 			var items = api.getEnumType(category);
 			for (var slot = 0; slot < items.getSize(); slot++) {
-				if (api.itemTotal(player, "backpack", items.getValueInt(slot)) > 1) {
+				if (api.itemTotal(player, Inv.BACKPACK, items.getValueInt(slot)) > 1) {
 					itemID = items.getValueInt(slot);
 					api.setVarp(player, 1170, itemID);
 					break;
@@ -66,9 +64,9 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		var itemType = api.getItemType(itemID);
 		
 		//Information about the selected item
-		api.setVarc(player, 2391, itemType.getExamineText());//Examine text
+		api.setVarc(player, 2391, api.getDesc(itemType));//Examine text
 		api.setVarc(player, 2223, 1);
-		api.setVarc(player, 2224, itemType.getExchangeValue());//Exchange guide price
+		api.setVarc(player, 2224, api.getExchangeCost(itemID));//Exchange guide price
 		api.setVarc(player, 199, -1);//Varc: key=199, value=-1
 		api.setVarc(player, 3678, -1);//Varc: key=3678, value=-1
 		api.runClientScript(player, 8178, []);
@@ -141,7 +139,6 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var widgetListener = new WidgetListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
 };
@@ -171,9 +168,9 @@ function setSelectedProduct (player, slotID) {
 
 		var itemType = api.getItemType(itemID);
 		
-		api.setVarc(player, 2391, itemType.getExamineText());//Examine text
+		api.setVarc(player, 2391, api.getDesc(itemType));//Examine text
 		api.setVarc(player, 2223, 1);//
-		api.setVarc(player, 2224, itemType.getExchangeValue());//Exchange guide price (Disabled as the exchange does not exist)
+		api.setVarc(player, 2224, api.getExchangeCost(itemID));//Exchange guide price (Disabled as the exchange does not exist)
 		
 		return true;
 	} else {

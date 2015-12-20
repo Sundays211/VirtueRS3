@@ -40,5 +40,5 @@ var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventLi
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var listener = new Listener();	
-	scriptManager.registerListener(EventType.LOC_OP_ITEMUSE, 38787, listener);
+	scriptManager.registerListener(EventType.OPLOCU, 38787, listener);
 };

@@ -44,7 +44,7 @@ public class SkillEventEncoder implements EventEncoder<SkillData> {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(OutgoingEventType.UPDATE_SKILL, player);
 		buffer.putIntA((int) context.getExperienceFloat());
-		buffer.putC(context.getSkill().getID());
+		buffer.putC(context.getSkill().getId());
 		buffer.putS(context.getCurrentLevel());
 		return buffer;
 	}

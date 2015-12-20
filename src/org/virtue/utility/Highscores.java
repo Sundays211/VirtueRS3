@@ -6,16 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.player.Player;
  
 public class Highscores implements Runnable {
 
-	public static final String HOST = "23.229.23.42"; // website ip
+	public static final String HOST = ""; // website ip
 																// address
-	public static final String USER = "wwwz83pn_scores";
-	public static final String PASS = "p_-7XAh22^2+";
-	public static final String DATABASE = "wwwz83pn_highscores";
+	public static final String USER = "";
+	public static final String PASS = "";
+	public static final String DATABASE = "";
 	public static final String TABLE = "hs_users";
 	
 	private Player player;
@@ -59,7 +59,7 @@ public class Highscores implements Runnable {
 			stmt2.setLong(3, player.getSkills().getTotalLevel());
 
 			int count = 0;
-			for (SkillType type : SkillType.values()) {
+			for (StatType type : StatType.values()) {
 				if (type == null)
 					continue;
 				
@@ -68,7 +68,7 @@ public class Highscores implements Runnable {
 				stmt2.setInt(4 + count, player.getSkills().getExperience(type)/10);
 				count++;
 
-				System.out.println(SkillType.values());
+				System.out.println(StatType.values());
 
 			}
 			stmt2.execute();

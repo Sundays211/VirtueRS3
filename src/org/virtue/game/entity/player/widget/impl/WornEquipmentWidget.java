@@ -21,8 +21,12 @@
  */
 package org.virtue.game.entity.player.widget.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.virtue.Virtue;
-import org.virtue.engine.script.listeners.ItemListener;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
 import org.virtue.game.entity.player.container.Item;
@@ -42,42 +46,23 @@ public class WornEquipmentWidget extends Widget {
 		player.getDispatcher().sendWidgetSettings(1464, 15, 0, 18, 15302654);
 		player.getDispatcher().sendWidgetSettings(1464, 13, 2, 12, 2);
 		player.getInvs().loadContainer(ContainerState.EQUIPMENT);
-		//container.swap(Item.create(21371, 1),  3);//TODO: Remove this when proper wielding has been implemented
-		/*container.swap(Item.create(31100, 1), 0);
-		container.swap(Item.create(23659, 1), 1);
-		container.swap(Item.create(19335, 1), 2);
-		container.swap(Item.create(18349, 1), 3);
-		container.swap(Item.create(13887, 1), 4);
-		container.swap(Item.create(25991, 1), 5);
-		container.swap(Item.create(13893, 1), 7);
-		container.swap(Item.create(22362, 1), 9);
-		container.swap(Item.create(21787, 1), 10);*/
 		player.getInvs().sendContainer(ContainerState.EQUIPMENT);
 	}
 
 	@Override
-	public boolean click(int widgetId, int componentId, int slotId, int itemId, Player player, OptionButton option) {
+	public boolean click(int widgetId, int componentId, int slot, int itemId, Player player, OptionButton option) {
 		switch (componentId) {
 		case 15:
-			Item item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(slotId);
-			if (item == null) {
+			Item item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(slot);
+			if (item == null || item.getId() != itemId) {
+				//The client inventory must not be synchronised, so let's send it again
+				player.getInvs().sendContainer(ContainerState.EQUIPMENT);
 				return false;
 			}
-			switch (option) {
-			case ONE:
-				return player.getEquipment().removeItem(slotId, itemId);
-			case TEN:
-				item.examine(player);
-				return true;
-			default:
-				ItemListener listener = Virtue.getInstance().getScripts().forItemID(item.getId());
-				if (listener == null || !listener.handleInteraction(player, item, slotId, option.getID()+20)) {
-					player.getDispatcher().sendGameMessage("Unhanded equipment item option: item="+item+", slot="+slotId+", option="+option);
-				}
-				return true;
-			}
+			handleEquipmentInteraction(player, option, item, slot);
+			return true;
 		case 13:
-			switch (slotId) {
+			switch (slot) {
 			case 12:
 				player.setWidgetState(WidgetState.GEAR_OVERLAY);
 				player.getVars().setVarValueInt(3708, 38544385);
@@ -129,6 +114,46 @@ public class WornEquipmentWidget extends Widget {
 	@Override
 	public int[] getStates() {
 		return new int[] { WidgetState.EQUIPMENT_WIDGET.getID() };
+	}
+	
+	private void handleEquipmentInteraction (Player player, OptionButton option, Item item, int slot) {
+		ScriptEventType eventType;
+		switch (option) {
+		case ONE:
+			player.getEquipment().removeItem(slot, item.getId());
+			return;
+		case TWO:
+			eventType = ScriptEventType.OPWORN1;
+			break;
+		case THREE:
+			eventType = ScriptEventType.OPWORN2;
+			break;
+		case FOUR:
+			eventType = ScriptEventType.OPWORN3;
+			break;
+		case FIVE:
+			eventType = ScriptEventType.OPWORN4;
+			break;
+		case SIX:
+			eventType = ScriptEventType.OPWORN5;
+			break;
+		case TEN:
+			item.examine(player);
+			return;
+		default:
+			eventType = null;
+			break;
+		}
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (eventType != null && scripts.hasBinding(eventType, item.getId())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("item", item);
+			args.put("slot", slot);
+			scripts.invokeScriptChecked(eventType, item.getId(), args);
+		} else {
+			player.getDispatcher().sendGameMessage("Unhanded equipment item option: item="+item+", slot="+slot+", option="+option);
+		}
 	}
 
 }

@@ -27,7 +27,7 @@ import java.util.Set;
 
 import org.virtue.Virtue;
 import org.virtue.cache.def.impl.EnumType;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.var.VarBitTypeList;
@@ -289,14 +289,14 @@ public class EquipmentManager {
 	
 	public boolean meetsEquipRequirements(Item item) {
 		for (int i=0;i<6;i+=2) {
-			SkillType skill = SkillType.forID(item.getType().getParam(749+i, -1));
+			StatType skill = StatType.getById(item.getType().getParam(749+i, -1));
 			if (skill == null) {
 				return true;
 			} else {
 				int level = item.getType().getParam(750+i, 0);
 				if (player.getSkills().getBaseLevel(skill) < level) {
 					String skillName = skill.getName();
-					String skillPart = StringUtility.startsWithVowel(skillName) ? "an" : "a"+" "+skillName;
+					String skillPart = StringUtility.startsWithVowel(skillName) ? "an " : "a "+skillName;
 					player.getDispatcher().sendGameMessage("You need to have "+skillPart+" level of "
 							+ level + " to equip this item.");
 					return false;
@@ -307,9 +307,9 @@ public class EquipmentManager {
 	}
 	
 	public void returnBorrowedItem () {
-		if (player.getVars().getVar(VarKey.Player.LOAN_FROM_PLAYER) != null
-				&& player.getVars().getVar(VarKey.Player.LOAN_FROM_PLAYER) instanceof Player) {
-			Player owner = (Player) player.getVars().getVar(VarKey.Player.LOAN_FROM_PLAYER);
+		if (player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER) != null
+				&& player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER) instanceof Player) {
+			Player owner = (Player) player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
 			if (owner.exists()) {
 				owner.getVars().setVarValueInt(VarKey.Player.LOAN_TO_PLAYER, -1);
 				owner.getDispatcher().sendGameMessage(player.getName()+" has returned the item "+(Gender.MALE.equals(player.getAppearance().getGender()) ? "he" : "she")+" borrowed from you.");

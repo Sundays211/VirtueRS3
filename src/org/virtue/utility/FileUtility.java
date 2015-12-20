@@ -117,4 +117,11 @@ public class FileUtility {
 		return files;		
 	}
 	
+	public static File parseFilePath (String path) {
+		if (path.charAt(0) == '~') {
+			path = System.getProperty("user.home")+path.substring(1);
+		}
+		return new File(path);
+	}
+	
 }

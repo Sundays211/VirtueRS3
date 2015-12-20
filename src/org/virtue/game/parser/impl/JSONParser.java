@@ -30,7 +30,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.game.content.skills.SkillManager;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.clan.ClanMember;
 import org.virtue.game.content.social.clan.ClanSettings;
 import org.virtue.game.content.social.friend.Friend;
@@ -182,8 +182,8 @@ public class JSONParser implements Parser {
 				SkillManager skillManager = (SkillManager) object;
 				JsonArray skills = new JsonArray();
 				JsonObject skill = new JsonObject();
-				for (SkillType skillType : SkillType.values()) {
-					skill.addProperty("id", skillType.getID());
+				for (StatType skillType : StatType.values()) {
+					skill.addProperty("id", skillType.getId());
 					skill.addProperty("experience", skillManager.getExperience(skillType));
 					skill.addProperty("level", skillManager.getCurrentLevel(skillType));
 					skills.add(skill);

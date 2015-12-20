@@ -54,7 +54,7 @@ public class LogParser {
 	 */
 	private static LogParser instance;
 	
-	private static File PATH = new File(System.getenv("APPDATA") + "//Z835/log/bug//");
+	private static File PATH = new File("repository/logs/bugs/");
 	
 	private List<BugReport> bugReportQueue = Collections.synchronizedList(new ArrayList<BugReport>());
 	

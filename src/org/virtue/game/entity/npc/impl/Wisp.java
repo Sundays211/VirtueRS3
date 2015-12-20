@@ -1,7 +1,7 @@
 package org.virtue.game.entity.npc.impl;
 
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Tile;
 
 public class Wisp extends NPC {
 

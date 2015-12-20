@@ -7,7 +7,7 @@ var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 var AttackInfo = Java.type('org.virtue.game.entity.combat.impl.ImpactInfo');
 var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
-var Projectile = Java.type('org.virtue.game.entity.region.packets.Projectile');
+var Projectile = Java.type('org.virtue.game.world.region.packets.Projectile');
 
 var SpecialAttack = Java.extend(SpecialAttackHandler);
 var armadylStaff = new SpecialAttack(CombatStyle.MAGIC, [21777]) {

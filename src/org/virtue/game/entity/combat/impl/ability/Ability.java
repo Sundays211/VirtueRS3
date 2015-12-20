@@ -1,6 +1,6 @@
 package org.virtue.game.entity.combat.impl.ability;
 
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackEvent;
 import org.virtue.game.entity.combat.AttackInfo;
@@ -113,7 +113,7 @@ public abstract class Ability extends AttackEvent {
 	 * @param level The level.
 	 * @return The requirement.
 	 */
-	public boolean hasRequirement(Entity entity, SkillType skill, int level) {
+	public boolean hasRequirement(Entity entity, StatType skill, int level) {
 		if (entity instanceof Player && ((Player) entity).getSkills().getBaseLevel(skill) < level) {
 			((Player) entity).getDispatcher().sendGameMessage("You need a " + skill.getName() + " level of " + level + " to use this ability!");
 			return false;

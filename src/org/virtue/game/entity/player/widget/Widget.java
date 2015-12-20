@@ -22,6 +22,7 @@
 package org.virtue.game.entity.player.widget;
 
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**
@@ -60,6 +61,37 @@ public abstract class Widget {
 	 * @return True if the drag was handled successfully, false otherwise
 	 */
 	public boolean drag (int widget1, int component1, int slot1, int item1, int widget2, int component2, int slot2, int item2, Player player) {
+		return false;
+	}
+	
+	/**
+	 * Called when this interface is used on another interface
+	 * @param widget1 The selected widget ID
+	 * @param component1 The selected widget component ID
+	 * @param slot1 The selected widget slot ID
+	 * @param item1 The selected widget item ID
+	 * @param widget2 The ID of the target widget
+	 * @param component2 The ID of the target widget component
+	 * @param slot2 The ID of the target widget slot
+	 * @param item2 The ID of the target widget item
+	 * @param player The player
+	 * @return True if the use was handled successfully, false otherwise
+	 */
+	public boolean use (int widget1, int component1, int slot1, int item1, int widget2, int component2, int slot2, int item2, Player player) {
+		return false;
+	}
+	
+	/**
+	 * Called when this interface is used on a {@link SceneLocation}
+	 * @param widget The selected widget ID
+	 * @param component The selected widget component ID
+	 * @param slot The selected widget slot ID
+	 * @param item The selected widget item ID
+	 * @param location The location on which the interface was used
+	 * @param player The player
+	 * @return True if the use was handled successfully, false otherwise
+	 */
+	public boolean use (int widget1, int component1, int slot, int item, SceneLocation location, Player player) {
 		return false;
 	}
 	

@@ -43,7 +43,7 @@ import org.virtue.game.content.exchange.ExchangeOffer;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.content.skills.SkillData;
 import org.virtue.game.content.skills.SkillManager;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.OnlineStatus;
 import org.virtue.game.content.social.clan.ClanBan;
@@ -60,9 +60,9 @@ import org.virtue.game.entity.player.container.ContainerState;
 import org.virtue.game.entity.player.container.InvRepository;
 import org.virtue.game.entity.player.container.Item;
 import org.virtue.game.entity.player.container.ItemContainer;
-import org.virtue.game.entity.region.Tile;
 import org.virtue.game.parser.Parser;
 import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.protocol.message.ResponseTypeMessage;
 import org.virtue.network.protocol.message.login.LoginRequestMessage;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
@@ -430,10 +430,10 @@ public class XmlParser implements Parser {
 					SkillManager skills = (SkillManager) object;
 					Element root = document.createElement("skills");
 					document.appendChild(root);
-					for (SkillType skillType : SkillType.values()) {
+					for (StatType skillType : StatType.values()) {
 						Element skill = document.createElement("skill");
 						Attr attr = document.createAttribute("id");
-						attr.setValue(Integer.toString(skillType.getID()));
+						attr.setValue(Integer.toString(skillType.getId()));
 						skill.setAttributeNode(attr);
 						
 						Element xp = document.createElement("experience");
@@ -1017,7 +1017,7 @@ public class XmlParser implements Parser {
 						Node node = list.item(ordinal);
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
 							Element element = (Element) node;
-							SkillType skillType = SkillType.forID(Integer.parseInt(element.getAttribute("id")));
+							StatType skillType = StatType.getById(Integer.parseInt(element.getAttribute("id")));
 							int xp = Integer.parseInt(element.getElementsByTagName("experience").item(0).getTextContent());
 							int level = Integer.parseInt(element.getElementsByTagName("level").item(0).getTextContent());
 							skills.add(new SkillData(skillType, xp, level));

@@ -29,8 +29,6 @@
  * @since 24/01/2015
  */
  
- var api;
- 
  var Types = {
  	    ANCHOVIES : {
 			itemID : 319,
@@ -303,39 +301,25 @@
 	    }	    			    		    		    	   
 };
  
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-	
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [ 1973, 319, 2309, 13433, 2140, 2142, 315, 325, 347, 355, 333, 339, 351, 
-		329, 361, 365, 379, 373, 7946, 385, 397, 15266, 391, 15272, 1891, 1897, 2289, 
-		2293, 2297, 2301, 7178, 6705, 7056, 7060, 7208, 7218, 21521, 19948, 19949, 26313, 6685, 23351, 28191, 28227 ];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		switch (option) {
-		case 1:
-			startFood(player, item, slot);
-			return true;
-		default:
-			api.sendMessage(player, "Unhandled food option: item="+item.getID()+", option="+option);
-		}
-		return true;
-	},
-	
-	/* Returns the examine text for the item, or "null" to use the default */
-	getExamine : function (player, item) {
-		return null;
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;
+		var item = args.item;
+		var slot = args.slot;
+		
+		startFood(player, item, slot);
 	}
-
 });
 
 /* Listen to the item ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
+	var ids = [ 1973, 319, 2309, 13433, 2140, 2142, 315, 325, 347, 355, 333, 339, 351, 
+	    		329, 361, 365, 379, 373, 7946, 385, 397, 15266, 391, 15272, 1891, 1897, 2289, 
+	    		2293, 2297, 2301, 7178, 6705, 7056, 7060, 7208, 7218, 21521, 19948, 19949, 26313, 6685, 23351, 28191, 28227 ];
 	var itemListener = new ItemListener();
-	scriptManager.registerItemListener(itemListener, itemListener.getItemIDs());
+	for (var i in ids) {
+		scriptManager.registerListener(EventType.OPHELD1, ids[i], itemListener);
+	}
 }
 
 function startFood (player, item, slot) {

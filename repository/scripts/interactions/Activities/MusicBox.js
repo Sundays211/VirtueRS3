@@ -28,33 +28,6 @@
  * @author Sundays211
  * @since 01/16/2015
  */
-var api;
-
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		switch (option) {
-			case 1:
-				//placeMusicBox(player, item, slot);
-				break;
-			default:
-				break;
-		}
-		return true;
-	},
-	
-	/* Returns the examine text for the item, or "null" to use the default */
-	getExamine : function (player, item) {
-		return null;
-	}
-
-});
 
 var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
 
@@ -104,11 +77,8 @@ var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcL
 
 /* Listen to the npc ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
 	var listener = new NpcListener();
-	var itemListener = new ItemListener();
 	scriptManager.registerNpcListener(listener, listener.getIDs());
-	scriptManager.registerItemListener(itemListener, itemListener.getItemIDs());
 };
 
 function checkOwnership(player, npc) {

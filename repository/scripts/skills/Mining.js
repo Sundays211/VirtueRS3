@@ -227,7 +227,7 @@ var listen = function(scriptManager) {
 	var listener = new MineListener();
 	for (var i in locs) {
 		//Bind option one on all mines to this listener
-		scriptManager.registerListener(EventType.LOC_OP1, locs[i], listener);
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], listener);
 	}
 };
 

@@ -4,7 +4,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.death.DeathEvent;
 import org.virtue.game.entity.combat.death.TransformDeathEvent;
 import org.virtue.game.entity.npc.AbstractNPC;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Tile;
 
 public class PestPortal extends AbstractNPC {
 	

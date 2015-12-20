@@ -31,9 +31,9 @@ import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.event.BenchSitting;
-import org.virtue.game.entity.region.Region;
-import org.virtue.game.entity.region.SceneLocation;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.SceneLocation;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.in.LocationClickEventContext;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.handler.GameEventHandler;
@@ -100,19 +100,19 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 			ScriptEventType type;
 			switch (context.getButton()) {
 			case ONE:
-				type = ScriptEventType.LOC_OP1;
+				type = ScriptEventType.OPLOC1;
 				break;
 			case TWO:
-				type = ScriptEventType.LOC_OP2;
+				type = ScriptEventType.OPLOC2;
 				break;
 			case THREE:
-				type = ScriptEventType.LOC_OP3;
+				type = ScriptEventType.OPLOC3;
 				break;
 			case FOUR:
-				type = ScriptEventType.LOC_OP4;
+				type = ScriptEventType.OPLOC4;
 				break;
 			case FIVE:
-				type = ScriptEventType.LOC_OP5;
+				type = ScriptEventType.OPLOC5;
 				break;
 			default:
 				return;

@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var SkillType = Java.type('org.virtue.game.content.skills.SkillType');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -37,20 +36,18 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 		switch (syntax) {
 		case "bxp":
 		case "bonusxp":
-			try {
-				var skill = SkillType.forID(parseInt(args[0]));
-				if (skill == null) {
-					api.sendConsoleMessage(player, "Invalid skill ID! ID must be between 0 (attack) and 25 (divination)");
-					return false;
-				}
-				var xpToAdd = parseInt(args[1])*10;
-				player.getSkills().addBonusExperience(skill, xpToAdd);
-				api.sendConsoleMessage(player, "Added "+(xpToAdd/10)+" bonus experience to "+skill.getName());
-				return true;				
-			} catch (ex) {
-				api.sendConsoleMessage(player, "You have used an invalid syntax. Usage: 'bxp [skillid] [xp]'");
-				return false;
+			var stat = api.getStatByName(args[0]);
+			if (stat == -1) {
+				sendCommandResponse(player, "Invalid skill: "+args[0], scriptArgs.console);
+				return;
 			}
+			var xp = parseInt(args[1]);
+			if (isNaN(xp)) {
+				sendCommandResponse(player, "Invalid xp: "+args[1], scriptArgs.console);
+				return;
+			}
+			addBonusExperience(player, stat, xp);
+			sendCommandResponse(player, "Added "+xp+" bonus experience to "+args[0], scriptArgs.console);
 			return;
 		case "xp":
 			if (args.length < 2) {
@@ -62,9 +59,13 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 				api.sendConsoleMessage(player, "Invalid skill: "+args[0]);
 				return;
 			}
-			var xpToAdd = parseInt(args[1]);
-			api.addExperience(player, stat, xpToAdd, false);
-			sendCommandResponse(player, "Added "+xpToAdd+" experience to "+args[0]);
+			var xp = parseInt(args[1]);
+			if (isNaN(xp)) {
+				sendCommandResponse(player, "Invalid xp: "+args[1], scriptArgs.console);
+				return;
+			}
+			api.addExperience(player, stat, xp, false);
+			sendCommandResponse(player, "Added "+xp+" experience to "+args[0]);
 			return;
 		case "boost":
 			if (args.length < 2) {
@@ -77,6 +78,10 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 				return false;
 			}
 			var boost = parseInt(args[1]);
+			if (isNaN(boost)) {
+				sendCommandResponse(player, "Invalid boost amount: "+args[1], scriptArgs.console);
+				return;
+			}
 			api.boostStat(player, stat, boost);
 			sendCommandResponse(player, "Boosted "+args[0]+" by "+boost+" levels.", scriptArgs.console);
 			return;

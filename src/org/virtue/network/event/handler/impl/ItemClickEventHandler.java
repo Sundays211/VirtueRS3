@@ -23,9 +23,9 @@ package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.GroundItem;
-import org.virtue.game.entity.region.Region;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.GroundItem;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.in.ItemClickEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

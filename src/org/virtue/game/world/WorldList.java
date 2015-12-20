@@ -37,8 +37,7 @@ public class WorldList {
 	private static final List<WorldEntry> entries = new LinkedList<>();
 	
 	static {
-		entries.add(new WorldEntry(1, "-", "127.0.0.1", "ZRS3 Economy", 255, true, true));
-		entries.add(new WorldEntry(2, "-", "127.0.0.1", "ZRS3 PK", 255, true, true));
+		entries.add(new WorldEntry(1, "-", "127.0.0.1", "World 1", 255, true, true));
 	}
 	
 	/**

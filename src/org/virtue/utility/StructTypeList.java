@@ -34,8 +34,8 @@ import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.cache.ReferenceTable.ChildEntry;
 import org.virtue.cache.ReferenceTable.Entry;
-import org.virtue.cache.def.impl.Js5Archive;
-import org.virtue.cache.def.impl.Js5ConfigGroup;
+import org.virtue.cache.config.Js5Archive;
+import org.virtue.cache.config.Js5ConfigGroup;
 import org.virtue.cache.def.impl.StructType;
 import org.virtue.cache.utility.ByteBufferUtils;
 

@@ -28,44 +28,17 @@
  * @author Sundays211
  * @since 16/01/2015
  */
-var api;
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs: function() {
-		return [26807];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, object, option) {
-		switch (option) {
-			case 2:
-				player.getDialogs().sendNpcChat("Hi "+api.getName(player)+", What would you like to do? TODO OPTIONS", 1);
-				return true;
-			case 6:
-				api.sendMessage(player, "Welcome to the J-Mod Secret Room.", 109);
-				return false;
-			default:
-				return false;
-		}		
-	},
-	
-	/* The range that a player must be within to interact */
-	getInteractRange : function (object, option) {
-		return 1;
-	},
-	
-	/* A backpack item used on the location */
-	handleItemOnLoc : function (player, location, item, invSlot) {
-		return false;
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		
+		player.getDialogs().sendNpcChat("Hi "+api.getName(player)+", What would you like to do? TODO OPTIONS", 1);
 	}
-
 });
 
 /* Listen to the object ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
 	var listener = new LocationListener();
-	scriptManager.registerLocationListener(listener, listener.getIDs());
+	scriptManager.registerListener(EventType.OPLOC1, 26807, listener);
 };

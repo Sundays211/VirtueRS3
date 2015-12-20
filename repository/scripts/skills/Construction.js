@@ -1,11 +1,10 @@
-var Tile = Java.type('org.virtue.game.entity.region.Tile');
-var DynamicRegion = Java.type('org.virtue.game.entity.region.DynamicRegion');
-var RegionTools = Java.type('org.virtue.game.entity.region.RegionTools');
+var Tile = Java.type('org.virtue.game.world.region.Tile');
+var DynamicRegion = Java.type('org.virtue.game.world.region.DynamicRegion');
+var RegionTools = Java.type('org.virtue.game.world.region.RegionTools');
 /**
  * @author Kayla
  * @since 11/17/2015
  */
-var api;
 
 var BACKPACK = 93;
 
@@ -82,32 +81,19 @@ var RoomTypes = {
 };
 
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs: function() {
-		return [15478, 15482, 15361];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, object, option) {
-		switch (option) {
-			case 1:
-				api.openDialog(player, "HouseOptions");
-			break;
-			case 4:
-				joinHouse(player);
-				break;
-			case 5:
-				api.openCentralWidget(player, 402, false);
-			break;
-			default:
-				api.sendMessage(player, "Unhandled construction action: locationid="+object.getID()+", option="+option);
-				break;
+var HousePortalListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		if (event == EventType.OPLOC1) {
+			api.openDialog(player, "HouseOptions");
+		} else if (event == EventType.OPLOC4) {
+			joinHouse(player);
+		} else if (event == EventType.OPLOC5) {
+			api.openCentralWidget(player, 402, false);
+		} else {
+			api.sendMessage(player, "Unhandled construction action: locationid="+locTypeId+", event="+event);
 		}
-		return true;
 	}
-
 });
 
 
@@ -139,11 +125,19 @@ var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.D
 	}
 });
 
-/* Listen to the object ids specified */
+/* Listen to the locations specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
-	var listener = new LocationListener();
-	scriptManager.registerLocationListener(listener, listener.getIDs());
+	var ids = [ 15478, 15482, 15361 ];
+	var listener = new HousePortalListener();
+	for (var i in ids) {
+		//Bind all options on house portals
+		scriptManager.registerListener(EventType.OPLOC1, ids[i], listener);
+		scriptManager.registerListener(EventType.OPLOC2, ids[i], listener);
+		scriptManager.registerListener(EventType.OPLOC3, ids[i], listener);
+		scriptManager.registerListener(EventType.OPLOC4, ids[i], listener);
+		scriptManager.registerListener(EventType.OPLOC5, ids[i], listener);
+	}	
+	
 	scriptManager.registerDialogListener(new DialogListener(), "HouseOptions");
 	var widgetListener = new WidgetListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());

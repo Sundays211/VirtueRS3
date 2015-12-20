@@ -1,6 +1,6 @@
 package org.virtue.game.entity.combat.impl.ability.script;
 
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.impl.FollowingType;
@@ -35,7 +35,7 @@ public class Wrack extends Ability {
 
 	@Override
 	public boolean canActivate(Entity entity, Entity lock) {
-		return hasRequirement(entity, SkillType.MAGIC, 1);
+		return hasRequirement(entity, StatType.MAGIC, 1);
 	}
 
 }

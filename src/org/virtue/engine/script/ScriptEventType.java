@@ -36,127 +36,157 @@ public enum ScriptEventType {
 	/**
 	 * The first option on a location
 	 */
-	LOC_OP1(1),
+	OPLOC1(1),
 	
 	/**
 	 * The second option on a location
 	 */
-	LOC_OP2(2),
+	OPLOC2(2),
 	
 	/**
 	 * The third option on a location
 	 */
-	LOC_OP3(3),
+	OPLOC3(3),
 	
 	/**
 	 * The fourth option on a location
 	 */
-	LOC_OP4(4),
+	OPLOC4(4),
 	
 	/**
 	 * The fifth option on a location
 	 */
-	LOC_OP5(5),
-	
-	/**
-	 * Called when an interface component is used on a location
-	 */
-	LOC_OPUSE(6),
+	OPLOC5(5),
 	
 	/**
 	 * Called when a backpack item is used on a location
 	 */
-	LOC_OP_ITEMUSE(7),
+	OPLOCU(6),
 	
 	/**
 	 * The first option on an NPC
 	 */
-	NPC_OP1(21),
+	OPNPC1(21),
 	
 	/**
 	 * The second option on an NPC
 	 */
-	NPC_OP2(22),
+	OPNPC2(22),
 	
 	/**
 	 * The third option on an NPC
 	 */
-	NPC_OP3(23),
+	OPNPC3(23),
 	
 	/**
 	 * The fourth option on an NPC
 	 */
-	NPC_OP4(24),
+	OPNPC4(24),
 	
 	/**
 	 * The fifth option on an NPC
 	 */
-	NPC_OP5(25),
+	OPNPC5(25),
 	
 	/**
-	 * Called when an interface component is used on an NPC
+	 * Called when an inventory item is used on an NPC
 	 */
-	NPC_OPUSE(26),
+	OPNPCU(26),
 	
 	/**
-	 * The first option on an inventory item
+	 * The first option on an item held in the player's inventory
 	 */
-	ITEM_IOP1(41),
+	OPHELD1(41),
 	
 	/**
-	 * The second option on an inventory item
+	 * The second option on an item held in the player's inventory
 	 */
-	ITEM_IOP2(42),
+	OPHELD2(42),
 	
 	/**
-	 * The third option on an inventory item
+	 * The third option on an item held in the player's inventory
 	 */
-	ITEM_IOP3(43),
+	OPHELD3(43),
 	
 	/**
-	 * The fourth option on an inventory item
+	 * The fourth option on an item held in the player's inventory
 	 */
-	ITEM_IOP4(44),
+	OPHELD4(44),
 	
 	/**
-	 * The fifth option on an inventory item
+	 * The fifth option on an item held in the player's inventory
 	 */
-	ITEM_IOP5(45),
+	OPHELD5(45),
 	
 	/**
-	 * Called when an interface component is used on an inventory item
+	 * Called when an inventory item is used on another inventory item
 	 */
-	ITEM_IOPUSE(46),
+	OPHELDU(46),
+	
+	/**
+	 * The first custom option on an item the player is currently wearing
+	 */
+	OPWORN1(47),
+	
+	/**
+	 * The second custom option on an item the player is currently wearing
+	 */
+	OPWORN2(48),
+	
+	/**
+	 * The third custom option on an item the player is currently wearing
+	 */
+	OPWORN3(49),
+	
+	/**
+	 * The fourth custom option on an item the player is currently wearing
+	 */
+	OPWORN4(50),
 	
 	/**
 	 * The first option on a ground item
 	 */
-	ITEM_OP1(51),
+	OPGROUND1(51),
 	
 	/**
 	 * The second option on a ground item
 	 */
-	ITEM_OP2(52),
+	OPGROUND2(52),
 	
 	/**
 	 * The third option on a ground item
 	 */
-	ITEM_OP3(53),
+	OPGROUND3(53),
 	
 	/**
 	 * The fourth option on a ground item
 	 */
-	ITEM_OP4(54),
+	OPGROUND4(54),
 	
 	/**
 	 * The fifth option on a ground item
 	 */
-	ITEM_OP5(55),
+	OPGROUND5(55),
 	
 	/**
-	 * Called when an interface component is used on a ground item
+	 * Called when an inventory item is used on a ground item
 	 */
-	ITEM_OPUSE(56),
+	OPGROUNDU(56),
+	
+	/**
+	 * The fifth custom option on an item the player is currently wearing
+	 */
+	OPWORN5(57),
+	
+	/**
+	 * The first custom option on an item in the player's bank (in both the withdraw and deposit screen)
+	 */
+	OPBANK1(58),
+	
+	/**
+	 * The second custom option on an item in the player's bank (deposit screen only)
+	 */
+	OPBANK2(59),	
 	
 	/**
 	 * The first option on an interface component
@@ -207,6 +237,31 @@ public enum ScriptEventType {
 	 * The tenth option on an interface component
 	 */
 	IF_BUTTON10(90),
+	
+	/**
+	 * Called when an interface component is used on another interface component
+	 */
+	IF_IFU(91),
+	
+	/**
+	 * Called when an interface component is used on a location
+	 */
+	IF_LOCU(92),
+	
+	/**
+	 * Called when an interface component is used on an NPC
+	 */
+	IF_NPCU(93),
+	
+	/**
+	 * Called when an interface component is used on a ground item
+	 */
+	IF_OBJU(94),
+	
+	/**
+	 * Called when an interface component is used on a player
+	 */
+	IF_PLAYERU(95),
 	
 	/**
 	 * Called once every server cycle (600ms)

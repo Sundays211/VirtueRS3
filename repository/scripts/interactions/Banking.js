@@ -28,45 +28,23 @@
  * @author Sundays211
  * @since 16/01/2015
  */
-var api;
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs: function() {
-		return [2213, 782, 11758, 34752, 83634, 10517, 29085, 42192, 14369, 20607, 42217, 79036];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, object, option) {
-		var optionText = api.getLocType(object).op[option-1];
-		api.sendMessage(player, optionText);
-		switch (option) {
-		case 1:
+var BankBoothListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		
+		switch (event) {
+		case EventType.OPLOC1:
 			api.openOverlaySub(player, 1017, 762, false);
-			return true;
-		case 2:
-			//Handing code for the second option //Open Bank
+			return;
+		case EventType.OPLOC2://Handing code for the second option //Open Bank
 			api.openOverlaySub(player, 1017, 762, false);
-			return true;
-		case 3://Collect
+			return;
+		case EventType.OPLOC3://Collect
 			api.openCentralWidget(player, 109, false);
-			return true;
-		default:
-			return false;
+			return;
 		}		
-	},
-	
-	/* The range that a player must be within to interact */
-	getInteractRange : function (object, option) {
-		return 1;
-	},
-	
-	/* A backpack item used on the location */
-	handleItemOnLoc : function (player, location, item, invSlot) {
-		return false;
 	}
-
 });
 
 var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
@@ -110,9 +88,14 @@ var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcL
 
 /* Listen to the object ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
+	var locs = [ 2213, 782, 11758, 34752, 83634, 10517, 29085, 42192, 14369, 20607, 42217, 79036 ];
+	var listener = new BankBoothListener();
+	for (var i in locs) {
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], listener);
+		scriptManager.registerListener(EventType.OPLOC2, locs[i], listener);
+		scriptManager.registerListener(EventType.OPLOC3, locs[i], listener);
+	}
+	
 	var npcListener = new NpcListener();
-	var listener = new LocationListener();
 	scriptManager.registerNpcListener(npcListener, npcListener.getIDs());
-	scriptManager.registerLocationListener(listener, listener.getIDs());
 };

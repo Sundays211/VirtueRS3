@@ -26,7 +26,6 @@ var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.Graphics
  * @author Kayla
  * @since 01/16/2015
  */
-var api;
 var THIEVING_SKILL = 17;
 var BACKPACK = 93;
 
@@ -184,31 +183,23 @@ var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcL
 
 });
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		ThievingStallStart(args.player, args.location);
+	}
+});
 
-	/* The object ids to bind to */
-	getIDs: function() {
-		return [34383];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, object, option) {
-		switch (option) {
-			case 2:
-				ThievingStallStart(player, object);
-				break;
-			default:
-				//api.sendMessage(player, "Unhandled thieving action: objectId="+object.getID()+", option="+option);
-				break;
-		}
-		return true;
-	},
-	
-	getInteractRange : function (object, option) {
-		return 1;
+/* Listen to the npc ids specified */
+var listen = function(scriptManager) {
+	var stalls = [34383];
+	var stallListener = new LocationListener();
+	for (var i in stalls) {
+		scriptManager.registerListener(EventType.OPLOC2, stalls[i], stallListener);
 	}
 
-});
+	var listener = new NpcListener();
+	scriptManager.registerNpcListener(listener, listener.getIDs());
+};
 
 function ThievingStallStart (player, object) {
 	print(api.getLocType(object.getID()).name+"\n");
@@ -262,14 +253,7 @@ function ThievingStallStart (player, object) {
 		}
 	}
 
-/* Listen to the npc ids specified */
-var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
-	var listener = new NpcListener();
-	var object = new LocationListener();
-	scriptManager.registerNpcListener(listener, listener.getIDs());
-	scriptManager.registerLocationListener(object, object.getIDs());
-};
+
 
 function ThievingStart (player, npc) {
 	print(api.getNpcType(npc.getID()).name+"\n");

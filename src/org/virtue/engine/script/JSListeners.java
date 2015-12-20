@@ -26,10 +26,8 @@ import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -37,20 +35,22 @@ import javax.script.ScriptEngineManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Virtue;
+import org.virtue.engine.script.api.ClanAPI;
+import org.virtue.engine.script.api.ScriptAPI;
+import org.virtue.engine.script.api.impl.VirtueClanAPI;
+import org.virtue.engine.script.api.impl.VirtueScriptAPI;
 import org.virtue.engine.script.listeners.AbilityListener;
 import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.DialogListener;
 import org.virtue.engine.script.listeners.EventListener;
-import org.virtue.engine.script.listeners.ItemListener;
 import org.virtue.engine.script.listeners.ItemOnEntityListener;
-import org.virtue.engine.script.listeners.ItemOnItemListener;
 import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.engine.script.listeners.NpcListener;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
 import org.virtue.engine.script.listeners.WidgetListener;
-import org.virtue.engine.script.listeners.WorldCycleListener;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.ability.ScriptedAbility;
@@ -125,15 +125,11 @@ public class JSListeners implements ScriptManager {
 
 	private Map<Integer, LocationListener> locationMap;
 
-	private Map<Integer, ItemOnItemListener> itemOnItemMap;
-
 	private Map<Integer, ItemOnEntityListener> itemOnEntityMap;
 
 	private Map<Integer, WidgetListener> widgetMap;
 
 	private Map<Integer, NpcListener> npcMap;
-	
-	private Map<Integer, ItemListener> itemMap;
 	
 	private Map<String, DialogListener> dialogMap;
 	
@@ -145,9 +141,9 @@ public class JSListeners implements ScriptManager {
 	
 	private Map<Integer, VarListener> vars;
 	
-	private Set<WorldCycleListener> cycleScripts;
-	
 	private ScriptAPI scriptAPI;
+	
+	private ClanAPI clanApi;
 	
 	private ScriptEngine engine;
 	
@@ -157,22 +153,21 @@ public class JSListeners implements ScriptManager {
 		listeners = new HashMap<>();
 		locationMap = new HashMap<Integer, LocationListener>();
 		itemOnEntityMap = new HashMap<Integer, ItemOnEntityListener>();
-		itemOnItemMap = new HashMap<Integer, ItemOnItemListener>();
 		widgetMap = new HashMap<Integer, WidgetListener>();
-		itemMap = new HashMap<Integer, ItemListener>();
 		npcMap = new HashMap<Integer, NpcListener>();
 		abstractNPCMap = new HashMap<Integer, AbstractNPC>();
 		combatScriptMap = new HashMap<Integer, CombatHandler>();
 		dialogMap = new HashMap<String, DialogListener>();
 		varMap = new HashMap<Integer, VarListener>();
 		vars = new HashMap<Integer, VarListener>();
-		cycleScripts = new HashSet<WorldCycleListener>();
 		scriptAPI = new VirtueScriptAPI();
+		clanApi = new VirtueClanAPI(Virtue.getInstance().getClans());
 		scriptDir = new File("./repository/scripts/");
 	}
 	
 	private void setConstants (ScriptEngine engine) {
 		engine.put("api", getApi());
+		engine.put("clanApi", clanApi);
 		
 		Map<String, Integer> map = new HashMap<>();
 		for (ScriptEventType type : ScriptEventType.values()) {
@@ -187,8 +182,8 @@ public class JSListeners implements ScriptManager {
 		engine.put("MesType", map);
 		
 		map = new HashMap<>();
-		for (SkillType type : SkillType.values()) {
-			map.put(type.name(), type.getID());
+		for (StatType type : StatType.values()) {
+			map.put(type.name(), type.getId());
 		}
 		engine.put("Stat", map);
 		
@@ -229,7 +224,7 @@ public class JSListeners implements ScriptManager {
 				}
 			}			
 		}
-		logger.info("Registerd " + locationMap.size() + " Location Script(s), " + itemOnItemMap.size() + " ItemOnItem Script(s), " + widgetMap.size() + " Widget Script(s).");
+		logger.info("Registerd " + locationMap.size() + " Location Script(s), " + npcMap.size() + " NPC Script(s), " + itemOnEntityMap.size() + " ItemOnEntity Script(s), " + widgetMap.size() + " Widget Script(s).");
 		return success;
 	}
 	
@@ -260,15 +255,12 @@ public class JSListeners implements ScriptManager {
 		listeners.clear();
 		locationMap.clear();
 		itemOnEntityMap.clear();
-		itemOnItemMap.clear();
 		widgetMap.clear();
-		itemMap.clear();
 		npcMap.clear();
 		dialogMap.clear();
 		abstractNPCMap.clear();
 		varMap.clear();
 		vars.clear();
-		cycleScripts.clear();
 		return load();
 	}
 	
@@ -312,12 +304,6 @@ public class JSListeners implements ScriptManager {
 		listeners.put(bind, listener);
 	}
 	
-	public void registerBackpackItemListener(ItemListener listener, int[] ids) {
-		for (int id : ids) {
-			itemMap.put(id, listener);
-		}  
-	}
-	
 	/**
 	 * Registers a {@link LocationListener} which is called whenever a specified location is interacted with
 	 * @param listener The listener 
@@ -339,19 +325,6 @@ public class JSListeners implements ScriptManager {
 		for (int id : ids) {
 			npcMap.put(id, listener);
 		}
-	}
-
-	/**
-	 * Registers an {@link ItemListener} which is called whenever an item is interacted with.
-	 * Interactions include inventory (backpack), bank, worn screen, and ground
-	 * @param listener The listener
-	 * @param ids The ids of the items to bind to
-	 */
-	@Deprecated
-	public void registerItemListener(ItemListener listener, int[] ids) {
-		for (int id : ids) {
-			itemMap.put(id, listener);
-		}		
 	}
 
 	/**
@@ -392,15 +365,6 @@ public class JSListeners implements ScriptManager {
 		for (int id : ids) {
 			itemOnEntityMap.put(id, listener);
 		}
-	}
-
-	public void registerItemOnItemListener(ItemOnItemListener listener, int id1, int id2) {
-		itemOnItemMap.put(id1, listener);
-		itemOnItemMap.put(id2, listener);
-	}
-	
-	public void registerCycleScript(WorldCycleListener listener) {
-		this.cycleScripts.add(listener);
 	}
 	
 	public void registerAbilityListener(AbilityListener listener, int shortcut) {
@@ -475,16 +439,6 @@ public class JSListeners implements ScriptManager {
 	public NpcListener forNpcID(int id) {
 		return npcMap.get(id);
 	}
-
-	@Override
-	public ItemListener forItemID(int id) {
-		return itemMap.get(id);
-	}
-	
-	@Override
-	public ItemOnItemListener forItemOnItem (int id1) {
-		return itemOnItemMap.get(id1);
-	}
 	
 	@Override
 	public ItemOnEntityListener forItemOnEntity (int itemID) {
@@ -501,9 +455,5 @@ public class JSListeners implements ScriptManager {
 	
 	public Collection<VarListener> getVarListeners () {
 		return vars.values();
-	}
-	
-	public Collection<WorldCycleListener> getCycleListeners () {
-		return cycleScripts;
 	}
 }

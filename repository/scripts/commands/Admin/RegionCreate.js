@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var DynamicRegion = Java.type('org.virtue.game.entity.region.DynamicRegion');
-var RegionTools = Java.type('org.virtue.game.entity.region.RegionTools');
-var ClipFlag = Java.type('org.virtue.game.entity.region.ClipFlag');
-var Region = Java.type('org.virtue.game.entity.region.Region');
+var DynamicRegion = Java.type('org.virtue.game.world.region.DynamicRegion');
+var RegionTools = Java.type('org.virtue.game.world.region.RegionTools');
+var ClipFlag = Java.type('org.virtue.game.world.region.ClipFlag');
+var Region = Java.type('org.virtue.game.world.region.Region');
 /**
  * @author Kayla
  * @date 11/17/2015

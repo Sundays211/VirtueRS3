@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.DynamicRegion;
+import org.virtue.game.world.region.DynamicRegion;
 
 /**
  * An encapsulation class for holding information

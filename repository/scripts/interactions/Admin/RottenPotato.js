@@ -21,7 +21,6 @@
  */
  
 var NPC = Java.type('org.virtue.game.entity.npc.NPC');
-var Tile = Java.type('org.virtue.game.entity.region.Tile');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -31,44 +30,29 @@ var Tile = Java.type('org.virtue.game.entity.region.Tile');
  * @author Sundays21
  * @since 24/01/2015
  */
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-	
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [ 5733 ];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;
+		var item = args.item;
+		var slot = args.slot;
+		
 		if (!api.isAdmin(player)) {
-				player.getDialogs().sendNpcChat("Eww! This was yuck! I don't think I want another bite.", 2253);
-				api.runAnimation(player, 18001);
-				api.delCarriedItem(player, item.getID(), 1);
-				return true;
+			player.getDialogs().sendNpcChat("Eww! This was yuck! I don't think I want another bite.", 2253);
+			api.runAnimation(player, 18001);
+			api.delCarriedItem(player, objTypeId, 1);
+			return;
 		}
-		switch (option) {
-		case 1://Eat Option
+		if (event == EventType.OPHELD1) {//Eat Option
 			api.openDialog(player, "RottenPotato2");
-			return true;
-		case 2://Heal Option
+		} else if (event == EventType.OPHELD2) {//Heal Option
 			api.sendMessage(player, "You set your health to max.");
-			player.getImpactHandler().restoreLifepoints();
-			return true;
-		case 3://CM-Tool
-			api.openDialog(player, "RottenPotato");
-			return true;
-		case 4://commands list
-			api.openDialog(player, "RottenPotato3");		
-			return false;
-		default:
-			return false;
+			player.getImpactHandler().restoreLifepoints();			
+		} else if (event == EventType.OPHELD3) {//CM-Tool
+			api.openDialog(player, "RottenPotato");			
+		} else if (event == EventType.OPHELD4) {//Commands list
+			api.openDialog(player, "RottenPotato3");			
 		}
-	},
-	
-	getExamine : function (player, item) {
-		return null;
 	}
-
 });
 
 var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
@@ -84,8 +68,8 @@ var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.D
 			api.openOverlaySub(player, 1017, 762, false);
 			return false;//This will prevent the interface from closing
 		case 2:
-			for (skill=0; skill < 26; skill++) {
-				player.getSkills().addExperience(SkillType.forID(skill), 13034431);
+			for (var skill=0; skill < 26; skill++) {
+				api.addExperience(player, skill, 13034431, false);
 			}
 			return true;
 		case 3:
@@ -107,14 +91,14 @@ var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.D
 			api.sendMessage(player, "Bank is now clear!");
 			return true;
 		case 9:
-			if (api.freeSpaceTotal(player, "backpack") < 1) {
+			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 				api.sendMessage(player, "Not enough space in your inventory space.");
 				return;
 			}
 			api.addCarriedItem(player, 9813, 1);
 			return true;
 		case 10:
-			if (api.freeSpaceTotal(player, "backpack") < 1) {
+			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 				api.sendMessage(player, "Not enough space in your inventory space.");
 				return;
 			}
@@ -154,43 +138,43 @@ var DialogListener2 = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			player.getAppearance().refresh();
 			return true;
 		case 5:
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			
-			var npc = NPC.create(90, new Tile(player.getCurrentTile()));
+			var npc = NPC.create(90, api.getCoords(player));
 			npc.setCanRespawn(false);
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			return true;
@@ -263,60 +247,63 @@ var DialogListener3 = Java.extend(Java.type('org.virtue.engine.script.listeners.
 });
 
 function SpawnBalloonEvent(player) {
-			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2275, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2275, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2276, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2277, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-			
-			var npc = NPC.create(2278, new Tile(player.getCurrentTile()));
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	var npc = NPC.create(2276, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2277, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2278, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2276, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2277, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2278, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2275, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2276, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2277, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2278, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2277, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2278, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2275, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2276, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2277, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+	
+	var npc = NPC.create(2278, api.getCoords(player));
+	Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 }
 
 /* Listen to the item ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var itemListener = new ItemListener();
-	scriptManager.registerItemListener(itemListener, itemListener.getItemIDs());
+	scriptManager.registerListener(EventType.OPHELD1, 5733, itemListener);
+	scriptManager.registerListener(EventType.OPHELD2, 5733, itemListener);
+	scriptManager.registerListener(EventType.OPHELD3, 5733, itemListener);
+	scriptManager.registerListener(EventType.OPHELD4, 5733, itemListener);
+	
 	scriptManager.registerDialogListener(new DialogListener(), "RottenPotato");
 	scriptManager.registerDialogListener(new DialogListener2(), "RottenPotato2");
 	scriptManager.registerDialogListener(new DialogListener3(), "RottenPotato3");

@@ -3,7 +3,7 @@ var World = Java.type('org.virtue.game.World');
 
 var NPC = Java.type('org.virtue.game.entity.npc.NPC');
 var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
-var Tile = Java.type('org.virtue.game.entity.region.Tile');
+var Tile = Java.type('org.virtue.game.world.region.Tile');
 
 var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 

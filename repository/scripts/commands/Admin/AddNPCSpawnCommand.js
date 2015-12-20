@@ -23,7 +23,7 @@
 var BufferedWriter = Java.type('java.io.BufferedWriter');
 var FileWriter = Java.type('java.io.FileWriter');
 var NPC = Java.type('org.virtue.game.entity.npc.NPC');
-var Tile = Java.type('org.virtue.game.entity.region.Tile');
+var Tile = Java.type('org.virtue.game.world.region.Tile');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -1,6 +1,6 @@
 package org.virtue.game.content.skills.magic;
 
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
@@ -127,7 +127,7 @@ public abstract class MagicSpell {
 	public boolean hasRequirements(Entity entity, Node target) {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
-			if (player.getSkills().getCurrentLevel(SkillType.MAGIC) < level) {
+			if (player.getSkills().getCurrentLevel(StatType.MAGIC) < level) {
 				player.getDispatcher().sendGameMessage("You need a Magic level of " + level + " to cast this spell!");
 				return false;
 			}

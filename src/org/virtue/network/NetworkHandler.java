@@ -133,7 +133,7 @@ public class NetworkHandler implements ChannelInboundHandler {
 				case HANDHSHAKE_CREATION:
 					//ctx.channel().attr(attachment).set(new CreationSession(ctx.channel()));
 					break;
-				case HANDSHAKE_SOCIAL:
+				case HANDSHAKE_SOCIAL_LOGIN:
 					ctx.channel().attr(attachment).set(new LoginSession(ctx.channel()));
 					break;
 				default: 

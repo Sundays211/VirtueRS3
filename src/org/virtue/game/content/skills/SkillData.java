@@ -35,7 +35,7 @@ public class SkillData implements GameEventContext {
 	private int experience = 0;
 	private int currentLevel = 0;
 	private int baseLevel = 1;
-	private final SkillType skill;
+	private final StatType skill;
 	
 	public static int[] levelXpNeeded = new int[120];
 	
@@ -48,11 +48,11 @@ public class SkillData implements GameEventContext {
 		}
 	}
 	
-	public SkillData (SkillType skill) {
+	public SkillData (StatType skill) {
 		this(skill, 0, 1);
 	}
 	
-	public SkillData (SkillType skill, int xp, int level) {
+	public SkillData (StatType skill, int xp, int level) {
 		this.skill = skill;
 		this.experience = xp;
 		this.currentLevel = level;
@@ -63,7 +63,7 @@ public class SkillData implements GameEventContext {
 	 * Gets the id of the skill (the id should be between 1 and the total number of skills)
 	 * @return	The id.
 	 */
-	public SkillType getSkill () {
+	public StatType getSkill () {
 		return skill;
 	}
 	

@@ -626,12 +626,12 @@ FlowerPatch.prototype.harvest = function (player, crop) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 		process : function (player) {
 			if (delay <= 0) {
-				if (api.freeSpaceTotal(player, "backpack") < 1) {
+				if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 					api.sendMessage(player, "You need free space!");
 					return true;
 				}
 				api.addCarriedItem(player, crop.productId, 1);
-				api.addExperience(player, "farming", crop.harvestXp, true);
+				api.addExperience(player, Stat.FARMING, crop.harvestXp, true);
 				that.setEmpty(player);
 				return true;//It's only possible to get one product from flower patches		
 			}
@@ -748,110 +748,72 @@ var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarL
 
 });
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs: function() {
-		locTypes = [ 7836, 7837, 7838, 7839, 8388, 8389, 8390, 8391 ];
-		for (var key in patches) {
-			locTypes.push(key);
+var PatchListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		var option = -1;
+		if (event == EventType.OPLOC1) {
+			option = 1;
+		} else if (event == EventType.OPLOC2) {
+			option = 2;			
+		} else if (event == EventType.OPLOC3) {
+			option = 3;			
+		} else if (event == EventType.OPLOC4) {
+			option = 4;			
+		} else if (event == EventType.OPLOC5) {
+			option = 5;			
 		}
-		return locTypes;
-	},
-
-	/* An option selected on the location */
-	handleInteraction: function(player, location, option) {
-		if (location.getID() in patches) {
-			return patches[location.getID()].handlePatch(player, option);
+		
+		if (option == -1) {
+			api.logError("Invalid event type: "+event);
+			return;
 		}
-		switch (location.getID()) {
+		
+		var handled = false;
+		
+		if (locTypeId in patches) {
+			handled = patches[locTypeId].handlePatch(player, option);
+		}
+		switch (locTypeId) {
 		case 7836://Falador compost
-			return Farming.COMPOST.handleBin(player, 1, option);
+			handled = Farming.COMPOST.handleBin(player, 1, option);
+			break;
 		case 7837://Catherby compost
-			return Farming.COMPOST.handleBin(player, 2, option);
+			handled = Farming.COMPOST.handleBin(player, 2, option);
+			break;
 		case 7838://Morytania compost
-			return Farming.COMPOST.handleBin(player, 3, option);
+			handled = Farming.COMPOST.handleBin(player, 3, option);
+			break;
 		case 7839://Ardougne compost
-			return Farming.COMPOST.handleBin(player, 4, option);
+			handled = Farming.COMPOST.handleBin(player, 4, option);
+			break;
 		case 8388://Taverly tree patch
-			return Farming.TREES.handlePatch(player, 1, option);
+			handled = Farming.TREES.handlePatch(player, 1, option);
+			break;
 		case 8389://Falador tree patch
-			return Farming.TREES.handlePatch(player, 2, option);
+			handled = Farming.TREES.handlePatch(player, 2, option);
+			break;
 		case 8390://Varrock tree patch
-			return Farming.TREES.handlePatch(player, 3, option);
+			handled = Farming.TREES.handlePatch(player, 3, option);
+			break;
 		case 8391://Lumbridge tree patch
-			return Farming.TREES.handlePatch(player, 4, option);
+			handled = Farming.TREES.handlePatch(player, 4, option);
+			break;
 		default:
-			return false;
-		}		
-	},
-	
-	/* The range that a player must be within to interact */
-	getInteractRange : function (location, option) {
-		return 1;
-	},
-	
-	/* A backpack item used on the location */
-	handleItemOnLoc : function (player, location, item, invSlot) {
-		api.sendMessage(player, "Old listener");
-		if (location.getID() in patches) {
-			var patch = patches[location.getID()];
-			if (item.getID() in seedLookup) {
-				if (!patch.isEmpty(player)) {
-					api.sendMessage(player, "This patch needs to be weeded and empty before you can do that.");
-					return true;
-				}
-				var crop = seedLookup[item.getID()];
-				if (crop.type == patch.type) {
-					patch.plantSeed(player, crop);
-				} else {
-					api.sendMessage(player, "You cannot plant the seed in this patch.");
-				}
-				return true;
-			} else if (item.getID() == 6032 || item.getID() == 6034) {//Compost
-				if (patch.getCompost(player) != 0) {
-					api.sendMessage(player, "This patch has already been treated with compost.");
-				} else if (patch.isEmpty(player)) {
-					patch.applyCompost(player, item.getID() == 6032 ? 1 : 2);
-				} else {
-					api.sendMessage(player, "This patch needs to be weeded and empty before you can do that.");
-				}				
-				return true;
-			}
+			break;
+		}	
+		if (!handled) {
+			api.sendMessage(player, "Unhandled farming patch option: patch="+locTypeId+", option="+option);
 		}
-		switch (location.getID()) {
-		case 7836://Falador compost
-			return false;
-		case 7837://Catherby compost
-			return false;
-		case 7838://Morytania compost
-			return false;
-		case 7839://Ardougne compost
-			return false;
-		case 8388://Taverly tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 1, item, invSlot);
-		case 8389://Falador tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 2, item, invSlot);
-		case 8390://Varrock tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 3, item, invSlot);
-		case 8391://Lumbridge tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 4, item, invSlot);
-		default:
-		}
-		api.sendMessage(player, "Used item on location: item="+item+", location="+location+", slot="+invSlot);
-		return true;
 	}
-
 });
 
 var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, args) {
-		var player = args.player;
-		var locId = args.loctype;
-		
-		var invSlot = args.slot;
-		var itemId = args.objtype;
-		var item = args.item;
+	invoke : function (event, locId, args) {
+		var player = args.player;		
+		var invSlot = args.useslot;
+		var item = args.useitem;
+		var itemId = api.getId(item);
 		api.sendMessage(player, "Used item "+item+" on patch "+args.location);
 		
 		if (locId in patches) {
@@ -898,76 +860,96 @@ var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listen
 	}
 });
 
-var ItemOnItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemOnItemListener'), {
+var PlantPotListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;		
+		var item = args.item;
+		var slot = args.slot;
+		var useitem = args.useitem;
+		var useslot = args.useslot;
 
-	/* The first option on an object */
-	handleInteraction: function(player, item1, slot1, item2, slot2) {
-		if (item1.getID() == item2.getID()) {
-			return true;//Item used on itself
-		}
-		if (item1.getID() == 5354) {
-			if (Farming.TREE_SEEDS[item2.getID()] !== undefined) {
-				Farming.plantInPot(player, Farming.TREE_SEEDS[item2.getID()].seedling, 6825);
-				return true;
+		if (objTypeId == 5354) {//Empty plant pot
+			if (Farming.TREE_SEEDS[api.getId(useitem)] !== undefined) {
+				Farming.plantInPot(player, Farming.TREE_SEEDS[api.getId(useitem)].seedling, 6825);
+				return;
 			} else {
-				return false;
+				defaultOpHeldUseHandler(player, args);
+				return;
 			}
 		}
 		var wateringCans = api.getEnumType(136);
-		for (var i=0; i<wateringCans.getSize(); i++) {
-			if (wateringCans.getValueInt(i) == item1.getID()) {
-				if (Farming.getBySeedling(item2.getID()) !== undefined) {
-					Farming.waterPot(player, Farming.getBySeedling(item2.getID()).seedlingW, 6826);
-					return true;
-				} else {
-					return false;
+		
+		if (Farming.getBySeedling(objTypeId) !== undefined) {
+			for (var i=0; i<wateringCans.getSize(); i++) {
+				if (wateringCans.getValueInt(i) == api.getId(useitem)) {
+					Farming.waterPot(player, Farming.getBySeedling(objTypeId).seedlingW, 6826);
+					return;
 				}
 			}
 		}
-		var item = item1;
-		var tool = item2;
-		if (Farming.TREE_SEEDS[item.getID()] === undefined) {
-			item = item2;
-			tool = item1;
+		
+		for (var i=0; i<wateringCans.getSize(); i++) {
+			if (wateringCans.getValueInt(i) == objTypeId) {
+				if (Farming.getBySeedling(api.getId(useitem)) !== undefined) {
+					Farming.waterPot(player, Farming.getBySeedling(api.getId(useitem)).seedlingW, 6826);
+					return;
+				} else {
+					defaultOpHeldUseHandler(player, args);
+					return;
+				}
+			}
 		}
-		switch (tool.getID()) {
-		case 5354:
-			Farming.plantInPot(player, Farming.TREE_SEEDS[item.getID()].seedling, 6825);
-			return true;
+		if (Farming.TREE_SEEDS[objTypeId] !== undefined) {
+			if (api.getId(useitem) == 5354) {
+				Farming.plantInPot(player, Farming.TREE_SEEDS[objTypeId].seedling, 6825);
+				return;
+			}
 		}
-		api.sendMessage(player, "Unhandled farming option: item1="+item1.getID()+", item2="+item2.getID());
-		return true;
+		defaultOpHeldUseHandler(player, args);
+		return;
 	}
-
 });
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
 	var varListener = new VarListener();
-	var locationListener = new LocationListener();
-	var itemOnItemListener = new ItemOnItemListener();
 	scriptManager.registerVarListener(varListener, varListener.getIDs());
 	
 	var locTypes = [ 7836, 7837, 7838, 7839, 8388, 8389, 8390, 8391 ];
 	for (var key in patches) {
 		locTypes.push(key);
 	}
+	var patchListener = new PatchListener();
 	var itemOnPatchListener = new ItemOnPatchListener();
 	for (var i in locTypes) {
-		scriptManager.registerListener(EventType.LOC_OP_ITEMUSE, locTypes[i], itemOnPatchListener);
+		scriptManager.registerListener(EventType.OPLOCU, locTypes[i], itemOnPatchListener);
+		//For now we'll bind all events, but most are probably not needed...
+		scriptManager.registerListener(EventType.OPLOC1, locTypes[i], patchListener);
+		scriptManager.registerListener(EventType.OPLOC2, locTypes[i], patchListener);
+		scriptManager.registerListener(EventType.OPLOC3, locTypes[i], patchListener);
+		scriptManager.registerListener(EventType.OPLOC4, locTypes[i], patchListener);
+		scriptManager.registerListener(EventType.OPLOC5, locTypes[i], patchListener);
 	}
 	
-	scriptManager.registerLocationListener(locationListener, locationListener.getIDs());
-	var TREE_SEEDS = [ 5312, 5313, 5314, 5315, 5316 ];
-	for (var i in TREE_SEEDS) {
-		var seed = TREE_SEEDS[i];
-		scriptManager.registerItemOnItemListener(itemOnItemListener, 5354, seed);
+	var treeSeeds = [ 5312, 5313, 5314, 5315, 5316 ];
+	var plantPotListener = new PlantPotListener();
+	scriptManager.registerListener(EventType.OPHELDU, 5354, plantPotListener);
+	for (var i in treeSeeds) {
+		var seed = treeSeeds[i];
+		scriptManager.registerListener(EventType.OPHELDU, seed, plantPotListener);
 	}
+	
+	var seedlings = [ 5358, 5359, 5360, 5361, 5362 ];
+	for (var i in seedlings) {
+		var seedling = seedlings[i];
+		scriptManager.registerListener(EventType.OPHELDU, seedling, plantPotListener);
+	}
+	
 	var wateringCans = api.getEnumType(136);
 	for (var i=0; i<wateringCans.getSize(); i++) {
 		var itemID = wateringCans.getValueInt(i);
 		if (itemID != -1) {
-			scriptManager.registerItemOnItemListener(itemOnItemListener, itemID, -1);//Watering can
+			scriptManager.registerListener(EventType.OPHELDU,itemID, plantPotListener);//Watering can
 		}
 	}
 };

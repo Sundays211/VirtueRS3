@@ -26,9 +26,9 @@ import java.util.Set;
 
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.DynamicRegion;
-import org.virtue.game.entity.region.Region;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.DynamicRegion;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
 import org.virtue.network.event.encoder.EventEncoder;

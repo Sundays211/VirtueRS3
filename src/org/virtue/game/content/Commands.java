@@ -11,9 +11,9 @@ import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.DynamicRegion;
-import org.virtue.game.entity.region.RegionTools;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.DynamicRegion;
+import org.virtue.game.world.region.RegionTools;
+import org.virtue.game.world.region.Tile;
 
 public class Commands {
 

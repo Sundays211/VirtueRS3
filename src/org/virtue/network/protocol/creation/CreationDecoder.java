@@ -48,6 +48,7 @@ import org.virtue.utility.XTEACipher;
  */
 public class CreationDecoder extends ByteToMessageDecoder {
 
+
 	/* (non-Javadoc)
 	 * @see io.netty.handler.codec.ByteToMessageDecoder#decode(io.netty.channel.ChannelHandlerContext, io.netty.buffer.ByteBuf, java.util.List)
 	 */

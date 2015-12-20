@@ -59,8 +59,10 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
 		if (buf.isReadable()) {
 			HandshakeMessage type = new HandshakeMessage(buf.readUnsignedByte());
-			if (type.getType() == null)
+			if (type.getType() == null) {
+				ctx.close();//Disconnect the player if they have an invalid handshake code.
 				return;
+			}
 			switch (type.getType()) {
 			case HANDSHAKE_LOGIN:
 				ensureResponse(ctx);
@@ -76,7 +78,7 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
 			case HANDHSHAKE_CREATION:
 				ctx.pipeline().replace("decoder", "decoder", new CreationDecoder());
 				break;
-			case HANDSHAKE_SOCIAL:
+			case HANDSHAKE_SOCIAL_LOGIN:
 				ensureResponse(ctx);
 				ctx.pipeline().replace("decoder", "decoder", new SocialDecoder());
 				break;
@@ -84,11 +86,11 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
 				break;
 			}
 			//ctx.pipeline().remove(HandshakeDecoder.class);
-			if (buf.isReadable()) {
+			//if (buf.isReadable()) {
 				//out.add(new Object[] { type, buf.readBytes(buf.readableBytes()) });
-			} else {
+			//} else {
 				out.add(type);
-			}
+			//}
 		}
 	}
 	
@@ -99,8 +101,9 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
 	}
 	
 	private void ensureResponse(ChannelHandlerContext ctx, ByteBuf buf) {
-		if (buf.readableBytes() < 6)
+		if (buf.readableBytes() < 6) {
 			return;
+		}
 		
 		ByteBuf buffer = Unpooled.buffer();
 		
@@ -109,7 +112,7 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
         	int major = buf.readInt();
         	int minor = buf.readInt();
         	String token = BufferUtility.readString(buf);
-           if (major != Constants.FRAME_MAJOR && minor != Constants.FRAME_MINOR) {
+            if (major != Constants.FRAME_MAJOR && minor != Constants.FRAME_MINOR) {
         	   logger.warn("Bad connection: Invalid major-minor version (sent: "+major+"_"+minor+", expected: "+Constants.FRAME_MAJOR+"_"+Constants.FRAME_MINOR+")");
                buffer.writeByte(6);
             } else {

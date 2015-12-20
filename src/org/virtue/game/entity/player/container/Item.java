@@ -1,8 +1,6 @@
 package org.virtue.game.entity.player.container;
 
-import org.virtue.Virtue;
 import org.virtue.cache.def.impl.ItemType;
-import org.virtue.engine.script.listeners.ItemOnItemListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.node.Node;
 import org.virtue.utility.text.StringUtility;
@@ -64,14 +62,14 @@ public class Item extends Node {
 	}
 
 	/**
-	 * @param amount amount the amount to set
+	 * @param count the amount to set
 	 * @throws IllegalArgumentException If the amount specified is negative
 	 */
-	public void setAmount(int amount) throws IllegalArgumentException {
-		if (amount < 0) {
-			throw new IllegalArgumentException("Item amount must be a positive integer. Amount supplied: "+amount);
+	public void setAmount(int count) throws IllegalArgumentException {
+		if (count < 0) {
+			throw new IllegalArgumentException("Item count must be a positive integer. Count supplied: "+count);
 		}
-		this.amount = amount;
+		this.amount = count;
 	}
 	
 	/**
@@ -153,10 +151,4 @@ public class Item extends Node {
 	public String toString () {
 		return new StringBuilder().append("{id=").append(id).append(", amount=").append(amount).append("}").toString();
 	}
-	
-	public boolean handleItemOnItem (Player player, int invSlot, Item item2, int item2Slot) {
-		ItemOnItemListener listener = Virtue.getInstance().getScripts().forItemOnItem(this.getId());
-		return listener == null ? false : listener.handleInteraction(player, this, invSlot, item2, item2Slot);
-	}
-
 }

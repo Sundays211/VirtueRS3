@@ -4,34 +4,25 @@
 
 var usingRing;
 
-
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-
-	/* The item ids to bind to */
-	getItemIDs : function() {
-		return [ 7927 ];
-	},
-
-	/* The first option on an object */
-	handleInteraction : function(player, item, slot, option) {
-		switch (item.getId()) {
-		case 7927:
-			switch (option) {
-			case 2:
-				renderEasterRing(player);
-				return true;
-			}
-			return true;
-		default:
-			return false;
-		}
-	},
-
-	getExamine : function(player, item) {
-		return null;
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;
+		var item = args.item;
+		var slot = args.slot;
+		
+		renderEasterRing(player);
 	}
-	
 });
+
+/* Listen to the item ids specified */
+var listen = function(scriptManager) {
+	var ids = [ 7927 ];
+	var itemListener = new ItemListener();
+	for (var i in ids) {
+		//Listen to option 2
+		scriptManager.registerListener(EventType.OPHELD2, ids[i], itemListener);
+	}
+}
 
 function renderEasterRing(player) {
 	var eggType = [3689, 3690, 3691, 3692, 3693, 3694];

@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
-var FaceEntityBlock = Java.type('org.virtue.network.protocol.update.block.FaceEntityBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -30,47 +28,89 @@ var FaceEntityBlock = Java.type('org.virtue.network.protocol.update.block.FaceEn
  * @author Sundays211
  * @since 04/19/2015
  */
-var api;
 
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-	
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [1712];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		switch (option) {
-		case 22://Edge
-			api.teleportEntity(player, 3086, 3502, 0);
-			return true;
-		case 23://karamaja
-			api.teleportEntity(player, 3086, 3502, 0);
-			return true;
-		case 24://Draynor village
-			api.teleportEntity(player, 3110, 3294, 0);
-			return true;
-		case 25://alkarid
-			api.teleportEntity(player, 3086, 3502, 0);
-			return true;
-		default:
-			api.sendMessage(player, "Unhandled equipment option: item="+item.getID()+", option="+option);
+var GloryListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;
+		switch (event) {
+		case EventType.OPWORN1://Edgeville
+			Glory.edgevilleTeleport(player);
+			break;
+		case EventType.OPWORN2://Karamja
+			Glory.karamjaTeleport(player);
+			break;
+		case EventType.OPWORN3://Draynor Village
+			Glory.draynorTeleport(player);
+			break;
+		case EventType.OPWORN4://Al Kharid
+			Glory.alkharidTeleport(player);
+			break;
 		}
-		return true;
-	},
-	
-	/* Returns the examine text for the item, or "null" to use the default */
-	getExamine : function (player, item) {
-		return null;
+		Glory.useCharge(player, Inv.EQUIPMENT, objTypeId, args.slot);
 	}
-
 });
 
 
-/* Listen to the npc ids specified */
+/* Listen to the items specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
-	var itemListener = new ItemListener();
-	scriptManager.registerItemListener(itemListener, itemListener.getItemIDs());
+	var ids = [1706, 1708, 1710, 1712];
+	var itemListener = new GloryListener();
+	for (var i in ids) {
+		scriptManager.registerListener(EventType.OPWORN1, ids[i], itemListener);
+		scriptManager.registerListener(EventType.OPWORN2, ids[i], itemListener);
+		scriptManager.registerListener(EventType.OPWORN3, ids[i], itemListener);
+		scriptManager.registerListener(EventType.OPWORN4, ids[i], itemListener);
+	}
 };
+
+var Glory = {
+		edgevilleTeleport : function (player) {
+			api.teleportEntity(player, 3086, 3502, 0);
+		},
+		karamjaTeleport : function (player) {
+			api.teleportEntity(player, 2919, 3163, 0);
+		},
+		draynorTeleport : function (player) {
+			api.teleportEntity(player, 3081, 3251, 0);
+		},
+		alkharidTeleport : function (player) {
+			api.teleportEntity(player, 3304, 3124, 0);
+		},
+		useCharge : function (player, inv, itemId, slot) {
+			var newId = 1704;
+			var chargesLeft = 0;
+			switch (itemId) {
+			case 1712:
+				newId = 1710;
+				chargesLeft = 3;
+				break;
+			case 1710:
+				newId = 1708;
+				chargesLeft = 2;
+				break;
+			case 1708:
+				newId = 1706;
+				chargesLeft = 1;
+				break;
+			case 1706:
+				newId = 1704;
+				chargesLeft = 0;
+				break;
+			}
+			api.setInvSlot(player, inv, slot, newId, 1);
+			switch (chargesLeft) {
+			case 3:
+				api.sendMessage(player, "Your amulet has three charges left.");
+				break;
+			case 2:
+				api.sendMessage(player, "Your amulet has two charges left.");
+				break;
+			case 1:
+				api.sendMessage(player, "Your amulet has one charge left.");
+				break;
+			case 0:
+				api.sendMessage(player, "<col=ff0000>You use your amulet's last charge.</col>");
+				break;
+			}
+		}
+}

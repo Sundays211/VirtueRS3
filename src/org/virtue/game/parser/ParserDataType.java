@@ -27,15 +27,15 @@ package org.virtue.game.parser;
  * @since Sep 30, 2014
  */
 public enum ParserDataType {
-	CHARACTER(System.getenv("APPDATA") + "//Z835/character/game//"), 
-	FRIEND(System.getenv("APPDATA") + "//Z835/character/friend//"), 
-	IGNORE(System.getenv("APPDATA") + "//Z835/character/ignore//"), 
-	VAR(System.getenv("APPDATA") + "//Z835/character/var//"), 
-	INV(System.getenv("APPDATA") + "//Z835/character/inv//"), 
-	SKILL(System.getenv("APPDATA") + "//Z835/character/skill//"),
-	EXCHANGE(System.getenv("APPDATA") + "//Z835/character/exchange//"),
-	LAYOUT(System.getenv("APPDATA") + "//Z835/character/layout//"),
-	CLAN_SETTINGS(System.getenv("APPDATA") + "//Z835/clan/settings/");
+	CHARACTER("./repository/character/game/"), 
+	FRIEND("./repository/character/friend/"), 
+	IGNORE("./repository/character/ignore/"), 
+	VAR("./repository/character/var/"), 
+	INV("./repository/character/inv/"), 
+	SKILL("./repository/character/skill/"),
+	EXCHANGE("./repository/character/exchange/"),
+	LAYOUT("./repository/character/layout/"),
+	CLAN_SETTINGS("./repository/clan/settings/");
 	
 	String path;
 	

@@ -28,7 +28,6 @@ var CraftAction = Java.type('org.virtue.game.content.skills.CraftAction');
  * @author Sundays211
  * @since 19/11/2014
  */
-var api;
 
 var FletchLog = {
 		NORMAL : {
@@ -115,7 +114,7 @@ var FletchType = {
 
 var FletchMaterial = {
 		1511 : {//Normal logs
-			itemID : 1511,//The item ID of the material
+			itemId : 1511,//The item ID of the material
 			useWith : [],
 			type : FletchType.FLETCH_WOOD,//The main category of the fletching action
 			category : 6947,//The sub category (eg "normal", "oak", "willow", etc)
@@ -124,7 +123,7 @@ var FletchMaterial = {
 			delay : 3//The time taken to craft products
 		},
 		1521 : {//Oak logs
-			itemID : 1521,
+			itemId : 1521,
 			useWith : [],
 			type : FletchType.FLETCH_WOOD,
 			category : 6949,
@@ -133,7 +132,7 @@ var FletchMaterial = {
 			delay : 3
 		},
 		1519 : {//Willow logs
-			itemID : 1519,
+			itemId : 1519,
 			useWith : [],
 			type : FletchType.FLETCH_WOOD,
 			category : 6950,
@@ -142,7 +141,7 @@ var FletchMaterial = {
 			delay : 3
 		},
 		6333 : {//Teak logs
-			itemID : 6333,
+			itemId : 6333,
 			useWith : [],
 			type : FletchType.FLETCH_WOOD,
 			category : 6951,
@@ -151,7 +150,7 @@ var FletchMaterial = {
 			delay : 3
 		},
 		1517 : {//Maple logs
-			itemID : 1517,
+			itemId : 1517,
 			useWith : [],
 			type : FletchType.FLETCH_WOOD,
 			category : 6952,
@@ -160,7 +159,7 @@ var FletchMaterial = {
 			delay : 3
 		},
 		6332 : {//Mahogany logs
-			itemID : 6332,
+			itemId : 6332,
 			useWith : [],
 			type : FletchType.FLETCH_WOOD,
 			category : 6953,
@@ -169,56 +168,56 @@ var FletchMaterial = {
 			delay : 3
 		},
 		1777 : {//Bow string
-			itemID : 1777,
+			itemId : 1777,
 			useWith : [],
 			type : FletchType.STRING_BOW,
 			defaultProduct : -1,//Auto select product
 			animation : -1//This shouldn't be selected as a product...
 		},
 		48 : {//Shieldbow (u)
-			itemID : 48,
+			itemId : 48,
 			useWith : [1777],
 			type : FletchType.STRING_BOW,
 			defaultProduct : 839,
 			animation : 6684
 		},
 		50 : {//Shortbow (u)
-			itemID : 50,
+			itemId : 50,
 			useWith : [1777],
 			type : FletchType.STRING_BOW,
 			defaultProduct : 841,
 			animation : 6678
 		},
 		54 : {//Oak Shortbow (u)
-			itemID : 54,
+			itemId : 54,
 			useWith : [1777],
 			type : FletchType.STRING_BOW,
 			defaultProduct : 843,
 			animation : 6679
 		},
 		56 : {//Oak Shieldbow (u)
-			itemID : 56,
+			itemId : 56,
 			useWith : [1777],
 			type : FletchType.STRING_BOW,
 			defaultProduct : 845,
 			animation : 6685
 		},
 		58 : {//Willow Shieldbow (u)
-			itemID : 58,
+			itemId : 58,
 			useWith : [1777],
 			type : FletchType.STRING_BOW,
 			defaultProduct : 847,
 			animation : 6686
 		},
 		60 : {//Willow Shortbow (u)
-			itemID : 60,
+			itemId : 60,
 			useWith : [1777],
 			type : FletchType.STRING_BOW,
 			defaultProduct : 849,
 			animation : 6680
 		},
 		52 : {//Arrow shaft
-			itemID : 52,
+			itemId : 52,
 			useWith : [314],//Feather
 			type : FletchType.FEATHER_ARROW,
 			category : 6966,
@@ -226,7 +225,7 @@ var FletchMaterial = {
 			animation : -1
 		},
 		53 : {//Headless arrow
-			itemID : 53,
+			itemId : 53,
 			useWith : [314],//Feather
 			type : FletchType.FEATHER_ARROW,
 			category : 6966,
@@ -234,7 +233,7 @@ var FletchMaterial = {
 			animation : -1
 		},
 		39 : {//Bronze arrowheads
-			itemID : 39,
+			itemId : 39,
 			useWith : [53],//Headless arrow
 			type : FletchType.TIP_ARROW,
 			category : 6963,
@@ -243,71 +242,55 @@ var FletchMaterial = {
 		}
 }
 
-var ToolListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemOnItemListener'), {
-
-	/* The first option on an object */
-	handleInteraction: function(player, item1, slot1, item2, slot2) {
-		var material = fletchForItem(item1.getID());
-		var item = item1;
-		var slot = slot1;
+var ToolListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;		
+		var item = args.item;
+		var slot = args.slot;
+		
+		var material = fletchForItem(objTypeId);
+		
 		if (material === null || material.defaultProduct == -1) {
 			//Item1 is the tool/minor material
-			item = item2;
-			slot = slot2;
+			item = args.useitem;
+			slot = args.useslot;
 		}
-		//print("Fletching item-on-item: item1="+item1+", item2="+item2+", material="+JSON.stringify(material));
-		if (material !== null || fletchForItem(item2.getID()) !== null) {
-			showFletchingDialog(player, item, [slot1, slot2]);
+		if (material !== null || fletchForItem(api.getId(args.useitem)) !== null) {
+			showFletchingDialog(player, item, [args.slot, args.useslot]);
 		} else {
-			api.sendMessage(player, "Unhandled fletching option: item1="+item.getID()+", item2="+item2.getID());
+			defaultOpHeldUseHandler(player, args);
 		}
-		return true;
+		return;
 	}
-
 });
 
-var MaterialListner = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-	
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [];
-	},
+var MaterialListner = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		var item = args.item;
+		var slot = args.slot;
 
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		if (option == 1) {
-			showFletchingDialog(player, item, [slot, -1]);
-		} else {
-			api.sendMessage(player, "Unhandled fletching option: item="+item.getID()+", option="+option);
-		}
-		return true;
-	},
-	
-	/* Returns the examine text for the item, or "null" to use the default */
-	getExamine : function (player, item) {
-		return null;
+		showFletchingDialog(player, item, [slot, -1]);
 	}
-
 });
 
 /* Listen to the item ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
+	var materialListener = new MaterialListner();
+	var toolListener = new ToolListener();
 	
-	for (var material in FletchMaterial) {
-		switch (FletchMaterial[material].type) {
+	for (var i in FletchMaterial) {
+		var material = FletchMaterial[i];
+		scriptManager.registerListener(EventType.OPHELDU, material.itemId, toolListener);
+		
+		switch (material.type) {
 		case FletchType.FLETCH_WOOD:
-			scriptManager.registerItemOnItemListener(new ToolListener(), FletchMaterial[material].type.tool, material);
 			break;
 		case FletchType.STRING_BOW:
-			scriptManager.registerItemListener(new MaterialListner(), [material]);
-			if (material !== 1777) {
-				scriptManager.registerItemOnItemListener(new ToolListener(), 1777, material);
-			}
+			scriptManager.registerListener(EventType.OPHELD1, material.itemId, materialListener);
 			break;
 		case FletchType.FEATHER_ARROW:
 		case FletchType.TIP_ARROW:
-			scriptManager.registerItemOnItemListener(new ToolListener(), FletchMaterial[material].useWith[0], material);
 			break;
 		}
 	}

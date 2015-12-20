@@ -3,7 +3,7 @@ package org.virtue.game.entity.combat.impl.melee;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.FollowingType;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Tile;
 
 /**
  * Handles melee following.

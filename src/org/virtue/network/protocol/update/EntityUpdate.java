@@ -25,9 +25,7 @@ import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.Virtue;
 import org.virtue.engine.cycle.Tick;
-import org.virtue.engine.script.listeners.WorldCycleListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
@@ -170,14 +168,6 @@ public class EntityUpdate extends Tick {
 		entity.getMovement().postSend();
 		if (entity instanceof Player) {
 			((Player) entity).getViewport().repack();
-		}
-	}
-	
-	private void processWorld (World world) {
-		for (WorldCycleListener listener : Virtue.getInstance().getScripts().getCycleListeners()) {
-			if (world.getCycleCount() % listener.getCycleDelay() == 0) {
-				listener.onCycle(world.getCycleCount());
-			}
 		}
 	}
 	

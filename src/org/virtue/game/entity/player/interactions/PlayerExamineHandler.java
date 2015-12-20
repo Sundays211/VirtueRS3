@@ -22,7 +22,7 @@
 package org.virtue.game.entity.player.interactions;
 
 import org.virtue.Virtue;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
 import org.virtue.game.entity.player.container.ItemContainer;
@@ -80,14 +80,14 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 	}
 	
 	private void showStats (Player player, Player target) {
-		for (SkillType stat : SkillType.values()) {
+		for (StatType stat : StatType.values()) {
 			setInspectedStatBase(player, stat, target.getSkills().getBaseLevel(stat));
 			setInspectedStatLevel(player, stat, target.getSkills().getCurrentLevel(stat));
 			setInspectedStatXp(player, stat, target.getSkills().getExperience(stat) / 10);
 		}
 	}
 	
-	private void setInspectedStatXp (Player player, SkillType stat, int value) {
+	private void setInspectedStatXp (Player player, StatType stat, int value) {
 		switch (stat) {
 		case ATTACK:
 			player.getVars().setVarValueInt(VarKey.Player.PLAYER_INSPECT_ATTACK_XP, value);
@@ -170,7 +170,7 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 		}
 	}
 	
-	private void setInspectedStatBase (Player player, SkillType stat, int value) {
+	private void setInspectedStatBase (Player player, StatType stat, int value) {
 		switch (stat) {
 		case ATTACK:
 			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_ATTACK_BASE, value);
@@ -253,7 +253,7 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 		}
 	}
 	
-	private void setInspectedStatLevel (Player player, SkillType stat, int value) {
+	private void setInspectedStatLevel (Player player, StatType stat, int value) {
 		switch (stat) {
 		case ATTACK:
 			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_ATTACK, value);

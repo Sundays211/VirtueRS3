@@ -21,8 +21,8 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.entity.region.MapSize;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.MapSize;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

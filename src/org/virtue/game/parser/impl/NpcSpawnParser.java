@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.game.World;
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.entity.region.Tile;
-import org.virtue.game.entity.region.movement.Direction;
+import org.virtue.game.world.region.Tile;
+import org.virtue.game.world.region.movement.Direction;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

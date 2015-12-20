@@ -1,8 +1,6 @@
 /**
  * @author Kayla
  */
- var api;
-
  var PotionTypes = {
  	    OVERLOAD_FLASK : {
 			itemID : 23531,
@@ -15,37 +13,23 @@
 	    }			    		    		    	   
 };
  
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-	
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [ 23531 ];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		switch (option) {
-		case 1:
-			startPotion(player, item, slot);
-			return true;
-		default:
-			api.sendMessage(player, "Unhandled potion option: item="+item.getID()+", option="+option);
-		}
-		return true;
-	},
-	
-	/* Returns the examine text for the item, or "null" to use the default */
-	getExamine : function (player, item) {
-		return null;
+var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		var player = args.player;
+		var item = args.item;
+		var slot = args.slot;
+		
+		startPotion(player, item, slot);
 	}
-
 });
 
 /* Listen to the item ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
+	var ids = [ 23531 ];
 	var itemListener = new ItemListener();
-	scriptManager.registerItemListener(itemListener, itemListener.getItemIDs());
+	for (var i in ids) {
+		scriptManager.registerListener(EventType.OPHELD1, ids[i], itemListener);
+	}
 }
 
 function startPotion (player, item, slot) {

@@ -21,10 +21,14 @@
  */
 package org.virtue.game.entity.player.widget.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.engine.script.listeners.ItemListener;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
@@ -113,12 +117,19 @@ public class BankWidget extends Widget {
 	 * @see org.virtue.game.entity.player.widget.Widget#click(int, int, int, int, org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public boolean click(int widgetId, int componentId, int slotId, int itemId, Player player, OptionButton option) {
+	public boolean click(int widgetId, int componentId, int slot, int itemId, Player player, OptionButton option) {
 		int amount = 0;
+		Item item;
 		switch (componentId) {
 		case 303://Close button
 			return true;
 		case 215://Withdraw
+			item = player.getInvs().getContainer(ContainerState.BANK).get(slot);
+			if (item == null) {
+				//The client inventory must not be synchronised, so let's send it again
+				player.getInvs().sendContainer(ContainerState.BANK);
+				return false;
+			}
 			switch (option) {
 			case ONE:
 				amount = 1;
@@ -133,32 +144,34 @@ public class BankWidget extends Widget {
 				amount = player.getVars().getVarValueInt(VarKey.Player.BANK_WITHDRAW_AMOUNT);
 				break;
 			case FIVE://Withdraw-X
-				depositWithdrawX(player, false, slotId, itemId);
+				depositWithdrawX(player, false, slot, itemId);
 				return true;
 			case SIX://Withdraw all
-				amount = player.getInvs().getContainer(ContainerState.BANK).get(slotId).getAmount();
+				amount = player.getInvs().getContainer(ContainerState.BANK).get(slot).getAmount();
 				break;
 			case SEVEN://Withdraw all-but-one
-				amount = player.getInvs().getContainer(ContainerState.BANK).get(slotId).getAmount() - 1;
+				amount = player.getInvs().getContainer(ContainerState.BANK).get(slot).getAmount() - 1;
 				break;
-			case EIGHT://Bank custom option 3
-				return handleCustomOption(player, slotId, itemId, 3);
+			case EIGHT://Bank custom option 1
+				return handleCustomOption(player, slot, item, 1, true);
 			case TEN://Examine
-				Item item = player.getInvs().getContainer(ContainerState.BANK).get(slotId);
-				if (item != null) {
-					item.examine(player);
-					player.getDispatcher().sendGameMessage("Item in slot "+slotId+", tab "+getTab(player, slotId));
-				}
+				item.examine(player);
+				player.getDispatcher().sendGameMessage("Item in slot "+slot+", tab "+getTab(player, slot));
 				return true;
 			default:
 				return false;
 			}
 			if (amount > 0) {
-				withdrawItems(player, slotId, itemId, amount);
-				return true;
+				withdrawItems(player, slot, itemId, amount);
 			}
-			break;
+			return true;
 		case 7://Deposit
+			item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot);
+			if (item == null) {
+				//The client inventory must not be synchronised, so let's send it again
+				player.getInvs().sendContainer(ContainerState.BACKPACK);
+				return false;
+			}
 			switch (option) {
 			case ONE:
 				amount = 1;
@@ -173,30 +186,26 @@ public class BankWidget extends Widget {
 				amount = player.getVars().getVarValueInt(VarKey.Player.BANK_DEPOSIT_AMOUNT);
 				break;
 			case FIVE://Deposit-x
-				depositWithdrawX(player, true, slotId, itemId);
+				depositWithdrawX(player, true, slot, itemId);
 				return true;
 			case SIX://Deposit all
-				int id = player.getInvs().getContainer(ContainerState.BACKPACK).get(slotId).getId();
+				int id = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot).getId();
 				amount = player.getInvs().getContainer(ContainerState.BACKPACK).getNumberOf(id);
 				break;
 			case EIGHT://Bank item option				
-				return handleCustomOption(player, slotId, itemId, 1);
+				return handleCustomOption(player, slot, item, 1, false);
 			case NINE://Bank item option 2
-				return handleCustomOption(player, slotId, itemId, 2);
+				return handleCustomOption(player, slot, item, 2, false);
 			case TEN://Examine
-				Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slotId);
-				if (item != null) {
-					item.examine(player);
-				}
+				item.examine(player);
 				return true;
 			default:
 				return false;
 			}
 			if (amount > 0) {
-				depositItems(player, slotId, itemId, amount);
-				return true;
+				depositItems(player, slot, itemId, amount);
 			}
-			break;
+			return true;
 		case 83://Deposit all backpack
 			depositBackpack(player);
 			return true;
@@ -233,7 +242,7 @@ public class BankWidget extends Widget {
 			return false;
 		case 99://Deposit all familiar
 		default:
-			logger.info("Unhandled bank click: interface="+widgetId+", component="+componentId+", slot="+slotId+", item="+itemId+", option="+option);
+			logger.info("Unhandled bank click: interface="+widgetId+", component="+componentId+", slot="+slot+", item="+itemId+", option="+option);
 			break;
 		}
 		return false;
@@ -478,22 +487,34 @@ public class BankWidget extends Widget {
 		}
 	}
 	
-	private boolean handleCustomOption (Player player, int slot, int itemID, int option) {
-		Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot);
-		if (item == null) {
+	private boolean handleCustomOption (Player player, int slot, Item item, int option, boolean bank) {
+		ScriptEventType eventType = null;
+		if (option == 1) {
+			eventType = ScriptEventType.OPBANK1;
+		} else if (option == 2) {
+			eventType = ScriptEventType.OPBANK2;
+		}
+		
+		if (eventType == null) {
 			return false;
 		}
-		if (player.getEquipment().isEquipable(item)) {
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(eventType, item.getId())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("item", item);
+			args.put("slot", slot);
+			args.put("isBank", bank);
+			scripts.invokeScriptChecked(eventType, item.getId(), args);
+		} else if (player.getEquipment().isEquipable(item)) {
 			if (player.getEquipment().meetsEquipRequirements(item)) {
 				return player.getEquipment().wearItem(slot);
 			} else {
 				return true;//Prevent the debug message from showing anyways
-			}			
-		}
-		ItemListener listener = Virtue.getInstance().getScripts().forItemID(item.getId());
-		if (listener == null || !listener.handleInteraction(player, item, slot, option+30)) {
+			}
+		} else {
 			player.getDispatcher().sendGameMessage("Unhanded bank item option: item="+item+", slot="+slot+", option="+option);
-		}
+		}		
 		return true;
 	}
 	

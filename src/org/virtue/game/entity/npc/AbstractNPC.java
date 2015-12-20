@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.virtue.Virtue;
 import org.virtue.engine.script.listeners.CombatHandler;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Tile;
 
 /**
  * Used for creating custom NPC handlers.

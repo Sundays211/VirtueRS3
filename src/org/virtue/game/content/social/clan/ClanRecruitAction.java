@@ -22,7 +22,7 @@
 package org.virtue.game.content.social.clan;
 
 import org.virtue.Virtue;
-import org.virtue.cache.def.vartype.VarBitType;
+import org.virtue.cache.config.vartype.VarBitType;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler;

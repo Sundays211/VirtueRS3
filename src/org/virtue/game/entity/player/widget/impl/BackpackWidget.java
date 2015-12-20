@@ -28,9 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Constants;
 import org.virtue.Virtue;
-import org.virtue.engine.script.JSListeners;
 import org.virtue.engine.script.ScriptEventType;
-import org.virtue.engine.script.listeners.ItemListener;
+import org.virtue.engine.script.ScriptManager;
+import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.game.World;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.social.ChannelType;
@@ -40,8 +40,9 @@ import org.virtue.game.entity.player.container.Item;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.game.entity.player.widget.var.VarKey;
-import org.virtue.game.entity.region.GroundItem;
-import org.virtue.game.entity.region.Region;
+import org.virtue.game.world.region.GroundItem;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.utility.TimeUtility;
 import org.virtue.utility.text.StringUtility;
@@ -115,14 +116,16 @@ public class BackpackWidget extends Widget {
 	public boolean drag (int widget1, int component1, int slot1, int itemID1, int widget2, int component2, int slot2, int itemID2, Player player) {
 		if (widget1 == widget2 && widget1 == WidgetState.BACKPACK_WIDGET.getID()
 				&& component1 == component2 && component1 == 34) {
+			if (slot2 == -1) {
+				return true;//This means the item wasn't dragged onto another slot. We'll just suppress the debug message...
+			}
 			if (slot1 >= 0 && slot1 < 28 && slot2 >= 0 && slot2 < 28) {
 				Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot1);
 				Item item2 = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot2);
 				int actualID1 = (item == null) ? -1 : item.getId();
 				int actualID2 = (item2 == null) ? -1 : item2.getId();
 				if (actualID1 != itemID2 || actualID2 != itemID1) {//Since the client version has already changed, the order is reversed
-					System.out.println("Client backpack out of sync: expected1="+itemID2+", actual1="+actualID1+", expected2="+itemID1+", actual2="+actualID2);
-					player.getInvs().sendContainer(ContainerState.BACKPACK);//Client backpack is out of sync; resynchronise it
+					player.getInvs().sendContainer(ContainerState.BACKPACK);//Client backpack is out of sync; re-synchronise it
 				} else {
 					player.getInvs().getContainer(ContainerState.BACKPACK).set(slot2, item);
 					player.getInvs().getContainer(ContainerState.BACKPACK).set(slot1, item2);			
@@ -132,6 +135,89 @@ public class BackpackWidget extends Widget {
 			}
 		}
 		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.player.widget.Widget#use(int, int, int, int, int, int, int, int, org.virtue.game.entity.player.Player)
+	 */
+	@Override
+	public boolean use(int widget1, int component1, int slot1, int itemId1,
+			int widget2, int component2, int slot2, int itemId2, Player player) {
+		if (widget2 != WidgetState.BACKPACK_WIDGET.getID() || component1 != 34 || component2 != 34) {
+			//Not item-on-item event
+			return false;
+		}
+		Item item1 = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot1);
+		Item item2 = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot2);
+		if (item1 == null || item1.getId() != itemId1 || item2 == null 
+				|| item2.getId() != itemId2) {
+			//Client backpack is out of sync; re-synchronise it
+			player.getInvs().sendContainer(ContainerState.BACKPACK);
+			return false;
+		}
+		if (slot1 == slot2) {
+			return true;//Item used on itself
+		}
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(ScriptEventType.OPHELDU, itemId2)) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("useitem", item1);
+			args.put("useslot", slot1);
+			args.put("item", item2);
+			args.put("slot", slot2);
+			scripts.invokeScriptChecked(ScriptEventType.OPHELDU, itemId2, args);
+			return true;
+		}
+		
+		String message = "Nothing interesting happens.";
+		if (player.getPrivilegeLevel().getRights() >= 2) {
+			message = "Unhandled item use: item="+item2+", slot="+slot2+", useitem="+item1+", useslot="+slot1;
+		}		
+		player.getDispatcher().sendGameMessage(message);
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.player.widget.Widget#use(int, int, int, int, int, int, int, int, org.virtue.game.entity.player.Player)
+	 */
+	@Override
+	public boolean use(int widget, int component, int slot, int itemId,
+			SceneLocation location, Player player) {
+		if (component != 34) {//Not item-on-location event
+			return false;
+		}
+		Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot);
+		if (item == null || item.getId() != itemId) {
+			//Client backpack is out of sync; re-synchronise it
+			player.getInvs().sendContainer(ContainerState.BACKPACK);
+			return false;
+		}
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		
+		if (scripts.hasBinding(ScriptEventType.OPLOCU, location.getId())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("location", location);
+			args.put("useitem", item);
+			args.put("useslot", slot);
+			scripts.invokeScriptChecked(ScriptEventType.OPLOCU, location.getId(), args);
+			return true;
+		}
+		boolean handled = false;
+		
+		LocationListener listener = scripts.forLocationID(location.getId());
+		if (listener != null) {
+			handled = listener.handleItemOnLoc(player, location, item, slot);
+		}
+		if (!handled) {
+			String message = "Nothing interesting happens.";
+			if (player.getPrivilegeLevel().getRights() >= 2) {
+				message = "Unhandled location use: location="+location+", useitem="+item+", useslot="+slot;
+			}		
+			player.getDispatcher().sendGameMessage(message);
+		}
+		return true;
 	}
 
 	/* (non-Javadoc)
@@ -150,25 +236,25 @@ public class BackpackWidget extends Widget {
 		ScriptEventType eventType;
 		switch (option) {
 		case ONE:
-			eventType = ScriptEventType.ITEM_IOP1;
+			eventType = ScriptEventType.OPHELD1;
 			break;
 		case TWO:
-			eventType = ScriptEventType.ITEM_IOP2;
+			eventType = ScriptEventType.OPHELD2;
 			break;
 		case THREE:
-			eventType = ScriptEventType.ITEM_IOP3;
+			eventType = ScriptEventType.OPHELD3;
 			break;
 		case SEVEN:
-			eventType = ScriptEventType.ITEM_IOP4;
+			eventType = ScriptEventType.OPHELD4;
 			break;
 		case EIGHT:
-			eventType = ScriptEventType.ITEM_IOP5;
+			eventType = ScriptEventType.OPHELD5;
 			break;
 		default:
 			eventType = null;
 			break;
 		}
-		JSListeners scripts = Virtue.getInstance().getScripts();
+		ScriptManager scripts = Virtue.getInstance().getScripts();
 		if (eventType != null && scripts.hasBinding(eventType, item.getId())) {
 			Map<String, Object> args = new HashMap<>();
 			args.put("player", player);
@@ -193,7 +279,7 @@ public class BackpackWidget extends Widget {
 		
 		String text = item.getType().iop[optionId-1];
 		
-		if (eventType == ScriptEventType.ITEM_IOP2 &&
+		if (eventType == ScriptEventType.OPHELD2 &&
 				("Wield".equalsIgnoreCase(text) || "Wear".equalsIgnoreCase(text))
 				&& player.getEquipment().isEquipable(item)) {
 			if (!player.getEquipment().meetsEquipRequirements(item)) {
@@ -205,7 +291,7 @@ public class BackpackWidget extends Widget {
 			return;
 		}		
 
-		if (eventType == ScriptEventType.ITEM_IOP4 && item.getId() == 995) {
+		if (eventType == ScriptEventType.OPHELD4 && item.getId() == 995) {
 			if (player.getMoneyPouch().addCoins(item.getAmount())) {
 				player.getInvs().getContainer(ContainerState.BACKPACK).clearSlot(slot);
 				player.getInvs().updateContainer(ContainerState.BACKPACK, slot);
@@ -214,7 +300,7 @@ public class BackpackWidget extends Widget {
 			}
 			return;
 		}
-		if (eventType == ScriptEventType.ITEM_IOP5) {
+		if (eventType == ScriptEventType.OPHELD5) {
 			if ("Drop".equalsIgnoreCase(text)) {
 				handleDrop(player, item, slot);
 				return;
@@ -223,12 +309,6 @@ public class BackpackWidget extends Widget {
 				return;
 			} else if (item.getType().lenttemplate != -1) {
 				handleDiscard(player, item, slot);
-				return;
-			}
-		}
-		if (eventType != null) {
-			ItemListener listener = scripts.forItemID(item.getId());
-			if (listener != null && listener.handleInteraction(player, item, slot, optionId)) {
 				return;
 			}
 		}
@@ -268,7 +348,7 @@ public class BackpackWidget extends Widget {
 			}
 		};
 		int timeRemaining = player.getVars().getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING);
-		Object loanFrom = player.getVars().getVar(VarKey.Player.LOAN_FROM_PLAYER);
+		Object loanFrom = player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
 		if (timeRemaining > 0) {
 			String message = "<center>~Loan expires in "+TimeUtility.ticksToString(timeRemaining)+"~</center><br>";
 			message += "If you discard this item, it will disappear. You won't be able to pick it up again.";

@@ -44,7 +44,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 					if (value.length <= 0) {
 						return;
 					}
-					api.createClan(value, player, []);
+					clanApi.createClan(value, player, []);
 				}
 			});
 			api.openWidget(player, 1477, 437, 1094, false);

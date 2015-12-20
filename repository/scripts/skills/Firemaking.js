@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var GroundItem = Java.type('org.virtue.game.entity.region.GroundItem');
+var GroundItem = Java.type('org.virtue.game.world.region.GroundItem');
 var Item = Java.type('org.virtue.game.entity.player.container.Item');
 
 /**
@@ -138,14 +138,14 @@ var Log = {
 }
 
 var LogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, locTypeId, args) {
+	invoke : function (event, objTypeId, args) {
 		var player = args.player;
 		var item = args.item;
 		var slot = args.slot;
 		
-		if (event == EventType.ITEM_IOP1) {//Craft
+		if (event == EventType.OPHELD1) {//Craft
 			Firemaking.openToolDialog(player, item, slot);
-		} else if (event == EventType.ITEM_IOP2) {//Light
+		} else if (event == EventType.OPHELD2) {//Light
 			Firemaking.runFiremakingAction(player, item, slot);
 		}
 	}
@@ -168,8 +168,8 @@ var listen = function(scriptManager) {
 	var fireListener = new FireListener();
 	for (var i in FIRE_IDS) {
 		//Bind option one and five on all fires to this listener (option 1=Add Logs on bonfire, option 5=Use on normal fire)
-		scriptManager.registerListener(EventType.LOC_OP1, FIRE_IDS[i], fireListener);
-		scriptManager.registerListener(EventType.LOC_OP5, FIRE_IDS[i], fireListener);
+		scriptManager.registerListener(EventType.OPLOC1, FIRE_IDS[i], fireListener);
+		scriptManager.registerListener(EventType.OPLOC5, FIRE_IDS[i], fireListener);
 	}
 	
 	for (var log in Log) {
@@ -178,8 +178,8 @@ var listen = function(scriptManager) {
 	var logListener = new LogListener();
 	for (var i in LOG_IDS) {
 		//Bind option one and two on all logs to this listener
-		scriptManager.registerListener(EventType.ITEM_IOP1, LOG_IDS[i], logListener);
-		scriptManager.registerListener(EventType.ITEM_IOP2, LOG_IDS[i], logListener);
+		scriptManager.registerListener(EventType.OPHELD1, LOG_IDS[i], logListener);
+		scriptManager.registerListener(EventType.OPHELD2, LOG_IDS[i], logListener);
 	}
 };
 
@@ -195,7 +195,8 @@ var Firemaking = {
 					Firemaking.runFiremakingAction(player, item, slot);
 					break;
 				case 946://Craft
-					item.handleItemOnItem(player, slot, Item.create(946, 1), -1);//A hacky solution, but it should work
+					showFletchingDialog(player, item, [slot])
+					//item.handleItemOnItem(player, slot, Item.create(946, 1), -1);//A hacky solution, but it should work
 					break;
 				case 24291://Add logs to a nearby bonfire
 					Firemaking.findBonfire(player, item.getId(), slot);

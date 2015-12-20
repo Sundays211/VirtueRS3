@@ -131,7 +131,7 @@ var listen = function(scriptManager) {
 	var listener = new PrayerListener();
 	for (var i in ids) {
 		//Bind option one on all bones/ashes to this listener
-		scriptManager.registerListener(EventType.ITEM_IOP1, ids[i], listener);
+		scriptManager.registerListener(EventType.OPHELD1, ids[i], listener);
 	}	
 }
 

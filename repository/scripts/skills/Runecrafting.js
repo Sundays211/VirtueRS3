@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var Tile = Java.type('org.virtue.game.entity.region.Tile');
 var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /**
@@ -306,7 +305,7 @@ var listen = function(scriptManager) {
 	var runesListener = new RunesListener();
 	for (var i in locs) {
 		//Bind option one on all mysterious runes to this listener
-		scriptManager.registerListener(EventType.LOC_OP1, locs[i], runesListener);
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], runesListener);
 	}
 	
 	var locs = [];
@@ -316,7 +315,7 @@ var listen = function(scriptManager) {
 	var portalListener = new PortalListener();
 	for (var i in locs) {
 		//Bind option one on all runecrafting exit portals to this listener
-		scriptManager.registerListener(EventType.LOC_OP1, locs[i], portalListener);
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], portalListener);
 	}
 	
 	locs = [];
@@ -326,7 +325,7 @@ var listen = function(scriptManager) {
 	var alterListener = new AlterListener();
 	for (var i in locs) {
 		//Bind option one on all runecrafting alters to this listener
-		scriptManager.registerListener(EventType.LOC_OP1, locs[i], alterListener);
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], alterListener);
 	}	
 };
 

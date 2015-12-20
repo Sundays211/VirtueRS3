@@ -26,8 +26,10 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.virtue.cache.config.vartype.VarBitType;
 import org.virtue.cache.def.ConfigType;
 import org.virtue.cache.utility.ByteBufferUtils;
+import org.virtue.game.entity.player.widget.var.VarBitTypeList;
 import org.virtue.game.entity.player.widget.var.VarDomain;
 import org.virtue.utility.QuestTypeList;
 
@@ -75,7 +77,8 @@ public class QuestType implements ConfigType {
         }
         if (null != progressVarBits) {
             for (int slot = 0; slot < progressVarBits.length; slot++) {
-                if (varDomain.getVarBitValue(progressVarBits[slot][0]) >= progressVarBits[slot][1]) {
+            	VarBitType varBitType = VarBitTypeList.list(progressVarBits[slot][0]);
+                if (varDomain.getVarBitValue(varBitType) >= progressVarBits[slot][1]) {
                     return true;
                 }
             }
@@ -115,7 +118,8 @@ public class QuestType implements ConfigType {
         }
         if (progressVarBits != null) {
             for (int slot = 0; slot < progressVarBits.length; slot++) {
-                if (varDomain.getVarBitValue(progressVarBits[slot][0]) >= progressVarBits[slot][2]) {
+            	VarBitType varBitType = VarBitTypeList.list(progressVarBits[slot][0]);
+                if (varDomain.getVarBitValue(varBitType) >= progressVarBits[slot][2]) {
                     return true;
                 }
             }
@@ -153,7 +157,8 @@ public class QuestType implements ConfigType {
         }
         if (varBitRequirements != null) {
             for (int slot = 0; slot < varBitRequirements.length; slot++) {
-                int value = varDomain.getVarBitValue(varBitRequirements[slot]);
+            	VarBitType varBitType = VarBitTypeList.list(varBitRequirements[slot]);
+                int value = varDomain.getVarBitValue(varBitType);
                 if (value < minVarBitValue[slot] || value > maxVarBitValue[slot]) {
                     return false;
                 }
@@ -194,7 +199,8 @@ public class QuestType implements ConfigType {
         if (varBitRequirements == null || slot < 0 || slot >= varBitRequirements.length) {
             return false;
         }
-        int value = varDomain.getVarBitValue(varBitRequirements[slot]);
+    	VarBitType varBitType = VarBitTypeList.list(varBitRequirements[slot]);
+        int value = varDomain.getVarBitValue(varBitType);
         if (value < minVarBitValue[slot] || value > maxVarBitValue[slot]) {
             return false;
         }

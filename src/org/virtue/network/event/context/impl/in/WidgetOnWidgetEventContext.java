@@ -61,7 +61,7 @@ public class WidgetOnWidgetEventContext implements GameEventContext {
 		return if1_slot;
 	}
 	
-	public int getIf1ItemID () {
+	public int getIf1Item () {
 		return if1_item;
 	}
 	
@@ -81,7 +81,7 @@ public class WidgetOnWidgetEventContext implements GameEventContext {
 		return if2_slot;
 	}
 	
-	public int getIf2ItemID () {
+	public int getIf2Item () {
 		return if2_item;
 	}
 }

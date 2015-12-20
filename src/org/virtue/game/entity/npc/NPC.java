@@ -31,9 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.cache.def.impl.NpcType;
-import org.virtue.engine.script.ScriptAPI;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
+import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.NpcListener;
 import org.virtue.game.World;
@@ -42,11 +42,11 @@ import org.virtue.game.entity.combat.AttackEvent;
 import org.virtue.game.entity.combat.CombatState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
-import org.virtue.game.entity.region.Region;
-import org.virtue.game.entity.region.Tile;
-import org.virtue.game.entity.region.movement.Direction;
-import org.virtue.game.entity.region.movement.routefinder.NpcTraversalMap;
 import org.virtue.game.parser.impl.NpcDropParser;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.Tile;
+import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.routefinder.NpcTraversalMap;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.protocol.update.block.AnimationBlock;
@@ -315,19 +315,19 @@ public class NPC extends Entity {
 		ScriptEventType eventType;
 		switch (option) {
 		case ONE:
-			eventType = ScriptEventType.NPC_OP1;
+			eventType = ScriptEventType.OPNPC1;
 			break;
 		case TWO:
-			eventType = ScriptEventType.NPC_OP2;
+			eventType = ScriptEventType.OPNPC2;
 			break;
 		case THREE:
-			eventType = ScriptEventType.NPC_OP3;
+			eventType = ScriptEventType.OPNPC3;
 			break;
 		case SEVEN:
-			eventType = ScriptEventType.NPC_OP4;
+			eventType = ScriptEventType.OPNPC4;
 			break;
 		case EIGHT:
-			eventType = ScriptEventType.NPC_OP5;
+			eventType = ScriptEventType.OPNPC5;
 			break;
 		default:
 			eventType = null;

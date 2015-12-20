@@ -4,14 +4,14 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.melee.MeleeFollower;
 import org.virtue.game.entity.combat.impl.range.RangeFollower;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.Tile;
-import org.virtue.game.entity.region.movement.Direction;
-import org.virtue.game.entity.region.movement.path.Path;
-import org.virtue.game.entity.region.movement.path.Point;
-import org.virtue.game.entity.region.movement.path.impl.AbstractPathfinder;
-import org.virtue.game.entity.region.movement.path.impl.DumbPathfinder;
-import org.virtue.game.entity.region.movement.path.impl.SmartPathfinder;
 import org.virtue.game.node.Node;
+import org.virtue.game.world.region.Tile;
+import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.path.Path;
+import org.virtue.game.world.region.movement.path.Point;
+import org.virtue.game.world.region.movement.path.impl.AbstractPathfinder;
+import org.virtue.game.world.region.movement.path.impl.DumbPathfinder;
+import org.virtue.game.world.region.movement.path.impl.SmartPathfinder;
 
 /**
  * Interface for combat following handlers.

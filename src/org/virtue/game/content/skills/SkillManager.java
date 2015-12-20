@@ -45,7 +45,7 @@ import org.virtue.utility.text.StringUtility;
  */
 public class SkillManager {
 	
-	private EnumMap<SkillType, SkillData> skills = new EnumMap<SkillType, SkillData>(SkillType.class);
+	private EnumMap<StatType, SkillData> skills = new EnumMap<StatType, SkillData>(StatType.class);
 	
 	private Player player;
 		
@@ -68,10 +68,10 @@ public class SkillManager {
 	 * @param stat The stat to set the level of
 	 * @param level The desired level (from 0 to 255)
 	 */
-	public void setLevel (SkillType stat, int level) {
+	public void setLevel (StatType stat, int level) {
 		SkillData skillData = skills.get(stat);
 		skillData.setCurrentLevel(level);
-		player.getDispatcher().sendSkill(skillData);
+		player.getDispatcher().sendStat(skillData);
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class SkillManager {
 	 * @param skillType The skill to increase/decrease
 	 * @param amount The amount to increase by, or a negative value to decrease
 	 */
-	public void boostSkill (SkillType skillType, int amount) {
+	public void boostSkill (StatType skillType, int amount) {
 		SkillData skillData = skills.get(skillType);
 		if (amount+skillData.getCurrentLevel() < 0) {
 			skillData.setCurrentLevel(0);
@@ -88,17 +88,17 @@ public class SkillManager {
 		} else {
 			skillData.setCurrentLevel(skillData.getCurrentLevel()+amount);
 		}
-		player.getDispatcher().sendSkill(skillData);
+		player.getDispatcher().sendStat(skillData);
 	}
 	
 	/**
 	 * Restores the specified stat to its base level
 	 * @param stat The stat to restore
 	 */
-	public void restore (SkillType stat) {
+	public void restore (StatType stat) {
 		SkillData statData = skills.get(stat);
 		statData.setCurrentLevel(statData.getBaseLevel());
-		player.getDispatcher().sendSkill(statData);		
+		player.getDispatcher().sendStat(statData);		
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class SkillManager {
 	 * @param skill	 The skill to add experience to
 	 * @param totalXpToAdd The the amount of experience to add
 	 */
-	public void addExperience (SkillType skillType, double totalXpToAdd) {
+	public void addExperience (StatType skillType, double totalXpToAdd) {
 		totalXpToAdd *= Constants.GLOBAL_XP_MULTIPLYER;
 		SkillData skillData = skills.get(skillType);
 		double currentXp = skillData.getExperienceFloat();
@@ -123,11 +123,11 @@ public class SkillManager {
 			//System.out.println("levelBefore="+levelBefore+", levelAfter="+levelAfter);
 			skillData.incrementCurrentLevel(levelAfter - levelBefore);
 			handleAdvancement(skillData, (levelAfter - levelBefore));
-			if (skillType == SkillType.CONSTITUTION) {
+			if (skillType == StatType.CONSTITUTION) {
 				player.getImpactHandler().setMaximumLifepoints(levelAfter * 100);
 			}
 		}
-		player.getDispatcher().sendSkill(skillData);
+		player.getDispatcher().sendStat(skillData);
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class SkillManager {
 	 * @param skillType The skill to add bonus experience to
 	 * @param xpToAdd The amount of bonus experience to add
 	 */
-	public void addBonusExperience(SkillType skillType, double xpToAdd) {
+	public void addBonusExperience(StatType skillType, double xpToAdd) {
 		player.getVars().incrementVarp(skillType.getBonusXpVarp(), (int) xpToAdd);
 	}
 	
@@ -145,7 +145,7 @@ public class SkillManager {
 	 * @param skillType The skill to check
 	 * @return The skill level, or 1 if the skill has not been loaded
 	 */
-	public int getCurrentLevel (SkillType skillType) {
+	public int getCurrentLevel (StatType skillType) {
 		SkillData data = skills.get(skillType);
 		return data == null ? 1 : data.getCurrentLevel();
 	}	
@@ -156,7 +156,7 @@ public class SkillManager {
 	 * @param skillType The skill to check
 	 * @return The skill level, or 1 if the skill has not been loaded
 	 */
-	public int getBaseLevel (SkillType skillType) {
+	public int getBaseLevel (StatType skillType) {
 		SkillData data = skills.get(skillType);
 		return data == null ? 1 : data.getBaseLevel();
 	}
@@ -167,7 +167,7 @@ public class SkillManager {
 	 * @param skillType The skill to check 
 	 * @return The experience, or 0 if the skill has not been loaded
 	 */
-	public int getExperience (SkillType skillType) {
+	public int getExperience (StatType skillType) {
 		SkillData data = skills.get(skillType);
 		return data == null ? 0 : data.getExperience();
 	}
@@ -177,7 +177,7 @@ public class SkillManager {
 	 * @param skillType The skill to check 
 	 * @return The experience, or 0 if the skill has not been loaded
 	 */
-	public double getRealExperience (SkillType skillType) {
+	public double getRealExperience (StatType skillType) {
 		SkillData data = skills.get(skillType);
 		return data == null ? 0 : data.getExperienceFloat();
 	}
@@ -187,8 +187,8 @@ public class SkillManager {
 	 * Sets all experience to zero (and levels to 1), except for hitpoints which start at 10.
 	 */
 	public void setInitialLevels () {
-		for (SkillType s : SkillType.values()) {
-			if (s.equals(SkillType.CONSTITUTION)) {
+		for (StatType s : StatType.values()) {
+			if (s.equals(StatType.CONSTITUTION)) {
 				skills.put(s, new SkillData(s, 11840, 10));
 			} else {
 				skills.put(s, new SkillData(s));
@@ -201,7 +201,7 @@ public class SkillManager {
 	 */
 	public void sendAllSkills () {
 		for (SkillData skill : skills.values()) {
-			player.getDispatcher().sendSkill(skill);
+			player.getDispatcher().sendStat(skill);
 		}
 	}
 	
@@ -254,11 +254,11 @@ public class SkillManager {
 		}
 		if (key > 0 && key < 61) {
 			if (boostable) {
-				if (getCurrentLevel(SkillType.forID(levelEnum.getValueInt(key))) >= value) {
+				if (getCurrentLevel(StatType.getById(levelEnum.getValueInt(key))) >= value) {
 					// || reqID == 0 && script_7107(unk1) >= value
 					return true;
 				}
-			} else if (getBaseLevel(SkillType.forID(levelEnum.getValueInt(key))) >= value) {
+			} else if (getBaseLevel(StatType.getById(levelEnum.getValueInt(key))) >= value) {
 				return true;
 			}
 			return false;
@@ -277,14 +277,14 @@ public class SkillManager {
 	}
 	
 	public int getCombatLevel() {
-		int attack = getBaseLevel(SkillType.ATTACK);
-		int defence = getBaseLevel(SkillType.DEFENCE);
-		int strength = getBaseLevel(SkillType.STRENGTH);
-		int constitution = getBaseLevel(SkillType.CONSTITUTION);
-		int prayer = getBaseLevel(SkillType.PRAYER);
-		int summoning = getBaseLevel(SkillType.SUMMONING);
-		int ranged = getBaseLevel(SkillType.RANGED);
-		int magic = getBaseLevel(SkillType.MAGIC);
+		int attack = getBaseLevel(StatType.ATTACK);
+		int defence = getBaseLevel(StatType.DEFENCE);
+		int strength = getBaseLevel(StatType.STRENGTH);
+		int constitution = getBaseLevel(StatType.CONSTITUTION);
+		int prayer = getBaseLevel(StatType.PRAYER);
+		int summoning = getBaseLevel(StatType.SUMMONING);
+		int ranged = getBaseLevel(StatType.RANGED);
+		int magic = getBaseLevel(StatType.MAGIC);
 		
 		int max = Math.max(strength + attack, Math.max(magic * 2, ranged * 2));
 		int combat = (int) (((max * 1.3) + defence + constitution
@@ -294,7 +294,7 @@ public class SkillManager {
 	
 	public int getTotalLevel() {
 		int totalLevel = 0;
-		for (SkillType skill : SkillType.values()) {
+		for (StatType skill : StatType.values()) {
 			totalLevel += getBaseLevel(skill);
 		}
 		return totalLevel;
@@ -303,7 +303,7 @@ public class SkillManager {
 	public long getTotalExperience() {
 		long totalExp = 0;
 		SkillData data;
-		for (int index = 0; index < SkillType.values().length; index++) {
+		for (int index = 0; index < StatType.values().length; index++) {
 			data = skills.get(index);
 			if (data != null) {
 				totalExp += data.getExperienceFloat();

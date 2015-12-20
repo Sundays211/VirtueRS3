@@ -1,7 +1,7 @@
 package org.virtue.game.content.treasure;
 
 import org.virtue.Virtue;
-import org.virtue.engine.script.ScriptAPI;
+import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
 import org.virtue.game.entity.player.container.Item;

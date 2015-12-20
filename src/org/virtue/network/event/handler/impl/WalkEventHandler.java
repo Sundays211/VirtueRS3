@@ -22,7 +22,7 @@
 package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.in.WalkEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -34,11 +34,9 @@ public class WalkEventHandler implements GameEventHandler<WalkEventContext> {
 
 	@Override
 	public void handle(Player player, WalkEventContext context) {
-		//logger.warn("Unhandled walk event: targetX=" + context.getBaseX() + ", targetY=" + context.getBaseY() + ", forceRun=" + context.forceRun());
-		/*if (player.getCombat().inCombat()) {
-			player.getCombat().destroy();
-			player.getMovement().stop();
-		}*/
+		if (player.getImpactHandler().isDead())
+			return;//No need for a dead player to move.
+		
 		boolean success = player.getMovement().moveTo(context.getBaseX(), context.getBaseY());
 		if (context.forceRun()) {
 			player.getMovement().forceRunToggle();
@@ -49,11 +47,7 @@ public class WalkEventHandler implements GameEventHandler<WalkEventContext> {
 				return;
 			}
 			Tile target = player.getMovement().getDestination();
-			if (target != null) {//TODO: Fix the minimap flag
-				//System.out.println("Target: "+target);
-				//System.out.println("BaseX="+(8 * (target.getChunkX() - (Tile.REGION_SIZES[0] >> 4)))
-				//		+", BaseY="+(8 * (target.getChunkY() - (Tile.REGION_SIZES[0] >> 4))));
-				//System.out.println("Flag: x="+target.getXInRegion()+", y="+target.getYInRegion());
+			if (target != null) {
 				player.getDispatcher().sendMapFlag(target.getLocalX(player.getViewport().getBaseTile()), target.getLocalY(player.getViewport().getBaseTile()));
 			}
 		} else {

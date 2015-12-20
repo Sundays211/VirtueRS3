@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.def.impl.Js5ConfigGroup;
+import org.virtue.cache.config.Js5ConfigGroup;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

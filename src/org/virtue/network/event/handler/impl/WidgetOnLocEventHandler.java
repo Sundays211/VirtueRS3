@@ -21,21 +21,12 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.virtue.Virtue;
-import org.virtue.engine.script.ScriptEventType;
-import org.virtue.engine.script.ScriptManager;
-import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.player.widget.WidgetState;
-import org.virtue.game.entity.region.Region;
-import org.virtue.game.entity.region.SceneLocation;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.SceneLocation;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.in.WidgetOnLocEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
@@ -68,65 +59,25 @@ public class WidgetOnLocEventHandler implements GameEventHandler<WidgetOnLocEven
 				player.getMovement().setOnTarget(new Runnable() {
 					@Override
 					public void run () {
-						handleInteraction(player, context, location);
+						if (!Virtue.getInstance().getWidgetRepository().handleUse(
+								context.getIfInterface(), context.getIfComponent(), context.getIfSlot(), context.getIfItem(), 
+								location, player)) {
+							defaultHandler(player, context, location);
+						}
 					}
 				});
 			}
 		}		
 	}
 	
-	private void handleInteraction (Player player, WidgetOnLocEventContext context, SceneLocation location) {
-		ScriptManager scripts = Virtue.getInstance().getScripts();
-		ScriptEventType type = ScriptEventType.LOC_OPUSE;
-		if (context.getIfInterface() == WidgetState.BACKPACK_WIDGET.getID()) {
-			type = ScriptEventType.LOC_OP_ITEMUSE;
+	private void defaultHandler(Player player, WidgetOnLocEventContext context, SceneLocation location) {
+		String message = "Nothing interesting happens.";
+		if (player.getPrivilegeLevel().getRights() >= 2) {
+			message = "Unhanded interface-on-location: Interface: id="+context.getIfInterface()+", comp="+context.getIfComponent()
+					+", slot="+context.getIfSlot()+", item="+context.getIfItem()
+					+" Location: "+location;
 		}
-		if (scripts.hasBinding(type, context.getLocTypeID())) {
-			Map<String, Object> args = new HashMap<>();
-			args.put("player", player);
-			args.put("location", location);
-			if (type == ScriptEventType.LOC_OP_ITEMUSE) {
-				Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(context.getIfSlot());
-				if (item == null || item.getId() != context.getIfItem()) {
-					return;//Expected items do not match actual items
-				}
-				args.put("item", item);
-				args.put("objtype", context.getIfItem());
-				args.put("slot", context.getIfSlot());
-			} else {
-				args.put("iface", context.getIfInterface());
-				args.put("comp", context.getIfComponent());
-				args.put("slot", context.getIfSlot());
-			}
-			scripts.invokeScriptChecked(type, location.getID(), args);
-		} else {
-			boolean handled = false;
-			if (type == ScriptEventType.LOC_OP_ITEMUSE) {
-				handled = handleLegacyListener(player, context, location);
-			}
-			if (!handled) {
-				String message = "Nothing interesting happens.";
-				if (player.getPrivilegeLevel().getRights() >= 2) {
-					message = "Unhanded interface-on-location: Interface: id="+context.getIfInterface()+", comp="+context.getIfComponent()
-							+", slot="+context.getIfSlot()+", item="+context.getIfItem()
-							+" Location: "+location+", forceRun="+context.forceRun();
-				}
-				player.getDispatcher().sendGameMessage(message);
-			}
-		}
-	}
-	
-	private boolean handleLegacyListener (Player player, WidgetOnLocEventContext context, SceneLocation location) {
-		Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(context.getIfSlot());
-		if (item == null || item.getId() != context.getIfItem()) {
-			return false;//Expected items do not match actual items
-		}
-		LocationListener listener = Virtue.getInstance().getScripts().forLocationID(context.getLocTypeID());
-		if (listener != null) {
-			return listener.handleItemOnLoc(player, location, item, context.getIfSlot());
-		} else {
-			return false;
-		}
+		player.getDispatcher().sendGameMessage(message);
 	}
 
 }

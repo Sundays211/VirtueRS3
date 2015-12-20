@@ -72,8 +72,8 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 			packet.put5ByteInteger(125050283515445249L);
 			packet.putByte(0x1 | 0x2);
 
-			packet.putInt(0);
-			packet.putInt(400000);
+			packet.putInt(0);//Jcoins
+			packet.putInt(response.getPlayer().getLoyaltyPoints());//Loyalty points
 			packet.putShort(3843);
 			packet.putShort(77);//unread emails
 			packet.putShort((int)(((response.getPlayer().getLastLogin() - 1014786000000L) / 86400000) + 1));
@@ -94,12 +94,12 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 		} else if (response.getLoginType().equals(LoginTypeMessage.LOGIN_WORLD)) {
 			//System.out.println("Sending world response for player "+response.getPlayer().getDisplay()+", index="+response.getPlayer().getIndex());
 			packet.putByte(0);
-			packet.putByte(response.getPlayer().getPrivilegeLevel().getRights());
-			packet.putByte(0);
-			packet.putByte(0);
-			packet.putByte(0);
-			packet.putByte(0);
+			packet.putByte(response.getPlayer().getPrivilegeLevel().getRights());//Rights
+			packet.putByte(0);//Unknown int
 			packet.putByte(0);//Quick chat world
+			packet.putByte(0);//Bypass world quickchat restriction (eg for jmods)
+			packet.putByte(0);
+			packet.putByte(0);//Chat restricted account (1=quick chat only, 0=free chat)
 			packet.putShort(response.getPlayer().getIndex());//Player id
 			packet.putByte(1);//Member account
 			packet.putTri(0);//Player DOB

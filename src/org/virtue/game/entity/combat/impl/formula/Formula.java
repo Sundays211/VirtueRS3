@@ -1,7 +1,7 @@
 package org.virtue.game.entity.combat.impl.formula;
 
 import org.virtue.Virtue;
-import org.virtue.engine.script.ScriptAPI;
+import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;

@@ -21,6 +21,8 @@
  */
 package org.virtue.game.entity.player.widget.var;
 
+import org.virtue.cache.config.vartype.VarBitType;
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -31,8 +33,21 @@ package org.virtue.game.entity.player.widget.var;
  */
 public interface VarDomain {
 	
+	public Object getVarValue (int key);
+	
+	public long getVarValueLong (int key);
+	
 	public int getVarValueInt (int key);
 	
-	public int getVarBitValue (int key);
+	/**
+	 * Gets the vale of the specified var bit
+	 * @param type The var bit type
+	 * @return The value
+	 */
+	public int getVarBitValue (VarBitType type);
+	
+	public void setVarValue (int key, Object value);
+	
+	public void setVarValueInt (int key, int value);
 
 }

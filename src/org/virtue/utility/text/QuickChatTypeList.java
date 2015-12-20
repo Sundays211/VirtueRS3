@@ -32,9 +32,9 @@ import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.def.impl.Js5Archive;
+import org.virtue.cache.config.Js5Archive;
 import org.virtue.cache.def.impl.QuickChatPhraseType;
-import org.virtue.game.entity.region.LocTypeList;
+import org.virtue.game.world.region.LocTypeList;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

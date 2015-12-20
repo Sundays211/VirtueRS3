@@ -28,7 +28,7 @@ import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.cache.utility.crypto.BKDR;
 import org.virtue.game.content.skills.SkillData;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.OnlineStatus;
 import org.virtue.game.content.social.ignore.Ignore;
@@ -38,8 +38,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.Item;
 import org.virtue.game.entity.player.widget.var.LoginDispatcher;
 import org.virtue.game.entity.player.widget.var.VarKey;
-import org.virtue.game.entity.region.MapSize;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.MapSize;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.GameEventContext;
 import org.virtue.network.event.context.impl.EmptyEventContext;
@@ -158,9 +158,6 @@ public class GameEventDispatcher {
 				//sendRootWidget(1507); // Welcome Screen
 			//}
 			sendGameMessage("Welcome to " + Constants.ServerName + ".");
-			sendGameMessage(
-					"<col=#333333>Commands: ::item, ::godwars, ::vorago, ::edge, ::tele, ::home, ::yell ::players");
-			sendGameMessage("<col=#3399FF>Visit our site at www.zrs3.com ");
 			player.getEquipment().refresh(true);
 			player.getAppearance().refresh();
 			player.updateWeight();
@@ -186,7 +183,7 @@ public class GameEventDispatcher {
 			player.getCombatSchedule()
 					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
 			player.getImpactHandler()
-					.setMaximumLifepoints(player.getSkills().getBaseLevel(SkillType.CONSTITUTION) * 100);
+					.setMaximumLifepoints(player.getSkills().getBaseLevel(StatType.CONSTITUTION) * 100);
 			player.getImpactHandler().restoreLifepoints();
 			player.getMoneyPouch().refresh(false);
 			player.getVars().processLogin(player.getLastLogin());
@@ -401,7 +398,7 @@ public class GameEventDispatcher {
 	 * @param skill
 	 *            The skill to update
 	 */
-	public void sendSkill(SkillData skill) {
+	public void sendStat(SkillData skill) {
 		sendEvent(SkillEventEncoder.class, skill);
 	}
 

@@ -23,7 +23,7 @@ package org.virtue.network.event.encoder.impl;
 
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.SceneLocation;
+import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
 import org.virtue.network.event.encoder.EventEncoder;

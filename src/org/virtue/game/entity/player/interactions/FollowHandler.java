@@ -23,7 +23,7 @@ package org.virtue.game.entity.player.interactions;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.movement.EntityTarget;
+import org.virtue.game.world.region.movement.EntityTarget;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -44,7 +44,7 @@ public class ClanManager {
 	private ClanChannelManager channelManager;
 	
 	public void load () {
-		index = new XMLClanIndex(new File(System.getenv("APPDATA") + "//Z835/clan/", "index.xml"));
+		index = new XMLClanIndex(new File("./repository/clan/", "index.xml"));
 		settingsManager = new ClanSettingsManager(this);
 		channelManager = new ClanChannelManager(this);
 		Virtue.getInstance().getEngine().invoke(new Tick () {

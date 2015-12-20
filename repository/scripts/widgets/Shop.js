@@ -289,7 +289,7 @@ var Shop = {
 			var itemID = api.getItem(player, inv, slot).getID();
 			api.setVarp(player, 300, itemID);
 			api.setVarp(player, 302, Math.min(Math.max(api.getVarp(player, 302), 1), api.itemTotal(player, inv, itemID)));
-			api.setVarc(player, 2361, api.getItemType(itemID).getExamineText())
+			api.setVarc(player, 2361, "");//item examine
 			//api.sendMessage(player, "Setting selected item to inv="+inv+", slot="+slot);
 		},
 		buyItem : function (player, itemID, amount, confirmed) {

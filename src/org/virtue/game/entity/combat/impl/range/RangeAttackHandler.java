@@ -8,7 +8,7 @@ import org.virtue.game.entity.combat.impl.CombatUtils;
 import org.virtue.game.entity.combat.impl.formula.Formula;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.region.packets.Projectile;
+import org.virtue.game.world.region.packets.Projectile;
 
 /**
  * Handles range attacks.

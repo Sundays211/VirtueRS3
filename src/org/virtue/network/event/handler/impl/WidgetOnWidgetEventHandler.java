@@ -21,10 +21,8 @@
  */
 package org.virtue.network.event.handler.impl;
 
+import org.virtue.Virtue;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.network.event.context.impl.in.WidgetOnWidgetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -42,32 +40,21 @@ public class WidgetOnWidgetEventHandler implements GameEventHandler<WidgetOnWidg
 	 */
 	@Override
 	public void handle(Player player, WidgetOnWidgetEventContext context) {
-		if (context.getIf1Interface() == WidgetState.BACKPACK_WIDGET.getID()
-				&& context.getIf1Hash() == context.getIf2Hash()) {
-			if (!inventoryItemOnItem(player, context)) {
-				player.getDispatcher().sendConsoleMessage("Unhandled item-on-item: item1="+context.getIf1ItemID()
-						+", slot1="+context.getIf1Slot()+", item2="+context.getIf2ItemID()+", slot2="+context.getIf2Slot());
-				return;
-			}
-		} else {
-			String message = "Interface1: id="+context.getIf1Interface()+", comp="+context.getIf1Component()
-					+", slot1="+context.getIf1Slot()+", slot2="+context.getIf1ItemID()
-					+" Interface2: id="+context.getIf2Interface()+", comp="+context.getIf2Component()
-					+", slot1="+context.getIf2Slot()+", slot2="+context.getIf2ItemID();
-			player.getDispatcher().sendConsoleMessage("Unhanded interface-on-interface: "+message);
-			System.out.println(message);
+		if (!Virtue.getInstance().getWidgetRepository().handleUse(
+				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
+				context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item(), player)) {
+			defaultHandler(player, context);
 		}
 	}
 	
-	private boolean inventoryItemOnItem (Player player, WidgetOnWidgetEventContext context) {
-		Item item1 = player.getInvs().getContainer(ContainerState.BACKPACK).get(context.getIf1Slot());
-		Item item2 = player.getInvs().getContainer(ContainerState.BACKPACK).get(context.getIf2Slot());
-		if (item1 == null || item1.getId() != context.getIf1ItemID() || item2 == null 
-				|| item2.getId() != context.getIf2ItemID()) {
-			return false;//Expected items do not match actual items
-		}
-		return item1.handleItemOnItem(player, context.getIf1Slot(), item2, context.getIf2Slot());
-		//
+	private void defaultHandler(Player player, WidgetOnWidgetEventContext context) {
+		String message = "Nothing interesting happens.";
+		if (player.getPrivilegeLevel().getRights() >= 2) {
+			message = "Unhanded interface-on-interface: Interface1: id="+context.getIf1Interface()+", comp="+context.getIf1Component()
+					+", slot="+context.getIf1Slot()+", itemID="+context.getIf1Item()
+					+" Interface2: id="+context.getIf2Interface()+", comp="+context.getIf2Component()
+					+", slot="+context.getIf2Slot()+", itemID="+context.getIf2Item();
+		}		
+		player.getDispatcher().sendGameMessage(message);
 	}
-
 }

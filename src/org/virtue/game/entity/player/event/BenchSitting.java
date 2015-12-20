@@ -1,8 +1,8 @@
 package org.virtue.game.entity.player.event;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.SceneLocation;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.SceneLocation;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 
 public class BenchSitting implements PlayerActionHandler {

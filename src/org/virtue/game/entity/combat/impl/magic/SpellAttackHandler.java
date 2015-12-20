@@ -5,7 +5,7 @@ import org.virtue.game.entity.combat.AttackInfo;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.impl.CombatUtils;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
-import org.virtue.game.entity.region.packets.Projectile;
+import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
 import org.virtue.utility.RandomExt;

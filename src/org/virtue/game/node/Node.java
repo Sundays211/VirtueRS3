@@ -1,6 +1,6 @@
 package org.virtue.game.node;
 
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.Tile;
 
 /**
  * Represents a game node (item, object, player, npc, ...).

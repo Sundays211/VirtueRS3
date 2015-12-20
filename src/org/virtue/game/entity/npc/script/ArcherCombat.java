@@ -9,7 +9,7 @@ import org.virtue.game.entity.combat.impl.AttackHandler;
 import org.virtue.game.entity.combat.impl.FollowingType;
 import org.virtue.game.entity.combat.impl.range.RangeAttackEvent;
 import org.virtue.game.entity.combat.impl.range.RangeAttackHandler;
-import org.virtue.game.entity.region.packets.Projectile;
+import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
 

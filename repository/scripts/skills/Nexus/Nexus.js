@@ -1,11 +1,3 @@
-var api;
-
-var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
-var FaceDirectionBlock = Java.type('org.virtue.network.protocol.update.block.FaceDirectionBlock');
-
-var PRAYER_SKILL = 5;
-
 var Unset = 0;
 var Chaotic = 1;
 var Battle = 2;
@@ -13,82 +5,41 @@ var Order = 3;
 var Fealty = 4;
 var charmLimit = 500;
 
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemListener'), {
-
-	/* The item ids to bind to */
-	getItemIDs: function() {
-		return [];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, item, slot, option) {
-		switch (option) {
-			case 1:
-				//api.sendMessage(player, "Collect from the Nexus in lumbridge swamp to get free prayer experience!");
-				break;
-			default:
-				break;
-		}
-		return true;
-	},
-	
-	/* Returns the examine text for the item, or "null" to use the default */
-	getExamine : function (player, item) {
-		return null;
-	}
-
-});
-
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs: function() {
-		return [84209, 84140, 84141, 84142, 84143];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, object, option) {
-		switch (object.getID()) {
+var NexusListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		var location = args.location;
+		
+		switch (locTypeId) {
 		case 84209:
-			startNexusCollection(player, object);
-			return true;
+			startNexusCollection(player, location);
+			return;
 		case 84140:
-			startNexusPurification(player, object);
-			return true;
+			startNexusPurification(player, location);
+			return;
 		case 84141:
-			startNexusPurification(player, object);
-			return true;				
+			startNexusPurification(player, location);
+			return;				
 		case 84142:
-			startNexusPurification(player, object);
-			return true;				
+			startNexusPurification(player, location);
+			return;				
 		case 84143:
-			startNexusPurification(player, object);
-			return true;					
+			startNexusPurification(player, location);
+			return;					
 		default:
-			return false;
+			api.sendMessage(player, "Unhandled nexus: "+location);
+			return;
 		}		
-	},
-	
-	/* The range that a player must be within to interact */
-	getInteractRange : function (object, option) {
-		return 1;
-	},
-	
-	/* A backpack item used on the location */
-	handleItemOnLoc : function (player, location, item, invSlot) {
-		return false;
 	}
-
 });
-
 
 /* Listen to the location ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
-	var listener = new LocationListener();
-	var itemListener = new ItemListener();
-	scriptManager.registerLocationListener(listener, listener.getIDs());
-	scriptManager.registerBackpackItemListener(itemListener, itemListener.getItemIDs());
+	var locs = [ 84209, 84140, 84141, 84142, 84143 ];
+	var listener = new NexusListener();
+	for (var i in locs) {
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], listener);
+	}
 };
 
 function startNexusCollection(player, object, option) {
@@ -102,7 +53,7 @@ function startNexusCollection(player, object, option) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {
 				api.runAnimation(player, 20174);
-				api.addExperience(player, PRAYER_SKILL, 250, true);
+				api.addExperience(player, Stat.PRAYER, 250, true);
 				if (delay <= 0) {
 					return true;
 				}
@@ -128,7 +79,7 @@ function startNexusPurification(player, object, option) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {
 				api.runAnimation(player, 20174);
-				api.addExperience(player, PRAYER_SKILL, 150, true);
+				api.addExperience(player, Stat.PRAYER, 150, true);
 				if (delay <= 0) {
 					return true;
 				}

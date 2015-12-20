@@ -6,7 +6,7 @@ import org.virtue.game.entity.combat.CombatEvent;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.hit.Hit;
 import org.virtue.game.entity.combat.hit.Hit.HitType;
-import org.virtue.game.entity.region.packets.Projectile;
+import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
 

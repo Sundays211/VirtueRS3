@@ -23,8 +23,8 @@ package org.virtue.network.event.context.impl.out;
 
 import java.util.Collection;
 
-import org.virtue.game.entity.region.Tile;
-import org.virtue.game.entity.region.packets.SceneUpdatePacket;
+import org.virtue.game.world.region.Tile;
+import org.virtue.game.world.region.packets.SceneUpdatePacket;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

@@ -58,8 +58,9 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 				+", slot="+context.getIf1Slot()+", itemID="+context.getIf1Item()
 				+" Interface2: id="+context.getIf2Interface()+", comp="+context.getIf2Component()
 				+", slot="+context.getIf2Slot()+", itemID="+context.getIf2Item();
-		player.getDispatcher().sendGameMessage("Unhanded interface drag: "+message);
-		System.out.println(message);
+		if (player.getPrivilegeLevel().getRights() >= 2) {
+			player.getDispatcher().sendGameMessage("Unhanded interface drag: "+message);
+		}
 	}
 
 }

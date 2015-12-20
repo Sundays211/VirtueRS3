@@ -72,10 +72,9 @@ public class LoginDecoder extends ByteToMessageDecoder {
 
 		int version = buf.readInt();
 		int subVersion = buf.readInt();
-		int antileech = buf.readInt();
 		
-		if (version != Constants.FRAME_MAJOR && subVersion != Constants.FRAME_MINOR && antileech != Constants.ANTILEECH) {
-			throw new IllegalStateException("Invalid client version/sub-version/clientleech!");
+		if (version != Constants.FRAME_MAJOR && subVersion != Constants.FRAME_MINOR) {
+			throw new IllegalStateException("Invalid client version/sub-version!");
 		}
 
 		if (type.equals(LoginTypeMessage.LOGIN_WORLD)) {
@@ -99,6 +98,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		byte[] secureBytes = new byte[secureBufferSize];
 		buf.readBytes(secureBytes);
 		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
+
 		int blockOpcode = secureBuffer.readByte() & 0xFF;
 		if (blockOpcode != 10)
 			throw new ProtocolException("Invalid block opcode: " + blockOpcode);
@@ -128,6 +128,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		xtea.decrypt(xteaBlock, 0, xteaBlock.length);
 		
 		ByteBuf xteaBuffer = Unpooled.wrappedBuffer(xteaBlock);
+
 		boolean decodeAsString = xteaBuffer.readByte() == 1;
 		String username = decodeAsString ? BufferUtility.readString(xteaBuffer) : Base37Utility.decodeBase37(xteaBuffer.readLong());
 

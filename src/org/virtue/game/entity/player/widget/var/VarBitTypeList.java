@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.def.vartype.VarBitType;
+import org.virtue.cache.config.vartype.VarBitType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

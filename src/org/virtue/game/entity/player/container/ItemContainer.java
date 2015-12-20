@@ -2,7 +2,7 @@ package org.virtue.game.entity.player.container;
 
 import java.util.Arrays;
 
-import org.virtue.cache.def.impl.InvType;
+import org.virtue.cache.config.inv.InvType;
 import org.virtue.game.entity.player.widget.var.ScriptVar;
 
 /**

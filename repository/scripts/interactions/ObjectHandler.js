@@ -28,38 +28,21 @@
  * @author Sundays211
  * @since 16/01/2015
  */
-var api;
-var entered;
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs : function() {
-		return [ 77834, 1817, 14304, 14305, 14306, 14307, 68134, 68135, 65084,
-				68223, 9356, 65086, 65082, 65079, 65077, 38698, 20604, 20602, 79061, 79041, 79042, 79043,
-				1804, 12389, 29335];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, object, option) {
-		if (option != 1) {
-			return false;
-		}
-		
-		if (api.freeSpaceTotal(player, "backpack") < 1) {
-			api.sendMessage(player, "Not enough space in your inventory.");
-			return;
-		}
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		var location = args.location;
 		
 		if (api.isPaused(player)) {
 			return false;
 		}
 		
-		switch (object.getID()) {
+		switch (locTypeId) {
 			case 1804://Varrock dungeon Door
-				if(player.getCurrentTile().getX() == 3115 && player.getCurrentTile().getY() == 3449) {
+				if(api.getCoordX(player) == 3115 && api.getCoordY(player) == 3449) {
 					api.teleportEntity(player, 3115, 3450, 0);
-				} else if(player.getCurrentTile().getX() == 3115 && player.getCurrentTile().getY() == 3450) {
+				} else if(api.getCoordX(player) == 3115 && api.getCoordY(player) == 3450) {
 					api.teleportEntity(player, 3115, 3449, 0);
 				}
 			return true;
@@ -171,33 +154,26 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 			case 65082:
 			case 65079:
 			case 65077:
-					if(player.getCurrentTile().getY() == 3520) {
-						minigame = Java.type('org.virtue.Virtue').getInstance().getController().createWildy(1, 1);
-						minigame.getPlayers().add(player);
-						api.runAnimation(player, 6132);
-						api.teleportEntityBy(player, 0, 3, 0);
-					}
+				if(api.getCoordY(player) == 3520) {
+					minigame = Java.type('org.virtue.Virtue').getInstance().getController().createWildy(1, 1);
+					minigame.getPlayers().add(player);
+					api.runAnimation(player, 6132);
+					api.teleportEntityBy(player, 0, 3, 0);
+				}
 				return true;
 			default:
 				return false;
 		}		
-	},
-	
-	/* The range that a player must be within to interact */
-	getInteractRange : function (object, option) {
-		return 1;
-	},
-	
-	/* A backpack item used on the location */
-	handleItemOnLoc : function (player, location, item, invSlot) {
-		return false;
 	}
-
 });
 
 /* Listen to the location ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
+	var locs = [ 77834, 1817, 14304, 14305, 14306, 14307, 68134, 68135, 65084,
+					68223, 9356, 65086, 65082, 65079, 65077, 38698, 20604, 20602, 79061, 79041, 79042, 79043,
+					1804, 12389, 29335 ];
 	var listener = new LocationListener();
-	scriptManager.registerLocationListener(listener, listener.getIDs());
+	for (var i in locs) {
+		scriptManager.registerListener(EventType.OPLOC1, locs[i], listener);
+	}
 };

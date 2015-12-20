@@ -2,8 +2,7 @@ package org.virtue.game.content.skills.hunter;
 
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.region.SceneLocation;
-import org.virtue.network.protocol.update.block.AnimationBlock;
+import org.virtue.game.world.region.SceneLocation;
 
 public class NetTrapMethod extends Hunter {
 

@@ -33,11 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.cache.Archive;
-import org.virtue.cache.def.vartype.VarBitOverflowException;
-import org.virtue.cache.def.vartype.VarBitType;
-import org.virtue.cache.def.vartype.VarDomainType;
-import org.virtue.cache.def.vartype.VarLifetime;
-import org.virtue.cache.def.vartype.VarType;
+import org.virtue.cache.config.vartype.VarBitOverflowException;
+import org.virtue.cache.config.vartype.VarBitType;
+import org.virtue.cache.config.vartype.VarDomainType;
+import org.virtue.cache.config.vartype.VarLifetime;
+import org.virtue.cache.config.vartype.VarType;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
@@ -142,20 +142,33 @@ public class VarRepository implements VarDomain {
 		setVarpBit(key, this.getVarBitValue(key)+value);
 	}
 	
+	@Override
 	public void setVarValueInt (int key, int value) {
-		setVarp(key, new IntScriptVar(value));
+		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(key, value));
+		setVarValue(key, Integer.valueOf(value));
 	}
 	
-	public void setVarp (int key, ScriptVar value) {
+	public void setVarValue (int key, ScriptVar value) {
+		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(key, value.scriptValue()));
+		setVarValue(key, value);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.player.widget.var.VarDomain#setVarValue(int, java.lang.Object)
+	 */
+	@Override
+	public void setVarValue(int key, Object value) {
 		Object oldValue = this.varps[key];
 		this.varps[key] = value;
-		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(key, value.scriptValue()));
 		VarListener listener = Virtue.getInstance().getScripts().forVarID(key);
 		if (listener != null && player.exists() && tick > 0) {
 			if (oldValue instanceof ScriptVar) {
 				oldValue = ((ScriptVar) oldValue).scriptValue();
 			}
-			if (listener.onValueChange(player, key, oldValue, value.scriptValue())) {
+			if (value instanceof ScriptVar) {
+				value = ((ScriptVar) value).scriptValue();
+			}
+			if (listener.onValueChange(player, key, oldValue, value)) {
 				tickTasks.add(listener);
 			}
 		}
@@ -186,28 +199,48 @@ public class VarRepository implements VarDomain {
 	public boolean isValidBitKey (int key) {
 		return key >= 0 && key < VarBitTypeList.capacity();
 	}
-	
-	public Object getVar (int key) {
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.player.widget.var.VarDomain#getVarValue(int)
+	 */
+	@Override
+	public Object getVarValue(int key) {
 		return varps[key];
 	}
 	
 	@Override
 	public int getVarValueInt (int key) {
-		if (varps[key] == null) {
+		Object value = getVarValue(key);
+		if (value == null) {
 			return 0;
 		}
-		if (varps[key] instanceof ScriptVar) {
-			return ((ScriptVar) varps[key]).scriptValue();
+		if (value instanceof ScriptVar) {
+			return ((ScriptVar) value).scriptValue();
 		}
-		return ((Integer) varps[key]);
+		return ((Integer) value);
 	}
 	
-	@Override
 	public int getVarBitValue (int key) {
-		return getVarpBit(VarBitTypeList.list(key));
+		return getVarBitValue(VarBitTypeList.list(key));
 	}
-	
-	public int getVarpBit (VarBitType type) {
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.player.widget.var.VarDomain#getVarValueLong(int)
+	 */
+	@Override
+	public long getVarValueLong(int key) {
+		Object value = getVarValue(key);
+		if (value == null) {
+			return 0;
+		}
+		if (!(value instanceof Long)) {
+			throw new RuntimeException("Variable "+key+" is not of type Long");
+		}
+		return ((Long) value);
+	}
+
+	@Override
+	public int getVarBitValue (VarBitType type) {
 		if (type == null || !VarDomainType.PLAYER.equals(type.getBaseVarDomain())) {
 			return 0;
 		}

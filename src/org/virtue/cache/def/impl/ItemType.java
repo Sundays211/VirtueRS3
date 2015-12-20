@@ -87,7 +87,7 @@ public class ItemType {
 	
 	int mesh;
 	public String name = "null";
-	public String desc = null;
+	private String desc = null;
 	public int zoom2d = 2000;
 	public int xan2d = 0;
 	public int yan2d = 0;

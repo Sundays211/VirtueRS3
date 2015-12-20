@@ -38,7 +38,7 @@ public class HandshakeMessage {
 	/**
 	 * Enum of possible handshake types
 	 */
-	public static enum HandshakeTypes { HANDSHAKE_LOGIN, HANDSHAKE_ONDEMAND, HANDHSHAKE_CREATION, HANDSHAKE_SOCIAL }
+	public static enum HandshakeTypes { HANDSHAKE_LOGIN, HANDSHAKE_ONDEMAND, HANDHSHAKE_CREATION, HANDSHAKE_SOCIAL_LOGIN }
 
 	/**
 	 * The current handshake type
@@ -65,7 +65,7 @@ public class HandshakeMessage {
 		case 28:
 			return HandshakeTypes.HANDHSHAKE_CREATION;
 		case 29:
-			return HandshakeTypes.HANDSHAKE_SOCIAL;
+			return HandshakeTypes.HANDSHAKE_SOCIAL_LOGIN;
 		default:
 			logger.error("Unknown Handshake Opcode: " + opcode);
 		}

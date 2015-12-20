@@ -93,16 +93,15 @@ public class AccountIndex {
 	 * Loads the accounts into the index
 	 * @throws Exception
 	 */
-	public void load() throws Exception {
+	public void load(File indexFile) throws Exception {
 		clearIndex();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		File file = new File(System.getenv("APPDATA") + "//Z835/character//", "index.xml");
-		if (!file.exists()) {
-			System.err.println("Could not find file " + file.getAbsolutePath() + "!");
+		if (!indexFile.exists()) {
+			System.err.println("Could not find file " + indexFile.getAbsolutePath() + "!");
 			return;
 		}
-		Document doc = builder.parse(file);
+		Document doc = builder.parse(indexFile);
 
 		doc.getDocumentElement().normalize();
 		
@@ -127,11 +126,13 @@ public class AccountIndex {
 					long userhash = Long.parseLong(element.getElementsByTagName("hash").item(0).getTextContent(), 16);
 					String display = element.getElementsByTagName("display").item(0).getTextContent();
 					String prevname = element.getElementsByTagName("prevname").item(0).getTextContent();
-					PrivilegeLevel rights = PrivilegeLevel.forId(Integer.parseInt(element.getElementsByTagName("type").item(0).getTextContent()));
-	
+					PrivilegeLevel rights = PrivilegeLevel.PLAYER;
+					if (version >= 3) {
+						rights = PrivilegeLevel.forId(Integer.parseInt(element.getElementsByTagName("type").item(0).getTextContent()));
+					}
 					addAccount(email, userhash, display, prevname, locked, rights);
-				} catch (Throwable t) {
-					t.printStackTrace();
+				} catch (Exception ex) {
+					logger.warn("Error loading account index definition "+ordinal, ex);
 				}
 			}
 		}
@@ -204,7 +205,7 @@ public class AccountIndex {
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(document);
-			StreamResult result = new StreamResult(new File(System.getenv("APPDATA") + "//Z835/character//", "index.xml"));
+			StreamResult result = new StreamResult(new File("./repository/character/", "index.xml"));
 			transformer.transform(source, result);
 			logger.info("Saved account index. Index now countains " + hashLookup.size() + " account(s)");
 		} catch (Exception ex) {

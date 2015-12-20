@@ -22,7 +22,7 @@
 package org.virtue.utility.text;
 
 import org.virtue.cache.def.impl.QuickChatPhraseType;
-import org.virtue.game.content.skills.SkillType;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 
@@ -66,10 +66,10 @@ public class QuickChatMessage {
 		for (int param=0;param<type.getParamCount();param++) {
 			switch (type.getParamType(param)) {
 			case ENUM_STRING_STATBASE://Enum value related to base skill level
-				params[param] = player.getSkills().getBaseLevel(SkillType.forID(type.getParamKey(param, 1)));
+				params[param] = player.getSkills().getBaseLevel(StatType.getById(type.getParamKey(param, 1)));
 				break;
 			case STAT_BASE://Base skill level
-				params[param] = player.getSkills().getBaseLevel(SkillType.forID(type.getParamKey(param, 0)));
+				params[param] = player.getSkills().getBaseLevel(StatType.getById(type.getParamKey(param, 0)));
 				break;
 			case TOSTRING_VARBIT://Var bit value
 				params[param] = player.getVars().getVarBitValue(type.getParamKey(param, 0));
@@ -87,6 +87,7 @@ public class QuickChatMessage {
 				params[param] = player.getChat().getFriendChatMeanCombatLevel();
 				break;
 			case ENUM_STRING://Currently only used for slayer assignment
+				params[param] = player.getVars().getVarValueInt(type.getParamKey(param, 1));
 				break;
 			case ENUM_STRING_CLAN://Friend chat rank
 				break;

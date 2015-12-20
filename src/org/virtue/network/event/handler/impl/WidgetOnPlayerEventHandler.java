@@ -23,7 +23,7 @@ package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.movement.WidgetOnEntityTarget;
+import org.virtue.game.world.region.movement.WidgetOnEntityTarget;
 import org.virtue.network.event.context.impl.in.WidgetOnPlayerEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -46,20 +46,7 @@ public class WidgetOnPlayerEventHandler implements GameEventHandler<WidgetOnPlay
 		if (target != null) {
 			player.getMovement().setTarget(new WidgetOnEntityTarget(player, target, 
 					context.getIfInterface(),  context.getIfComponent(),
-					context.getIfSlot(), context.getIfItem()));
-			/*switch (context.getIfInterface()) {
-			case 234:
-			case 1110://Clan recruit
-				handleClanRecruit(player, target, context);
-				break;
-			default:
-				String message = "Interface: id="+context.getIfInterface()+", comp="+context.getIfComponent()
-					+", slot="+context.getIfSlot()+", item="+context.getIfItem()
-					+" Player: name="+target.getName()+", index="+target.getIndex()
-					+", forceRun="+context.forceRun();
-			player.getDispatcher().sendGameMessage("Unhanded interface-on-player: "+message);
-			System.out.println(message);
-			}	*/		
+					context.getIfSlot(), context.getIfItem()));		
 		}
 	}
 }

@@ -43,8 +43,8 @@ import org.virtue.cache.ChecksumTable;
 import org.virtue.cache.Container;
 import org.virtue.cache.FileStore;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.def.impl.Js5Archive;
-import org.virtue.cache.def.impl.Js5ConfigGroup;
+import org.virtue.cache.config.Js5Archive;
+import org.virtue.cache.config.Js5ConfigGroup;
 import org.virtue.engine.GameEngine;
 import org.virtue.engine.cycle.ticks.SystemUpdateTick;
 import org.virtue.engine.script.JSListeners;
@@ -66,16 +66,17 @@ import org.virtue.game.entity.player.container.ItemTypeList;
 import org.virtue.game.entity.player.widget.WidgetRepository;
 import org.virtue.game.entity.player.widget.var.VarBitTypeList;
 import org.virtue.game.entity.player.widget.var.VarRepository;
-import org.virtue.game.entity.region.LocTypeList;
-import org.virtue.game.entity.region.RegionManager;
 import org.virtue.game.parser.ParserRepository;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.parser.impl.NpcDataParser;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.game.parser.impl.NpcSpawnParser;
+import org.virtue.game.world.region.LocTypeList;
+import org.virtue.game.world.region.RegionManager;
 import org.virtue.network.Network;
 import org.virtue.network.event.EventRepository;
 import org.virtue.utility.EnumTypeList;
+import org.virtue.utility.FileUtility;
 import org.virtue.utility.QuestTypeList;
 import org.virtue.utility.RenderTypeList;
 import org.virtue.utility.StructTypeList;
@@ -197,7 +198,7 @@ public class Virtue {//
 		}
 		instance.loadProperties(propertiesFile);
 		instance.serverDay0 = Constants.SERVER_DAY_INITIAL;
-		//instance.serverDay0 =  Long.parseLong(instance.properties.getProperty("serverDate.initial"));
+		//instance.serverDay0 =  Long.parseLong(instance.properties.getProperty("server.date.initial"));
 		try {
 			instance.initLogging();
 			instance.loadEngine();
@@ -238,14 +239,17 @@ public class Virtue {//
 	}
 	
 	private void initLogging () {
-		String loggerPath = System.getenv("APPDATA") + "//Z835/log/game//"+getServerDay()+".log";
+		File loggerPath = FileUtility.parseFilePath(properties.getProperty("logging.dir", "/repository/log/game/"));
+		if (!loggerPath.exists()) {
+			loggerPath.mkdirs();
+		}
 		
 		org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
 		
 		org.apache.log4j.Logger.getRootLogger().addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
 		
 		try {
-			FileAppender appender = new FileAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN), loggerPath);
+			FileAppender appender = new FileAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN), loggerPath.getAbsolutePath()+getServerDay()+".log");
 			appender.setThreshold(Level.WARN);
 			org.apache.log4j.Logger.getRootLogger().addAppender(appender);
 		} catch (IOException e) {
@@ -288,7 +292,8 @@ public class Virtue {//
 	 */
 	private void loadGame() throws Exception {
 		accountIndex = new AccountIndex();
-		accountIndex.load();
+		String indexFileLocation = getProperty("character.index.file", "./repository/character/index.xml");
+		accountIndex.load(FileUtility.parseFilePath(indexFileLocation));
 		event = new EventRepository();
 		event.load();
 		parser = new ParserRepository();
@@ -444,6 +449,16 @@ public class Virtue {//
 	}
 	
 	/**
+	 * Returns the value of the specified server property or the specified default if no property was defined
+	 * @param name The property name (key)
+	 * @param defaultValue The value to return if the property was not defined
+	 * @return The property value.
+	 */
+	public String getProperty (String name, String defaultValue) {
+		return properties.getProperty(name, defaultValue);
+	}
+	
+	/**
 	 * Gets the current number of days since SERVER_DAY_0
 	 * @return The number of days
 	 */
@@ -514,7 +529,6 @@ public class Virtue {//
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	/**

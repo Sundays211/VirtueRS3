@@ -28,9 +28,9 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.EntityList;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.RegionManager;
-import org.virtue.game.entity.region.RegionUpdateTick;
 import org.virtue.game.node.ServerNode;
+import org.virtue.game.world.region.RegionManager;
+import org.virtue.game.world.region.RegionUpdateTick;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 
 /**

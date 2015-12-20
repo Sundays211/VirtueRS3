@@ -23,7 +23,7 @@ package org.virtue.game.content.minigame;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.SceneLocation;
+import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**

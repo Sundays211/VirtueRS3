@@ -34,9 +34,9 @@ import org.virtue.Virtue;
 import org.virtue.engine.cycle.GameTick;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.region.DynamicRegion;
-import org.virtue.game.entity.region.RegionTools;
-import org.virtue.game.entity.region.Tile;
+import org.virtue.game.world.region.DynamicRegion;
+import org.virtue.game.world.region.RegionTools;
+import org.virtue.game.world.region.Tile;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

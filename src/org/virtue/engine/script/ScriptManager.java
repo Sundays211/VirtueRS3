@@ -23,9 +23,7 @@ package org.virtue.engine.script;
 
 import java.util.Map;
 
-import org.virtue.engine.script.listeners.ItemListener;
 import org.virtue.engine.script.listeners.ItemOnEntityListener;
-import org.virtue.engine.script.listeners.ItemOnItemListener;
 import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.engine.script.listeners.NpcListener;
 import org.virtue.engine.script.listeners.WidgetListener;
@@ -81,17 +79,7 @@ public interface ScriptManager {
 
 	public ItemOnEntityListener forItemOnEntity(int itemID);
 
-	public ItemOnItemListener forItemOnItem(int id1);
-
-	/**
-	 * Returns the item listener for the item with the given ID
-	 * NOTE: This is deprecated - use {@link #invokeScriptChecked(ScriptEventType, Object, Map)} instead
-	 * @param id The item ID
-	 * @return The item listener, or null if no listener exists.
-	 */
 	@Deprecated
-	public ItemListener forItemID(int id);
-
 	public NpcListener forNpcID(int id);
 
 	public WidgetListener forWidgetID(int id);
