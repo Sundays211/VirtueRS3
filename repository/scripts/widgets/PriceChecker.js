@@ -45,7 +45,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		if (interfaceID == 206) {
 			//Received if sub: parent=1477, parentSlot=426, ifID=206, options=0
 			api.openOverlaySub(player, 1008, 207, false);//Received if sub: parent=1477, parentSlot=431, ifID=207, options=0
-			api.sendContainer(player, PC_CONTAINER);
+			api.sendInv(player, PC_CONTAINER);
 			//Run client script: [8178], params=
 			api.runClientScript(player, 8865, [1]);//Run client script: [8865, 1], params=i
 			api.setWidgetEvents(player, 206, 5, 0, 54, 1086);//Received if events: if=206, comp=5, fromSlot=0, toSlot=54, events=1086

@@ -3514,7 +3514,7 @@ public class LoginDispatcher {
 		player.getVars().setVarValueInt(4012, 2308365);
 		player.getVars().setVarValueInt(260,0);
 		player.getDispatcher().sendVarc(695,0);
-		player.getWidgets().openWidgetCustom(96797216,669,1,new int[]{0,0,0,0});
+		//player.getWidgets().openWidgetCustom(96797216,669,1,new int[]{0,0,0,0});
 		player.getDispatcher().sendVarc(3838,0);
 		player.getDispatcher().sendVarc(3840,0);
 		player.getDispatcher().sendVarc(3842,-1);

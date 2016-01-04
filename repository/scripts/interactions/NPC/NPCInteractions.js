@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ContainerState = Java.type('org.virtue.game.entity.player.container.ContainerState');
+var ContainerState = Java.type('org.virtue.game.entity.player.inv.ContainerState');
 
 var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
 /**
@@ -58,11 +58,6 @@ var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcL
 				switch (option) {
 					case 1:
 						player.getDialogs().sendNpcChat("Would you like to buy any fine clothes?", 548);
-						return true;
-					case 3:
-						api.setVarp(player, 304, 8);
-						api.setVarc(player, 2360, "Thessalia's Fine Clothes");
-						api.openCentralWidget(player, 1265, false);
 						return true;
 					case 4:
 						startMakeover(player, npc);			
@@ -144,7 +139,7 @@ function startMakeover (player, npc) {
 
 function startNastroth (player, npc) {
 	print(api.getNpcType(npc).name+"\n");
-	if (api.freeSpaceTotal(player, "backpack") < 28) {
+	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 28) {
 		player.getDialogs().sendNpcChat("Sorry! I cannot give you any item's if you have something in your inventory already. You must have atleast 28 empty inventory slots. Come talk to me later.", 6539);
 		return;
 	}

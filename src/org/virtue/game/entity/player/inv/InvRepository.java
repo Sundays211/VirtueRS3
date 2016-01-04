@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.container;
+package org.virtue.game.entity.player.inv;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.virtue.Virtue;
 import org.virtue.cache.Archive;
+import org.virtue.cache.ReferenceTable;
 import org.virtue.cache.config.inv.InvType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
@@ -45,10 +46,13 @@ public class InvRepository {
 	
 	private static InvType[] invTypes;
 	
-	public static void init (Archive archive) throws IOException {
-		invTypes = new InvType[archive.size()];
+	public static void init (Archive archive, ReferenceTable.Entry invTypeEntry) throws IOException {
+		invTypes = new InvType[invTypeEntry.capacity()];
 		for (int id=0;id<archive.size();id++) {
-			ByteBuffer entry = archive.getEntry(id);
+			if (invTypeEntry.getEntry(id) == null) {
+				continue;
+			}
+			ByteBuffer entry = archive.getEntry(invTypeEntry.getEntry(id).index());
 			if (entry == null) {
 				continue;
 			}
@@ -122,16 +126,12 @@ public class InvRepository {
 	 * @return The item container.
 	 */
 	public ItemContainer loadContainer (ContainerState state) {
-		int containerID = state.getID();
+		int invId = state.getID();
 		boolean alwaysStack = state.alwaysStack();
-		if (containers[containerID] == null) {
-			containers[containerID] = new ItemContainer(invTypes[containerID], alwaysStack);
-			if (state.getPreset() != null) {
-				containers[containerID].clear();
-				containers[containerID].addAll(state.getPreset());//Lets try this
-			}
+		if (containers[invId] == null) {
+			containers[invId] = new ItemContainer(invTypes[invId], alwaysStack);
 		}
-		return containers[containerID];
+		return containers[invId];
 	}
 	
 	/**
@@ -141,7 +141,7 @@ public class InvRepository {
 	 * @return The item container.
 	 */
 	public ItemContainer loadContainer (int containerID) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null)
 			throw new IllegalStateException("Could not find container: ["+containerID+"].");
 		return loadContainer(state);

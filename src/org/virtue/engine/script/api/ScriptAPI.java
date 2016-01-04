@@ -40,8 +40,8 @@ import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
-import org.virtue.game.entity.player.container.Item;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
 import org.virtue.game.world.region.Region;
@@ -434,7 +434,7 @@ public interface ScriptAPI {
 	/**
 	 * Gets the item in the specified slot in the player's inventory
 	 * @param player The player
-	 * @param invName The inventory to get the item from. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param invName The inventory to get the item from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
 	 * @param slot The slot to check
 	 * @return The {@link Item} in the slot, or null if no item exists
 	 */
@@ -445,7 +445,7 @@ public interface ScriptAPI {
 	/**
 	 * Adds an item to the player's inventory
 	 * @param player The player
-	 * @param inv The inventory to add the item into. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param inv The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
 	 * @param itemID The id of the item to add
 	 * @param amount The amount of the item to add
 	 */
@@ -455,7 +455,7 @@ public interface ScriptAPI {
 	 * Replaces an item in the player's inventory with a new item.
 	 * This should be used with care, as it deletes the old item without warning and can cause issues in some inventories (such as shops and banks).
 	 * @param player The player
-	 * @param invName The inventory to add the item into. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param invName The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
 	 * @param slot The slot to set
 	 * @param itemID The id of the new item to add
 	 * @param amount The number of items to add
@@ -466,7 +466,7 @@ public interface ScriptAPI {
 	 * Replaces an item in the player's inventory with a new item.
 	 * This should be used with care, as it deletes the old item without warning and can cause issues in some inventories (such as shops and banks).
 	 * @param player The player
-	 * @param invId The inventory to add the item into. See {@link org.virtue.game.entity.player.container.ContainerState} for the ids of valid containers
+	 * @param invId The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid containers
 	 * @param slot The slot to set
 	 * @param itemID The id of the new item to add
 	 * @param amount The number of items to add
@@ -482,7 +482,7 @@ public interface ScriptAPI {
 	/**
 	 * Removes an item of the specified type from the player's inventory
 	 * @param player The player
-	 * @param invName The inventory to delete the item from. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param invName The inventory to delete the item from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
 	 * @param itemID The id of the item to delete
 	 * @param amount The number of items to delete
 	 * @param slot The prefered slot to delete from
@@ -495,7 +495,7 @@ public interface ScriptAPI {
 	/**
 	 * Counts the number of items held by the player in the specified inventory
 	 * @param player The player
-	 * @param container The inventory to check. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param container The inventory to check. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
 	 * @param itemID The type of items to count
 	 * @return The number of items of the specified id held in the specified container
 	 */
@@ -512,7 +512,7 @@ public interface ScriptAPI {
 	/**
 	 * Counts the number of empty slots in an inventory of the specified player
 	 * @param player The player.
-	 * @param invName The inventory to check. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param invName The inventory to check. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
 	 * @return The number of empty slots.
 	 */
 	public int freeSpaceTotal (Player player, String invName);
@@ -526,9 +526,7 @@ public interface ScriptAPI {
 	 */
 	public Item getWeapon(Player player, boolean offhand);
 	
-	public boolean containerReady(Player player, int containerID);
-	
-	public void sendContainer (Player player, int containerID);
+	public boolean containerReady(Player player, int containerID);	
 	
 	/**
 	 * Combat Mode
@@ -537,21 +535,19 @@ public interface ScriptAPI {
 	public CombatMode getMode(Player player, CombatMode mode);
 	
 	/**
-	 * Loads the specified container and sends it to the player
+	 * Loads the specified inventory and sends it to the player
 	 * @param player The player
-	 * @param invName The inventory to send. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param invId The ID of the inventory to send. 
 	 */
-	public void sendContainer (Player player, String invName);
+	public void sendInv (Player player, int invId);
 
-	public void sendContainerTo(Player player, Player target, int containerID);
-	
 	/**
 	 * Sends the specified container to another player. Mainly used for trade.
 	 * @param player The player who owns the container
 	 * @param target The player to send the container to
-	 * @param invName The inventory to send. See {@link org.virtue.game.entity.player.container.ContainerState} for the names of valid containers
+	 * @param invName The inventory to send. 
 	 */
-	public void sendContainerTo(Player player, Player target, String invName);
+	public void sendInvTo(Player player, Player target, int invId);
 	
 	public void clearContainer (Player player, int containerID);
 	

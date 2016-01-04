@@ -23,10 +23,10 @@ package org.virtue.game.content.exchange;
 
 import org.virtue.Virtue;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.player.container.ItemContainer;
-import org.virtue.game.entity.player.container.ItemTypeList;
+import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.utility.EnumTypeList;
 
@@ -99,9 +99,9 @@ public class ExchangeOffers {
 		int processed = totalProcessed - offer.getCompletedCount();
 		int coins = totalCoins - offer.getCompletedGold();
 		int offerInvID = EnumTypeList.list(1078).getValueInt(slot);
-		ContainerState offerContainer = ContainerState.forID(offerInvID);
+		ContainerState offerContainer = ContainerState.getById(offerInvID);
 		int returnInvID = EnumTypeList.list(1079).getValueInt(slot);
-		ContainerState returnContainer = ContainerState.forID(returnInvID);
+		ContainerState returnContainer = ContainerState.getById(returnInvID);
 		if (offerContainer == null || returnContainer == null) {
 			return;
 		}

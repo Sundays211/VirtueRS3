@@ -25,7 +25,7 @@ import java.text.NumberFormat;
 
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ContainerState;
+import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;

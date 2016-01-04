@@ -23,7 +23,7 @@ package org.virtue.engine.script.listeners;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -19,21 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.container;
+package org.virtue.game.entity.player.inv;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 19, 2014
  */
 public enum ContainerState {	
-	BOBS_AXES(1, true, false, new Item(4151, 1)),
+	BOBS_AXES(1, true, false),
 	HORVIKS_ARMOUR_SHOP(2, true, false),
 	LUMBRIDGE_GEN_STORE(3, true, false),
+	VARROCK_GEN_STORE(4, true, false),
 	AUBURYS_RUNE_SHOP(5, true, false),
 	VARROCK_SWORD_SHOP(6, true, false),
 	LOWES_ARCHERY_SHOP(7, true, false),
 	THESSALIAS_FINE_SHOP(8, true, false),
 	ZAFF_STAFF_SHOP(9, true, false),
+	FALADOR_GEN_STORE(13, true, false),
 	LOST_CITY_DRAGON_SHOP(36, true, false),
 	HEROES_QUEST_DRAGON_SHOP(45, true, false),
 	
@@ -101,13 +103,11 @@ public enum ContainerState {
 	private int id;
 	private boolean stackable;
 	private boolean save;
-	private Item[] preset;
 	
-	ContainerState (int id, boolean stackable, boolean save, Item... preset) {
+	ContainerState (int id, boolean stackable, boolean save) {
 		this.id = id;
 		this.stackable = stackable;
 		this.save = save;
-		this.preset = preset;
 	}
 	
 	public int getID () {
@@ -126,11 +126,7 @@ public enum ContainerState {
 		return name().toLowerCase();
 	}
 	
-	public Item[] getPreset() {
-		return preset;
-	}
-	
-	public static ContainerState forID (int id) {
+	public static ContainerState getById (int id) {
 		for (ContainerState container : ContainerState.values()) {
 			if (container.id == id) {
 				return container;

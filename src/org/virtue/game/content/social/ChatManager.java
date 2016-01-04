@@ -33,7 +33,7 @@ import org.virtue.game.entity.player.AccountInfo;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
-import org.virtue.game.entity.player.container.ContainerState;
+import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ClanChannelDeltaEventContext;

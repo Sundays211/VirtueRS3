@@ -49,11 +49,11 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			if (targetPlayer == null) {
 				return;
 			}
-			api.sendContainer(player, TRADE_CONTAINER);
-			api.sendContainerTo(player, targetPlayer, TRADE_CONTAINER);
-			api.sendContainer(player, LOAN_OFFER);
-			api.sendContainerTo(player, targetPlayer, LOAN_OFFER);
-			api.sendContainer(player, LOAN_RETURN);
+			api.sendInv(player, TRADE_CONTAINER);
+			api.sendInv(player, targetPlayer, TRADE_CONTAINER);
+			api.sendInv(player, LOAN_OFFER);
+			api.sendInv(player, targetPlayer, LOAN_OFFER);
+			api.sendInv(player, LOAN_RETURN);
 			api.setVarc(player, 199, -1);
 			api.setVarc(player, 3678, -1);
 			api.openOverlaySub(player, 1008, 336, false);
@@ -458,8 +458,8 @@ var Trade = {
 		refreshTrade : function (player) {
 			var targetPlayer = api.getInteractionTarget(player);
 			if (targetPlayer != null) {
-				api.sendContainerTo(player, targetPlayer, "trade");
-				api.sendContainerTo(player, targetPlayer, "loan_offer");
+				api.sendInvTo(player, targetPlayer, Inv.TRADE);
+				api.sendInvTo(player, targetPlayer, Inv.LOAN_OFFER);
 			}
 			api.setWidgetText(player, 335, 31, "");
 			api.setTradeAccepted(targetPlayer, false);

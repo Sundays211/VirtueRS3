@@ -249,7 +249,7 @@ public class WidgetManager {
 			int widgetID = openWidgets.get(hash);
 			ScriptManager scripts = Virtue.getInstance().getScripts();
 			WidgetListener listener = scripts.forWidgetID(widgetID);
-			if (scripts.hasBinding(ScriptEventType.IF_CLOSE, widgetID)) {
+			if (scripts.hasBinding(ScriptEventType.IF_CLOSE, widgetID) && handleClose) {
 				Map<String, Object> args = new HashMap<>();
 				args.put("player", player);
 				args.put("parentInterface", parentID);
@@ -274,10 +274,18 @@ public class WidgetManager {
 	 */
 	public void closeWidgets (boolean sendClose) {
 		for (Map.Entry<Integer, Integer> entry : closableWidgets.entrySet()) {
-			WidgetListener listener = Virtue.getInstance().getScripts().forWidgetID(entry.getValue());
 			int parentID = ((entry.getKey() >> 16) & 0xffff);
 			int parentSlot = (entry.getKey() & 0xffff);
-			if (listener != null) {
+			ScriptManager scripts = Virtue.getInstance().getScripts();
+			WidgetListener listener = scripts.forWidgetID(entry.getValue());
+			if (scripts.hasBinding(ScriptEventType.IF_CLOSE, entry.getValue())) {
+				Map<String, Object> args = new HashMap<>();
+				args.put("player", player);
+				args.put("parentInterface", parentID);
+				args.put("parentComponent", parentSlot);
+				args.put("interface", entry.getValue());
+				scripts.invokeScriptChecked(ScriptEventType.IF_CLOSE, entry.getValue(), args);
+			} else if (listener != null) {
 				try {
 					listener.close(player, parentID, parentSlot, entry.getValue());
 				} catch (RuntimeException ex) {

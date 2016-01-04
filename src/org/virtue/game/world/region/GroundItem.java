@@ -31,8 +31,8 @@ import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**

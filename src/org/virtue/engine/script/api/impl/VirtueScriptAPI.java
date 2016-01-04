@@ -56,11 +56,11 @@ import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.AccountInfo;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.player.container.ItemContainer;
-import org.virtue.game.entity.player.container.ItemTypeList;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
+import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.game.entity.player.var.VarBitTypeList;
 import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetManager;
@@ -688,7 +688,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public Item getItem(Player player, int containerID, int slot) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return null;
 		}
@@ -743,7 +743,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean addItem(Player player, int containerID, int itemID, int amount) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return false;
 		}
@@ -776,7 +776,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int delItem(Player player, int containerID, int itemID, int amount, int slot) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return 0;
 		}
@@ -835,7 +835,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setInvSlot(Player player, int invId, int slot, int itemId, int amount) {
-		ContainerState state = ContainerState.forID(invId);
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
 			throw new IllegalArgumentException("Container "+invId+" does not exist!");
 		}
@@ -868,7 +868,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int itemTotal(Player player, int invId, int itemID) {
-		ContainerState state = ContainerState.forID(invId);
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
 			return -1;
 		}
@@ -884,7 +884,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int freeSpaceTotal(Player player, int containerID) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return 0;
 		}
@@ -916,7 +916,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int defaultItemTotal(Player player, int containerID, int itemID) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return -1;
 		}
@@ -931,8 +931,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#containerReady(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public boolean containerReady(Player player, int containerID) {
-		ContainerState state = ContainerState.forID(containerID);
+	public boolean containerReady(Player player, int invId) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
 			return false;
 		}
@@ -944,7 +944,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void clearContainer(Player player, int containerID) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return;
 		}
@@ -957,7 +957,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void unloadContainer(Player player, int containerID) {
-		ContainerState state = ContainerState.forID(containerID);
+		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return;
 		}
@@ -968,23 +968,10 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#sendContainer(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public void sendContainer(Player player, int containerID) {
-		ContainerState state = ContainerState.forID(containerID);
+	public void sendInv(Player player, int invId) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			throw new IllegalArgumentException("Container "+containerID+" does not exist!");
-		}
-		player.getInvs().loadContainer(state);
-		player.getInvs().sendContainer(state);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#sendContainer(org.virtue.game.entity.player.Player, java.lang.String)
-	 */
-	@Override
-	public void sendContainer(Player player, String invName) {
-		ContainerState state = ContainerState.valueOf(invName.toUpperCase());
-		if (state == null) {
-			throw new IllegalArgumentException("Container "+invName+" does not exist!");
+			throw new IllegalArgumentException("Inventory "+invId+" does not exist!");
 		}
 		player.getInvs().loadContainer(state);
 		player.getInvs().sendContainer(state);
@@ -994,22 +981,10 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#sendPlayerContainer(org.virtue.game.entity.player.Player, org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public void sendContainerTo(Player player, Player target, int containerID) {
-		ContainerState state = ContainerState.forID(containerID);
+	public void sendInvTo(Player player, Player target, int invId) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			throw new IllegalArgumentException("Container "+containerID+" does not exist!");
-		}
-		player.getInvs().sendContainerTo(state, target);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#sendContainerTo(org.virtue.game.entity.player.Player, org.virtue.game.entity.player.Player, java.lang.String)
-	 */
-	@Override
-	public void sendContainerTo(Player player, Player target, String invName) {
-		ContainerState state = ContainerState.valueOf(invName.toUpperCase());
-		if (state == null) {
-			throw new IllegalArgumentException("Container "+invName+" does not exist!");
+			throw new IllegalArgumentException("Inventory "+invId+" does not exist!");
 		}
 		player.getInvs().sendContainerTo(state, target);
 	}
@@ -1043,7 +1018,13 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+key);
 		}
-		player.getVars().setVarValue(varType, value);
+		if (value instanceof Double) {
+			player.getVars().setVarValueInt(varType.id, ((Double) value).intValue());
+		} else if (value instanceof Integer) {
+			player.getVars().setVarValueInt(varType.id, ((Integer) value).intValue());
+		} else {
+			player.getVars().setVarValue(varType, value);
+		}		
 	}
 
 	/* (non-Javadoc)

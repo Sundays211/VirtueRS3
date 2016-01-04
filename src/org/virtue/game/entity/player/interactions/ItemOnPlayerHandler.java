@@ -25,9 +25,9 @@ import org.virtue.Virtue;
 import org.virtue.engine.script.listeners.ItemOnEntityListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.player.container.ItemContainer;
+import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.entity.player.inv.ItemContainer;
 import org.virtue.game.entity.player.widget.WidgetState;
 
 /**

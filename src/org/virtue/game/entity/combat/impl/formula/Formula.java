@@ -6,7 +6,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 
 /**
  * Combat Formula

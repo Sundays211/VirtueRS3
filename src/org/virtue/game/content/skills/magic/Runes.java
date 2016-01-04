@@ -1,6 +1,6 @@
 package org.virtue.game.content.skills.magic;
 
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 
 /**
  * Represents a rune.

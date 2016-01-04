@@ -1,7 +1,7 @@
 package org.virtue.game.entity.combat.impl.range.ammo;
 
 import org.virtue.game.entity.combat.CombatStyle;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 
 /**
  * The weapon types.

@@ -37,22 +37,22 @@ public class InvType {
 			if (opcode == 2) {
 				invType.capacity = buffer.getShort() & 0xffff;
 			} else if (4 == opcode) {
-				invType.defaultItemCount = buffer.get() & 0xff;
-				invType.defaultItems = new int[invType.defaultItemCount];
-				invType.defaultItemAmounts = new int[invType.defaultItemCount];
-			    for (int slot = 0;slot < invType.defaultItemCount; slot++) {
-			    	invType.defaultItems[slot] = buffer.getShort() & 0xffff;
-			    	invType.defaultItemAmounts[slot] = buffer.getShort() & 0xffff;
+				invType.stockCount = buffer.get() & 0xff;
+				invType.stockObjects = new int[invType.stockCount];
+				invType.stockCounts = new int[invType.stockCount];
+			    for (int slot = 0;slot < invType.stockCount; slot++) {
+			    	invType.stockObjects[slot] = buffer.getShort() & 0xffff;
+			    	invType.stockCounts[slot] = buffer.getShort() & 0xffff;
 			    }
 			}
 		}
 		return invType;
 	}
 	
-	public int[] defaultItemAmounts;
-    public int[] defaultItems;
+	public int[] stockCounts;
+    public int[] stockObjects;
     private int capacity = 0;
-    public int defaultItemCount = 0;
+    public int stockCount = 0;
     private int myid;
     
     public int getCapacity () {

@@ -30,7 +30,7 @@ import org.virtue.cache.def.impl.EnumType;
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ItemTypeList;
+import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
 import org.virtue.utility.EnumTypeList;

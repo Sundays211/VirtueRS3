@@ -42,7 +42,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 	},
 	
 	open : function (player, parentID, parentComponent, interfaceID) {
-		api.sendContainer(player, LOAN_RETURN);
+		api.sendInv(player, LOAN_RETURN);
 	},
 
 	/* Pressed a button on the interface */

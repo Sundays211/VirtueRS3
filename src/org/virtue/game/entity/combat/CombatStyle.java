@@ -8,7 +8,7 @@ import org.virtue.game.entity.combat.impl.melee.MeleeAttackEvent;
 import org.virtue.game.entity.combat.impl.range.RangeAttackEvent;
 import org.virtue.game.entity.combat.impl.range.ammo.WeaponType;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 
 /**
  * Represents the available combat styles.

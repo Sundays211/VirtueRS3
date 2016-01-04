@@ -41,8 +41,8 @@ public class NpcClickEventDecoder implements EventDecoder<NpcClickEventContext> 
 	 */
 	@Override
 	public NpcClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int index = buffer.getShortA();
-		boolean forceRun = buffer.getByteS() == 1;
+		int index = buffer.getUnsignedShort();
+		boolean forceRun = buffer.getByte() == 1;
 		return new NpcClickEventContext(index, forceRun, opcode);
 	}
 

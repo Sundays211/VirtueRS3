@@ -24,7 +24,7 @@ package org.virtue.game.world.region;
 import java.util.Arrays;
 
 import org.virtue.game.World;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.world.region.movement.routefinder.TraversalMap;
 
 /**

@@ -1,4 +1,4 @@
-package org.virtue.game.entity.player.container;
+package org.virtue.game.entity.player.inv;
 
 import java.util.Arrays;
 
@@ -34,9 +34,9 @@ public final class ItemContainer implements ScriptVar {
 		this.invType = invType;
 		
 		data = new Item[invType.getCapacity()];
-		if (invType.defaultItemCount > 0) {
-			for (int slot=0;slot<invType.defaultItemCount;slot++) {
-				data[slot] = Item.create(invType.defaultItems[slot], invType.defaultItemAmounts[slot]);
+		if (invType.stockCount > 0) {
+			for (int slot=0;slot<invType.stockCount;slot++) {
+				data[slot] = Item.create(invType.stockObjects[slot], invType.stockCounts[slot]);
 			}
 		}
 		this.alwaysStackable = alwaysStackable;
@@ -75,8 +75,8 @@ public final class ItemContainer implements ScriptVar {
 		if (slot < 0 || slot >= data.length) {
 			return;
 		}
-		if (item == null && slot < invType.defaultItemCount && invType.defaultItems[slot] >= 0) {
-			data[slot] = Item.create(invType.defaultItems[slot], 0);
+		if (item == null && slot < invType.stockCount && invType.stockObjects[slot] >= 0) {
+			data[slot] = Item.create(invType.stockObjects[slot], 0);
 		} else {
 			data[slot] = item;
 		}
@@ -258,8 +258,8 @@ public final class ItemContainer implements ScriptVar {
 	public Item clearSlot (int slot) {
 		if (slot >= 0 && slot < data.length) {
 			Item item = data[slot];
-			if (slot < invType.defaultItemCount && invType.defaultItems[slot] >= 0) {
-				data[slot] = Item.create(invType.defaultItems[slot], 0);
+			if (slot < invType.stockCount && invType.stockObjects[slot] >= 0) {
+				data[slot] = Item.create(invType.stockObjects[slot], 0);
 			} else {
 				data[slot] = null;
 			}
@@ -360,9 +360,9 @@ public final class ItemContainer implements ScriptVar {
 	 * @return The amount in the container by default
 	 */
 	public int getDefaultCount (int itemID) {
-		for (int slot=0; slot<invType.defaultItemCount; slot++) {
-			if (invType.defaultItems[slot] == itemID) {
-				return invType.defaultItemAmounts[slot];
+		for (int slot=0; slot<invType.stockCount; slot++) {
+			if (invType.stockObjects[slot] == itemID) {
+				return invType.stockCounts[slot];
 			}
 		}
 		return -1;

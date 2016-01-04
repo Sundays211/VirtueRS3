@@ -9,7 +9,7 @@ import org.virtue.game.entity.combat.impl.AttackHandler;
 import org.virtue.game.entity.combat.impl.FollowingType;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 

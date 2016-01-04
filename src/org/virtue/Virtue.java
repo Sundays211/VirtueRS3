@@ -61,8 +61,8 @@ import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.npc.NpcTypeList;
 import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.InvRepository;
-import org.virtue.game.entity.player.container.ItemTypeList;
+import org.virtue.game.entity.player.inv.InvRepository;
+import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.game.entity.player.var.VarBitTypeList;
 import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetRepository;
@@ -330,14 +330,15 @@ public class Virtue {//
 	private void loadConfig () throws IOException {
 		Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG.getArchiveId()));
 		ReferenceTable configTable = ReferenceTable.decode(container.getData());
-		InvRepository.init(Archive.decode(cache.read(2, Js5ConfigGroup.INVTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.INVTYPE.id).size()));
+		Archive invs = Archive.decode(cache.read(2, Js5ConfigGroup.INVTYPE.id).getData(), 
+				configTable.getEntry(Js5ConfigGroup.INVTYPE.id).size());
 		Archive varbits = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_BIT.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_BIT.id).size());
 		Archive varps = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_PLAYER.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id).size());
 		Archive varclans = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_CLAN_SETTING.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id).size());
+		InvRepository.init(invs, configTable.getEntry(Js5ConfigGroup.INVTYPE.id));
 		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));
 		VarBitTypeList.init(varbits, configTable.getEntry(Js5ConfigGroup.VAR_BIT.id));
 		ClanSettings.init(varclans, configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id));

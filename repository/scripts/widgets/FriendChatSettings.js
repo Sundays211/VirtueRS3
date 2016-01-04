@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ChannelRank = Java.type('org.virtue.game.content.social.ChannelRank');
-var UsernameUtility = Java.type('org.virtue.utility.text.UsernameUtility');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

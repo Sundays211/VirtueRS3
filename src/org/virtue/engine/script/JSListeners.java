@@ -56,8 +56,8 @@ import org.virtue.game.content.social.friendchat.FriendChatDataType;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.ability.ScriptedAbility;
 import org.virtue.game.entity.npc.AbstractNPC;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.EquipmentManager.WearPos;
+import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.EquipmentManager.WearPos;
 import org.virtue.utility.FileUtility;
 
 /**

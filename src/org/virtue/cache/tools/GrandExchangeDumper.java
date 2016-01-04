@@ -34,7 +34,7 @@ import org.virtue.Constants;
 import org.virtue.cache.Cache;
 import org.virtue.cache.FileStore;
 import org.virtue.cache.def.impl.ItemType;
-import org.virtue.game.entity.player.container.ItemTypeList;
+import org.virtue.game.entity.player.inv.ItemTypeList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

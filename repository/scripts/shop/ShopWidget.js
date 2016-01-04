@@ -28,92 +28,44 @@
  * @author Sundays211
  * @since 8/02/2015
  */
-var api;
 
-var BACKPACK = 93;
-
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interface ids to bind to */
-	getIDs: function() {
-		return [1265];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		//api.setVarp(player, 304, 4);
-		//api.setVarp(player, 305, -1);
-		api.setVarp(player, 306, 995);//Currency
-		var shopID = api.getVarp(player, 304);
-		if (shopID != -1) {
-			if (!api.containerReady(player, shopID)) {
-				if (api.isAdmin(player)) {
-					api.sendMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+shopID);
-				} else {
-					api.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
-				}				
-				return;
-			}
-			api.sendContainer(player, shopID);
-		}
-		var freeStock = api.getVarp(player, 305);
-		if (freeStock != -1) {
-			if (!api.containerReady(player, freeStock)) {
-				if (api.isAdmin(player)) {
-					api.sendMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+freeStock);
-				} else {
-					api.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
-				}				
-				return;
-			}
-			api.sendContainer(player, freeStock);
-		}
-		var canSell = 0;
-		for (var slot=0; slot<28; slot++) {
-			var item = api.getItem(player, Inv.BACKPACK, slot);
-			if (item != null && Shop.canSellTo(player, api.getVarp(player, 304), item.getID())) {
-				canSell |= 1 << slot;
-			}			
-		}
-		api.setVarc(player, 1879, canSell);//Bitpacked can sell
-		api.setWidgetEvents(player, 1265, 20, 0, 40, 2097406);
-		api.setWidgetEvents(player, 1265, 21, 0, 40, 2097406);
-		api.setWidgetEvents(player, 1265, 26, 0, 40, 10223616);
+var ShopButtonListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, comphash, args) {
+		var player = args.player;
 		
-	},
-
-	/* A button clicked on the interface */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
 		if (api.getVarp(player, 304) != -1 && !api.containerReady(player, api.getVarp(player, 304))) {
 			if (api.isAdmin(player)) {
 				api.sendMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+api.getVarp(player, 304));
 			} else {
 				api.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
 			}				
-			return true;
+			return;
 		}
-		switch (component) {
+		switch (args.component) {
+		case 89://Close button
+			return;
 		case 20://Selected item
 			if (api.getVarp(player, 303) == 0) {
-				Shop.handleBuyButton(player, slot, option);
+				Shop.handleBuyButton(player, args.slot, args.button);
 			} else {
-				Shop.handleSellButton(player, slot, option);
+				Shop.handleSellButton(player, args.slot, args.button);
 			}
-			return true;
+			return;
 		case 21://Free item stock
-			Shop.handleTakeButton(player, slot, option);
-			return true;
+			Shop.handleTakeButton(player, args.slot, args.button);
+			return;
 		case 28://Switch to "Buy Items"
 			api.setVarp(player, 303, 0);
-			return true;
+			return;
 		case 29://Switch to "Sell Items"
 			api.setVarp(player, 303, 1);
-			return true;
+			return;
 		case 49://Show full names
 			api.setVarBit(player, 987, 1);
-			return true;
+			return;
 		case 50://Show icons
 			api.setVarBit(player, 987, 0);
-			return true;
+			return;
 		case 205://Buy/Take/Sell
 			if (api.getVarp(player, 299) == api.getVarp(player, 304)) {
 				Shop.buyItem(player, api.getVarp(player, 300), api.getVarp(player, 302));
@@ -122,72 +74,121 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			} else if (api.getVarp(player, 299) == api.getVarp(player, 305)) {
 				Shop.takeItem(player, api.getVarp(player, 300), api.getVarp(player, 302));
 			}
-			return true;
+			return;
 		case 15://Add one
 			/*if (api.getVarp(player, 302) < api.itemTotal(player, api.getVarp(player, 299), api.getVarp(player, 300))) {
 				api.incrementVarp(player, 302, 1);
 			}*/
 			api.setVarp(player, 302, Math.min(api.getVarp(player, 302)+1, Shop.getMaxBuySellAmount(player, api.getVarp(player, 300))));
-			return true;
+			return;
 		case 212://Add 5
 			api.setVarp(player, 302, Math.min(api.getVarp(player, 302)+5, Shop.getMaxBuySellAmount(player, api.getVarp(player, 300))));
 			//api.setVarp(player, 302, Math.min(api.getVarp(player, 302)+5, api.itemTotal(player, api.getVarp(player, 299), api.getVarp(player, 300))));
-			return true;
+			return;
 		case 215://Set max amount
 			api.setVarp(player, 302, Shop.getMaxBuySellAmount(player, api.getVarp(player, 300)));
 			//api.setVarp(player, 302, api.itemTotal(player, api.getVarp(player, 299), api.getVarp(player, 300)));
-			return true;
+			return;
 		case 218://Subtract 1
 			if (api.getVarp(player, 302) > 1) {
 				api.incrementVarp(player, 302, -1);
 			}
-			return true;
+			return;
 		case 221://Subtract 5
 			api.setVarp(player, 302, Math.max(api.getVarp(player, 302)-5, 1));
-			return true;
+			return;
 		case 224://Set min amount
 			api.setVarp(player, 302, 1);
-			return true;
+			return;
 		case 256:
 		case 266://Continue button
 			api.hideWidget(player, 1265, 64, true);
-			return true;
+			return;
 		case 251://Confirm buy
 			Shop.buyItem(player, api.getVarp(player, 300), api.getVarp(player, 302), true);
 		case 242://Cancel buy
 		case 232://Clicked area around buy warning
 			api.hideWidget(player, 1265, 62, true);
-			return true;
+			return;
 		case 189://Confirm sell
 			Shop.sellItem(player, api.getVarp(player, 300), api.getVarp(player, 302), true);
 		case 197://Cancel sell
 		case 1://Clicked area around sell warning
 			api.hideWidget(player, 1265, 63, true);
-			return true;
+			return;
 		default:
-			return false;
+			api.sendMessage(player, "Unhandled shop button: comp="+args.component+", button="+args.button)
+			return;
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
+	}
+});
+
+var ShopOpenListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, interfaceId, args) {
+		var player = args.player;
+		
+		//api.setVarp(player, 304, 4);
+		//api.setVarp(player, 305, -1);
+		api.setVarp(player, 306, 995);//Currency
+		var shopId = api.getVarp(player, 304);
+		if (shopId != -1) {
+			if (!api.containerReady(player, shopId)) {
+				if (api.isAdmin(player)) {
+					api.sendMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+shopID);
+				} else {
+					api.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
+				}				
+				return;
+			}
+			api.sendInv(player, shopId);
+		}
+		var freeStockId = api.getVarp(player, 305);
+		if (freeStockId != -1) {
+			if (!api.containerReady(player, freeStockId)) {
+				if (api.isAdmin(player)) {
+					api.sendMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+freeStock);
+				} else {
+					api.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
+				}				
+				return;
+			}
+			api.sendInv(player, freeStockId);
+		}
+		var canSell = 0;
+		for (var slot=0; slot<28; slot++) {
+			var item = api.getItem(player, Inv.BACKPACK, slot);
+			if (item != null && Shop.canSellTo(player, api.getVarp(player, 304), api.getId(item))) {
+				canSell |= 1 << slot;
+			}			
+		}
+		api.setVarc(player, 1879, canSell);//Bitpacked can sell
+		api.setWidgetEvents(player, 1265, 20, 0, 40, 2097406);
+		api.setWidgetEvents(player, 1265, 21, 0, 40, 2097406);
+		api.setWidgetEvents(player, 1265, 26, 0, 40, 10223616);
+	}
+});
+
+var ShopCloseListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, interfaceId, args) {
+		var player = args.player;
 		api.setVarp(player, 304, -1);
 		api.setVarp(player, 305, -1);
 		api.setVarp(player, 306, -1);
 		api.setVarc(player, 1876, -1);
 		api.setVarc(player, 1878, -1);
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
-	var widgetListener = new WidgetListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
+	var buttonListener = new ShopButtonListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 1265, buttonListener);
+	
+	var openListener = new ShopOpenListener();
+	scriptManager.registerListener(EventType.IF_OPEN, 1265, openListener);
+	
+	var closeListener = new ShopCloseListener();
+	scriptManager.registerListener(EventType.IF_CLOSE, 1265, closeListener);
 };
 
 
@@ -409,7 +410,7 @@ var Shop = {
 			api.setVarc(player, 1879, canSell);//Bitpacked can sell
 		},
 		getMaxBuySellAmount : function (player, itemID) {
-			if (api.getVarp(player, 299) == BACKPACK) {
+			if (api.getVarp(player, 299) == Inv.BACKPACK) {
 				return Math.max(api.itemTotal(player, Inv.BACKPACK, itemID), 1);
 			} else {
 				var shopStock = api.itemTotal(player, api.getVarp(player, 299), itemID);

@@ -249,7 +249,7 @@ var Exchange = {
 				if (api.freeSpaceTotal(player, returnInv) == 2 && api.exchangeOfferFinished(player, slot)) {
 					api.clearExchangeOffer(player, slot);
 				} else {
-					api.sendContainer(player, returnInv);
+					api.sendInv(player, returnInv);
 					var exchangePrice = api.getItemType(offer.getOfferItem()).getExchangeValue();
 					api.setVarp(player, 140, exchangePrice);
 					api.setVarp(player, 138, slot);
@@ -383,7 +383,7 @@ var Exchange = {
 			}
 			if (itemID != -1 && amount > 0) {
 				var offerInv = api.getEnumType(1078).getValueInt(slot);
-				api.sendContainer(player, offerInv);
+				api.sendInv(player, offerInv);
 				if (isSell) {
 					var carriedTotal = api.carriedItemTotal(player, itemID);
 					if (api.getItemType(itemID).certlink != -1) {

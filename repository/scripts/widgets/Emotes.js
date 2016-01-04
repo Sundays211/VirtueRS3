@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
-var item = Java.type('org.virtue.game.entity.player.container.Item');
 var Render = Java.type('org.virtue.network.protocol.update.ref.Appearance.Render');
   /* The AnimationBlock for adding ability animations */
 var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');

@@ -5,7 +5,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackInfo;
 import org.virtue.game.entity.combat.impl.AttackHandler;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.node.Node;
 
 /**

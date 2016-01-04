@@ -1,7 +1,7 @@
 package org.virtue.network.event.encoder.impl;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.InvEventContext;
 import org.virtue.network.event.encoder.EventEncoder;

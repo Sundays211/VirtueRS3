@@ -26,9 +26,9 @@ import java.text.NumberFormat;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.player.container.ItemContainer;
+import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.entity.player.inv.ItemContainer;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

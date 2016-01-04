@@ -1,7 +1,7 @@
 package org.virtue.game.entity.combat.impl.ability.keybind;
 
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 
 /**
  * Represents a key-bind slot.

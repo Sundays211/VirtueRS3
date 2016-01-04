@@ -24,8 +24,8 @@ package org.virtue.game.entity.player.interactions;
 import org.virtue.Virtue;
 import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.ContainerState;
-import org.virtue.game.entity.player.container.ItemContainer;
+import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.ItemContainer;
 import org.virtue.game.entity.player.var.VarKey;
 
 /**

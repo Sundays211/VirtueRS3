@@ -28,7 +28,7 @@ import org.virtue.game.entity.combat.impl.ability.Ability;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.network.event.context.impl.in.WidgetOnNPCContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 var GroundItem = Java.type('org.virtue.game.world.region.GroundItem');
-var Item = Java.type('org.virtue.game.entity.player.container.Item');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

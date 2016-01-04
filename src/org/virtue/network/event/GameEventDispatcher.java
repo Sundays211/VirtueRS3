@@ -35,7 +35,7 @@ import org.virtue.game.content.social.ignore.Ignore;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.var.LoginDispatcher;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.world.region.MapSize;

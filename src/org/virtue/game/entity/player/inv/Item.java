@@ -1,4 +1,4 @@
-package org.virtue.game.entity.player.container;
+package org.virtue.game.entity.player.inv;
 
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.game.entity.player.Player;
