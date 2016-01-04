@@ -64,7 +64,8 @@ public class HeadIcons {
 	}
 	
 	public void reset() {
-		this.reset(1);
+		Arrays.fill(spriteIDs, -1);
+		Arrays.fill(subSpriteIDs, -1);
 	}
 	
 	public void reset(int type) {

@@ -25,6 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WidgetExternalSpriteEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,9 +39,9 @@ public class WidgetExternalSpriteEventEncoder implements EventEncoder<WidgetExte
 	@Override
 	public OutboundBuffer encode(Player player, WidgetExternalSpriteEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(158, player);
-		buffer.putIntA(context.getSpriteID());
+		buffer.putPacket(OutgoingEventType.IF_SETGRAPHIC_EXTERNAL, player);
 		buffer.putIntA((context.getWidget() << 16 | context.getComponent()));
+		buffer.putLEInt(context.getSpriteID());
 		return buffer;
 	}
 

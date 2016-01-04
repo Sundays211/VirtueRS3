@@ -114,16 +114,16 @@ public class JSONParser implements Parser {
 				FriendsList list = (FriendsList) object;
 				obj.addProperty("onlinestatus", list.getOnlineStatus().getSerialID());
 				obj.addProperty("chatname", list.getFriendChatName() == null ? "" : list.getFriendChatName());
-				obj.addProperty("chatjoin", list.getFriendChatJoinRank().getID());
-				obj.addProperty("chattalk", list.getFriendChatTalkRank().getID());
-				obj.addProperty("chatkick", list.getFriendChatKickRank().getID());
+				obj.addProperty("chatjoin", list.getFriendChatJoinRank().getId());
+				obj.addProperty("chattalk", list.getFriendChatTalkRank().getId());
+				obj.addProperty("chatkick", list.getFriendChatKickRank().getId());
 				JsonArray friends = new JsonArray();
 				JsonObject friend;
 				for (Friend frd : list.getFriends()) {
 					friend = new JsonObject();
 					friend.addProperty("id", ordinal);
 					friend.addProperty("hash", frd.getHash());
-					friend.addProperty("rank", frd.getRank().getID());
+					friend.addProperty("rank", frd.getRank().getId());
 					friend.addProperty("note", frd.getNote());
 					friends.add(friend);
 					ordinal++;

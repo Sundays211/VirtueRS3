@@ -45,13 +45,14 @@ import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.DialogListener;
 import org.virtue.engine.script.listeners.EventListener;
 import org.virtue.engine.script.listeners.ItemOnEntityListener;
-import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.engine.script.listeners.NpcListener;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
 import org.virtue.engine.script.listeners.WidgetListener;
 import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.social.ChatOptionType;
+import org.virtue.game.content.social.friendchat.FriendChatDataType;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.ability.ScriptedAbility;
 import org.virtue.game.entity.npc.AbstractNPC;
@@ -123,8 +124,6 @@ public class JSListeners implements ScriptManager {
 	 */
 	private Map<EventBind, EventListener> listeners;
 
-	private Map<Integer, LocationListener> locationMap;
-
 	private Map<Integer, ItemOnEntityListener> itemOnEntityMap;
 
 	private Map<Integer, WidgetListener> widgetMap;
@@ -151,7 +150,6 @@ public class JSListeners implements ScriptManager {
 
 	public JSListeners() {
 		listeners = new HashMap<>();
-		locationMap = new HashMap<Integer, LocationListener>();
 		itemOnEntityMap = new HashMap<Integer, ItemOnEntityListener>();
 		widgetMap = new HashMap<Integer, WidgetListener>();
 		npcMap = new HashMap<Integer, NpcListener>();
@@ -199,6 +197,18 @@ public class JSListeners implements ScriptManager {
 		}
 		engine.put("WearPos", map);
 		
+		map = new HashMap<>();
+		for (ChatOptionType opType : ChatOptionType.values()) {
+			map.put(opType.name(), opType.getId());
+		}
+		engine.put("ChatListType", map);
+		
+		map = new HashMap<>();
+		for (FriendChatDataType opType : FriendChatDataType.values()) {
+			map.put(opType.name(), opType.getId());
+		}
+		engine.put("FriendChatData", map);
+		
 		File generalFunctions = new File(scriptDir, "GeneralFunctions.js");
 		if (generalFunctions.exists()) {
 			try {
@@ -224,7 +234,7 @@ public class JSListeners implements ScriptManager {
 				}
 			}			
 		}
-		logger.info("Registerd " + locationMap.size() + " Location Script(s), " + npcMap.size() + " NPC Script(s), " + itemOnEntityMap.size() + " ItemOnEntity Script(s), " + widgetMap.size() + " Widget Script(s).");
+		logger.info("Registerd " + npcMap.size() + " NPC Script(s), " + itemOnEntityMap.size() + " ItemOnEntity Script(s), " + widgetMap.size() + " Widget Script(s).");
 		return success;
 	}
 	
@@ -253,7 +263,6 @@ public class JSListeners implements ScriptManager {
 	@Override
 	public synchronized boolean reload() {
 		listeners.clear();
-		locationMap.clear();
 		itemOnEntityMap.clear();
 		widgetMap.clear();
 		npcMap.clear();
@@ -304,16 +313,8 @@ public class JSListeners implements ScriptManager {
 		listeners.put(bind, listener);
 	}
 	
-	/**
-	 * Registers a {@link LocationListener} which is called whenever a specified location is interacted with
-	 * @param listener The listener 
-	 * @param ids The ids of the locations to bind to
-	 */
-	@Deprecated
-	public void registerLocationListener(LocationListener listener, int[] ids) {
-		for (int id : ids) {
-			locationMap.put(id, listener);
-		}
+	public void registerCompListener(int eventTypeId, int iface, int comp, EventListener listener) {
+		registerListener(eventTypeId, iface << 16 | (comp & 0xffff), listener);
 	}
 
 	/**
@@ -321,6 +322,7 @@ public class JSListeners implements ScriptManager {
 	 * @param listener The listener 
 	 * @param ids The ids of the npcs to bind to
 	 */
+	@Deprecated
 	public void registerNpcListener(NpcListener listener, int[] ids) {		
 		for (int id : ids) {
 			npcMap.put(id, listener);
@@ -423,11 +425,6 @@ public class JSListeners implements ScriptManager {
 		} catch (Exception ex) {
 			logger.warn("Error executing script: type="+type+", trigger="+trigger, ex);
 		}
-	}
-
-	@Override
-	public LocationListener forLocationID(int id) {
-		return locationMap.get(id);
 	}
 
 	@Override

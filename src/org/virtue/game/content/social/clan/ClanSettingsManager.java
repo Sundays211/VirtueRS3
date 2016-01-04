@@ -38,7 +38,7 @@ import org.virtue.game.World;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.SocialUser;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.widget.var.VarBitTypeList;
+import org.virtue.game.entity.player.var.VarBitTypeList;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.utility.EnumTypeList;
 import org.virtue.utility.StructTypeList;

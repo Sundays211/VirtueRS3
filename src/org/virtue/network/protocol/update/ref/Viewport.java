@@ -117,7 +117,7 @@ public class Viewport implements GameEventContext {
 	/**
 	 * Represents if the player has a large scene radius
 	 */
-	private boolean largeScene;
+	private int sceneRadius;
 	
 	/**
 	 * Represents the south-western tile of the last loaded map chunk
@@ -138,7 +138,7 @@ public class Viewport implements GameEventContext {
 	
 	public Viewport(Player player) {
 		this.player = player;
-		largeScene = false;
+		sceneRadius = 5;
 		slotFlags = new byte[2048];
 		movementTypes = new byte[2048];
 		localPlayers = new Player[2048];
@@ -163,7 +163,7 @@ public class Viewport implements GameEventContext {
 		}
 		stream.setBitAccess();
 		stream.putBits(30, player.getCurrentTile().getTileHash());
-		System.out.println("Player index="+player.getIndex());
+
 		localPlayers[player.getIndex()] = player;
 		localPlayersIndexesCount = 0;
 		outPlayersIndexesCount = 0;
@@ -230,7 +230,8 @@ public class Viewport implements GameEventContext {
 		}
 		traversalMap.reload();
 		if (sendUpdate) {
-			player.getDispatcher().sendSceneGraph(tile, mapSize, false, staticRegion);
+			sceneRadius = ((actualSize >> 3) / 2) - 1;//no fucking idea what this should be
+			player.getDispatcher().sendSceneGraph(sceneRadius, tile, mapSize, false, staticRegion);
 			onMapLoaded();
 		}
 	}
@@ -282,14 +283,6 @@ public class Viewport implements GameEventContext {
 	 */
 	public Set<Region> getRegions () {
 		return regions;
-	}
-	
-	/**
-	 * Gets if the player has a large scene radius
-	 * @return
-	 */
-	public boolean isLargeScene() {
-		return largeScene;
 	}
 	
 	public Tile getBaseTile () {
@@ -408,6 +401,14 @@ public class Viewport implements GameEventContext {
 	 */
 	public int getLocalAddedPlayers () {
 		return localAddedPlayers;
+	}
+
+	public int getSize() {
+		return sceneRadius;
+	}
+	
+	public void setSceneRadius(int size) {
+		sceneRadius = size;
 	}
 
 }

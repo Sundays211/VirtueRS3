@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -30,10 +28,6 @@ var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.Animati
  * @author Sundays211
  * @since 01/16/2015
  */
-var api;
-var FISHING_SKILL = 10;
-var BACKPACK = 93;
-var option;
 
 var Spots = {
 		NORMAL : {
@@ -86,44 +80,21 @@ var Tool = {
 	}
 };
 
-var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
-
-	/* The npc ids to bind to */
-	getIDs: function() {
-		return [233, 329];
-	},
-
-	/* The first option on an npc */
-	handleInteraction: function(player, npc, option) {
-		player.queueUpdateBlock(new FaceEntityBlock(npc));
-		switch (option) {
-			case 1:
-				startFish(player, npc);
-				break;
-			case 2:
-				startFish(player, npc);
-				break;
-			case 3:
-				startFish(player, npc);
-				break;
-			default:
-				api.sendMessage(player, "Unhandled fishing action: npcId="+npc.getID()+", option="+option);
-				break;
-		}
-		return true;
-	},
-	
-	getInteractRange : function (npc, option) {
-		return 1;
+var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		startFish(args.player, args.npc);
 	}
-
 });
 
 /* Listen to the npc ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
 	var listener = new NpcListener();
-	scriptManager.registerNpcListener(listener, listener.getIDs());
+	
+	scriptManager.registerListener(EventType.OPNPC1, 233, listener);//Bait
+	
+
+	scriptManager.registerListener(EventType.OPNPC1, 329, listener);//Lure
+	scriptManager.registerListener(EventType.OPNPC3, 329, listener);//Bait
 };
 
 function startFish (player, npc) {
@@ -137,11 +108,11 @@ function startFish (player, npc) {
 		api.sendMessage(player, "You need a fishing item to fish here.");
 		return;
 	}
-	if (api.getStatLevel(player, FISHING_SKILL) < spots.level) {
+	if (api.getStatLevel(player, Stat.FISHING) < spots.level) {
 		api.sendMessage(player, "You require a fishing level of "+spots.level+"  to fish here.");
 		return;
 	}
-	if (api.freeSpaceTotal(player, "backpack") < 1) {
+	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 		api.sendMessage(player, "Not enough space in your inventory.");
 		return;
 	}
@@ -167,14 +138,14 @@ function startFish (player, npc) {
 }
 
 function fishingSuccess (player, spots, npc) {
-	api.addExperience(player, "fishing", spots.xp, true);
+	api.addExperience(player, Stat.FISHING, spots.xp, true);
 	var fishID = getCatch(player, spots);
 	api.addCarriedItem(player, fishID, 1);
 	api.sendFilterMessage(player, "You catch some " + api.getItemType(fishID).name + ".");
 }
 
 function getDelay (player, spots, tool) {
-	var timer = spots.baseTime - api.getStatLevel(player, FISHING_SKILL) - Math.floor(Math.random() * tool.time);
+	var timer = spots.baseTime - api.getStatLevel(player, Stat.FISHING) - Math.floor(Math.random() * tool.time);
 	print(timer+"\n");
 	if (timer < 1 + spots.randomTime) {
 		timer = 1 + Math.floor((Math.random() * spots.randomTime));
@@ -186,7 +157,7 @@ function getDelay (player, spots, tool) {
 function getCatch (player, spots) {
 	var possibleCatches = [];
 	for (var i in spots.catchLevels) {
-		if (spots.catchLevels[i] <= api.getStatLevel(player, FISHING_SKILL)) {
+		if (spots.catchLevels[i] <= api.getStatLevel(player, Stat.FISHING)) {
 			possibleCatches.push(spots.catches[i]);
 		}
 	}
@@ -204,9 +175,9 @@ function forSpots(id, option) {
 
 function forTool(player) {
 	var tool;
-	for (ordial in Tool) {
+	for (var ordial in Tool) {
 		tool = Tool[ordial];//TODO: Run this backwards (from best to worst)
-		if (api.itemTotal(player, BACKPACK, tool.itemID) >= 1) {
+		if (api.itemTotal(player, Inv.BACKPACK, tool.itemID) >= 1) {
 			return tool;
 		}
 	}

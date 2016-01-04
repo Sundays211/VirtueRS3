@@ -40,11 +40,7 @@ public class SocialEventDecoder implements EventDecoder<SocialEventContext> {
 	 */
 	@Override
 	public SocialEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		IncomingEventType type = IncomingEventType.forOpcode(opcode);
-		ChannelRank rank = null;
-		if (type == IncomingEventType.FRIEND_SETRANK) {
-			rank = ChannelRank.forID(buffer.getByteA());
-		}
+		IncomingEventType type = IncomingEventType.forOpcode(opcode);		
 		String name = buffer.available() > 0 ? buffer.getString() : "";
 		String note;
 		switch (type) {
@@ -61,9 +57,7 @@ public class SocialEventDecoder implements EventDecoder<SocialEventContext> {
 		case FRIENDCHAT_KICK:
 			return new SocialEventContext(SocialType.KICK_FRIENDCHAT, name);
 		case FRIEND_SETRANK:
-			if (rank == null) {
-				throw new RuntimeException();
-			}
+			ChannelRank rank = ChannelRank.forID(buffer.getByteC());
 			return new SocialEventContext(SocialType.SET_FRIEND_RANK, name, rank);
 		case FRIEND_SETNOTE:
 			note = buffer.getString();

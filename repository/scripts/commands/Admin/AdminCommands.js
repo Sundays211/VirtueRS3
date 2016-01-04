@@ -68,6 +68,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			return;
 		case "inter":
 		case "root":
+		case "if":
 		case "widget":
 			if (args.length < 1) {
 				return;
@@ -203,9 +204,8 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 				sendCommandResponse(player, "Usage: "+syntax+" [locationId]", scriptArgs.console);				
 				return;
 			}
-			var region = api.getRegion(player.getCurrentTile().getRegionID());
-			var location = api.createLocation(locId, api.getCoords(player), 10, 0);
-			region.spawnTempLocation(location, 50);
+			var loc = api.createLocation(locId, api.getCoords(player), 10, 0);
+			api.spawnLocation(loc, 50);
 			sendCommandResponse(player, "Spawned location "+locId, scriptArgs.console);
 			return;
 		case "ring":
@@ -216,13 +216,11 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 				sendCommandResponse(player, "Usage: "+syntax+" [locationId]", scriptArgs.console);				
 				return;
 			}
-			var region = api.getRegion(player.getCurrentTile().getRegionID());
 			var location = api.createLocation(locId, api.getCoords(player), type, rotation);
-			region.spawnTempLocation(location, 50);
+			api.spawnLocation(location, 50);
 			sendCommandResponse(player, "Spawned location "+locId, scriptArgs.console);
 			return;
 		case "testRing":
-			var region = api.getRegion(player.getCurrentTile().getRegionID());
 			var north = api.createLocation(13137, 3210, 3258, 0, 0, 3);
 			var north2 = api.createLocation(13137, 3211, 3258, 0, 0, 3);
 			var north3 = api.createLocation(13137, 3209, 3258, 0, 0, 3);
@@ -248,38 +246,40 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			var floor6 = api.createLocation(13140, 3209, 3255, 0, 22, 2);
 			var floor7 = api.createLocation(13140, 3210, 3255, 0, 22, 2);
 			var floor8 = api.createLocation(13140, 3211, 3255, 0, 22, 2);
-			region.spawnTempLocation(floor, 100);
-			region.spawnTempLocation(floor1, 100);
-			region.spawnTempLocation(floor2, 100);
-			region.spawnTempLocation(floor3, 100);
-			region.spawnTempLocation(floor4, 100);
-			region.spawnTempLocation(floor5, 100);
-			region.spawnTempLocation(floor6, 100);
-			region.spawnTempLocation(floor7, 100);
-			region.spawnTempLocation(floor8, 100);
-			region.spawnTempLocation(northwest, 100);
-			region.spawnTempLocation(northwest2, 100);
-			region.spawnTempLocation(northwest3, 100);
-			region.spawnTempLocation(southwestCorner, 100);
-			region.spawnTempLocation(northwestCorner, 100);
-			region.spawnTempLocation(northeastCorner, 100);
-			region.spawnTempLocation(southCorner, 100);
-			region.spawnTempLocation(north, 100);
-			region.spawnTempLocation(north3, 100);
-			region.spawnTempLocation(north2, 100);
-			region.spawnTempLocation(east, 100);
-			region.spawnTempLocation(east2, 100);
-			region.spawnTempLocation(east3, 100);
-			region.spawnTempLocation(south, 100);
-			region.spawnTempLocation(south2, 100);
-			region.spawnTempLocation(south3, 100);
+			api.spawnLocation(floor, 100);
+			api.spawnLocation(floor1, 100);
+			api.spawnLocation(floor2, 100);
+			api.spawnLocation(floor3, 100);
+			api.spawnLocation(floor4, 100);
+			api.spawnLocation(floor5, 100);
+			api.spawnLocation(floor6, 100);
+			api.spawnLocation(floor7, 100);
+			api.spawnLocation(floor8, 100);
+			api.spawnLocation(northwest, 100);
+			api.spawnLocation(northwest2, 100);
+			api.spawnLocation(northwest3, 100);
+			api.spawnLocation(southwestCorner, 100);
+			api.spawnLocation(northwestCorner, 100);
+			api.spawnLocation(northeastCorner, 100);
+			api.spawnLocation(southCorner, 100);
+			api.spawnLocation(north, 100);
+			api.spawnLocation(north3, 100);
+			api.spawnLocation(north2, 100);
+			api.spawnLocation(east, 100);
+			api.spawnLocation(east2, 100);
+			api.spawnLocation(east3, 100);
+			api.spawnLocation(south, 100);
+			api.spawnLocation(south2, 100);
+			api.spawnLocation(south3, 100);
 			return;
 		case "setKey":
 			var amount = parseInt(args[0]);
 			player.setKeys(amount);
-			player.getDispatcher().sendVarc(1800, player.getKeys() - 1);
+			api.setVarc(player, 1800, player.getKeys() - 1);
 			api.sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
 			return;
+		case "xTest":
+			player.getWidgets().openWidget(1477, 503, 1418, true);
 		}
 	}
 });
@@ -287,10 +287,10 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var commands = [ "bc", "npc", "gfx", "graphic", "gender", "music", "inter",
-			"root", "widget", "priceReload", "reloadPrice", "adr", "hair",
+			"root", "widget", "if", "priceReload", "reloadPrice", "adr", "hair",
 			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow",
 			"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
-			"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey"];
+			"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey","xtest"];
 	var listener = new EventListener();
 	for (var i in commands) {
 		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);

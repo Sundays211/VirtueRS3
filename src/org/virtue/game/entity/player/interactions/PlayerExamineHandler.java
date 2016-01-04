@@ -26,7 +26,7 @@ import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
 import org.virtue.game.entity.player.container.ItemContainer;
-import org.virtue.game.entity.player.widget.var.VarKey;
+import org.virtue.game.entity.player.var.VarKey;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -72,7 +72,7 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 		}
 		player.getDispatcher().sendVarcString(VarKey.Client.PLAYER_INSPECT_CLAN, clan);
 		
-		player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_LIFEPOINTS, target.getVars().getVarBitValue(VarKey.Bit.PLAYER_HITPOINTS));
+		player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_LIFEPOINTS, target.getVars().getVarBitValue(VarKey.Bit.PLAYER_HITPOINTS));
 		player.getVars().setVarValueInt(4972, 0);//Force the changes to take effect
 		
 		showStats(player, target);
@@ -173,82 +173,82 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 	private void setInspectedStatBase (Player player, StatType stat, int value) {
 		switch (stat) {
 		case ATTACK:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_ATTACK_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_ATTACK_BASE, value);
 			break;
 		case CONSTITUTION:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_CONSTITUTION_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_CONSTITUTION_BASE, value);
 			break;
 		case MINING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_MINING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_MINING_BASE, value);
 			break;
 		case STRENGTH:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_STRENGTH_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_STRENGTH_BASE, value);
 			break;
 		case AGILITY:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_AGILITY_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_AGILITY_BASE, value);
 			break;
 		case SMITHING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_SMITHING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_SMITHING_BASE, value);
 			break;
 		case DEFENCE:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_DEFENSE_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DEFENSE_BASE, value);
 			break;
 		case HERBLORE:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_HERBLORE_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_HERBLORE_BASE, value);
 			break;
 		case FISHING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FISHING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FISHING_BASE, value);
 			break;
 		case RANGED:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_RANGED_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_RANGED_BASE, value);
 			break;
 		case THIEVING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_THIEVING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_THIEVING_BASE, value);
 			break;
 		case COOKING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_COOKING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_COOKING_BASE, value);
 			break;
 		case PRAYER:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_PRAYER_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_PRAYER_BASE, value);
 			break;
 		case CRAFTING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_CRAFTING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_CRAFTING_BASE, value);
 			break;
 		case FIREMAKING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FIREMAKING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FIREMAKING_BASE, value);
 			break;
 		case MAGIC:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_MAGIC_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_MAGIC_BASE, value);
 			break;
 		case FLETCHING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FLETCHING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FLETCHING_BASE, value);
 			break;
 		case WOODCUTTING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_WOODCUTTING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_WOODCUTTING_BASE, value);
 			break;
 		case RUNECRAFTING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_RUNECRAFTING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_RUNECRAFTING_BASE, value);
 			break;
 		case SLAYER:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_SLAYER_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_SLAYER_BASE, value);
 			break;
 		case FARMING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FARMING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FARMING_BASE, value);
 			break;
 		case CONSTRUCTION:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_CONSTRUCTION_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_CONSTRUCTION_BASE, value);
 			break;
 		case HUNTER:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_HUNTER_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_HUNTER_BASE, value);
 			break;
 		case SUMMONING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_SUMMONING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_SUMMONING_BASE, value);
 			break;
 		case DUNGEONEERING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_DUNGEONEERING_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DUNGEONEERING_BASE, value);
 			break;
 		case DIVINATION:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_DIVINATION_BASE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DIVINATION_BASE, value);
 			break;
 		}
 	}
@@ -256,82 +256,82 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 	private void setInspectedStatLevel (Player player, StatType stat, int value) {
 		switch (stat) {
 		case ATTACK:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_ATTACK, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_ATTACK, value);
 			break;
 		case CONSTITUTION:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_CONSTITUTION, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_CONSTITUTION, value);
 			break;
 		case MINING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_MINING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_MINING, value);
 			break;
 		case STRENGTH:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_STRENGTH, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_STRENGTH, value);
 			break;	
 		case AGILITY:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_AGILITY, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_AGILITY, value);
 			break;
 		case SMITHING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_SMITHING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_SMITHING, value);
 			break;
 		case DEFENCE:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_DEFENSE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DEFENSE, value);
 			break;
 		case HERBLORE:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_HERBLORE, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_HERBLORE, value);
 			break;
 		case FISHING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FISHING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FISHING, value);
 			break;	
 		case RANGED:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_RANGED, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_RANGED, value);
 			break;
 		case THIEVING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_THIEVING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_THIEVING, value);
 			break;
 		case COOKING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_COOKING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_COOKING, value);
 			break;
 		case PRAYER:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_PRAYER, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_PRAYER, value);
 			break;
 		case CRAFTING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_CRAFTING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_CRAFTING, value);
 			break;
 		case FIREMAKING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FIREMAKING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FIREMAKING, value);
 			break;
 		case MAGIC:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_MAGIC, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_MAGIC, value);
 			break;
 		case FLETCHING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FLETCHING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FLETCHING, value);
 			break;
 		case WOODCUTTING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_WOODCUTTING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_WOODCUTTING, value);
 			break;
 		case RUNECRAFTING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_RUNECRAFTING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_RUNECRAFTING, value);
 			break;
 		case SLAYER:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_SLAYER, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_SLAYER, value);
 			break;
 		case FARMING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_FARMING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_FARMING, value);
 			break;
 		case CONSTRUCTION:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_CONSTRUCTION, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_CONSTRUCTION, value);
 			break;
 		case HUNTER:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_HUNTER, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_HUNTER, value);
 			break;
 		case SUMMONING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_SUMMONING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_SUMMONING, value);
 			break;
 		case DUNGEONEERING:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_DUNGEONEERING, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DUNGEONEERING, value);
 			break;
 		case DIVINATION:
-			player.getVars().setVarpBit(VarKey.Bit.PLAYER_INSPECT_DIVINATION, value);
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DIVINATION, value);
 			break;
 		}
 	}

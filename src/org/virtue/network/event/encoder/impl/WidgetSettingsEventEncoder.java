@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,10 +40,16 @@ public class WidgetSettingsEventEncoder implements EventEncoder<WidgetSettingsEv
 	public OutboundBuffer encode(Player player, WidgetSettingsEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(OutgoingEventType.IF_SETEVENTS, player);
-		buffer.putInt(context.getRoot() << 16 | context.getComponent());
-		buffer.putIntA(context.getSettings());
-		buffer.putShortA(context.getTo());
 		buffer.putLEShortA(context.getFrom());
+		buffer.putIntA(context.getRoot() << 16 | context.getComponent());
+		buffer.putShortA(context.getTo());
+		buffer.putLEInt(context.getSettings());
+
+//
+//		buffer.putInt(context.getRoot() << 16 | context.getComponent());
+//		buffer.putIntA(context.getSettings());
+//		buffer.putShortA(context.getTo());
+//		buffer.putLEShortA(context.getFrom());
 		return buffer;
 	}
 

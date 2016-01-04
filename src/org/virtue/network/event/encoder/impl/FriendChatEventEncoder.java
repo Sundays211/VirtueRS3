@@ -47,7 +47,7 @@ public class FriendChatEventEncoder implements EventEncoder<FriendChatEventConte
 			buffer.putString(context.getOwnerName());
 			buffer.putByte(0);//No need to send the owner unfiltered name, as it's never used
 			buffer.putString(context.getChannelName());
-			buffer.putByte(context.getKickReq().getID());
+			buffer.putByte(context.getKickReq().getId());
 			buffer.putByte(context.getUsers().length);
 		} else {
 			buffer.putVarByte(OutgoingEventType.UPDATE_FRIENDCHANNEL_PART, player);
@@ -73,7 +73,7 @@ public class FriendChatEventEncoder implements EventEncoder<FriendChatEventConte
 		if (user.getRank() == null) {
 			buffer.putByte(Byte.MIN_VALUE);
 		} else {
-			buffer.putByte(user.getRank().getID());
+			buffer.putByte(user.getRank().getId());
 			buffer.putString(user.getWorldName());
 		}
 	}

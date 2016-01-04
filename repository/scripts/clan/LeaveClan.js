@@ -27,8 +27,6 @@
  * @author Sundays211
  * @since 26/12/2014
  */
-var api;
-
 var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
 	startDialog : function (player) {
 		var clanHash = api.getClanHash(player);
@@ -110,6 +108,5 @@ Applying changes to clan settings.
 
 /* Listen to the dialogs specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	scriptManager.registerDialogListener(new DialogListener(), "LeaveClan");
 };

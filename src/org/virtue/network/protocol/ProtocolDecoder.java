@@ -69,20 +69,22 @@ public class ProtocolDecoder extends ReplayingDecoder<Stage> {
 			switch (state()) {
 			case READ_OPCODE:
 				opcode = (buf.readByte() - cipher.nextInt()) & 0xFF;
+				//System.out.println("Received opcode: " + opcode);
 				checkpoint(Stage.READ_LENGTH);
 				break;
 			case READ_LENGTH:
+				//System.out.println("Getting length of opcode: " + opcode);
 				length = Constants.PACKET_SIZES[opcode];
 				switch (length) {
 				case -1:
-					if (buf.isReadable())
+					if (buf.isReadable()) {
 						length = buf.readByte() & 0xff;
-
+					}
 					break;
 				case -2:
-					if (buf.readableBytes() >= 2)
+					if (buf.readableBytes() >= 2) {
 						length = buf.readShort() & 0xffff;
-					
+					}
 					break;
 				}
 				checkpoint(Stage.FINALIZE);

@@ -21,7 +21,12 @@
  */
 package org.virtue.network.event.handler.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.virtue.Virtue;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.engine.script.listeners.WidgetListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.WidgetDragEventContext;
@@ -41,15 +46,29 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 	 */
 	@Override
 	public void handle(Player player, WidgetDragEventContext context) {
+		if (Virtue.getInstance().getWidgetRepository().handleDrag(
+				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
+				context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item(), player)) {
+			return;
+		}
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(ScriptEventType.IF_DRAG, context.getIf1Hash())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("frominterface", context.getIf1Interface());
+			args.put("fromcomponent", context.getIf1Component());
+			args.put("fromslot", context.getIf1Slot());
+			args.put("tointerface", context.getIf2Interface());
+			args.put("tocomponent", context.getIf2Component());
+			args.put("toslot", context.getIf2Slot());
+			scripts.invokeScriptChecked(ScriptEventType.IF_DRAG, context.getIf1Hash(), args);
+			return;
+		}
 		WidgetListener listner = Virtue.getInstance().getScripts().forWidgetID(context.getIf1Interface());
 		if (listner == null || !listner.drag(player, 
 				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
 				context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item())) {
-			if (!Virtue.getInstance().getWidgetRepository().handleDrag(
-					context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
-					context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item(), player)) {
-				defaultHandler(player, context);
-			}
+			defaultHandler(player, context);
 		}
 	}
 	

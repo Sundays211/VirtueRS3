@@ -32,9 +32,6 @@ var CraftAction = Java.type('org.virtue.game.content.skills.CraftAction');
 
 var TICK_DURATION = 500;//500
 var TICKS_PER_DAY = 100 * 60 * 24;
-var FARMING_SKILL = 19;
-var WOODCUTTING_SKILL = 8;
-var BACKPACK = 93;
 
 //See: http://services.runescape.com/m=forum/sl=0/forums.ws?154,155,727,62039428
 
@@ -387,7 +384,7 @@ FarmingPatch.prototype = {
 			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
-						api.addExperience(player, "farming", crop.plantXp, true);
+						api.addExperience(player, Stat.FARMING, crop.plantXp, true);
 						that.setStatus(player, crop.plantStage);
 						return true;
 					}
@@ -406,12 +403,12 @@ FarmingPatch.prototype = {
 			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
-						if (api.freeSpaceTotal(player, "backpack") < 1) {
+						if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 							api.sendMessage(player, "You need free space!");
 							return true;
 						}//24910?
 						api.addCarriedItem(player, crop.productId, 1);
-						api.addExperience(player, "farming", crop.harvestXp, true);
+						api.addExperience(player, Stat.FARMING, crop.harvestXp, true);
 						delay = 2;
 						if (Math.random() < 0.5) {
 							api.runAnimation(player, 22705);
@@ -1042,7 +1039,7 @@ var Farming = {
 					var amount = api.getVarBit(player, 1003);
 					var itemType = api.getItemType(productID);
 					var xp = itemType.getParam(2697, 0) * amount;
-					api.addExperience(player, "farming", xp, true);
+					api.addExperience(player, Stat.FARMING, xp, true);
 					api.delCarriedItem(player, 5354, amount);
 					api.delCarriedItem(player, itemType.getParam(2656, -1), amount);
 					api.addCarriedItem(player, productID, amount);
@@ -1245,11 +1242,11 @@ Farming.TREES.setSapling = function (player, patch, saplingID) {
 	switch (saplingID) {
 	case 5370://Oak
 		this.setStatus(player, patch, 8);
-		api.addExperience(player, "farming", 14, true);
+		api.addExperience(player, Stat.FARMING, 14, true);
 		return true;
 	case 5371://Willow
 		this.setStatus(player, patch, 15);
-		api.addExperience(player, "farming", 25, true);
+		api.addExperience(player, Stat.FARMING, 25, true);
 		return true;
 	default:
 		return false;
@@ -1300,12 +1297,12 @@ Farming.TREES.handlePatch = function (player, patch, option) {
 		//TODO: Grant xp and send message
 		this.setStatus(player, patch, 13);
 		api.sendMessage(player, "You examine the tree for signs of disease and find that it is in perfect health.");
-		api.addExperience(player, "farming", 467.3, true);
+		api.addExperience(player, Stat.FARMING, 467.3, true);
 		break;
 	case 21://Check health willow
 		this.setStatus(player, patch, 22);
 		api.sendMessage(player, "You examine the tree for signs of disease and find that it is in perfect health.");
-		api.addExperience(player, "farming", 1456.5, true);
+		api.addExperience(player, Stat.FARMING, 1456.5, true);
 		break;
 	case 73://Prune oak 2
 		Farming.prune(player, patch, this, 9);
@@ -1342,11 +1339,11 @@ Farming.TREES.chopDown = function (player, patchID, tree, emptyStatus) {
 	if (hatchet == null) {
 		api.sendMessage(player, "You need a hatchet to chop this tree.");
 	}
-	if (api.getStatLevel(player, WOODCUTTING_SKILL) < tree.level) {
+	if (api.getStatLevel(player, Stat.WOODCUTTING) < tree.level) {
 		api.sendMessage(player, "You require a woodcutting level of "+tree.level+"  to cut this tree.");
 		return;
 	}
-	if (api.freeSpaceTotal(player, "backpack") < 1) {
+	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 		api.sendMessage(player, "Not enough space in your inventory.");
 		return;
 	}
@@ -1357,7 +1354,7 @@ Farming.TREES.chopDown = function (player, patchID, tree, emptyStatus) {
 		process : function (player) {
 			api.runAnimation(player, hatchet.anim);
 			if(delay <= 0) {
-				api.addExperience(player, "woodcutting", tree.xp, true);
+				api.addExperience(player, Stat.WOODCUTTING, tree.xp, true);
 				api.addCarriedItem(player, tree.logID, 1);
 				api.sendFilterMessage(player, "You cut some " + api.getItemType(tree.logID).name + ".");
 				if (Math.random() > 0.9) {

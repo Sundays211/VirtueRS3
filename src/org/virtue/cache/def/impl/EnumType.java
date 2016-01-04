@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.virtue.cache.config.vartype.constants.ScriptVarType;
 import org.virtue.cache.utility.ByteBufferUtils;
+import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Sundays211
@@ -45,10 +47,10 @@ public class EnumType {
 		for (int opcode = buffer.get() & 0xff; opcode != 0; opcode = buffer.get() & 0xff) {
 			if (opcode == 1) {
 				buffer.get();
-			    //keyType = ScriptVarType.forChar(StringTools.charFromByte(buffer.readByte()));
+				enumType.keyType = ScriptVarType.forChar(StringUtility.charFromByte(buffer.get()));
 			} else if (opcode == 2) {
 				buffer.get();
-			    //valueType = ScriptVarType.forChar(StringTools.charFromByte(buffer.readByte()));
+				enumType.valueType = ScriptVarType.forChar(StringUtility.charFromByte(buffer.get()));
 			} else if (3 == opcode) {
 				enumType.defaultstr = ByteBufferUtils.getString(buffer);
 			} else if (4 == opcode) {
@@ -79,11 +81,9 @@ public class EnumType {
 					}
 			    }
 			} else if (101 == opcode) {
-				ByteBufferUtils.getSmallSmartInt(buffer);
-			    //keyType = ScriptVarType.forSerialID(buffer.readSmart());
+				enumType.keyType = ScriptVarType.getById(ByteBufferUtils.getSmallSmartInt(buffer)+1);
 			} else if (102 == opcode) {
-				ByteBufferUtils.getSmallSmartInt(buffer);
-			    //valueType = ScriptVarType.forSerialID(buffer.readSmart());
+				enumType.valueType = ScriptVarType.getById(ByteBufferUtils.getSmallSmartInt(buffer)+1);
 			}
 		}
 		return enumType;
@@ -91,10 +91,10 @@ public class EnumType {
 	
 	private Map<Integer, Serializable> valueMap;
     HashMap<Object, int[]> reverseLookupMap;
-    //public ScriptVarType valueType;
+    public ScriptVarType valueType;
     String defaultstr = "null";
     int defaultint;
-    //public ScriptVarType keyType;
+    public ScriptVarType keyType;
     Object[] valueArray;
     int size = 0;
 	int id;

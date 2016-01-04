@@ -67,7 +67,7 @@ public class FriendListEventEncoder implements EventEncoder<FriendListEventConte
 		buffer.putString(friend.getDisplayName());
 		buffer.putString(friend.getPrevName() == null ? "" : friend.getPrevName());
 		buffer.putShort(friend.getNodeID());
-		buffer.putByte(friend.getRank().getID());//Rank
+		buffer.putByte(friend.getRank().getId());//Rank
 		buffer.putByte(0);//Flags
 		if (friend.getNodeID() > 0) {
 			buffer.putString(friend.getWorldName());

@@ -21,6 +21,7 @@
  */
 package org.virtue.network.event.context.impl.in;
 
+import org.virtue.game.content.social.ChatOptionType;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -33,51 +34,19 @@ import org.virtue.network.event.context.GameEventContext;
  */
 public class ChatOptionEventContext implements GameEventContext {
 	
-	public static enum OptionType {
-		FRIEND(0),
-		GROUP_MEMBER(1),
-		GROUP_BAN(2),
-		MAIN_CLAN(3),
-		GUEST_CLAN(4),
-		FRIEND_CHAT(5);
-		
-		OptionType (int id) {
-			
-		}
-		
-		public static OptionType forID (int id) {
-			switch (id) {
-			case 0:
-				return FRIEND;
-			case 1:
-				return GROUP_MEMBER;
-			case 2:
-				return GROUP_BAN;
-			case 3:
-				return MAIN_CLAN;
-			case 4:
-				return GUEST_CLAN;
-			case 5:
-				return FRIEND_CHAT;
-			default:
-				return null;
-			}
-		}
-	}
-	
 	private int hash;
 	private int slot;
 	private OptionButton button;
 	private String name;
 	
-	private OptionType type;
+	private ChatOptionType type;
 	
-	public ChatOptionEventContext (int hash, int slot, OptionButton button, String name, int type) {
+	public ChatOptionEventContext (int hash, int slot, OptionButton button, String name, ChatOptionType type) {
 		this.hash = hash;
 		this.slot = slot;
 		this.button = button;
 		this.name = name;
-		this.type = OptionType.forID(type);
+		this.type = type;
 	}
 
 	public int getHash() {
@@ -104,7 +73,7 @@ public class ChatOptionEventContext implements GameEventContext {
 		return name;
 	}
 	
-	public OptionType getType () {
+	public ChatOptionType getType () {
 		return type;
 	}
 }

@@ -79,8 +79,8 @@ public class DialogManager {
 	 */
 	public void requestInteger (String message, InputEnteredHandler handler) {
 		setInputHandler(handler);
-		player.getWidgets().openWidget(1477, 437, 1418, true);
-		player.getWidgets().openWidget(1418, 0, 1469, true);
+		player.getWidgets().openWidget(1477, 503, 1418, true);
+		player.getWidgets().openWidget(1418, 1, 1469, true);
 		player.getDispatcher().sendCS2Script(108, message);
 	}
 	
@@ -91,8 +91,8 @@ public class DialogManager {
 	 */
 	public void requestName (String message, InputEnteredHandler handler) {
 		setInputHandler(handler);
-		player.getWidgets().openWidget(1477, 437, 1418, true);
-		player.getWidgets().openWidget(1418, 0, 1469, true);
+		player.getWidgets().openWidget(1477, 503, 1418, true);
+		player.getWidgets().openWidget(1418, 1, 1469, true);
 		player.getDispatcher().sendCS2Script(109, message);
 	}
 	
@@ -103,8 +103,8 @@ public class DialogManager {
 	 */
 	public void requestString (String message, InputEnteredHandler handler) {
 		setInputHandler(handler);
-		player.getWidgets().openWidget(1477, 437, 1418, true);
-		player.getWidgets().openWidget(1418, 0, 1469, true);
+		player.getWidgets().openWidget(1477, 503, 1418, true);
+		player.getWidgets().openWidget(1418, 1, 1469, true);
 		player.getDispatcher().sendCS2Script(110, message);
 	}
 	
@@ -116,8 +116,8 @@ public class DialogManager {
 	public void requestItem (String message, InputEnteredHandler handler) {
 		setInputHandler(handler);
 		player.getWidgets().closeWidget(1418, 0);
-		player.getWidgets().openWidget(1477, 437, 1418, true);
-		player.getWidgets().openWidget(1418, 0, 389, true);
+		player.getWidgets().openWidget(1477, 503, 1418, true);
+		player.getWidgets().openWidget(1418, 1, 389, true);
 		player.getDispatcher().sendCS2Script(8178);
 		player.getDispatcher().sendCS2Script(570, message);
 	}

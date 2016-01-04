@@ -27,7 +27,6 @@
  * @author Sundays211
  * @since 9/11/2014
  */
-var api;
 
 var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
@@ -94,7 +93,6 @@ var WorldMapOpenAction = Java.extend(Java.type('org.virtue.game.entity.player.ev
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var widgetListener = new WidgetListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
 };

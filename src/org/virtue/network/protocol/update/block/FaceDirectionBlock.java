@@ -27,6 +27,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -43,7 +44,7 @@ public class FaceDirectionBlock extends Block {
 	 * The {@link FaceDirectionBlock} constructor
 	 */
 	public FaceDirectionBlock(Tile target) {
-		super(0x40, 13, 0x4, 14);
+		super(BlockType.TURN);
 		this.target = target;
 	}
 
@@ -57,8 +58,8 @@ public class FaceDirectionBlock extends Block {
 		if (entity instanceof Player) {
 			block.putShort(direction);
 		} else if (entity instanceof NPC) {
-			block.putLEShortA(target.getX());
-			block.putLEShort(target.getY());
+			block.putShortA(target.getX());
+			block.putShort(target.getY());
 		}
 	}
 }

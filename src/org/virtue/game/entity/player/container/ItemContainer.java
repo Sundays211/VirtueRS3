@@ -3,7 +3,7 @@ package org.virtue.game.entity.player.container;
 import java.util.Arrays;
 
 import org.virtue.cache.config.inv.InvType;
-import org.virtue.game.entity.player.widget.var.ScriptVar;
+import org.virtue.game.entity.player.var.ScriptVar;
 
 /**
  * Container class.
@@ -44,7 +44,8 @@ public final class ItemContainer implements ScriptVar {
 	
 	public void addItemsAtSlots (Item[] items) {
 		for (int slot = 0; slot < data.length;slot++) {
-			data[slot] = items[slot];
+			if(slot < items.length)
+				data[slot] = items[slot];
 		}
 	}
 
@@ -154,6 +155,7 @@ public final class ItemContainer implements ScriptVar {
 				data[slot+1] = data[slot];
 				data[slot] = oldItem;
 			}
+			data[inSlot] = item;
 			return true;
 		}
 	}

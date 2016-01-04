@@ -28,7 +28,7 @@ import org.virtue.cache.ReferenceTable;
 import org.virtue.cache.config.Js5ConfigGroup;
 import org.virtue.cache.def.ConfigDecoder;
 import org.virtue.cache.def.impl.QuestType;
-import org.virtue.game.entity.player.widget.var.VarDomain;
+import org.virtue.game.entity.player.var.VarDomain;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

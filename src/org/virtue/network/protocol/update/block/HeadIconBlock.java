@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -34,13 +35,11 @@ import org.virtue.network.protocol.update.Block;
  * @since 13/11/2014
  */
 public class HeadIconBlock extends Block {
-	
+
 	/**
-	 * @param mask
-	 * @param position
 	 */
 	public HeadIconBlock() {
-		super(0x800, 10, 0x100000, 1);
+		super(BlockType.HEADICONS);
 	}
 
 	/* (non-Javadoc)
@@ -51,10 +50,10 @@ public class HeadIconBlock extends Block {
 		if (entity instanceof Player) {
 			byte[] renderData = entity.getHeadIcons().getData();
 			block.putC(renderData.length);
-			block.putBytesA(renderData, 0, renderData.length);			
+			block.putBytesA(renderData, 0, renderData.length);
 		} else {
 			byte[] renderData = entity.getHeadIcons().getData();
-			block.putBytes(renderData, 0, renderData.length);		
+			block.putBytes(renderData, 0, renderData.length);
 		}
 	}
 }

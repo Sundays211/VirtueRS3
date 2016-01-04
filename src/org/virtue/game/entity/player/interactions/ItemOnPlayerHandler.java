@@ -58,8 +58,8 @@ public class ItemOnPlayerHandler implements WidgetOnPlayerHandler {
 		}
 		ItemContainer backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
 		Item item = backpack.get(slot);
-		if (player.getPrivilegeLevel().getId() == 6 || player.getPrivilegeLevel().getId() == 7
-				|| player.getPrivilegeLevel().getId() == 8) {
+		if (player.getPrivilegeLevel() == PrivilegeLevel.IRONMAN || player.getPrivilegeLevel() == PrivilegeLevel.HARDCORE
+				|| player.getPrivilegeLevel() == PrivilegeLevel.HARDCORE_IRONMAN) {
 			return false;
 		}
 		if (item == null) {

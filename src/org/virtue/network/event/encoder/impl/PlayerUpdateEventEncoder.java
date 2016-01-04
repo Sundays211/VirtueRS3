@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +28,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.PlayerUpdateConstants;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.AppearenceBlock;
 import org.virtue.network.protocol.update.block.HeadIconBlock;
@@ -58,10 +59,10 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		//System.out.println("Pointer before masks: "+(buffer.offset() - startOffset));
 		buffer.putBytes(block.buffer(), 0, block.offset());
 		//System.out.println("Pointer after masks: "+(buffer.offset() - startOffset));
-		buffer.finishVarShort();		
+		buffer.finishVarShort();
 		return buffer;
 	}
-	
+
 	private void processLocalPlayers(Player player, OutboundBuffer buffer, OutboundBuffer block, Viewport context, boolean nsn0) {
 		buffer.setBitAccess();
 		int skipCount = 0;
@@ -256,7 +257,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		}
 		buffer.setByteAccess();
 	}
-	
+
 	private boolean needsRemove(Player player, Player p) {
 		return p == null || !p.getCurrentTile().withinDistance(player.getCurrentTile(), 14) || !p.exists() || p.getIndex() == -1;
 	}
@@ -293,10 +294,10 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 			maskData |= p.getUpdateBlocks()[pos].getMask(false);
 		}
 		if (maskData >= 0x100) {
-			maskData |= 0x8;
+			maskData |= PlayerUpdateConstants.PLAYER_2_BYTE_SIZE;
 		}
 		if (maskData >= 0x10000) {
-			maskData |= 0x1000;
+			maskData |= PlayerUpdateConstants.PLAYER_3_BYTE_SIZE;
 		}
 		//System.out.println("Packing update for player "+p.getIndex()+": 0x"+Integer.toHexString(maskData));
 		block.putShort(p.getIndex());
@@ -316,14 +317,14 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 				}
 				continue;
 			}
-			p.getUpdateBlocks()[pos].encodeBlock(block, p);		
+			p.getUpdateBlocks()[pos].encodeBlock(block, p);
 		}
 	}
 
 	private boolean needsMovementTypeUpdate (Player p2, Viewport context) {
 		return p2.getMovement().getMovementType() != context.getMovementTypes()[p2.getIndex()];
 	}
-	
+
 	/**
 	 * Returns whether or not a mask update needs to be packed for this player
 	 * @param p The player to check
@@ -336,7 +337,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		boolean headIconUpdate = needHeadIconUpdate(p.getIndex(), p.getHeadIcons().getHash(), context, blockSize);
 		return headIconUpdate || appearanceUpdate || p.needsMaskUpdate();
 	}
-	
+
 	/**
 	 * Checks whether the specified player needs an appearance update
 	 * @param index The index of the player to check
@@ -358,7 +359,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		}
 		return context.getHeadIconHashes()[index] == null || !MessageDigest.isEqual(context.getHeadIconHashes()[index], hash);
 	}
-	
+
 	private void appendRegionHash(OutboundBuffer buffer, Player p, int lastRegionHash, int currentRegionHash) {
 		int lastRegionX = (lastRegionHash >> 8) & 0xff;
 		int lastRegionY = 0xff & lastRegionHash;

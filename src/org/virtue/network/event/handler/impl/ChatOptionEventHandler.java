@@ -21,8 +21,12 @@
  */
 package org.virtue.network.event.handler.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.virtue.Virtue;
-import org.virtue.engine.script.listeners.WidgetListener;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.ChatOptionEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
@@ -43,11 +47,20 @@ public class ChatOptionEventHandler implements GameEventHandler<ChatOptionEventC
 	 */
 	@Override
 	public void handle(Player player, ChatOptionEventContext context) {
-		WidgetListener listener = Virtue.getInstance().getScripts().forWidgetID(context.getInterfaceId());
-		//We'll just handle this using the normal button listener, unless there's something special that needs to be done.
-		if (listener == null || !listener.handleInteraction(player, context.getInterfaceId(), 
-				context.getComponentId(), context.getSlot(), -1, context.getButton().getID())) {
-			player.getDispatcher().sendConsoleMessage("Unhandled chat option: iface="+context.getInterfaceId()+", comp="+context.getComponentId()+", option="+context.getButton()+", slot="+context.getSlot()+", name="+context.getName()+", type="+context.getType());
+		
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(ScriptEventType.CHATLIST_OPTION, context.getType().getId())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("interface", context.getInterfaceId());
+			args.put("component", context.getComponentId());
+			args.put("slot", context.getSlot());
+			args.put("button", context.getButton().getId());
+			args.put("name", context.getName());
+			args.put("type", context.getType().getId());
+			scripts.invokeScriptChecked(ScriptEventType.CHATLIST_OPTION, context.getType().getId(), args);
+		} else {
+			player.getDispatcher().sendGameMessage("Unhandled chat option: iface="+context.getInterfaceId()+", comp="+context.getComponentId()+", option="+context.getButton()+", slot="+context.getSlot()+", name="+context.getName()+", type="+context.getType());
 		}
 	}
 

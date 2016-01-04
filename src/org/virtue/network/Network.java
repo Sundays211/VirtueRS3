@@ -23,6 +23,7 @@ package org.virtue.network;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Constants;
 import org.virtue.network.protocol.handshake.HandshakeDecoder;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -74,7 +75,7 @@ public class Network {
 			.childOption(ChannelOption.TCP_NODELAY, true);
 		
 		try {
-			future = bootstrap.bind(43594).sync();
+			future = bootstrap.bind(Constants.SERVER_PORT).sync();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

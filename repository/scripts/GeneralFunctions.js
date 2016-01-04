@@ -105,6 +105,84 @@ function requestMulti (player, message, options, responses, onSelect) {
 	api.requestMulti(player, message, options, responses, new Handler());
 }
 
+function mesbox (player, message, callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			if (callback !== undefined) {
+				callback();
+			}
+		}
+	});
+	player.getDialogs().sendMessageBox(message);
+	api.setInputHandler(player, new Handler());
+}
+
+function chatplayer (player, message, callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			if (callback !== undefined) {
+				callback();
+			}
+		}
+	});
+	player.getDialogs().sendPlayerChat(message);
+	api.setInputHandler(player, new Handler());
+}
+
+function chatnpc (player, npc, message, callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			if (callback !== undefined) {
+				callback();
+			}			
+		}
+	});
+	if (typeof(npc) !== "number") {
+		npc = api.getId(npc);
+	}
+	player.getDialogs().sendNpcChat(message, npc);
+	api.setInputHandler(player, new Handler());
+}
+
+function multi2 (player, message, op1, op1callback, op2, op2callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			if (value == 1 && op1callback !== undefined) {
+				op1callback();
+			} else if (value == 2 && op2callback !== undefined) {
+				op2callback();
+			}
+		}
+	});
+	
+	api.requestMulti(player, message, [op1, op2], [1, 2], new Handler());
+}
+
+function multi3 (player, message, op1, op1callback, op2, op2callback, op3, op3callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			if (value == 1 && op1callback !== undefined) {
+				op1callback();
+			} else if (value == 2 && op2callback !== undefined) {
+				op2callback();
+			} else if (value == 3 && op3callback !== undefined) {
+				op3callback();
+			}
+		}
+	});
+	
+	api.requestMulti(player, message, [op1, op2, op3], [1, 2, 3], new Handler());
+}
+
+function getCompHash (iface, comp) {
+	return (iface << 16) | comp;
+}
+
+function openModalBase (player) {
+	api.openWidget(player, 1477, 503, 1418, true);
+	api.openWidget(player, 1418, 1, 1469, true);
+}
+
 function defaultOpHeldUseHandler (player, args) {
 	if (api.isAdmin(player)) {
 		api.sendMessage(player, "Unhandled item use: item="+args.item+", slot="+args.slot+", useitem="+args.useitem+", useslot="+args.useslot)

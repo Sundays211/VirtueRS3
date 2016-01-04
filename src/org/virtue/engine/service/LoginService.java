@@ -24,6 +24,8 @@ package org.virtue.engine.service;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.network.session.Session;
 import org.virtue.network.session.impl.LoginSession;
 
@@ -33,6 +35,11 @@ import org.virtue.network.session.impl.LoginSession;
  * @since Sep 4, 2014
  */
 public class LoginService implements Runnable {
+	
+	/**
+	 * The {@link Logger} Instance
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
 	/**
 	 * The {@link ArrayDeque} of {@link Session}
@@ -63,7 +70,11 @@ public class LoginService implements Runnable {
 					}
 				}
 			}
-			session.processLoginQueue();
+			try {
+				session.processLoginQueue();
+			} catch (Exception ex) {
+				logger.error("Error processing login queue: ", ex);
+			}
 		}
 	}
 	

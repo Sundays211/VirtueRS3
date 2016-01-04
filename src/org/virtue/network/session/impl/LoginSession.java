@@ -33,8 +33,7 @@ import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.AccountInfo;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.PrivilegeLevel;
-import org.virtue.game.entity.player.widget.var.LoginDispatcher;
+import org.virtue.game.entity.player.var.LoginDispatcher;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.NetworkHandler;
 import org.virtue.network.protocol.ProtocolDecoder;
@@ -43,6 +42,7 @@ import org.virtue.network.protocol.login.LoginEncoder;
 import org.virtue.network.protocol.message.ResponseTypeMessage;
 import org.virtue.network.protocol.message.login.LoginRequestMessage;
 import org.virtue.network.protocol.message.login.LoginResponseMessage;
+import org.virtue.network.protocol.message.login.LoginTypeMessage;
 import org.virtue.network.session.Session;
 
 /**
@@ -65,7 +65,7 @@ public class LoginSession extends Session {
 	private final LoginService service;
 	
 	/**
-	 * The {@link ArrayDwque} of pending requests
+	 * The {@link Deque} of pending requests
 	 */
 	private final Deque<LoginRequestMessage> loginQueue = new ArrayDeque<>();
 	
@@ -113,62 +113,70 @@ public class LoginSession extends Session {
 				idle = false;
 			}
 		}
+		if (request.getLoginType() == LoginTypeMessage.LOGIN_CONTINUE) {
+			World.getInstance().addPlayer(player);
+			channel.writeAndFlush(new LoginResponseMessage(player, ResponseTypeMessage.STATUS_OK.getCode(), LoginTypeMessage.LOGIN_WORLD));
+
+			finishLogin(LoginTypeMessage.LOGIN_WORLD);
+			return;
+		}
 		if (Virtue.getInstance().getUpdateTime() <= 100 && Virtue.getInstance().hasUpdate()) {
 			channel.pipeline().remove(LoginDecoder.class);
 			channel.writeAndFlush(new LoginResponseMessage(null, ResponseTypeMessage.SERVER_UPDATING.getCode(), null));
 			return;
 		}
 		if (request != null) {
-			int response = checkPlayer(request);
-			if (player == null) {
-				// player = new Player(request.getChannel(),
-				// request.getUsername(), request.getPassword(),
-				// PrivilegeLevel.forOpcode(2), CombatMode.EOC,
-				// request.getEncodingCipher(), request.getDecodingCipher());
+			if (request.getLoginType() != LoginTypeMessage.LOGIN_CONTINUE) {
+				int response = checkPlayer(request);
+				if (player == null) {
+					// player = new Player(request.getChannel(),
+					// request.getUsername(), request.getPassword(),
+					// PrivilegeLevel.forOpcode(2), CombatMode.EOC,
+					// request.getEncodingCipher(), request.getDecodingCipher());
+					channel.pipeline().remove(LoginDecoder.class);
+					channel.writeAndFlush(new LoginResponseMessage(null, response, null));
+					// channel.close();
+					return;
+				}			
+			}
+			if (World.getInstance().containsPlayer(player.getUserHash())) {
 				channel.pipeline().remove(LoginDecoder.class);
-				channel.writeAndFlush(new LoginResponseMessage(null, response, null));
-				// channel.close();
+				channel.writeAndFlush(new LoginResponseMessage(null, ResponseTypeMessage.STATUS_ALREADY_ONLINE.getCode(), null));
 				return;
 			}
-			
 			switch (request.getLoginType()) {
 			case LOGIN_LOBBY:
-				if (World.getInstance().containsPlayer(player.getUserHash())) {
-					channel.pipeline().remove(LoginDecoder.class);
-					channel.writeAndFlush(new LoginResponseMessage(null, ResponseTypeMessage.STATUS_ALREADY_ONLINE.getCode(), null));
-					return;
-				} else if (Lobby.getInstance().containsPlayer(player.getUserHash())) {
+				if (Lobby.getInstance().containsPlayer(player.getUserHash())) {
 					Lobby.getInstance().getPlayerByHash(player.getUserHash()).kick(false);
 				}
 				Lobby.getInstance().addPlayer(player);
+				channel.writeAndFlush(new LoginResponseMessage(player, ResponseTypeMessage.STATUS_OK.getCode(), request.getLoginType()));
+
+				finishLogin(request.getLoginType());
 				break;
 			case LOGIN_WORLD:
-				if (World.getInstance().containsPlayer(player.getUserHash())) {
-					channel.pipeline().remove(LoginDecoder.class);
-					channel.writeAndFlush(new LoginResponseMessage(null, ResponseTypeMessage.STATUS_ALREADY_ONLINE.getCode(), null));
-					return;
-				}
 				Player oldPlayer = Lobby.getInstance().getPlayerByHash(player.getUserHash());
 				if (oldPlayer != null) {
 					//Lobby.getInstance().getPlayers().remove(oldPlayer.getIndex());
 					oldPlayer.finish();
 				}
-				World.getInstance().addPlayer(player);
 				LoginDispatcher.onPreGameLogin(player);
-				break;
+				break;//Send the varcs then wait for the client to respond with READY
+			case LOGIN_CONTINUE:				
+				return;
 			}
-			//player.initialize();
-			
-			channel.writeAndFlush(new LoginResponseMessage(player, response, request.getLoginType()));
-
-			channel.pipeline().remove(LoginDecoder.class);
-			channel.pipeline().remove(LoginEncoder.class);
-			channel.pipeline().addFirst("decoder", new ProtocolDecoder(player.getDecodingCipher()));
-			channel.attr(NetworkHandler.attachment).set(new GameSession(channel, player));
-
-			player.getDispatcher().dispatchLogin(request.getLoginType());
+			//player.initialize();			
 			System.out.println(request.getUsername() + ", " + request.getPassword() + ", " + request.getLoginType().toString());
 		}
+	}
+	
+	private void finishLogin (LoginTypeMessage loginType) {
+		channel.pipeline().remove(LoginDecoder.class);
+		channel.pipeline().remove(LoginEncoder.class);
+		channel.pipeline().addFirst("decoder", new ProtocolDecoder(player.getDecodingCipher()));
+		channel.attr(NetworkHandler.attachment).set(new GameSession(channel, player));
+		
+		player.getDispatcher().dispatchLogin(loginType);
 	}
 	
 	public int checkPlayer(LoginRequestMessage request) {
@@ -190,11 +198,7 @@ public class LoginSession extends Session {
 		if (response instanceof Player) {			
 			player = (Player) response;
 			player.setNames(info.getDisplayName(), info.getPrevName());
-			if (player.getName().equalsIgnoreCase("emperor")) {
-				player.setPrivilgeLevel(PrivilegeLevel.ADMINISTRATOR);
-			} else {
-				player.setPrivilgeLevel(info.getType());
-			}
+			player.setPrivilgeLevel(info.getType());
 			/*
 			 * if (player.isAuthenticated()) {
 			 * return ResponseTypeMessage.AUTHENTICATED.getCode():

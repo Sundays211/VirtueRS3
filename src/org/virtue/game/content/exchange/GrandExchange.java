@@ -79,7 +79,7 @@ public class GrandExchange implements Runnable {
 	
 	private Queue<Offer> abortQueue = new ArrayDeque<Offer>();
 	
-	private Map<Long, Offer[]> playerLookup = new HashMap<Long, Offer[]>();
+	private Map<Long, Offer[][]> playerLookup = new HashMap<>();
 	
 	private Map<Integer, Set<Offer>> itemLookup = new HashMap<Integer, Set<Offer>>();
 	
@@ -123,6 +123,7 @@ public class GrandExchange implements Runnable {
 				
 				long userhash = Long.parseLong(element.getAttribute("owner"), 16);
 				long id = Long.parseLong(element.getAttribute("id"), 16);
+				int exchange = Byte.parseByte(element.getAttribute("exchangeId"));
 				int slot = Byte.parseByte(element.getAttribute("slot"));
 				boolean isSell = Boolean.parseBoolean(element.getAttribute("isSell"));
 				int itemID = Integer.parseInt(element.getElementsByTagName("itemID").item(0).getTextContent());
@@ -132,13 +133,13 @@ public class GrandExchange implements Runnable {
 				int processed = Integer.parseInt(element.getElementsByTagName("processed").item(0).getTextContent());
 				int coinsReceived = Integer.parseInt(element.getElementsByTagName("coinsReceived").item(0).getTextContent());
 				
-				Offer offer = new Offer(userhash, id, slot, isSell, itemID, amount, offerPrice);
+				Offer offer = new Offer(exchange, userhash, id, slot, isSell, itemID, amount, offerPrice);
 				offer.processOffer(processed, coinsReceived);
 				synchronized (playerLookup) {
 					if (!playerLookup.containsKey(offer.getOwner())) {
-						playerLookup.put(offer.getOwner(), new Offer[6]);
+						playerLookup.put(offer.getOwner(), new Offer[3][8]);
 					}
-					playerLookup.get(offer.getOwner())[offer.getSlot()] = offer;
+					playerLookup.get(offer.getOwner())[offer.getExchange()][offer.getSlot()] = offer;
 				}
 				if (!offer.isFinished()) {
 					submitQueue.add(offer);
@@ -189,51 +190,57 @@ public class GrandExchange implements Runnable {
 
 			Element offerElement;
 			int count = 0;
-			for (Offer[] offers : playerLookup.values()) {
-				for (Offer offer : offers) {
-					if (offer == null) {
-						continue;
+			for(Offer[][] exchangeType : playerLookup.values()) {
+				for (Offer[] offers : exchangeType) {
+					for (Offer offer : offers) {
+						if (offer == null) {
+							continue;
+						}
+						count++;
+						offerElement = document.createElement("offer");
+						
+						Attr attr = document.createAttribute("owner");
+						attr.setValue(Long.toHexString(offer.getOwner()));
+						offerElement.setAttributeNode(attr);
+						
+						attr = document.createAttribute("id");
+						attr.setValue(Long.toHexString(offer.getID()));
+						offerElement.setAttributeNode(attr);
+						
+						attr = document.createAttribute("exchangeId");
+						attr.setValue(Byte.toString((byte) offer.getExchange()));
+						offerElement.setAttributeNode(attr);
+						
+						attr = document.createAttribute("slot");
+						attr.setValue(Byte.toString((byte) offer.getSlot()));
+						offerElement.setAttributeNode(attr);
+						
+						attr = document.createAttribute("isSell");
+						attr.setValue(Boolean.toString(offer.isSell()));
+						offerElement.setAttributeNode(attr);
+		
+						Element itemID = document.createElement("itemID");
+						itemID.appendChild(document.createTextNode(Integer.toString(offer.getItemID())));
+						offerElement.appendChild(itemID);
+		
+						Element amount = document.createElement("amount");
+						amount.appendChild(document.createTextNode(Integer.toString(offer.getOfferCount())));
+						offerElement.appendChild(amount);
+		
+						Element offerPrice = document.createElement("offerPrice");
+						offerPrice.appendChild(document.createTextNode(Integer.toString(offer.getOfferPrice())));
+						offerElement.appendChild(offerPrice);
+		
+						Element processed = document.createElement("processed");
+						processed.appendChild(document.createTextNode(Integer.toString(offer.getCompletedCount())));
+						offerElement.appendChild(processed);
+		
+						Element coinsReceived = document.createElement("coinsReceived");
+						coinsReceived.appendChild(document.createTextNode(Integer.toString(offer.getCompletedGold())));
+						offerElement.appendChild(coinsReceived);
+		
+						def.appendChild(offerElement);
 					}
-					count++;
-					offerElement = document.createElement("offer");
-					
-					Attr attr = document.createAttribute("owner");
-					attr.setValue(Long.toHexString(offer.getOwner()));
-					offerElement.setAttributeNode(attr);
-					
-					attr = document.createAttribute("id");
-					attr.setValue(Long.toHexString(offer.getID()));
-					offerElement.setAttributeNode(attr);
-					
-					attr = document.createAttribute("slot");
-					attr.setValue(Byte.toString((byte) offer.getSlot()));
-					offerElement.setAttributeNode(attr);
-					
-					attr = document.createAttribute("isSell");
-					attr.setValue(Boolean.toString(offer.isSell()));
-					offerElement.setAttributeNode(attr);
-	
-					Element itemID = document.createElement("itemID");
-					itemID.appendChild(document.createTextNode(Integer.toString(offer.getItemID())));
-					offerElement.appendChild(itemID);
-	
-					Element amount = document.createElement("amount");
-					amount.appendChild(document.createTextNode(Integer.toString(offer.getOfferCount())));
-					offerElement.appendChild(amount);
-	
-					Element offerPrice = document.createElement("offerPrice");
-					offerPrice.appendChild(document.createTextNode(Integer.toString(offer.getOfferPrice())));
-					offerElement.appendChild(offerPrice);
-	
-					Element processed = document.createElement("processed");
-					processed.appendChild(document.createTextNode(Integer.toString(offer.getCompletedCount())));
-					offerElement.appendChild(processed);
-	
-					Element coinsReceived = document.createElement("coinsReceived");
-					coinsReceived.appendChild(document.createTextNode(Integer.toString(offer.getCompletedGold())));
-					offerElement.appendChild(coinsReceived);
-	
-					def.appendChild(offerElement);
 				}
 			}
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -293,10 +300,10 @@ public class GrandExchange implements Runnable {
 				if (itemLookup.containsKey(offer.getItemID())) {
 					itemLookup.get(offer.getItemID()).remove(offer);
 				}				
-				playerLookup.get(offer.getOwner())[offer.getSlot()] = null;
+				playerLookup.get(offer.getOwner())[offer.getExchange()][offer.getSlot()] = null;
 				Player player = World.getInstance().getPlayerByHash(offer.getOwner());
 				if (player != null) {
-					player.getExchangeOffers().onAbort(offer.getSlot());
+					player.getExchangeOffers().onAbort(offer.getExchange(), offer.getSlot());
 				}
 				needsSave = true;
 			}
@@ -344,16 +351,16 @@ public class GrandExchange implements Runnable {
 		to.processOffer(processAmount, price*processAmount);
 		Player player = World.getInstance().getPlayerByHash(from.getOwner());
 		if (player != null) {
-			player.getExchangeOffers().onUpdate(from.getSlot(), from.getCompletedCount(), from.getCompletedGold());
+			player.getExchangeOffers().onUpdate(from.getExchange(), from.getSlot(), from.getCompletedCount(), from.getCompletedGold());
 			if (from.isFinished()) {
-				playerLookup.get(from.getOwner())[from.getSlot()] = null;
+				playerLookup.get(from.getOwner())[from.getExchange()][from.getSlot()] = null;
 			}
 		}
 		player = World.getInstance().getPlayerByHash(to.getOwner());
 		if (player != null) {
-			player.getExchangeOffers().onUpdate(to.getSlot(), to.getCompletedCount(), to.getCompletedGold());
+			player.getExchangeOffers().onUpdate(to.getExchange(), to.getSlot(), to.getCompletedCount(), to.getCompletedGold());
 			if (to.isFinished()) {
-				playerLookup.get(to.getOwner())[to.getSlot()] = null;
+				playerLookup.get(to.getOwner())[to.getExchange()][to.getSlot()] = null;
 			}
 		}
 	}
@@ -365,42 +372,42 @@ public class GrandExchange implements Runnable {
 		}
 		synchronized (playerLookup) {
 			if (!playerLookup.containsKey(player.getUserHash())) {
-				playerLookup.put(player.getUserHash(), new Offer[6]);
+				playerLookup.put(player.getUserHash(), new Offer[3][8]);
 			}
-			playerLookup.get(player.getUserHash())[offer.getSlot()] = offer;
+			playerLookup.get(player.getUserHash())[offer.getExchange()][offer.getSlot()] = offer;
 		}
-		player.getExchangeOffers().onUpdate(offer.getSlot(), 0, 0);
+		player.getExchangeOffers().onUpdate(offer.getExchange(), offer.getSlot(), 0, 0);
 		//offer.setActive();
 		/*offer.sendOffer(player);*/
 	}
 	
-	public void requestOffer (Player player, int slot) {
+	public void requestOffer (Player player, int exchange, int slot) {
 		Offer offer = null;
 		synchronized (playerLookup) {
 			if (!playerLookup.containsKey(player.getUserHash())) {
 				return;
 			}
-			offer = playerLookup.get(player.getUserHash())[slot];
+			offer = playerLookup.get(player.getUserHash())[exchange][slot];
 		}
 		if (offer != null) {
-			player.getExchangeOffers().onUpdate(slot, offer.getCompletedCount(), offer.getCompletedGold());
+			player.getExchangeOffers().onUpdate(exchange, slot, offer.getCompletedCount(), offer.getCompletedGold());
 			if (offer.isFinished()) {
 				synchronized (playerLookup) {
-					offer = playerLookup.get(player.getUserHash())[slot] = null;
+					offer = playerLookup.get(player.getUserHash())[exchange][slot] = null;
 				}
 			}
 		} else {
-			player.getExchangeOffers().onAbort(slot);//If the offer cannot be found, we'll just call it aborted
+			player.getExchangeOffers().onAbort(exchange, slot);//If the offer cannot be found, we'll just call it aborted
 		}
 	}
 	
-	public void abortOffer (Player player, int slot) {
+	public void abortOffer (Player player, int exchange, int slot) {
 		Offer offer;
 		synchronized (playerLookup) {
 			if (!playerLookup.containsKey(player.getUserHash())) {
 				return;
 			}
-			offer = playerLookup.get(player.getUserHash())[slot];
+			offer = playerLookup.get(player.getUserHash())[exchange][slot];
 		}
 		if (offer != null) {
 			synchronized (abortQueue) {

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.widget.var;
+package org.virtue.game.entity.player.var;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -31,20 +31,16 @@ package org.virtue.game.entity.npc;
  */
 public class CustomNpcData {
 
-	private int deathAnimation;
 	private int attackAnimation;
 	private int defendAnimation;
 	private int walkRange;
+	private int interactRange;
 	
-	public CustomNpcData (int death, int att, int def, int range) {
-		this.deathAnimation = death;
+	public CustomNpcData (int att, int def, int range, int interact) {
 		this.attackAnimation = att;
 		this.defendAnimation = def;
 		this.walkRange = range;
-	}
-	
-	public int getDeathAnimation () {
-		return deathAnimation;
+		this.interactRange = interact;
 	}
 	
 	public int getAttackAnimation () {
@@ -57,5 +53,9 @@ public class CustomNpcData {
 	
 	public int getWalkRange () {
 		return walkRange;
+	}
+	
+	public int getInteractRange() {
+		return interactRange;
 	}
 }

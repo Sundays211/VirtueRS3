@@ -26,9 +26,9 @@ import java.text.NumberFormat;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
-import org.virtue.game.entity.player.widget.var.VarKey;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 
@@ -167,7 +167,7 @@ public class MinimapWidget extends Widget {
 	private boolean handleMoneyPouch (Player player, OptionButton option) {
 		if (OptionButton.ONE.equals(option)) {//Toggle money pouch
 			boolean wasOpen = player.getVars().getVarBitValue(VarKey.Bit.MONEY_POUCH_OPEN) == 1;
-			player.getVars().setVarpBit(VarKey.Bit.MONEY_POUCH_OPEN, wasOpen ? 0 : 1);
+			player.getVars().setVarBitValue(VarKey.Bit.MONEY_POUCH_OPEN, wasOpen ? 0 : 1);
 			return true;
 		} else if (OptionButton.TWO.equals(option)) {//Open Price Checker
 			player.getWidgets().openCentralWidget(206, false);

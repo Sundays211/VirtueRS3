@@ -36,6 +36,7 @@ import org.virtue.network.event.encoder.impl.ExchangeEventEncoder;
 public class ExchangeOffer {
 	
 	private ExchangeOfferStatus status;
+	private int exchange;
 	private final int slot;
 	private boolean isSell;
 	
@@ -46,14 +47,15 @@ public class ExchangeOffer {
 	private int offerCompletedCount;
 	private int offerCompletedGold;
 	
-	public ExchangeOffer (int slot, boolean isSell, int itemID, int amount, int offerPrice) {
-		this(slot, isSell, itemID, amount, offerPrice, 0, 0);
+	public ExchangeOffer (int exchange, int slot, boolean isSell, int itemID, int amount, int offerPrice) {
+		this(exchange, slot, isSell, itemID, amount, offerPrice, 0, 0);
 	}
 	
-	public ExchangeOffer (int slot, boolean isSell, int itemID, int amount, int offerPrice, int processedAmount, int processedCoins) {
+	public ExchangeOffer (int exchange, int slot, boolean isSell, int itemID, int amount, int offerPrice, int processedAmount, int processedCoins) {
 		if (amount < 1 || offerPrice < 1) {
 			throw new IllegalArgumentException("Offer price and amount must be at least one! amount="+amount+", offerPrice="+offerPrice);
 		}
+		this.exchange = exchange;
 		this.slot = slot;
 		this.isSell = isSell;
 		this.status = ExchangeOfferStatus.SUBMITTING;
@@ -131,7 +133,11 @@ public class ExchangeOffer {
 	}
 	
 	public void sendOffer (Player player) {
-		ExchangeEventContext context = new ExchangeEventContext(slot, status, isSell, offerItem, offerPrice, offerCount, offerCompletedCount, offerCompletedGold);
+		ExchangeEventContext context = new ExchangeEventContext(exchange, slot, status, isSell, offerItem, offerPrice, offerCount, offerCompletedCount, offerCompletedGold);
 		player.getDispatcher().sendEvent(ExchangeEventEncoder.class, context);
+	}
+
+	public int getExchange() {
+		return exchange;
 	}
 }

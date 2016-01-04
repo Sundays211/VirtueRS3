@@ -279,15 +279,15 @@ public class XmlParser implements Parser {
 					def.appendChild(chatname);
 					
 					Element chatjoin = document.createElement("chatjoin");
-					chatjoin.appendChild(document.createTextNode(Integer.toString(list.getFriendChatJoinRank().getID())));
+					chatjoin.appendChild(document.createTextNode(Integer.toString(list.getFriendChatJoinRank().getId())));
 					def.appendChild(chatjoin);
 					
 					Element chattalk = document.createElement("chattalk");
-					chattalk.appendChild(document.createTextNode(Integer.toString(list.getFriendChatTalkRank().getID())));
+					chattalk.appendChild(document.createTextNode(Integer.toString(list.getFriendChatTalkRank().getId())));
 					def.appendChild(chattalk);
 					
 					Element chatkick = document.createElement("chatkick");
-					chatkick.appendChild(document.createTextNode(Integer.toString(list.getFriendChatKickRank().getID())));
+					chatkick.appendChild(document.createTextNode(Integer.toString(list.getFriendChatKickRank().getId())));
 					def.appendChild(chatkick);
 					
 					Element friends;
@@ -303,7 +303,7 @@ public class XmlParser implements Parser {
 						friends.appendChild(username);
 						
 						Element rank = document.createElement("rank");
-						rank.appendChild(document.createTextNode(Integer.toString(friend.getRank().getID())));
+						rank.appendChild(document.createTextNode(Integer.toString(friend.getRank().getId())));
 						friends.appendChild(rank);
 						
 						Element note = document.createElement("note");
@@ -1030,7 +1030,7 @@ public class XmlParser implements Parser {
 				}
 			case EXCHANGE:
 				try {
-					ExchangeOffer[] offers = new ExchangeOffer[6];
+					ExchangeOffer[][] offers = new ExchangeOffer[3][8];
 					String name = (String) object;
 					File file = new File(type.getPath(), name + ".xml");
 					if (!file.exists()) {
@@ -1050,7 +1050,10 @@ public class XmlParser implements Parser {
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
 							Element element = (Element) node;
 							
+							
+							int exchange = Byte.parseByte(element.getAttribute("exchangeId"));
 							int slot = Byte.parseByte(element.getAttribute("slot"));
+							
 							boolean isSell = Boolean.parseBoolean(element.getAttribute("isSell"));
 							int itemID = Integer.parseInt(element.getElementsByTagName("itemID").item(0).getTextContent());
 							int amount = Integer.parseInt(element.getElementsByTagName("amount").item(0).getTextContent());
@@ -1063,9 +1066,9 @@ public class XmlParser implements Parser {
 							if (status == null) {
 								status = ExchangeOfferStatus.FINISHED;
 							}
-							ExchangeOffer offer = new ExchangeOffer(slot, isSell, itemID, amount, offerPrice, processed, coinsReceived);
+							ExchangeOffer offer = new ExchangeOffer(exchange, slot, isSell, itemID, amount, offerPrice, processed, coinsReceived);
 							offer.setStatus(status);
-							offers[slot] = offer;
+							offers[exchange][slot] = offer;
 						}
 					}					
 					return offers;

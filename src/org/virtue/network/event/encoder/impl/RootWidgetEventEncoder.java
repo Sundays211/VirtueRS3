@@ -42,12 +42,19 @@ public class RootWidgetEventEncoder implements EventEncoder<RootWidgetEventConte
 	public OutboundBuffer encode(Player player, RootWidgetEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(OutgoingEventType.IF_OPENTOP, player);
-		buffer.putA(1);
-		buffer.putIntA(context.getKeys()[0]);
-		buffer.putLEInt(context.getKeys()[3]);
-		buffer.putIntB(context.getKeys()[2]);
-		buffer.putInt(context.getKeys()[1]);
+		buffer.putInt(context.getKeys()[0]);
 		buffer.putShortA(context.getWidgetType());
+		buffer.putIntB(context.getKeys()[2]);
+		buffer.putS(1);
+		buffer.putLEInt(context.getKeys()[1]);
+		buffer.putIntB(context.getKeys()[3]);
+
+//		buffer.putA(1);
+//		buffer.putIntA(context.getKeys()[0]);
+//		buffer.putLEInt(context.getKeys()[3]);
+//		buffer.putIntB(context.getKeys()[2]);
+//		buffer.putInt(context.getKeys()[1]);
+//		buffer.putShortA(context.getWidgetType());
 		return buffer;
 	}
 }

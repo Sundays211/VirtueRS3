@@ -19,10 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.widget.var;
+package org.virtue.game.entity.player.var;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,15 +30,15 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.cache.Archive;
 import org.virtue.cache.config.vartype.VarBitOverflowException;
 import org.virtue.cache.config.vartype.VarBitType;
 import org.virtue.cache.config.vartype.VarDomainType;
 import org.virtue.cache.config.vartype.VarLifetime;
 import org.virtue.cache.config.vartype.VarType;
+import org.virtue.cache.config.vartype.constants.BaseVarType;
 import org.virtue.engine.script.listeners.VarListener;
+import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
 import org.virtue.network.protocol.update.ref.Appearance.Gender;
@@ -57,67 +55,25 @@ public class VarRepository implements VarDomain {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(VarRepository.class);
-	
-	//private static VarBitType[] varBitTypes;
-	private static VarType[] varPlayerTypes;
 	private static Object[] defaultVarps;
-	
-	public static void init (Archive varps) throws IOException {
-		/*varBitTypes = new VarBitType[varbits.size()];
-		for (int id=0;id<varbits.size();id++) {
-			ByteBuffer entry = varbits.getEntry(id);
-			if (entry == null) {
-				continue;
-			}
-			varBitTypes[id] = VarBitType.decode(entry, id);
-		}
-		logger.info("Found "+varBitTypes.length+" varBitType definitions.");*/
-		varPlayerTypes = new VarType[varps.size()];
-		for (int id=0;id<varps.size();id++) {
-			ByteBuffer entry = varps.getEntry(id);
-			if (entry == null) {
-				continue;
-			}
-			varPlayerTypes[id] = VarType.decode(entry, id, VarDomainType.PLAYER);
-		}
-		logger.info("Found "+varPlayerTypes.length+" varPlayerType definitions.");
-		defaultVarps = new Object[varps.size()];
-		DefaultVars.setDefaultVarps(defaultVarps);
-	}
-	
-	/*public static VarBitType getVarBitType (int key) {
-		if (key < 0 || key >= varBitTypes.length) {
-			return null;
-		}
-		return varBitTypes[key];
-	}*/
 
 	private Player player;
-	private Object[] varps;
+	private Map<Integer, Object> varValues = new HashMap<>();
 	private int tick = -1;
 	private Set<VarListener> tickTasks = new HashSet<VarListener>();
+	
+	private VarPlayerTypeList varTypes = VarPlayerTypeList.getInstance();
 
-	public VarRepository(Player player) {
-		if (varPlayerTypes == null) {
-			throw new IllegalStateException("VarType definitions not loaded.");
-		}
+	public VarRepository(Player player, Map<Integer, Object> values) {
 		this.player = player;
-		this.varps = new Object[varPlayerTypes.length];
-		System.arraycopy(defaultVarps, 0, this.varps, 0, varPlayerTypes.length);
-		
-		@SuppressWarnings("unchecked")
-		Map<Integer, Object> savedValues = (Map<Integer, Object>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.VAR);
-		if (savedValues == null) {
-			DefaultVars.setDefaultVarps(varps);
-		} else {
-			for (Map.Entry<Integer, Object> entry : savedValues.entrySet()) {
-				if (entry.getKey() != null && entry.getKey() > 0) {
-					if (entry.getValue() instanceof Integer) {
-						varps[entry.getKey()] = new IntScriptVar((Integer) entry.getValue());
-					} else {
-						logger.warn("Invalid varp value type: key="+entry.getKey()+", value="+entry.getValue()+", type="+entry.getValue().getClass());
-					}
-				}
+		this.varValues = values;
+		if (defaultVarps == null) {
+			defaultVarps = new Object[varTypes.capacity()];
+			DefaultVars.setDefaultVarps(defaultVarps);			
+		}
+		for (int key=0;key<defaultVarps.length;key++) {
+			if (!varValues.containsKey(key) && defaultVarps[key] != null) {
+				varValues.put(key, defaultVarps[key]);
 			}
 		}
 	}
@@ -139,7 +95,7 @@ public class VarRepository implements VarDomain {
 	 * @param value The amount to increment by
 	 */
 	public void incrementVarpBit (int key, int value)  {
-		setVarpBit(key, this.getVarBitValue(key)+value);
+		setVarBitValue(key, this.getVarBitValue(key)+value);
 	}
 	
 	@Override
@@ -147,19 +103,49 @@ public class VarRepository implements VarDomain {
 		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(key, value));
 		setVarValue(key, Integer.valueOf(value));
 	}
-	
-	public void setVarValue (int key, ScriptVar value) {
-		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(key, value.scriptValue()));
-		setVarValue(key, value);
-	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.player.widget.var.VarDomain#setVarValue(int, java.lang.Object)
 	 */
 	@Override
-	public void setVarValue(int key, Object value) {
-		Object oldValue = this.varps[key];
-		this.varps[key] = value;
+	public void setVarValue(VarType varType, Object value) {
+		switch (varType.dataType.getVarBaseType()) {
+		case INTEGER:
+			switch (varType.dataType) {
+			case PLAYER:
+				if ((value instanceof Player)) {
+					value = ((Player) value).getIndex();
+				}
+			default:
+				if (!(value instanceof Integer)) {
+					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
+				}
+			}			
+			break;
+		case LONG:
+			if (!(value instanceof Long)) {
+				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected long, found "+value.getClass());
+			}
+			break;
+		case STRING:
+			if (!(value instanceof String)) {
+				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected "+String.class+", found "+value.getClass());
+			}
+			break;		
+		}
+		if (value == varType.dataType.getDefaultValue()) {
+			value = null;
+		}
+		setVarValue(varType.id, value);
+	}
+	
+	private void setVarValue(int key, Object value) {
+		Object oldValue = varValues.get(key);
+		if (value == null) {
+			varValues.remove(key);
+		} else {
+			varValues.put(key, value);
+		}
 		VarListener listener = Virtue.getInstance().getScripts().forVarID(key);
 		if (listener != null && player.exists() && tick > 0) {
 			if (oldValue instanceof ScriptVar) {
@@ -174,7 +160,7 @@ public class VarRepository implements VarDomain {
 		}
 	}
 	
-	public void setVarpBit (int key, int value)  {
+	public void setVarBitValue (int key, int value)  {
 		try {
 			setVarpBit(VarBitTypeList.list(key), value);
 		} catch (VarBitOverflowException ex) {
@@ -204,8 +190,21 @@ public class VarRepository implements VarDomain {
 	 * @see org.virtue.game.entity.player.widget.var.VarDomain#getVarValue(int)
 	 */
 	@Override
+	public Object getVarValue(VarType varType) {
+		Object value = getVarValue(varType.id);
+		if (value == null) {
+			return varType.dataType.getDefaultValue();
+		}
+		switch (varType.dataType) {
+		case PLAYER:
+			return World.getInstance().getPlayers().get((Integer) value);
+		default:
+			return value;			
+		}
+	}
+	
 	public Object getVarValue(int key) {
-		return varps[key];
+		return varValues.get(key);
 	}
 	
 	@Override
@@ -249,10 +248,13 @@ public class VarRepository implements VarDomain {
 	
 	public Map<Integer, Object> getPermanantVarps () {
 		Map<Integer, Object> permVars = new HashMap<Integer, Object>();
-		for (VarType type : varPlayerTypes) {
-			if (VarLifetime.PERMANENT.equals(type.lifeTime) && varps[type.id] != null) {
-				permVars.put(type.id, varps[type.id]);
-				//permVars[type.id] = varps[type.id];
+		for (VarType type : varTypes) {
+			if (type == null) {
+				continue;
+			}
+			Object value = varValues.get(type.id);
+			if (value != null && VarLifetime.PERMANENT.equals(type.lifeTime)) {
+				permVars.put(type.id, value);
 			}
 		}
 		return permVars;
@@ -263,10 +265,13 @@ public class VarRepository implements VarDomain {
 	 */
 	public void sendAll () {
 		player.getDispatcher().sendVarReset();
-		for (int i=0;i<varps.length;i++) {
-			int value = getVarValueInt(i);
-			if (value != 0) {
-				player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(i, value));
+		for (Map.Entry<Integer, Object> varp : varValues.entrySet()) {
+			VarType varType = varTypes.list(varp.getKey());
+			if (varType != null && varType.dataType.getVarBaseType() == BaseVarType.INTEGER) {
+				int value = ((Integer) varp.getValue()).intValue();
+				if (value != 0) {
+					player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(varType.id, value));
+				}
 			}
 		}
 	}
@@ -333,10 +338,10 @@ public class VarRepository implements VarDomain {
 			}
 		}*/	
 		//Checks the player that the current item is loaned to
-		if (varps[VarKey.Player.LOAN_TO_PLAYER] != null
-				&& varps[VarKey.Player.LOAN_TO_PLAYER] instanceof Player) {
-			if (!((Player) varps[VarKey.Player.LOAN_TO_PLAYER]).exists()) {
-				Player p2 = (Player) varps[VarKey.Player.LOAN_TO_PLAYER];
+		Object value = this.getVarValue(VarKey.Player.LOAN_TO_PLAYER);
+		if (value != null && value instanceof Player) {
+			if (!((Player) value).exists()) {
+				Player p2 = (Player) value;
 				//().getEquipment().returnBorrowedItem();
 				player.getDispatcher().sendGameMessage(p2.getName()+" has returned the item "+(Gender.MALE.equals(p2.getAppearance().getGender()) ? "he" : "she")+" borrowed from you.");
 				player.getDispatcher().sendGameMessage("You may retrieve it from your Returned Items box by speaking to a banker.");
@@ -344,9 +349,9 @@ public class VarRepository implements VarDomain {
 			}
 		}
 		//Checks the player that the current item is loaned from
-		if (varps[VarKey.Player.LOAN_FROM_PLAYER] != null
-				&& varps[VarKey.Player.LOAN_FROM_PLAYER] instanceof Player) {
-			if (!((Player) varps[VarKey.Player.LOAN_FROM_PLAYER]).exists()) {
+		value = this.getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
+		if (value != null && value instanceof Player) {
+			if (!((Player) value).exists()) {
 				player.getDispatcher().sendGameMessage("Your item has been returned.");
 				setVarValueInt(VarKey.Player.LOAN_FROM_PLAYER, -1);
 				player.getEquipment().destroyBorrowedItems();
@@ -360,7 +365,8 @@ public class VarRepository implements VarDomain {
 	}
 	
 	public void setCreation () {
-		DefaultVars.setCreationVarps(varps);
+		//TODO: Do we really need different variables for creation & regular login?
+		//DefaultVars.setCreationVarps(varps);
 	}
 
 }

@@ -52,19 +52,24 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 			player.getViewport().init(buffer);
 		} 
 		if (context.isStatic()) {
+			buffer.putByte(9);//Count
+			buffer.putS(context.isRender() ? 1 : 0);//Force
+			buffer.putLEShort(context.getBaseTile().getChunkY());//ChunkY
+			buffer.putS(context.getMapSize().getID());
+			buffer.putByte(5);
+			//buffer.putByte(context.getSceneRadius());
 			buffer.putShortA(context.getBaseTile().getChunkX());
-			buffer.putByte(9);
-			buffer.putA(context.isRender() ? 1 : 0);
-			buffer.putLEShort(context.getBaseTile().getChunkY());
-			buffer.putByte(context.getMapSize().getID());
 		} else {
 			int baseChunkX = context.getBaseTile().getChunkX();
 			int baseChunkY = context.getBaseTile().getChunkY();
 			buffer.putS(1);//Type = 1 for dynamic region
-			buffer.putS(context.getMapSize().getID());
 			buffer.putShort(baseChunkY);
-			buffer.putLEShortA(baseChunkX);
-			buffer.putByte(context.isRender() ? 1 : 0);//Force refresh
+			buffer.putShortA(baseChunkX);
+			buffer.putA(context.isRender() ? 1 : 0);//Force refresh
+			buffer.putS(5);
+			//buffer.putS(context.getSceneRadius());
+			buffer.putC(context.getMapSize().getID());
+
 			buffer.setBitAccess();
 			Region region = null;
 			//System.out.println("Base tile: "+context.getBaseTile());

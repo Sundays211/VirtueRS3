@@ -21,6 +21,7 @@
  */
 package org.virtue.cache.config.vartype.constants;
 
+import org.virtue.utility.text.StringUtility;
 
 /**
  * 
@@ -72,21 +73,21 @@ public enum ScriptVarType {
 	CATEGORY(41, 'y', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	CHAR(42, 'z', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_43(43, '|', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	RENDER(44, '€', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	TYPE_45(45, 'ƒ', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	RENDER(44,'\u20ac', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	TYPE_45(45, '\u0192', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_46(46, '\u2021', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_47(47, '\u2030', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_48(48, '\u0160', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	TYPE_49(49, 'Œ', BaseVarType.LONG, Long.valueOf(-1L)),
+	TYPE_49(49, '\u0152', BaseVarType.LONG, Long.valueOf(-1L)),
 	//VECTOR3(50, '\u017d', BaseVarType.VECTOR3, new Vector3()),
 	TYPE_51(51, '\u0161', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_53(53, '\u00a1', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_54(54, '\u00a2', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_55(55, '\u00a3', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	LONG(56, '§', BaseVarType.LONG, Long.valueOf(-1L)),
+	LONG(56, '\u00a7', BaseVarType.LONG, Long.valueOf(-1L)),
 	TYPE_57(57, '\u00ab', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_58(58, '\u00ae', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	WORLDMAP_ELEMENT(59, 'µ', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	WORLDMAP_ELEMENT(59, '\u00b5', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_60(60, '\u00b6', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_61(61, '\u00c6', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_62(62, '\u00d7', BaseVarType.INTEGER, Integer.valueOf(-1)),
@@ -98,7 +99,7 @@ public enum ScriptVarType {
 	TYPE_68(68, '\u00ee', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_69(69, '\u00f3', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_70(70, '\u00fa', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	USERHASH(71, 'û', BaseVarType.LONG, Long.valueOf(-1L)),
+	USERHASH(71, '\u00fb', BaseVarType.LONG, Long.valueOf(-1L)),
 	TYPE_72(72, '\u00ce', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	STRUCT(73, 'J', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_74(74, '\u00d0', BaseVarType.INTEGER, Integer.valueOf(-1)),
@@ -126,9 +127,9 @@ public enum ScriptVarType {
 	TYPE_97(97, 'a', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_98(98, 'F', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_99(99, 'L', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	TYPE_100(100, '©', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	TYPE_101(101, 'Ý', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	TEXTURE(102, '¬', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	TYPE_100(100, '\u00a9', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	TYPE_101(101, '\u00dd', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	TEXTURE(102, '\u00ac', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_103(103, '\u00f8', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_104(104, '\u00e4', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_105(105, '\u00e3', BaseVarType.INTEGER, Integer.valueOf(-1)),
@@ -146,19 +147,39 @@ public enum ScriptVarType {
 	TYPE_117(117, '\u2022', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	TYPE_118(118, '\u00c2', BaseVarType.LONG, Long.valueOf(-1L)),
 	TYPE_119(119, '\u00c3', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	TYPE_120(120, '\u00c5', BaseVarType.INTEGER, Integer.valueOf(-1));
-	
+	TYPE_120(120, '\u00c5', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	TYPE_121(121, '\u00cb', BaseVarType.INTEGER, -1),
+	TYPE_122(122, '\u00cd', BaseVarType.INTEGER, -1),
+	TYPE_123(123, '\u00d5', BaseVarType.INTEGER, -1),
+	TYPE_124(124, '\u00b2', BaseVarType.INTEGER, -1),
+	TYPE_125(125, '\u00aa', BaseVarType.INTEGER, -1),
+	TYPE_126(126, '\0', BaseVarType.INTEGER, 0);
+
+
+    public char legacyChar;
 	private int serialID;
+	private BaseVarType baseType;
+	private Object defaultValue;
+    static ScriptVarType[] varByLegacyChar;
 	
 	ScriptVarType(int id, char c, BaseVarType varBase, Object defaultVal) {
-		serialID = id;
-		//legacyChar = c;
-		//baseType = varBase;
-		//defaultValue = defaultVal;
+		this.serialID = id;
+		this.legacyChar = c;
+		this.baseType = varBase;
+		this.defaultValue = defaultVal;
+		addLegacy(this);
 	}
 	
 	public int getId () {
 		return serialID;
+	}
+
+	public Object getDefaultValue() {
+		return defaultValue;
+	}
+
+	public BaseVarType getVarBaseType() {
+		return baseType;
 	}
     
 	public static ScriptVarType getById (int id) {
@@ -169,4 +190,18 @@ public enum ScriptVarType {
 		}
 		return null;
 	}
+    
+    static void addLegacy(ScriptVarType varType) {
+		if (null == varByLegacyChar) {
+		    varByLegacyChar = new ScriptVarType[256];
+		}
+		varByLegacyChar[StringUtility.charToByte(varType.legacyChar) & 0xff] = varType;
+    }
+    
+    public static ScriptVarType forChar(char c) {
+		if ('O' == c) {
+		    return OBJECT;
+		}
+		return varByLegacyChar[StringUtility.charToByte(c) & 0xff];
+    }
 }

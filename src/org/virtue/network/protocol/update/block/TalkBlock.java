@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -36,17 +37,17 @@ public class TalkBlock extends Block {
 	 * The message
 	 */
 	private String message;
-	
+
 	/**
 	 * The flags of the message
 	 */
 	private int flags;
-	
+
 	/**
 	 * The {@link TalkBlock} constructor
 	 */
 	public TalkBlock(String message, int flags) {
-		super(0x40000, 8, 0x80, 4);
+		super(BlockType.SAY);
 		this.message = message;
 		this.flags = flags;
 	}
@@ -59,9 +60,9 @@ public class TalkBlock extends Block {
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
 			block.putString(message);
-			block.putA(flags);
+			block.putC(flags);
 		} else {
-			block.putString(message);			
+			block.putString(message);
 		}
 	}
 }

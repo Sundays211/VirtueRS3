@@ -8,7 +8,7 @@ import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.OutgoingEventType;
 
 /**
- * 
+ *
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
@@ -21,21 +21,29 @@ public class InvEventEncoder implements EventEncoder<InvEventContext> {
 	@Override
 	public OutboundBuffer encode(Player player, InvEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(context.getSlots() == null ? OutgoingEventType.UPDATE_INV_FULL 
-				: OutgoingEventType.UPDATE_INV_PARTIAL, player);
+		buffer.putVarShort(context.getSlots() == null ? OutgoingEventType.UPDATE_INV_FULL : OutgoingEventType.UPDATE_INV_PARTIAL, player);
 		buffer.putShort(context.getContainerID());
-		buffer.putByte(context.isOtherPlayer() ? 1 : 0);
+
+		int flags = 0;
+		if(context.isOtherPlayer())
+			flags |= 0x1;
+
+//		TODO: no support yet :p
+//		if(context.hasItemProperties())
+//			flags |= 0x2;
+
+		buffer.putByte(flags);
 		if (context.getSlots() == null) {
-			packFull(buffer, context);
+			packFull(buffer, context,false); //TODO support needed.
 		} else {
-			packUpdate(buffer, context);
+			packUpdate(buffer, context,false); //TODO support needed.
 		}
 		buffer.finishVarShort();
 		return buffer;
 	}
 
-	
-	private void packFull (OutboundBuffer buffer, InvEventContext context) {
+
+	private void packFull (OutboundBuffer buffer, InvEventContext context, boolean withProperties) {
 		buffer.putShort(context.getItems().length);
 		for (Item item : context.getItems()) {
 			int itemID = -1;
@@ -44,17 +52,17 @@ public class InvEventEncoder implements EventEncoder<InvEventContext> {
 				itemID = item.getId();
 				amount = item.getAmount();
 			}
-			if (amount >= 255) {
-				buffer.putC(255);
-				buffer.putIntA(amount);
-			} else {
-				buffer.putC(amount);
-			}
 			buffer.putShort(itemID + 1);
+			if (amount >= 255) {
+				buffer.putByte(255);
+				buffer.putInt(amount);
+			} else {
+				buffer.putByte(amount);
+			}
 		}
 	}
-	
-	private void packUpdate (OutboundBuffer buffer, InvEventContext context) {
+
+	private void packUpdate (OutboundBuffer buffer, InvEventContext context, boolean withProperties) {
 		for (int slot : context.getSlots()) {
 			if (slot < 0) {
 				continue;
@@ -74,6 +82,11 @@ public class InvEventEncoder implements EventEncoder<InvEventContext> {
 					buffer.putInt(amount);
 				} else {
 					buffer.putByte(amount);
+				}
+
+				if(withProperties){
+					buffer.putByte(0); // Amount of properties.
+					//TODO support.
 				}
 			}
 		}

@@ -38,7 +38,7 @@ var DyeListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Even
 		switch (objTypeId) {
 		case 28617://seismic wand
 			if (api.getId(args.useitem) != 33296) {//The "use" item must be dye
-				api.sendMessage(player, "Nothing interesting happens.");
+				defaultOpHeldUseHandler(player, args);
 				return;
 			}
 			api.setInvSlot(player, Inv.BACKPACK, slot, 33390, 1);

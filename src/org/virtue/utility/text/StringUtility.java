@@ -82,6 +82,86 @@ public class StringUtility {
 		}
 		return output;
     }
+
+	public static char charFromByte(byte i) {
+		int i_7_ = i & 0xff;
+		if (i_7_ == 0) {
+		    throw new IllegalArgumentException(new StringBuilder().append
+				("").append(Integer.toString(i_7_, 16)).toString());
+		}
+		if (i_7_ >= 128 && i_7_ < 160) {
+		    int i_8_ = shiftCharacters[i_7_ - 128];
+		    if (0 == i_8_) {
+				i_8_ = 63;
+			}
+		    i_7_ = i_8_;
+		}
+		return (char) i_7_;
+	}
+    
+    public static byte charToByte(char c) {
+		byte byteVal;
+		if (c > 0 && c < '\u0080' || c >= '\u00a0' && c <= '\u00ff') {
+		    byteVal = (byte) c;
+		} else if (c == '\u20ac') {
+		    byteVal = (byte) -128;
+		} else if (c == '\u201a') {
+		    byteVal = (byte) -126;
+		} else if (c == '\u0192') {
+		    byteVal = (byte) -125;
+		} else if ('\u201e' == c) {
+		    byteVal = (byte) -124;
+		} else if (c == '\u2026') {
+		    byteVal = (byte) -123;
+		} else if ('\u2020' == c) {
+		    byteVal = (byte) -122;
+		} else if (c == '\u2021') {
+		    byteVal = (byte) -121;
+		} else if ('\u02c6' == c) {
+		    byteVal = (byte) -120;
+		} else if (c == '\u2030') {
+		    byteVal = (byte) -119;
+		} else if (c == '\u0160') {
+		    byteVal = (byte) -118;
+		} else if (c == '\u2039') {
+		    byteVal = (byte) -117;
+		} else if ('\u0152' == c) {
+		    byteVal = (byte) -116;
+		} else if ('\u017d' == c) {
+		    byteVal = (byte) -114;
+		} else if ('\u2018' == c) {
+		    byteVal = (byte) -111;
+		} else if ('\u2019' == c) {
+		    byteVal = (byte) -110;
+		} else if (c == '\u201c') {
+		    byteVal = (byte) -109;
+		} else if ('\u201d' == c) {
+		    byteVal = (byte) -108;
+		} else if ('\u2022' == c) {
+		    byteVal = (byte) -107;
+		} else if ('\u2013' == c) {
+		    byteVal = (byte) -106;
+		} else if ('\u2014' == c) {
+		    byteVal = (byte) -105;
+		} else if (c == '\u02dc') {
+		    byteVal = (byte) -104;
+		} else if ('\u2122' == c) {
+		    byteVal = (byte) -103;
+		} else if ('\u0161' == c) {
+		    byteVal = (byte) -102;
+		} else if (c == '\u203a') {
+		    byteVal = (byte) -101;
+		} else if (c == '\u0153') {
+		    byteVal = (byte) -100;
+		} else if ('\u017e' == c) {
+		    byteVal = (byte) -98;
+		} else if ('\u0178' == c) {
+		    byteVal = (byte) -97;
+		} else {
+		    byteVal = (byte) 63;
+		}
+		return byteVal;
+    }
     
     public static String getMessageFromBytes(byte[] messageData, int messageDataOffset, int messageDataLength) {
 		char[] chars = new char[messageDataLength];

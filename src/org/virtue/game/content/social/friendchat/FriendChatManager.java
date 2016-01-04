@@ -244,7 +244,7 @@ public class FriendChatManager implements FriendChatAPI {
 		if (banInfo == null) {
 			return;//User does not exist
 		}
-		if (channel.getPlayerRank(user).getID() <= channel.getPlayerRank(banhash, banInfo.getType()).getID()) {
+		if (channel.getPlayerRank(user).getId() <= channel.getPlayerRank(banhash, banInfo.getType()).getId()) {
 			user.sendMessage("You do not have permission to kick this user.", ChannelType.FRIENDCHANNEL_SYSTEM);
 			return;
 		}

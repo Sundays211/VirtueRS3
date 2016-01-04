@@ -30,6 +30,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.PlayerUpdateConstants;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.HeadIconBlock;
 import org.virtue.network.protocol.update.ref.Viewport;
@@ -42,7 +43,7 @@ import org.virtue.network.protocol.update.ref.Viewport;
  * @since 14/11/2014
  */
 public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
-
+	
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
@@ -50,7 +51,7 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 	public OutboundBuffer encode(Player player, Viewport context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		OutboundBuffer block = new OutboundBuffer();
-		buffer.putVarShort((context.isLargeScene() ? OutgoingEventType.NPC_UPDATE_LARGE : OutgoingEventType.NPC_UPDATE), player);
+		buffer.putVarShort(OutgoingEventType.NPC_UPDATE, player);
 		buffer.setBitAccess();
 		packNpcMovement(player, buffer, block, context);
 		packNpcAddition(player, buffer, block, context);
@@ -62,10 +63,9 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 	
 	private void packNpcMovement (Player player, OutboundBuffer buffer, OutboundBuffer block, Viewport context) {
 		buffer.putBits(8, context.getLocalNpcs().size());
-		//System.out.println("Locals: "+context.getLocalNpcs().size());
 		for (Iterator<NPC> iterator = context.getLocalNpcs().iterator(); iterator.hasNext();) {
 			NPC npc = iterator.next();
-			if (!npc.getCurrentTile().withinDistance(player.getCurrentTile(), (context.isLargeScene() ? 126 : 14)) || npc.getMovement().teleported() || !npc.exists() || npc.getImpactHandler().isDead()) {
+			if (!npc.getCurrentTile().withinDistance(player.getCurrentTile(), ((1 << context.getSize() - 1) - 2)) || npc.getMovement().teleported() || !npc.exists() || npc.getImpactHandler().isDead()) {
 				buffer.putBits(1, 1);
 				buffer.putBits(2, 3);
 				iterator.remove();//Remove NPC from viewport
@@ -100,7 +100,7 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 				//System.out.println("Unable to add npc "+npc.getID()+" to viewport of player "+player.getName());
 				break;
 			}
-			if (npc == null || !npc.exists() || context.getLocalNpcs().contains(npc) || !npc.getCurrentTile().withinDistance(player.getCurrentTile(), (context.isLargeScene() ? 126 : 14))) {
+			if (npc == null || !npc.exists() || context.getLocalNpcs().contains(npc) || !npc.getCurrentTile().withinDistance(player.getCurrentTile(), ((1 << context.getSize() - 1) - 2))) {
 				continue;
 			}
 			buffer.putBits(15, npc.getIndex());//NPC entity index
@@ -108,32 +108,42 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 			int dx = npc.getCurrentTile().getX() - player.getCurrentTile().getX();
 			int dy = npc.getCurrentTile().getY() - player.getCurrentTile().getY();
 			//System.out.println("dx="+dx+", dy="+dy);
-			if (context.isLargeScene()) {
-				if (dx < 127) {
-					dx += 256;
-				}
-				if (dy < 127) {
-					dy += 256;
-				}
-			} else {
-				if (dx < 15) {
-					dx += 32;
-				}
-				if (dy < 15) {
-					dy += 32;
-				}
+			/*if (dx < (1 << context.getSize() - 1) - 1) {
+				dx += 1 << context.getSize();
 			}
-			buffer.putBits((context.isLargeScene() ? 8 : 5), dy);
+			if (dy < (1 << context.getSize() - 1) - 1) {
+				dy += 1 << context.getSize();
+			}
+
+
 			buffer.putBits(1, npc.needsMaskUpdate() ? 1 : 0);
+			buffer.putBits(3, npc.getDirection().getID());
+			buffer.putBits(1, npc.getMovement().teleported() ? 1 : 0);
+			buffer.putBits(context.getSize(), dy);
+			buffer.putBits(2, npc.getCurrentTile().getPlane());
+			buffer.putBits(context.getSize(), dx);
+			buffer.putBits(15, npc.getID());//NPC type
+*/
+			if (dx < 15) {
+				dx += 32;
+			}
+			if (dy < 15) {
+				dy += 32;
+			}
+
+
+			buffer.putBits(1, npc.needsMaskUpdate() ? 1 : 0);
+			buffer.putBits(3, npc.getDirection().getID());
+			buffer.putBits(1, npc.getMovement().teleported() ? 1 : 0);
+			buffer.putBits(5, dy);
+			buffer.putBits(2, npc.getCurrentTile().getPlane());
+			buffer.putBits(5, dx);
+			buffer.putBits(15, npc.getID());//NPC type
+
+
 			if (npc.needsMaskUpdate()) {
-				//System.out.println("Mask update for "+npc.getIndex());
 				packUpdateBlock(npc, block, context);
 			}
-			buffer.putBits(3, npc.getDirection().getID());
-			buffer.putBits(15, npc.getID());//NPC type
-			buffer.putBits((context.isLargeScene() ? 8 : 5), dx);
-			buffer.putBits(1, npc.getMovement().teleported() ? 1 : 0);
-			buffer.putBits(2, npc.getCurrentTile().getPlane());
 		}
 		buffer.putBits(15, 32767);
 	}
@@ -172,15 +182,14 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 			masks |= npc.getUpdateBlocks()[pos].getMask(true);
 		}
 		if (masks >= 0x100) {
-			masks |= 0x20;
+			masks |= PlayerUpdateConstants.NPC_2_BYTE_SIZE;
 		}
 		if (masks >= 0x10000) {
-			masks |= 0x2000;
+			masks |= PlayerUpdateConstants.NPC_3_BYTE_SIZE;
 		}
 		if (masks >= 0x1000000) {
-			masks |= 0x400000;
+			masks |= PlayerUpdateConstants.NPC_4_BYTE_SIZE;
 		}
-		//System.out.println("Packing masks: "+Integer.toHexString(masks));
 		block.putShort(npc.getIndex());		
 		block.putByte(masks & 0xff);
 		

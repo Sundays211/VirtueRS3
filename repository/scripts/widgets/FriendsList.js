@@ -27,86 +27,88 @@
  * @author Sundays211
  * @since 9/11/2014
  */
-var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interface ids to bind to */
-	getIDs: function() {
-		return [550];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		api.setWidgetEvents(player, 550, 7, 0, 500, 1022);
-		api.setWidgetEvents(player, 550, 57, 0, 500, 6);
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		switch (component) {
-		case 7://Friends list pane
-			if (option == 7) {
-				api.openOverlaySub(player, 1006, 451, false);
+var FriendListListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		var player = args.player;
+		if (event == EventType.IF_OPEN) {
+			api.setWidgetEvents(player, 550, 7, 0, 500, 1022);
+			api.setWidgetEvents(player, 550, 57, 0, 500, 6);
+		} else {
+			switch (args.component) {
+			case 7://Friends list pane
+				if (args.button == 7) {
+					api.openOverlaySub(player, 1006, 451, false);
+					api.runClientScript(player, 8178, []);
+					api.runClientScript(player, 9206, [args.slot, 0, 29556758, 29556742, 29556743]);
+					return;
+				}
+				api.sendMessage(player, "Unhandled friend list option: "+args.button);
+				return;
+			case 25://Add friend
+				openModalBase(player);
 				api.runClientScript(player, 8178, []);
-				api.runClientScript(player, 9206, [slot, 0, 29556758, 29556742, 29556743]);
-				return true;
-			}
-			return false;
-		case 25://Add friend
-			api.openWidget(player, 1477, 437, 1418, true);
-			api.openWidget(player, 1418, 0, 1469, true);
-			api.runClientScript(player, 8178, []);//8178
-			api.runClientScript(player, 103, []);//103
-			return true;
-		case 33://Remove friend
-			api.openWidget(player, 1477, 437, 1418, true);
-			api.openWidget(player, 1418, 0, 1469, true);
-			api.runClientScript(player, 8178, []);
-			api.runClientScript(player, 104, []);
-			return true;
-		case 43://Recruit friend
-			return false;
-		case 57://Add/set ignore note 
-			if (option == 1) {
-				api.openOverlaySub(player, 1006, 451, false);
+				api.runClientScript(player, 103, []);
+				return;
+			case 33://Remove friend
+				openModalBase(player);
 				api.runClientScript(player, 8178, []);
-				api.runClientScript(player, 9206, [slot/2, 1, 29556758, 29556742, 29556743]);
-				return true;
+				api.runClientScript(player, 104, []);
+				return;
+			case 43://Recruit friend
+				api.sendMessage(player, "Recruit friend has not been implemented");
+				return;
+			case 57://Add/set ignore note 
+				if (args.button == 1) {
+					api.openOverlaySub(player, 1006, 451, false);
+					api.runClientScript(player, 8178, []);
+					api.runClientScript(player, 9206, [args.slot/2, 1, 29556758, 29556742, 29556743]);
+					return;
+				}
+				api.sendMessage(player, "Unhandled ignore list option: "+args.button);
+				return;
+			case 67://Add ignore
+				openModalBase(player);
+				api.runClientScript(player, 8178, []);
+				api.runClientScript(player, 105, []);
+				return;
+			case 75://Remove ignore
+				openModalBase(player);
+				api.runClientScript(player, 8178, []);
+				api.runClientScript(player, 1419, []);
+				return;
+			case 83:
+			case 85://Switching between friend and ignore tabs. We'll send this as handled so it doesn't spam the chatbox
+				return;
+			default:
+				api.sendMessage(player, "Unhandled friends list component: "+args.component);
+				return;
 			}
-			return false;
-		case 67://Add ignore
-			api.openWidget(player, 1477, 437, 1418, true);
-			api.openWidget(player, 1418, 0, 1469, true);
-			api.runClientScript(player, 8178, []);
-			api.runClientScript(player, 105, []);
-			return true;
-		case 75://Remove ignore
-			api.openWidget(player, 1477, 437, 1418, true);
-			api.openWidget(player, 1418, 0, 1469, true);
-			api.runClientScript(player, 8178, []);
-			api.runClientScript(player, 1419, []);
-			return true;
-		case 83:
-		case 85://Switching between friend and ignore tabs. We'll send this as handled so it doesn't spam the chatbox
-			return true;
-		default:
-			return false;
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
+});
 
+var FriendOptionListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, type, args) {
+		var player = args.player;
+		if (args["interface"] == 550) {
+			switch (args.button) {
+			case 7:
+				api.openOverlaySub(player, 1006, 451, false);
+				api.runClientScript(player, 8178, []);
+				api.runClientScript(player, 9206, [args.slot, 0, 29556758, 29556742, 29556743]);
+				return;
+			}
+		}
+		api.sendMessage(player, "Unhandled friend list option: interface="+args["interface"]+", comp="+args.component+", slot="+args.slot+", name="+args.name+", button="+args.button);
+	}
 });
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
-	var widgetListener = new WidgetListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
+	var listener = new FriendListListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 550, listener);
+	scriptManager.registerListener(EventType.IF_OPEN, 550, listener);
+	var optionListener = new FriendOptionListener();
+	scriptManager.registerListener(EventType.CHATLIST_OPTION, ChatListType.FRIEND, listener);
 };

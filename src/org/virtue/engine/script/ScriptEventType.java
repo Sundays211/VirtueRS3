@@ -229,7 +229,7 @@ public enum ScriptEventType {
 	IF_BUTTON8(88),
 	
 	/**
-	 * The nineth option on an interface component
+	 * The ninth option on an interface component
 	 */
 	IF_BUTTON9(89),
 	
@@ -264,6 +264,26 @@ public enum ScriptEventType {
 	IF_PLAYERU(95),
 	
 	/**
+	 * Called when an interface component is dragged onto another interface component
+	 */
+	IF_DRAG(96),
+	
+	/**
+	 * Called when an interface is opened
+	 */
+	IF_OPEN(97),
+	
+	/**
+	 * Called when an interface is closed
+	 */
+	IF_CLOSE(98),
+	
+	/**
+	 * A catch-all event for any button on any component within the specified interface
+	 */
+	IF_BUTTON(99),
+	
+	/**
 	 * Called once every server cycle (600ms)
 	 */
 	WORLD_CYCLE(100),
@@ -281,7 +301,12 @@ public enum ScriptEventType {
 	/**
 	 * Called when the specified moderator-only command is entered
 	 */
-	COMMAND_MOD(103);
+	COMMAND_MOD(103),
+	
+	/**
+	 * Called when an option is selected on a chat line or chat list (eg friends list, friends chat list, group chat, etc)
+	 */
+	CHATLIST_OPTION(105);
 	
 	private int id;
 	

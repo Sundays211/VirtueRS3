@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -36,7 +37,7 @@ public class AppearenceBlock extends Block {
 	 * The {@link AppearenceBlock} constructor
 	 */
 	public AppearenceBlock() {
-		super(0x80, 12, 0, -1);
+		super(BlockType.APPEARANCE);
 	}
 
 	/* (non-Javadoc)
@@ -46,19 +47,10 @@ public class AppearenceBlock extends Block {
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
-			//System.out.println("Encoding appearance block.");
 			byte[] renderData = player.getAppearance().getData();
-			block.putS(renderData.length);			
+			System.out.printf("Appearances %02X %02X %02X %02X\n", renderData[0],renderData[1],renderData[2],renderData[3]);
+			block.putS(renderData.length);
 			block.putReverseA(renderData, 0, renderData.length);
 		}
-		/*int flags = 0x0;
-		flags |= 0x1;
-		flags |= 0x4;
-		flags |= 0x40;
-		flags |= 0x80;
-		block.putByte(flags);
-		block.putJagString("prefix");
-		block.putJagString("suffix");
-		block.putByte(1);*/
 	}
 }

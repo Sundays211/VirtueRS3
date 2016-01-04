@@ -24,7 +24,7 @@ public class QuestsListWidget extends Widget {
 			player.getQuestManager().setCatagories(slotId);
 			break;
 		case 17:
-			switch (option.getID()) {
+			switch (option.getId()) {
 			case 1:
 			case 2:
 				player.getDispatcher().sendGameMessage(
@@ -32,7 +32,7 @@ public class QuestsListWidget extends Widget {
 				break;
 			default:
 				player.getDispatcher().sendGameMessage(
-						"Option " + option.getID());
+						"Option " + option.getId());
 				break;
 			}
 			break;

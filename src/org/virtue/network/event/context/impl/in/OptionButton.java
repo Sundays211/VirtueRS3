@@ -42,11 +42,11 @@ public enum OptionButton {
 	 * Gets the serial ID associated with this button
 	 * @return The id
 	 */
-	public int getID () {
+	public int getId () {
 		return buttonID;
 	}
 	
-	public static OptionButton forID (int id) {
+	public static OptionButton getById (int id) {
 		switch (id) {
 		case 1:
 			return ONE;

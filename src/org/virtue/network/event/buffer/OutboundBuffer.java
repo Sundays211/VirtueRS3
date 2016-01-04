@@ -314,6 +314,7 @@ public class OutboundBuffer extends Buffer {
 	}
 
 	public void putPacket(int packetId) {
+		System.out.println("Outgoing: " + packetId);
 		if (packetId >= 128) {
 			putByte((packetId >> 8) + 128);
 			putByte(packetId);
@@ -370,7 +371,7 @@ public class OutboundBuffer extends Buffer {
 		putByte(size, opcodeStart);
 	}
 	
-	public void putNISVar(int key, int val) {
+	public void putVarValueInt(int key, int val) {
 		putShort(key);
 		putInt(val);
 	}

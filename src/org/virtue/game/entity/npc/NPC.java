@@ -84,6 +84,8 @@ public class NPC extends Entity {
 	
 	private int walkRange = 6;
 	
+	private int interactRange = 1;
+	
 	private boolean canRespawn = true;
 	
 	private NpcAction currentAction;
@@ -131,8 +133,10 @@ public class NPC extends Entity {
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
 		getCombatSchedule().setRetaliating(type.getCombatLevel() > 0 && type.hasAction("attack"));
-		if (NpcTypeList.getCustomData(this.getID()) != null) {
-			this.walkRange = NpcTypeList.getCustomData(this.getID()).getWalkRange();
+		CustomNpcData customData = NpcTypeList.getCustomData(this.getID());
+		if (customData != null) {
+			this.walkRange = customData.getWalkRange();
+			this.interactRange = customData.getInteractRange();
 		} else if (type.renderTypeID == -1 
 				|| !RenderTypeList.list(type.renderTypeID).hasWalkAnimation()) {
 			this.walkRange = 0;
@@ -268,15 +272,11 @@ public class NPC extends Entity {
 		if (isDistanceOption(option)) {
 			return Integer.MAX_VALUE;
 		}
-		NpcListener listener = Virtue.getInstance().getScripts().forNpcID(typeId);
-		if (listener != null) {
-			return listener.getInteractRange(this, option.getID());
-		}		
-		return 1;
+		return interactRange;
 	}
 	
 	public boolean isDistanceOption (OptionButton option) {
-		if ("Attack".equalsIgnoreCase(getType().op[option.getID()-1])) {
+		if ("Attack".equalsIgnoreCase(getType().op[option.getId()-1])) {
 			return true;//Handle attack targeting using the combat system, rather than the general interaction
 		}
 		return OptionButton.SIX.equals(option);
@@ -305,7 +305,7 @@ public class NPC extends Entity {
 			}
 			return true;
 		}
-		if ("Attack".equalsIgnoreCase(getType().op[option.getID()-1])) {
+		if ("Attack".equalsIgnoreCase(getType().op[option.getId()-1])) {
 //			if (!player.getCombat().inCombat()) {
 //				player.getCombat().startCombat(this);
 //			}
@@ -342,9 +342,10 @@ public class NPC extends Entity {
 			return true;
 		}
 		
+		//Legacy listener
 		NpcListener listener = scripts.forNpcID(typeId);
 		if (listener != null) {
-			return listener.handleInteraction(player, this, option.getID());
+			return listener.handleInteraction(player, this, option.getId());
 		}
 		return false;
 	}

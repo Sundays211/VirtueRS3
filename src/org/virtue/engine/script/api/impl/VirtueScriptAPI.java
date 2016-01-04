@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.cache.config.vartype.VarBitOverflowException;
 import org.virtue.cache.config.vartype.VarBitType;
+import org.virtue.cache.config.vartype.VarType;
+import org.virtue.cache.config.vartype.constants.BaseVarType;
 import org.virtue.cache.def.impl.EnumType;
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.cache.def.impl.LocType;
@@ -41,9 +43,11 @@ import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.exchange.ExchangeOffer;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.content.skills.StatType;
+import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.clan.ClanChannelAPI;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
+import org.virtue.game.content.social.friendchat.FriendChatDataType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;
@@ -57,9 +61,9 @@ import org.virtue.game.entity.player.container.Item;
 import org.virtue.game.entity.player.container.ItemContainer;
 import org.virtue.game.entity.player.container.ItemTypeList;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
+import org.virtue.game.entity.player.var.VarBitTypeList;
+import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetManager;
-import org.virtue.game.entity.player.widget.var.ScriptVar;
-import org.virtue.game.entity.player.widget.var.VarBitTypeList;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
 import org.virtue.game.world.region.GroundItem;
@@ -76,6 +80,7 @@ import org.virtue.utility.EnumTypeList;
 import org.virtue.utility.StructTypeList;
 import org.virtue.utility.TimeUtility;
 import org.virtue.utility.text.Base37Utility;
+import org.virtue.utility.text.UsernameUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -135,6 +140,16 @@ public class VirtueScriptAPI implements ScriptAPI {
 			name = entity.getName();
 		}
 		return name;
+	}
+
+	@Override
+	public Long getBase37Hash(String name) {		
+		return Base37Utility.encodeBase37(name);
+	}
+
+	@Override
+	public String fromBase37Hash(Long hash) {
+		return UsernameUtility.formatForDisplay(Base37Utility.decodeBase37(hash));
 	}
 
 	/* (non-Javadoc)
@@ -424,12 +439,82 @@ public class VirtueScriptAPI implements ScriptAPI {
 		return player.getClanHash() == 0L ? null : player.getClanHash();
 	}
 
+	@Override
+	public Object getFriendChatData(Player player, int dataTypeId) {
+		FriendChatDataType type = FriendChatDataType.getById(dataTypeId);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid data type: "+dataTypeId);
+		}
+		switch (type) {
+		case NAME:
+			return Base37Utility.encodeBase37(player.getChat().getFriendsList().getFriendChatName());
+		case RANKJOIN:
+			return player.getChat().getFriendsList().getFriendChatJoinRank().getId();
+		case RANKKICK:
+			return player.getChat().getFriendsList().getFriendChatKickRank().getId();
+		case RANKTALK:
+			return player.getChat().getFriendsList().getFriendChatTalkRank().getId();
+		default:
+			throw new IllegalArgumentException("Invalid data type: "+dataTypeId);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.ScriptAPI#setFriendChatData(org.virtue.game.entity.player.Player, int, java.lang.Object)
+	 */
+	@Override
+	public void setFriendChatData(Player player, int dataTypeId, Object value) {
+		FriendChatDataType type = FriendChatDataType.getById(dataTypeId);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid data type: "+dataTypeId);
+		}
+		ChannelRank rank;
+		switch (type) {
+		case NAME:
+			String name = UsernameUtility.formatForDisplay(Base37Utility.decodeBase37(((Long) value)));
+			player.getChat().getFriendsList().setFriendChatName(name);
+			break;
+		case RANKJOIN:
+			rank = ChannelRank.forID(((Integer) value));
+			player.getChat().getFriendsList().setFriendChatJoinRank(rank);
+			break;
+		case RANKKICK:
+			rank = ChannelRank.forID(((Integer) value));
+			player.getChat().getFriendsList().setFriendChatKickRank(rank);
+			break;
+		case RANKTALK:
+			rank = ChannelRank.forID(((Integer) value));
+			player.getChat().getFriendsList().setFriendChatTalkRank(rank);
+			break;		
+		default:
+			throw new IllegalArgumentException("Invalid data type: "+dataTypeId);
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getEnumType(int)
 	 */
 	@Override
 	public EnumType getEnumType(int enumID) {
 		return EnumTypeList.list(enumID);
+	}
+
+	@Override
+	public Object getEnumValue(int enumId, int key) {
+		EnumType enumType = getEnumType(enumId);
+		Object value;
+		if (enumType.valueType.getVarBaseType() == BaseVarType.STRING) {
+			value = enumType.getValueString(key);
+		} else {
+			value = enumType.getValueInt(key);
+		}
+		return value;
+	}
+
+	@Override
+	public int getEnumSize(int enumId) {
+		EnumType enumType = getEnumType(enumId);
+		return enumType == null ? -1 : enumType.getSize();
 	}
 
 	/* (non-Javadoc)
@@ -941,24 +1026,24 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getVarp(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public int getVarp(Player player, int key) {		
-		return player.getVars().getVarValueInt(key);
+	public Object getVarp(Player player, int key) {	
+		VarType varType = VarPlayerTypeList.getInstance().list(key);
+		if (varType == null) {
+			throw new IllegalArgumentException("Invalid varp id: "+key);
+		}
+		return player.getVars().getVarValue(varType);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#setVarp(org.virtue.game.entity.player.Player, int, int)
 	 */
 	@Override
-	public void setVarp(Player player, int key, int value) {
-		player.getVars().setVarValueInt(key, value);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#setVarp(org.virtue.game.entity.player.Player, int, int)
-	 */
-	@Override
-	public void setVarp(Player player, int key, ScriptVar value) {
-		player.getVars().setVarValue(key, value);
+	public void setVarp(Player player, int key, Object value) {
+		VarType varType = VarPlayerTypeList.getInstance().list(key);
+		if (varType == null) {
+			throw new IllegalArgumentException("Invalid varp id: "+key);
+		}
+		player.getVars().setVarValue(varType, value);
 	}
 
 	/* (non-Javadoc)
@@ -1464,34 +1549,34 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getExchangeOffer(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public ExchangeOffer getExchangeOffer(Player player, int slot) {
-		return player.getExchangeOffers().getOffer(slot);
+	public ExchangeOffer getExchangeOffer(Player player, int exchange, int slot) {
+		return player.getExchangeOffers().getOffer(exchange, slot);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#sendExchangeOffer(org.virtue.game.entity.player.Player, int, boolean, int, int, int)
 	 */
 	@Override
-	public void sendExchangeOffer(Player player, int slot, boolean isSell,
+	public void sendExchangeOffer(Player player, int exchange, int slot, boolean isSell,
 			int itemID, int amount, int price) {
-		ExchangeOffer offer = new ExchangeOffer(slot, isSell, itemID, amount, price);
-		player.getExchangeOffers().submitOffer(slot, offer);
+		ExchangeOffer offer = new ExchangeOffer(exchange, slot, isSell, itemID, amount, price);
+		player.getExchangeOffers().submitOffer(exchange, slot, offer);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#abortExchangeOffer(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public void abortExchangeOffer(Player player, int slot) {
-		player.getExchangeOffers().abortOffer(slot);
+	public void abortExchangeOffer(Player player, int exchange, int slot) {
+		player.getExchangeOffers().abortOffer(exchange, slot);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#offerEmptyOrCompleted(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public boolean exchangeOfferFinished(Player player, int slot) {
-		ExchangeOffer offer = getExchangeOffer(player, slot);
+	public boolean exchangeOfferFinished(Player player, int exchange, int slot) {
+		ExchangeOffer offer = getExchangeOffer(player, exchange, slot);
 		return ExchangeOfferStatus.FINISHED.equals(offer.getStatus());
 	}
 
@@ -1499,8 +1584,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#clearExchangeOffer(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public void clearExchangeOffer(Player player, int slot) {
-		player.getExchangeOffers().clearOffer(slot);
+	public void clearExchangeOffer(Player player, int exchange, int slot) {
+		player.getExchangeOffers().clearOffer(exchange, slot);
 	}
 
 	/* (non-Javadoc)

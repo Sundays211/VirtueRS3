@@ -36,8 +36,8 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.Item;
-import org.virtue.game.entity.player.widget.var.LoginDispatcher;
-import org.virtue.game.entity.player.widget.var.VarKey;
+import org.virtue.game.entity.player.var.LoginDispatcher;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.world.region.MapSize;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -145,8 +145,9 @@ public class GameEventDispatcher {
 			LoginDispatcher.onLobbyLogin(player);
 			break;
 		case LOGIN_WORLD:
+		case LOGIN_CONTINUE:
 			player.setGameState(GameState.WORLD);
-			sendSceneGraph(player.getCurrentTile(), MapSize.DEFAULT, true, false);
+			sendSceneGraph(5, player.getCurrentTile(), MapSize.DEFAULT, true, false);
 			if (Virtue.getInstance().hasUpdate()) {
 				sendSystemUpdate(Virtue.getInstance().getUpdateTime() - 2);
 				// Subtract a couple of ticks to account for delay
@@ -230,6 +231,10 @@ public class GameEventDispatcher {
 				value));
 	}
 
+	public void sendRootWidget(int widget, int[] keys) {
+		sendEvent(RootWidgetEventEncoder.class, new RootWidgetEventContext(widget,keys));
+	}
+
 	public void sendRootWidget(int widget) {
 		sendEvent(RootWidgetEventEncoder.class, new RootWidgetEventContext(
 				widget));
@@ -295,9 +300,9 @@ public class GameEventDispatcher {
 		sendEvent(WorldListEventEncoder.class, context);
 	}
 
-	public void sendSceneGraph(Tile tile, MapSize mapSize, boolean init,
+	public void sendSceneGraph(int sceneRadius, Tile tile, MapSize mapSize, boolean init,
 			boolean isStatic) {
-		sendEvent(SceneGraphEventEncoder.class, new SceneGraphEventContext(
+		sendEvent(SceneGraphEventEncoder.class, new SceneGraphEventContext(sceneRadius,
 				tile, mapSize, init, isStatic));
 	}
 
@@ -475,6 +480,14 @@ public class GameEventDispatcher {
 	public void sendCS2Script(int id, Object... params) {
 		sendEvent(ClientScriptEventEncoder.class, new ClientScriptEventContext(
 				id, params));
+	}
+
+	//FIXME: remove...
+	public void sendCS2Script2(int id, Object... params) {
+		Object[] buff = new Object[params.length];
+		for(int i=params.length-1,j=0; i >= 0; i--,j++)
+			buff[j] = params[i];
+		sendEvent(ClientScriptEventEncoder.class, new ClientScriptEventContext(id, buff));
 	}
 
 	/**

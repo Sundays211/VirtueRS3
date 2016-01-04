@@ -67,6 +67,10 @@ public class LoginRequestMessage {
 	 */
 	private LoginTypeMessage type;
 	
+	public LoginRequestMessage (LoginTypeMessage type) {
+		this.type = type;
+	}
+	
 	/**
 	 * Creates a new Request message
 	 * @param username - request's username

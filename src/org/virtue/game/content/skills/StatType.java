@@ -21,7 +21,7 @@
  */
 package org.virtue.game.content.skills;
 
-import org.virtue.game.entity.player.widget.var.VarKey;
+import org.virtue.game.entity.player.var.VarKey;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -38,9 +38,9 @@ public class WalkEventDecoder implements EventDecoder<WalkEventContext> {
 	 */
 	@Override
 	public WalkEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		boolean forceRun = buffer.getByteC() == 1;
+		int baseY = buffer.getLEShort();
+		boolean forceRun = buffer.getByteS() == 1;
 		int baseX = buffer.getLEShort();
-		int baseY = buffer.getShortA();
 		return new WalkEventContext(baseX, baseY, forceRun);
 	}
 
@@ -50,7 +50,7 @@ public class WalkEventDecoder implements EventDecoder<WalkEventContext> {
 	@Override
 	public IncomingEventType[] getTypes() {
 		return new IncomingEventType[] { 
-				IncomingEventType.MOVE_MINIMAP, IncomingEventType.MOVE_GAMESCENE 
+				IncomingEventType.MOVE_MINIMAP, IncomingEventType.MOVE_MAP 
 		};
 	}
 

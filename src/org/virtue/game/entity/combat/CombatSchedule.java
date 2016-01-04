@@ -6,7 +6,7 @@ import org.virtue.game.entity.combat.impl.ability.Ability;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.magic.CombatSpell;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.widget.var.VarKey;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 
 /**

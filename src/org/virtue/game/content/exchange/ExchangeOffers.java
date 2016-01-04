@@ -41,7 +41,7 @@ import org.virtue.utility.EnumTypeList;
 public class ExchangeOffers {
 	
 	private Player player;	
-	private ExchangeOffer[] offers = new ExchangeOffer[6];
+	private ExchangeOffer[][] offers = new ExchangeOffer[3][8];
 	private boolean needsSave = false;
 	
 	public ExchangeOffers (Player player) {
@@ -49,18 +49,22 @@ public class ExchangeOffers {
 	}
 	
 	public void init () {
-		offers = (ExchangeOffer[]) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.EXCHANGE);
-		if (offers == null || offers.length != 6) {
-			offers = new ExchangeOffer[6];
+		offers = (ExchangeOffer[][]) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.EXCHANGE);
+		
+
+		if (offers == null || offers.length != 3) {
+			offers = new ExchangeOffer[3][8];
 		}
 		boolean hasOffersWaiting = false;
-		for (int slot=0; slot<6; slot++) {
-			if (offers[slot] != null) {
-				if (offers[slot].isFinished()) {//Finished offers will not be in the database anymore
-					offers[slot].sendOffer(player);
-					hasOffersWaiting = true;
-				} else {
-					Virtue.getInstance().getExchange().requestOffer(player, slot);
+		for(int exchange = 0; exchange < 3; exchange++) {
+			for (int slot=0; slot<8; slot++) {
+				if (offers[exchange][slot] != null) {
+					if (offers[exchange][slot].isFinished()) {//Finished offers will not be in the database anymore
+						offers[exchange][slot].sendOffer(player);
+						hasOffersWaiting = true;
+					} else {
+						Virtue.getInstance().getExchange().requestOffer(player, exchange, slot);
+					}
 				}
 			}
 		}
@@ -75,17 +79,17 @@ public class ExchangeOffers {
 		}
 	}
 	
-	public void onAbort (int slot) {
-		ExchangeOffer offer = offers[slot];
+	public void onAbort (int exchange, int slot) {
+		ExchangeOffer offer = offers[exchange][slot];
 		if (offer == null) {
 			return;
 		}
 		offer.setFinished();
-		onUpdate(slot, 0, 0);
+		onUpdate(exchange, slot, 0, 0);
 	}
 	
-	public void onUpdate (int slot, int totalProcessed, int totalCoins) {
-		ExchangeOffer offer = offers[slot];
+	public void onUpdate (int exchange, int slot, int totalProcessed, int totalCoins) {
+		ExchangeOffer offer = offers[exchange][slot];
 		if (offer == null) {
 			return;
 		}
@@ -131,32 +135,32 @@ public class ExchangeOffers {
 		needsSave = true;
 	}
 	
-	public void clearOffer (int slot) {
-		if (slot >= 0 && slot < 6) {
-			if (offers[slot] != null) {
-				offers[slot].clear();
-				offers[slot].sendOffer(player);
+	public void clearOffer (int exchange, int slot) {
+		if (slot >= 0 && slot < 8 && exchange >= 8 && exchange < 3) {
+			if (offers[exchange][slot] != null) {
+				offers[exchange][slot].clear();
+				offers[exchange][slot].sendOffer(player);
 				needsSave = true;
 			}
-			offers[slot] = null;			
+			offers[exchange][slot] = null;			
 		}
 	}
 	
-	public ExchangeOffer getOffer (int slot) {
-		return offers[slot];
+	public ExchangeOffer getOffer (int exchange, int slot) {
+		return offers[exchange][slot];
 	}
 	
-	public void submitOffer (int slot, ExchangeOffer offer) {
-		offers[slot] = offer;
+	public void submitOffer (int exchange, int slot, ExchangeOffer offer) {
+		offers[exchange][slot] = offer;
 		offer.sendOffer(player);
 		Virtue.getInstance().getExchange().submitOffer(player, offer);
 	}
 	
-	public void abortOffer (int slot) {
-		ExchangeOffer offer = offers[slot];
+	public void abortOffer (int exchange, int slot) {
+		ExchangeOffer offer = offers[exchange][slot];
 		if (offer != null && ExchangeOfferStatus.PROCESSING.equals(offer.getStatus())) {
 			offer.setFinished();
-			Virtue.getInstance().getExchange().abortOffer(player, slot);
+			Virtue.getInstance().getExchange().abortOffer(player, exchange, slot);
 			player.getDispatcher().sendGameMessage("Abort request acknowledged. Please be aware that your offer may have already been completed.");
 		} else /*if (offer.isFinished()) {
 			player.getActionSender().sendGameMessage("This offer has already finished.");

@@ -30,111 +30,102 @@ package org.virtue.network.event.encoder;
  */
 public enum OutgoingEventType {
 
-	KEEP_ALIVE(157, 0),
+	KEEP_ALIVE(30, 0),
 
 	/**
 	 * Sends (and updates) the world list
 	 */
-	WORLDLIST(63, -2),
+	WORLDLIST(24, -2),
 
 	/**
 	 * Updates the "System Update" (reboot) timer.
 	 */
-	UPDATE_REBOOT_TIMER(61, 2),
+	UPDATE_REBOOT_TIMER(98, 2),
 
 	/**
-	 * Updates a player variable with a value of less than 127 but more than
-	 * -127
+	 * Updates a player variable with a value of less than 127 but more than -127
 	 */
-	VARP_SMALL(127, 3),
+	VARP_SMALL(45, 3), // Adjusted by Stefan for 861
 
 	/**
 	 * Updates a player variable with a value of more than 127 or less than -127
 	 */
-	VARP_LARGE(88, 6),
+	VARP_LARGE(16, 6), // Adjusted by Stefan for 861
 
 	/**
-	 * Updates part of a player variable with a value of less than 127 but more
-	 * than -127
+	 * Updates part of a player variable with a value of less than 127 but more than -127
 	 */
-	VARPBIT_SMALL(59, 3),
+	VARPBIT_SMALL(147, 3), // Adjusted by Stefan for 861
 
 	/**
-	 * Updates part of a player variable with a value of more than 127 or less
-	 * than -127
+	 * Updates part of a player variable with a value of more than 127 or less than -127
 	 */
-	VARPBIT_LARGE(165, 6),
+	VARPBIT_LARGE(139, 6), // Adjusted by Stefan for 861
 
 	/**
-	 * Updates a client variable with a value of less than 127 but more than
-	 * -127
+	 * Updates a client variable with a value of less than 127 but more than -127
 	 */
-	VARC_SMALL(106, 3),
+	VARC_SMALL(90, 3),// Checked - Stefan
 
 	/**
 	 * Updates a client variable with a value of more than 127 or less than -127
 	 */
-	VARC_LARGE(41, 6),
+	VARC_LARGE(177, 6), // Checked - Stefan
 
 	/**
-	 * Updates part of a client variable with a value of less than 127 but more
-	 * than -127
+	 * Updates part of a client variable with a value of less than 127 but more than -127
 	 */
-	VARCBIT_SMALL(170, 3),
+	VARCBIT_SMALL(180, 3),// Checked - Stefan
 
 	/**
-	 * Updates part of a client variable with a value of more than 127 or less
-	 * than -127
+	 * Updates part of a client variable with a value of more than 127 or less than -127
 	 */
-	VARCBIT_LARGE(32, 6),
+	VARCBIT_LARGE(76, 6),// Checked - Stefan
 
 	/**
-	 * Updates a client variable which has a length of no more than 127
-	 * characters
+	 * Updates a client variable which has a length of no more than 127 characters
 	 */
-	VARCSTR_SMALL(109, -1),
+	VARCSTR_SMALL(10, -1),
 
 	/**
 	 * Updates a client variable which has a length of more than 127 characters
 	 */
-	VARCSTR_LARGE(81, -2),
+	VARCSTR_LARGE(62, -2),
 
 	/**
 	 * Resets all the client varp values to zero
 	 */
-	VARCACHE_RESET(92, 0),
+	VARCACHE_RESET(81, 0),
 
 	/**
 	 * Informs the client that the server is ready to receive more varc values
 	 */
-	RESET_VARC_TRANSMIT(148, 0),
+	RESET_VARC_TRANSMIT(60, 0),
 
 	/**
-	 * Tells the client to run the specified client script with the provided
-	 * paramaters
+	 * Tells the client to run the specified client script with the provided paramaters
 	 */
-	RUNCLIENTSCRIPT(166, -2),
+	RUNCLIENTSCRIPT(36, -2),
 
 	/**
 	 * Causes the client to disconnect from the game and connect to the lobby
 	 */
-	LOGOUT_LOBBY(57, 0),
+	LOGOUT_LOBBY(95, 0),
 
 	/**
-	 * Causes the client to disconnect from the game and return to the login
-	 * screen
+	 * Causes the client to disconnect from the game and return to the login screen
 	 */
-	LOGOUT_FULL(114, 0),
+	LOGOUT_FULL(108, 0),
 
 	/**
 	 * Updates the experience (and current level) of the specified skill
 	 */
-	UPDATE_SKILL(65, 6),
+	UPDATE_SKILL(4, 6),
 
 	/**
 	 * Updates the player's run energy level
 	 */
-	UPDATE_RUNENERGY(53, 1),
+	UPDATE_RUNENERGY(105, 1),
 
 	/**
 	 * Updates the player's run weight
@@ -144,320 +135,306 @@ public enum OutgoingEventType {
 	/**
 	 * Updates the player's own appearance
 	 */
-	UPDATE_APPEARANCE(54, -2),
+	UPDATE_APPEARANCE(164, -2),
 
 	/**
-	 * Sets the text for context-menu options for other players (eg "trade",
-	 * "attack", "follow", etc)
+	 * Sets the text for context-menu options for other players (eg "trade", "attack", "follow", etc)
 	 */
-	PLAYER_SETOPTION(17, -1),
+	PLAYER_SETOPTION(27, -1),
 
 	/**
 	 * Renders and updates the players in the game
 	 */
-	PLAYER_UPDATE(1, -2),
+	PLAYER_UPDATE(111, -2),
 
 	/**
 	 * Renders and updates the local npcs
 	 */
-	NPC_UPDATE(7, -2),
+	NPC_UPDATE(8, -2), //added but sceneRadius stuff might not work
 
-	/**
-	 * Renders and updates the local npcs in a large radius
-	 */
-	NPC_UPDATE_LARGE(55, -2),
+	// TODO: below this needs to be checked...
+
 
 	/**
 	 * Sends a system message to the client.
 	 */
-	MESSAGE_GAME(110, -1),
+	MESSAGE_GAME(2, -1),
 
 	/**
 	 * Sends a public chat message to the client
 	 */
-	MESSAGE_PUBLIC(95, -1),
+	MESSAGE_PUBLIC(144, -1),
 
 	/**
 	 * Sends a private chat message to the client
 	 */
-	MESSAGE_PRIVATE(11, -2),
+	MESSAGE_PRIVATE(152, -2),
 
 	/**
 	 * Sends a private quick chat message to the client
 	 */
-	MESSAGE_PRIVATE_QUICKCHAT(155, -1),
+	MESSAGE_PRIVATE_QUICKCHAT(92, -1),
 
 	/**
-	 * Sends a copy of the private message that was sent by the player (for the
-	 * "To: " field)
+	 * Sends a copy of the private message that was sent by the player (for the "To: " field)
 	 */
-	MESSAGE_PRIVATE_ECHO(15, -2),
+	MESSAGE_PRIVATE_ECHO(57, -2),
 
 	/**
-	 * Sends a copy of the private quick message that was sent by the player
-	 * (for the "To: " field)
+	 * Sends a copy of the private quick message that was sent by the player (for the "To: " field)
 	 */
-	MESSAGE_PRIVATE_ECHO_QUICKCHAT(9, -1),
+	MESSAGE_PRIVATE_ECHO_QUICKCHAT(12, -1),
 
 	/**
 	 * Sends a friend channel message to the client
 	 */
-	MESSAGE_FRIENDCHANNEL(149, -1),
+	MESSAGE_FRIENDCHANNEL(82, -1),
 
 	/**
 	 * Sends a friend channel quick message to the client
 	 */
-	MESSAGE_FRIENDCHANNEL_QUICKCHAT(16, -1),
+	MESSAGE_FRIENDCHANNEL_QUICKCHAT(85, -1),
 
 	/**
 	 * Sends a clan channel message to the client
 	 */
-	MESSAGE_CLANCHANNEL(143, -1),
+	MESSAGE_CLANCHANNEL(22, -1),
 
 	/**
 	 * Sends a clan channel quick message to the client
 	 */
-	MESSAGE_CLANCHANNEL_QUICKCHAT(125, -1),
+	MESSAGE_CLANCHANNEL_QUICKCHAT(91, -1),
 
 	/**
 	 * Sends a broadcast clan channel message to the client
 	 */
-	MESSAGE_CLANCHANNEL_BROADCAST(173, -1),
-
-	MESSAGE_GROUP(-1), CHAT_FILTER_SETTINGS(-1),
+	MESSAGE_CLANCHANNEL_BROADCAST(31, -1),
 
 	/**
 	 * Unlocks the player's client friends list
 	 */
-	UNLOCK_FRIENDLIST(145, 0),
+	UNLOCK_FRIENDLIST(77, 0),
 
 	/**
-	 * Sends the player's current online status. Note that this does not need to
-	 * be sent if the status is changed on the client side, but should be sent
-	 * on login (and if the status is changed on the server side, for whatever
-	 * reason)
+	 * Sends the player's current online status.
+	 * Note that this does not need to be sent if the status is changed on the client side, but should be sent on login (and if the status is changed on the server side, for whatever reason)
 	 */
-	ONLINE_STATUS(178, 1),
+	ONLINE_STATUS(70, 1),
 
 	/**
-	 * Updates or adds one or more entries in the player's friend list. Note
-	 * that friend list removals are handled on the client side only, and it is
-	 * not possible to remotely remove friends.
+	 * Updates or adds one or more entries in the player's friend list.
+	 * Note that friend list removals are handled on the client side only, and it is not possible to remotely remove friends.
 	 */
-	UPDATE_FRIENDLIST(104, -2),
+	UPDATE_FRIENDLIST(3, -2),
 
 	/**
-	 * Updates or adds one or more entries in the player's ignore list. Note
-	 * that ignore list removals are handled on the client side only, and it is
-	 * not possible to remotely remove ignores.
+	 * Updates or adds one or more entries in the player's ignore list.
+	 * Note that ignore list removals are handled on the client side only, and it is not possible to remotely remove ignores.
 	 */
-	UPDATE_IGNORELIST(33, -2),
+	UPDATE_IGNORELIST(47, -2),
 
 	/**
 	 * Updates the entire friend chat channel that the player is currently in.
 	 * This packet is also used to leave the channel (if empty)
 	 */
-	UPDATE_FRIENDCHANNEL_FULL(67, -2),
+	UPDATE_FRIENDCHANNEL_FULL(23, -2),
 
 	/**
 	 * Updates a single user in the current friend chat channel.
 	 */
-	UPDATE_FRIENDCHANNEL_PART(24, -1),
+	UPDATE_FRIENDCHANNEL_PART(148, -1),
 
 	/**
-	 * Updates/initialises the full clan channel that the player is currently
-	 * in. This packet is also used to leave the channel (if empty)
+	 * Updates/initialises the full clan channel that the player is currently in.
+	 * This packet is also used to leave the channel (if empty)
 	 */
-	CLANCHANNEL_FULL(5, -2),
+	CLANCHANNEL_FULL(162, -2),
 
 	/**
-	 * Sends a series of updates for the clan channel the player is currently
-	 * in.
+	 * Sends a series of updates for the clan channel the player is currently in.
 	 */
-	CLANCHANNEL_DELTA(174, -2),
+	CLANCHANNEL_DELTA(146, -2),
 
 	/**
-	 * Updates/initialises the full clan settings for the clan that the player
-	 * is currently in.
+	 * Updates/initialises the full clan settings for the clan that the player is currently in.
 	 */
-	CLANSETTINGS_FULL(0, -2),
+	CLANSETTINGS_FULL(34, -2),
 
 	/**
-	 * Sends a series of updates of the settings for the clan the player is
-	 * currently in.
+	 * Sends a series of updates of the settings for the clan the player is currently in.
 	 */
-	CLANSETTINGS_DELTA(111, -2),
+	CLANSETTINGS_DELTA(192, -2),
 
 	/**
-	 * Represents the status of the chosen display name within the account
-	 * creation procedure.
+	 * Represents the status of the chosen display name within the account creation procedure.
 	 */
-	CREATION_NAME_STATUS(153, 1),
+	CREATION_NAME_STATUS(124, 1),
 
 	/**
-	 * Represents the status of the chosen email address within the account
-	 * creation procedure.
+	 * Represents the status of the chosen email address within the account creation procedure.
 	 */
-	CREATION_EMAIL_STATUS(163, 1),
+	CREATION_EMAIL_STATUS(56, 1),
 
 	/**
 	 * The response code for the account creation procedure submit function.
 	 */
-	CREATION_SUBMIT_STATUS(86, 1),
+	CREATION_SUBMIT_STATUS(159, 1),
 
 	/**
 	 * Sets the position of the client minimap flag
 	 */
-	SET_TARGET(137, 2),
+	SET_TARGET(52, 2),
 
 	/**
 	 * Represents a static map update
 	 */
-	GAMESCENE_STATIC(49, -2),
+	GAMESCENE_STATIC(101, -2),//added but sceneRadius stuff might not work
 
 	/**
 	 * Represents a dynamic map update
 	 */
-	GAMESCENE_DYNAMIC(30, -2),
+	GAMESCENE_DYNAMIC(117, -2),//added but sceneRadius stuff might not work
 
 	/**
 	 * Sets the base tile for game scene updates
 	 */
-	GAMESCENE_SET_BASETILE(78, 3),
+	GAMESCENE_SET_BASETILE(28, 3),
 
 	/**
 	 * Adds a ground item to the game scene
 	 */
-	GAMESCENE_ADD_ITEM(139, 5),
+	GAMESCENE_ADD_ITEM(136, 5),
 
 	/**
-	 * Adds a ground item to the game scene which is not visible to a specified
-	 * entity
+	 * Adds a ground item to the game scene which is not visible to a specified entity
 	 */
-	GAMESCENE_ADD_HIDDEN_ITEM(2, 7),
+	GAMESCENE_ADD_HIDDEN_ITEM(127, 7),
 
 	/**
 	 * Removes a ground item from the game scene
 	 */
-	GAMESCENE_REMOVE_ITEM(40, 3),
+	GAMESCENE_REMOVE_ITEM(59, 3),
 
 	/**
 	 * Adds or updates an object in the game scene
 	 */
-	GAMESCENE_UPDATE_LOC(89, 6),
+	GAMESCENE_UPDATE_LOC(44, 6),
 
 	/**
 	 * Removes an object from the game scene
 	 */
-	GAMESCENE_REMOVE_LOC(45, 2),
+	GAMESCENE_REMOVE_LOC(93, 2),
 
 	/**
 	 * Sends a projectile within the game scene
 	 */
-	GAMESCENE_PROJECTILE(28, 18),
+	GAMESCENE_PROJECTILE(123, 18),
 
 	/**
 	 * Opens the top-level game interface (aka "root" interface)
 	 */
-	IF_OPENTOP(20, 19),
+	IF_OPENTOP(35, 19), // Adjusted by Stefan for 861
 
 	/**
 	 * Opens an interface as a sub of the specified interface
 	 */
-	IF_OPENSUB(37, 23),
+	IF_OPENSUB(64, 23), // Adjusted by Stefan for 861
 
 	/**
 	 * Opens an interface as a sub of an npc
 	 */
-	IF_OPENSUB_ACTIVE_NPC(31, 25),
+	IF_OPENSUB_ACTIVE_NPC(169, 25),
 
 	/**
 	 * Opens an interface as a sub of a location
 	 */
-	IF_OPENSUB_ACTIVE_LOC(121, 32),
+	IF_OPENSUB_ACTIVE_LOC(1, 32),
 
 	/**
 	 * Closes the interface which is a sub of the provided interface
 	 */
-	IF_CLOSESUB(80, 4),
+	IF_CLOSESUB(39, 4),
 
 	/**
 	 * Hides (or unhides) an interface component
 	 */
-	IF_SETHIDE(179, 5),
+	IF_SETHIDE(80, 5),
 
 	/**
 	 * Sets the text of an interface component
 	 */
-	IF_SETTEXT(132, -2),
-	
+	IF_SETTEXT(65, -2),
+
 	/**
 	 * Sets model on an interface component to another player's model
 	 */
-	IF_SETPLAYERMODEL_OTHER(101, 10),
-	
+	IF_SETPLAYERMODEL_OTHER(100, 10),
+
 	/**
 	 * Sets the model on an interface component to the active player's model
 	 */
-	IF_SETPLAYERMODEL_SELF(136, 4),
+	IF_SETPLAYERMODEL_SELF(116, 4),
+
 
 	/**
 	 * Sets the NPC head on an interface component
 	 */
-	IF_SETNPCHEAD(46, 8),
+	IF_SETNPCHEAD(50, 8),
 
 	/**
-	 * Sets the model on an interface component to the active player's chathead
+	 * Sets the model on an interface component to the player's chathead
 	 */
-	IF_SETPLAYERHEAD_SELF(107, 4),
+	IF_SETPLAYERHEAD_SELF(40, 4),
 
 	/**
 	 * Sets the model on an interface component to another player's chathead
 	 */
-	IF_SETPLAYERHEAD_OTHER(119, 10),
+	IF_SETPLAYERHEAD_OTHER(161, 10),
 
 	/**
 	 * Animates a model on an interface component
 	 */
-	IF_SETANIM(3, 8),
+	IF_SETANIM(11, 8),
 
 	/**
-	 * Sets the events for an interface (including which options are handled by
-	 * the server, whether it can be used on other elements, etc).
+	 * Sets the events for an interface (including which options are handled by the server, whether it can be used on other elements, etc).
 	 */
-	IF_SETEVENTS(162, 12),
+	IF_SETEVENTS(109, 12),
 
 	/**
 	 * Sends a full update of an item container
 	 */
-	UPDATE_INV_FULL(97, -2),
+	UPDATE_INV_FULL(102, -2),
 
 	/**
 	 * Sends a partial update of an item container
 	 */
-	UPDATE_INV_PARTIAL(172, -2),
+	UPDATE_INV_PARTIAL(49, -2),
 
 	/**
 	 * Updates a grand exchange offer
 	 */
-	UPDATE_EXCHANGE(171, 20),
+	UPDATE_EXCHANGE(9, 21),
 
 	/**
 	 * Notifies a client to play the specified cutscene
 	 */
-	CUTSCENE(13, -2);
+	CUTSCENE(155, -2),
+	
+	IF_SETGRAPHIC_EXTERNAL(158, 8),
 
+	PLAY_MUSIC(72,3);
 	private int opcode;
 
-	private OutgoingEventType(int opcode) {
+	private OutgoingEventType (int opcode) {
 		this(opcode, -3);
 	}
 
-	private OutgoingEventType(int opcode, int size) {
+	private OutgoingEventType (int opcode, int size) {
 		this.opcode = opcode;
 	}
 
-	public int getOpcode() {
+	public int getOpcode () {
 		return opcode;
 	}
 }

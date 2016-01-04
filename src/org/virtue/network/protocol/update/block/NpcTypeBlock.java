@@ -25,6 +25,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -37,7 +38,7 @@ import org.virtue.network.protocol.update.Block;
 public class NpcTypeBlock extends Block {
 	
 	public NpcTypeBlock() {
-		super(0, -1, 0x10, 11);
+		super(BlockType.NPCTYPE);
 	}
 
 	/* (non-Javadoc)

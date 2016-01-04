@@ -25,6 +25,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -66,7 +67,7 @@ public class GlowColorBlock extends Block {
 	private int duration;
 	
 	public GlowColorBlock(int r, int g, int b, int a, int delay, int duration) {
-		super(0x100000, 9, 0x4000000, 21);
+		super(BlockType.GLOW);
 		this.red = r;
 		this.green = g;
 		this.blue = b;
@@ -81,19 +82,19 @@ public class GlowColorBlock extends Block {
 	@Override
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
-			block.putA(red);
-			block.putS(green);
-			block.putByte(blue);
-			block.putS(alpha);
-			block.putShortA(delay);
-			block.putLEShortA(duration);
-		} else {
-			block.putByte(red);
+			block.putS(red);
 			block.putS(green);
 			block.putC(blue);
-			block.putS(alpha);
-			block.putShortA(delay);
-			block.putShortA(duration);
+			block.putByte(alpha);
+			block.putShort(delay);
+			block.putShort(duration);
+		} else {
+			block.putByte(red);
+			block.putByte(green);
+			block.putA(blue);
+			block.putByte(alpha);
+			block.putLEShortA(delay);
+			block.putLEShort(duration);
 		}
 	}
 }

@@ -23,22 +23,22 @@ public class VarcEventEncoder implements EventEncoder<VarcEventContext> {
 		if (context.isBit()) {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
 				buffer.putPacket(OutgoingEventType.VARCBIT_LARGE, player);//Large
-				buffer.putShort(context.getKey());
-				buffer.putIntA(context.getValue());
+				buffer.putLEInt(context.getValue());
+				buffer.putLEShort(context.getKey());
 			} else {
 				buffer.putPacket(OutgoingEventType.VARCBIT_SMALL, player);//Small
-				buffer.putShort(context.getKey());
-				buffer.putByte(context.getValue());
+				buffer.putLEShortA(context.getKey());
+				buffer.putS(context.getValue());
 			}
 		} else {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
 				buffer.putPacket(OutgoingEventType.VARC_LARGE, player);
+				buffer.putInt(context.getValue());
 				buffer.putLEShortA(context.getKey());
-				buffer.putIntB(context.getValue());
 			} else {
 				buffer.putPacket(OutgoingEventType.VARC_SMALL, player);
-				buffer.putC(context.getValue());
-				buffer.putShort(context.getKey());
+				buffer.putLEShortA(context.getKey());
+				buffer.putA(context.getValue());
 			}
 		}
 		return buffer;

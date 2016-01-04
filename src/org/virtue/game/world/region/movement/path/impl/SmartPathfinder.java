@@ -119,7 +119,7 @@ public final class SmartPathfinder extends AbstractPathfinder {
 			}
 		}
 		int z = start.getPlane();
-		Tile location = new Tile((start.getChunkX() - 6) << 3, (start.getChunkY() - 6) << 3, z);
+		Tile coords = new Tile((start.getChunkX() - 6) << 3, (start.getChunkY() - 6) << 3, z);
 		curX = start.getLocalX();
 		curY = start.getLocalY();
 		dstX = end.getLocalX(start);
@@ -128,11 +128,11 @@ public final class SmartPathfinder extends AbstractPathfinder {
 		int readPosition = 0;
 		check(curX, curY, 99, 0);
 		if (moverSize < 2) {
-			checkSingleTraversal(end, sizeX, sizeY, type, rotation, walkingFlag, location);
+			checkSingleTraversal(end, sizeX, sizeY, type, rotation, walkingFlag, coords);
 		} else if (moverSize == 2) {
-			checkDoubleTraversal(end, sizeX, sizeY, type, rotation, walkingFlag, location);
+			checkDoubleTraversal(end, sizeX, sizeY, type, rotation, walkingFlag, coords);
 		} else {
-			checkVariableTraversal(end, moverSize, sizeX, sizeY, type, rotation, walkingFlag, location);
+			checkVariableTraversal(end, moverSize, sizeX, sizeY, type, rotation, walkingFlag, coords);
 		}
 		if (!foundPath) {
 			if (near) {
@@ -196,13 +196,13 @@ public final class SmartPathfinder extends AbstractPathfinder {
 			}
 		}
 		int size = readPosition--;
-		int absX = location.getX() + queueX[readPosition];
-		int absY = location.getY() + queueY[readPosition];
+		int absX = coords.getX() + queueX[readPosition];
+		int absY = coords.getY() + queueY[readPosition];
 		path.getPoints().add(new Point(absX, absY));
 		for (int i = 1; i < size; i++) {
 			readPosition--;
-			absX = location.getX() + queueX[readPosition];
-			absY = location.getY() + queueY[readPosition];
+			absX = coords.getX() + queueX[readPosition];
+			absY = coords.getY() + queueY[readPosition];
 			path.getPoints().add(new Point(absX, absY));
 		}
 		path.setSuccesful(true);
@@ -214,14 +214,15 @@ public final class SmartPathfinder extends AbstractPathfinder {
 	 * @param end The destination location.
 	 * @param sizeX The x-size of the destination.
 	 * @param sizeY The y-size of the destination.
-	 * @param type The object type.
-	 * @param rotation The object rotation.
+	 * @param type The location type.
+	 * @param rotation The location rotation.
 	 * @param walkingFlag The walking flag.
-	 * @param location The viewport location.
+	 * @param coords The viewport coords.
 	 */
-	private void checkSingleTraversal(Tile end, int sizeX, int sizeY, int type, int rotation, int walkingFlag, Tile location) {
+	private void checkSingleTraversal(Tile end, int sizeX, int sizeY, int type, int rotation, int walkingFlag, Tile coords) {
 		int readPosition = 0;
-		int z = location.getPlane();
+		int z = coords.getPlane();
+		RegionManager regionManager = World.getInstance().getRegions();
 		while (writePathPosition != readPosition) {
 			curX = queueX[readPosition];
 			curY = queueY[readPosition];
@@ -230,8 +231,8 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				foundPath = true;
 				break;
 			}
-			int absX = location.getX() + curX;
-			int absY = location.getY() + curY;
+			int absX = coords.getX() + curX;
+			int absY = coords.getY() + curY;
 			if (type != 0) {
 				if ((type < 5 || type == 10) && canDoorInteract(absX, absY, 1, end.getX(), end.getY(), type - 1, rotation, z)) {
 					foundPath = true;
@@ -247,28 +248,36 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				break;
 			}
 			int thisCost = cost[curX][curY] + 1;
-			if (curY > 0 && via[curX][curY - 1] == 0 && (RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0) {
+			if (curY > 0 && via[curX][curY - 1] == 0 && regionManager.isTraversableSouth(z, absX, absY, 1)) {
+				//(RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0
 				check(curX, curY - 1, SOUTH_FLAG, thisCost);
 			}
-			if (curX > 0 && via[curX - 1][curY] == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0) {
+			if (curX > 0 && via[curX - 1][curY] == 0 && regionManager.isTraversableWest(z, absX, absY, 1)) {
+				//(RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0
 				check(curX - 1, curY, WEST_FLAG, thisCost);
 			}
-			if (curY < 103 && via[curX][curY + 1] == 0 && (RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0) {
+			if (curY < 103 && via[curX][curY + 1] == 0 && regionManager.isTraversableNorth(z, absX, absY, 1)) {
+				//(RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0
 				check(curX, curY + 1, NORTH_FLAG, thisCost);
 			}
-			if (curX < 103 && via[curX + 1][curY] == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0) {
+			if (curX < 103 && via[curX + 1][curY] == 0 && regionManager.isTraversableEast(z, absX, absY, 1)) {
+				//(RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0
 				check(curX + 1, curY, EAST_FLAG, thisCost);
 			}
-			if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY - 1) & 0x12c010e) == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0 && (RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0) {
+			if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && regionManager.isTraversableSouthWest(z, absX, absY, 1)) {
+				// && (RegionManager.getClippingFlag(z, absX - 1, absY - 1) & 0x12c010e) == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0 && (RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0
 				check(curX - 1, curY - 1, SOUTH_WEST_FLAG, thisCost);
 			}
-			if (curX > 0 && curY < 103 && via[curX - 1][curY + 1] == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY + 1) & 0x12c0138) == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0 && (RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0) {
+			if (curX > 0 && curY < 103 && via[curX - 1][curY + 1] == 0 && regionManager.isTraversableNorthWest(z, absX, absY, 1)) {
+				// (RegionManager.getClippingFlag(z, absX - 1, absY + 1) & 0x12c0138) == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0 && (RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0
 				check(curX - 1, curY + 1, NORTH_WEST_FLAG, thisCost);
 			}
-			if (curX < 103 && curY > 0 && via[curX + 1][curY - 1] == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY - 1) & 0x12c0183) == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0 && (RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0) {
+			if (curX < 103 && curY > 0 && via[curX + 1][curY - 1] == 0 && regionManager.isTraversableSouthEast(z, absX, absY, 1)) {
+				// (RegionManager.getClippingFlag(z, absX + 1, absY - 1) & 0x12c0183) == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0 && (RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0
 				check(curX + 1, curY - 1, SOUTH_EAST_FLAG, thisCost);
 			}
-			if (curX < 103 && curY < 103 && via[curX + 1][curY + 1] == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY + 1) & 0x12c01e0) == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0 && (RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0) {
+			if (curX < 103 && curY < 103 && via[curX + 1][curY + 1] == 0 && regionManager.isTraversableNorthEast(z, absX, absY, 1)) {
+				// (RegionManager.getClippingFlag(z, absX + 1, absY + 1) & 0x12c01e0) == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0 && (RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0
 				check(curX + 1, curY + 1, NORTH_EAST_FLAG, thisCost);
 			}
 		}

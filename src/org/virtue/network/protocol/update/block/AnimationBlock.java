@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,20 +25,21 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 14, 2014
  */
 public class AnimationBlock extends Block {
-	
+
 	/**
 	 * The reset animation.
 	 */
 	public static final AnimationBlock RESET = new AnimationBlock(-1);
-	
+
 	private int[] frames;
-	
+
 	private int delay;
 
 	/**
@@ -47,13 +48,13 @@ public class AnimationBlock extends Block {
 	public AnimationBlock(int id) {
 		this(id, 0);
 	}
-	
+
 	public AnimationBlock(int id, int delay) {
-		super(0x4, 2, 0x8, 2);
+		super(BlockType.ANIMATION);
 		this.frames = new int[] { id, id, id, id };
 		this.delay = delay;
 	}
-	
+
 	/**
 	 * Transforms the graphics block for the given delay.
 	 * @param delay The delay.
@@ -73,7 +74,7 @@ public class AnimationBlock extends Block {
 			block.putBigSmart(frame);
 		}
 		if (entity instanceof Player) {
-			block.putC(delay);//Delay
+			block.putByte(delay);//Delay
 		} else {
 			block.putA(delay);//Delay
 		}

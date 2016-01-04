@@ -43,10 +43,10 @@ public class PlayerOptionEventEncoder implements EventEncoder<PlayerOptionEventC
 	public OutboundBuffer encode(Player player, PlayerOptionEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarByte(OutgoingEventType.PLAYER_SETOPTION, player);
-		buffer.putS(context.isTop() ? 1 : 0);
-		buffer.putC(context.getOption().getID());
+		buffer.putLEShortA(context.getCursor());
 		buffer.putString(context.getText());
-		buffer.putShortA(context.getCursor());
+		buffer.putByte(context.getOption().getId());
+		buffer.putS(context.isTop() ? 1 : 0);
 		buffer.finishVarByte();
 		return buffer;
 	}

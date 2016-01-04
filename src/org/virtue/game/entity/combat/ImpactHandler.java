@@ -10,7 +10,7 @@ import org.virtue.game.entity.combat.hit.Hit;
 import org.virtue.game.entity.combat.hit.Hit.HitType;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.widget.var.VarKey;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.network.protocol.update.block.HitMarkBlock;
 import org.virtue.network.protocol.update.ref.Bar;
 
@@ -137,7 +137,7 @@ public class ImpactHandler {
 	public void updateLifepoints(int lifepoints) {
 		setLifepoints(lifepoints);
 		if (entity instanceof Player) {
-			((Player) entity).getVars().setVarpBit(VarKey.Bit.PLAYER_HITPOINTS, lifepoints);
+			((Player) entity).getVars().setVarBitValue(VarKey.Bit.PLAYER_HITPOINTS, lifepoints);
 		}
 	}
 	

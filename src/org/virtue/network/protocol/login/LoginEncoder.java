@@ -26,6 +26,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+import org.virtue.Constants;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.message.login.LoginResponseMessage;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
@@ -91,6 +92,8 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 			packet.putInt(37396180);
 			packet.putShort(1);
             packet.putJagString("127.0.0.1");
+			packet.putShort(Constants.SERVER_PORT);
+			packet.putShort(Constants.SERVER_PORT);
 		} else if (response.getLoginType().equals(LoginTypeMessage.LOGIN_WORLD)) {
 			//System.out.println("Sending world response for player "+response.getPlayer().getDisplay()+", index="+response.getPlayer().getIndex());
 			packet.putByte(0);

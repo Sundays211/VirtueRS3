@@ -25,6 +25,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,7 +39,7 @@ public class ForceTalkBlock extends Block {
 	 * The {@link ForceTalkBlock} constructor
 	 */
 	public ForceTalkBlock(String message) {
-		super(0x100, 8, 0, -1);
+		super(BlockType.SAY_PRIVATE);
 		this.message = message;
 	}
 

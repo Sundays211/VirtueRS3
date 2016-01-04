@@ -27,7 +27,6 @@ import java.util.Map;
 import org.virtue.Virtue;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
-import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.event.BenchSitting;
@@ -85,14 +84,7 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 	}
 	
 	private void handleInteraction (Player player, SceneLocation location, LocationClickEventContext context) {
-		/*if (player.getMinigame() != null) {
-			Controller controller = Virtue.getInstance().getController().getController(player.getMinigame());
-			if (controller != null) {
-				controller.objectClick(player.getMinigame(), player, location, context.getButton());
-				return;
-			}
-		}*/
-		
+
 		if (location.getLocType().name.equalsIgnoreCase("bench")) {
 			player.setAction(new BenchSitting(location));
 		} else {
@@ -117,32 +109,24 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 			default:
 				return;
 			}
+			int clickX = context.getBaseX();
+			int clickY = context.getBaseY();
+			int level = location.getCurrentTile().getPlane();
+			Tile clickCoords = new Tile(clickX, clickY, level);
+			
 			if (scripts.hasBinding(type, location.getID())) {
 				Map<String, Object> args = new HashMap<>();
 				args.put("player", player);
 				args.put("location", location);
-				args.put("loctype", location.getID());
+				args.put("coords", clickCoords);
 				scripts.invokeScriptChecked(type, location.getID(), args);
 			} else {
-				boolean handled = handleLegacyListener(player, location, context.getButton());
-				if (!handled) {
-					String message = "Nothing interesting happens.";
-					if (player.getPrivilegeLevel().getRights() >= 2) {
-						message = "<col=ff6600>Unhandled Location: " + location  + ", forceRun: "
-								+ context.forceRun() + ", Button: " + context.getButton();
-					}
-					player.getDispatcher().sendGameMessage(message);
+				String message = "Nothing interesting happens.";
+				if (player.getPrivilegeLevel().getRights() >= 2) {
+					message = "<col=ff6600>Unhandled Location: " + location + ", Click coords: " + clickCoords + ", Button: " + context.getButton();
 				}
+				player.getDispatcher().sendGameMessage(message);
 			}			
 		}
-	}
-	
-	private boolean handleLegacyListener (Player player, SceneLocation location, OptionButton button) {
-		LocationListener listener = Virtue.getInstance().getScripts().forLocationID(location.getID());
-		if (listener == null) {
-			return false;
-		}
-		return listener.handleInteraction(player, location, button.getID());
-		
 	}
 }

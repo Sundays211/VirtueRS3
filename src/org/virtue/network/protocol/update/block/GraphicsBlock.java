@@ -25,6 +25,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -69,12 +70,29 @@ public class GraphicsBlock extends Block {
 	}
 	
 	public GraphicsBlock(int type, int id, int height, int speed, int rotation) {
-		super(getType(type, false), getPos(type, false), getType(type, true), getPos(type, true));		
+		super(getType(type));		
 		this.type = type;
 		this.id = id;
 		this.height = height;
 		this.speed = speed;
 		this.rotation = rotation;
+	}
+	
+	private static BlockType getType (int type) {
+		switch (type) {
+		case 1:
+			return BlockType.SPOT_1;
+		case 2:
+			return BlockType.SPOT_2;
+		case 3:
+			return BlockType.SPOT_3;
+		case 4:
+			return BlockType.SPOT_4;
+		case 5:
+			return BlockType.SPOT_5;
+		default:
+			return null;
+		}
 	}
 	
 	/**
@@ -84,86 +102,6 @@ public class GraphicsBlock extends Block {
 	 */
 	public GraphicsBlock transform(int delay) {
 		return new GraphicsBlock(type, id, height, delay, rotation);
-	}
-	
-	/**
-	 * Gets the mask for the graphics block type
-	 * @param type
-	 * @param npc True if the mask is for an npc, false otherwise
-	 * @return
-	 */
-	private static int getType(int type, boolean npc) {
-		if (npc) {
-			switch (type) {
-			case 1:
-				return 0x1;
-			case 2:
-				return 0x400;
-			case 3:
-				return 0x10000000;
-			case 4:
-				return 0x8000000;
-			case 5:
-				return 0x1000000;
-			default:
-				return 0;
-			}			
-		} else {
-			switch (type) {
-			case 1:
-				return 0x1;
-			case 2:
-				return 0x2000;
-			case 3:
-				return 0x200;
-			case 4:
-				return 0x10000;
-			case 5:
-				return 0x400000;
-			default:
-				return 0;
-			}			
-		}
-	}
-	
-	/**
-	 * Gets the position of the graphics block type
-	 * @param type
-	 * @param npc True if the position is for an npc, false otherwise
-	 * @return The position
-	 */
-	private static int getPos(int type, boolean npc) {
-		if (npc) {
-			switch (type) {
-			case 1:
-				return 20;
-			case 2:
-				return 24;
-			case 3:
-				return 18;
-			case 4:
-				return 10;
-			case 5:
-				return 15;
-			default:
-				return -1;
-			}
-		} else {
-			switch (type) {
-			case 1:
-				return 11;
-			case 2:
-				return 18;
-			case 3:
-				return 14;
-			case 4:
-				return 15;
-			case 5:
-				return 17;
-			default:
-				return -1;
-			}
-		}
 	}
 	
 	private int getSettingsHash () {
@@ -183,58 +121,58 @@ public class GraphicsBlock extends Block {
 		//System.out.println("Encoding graphics block. id="+id+", type="+type);
 		if (entity instanceof Player) {
 			switch (type) {
-			case 1://
-				block.putLEShort(id);
+			case 1://done
+				block.putShort(id);
+				block.putLEInt(getSettingsHash());
+				block.putByte(getRotationHash());
+				break;
+			case 2://done
+				block.putLEShortA(id);
 				block.putIntB(getSettingsHash());
 				block.putC(getRotationHash());
 				break;
-			case 2://
-				block.putLEShortA(id);
-				block.putIntA(getSettingsHash());
-				block.putS(getRotationHash());
-				break;
-			case 3://
-				block.putShort(id);
-				block.putIntA(getSettingsHash());
-				block.putByte(getRotationHash());
-				break;
-			case 4://
-				block.putShort(id);
-				block.putIntA(getSettingsHash());
-				block.putS(getRotationHash());
-				break;
-			case 5://
+			case 3://done
 				block.putLEShort(id);
 				block.putIntB(getSettingsHash());
 				block.putS(getRotationHash());
+				break;
+			case 4://done
+				block.putLEShortA(id);
+				block.putIntB(getSettingsHash());
+				block.putS(getRotationHash());
+				break;
+			case 5://done
+				block.putShort(id);
+				block.putIntB(getSettingsHash());
+				block.putByte(getRotationHash());
 				break;
 			}
 		} else {
 			switch (type) {
-			case 1://
-				block.putLEShort(id);
-				block.putIntA(getSettingsHash());
-				block.putByte(getRotationHash());
-				break;
-			case 2://
-				block.putLEShortA(id);
-				block.putIntA(getSettingsHash());
-				block.putS(getRotationHash());
-				break;
-			case 3://
-				block.putLEShort(id);
-				block.putLEInt(getSettingsHash());
-				block.putC(getRotationHash());
-				break;
-			case 4://
+			case 1://done
 				block.putShortA(id);
 				block.putInt(getSettingsHash());
-				block.putS(getRotationHash());
+				block.putA(getRotationHash());
 				break;
-			case 5://
-				block.putLEShort(id);
+			case 2://done
+				block.putShort(id);
 				block.putIntA(getSettingsHash());
-				block.putS(getRotationHash());
+				block.putC(getRotationHash());
+				break;
+			case 3://done
+				block.putLEShortA(id);
+				block.putIntB(getSettingsHash());
+				block.putByte(getRotationHash());
+				break;
+			case 4://done
+				block.putShort(id);
+				block.putIntB(getSettingsHash());
+				block.putA(getRotationHash());
+				break;
+			case 5://done
+				block.putShort(id);
+				block.putInt(getSettingsHash());
+				block.putByte(getRotationHash());
 				break;
 			}
 		}

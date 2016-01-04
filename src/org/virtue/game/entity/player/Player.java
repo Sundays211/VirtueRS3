@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,10 +60,10 @@ import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.interactions.ChallengeHandler;
 import org.virtue.game.entity.player.interactions.PlayerInteractions;
 import org.virtue.game.entity.player.interactions.PlayerInteractions.PlayerOption;
+import org.virtue.game.entity.player.var.VarKey;
+import org.virtue.game.entity.player.var.VarRepository;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.entity.player.widget.WidgetState;
-import org.virtue.game.entity.player.widget.var.VarKey;
-import org.virtue.game.entity.player.widget.var.VarRepository;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.GroundItem;
@@ -365,7 +366,10 @@ public class Player extends Entity {
 	 */
 	public void initialize(boolean isWorld) {
 		this.sendOpcode = new GameEventDispatcher(this);
-		this.var = new VarRepository(this);
+		
+		@SuppressWarnings("unchecked")
+		Map<Integer, Object> varValues = (Map<Integer, Object>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(getUsername(), ParserDataType.VAR);
+		this.var = new VarRepository(this, varValues);
 		this.chat = new ChatManager(this);
 		this.dialogs = new DialogManager(this);
 		this.widgets = new WidgetManager(this);
@@ -451,11 +455,11 @@ public class Player extends Entity {
 					.getParser()
 					.saveObjectDefinition(this.getInvs(), this.getUsername(),
 							ParserDataType.INV);
+			Map<Integer, Object> varps = this.getVars().getPermanantVarps();
 			Virtue.getInstance()
 					.getParserRepository()
 					.getParser()
-					.saveObjectDefinition(this.getVars().getPermanantVarps(),
-							this.getUsername(), ParserDataType.VAR);
+					.saveObjectDefinition(varps, this.getUsername(), ParserDataType.VAR);
 			exchangeOffers.save();
 			widgets.saveLayout();
 		}

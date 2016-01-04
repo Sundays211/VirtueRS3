@@ -63,9 +63,9 @@ import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.InvRepository;
 import org.virtue.game.entity.player.container.ItemTypeList;
+import org.virtue.game.entity.player.var.VarBitTypeList;
+import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetRepository;
-import org.virtue.game.entity.player.widget.var.VarBitTypeList;
-import org.virtue.game.entity.player.widget.var.VarRepository;
 import org.virtue.game.parser.ParserRepository;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.parser.impl.NpcDataParser;
@@ -175,7 +175,7 @@ public class Virtue {//
 	/**
 	 * The current number of days since SERVER_DAY_0
 	 */
-	private long serverDay0;
+	private int serverDay0;
 	
 	private Properties properties;
 	
@@ -210,6 +210,7 @@ public class Virtue {//
 			//new MaintananceThread().start();
 			logger.info("Virtue Loaded in " + TimeUnit.MILLISECONDS.toSeconds((System.currentTimeMillis() - start)) + " seconds.");
 			logger.info("Virtue is currently running a "+(instance.live ? "live" : "testing")+" instance on " + System.getProperty("os.name") + " on a(n) " + System.getProperty("os.arch") + " architecture.");
+			logger.info("Current server day: "+instance.getServerDay());
 		} catch (Exception e) {
 			logger.error("Error launching server.", e);
 		}
@@ -271,7 +272,11 @@ public class Virtue {//
 	private void loadCache() throws IOException {
 		File cachePath = new File(Constants.CACHE_REPOSITORY);
 		if (!cachePath.exists()) {
-			cachePath = new File("repository/cache/");
+			File test = new File("C:\\rscd\\data_861");
+			if(test.exists())
+				cachePath = test;
+			else
+				cachePath = new File("repository/cache/");
 		}
 		cache = new Cache(FileStore.open(cachePath));
 		container = new Container(Container.COMPRESSION_NONE, cache.createChecksumTable().encode(true, Constants.ONDEMAND_MODULUS, Constants.ONDEMAND_EXPONENT));
@@ -333,7 +338,7 @@ public class Virtue {//
 				configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id).size());
 		Archive varclans = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_CLAN_SETTING.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id).size());
-		VarRepository.init(varps);
+		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));
 		VarBitTypeList.init(varbits, configTable.getEntry(Js5ConfigGroup.VAR_BIT.id));
 		ClanSettings.init(varclans, configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id));
 		ItemTypeList.init(cache, Constants.ITEM_DATA);
@@ -463,7 +468,7 @@ public class Virtue {//
 	 * @return The number of days
 	 */
 	public int getServerDay () {
-		return (int) ((System.currentTimeMillis() - serverDay0) / 86400000);
+		return ((int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis())) - serverDay0;
 	}
 	
 	public int getTickInDay () {
@@ -483,7 +488,7 @@ public class Virtue {//
 	}
 	
 	public void runUpdate (int time) {
-		System.out.println("Running update in "+time+" ticks...");
+		logger.info("Running system reboot in "+time+" ticks...");
 		this.systemUpdate = true;
 		this.updateTimer = time;
 		engine.invoke(new SystemUpdateTick());

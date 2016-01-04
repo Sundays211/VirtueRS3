@@ -27,6 +27,7 @@ package org.virtue.network.protocol.message.login;
  */
 public enum LoginTypeMessage {
 
-	LOGIN_LOBBY, LOGIN_WORLD
+	LOGIN_LOBBY, LOGIN_WORLD,
+	LOGIN_CONTINUE
 
 }

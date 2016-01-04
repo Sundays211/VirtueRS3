@@ -110,7 +110,7 @@ public class FriendChannel {
 	 * @return		True if the rank can kick, false otherwise
 	 */
 	public boolean canKick (ChannelRank rank) {
-		return getKickReq().getID() <= rank.getID();
+		return getKickReq().getId() <= rank.getId();
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class FriendChannel {
 	 * @return		True if the rank can join, false otherwise
 	 */
 	public boolean canJoin (ChannelRank rank) {
-		return getJoinReq().getID() <= rank.getID();
+		return getJoinReq().getId() <= rank.getId();
 	}
 	
 	/**
@@ -144,7 +144,7 @@ public class FriendChannel {
 	 * @return		True if the rank can talk in the channel, false otherwise
 	 */
 	public boolean canTalk (ChannelRank rank) {
-		return getTalkReq().getID() <= rank.getID();
+		return getTalkReq().getId() <= rank.getId();
 	}
 	
 	/**

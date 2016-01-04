@@ -14,7 +14,6 @@ import org.virtue.engine.thread.NetworkThreadPool;
 import org.virtue.engine.thread.ServiceThreadFactory;
 import org.virtue.engine.thread.WorkerThreadPool;
 import org.virtue.network.protocol.update.EntityUpdate;
-import org.virtue.network.session.impl.OnDemandSession;
 import org.virtue.utility.MaintananceThread;
 import org.virtue.utility.PlayerCountThread;
 
@@ -27,7 +26,7 @@ public class GameEngine implements Runnable {
 	/**
 	 * The {@link Logger} Instance
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(OnDemandSession.class);
+	private static final Logger logger = LoggerFactory.getLogger(GameEngine.class);
 	
 	/**
 	 * Represents the {@link TickService} responsible for performing game cycles.

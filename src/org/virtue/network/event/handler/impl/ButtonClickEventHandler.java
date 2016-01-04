@@ -21,7 +21,12 @@
  */
 package org.virtue.network.event.handler.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.virtue.Virtue;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.engine.script.listeners.WidgetListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.ButtonClickEventContext;
@@ -38,16 +43,75 @@ public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEven
 	 */
 	@Override
 	public void handle(Player player, ButtonClickEventContext context) {
-		WidgetListener listener = Virtue.getInstance().getScripts().forWidgetID(context.getInterfaceId());
-		if (listener == null || !listener.handleInteraction(player, context.getInterfaceId(), 
-				context.getComponentId(), context.getSlot(), context.getItemID(), context.getButton().getID())) {
-			boolean success = Virtue.getInstance().getWidgetRepository().handle(context.getInterfaceId(), context.getComponentId(), context.getSlot(), context.getItemID(), context.getButton(), player);
-			if (!success) {
-				//System.out.println("Unhandled Widget: " + context.getInterfaceId() + ", Component: " + context.getComponentId() + ", Slot1: " + context.getSlot1() + ", Slot2: " + context.getSlot2() + ", Button: "+context.getButton());
-				player.getDispatcher().sendConsoleMessage("Unhandled Widget: " + context.getInterfaceId() + ", Component: " + context.getComponentId() + ", Slot: " + context.getSlot() + ", Item: " + context.getItemID() + ", Button: "+context.getButton());
-			}			
+		boolean success = Virtue.getInstance().getWidgetRepository().handle(context.getInterfaceId(), context.getComponentId(), context.getSlot(), context.getItemID(), context.getButton(), player);
+		if (!success) {
+			handleInteraction(player, context);
+		}			
+	}
+	
+	private void handleInteraction (Player player, ButtonClickEventContext context) {
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		ScriptEventType type;
+		switch (context.getButton()) {
+		case ONE:
+			type = ScriptEventType.IF_BUTTON1;
+			break;
+		case TWO:
+			type = ScriptEventType.IF_BUTTON2;
+			break;
+		case THREE:
+			type = ScriptEventType.IF_BUTTON3;
+			break;
+		case FOUR:
+			type = ScriptEventType.IF_BUTTON4;
+			break;
+		case FIVE:
+			type = ScriptEventType.IF_BUTTON5;
+			break;
+		case SIX:
+			type = ScriptEventType.IF_BUTTON6;
+			break;
+		case SEVEN:
+			type = ScriptEventType.IF_BUTTON7;
+			break;
+		case EIGHT:
+			type = ScriptEventType.IF_BUTTON8;
+			break;
+		case NINE:
+			type = ScriptEventType.IF_BUTTON9;
+			break;
+		case TEN:
+			type = ScriptEventType.IF_BUTTON10;
+			break;
+		default:
+			return;
 		}
-				
+		if (scripts.hasBinding(type, context.getHash())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("interface", context.getInterfaceId());
+			args.put("component", context.getComponentId());
+			args.put("slot", context.getSlot());
+			scripts.invokeScriptChecked(type, context.getHash(), args);
+		} else if (scripts.hasBinding(ScriptEventType.IF_BUTTON, context.getInterfaceId())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("interface", context.getInterfaceId());
+			args.put("component", context.getComponentId());
+			args.put("slot", context.getSlot());
+			args.put("button", context.getButton().getId());
+			scripts.invokeScriptChecked(ScriptEventType.IF_BUTTON, context.getInterfaceId(), args);
+		} else {
+			WidgetListener listener = scripts.forWidgetID(context.getInterfaceId());
+			if (listener == null || !listener.handleInteraction(player, context.getInterfaceId(), 
+					context.getComponentId(), context.getSlot(), context.getItemID(), context.getButton().getId())) {
+				String message = "Nothing interesting happens.";
+				if (player.getPrivilegeLevel().getRights() >= 2) {
+					message = "Unhandled Widget: " + context.getInterfaceId() + ", Component: " + context.getComponentId() + ", Slot: " + context.getSlot() + ", Item: " + context.getItemID() + ", Button: "+context.getButton();
+					player.getDispatcher().sendGameMessage(message);
+				}
+			}
+		}
 	}
 
 }

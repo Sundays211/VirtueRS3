@@ -83,9 +83,9 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param end The end coords.
 	 * @param sizeX The x-size of the destination node.
 	 * @param sizeY The y-size of the destination node.
-	 * @param rotation The object rotation.
-	 * @param type The location type.
-	 * @param walkingFlag The location walking flag.
+	 * @param rotation The destination location rotation.
+	 * @param type The destination location type.
+	 * @param walkingFlag The  location walking flag.
 	 * @param near If we should find the nearest location if a path can't be found.
 	 * @return The path.
 	 */

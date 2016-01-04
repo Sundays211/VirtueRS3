@@ -43,8 +43,8 @@ public class WidgetTextEventEncoder implements EventEncoder<WidgetTextEventConte
 	public OutboundBuffer encode(Player player, WidgetTextEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarShort(OutgoingEventType.IF_SETTEXT, player);
-		buffer.putInt((context.getWidget() << 16) | (context.getComponent() & 0xffff));
 		buffer.putString(context.getText());
+		buffer.putIntB((context.getWidget() << 16) | (context.getComponent() & 0xffff));
 		buffer.finishVarShort();
 		return buffer;
 	}

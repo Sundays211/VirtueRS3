@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,21 +32,34 @@ import org.virtue.network.event.decoder.IncomingEventType;
  * @since Oct 5, 2014
  */
 public class ButtonClickEventDecoder implements EventDecoder<ButtonClickEventContext> {
-	
+
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
 	public ButtonClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int hash = buffer.getInt();
-		int itemID = buffer.getLEShortA() & 0xffff;
-		if (itemID == 65535) {
-			itemID = -1;
-		}
+//		int hash = buffer.getInt();
+//		int itemID = buffer.getLEShortA() & 0xffff;
+//		if (itemID == 65535) {
+//			itemID = -1;
+//		}
+//		int slot = buffer.getLEShortA() & 0xffff;
+//		if (slot == 65535) {
+//			slot = -1;
+//		}
+
 		int slot = buffer.getLEShortA() & 0xffff;
-		if (slot == 65535) {
+		int hash = buffer.getInt();
+		int itemID = buffer.getShortA();
+
+		if (slot == 65535)
 			slot = -1;
-		}
+
+		if(itemID == 65535)
+			itemID = -1;
+
+		System.out.printf("ButtonClick - hash: %d - slot: %d - itemId: %d\n",hash,slot,itemID);
+
 		return new ButtonClickEventContext(hash, slot, itemID, opcode);
 	}
 
@@ -55,7 +68,7 @@ public class ButtonClickEventDecoder implements EventDecoder<ButtonClickEventCon
 	 */
 	@Override
 	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] { 
+		return new IncomingEventType[] {
 				IncomingEventType.IF_OPTION_1, IncomingEventType.IF_OPTION_2,
 				IncomingEventType.IF_OPTION_3, IncomingEventType.IF_OPTION_4,
 				IncomingEventType.IF_OPTION_5, IncomingEventType.IF_OPTION_6,

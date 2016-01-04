@@ -19,9 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.widget.var;
+package org.virtue.game.entity.player.var;
 
 import org.virtue.cache.config.vartype.VarBitType;
+import org.virtue.cache.config.vartype.VarType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,7 +34,7 @@ import org.virtue.cache.config.vartype.VarBitType;
  */
 public interface VarDomain {
 	
-	public Object getVarValue (int key);
+	public Object getVarValue (VarType varType);
 	
 	public long getVarValueLong (int key);
 	
@@ -46,7 +47,12 @@ public interface VarDomain {
 	 */
 	public int getVarBitValue (VarBitType type);
 	
-	public void setVarValue (int key, Object value);
+	/**
+	 * Sets the value of the specified variable
+	 * @param varType The variable to set
+	 * @param value The value to set
+	 */
+	public void setVarValue (VarType varType, Object value);
 	
 	public void setVarValueInt (int key, int value);
 

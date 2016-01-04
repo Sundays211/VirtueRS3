@@ -290,11 +290,11 @@ var Woodcutting = {
 				return;
 			}
 			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-				api.sendMessage(player, "Not enough space in your inventory.");
+				api.sendMessage(player, "Your inventory is too full to hold any more logs.");
 				return;
 			}
 			api.runAnimation(player, hatchet.anim);
-			api.sendMessage(player, "You begin to swing your axe.", MesType.GAME_SPAM);
+			api.sendMessage(player, "You swing your hatchet at the tree.", MesType.GAME_SPAM);
 			var delay = this.getDelay(player, tree.type, hatchet);//Calculates the time taken to mine this rock
 			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
@@ -305,7 +305,7 @@ var Woodcutting = {
 					if (delay <= 0) {
 						api.addExperience(player, Stat.WOODCUTTING, tree.type.xp, true);
 						api.addCarriedItem(player, tree.type.logId, 1);
-						api.sendMessage(player, "You cut some " + getItemName(tree.type.logId)+ ".", MesType.GAME_SPAM);
+						api.sendMessage(player, "You get some " + getItemName(tree.type.logId)+ ".", MesType.GAME_SPAM);
 						if (tree.type == TreeType.NORMAL || Math.random() < 0.2) {//If the tree is not a normal tree, there is a 1 in 5 chance of felling it
 							fellTree();	
 							return true;

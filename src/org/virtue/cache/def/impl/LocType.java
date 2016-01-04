@@ -401,6 +401,7 @@ public class LocType {
 				    anInt7374 = buffer.get() & 0xff;
 				} else if (opcode == 186) {
 					buffer.get();//aClass535_7347 = Class535.forId(buffer.get() & 0xff);
+				} else if (opcode == 188) {
 				} else if (189 == opcode) {
 				    aBool7393 = true;
 				} else if (opcode >= 190 && opcode < 196) {

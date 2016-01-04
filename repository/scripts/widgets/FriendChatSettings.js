@@ -30,143 +30,111 @@ var UsernameUtility = Java.type('org.virtue.utility.text.UsernameUtility');
  * @since 9/11/2014
  */
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The object ids to bind to */
-	getIDs: function() {
-		return [1108];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		//player.getVars().setVarp(1258, 299248);
-		var channelName = player.getChat().getFriendChatData().getChannelName();
-		player.getDispatcher().sendWidgetText(1108, 1, channelName.isEmpty() ? "Chat disabled" : channelName);
-		player.getDispatcher().sendWidgetText(1108, 2, rankToString(player.getChat().getFriendChatData().getJoinRank(), false));
-		player.getDispatcher().sendWidgetText(1108, 3, rankToString(player.getChat().getFriendChatData().getTalkRank(), false));
-		player.getDispatcher().sendWidgetText(1108, 4, rankToString(player.getChat().getFriendChatData().getKickRank(), false));
-		player.getDispatcher().sendVarc(199, -1);
-		player.getDispatcher().sendVarc(3678, -1);
-		player.getDispatcher().sendCS2Script(8178);
-		player.getDispatcher().sendWidgetSettings(1108, 22, 0, 199, 254);//Allow all rank options to be sent to the server
-		player.getDispatcher().sendHideWidget(1108, 16, true);
-		player.getDispatcher().sendHideWidget(1108, 15, true);
-		player.getDispatcher().sendHideWidget(1108, 14, true);
-		player.getDispatcher().sendHideWidget(1108, 13, true);
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		var rank;
-		switch (component) {
-		case 38://Close interface
-			return true;//
-		case 1://Set prefix/disable
-			if (option == 1) {
-				
-				var InputListener = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-					handle : function (value) {
-						var prefix = UsernameUtility.formatForDisplay(value).trim();
-						if (prefix.isEmpty()) {
+var FriendChatSettingsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		var player = args.player;
+		if (event == EventType.IF_OPEN) {
+			//player.getVars().setVarp(1258, 299248);
+			var nameHash = api.getFriendChatData(player, FriendChatData.NAME);
+			api.setWidgetText(player, 1108, 1, nameHash == 0 ? "Chat disabled" : api.fromBase37Hash(nameHash));
+			api.setWidgetText(player, 1108, 2, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKJOIN), false));
+			api.setWidgetText(player, 1108, 3, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKTALK), false));
+			api.setWidgetText(player, 1108, 4, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKKICK), false));
+			api.setVarc(player, 199, -1);
+			api.setVarc(player, 3678, -1);
+			api.runClientScript(player, 8178, []);
+			api.setWidgetEvents(player, 1108, 22, 0, 199, 254);//Allow all rank options to be sent to the server
+			api.hideWidget(player, 1108, 16, true);
+			api.hideWidget(player, 1108, 15, true);
+			api.hideWidget(player, 1108, 14, true);
+			api.hideWidget(player, 1108, 13, true);
+		} else {
+			var rank;
+			switch (args.component) {
+			case 38://Close interface
+				return;
+			case 1://Set prefix/disable
+				if (args.button == 1) {
+					requestString(player, "Enter chat prefix:", function (value) {
+						var prefix = api.getBase37Hash(value);
+						if (prefix == 0) {
 							return;
 						}
-						player.getChat().getFriendsList().setFriendChatName(prefix);
-						player.getDispatcher().sendWidgetText(1108, 1, prefix);
-					}
-				});
-				
-				player.getDialogs().requestString("Enter chat prefix:", new InputListener());
-				return true;
-			} else if (option == 2) {
-				player.getChat().getFriendsList().setFriendChatName("");
-				player.getDispatcher().sendWidgetText(1108, 1, "Chat disabled");
-				return true;
+						api.setFriendChatData(player, FriendChatData.NAME, prefix);
+						api.setWidgetText(player, 1108, 1, api.fromBase37Hash(prefix));
+					});
+					return;
+				} else if (args.button == 2) {
+					api.setFriendChatData(player, FriendChatData.NAME, api.getBase37Hash(""));
+					api.setWidgetText(player, 1108, 1, "Chat disabled");
+					return;
+				}
+				api.sendMessage(player, "Unhandled friends chat settings component: "+args.component);
+				return;
+			case 2://Set join rank
+				var rankId = FriendChatSettings.rankFromButton(args.button, -8);
+				if (rankId != -8) {
+					api.setFriendChatData(player, FriendChatData.RANKJOIN, rankId);
+					api.setWidgetText(player, 1108, 2, FriendChatSettings.nameFromRank(rankId, false));
+				}
+				return;
+			case 3://Set talk rank
+				var rankId = FriendChatSettings.rankFromButton(args.button, -8);
+				if (rankId != -1) {
+					api.setFriendChatData(player, FriendChatData.RANKTALK, rankId);
+					api.setWidgetText(player, 1108, 3, FriendChatSettings.nameFromRank(rankId, false));
+				}
+				return;
+			case 4://Set kick rank
+				var rankId = FriendChatSettings.rankFromButton(args.button, -8);
+				if (rankId != -1) {
+					api.setFriendChatData(player, FriendChatData.RANKKICK, rankId);
+					api.setWidgetText(player, 1108, 4, FriendChatSettings.nameFromRank(rankId, false));
+				}
+				return;
+			case 5://Set lootshare rank
+			case 12://Toggle coinshare
+			default:
+				api.sendMessage(player, "Unhandled friends chat settings component: "+args.component);
+				return;
 			}
-			return false;
-		case 2://Set join rank
-			rank = rankFromButton(option);
-			if (rank != null && !ChannelRank.JMOD.equals(rank)) {
-				player.getChat().getFriendsList().setFriendChatJoinRank(rank);
-				player.getDispatcher().sendWidgetText(1108, 2, rankToString(rank, false));
-			}
-			return true;
-		case 3://Set talk rank
-			rank = rankFromButton(option);
-			if (rank != null && !ChannelRank.JMOD.equals(rank)) {
-				player.getChat().getFriendsList().setFriendChatTalkRank(rank);
-				player.getDispatcher().sendWidgetText(1108, 3, rankToString(rank, false));
-			}
-			return true;
-		case 4://Set kick rank
-			rank = rankFromButton(option);
-			if (rank != null && !ChannelRank.JMOD.equals(rank)) {
-				player.getChat().getFriendsList().setFriendChatKickRank(rank);
-				player.getDispatcher().sendWidgetText(1108, 4, rankToString(rank, false));
-			}
-			return true;
-		case 5://Set lootshare rank
-		case 12://Toggle coinshare
-		default:
-			return false;
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 /* Listen to the interface ids specified */
-var listen = function(scriptLoader) {
-	var widgetListener = new WidgetListener();
-	scriptLoader.registerWidgetListener(widgetListener, widgetListener.getIDs());
+var listen = function(scriptManager) {
+	var listener = new FriendChatSettingsListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 1108, listener);
+	scriptManager.registerListener(EventType.IF_OPEN, 1108, listener);
 };
 
-function rankToString (rank, lootshare) {
-	switch (rank) {
-	case ChannelRank.GUEST:
-		return "Anyone";
-	case ChannelRank.FRIEND:
-		return "Any friends";
-	case ChannelRank.RECRUIT:
-	case ChannelRank.CORPORAL:
-	case ChannelRank.SERGEANT:
-	case ChannelRank.LIEUTENANT:
-	case ChannelRank.CAPTAIN:
-	case ChannelRank.GENERAL:
-		return rank.getName()+"+";
-	case ChannelRank.OWNER:
-		return lootshare ? "No one" : "Only me";
-	case ChannelRank.JMOD:
-	}
-	return null;
-}
-
-function rankFromButton (button) {
-	switch (button) {
-	case 1:
-		return ChannelRank.GUEST;
-	case 2:
-		return ChannelRank.FRIEND;
-	case 3:
-		return ChannelRank.RECRUIT;
-	case 4:
-		return ChannelRank.CORPORAL;
-	case 5:
-		return ChannelRank.SERGEANT;
-	case 6:
-		return ChannelRank.LIEUTENANT;
-	case 7:
-		return ChannelRank.CAPTAIN;
-	case 8:
-		return ChannelRank.GENERAL;
-	case 9:
-		return ChannelRank.OWNER;
-	default:
-		return null;	
-	}
+var FriendChatSettings = {
+		rankFromButton : function (button, defaultValue) {
+			switch (button) {
+			case 1:
+				return -1;
+			case 2:
+				return 0;
+			case 3:
+				return 1;
+			case 4:
+				return 2;
+			case 5:
+				return 3;
+			case 6:
+				return 4;
+			case 7:
+				return 5;
+			case 8:
+				return 6;
+			case 9:
+				return 7;
+			default:
+				return defaultValue;
+			}
+		},
+		nameFromRank : function (rankId, lootshare) {
+			return api.getEnumValue(616, rankId+1);
+		}
 }

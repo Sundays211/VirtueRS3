@@ -59,6 +59,10 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		}
 
 		int loginType = buf.readByte() & 0xFF;
+		if (loginType == 26) {
+			out.add(new LoginRequestMessage(LoginTypeMessage.LOGIN_CONTINUE));
+			return;
+		}
 		if (loginType != 16 && loginType != 19 && loginType != 18 && loginType != 60) {
 			throw new ProtocolException("Invalid login type: " + loginType);
 		}
@@ -69,10 +73,16 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		if (buf.readableBytes() < size) {
 			throw new IllegalStateException("Not enough readable bytes from buffer!");
 		}
+		
+		byte[] block = new byte[size];
+		buf.readBytes(block);
+		buf = Unpooled.wrappedBuffer(block);
 
 		int version = buf.readInt();
 		int subVersion = buf.readInt();
-		
+
+		System.out.printf("LoginDecoder:: Type(%s) size(%d) version %d %d\n",type+"",size,version,subVersion);
+
 		if (version != Constants.FRAME_MAJOR && subVersion != Constants.FRAME_MINOR) {
 			throw new IllegalStateException("Invalid client version/sub-version!");
 		}
@@ -81,10 +91,11 @@ public class LoginDecoder extends ByteToMessageDecoder {
 			buf.readByte();
 		}
 
-		if (type.equals(LoginTypeMessage.LOGIN_LOBBY))
+		if (type.equals(LoginTypeMessage.LOGIN_LOBBY)) {
 			decodeLobbyPayload(ctx, buf, out);
-		else if (type.equals(LoginTypeMessage.LOGIN_WORLD))
+		} else if (type.equals(LoginTypeMessage.LOGIN_WORLD)) {
 			decodeGamePayload(ctx, buf, out);
+		}
 	}
 
 	private void decodeLobbyPayload(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws ProtocolException {
@@ -100,13 +111,14 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
 
 		int blockOpcode = secureBuffer.readByte() & 0xFF;
-		if (blockOpcode != 10)
+		if (blockOpcode != 10) {
 			throw new ProtocolException("Invalid block opcode: " + blockOpcode);
+		}
 
 		int[] xteaKey = new int[4];
-		for (int i = 0; i < xteaKey.length; i++)
+		for (int i = 0; i < xteaKey.length; i++) {
 			xteaKey[i] = secureBuffer.readInt();
-			
+		}			
 
 		secureBuffer.readLong();
 		//if (loginHash != 0)
@@ -173,24 +185,30 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		for (int i = 0; i < serverKeys.length; i++) {
 			serverKeys[i] = xteaKey[i] + 50;
 		}
+
+		System.out.println("Username = " + username);
+		System.out.println("Password = " + password);
 		out.add(new LoginRequestMessage(ctx.channel(), UsernameUtility.formatForProtocol(username), password, username.contains("@"), new ISAACCipher(serverKeys), new ISAACCipher(xteaKey), type));
 	}
 	
 	private void decodeGamePayload(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws ProtocolException {
-		if (buf.readableBytes() < 2)
+		if (buf.readableBytes() < 2) {
 			throw new IllegalStateException("Not enough readable bytes from buffer.");
+		}
 
 		int secureBufferSize = buf.readShort() & 0xFFFF;
-		if (buf.readableBytes() < secureBufferSize)
+		if (buf.readableBytes() < secureBufferSize) {
 			throw new IllegalStateException("Not enough readable bytes from buffer.");
+		}
 
 		byte[] secureBytes = new byte[secureBufferSize];
 		buf.readBytes(secureBytes);
 		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
 
 		int blockOpcode = secureBuffer.readByte() & 0xFF;
-		if (blockOpcode != 10)
+		if (blockOpcode != 10) {
 			throw new ProtocolException("Invalid block opcode: " + blockOpcode);
+		}
 
 		int[] xteaKey = new int[4];
 		for (int i = 0; i < xteaKey.length; i++)

@@ -22,9 +22,9 @@
 package org.virtue.game.entity.player.widget.impl;
 
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
-import org.virtue.game.entity.player.widget.var.VarKey;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**
@@ -41,7 +41,7 @@ public class RibbonWidget extends Widget {
 		switch (buttonId) {
 		case 7:// Hero
 			player.setWidgetState(WidgetState.HERO_OVERLAY);
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_OVERLAY, 0);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 0);
 			//player.getVars().setVarp(3708, 38585352);
 			//player.getVars().setVarp(3708, 38585344);
 			player.getVars().setVarValueInt(1228, 1551892544);
@@ -71,8 +71,8 @@ public class RibbonWidget extends Widget {
 			break;
 		case 8:// Gear
 			player.setWidgetState(WidgetState.GEAR_OVERLAY);
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_OVERLAY, 1);
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_GEAR_OVERLAY, 1);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 1);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 1);
 			//player.getVars().setVarp(3708, 38544385);
 			//player.getVars().setVarp(3708, 38544385);
 			player.getWidgets().sendOverlay(1, -1);
@@ -105,7 +105,7 @@ public class RibbonWidget extends Widget {
 			break;
 		case 9:// Adventures
 			player.setWidgetState(WidgetState.ADVENTURES_OVERLAY);
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_OVERLAY, 3);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 3);
 			player.getVars().setVarValueInt(101, 0);
 			player.getVars().setVarValueInt(101, 1);
 			player.getVars().setVarValueInt(101, 2);
@@ -151,7 +151,7 @@ public class RibbonWidget extends Widget {
 			break;
 		case 10:// Powers
 			player.setWidgetState(WidgetState.POWERS_OVERLAY);
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_OVERLAY, 2);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 2);
 			player.getVars().setVarValueInt(1757, 0);
 			player.getVars().setVarValueInt(1762, -1);
 			//player.getVars().setVarp(3708, 46973955);
@@ -245,7 +245,7 @@ public class RibbonWidget extends Widget {
 			break;
 		case 11:// Community
 			player.setWidgetState(WidgetState.COMMUNITY_OVERLAY);
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_OVERLAY, 4);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 4);
 			//player.getVars().setVarp(3708, 46973954);
 			//player.getVars().setVarp(3708, 46973956);
 			player.getVars().setVarValueInt(4041, 0);

@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ContainerState = Java.type('org.virtue.game.entity.player.container.ContainerState');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,64 +26,23 @@ var ContainerState = Java.type('org.virtue.game.entity.player.container.Containe
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 01/16/2015
+ * @since 16/01/2015
  */
 
-var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
-
-	/* The npc ids to bind to */
-	getIDs: function() {
-		return [5915, 13633];
-	},
-
-	/* The first option on an npc */
-	handleInteraction: function(player, npc, option) {
-		if (option != 1) {
-			return false;
+var ScribeListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		var player = args.player;
+		var npc = args.npc;
+		if (event == EventType.OPNPC3) {//Get vexillum from
+			startClanVexGiver(player, npc);
+		} else {
+			chatnpc(player, npc, "Hey "+api.getName(player)+", I am giving away free clan vex. If you right click me and click get vex.");
 		}
-		switch (npc.getID()) {
-			case 5915:
-				switch (option) {
-				case 1:
-					player.getDialogs().sendNpcChat("Hey "+api.getName(player)+", I am giving away free clan vex. If you right click me and click get vex. ", 5915);
-					return true;
-				case 3:
-					startClanVexGiver(player, npc);			
-					return true;
-				}
-				return true;
-			case 13633:		
-				switch (option) {
-				case 1:
-					player.getDialogs().sendNpcChat("Hey "+api.getName(player)+", You can get a clan cape from me.", 13633);
-					return true;
-				case 3:
-					startClanCloakGiver(player, npc);			
-					return true;
-				}
-				return true;
-			default:
-				//api.sendMessage(player, "Unhandled NPC Interaction action: npcId="+npc.getID()+", option="+option);
-				break;
-		}
-		return true;
-	},
-	
-	getInteractRange : function (npc, option) {
-		return 1;
 	}
-
 });
 
-/* Listen to the npc ids specified */
-var listen = function(scriptManager) {
-	var listener = new NpcListener();
-	scriptManager.registerNpcListener(listener, listener.getIDs());
-};
-
 function startClanVexGiver (player, npc) {
-	print(api.getNpcType(npc).name+"\n");
-	if (api.freeSpaceTotal(player, "backpack") < 1) {
+	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 		api.sendMessage(player, "Not enough space in your inventory.");
 		return;
 	}
@@ -93,18 +51,28 @@ function startClanVexGiver (player, npc) {
 		return;
 	}
 	if (api.carriedItemTotal(player, 20709) > 0
-			|| api.itemTotal(player, "bank", 20709) > 0) {
+			|| api.itemTotal(player, Inv.BANK, 20709) > 0) {
 		api.sendMessage(player, "You already own a clan vexillum.");
 		return;
 	}
 	api.addCarriedItem(player, 20709, 1);
-	player.getDialogs().sendNpcChat("Here you go "+api.getName(player)+".", 5915);
+	chatnpc(player, npc, "Here you go "+api.getName(player)+".");
+}
 
-} 
+var GuardCaptainListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		var player = args.player;
+		var npc = args.npc;
+		if (event == EventType.OPNPC3) {//Get cloak from
+			startClanCloakGiver(player, npc);
+		} else {
+			chatnpc(player, npc, "Hey "+api.getName(player)+", You can get a clan cape from me.");
+		}
+	}
+});
 
 function startClanCloakGiver (player, npc) {
-	print(api.getNpcType(npc).name+"\n");
-	if (api.freeSpaceTotal(player, "backpack") < 1) {
+	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 		api.sendMessage(player, "Not enough space in your inventory.");
 		return;
 	}
@@ -113,11 +81,21 @@ function startClanCloakGiver (player, npc) {
 		return;
 	}
 	if (api.carriedItemTotal(player, 20708) > 0
-			|| api.itemTotal(player, "bank", 20709) > 0) {
+			|| api.itemTotal(player, Inv.BANK, 20709) > 0) {
 		api.sendMessage(player, "You already own a clan cloak.");
 		return;
 	}
 	api.addCarriedItem(player, 20708, 1);
-	player.getDialogs().sendNpcChat("Here you go "+api.getName(player)+".", 13633);
+	chatnpc(player, npc, "Here you go "+api.getName(player)+".");
+}
 
-} 
+/* Listen to the npc ids specified */
+var listen = function(scriptManager) {
+	var listener = new ScribeListener();
+	scriptManager.registerListener(EventType.OPNPC1, 5915, listener);
+	scriptManager.registerListener(EventType.OPNPC3, 5915, listener);
+	
+	listener = new GuardCaptainListener();
+	scriptManager.registerListener(EventType.OPNPC1, 13633, listener);
+	scriptManager.registerListener(EventType.OPNPC3, 13633, listener);
+};

@@ -22,9 +22,9 @@
 package org.virtue.game.entity.player.widget.impl;
 
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
-import org.virtue.game.entity.player.widget.var.VarKey;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**
@@ -46,14 +46,14 @@ public class OverlayWidget extends Widget {
 		}*/
 		//System.out.println(player.getWidgetState().toString());
 		switch (buttonId) {
-		case 30://Lock/unlock interfaces
+		case 36://Lock/unlock interfaces
 			boolean locked = player.getVars().getVarBitValue(VarKey.Bit.IF_LOCK_STATUS) == 1;
-			player.getVars().setVarpBit(VarKey.Bit.IF_LOCK_STATUS, locked ? 0 : 1);
+			player.getVars().setVarBitValue(VarKey.Bit.IF_LOCK_STATUS, locked ? 0 : 1);
 			return true;
-		case 36:
+		case 37:
 			player.switchSheathing();
 			break;
-		case 42://Logout
+		case 68://Logout
 			player.setWidgetState(WidgetState.LOGOUT_WIDGET);
 			player.getVars().setVarValueInt(3813, 6);
 			player.getWidgets().openWidget(1477, 787, 26, true);
@@ -337,7 +337,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(4017, new Object[] { 12, 0 });
 					break;
 				case GEAR_OVERLAY://Wardrobe
-					player.getVars().setVarpBit(VarKey.Bit.SELECTED_GEAR_OVERLAY, 2);
+					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 2);
 					//player.getVars().setVarp(3708, 80495617);
 					player.getVars().setVarValueInt(256, 2);
 					player.getVars().setVarValueInt(256, 4161538);
@@ -534,7 +534,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1311, 190, true);
 					break;
 				case GEAR_OVERLAY://Titles
-					player.getVars().setVarpBit(VarKey.Bit.SELECTED_GEAR_OVERLAY, 3);
+					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 3);
 					//player.getVars().setVarp(3708, 38560769);
 					player.getVars().setVarValueInt(256, 4194275);
 					player.getVars().setVarValueInt(256, 4194275);
@@ -825,10 +825,10 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(8862, new Object[] { 3, 1 });
 					break;
 				case GEAR_OVERLAY://Animations
-					player.getVars().setVarpBit(VarKey.Bit.SELECTED_GEAR_OVERLAY, 4);
+					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 4);
 					//player.getVars().setVarp(3708, 38568961);
 					player.getVars().setVarValueInt(256, 4194276);
-					player.getVars().setVarpBit(VarKey.Bit.SELECTED_CUSTOMISE_TYPE, 4);
+					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_CUSTOMISE_TYPE, 4);
 					//player.getVars().setVarp(256, 4194276);
 					//player.getVars().setVarp(256, 4194276);
 					//player.getVars().setVarp(659, 432550801);
@@ -1046,9 +1046,9 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
 				case GEAR_OVERLAY://Appearance
-					player.getVars().setVarpBit(VarKey.Bit.SELECTED_GEAR_OVERLAY, 5);
+					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 5);
 					//player.getVars().setVarp(3708, 38577153);
-					player.getVars().setVarpBit(VarKey.Bit.SELECTED_CUSTOMISE_TYPE, 1);
+					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_CUSTOMISE_TYPE, 1);
 					//player.getVars().setVarpBit(686, 117);
 					//player.getVars().setVarp(256, 4194273);
 					//player.getVars().setVarp(256, 4194273);

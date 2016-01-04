@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +26,7 @@ import org.virtue.game.entity.combat.hit.Hit;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
+import org.virtue.network.protocol.update.BlockType;
 import org.virtue.network.protocol.update.ref.Bar;
 
 /**
@@ -38,7 +39,7 @@ public class HitMarkBlock extends Block {
 	 * The {@link HitMarkBlock} constructor
 	 */
 	public HitMarkBlock() {
-		super(0x20, 4, 0x40, 6);
+		super(BlockType.HITMARKS);
 	}
 
 	@Override
@@ -61,7 +62,11 @@ public class HitMarkBlock extends Block {
 				} else if (32766 != hitType) {
 					block.putSmart(hit.getDamage());
 				} else {
-					block.putC(hit.getDamage());
+					if (entity instanceof Player) {
+						block.putByte(hit.getDamage());
+					} else {
+						block.putC(hit.getDamage());
+					}
 				}
 				block.putSmart(hit.getDelay());
 			}
@@ -73,7 +78,7 @@ public class HitMarkBlock extends Block {
 			if (barSize > 0) {
 				for (Bar bar : entity.getImpactHandler().getQueuedBars()) {
 					if (bar == null) {
-						continue;
+						continue; //FIXME: wont this break stuff? o_O
 					}
 					block.putSmart(bar.getType());
 					int perc = bar.getNewLifepoints() * modifier / maximumLifepoints;
@@ -82,10 +87,10 @@ public class HitMarkBlock extends Block {
 					if (display) {
 						block.putSmart(bar.getDelay() * 30); //Delay
 						if (bar.getSpeed() == 0) {
-							block.putA(perc);
+							block.putByte(perc);
 						} else {
-							block.putA((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
-							block.putS(perc);
+							block.putByte((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
+							block.putC(perc);
 						}
 					}
 				}
@@ -105,10 +110,10 @@ public class HitMarkBlock extends Block {
 					if (display) {
 						block.putSmart(bar.getDelay() * 30); //Delay
 						if (bar.getSpeed() == 0) {
-							block.putC(perc);
-						} else {
-							block.putC((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
 							block.putByte(perc);
+						} else {
+							block.putByte((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
+							block.putC(perc);
 						}
 					}
 				}

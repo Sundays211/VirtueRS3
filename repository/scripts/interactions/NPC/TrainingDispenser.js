@@ -28,36 +28,11 @@
  * @author Sundays211
  * @since 1/05/2015
  */
-var api;
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs: function() {
-		return [79034];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, loc, option) {
-		switch (loc.getID()) {
-		case 79034://Dispenser
-				api.openDialog(player, "Dispenser");
-				return true;
-			default:
-				return false;
-		}		
-	},
-	
-	/* The range that a player must be within to interact */
-	getInteractRange : function (object, option) {
-		return 1;
-	},
-	
-	/* A backpack item used on the location */
-	handleItemOnLoc : function (player, location, item, invSlot) {
-		return false;
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		api.openDialog(args.player, "Dispenser");	
 	}
-
 });
 
 var Dispenser = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
@@ -87,10 +62,9 @@ var Dispenser = Java.extend(Java.type('org.virtue.engine.script.listeners.Dialog
 	}
 });
 
-/* Listen to the object ids specified */
+/* Listen to the location ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
 	var listener = new LocationListener();
-	scriptManager.registerLocationListener(listener, listener.getIDs());
+	scriptManager.registerListener(EventType.OPLOC1, 79034, listener);
 	scriptManager.registerDialogListener(new Dispenser(), "Dispenser");
 };

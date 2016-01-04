@@ -47,46 +47,24 @@ var BankBoothListener = Java.extend(Java.type('org.virtue.engine.script.listener
 	}
 });
 
-var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
-
-	/* The npc ids to bind to */
-	getIDs: function() {
-		return [4907, 494, 1419, 2593, 3416];
-	},
-
-	/* The first option on an npc */
-	handleInteraction: function(player, npc, option) {
-		switch (npc.getID()) {
-		case 1419:
-		case 2593:
-			switch (option) {
-			case 1:
-				api.openCentralWidget(player, 105, false);
-				return true;
-			default:
-				return false;
-			}
-		default://Normal banker
-			switch (option) {
-			case 1:
-				api.openOverlaySub(player, 1017, 762, false);
-				return true;
-			case 4://Collect
-				api.openCentralWidget(player, 109, false);
-				return true;
-			default:
-				return false;
-			}		
-		}			
-	},
-	
-	getInteractRange : function (npc, option) {
-		return 2;
+var BankerListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		var player = args.player;
+		if (event == EventType.OPNPC1) {
+			api.openOverlaySub(player, 1017, 762, false);
+		} else if (event == EventType.OPNPC4) {
+			api.openCentralWidget(player, 109, false);
+		}		
 	}
-
 });
 
-/* Listen to the object ids specified */
+var ExchangeClerkListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		api.openCentralWidget(args.player, 105, false);		
+	}
+});
+
+/* Listen to the game nodes specified */
 var listen = function(scriptManager) {
 	var locs = [ 2213, 782, 11758, 34752, 83634, 10517, 29085, 42192, 14369, 20607, 42217, 79036 ];
 	var listener = new BankBoothListener();
@@ -96,6 +74,18 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPLOC3, locs[i], listener);
 	}
 	
-	var npcListener = new NpcListener();
-	scriptManager.registerNpcListener(npcListener, npcListener.getIDs());
+	var npcs = [ 494, 495, 496, 497, 498, 499, 3416, 4907 ];
+	var bankerListener = new BankerListener();
+	for (var i in npcs) {
+		//Binds option one and four on all bankers to this listener
+		scriptManager.registerListener(EventType.OPNPC1, npcs[i], bankerListener);
+		scriptManager.registerListener(EventType.OPNPC4, npcs[i], bankerListener);
+	}
+	
+	npcs = [ 1419, 2593 ];
+	var exchangeClerkListener = new ExchangeClerkListener();
+	for (var i in npcs) {
+		//Binds option one on all exchange clerks to this listener
+		scriptManager.registerListener(EventType.OPNPC1, npcs[i], exchangeClerkListener);
+	}
 };

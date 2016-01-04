@@ -18,22 +18,22 @@ public class VarpEventEncoder implements EventEncoder<VarpEventContext> {
 		if (context.isBit()) {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
 				buffer.putPacket(OutgoingEventType.VARPBIT_LARGE, player);
-				buffer.putLEInt(context.getValue());
-				buffer.putLEShort(context.getKey());
+				buffer.putIntA(context.getValue());
+				buffer.putLEShortA(context.getKey());
 			} else {
 				buffer.putPacket(OutgoingEventType.VARPBIT_SMALL, player);
-				buffer.putLEShortA(context.getKey());
-				buffer.putC(context.getValue());
+				buffer.putA(context.getValue());
+				buffer.putLEShort(context.getKey());
 			}
 		} else {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
 				buffer.putPacket(OutgoingEventType.VARP_LARGE, player);
-				buffer.putInt(context.getValue());
-				buffer.putLEShortA(context.getKey());
+				buffer.putLEInt(context.getValue());
+				buffer.putShortA(context.getKey());
 			} else {
 				buffer.putPacket(OutgoingEventType.VARP_SMALL, player);
+				buffer.putByte(context.getValue());
 				buffer.putLEShortA(context.getKey());
-				buffer.putC(context.getValue());
 			}
 		}
 		return buffer;

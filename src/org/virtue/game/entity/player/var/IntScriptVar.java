@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.widget.var;
+package org.virtue.game.entity.player.var;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -29,8 +29,25 @@ package org.virtue.game.entity.player.widget.var;
  * @author Sundays211
  * @since 11/02/2015
  */
-public interface ScriptVar {
+public class IntScriptVar implements ScriptVar {
 	
-	public int scriptValue();
+	private int value;
+	
+	public IntScriptVar (int value) {
+		this.value = value;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.player.widget.var.ScriptVar#scriptValue()
+	 */
+	@Override
+	public int scriptValue() {
+		return value;
+	}
+	
+	@Override
+	public String toString () {
+		return Integer.toString(value);
+	}
 
 }

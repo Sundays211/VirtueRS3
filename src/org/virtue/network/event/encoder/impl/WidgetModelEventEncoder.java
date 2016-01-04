@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,36 +43,36 @@ public class WidgetModelEventEncoder implements EventEncoder<WidgetModelEventCon
 	public OutboundBuffer encode(Player player, WidgetModelEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		switch (context.getType()) {
-		case PLAYER_MODEL_OTHER:
-			buffer.putPacket(OutgoingEventType.IF_SETPLAYERMODEL_OTHER);
-			buffer.putIntB((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
-			buffer.putIntB(context.getSettings());
-			buffer.putLEShortA(context.getMediaID());
-			break;
-		case PLAYER_MODEL_SELF:
-			buffer.putPacket(OutgoingEventType.IF_SETPLAYERMODEL_SELF);
-			buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
-			break;
-		case NPC_HEAD:
-			buffer.putPacket(OutgoingEventType.IF_SETNPCHEAD);
-			buffer.putInt(context.getMediaID());
-			buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
-			break;
-		case PLAYER_HEAD_SELF:
-			buffer.putPacket(OutgoingEventType.IF_SETPLAYERHEAD_SELF);
-			buffer.putInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
-			break;
-		case PLAYER_HEAD_OTHER:
-			buffer.putPacket(OutgoingEventType.IF_SETPLAYERHEAD_OTHER);
-			buffer.putShort(context.getMediaID());
-			buffer.putLEInt(context.getSettings());
-			buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
-			break;
-		case ANIMATION:
-			buffer.putPacket(OutgoingEventType.IF_SETANIM);
-			buffer.putIntB(context.getMediaID());
-			buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
-			break;
+			case PLAYER_MODEL_OTHER:
+				buffer.putLEShort(context.getMediaID());
+				buffer.putPacket(OutgoingEventType.IF_SETPLAYERMODEL_OTHER);
+				buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putLEInt(context.getSettings());
+				break;
+			case PLAYER_MODEL_SELF:
+				buffer.putPacket(OutgoingEventType.IF_SETPLAYERMODEL_SELF);
+				buffer.putIntB((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				break;
+			case NPC_HEAD:
+				buffer.putPacket(OutgoingEventType.IF_SETNPCHEAD);
+				buffer.putIntB(context.getMediaID());
+				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				break;
+			case PLAYER_HEAD_SELF:
+				buffer.putPacket(OutgoingEventType.IF_SETPLAYERHEAD_SELF);
+				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				break;
+			case PLAYER_HEAD_OTHER:
+				buffer.putPacket(OutgoingEventType.IF_SETPLAYERHEAD_OTHER);
+				buffer.putShortA(context.getMediaID());
+				buffer.putInt(context.getSettings());
+				buffer.putIntB((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				break;
+			case ANIMATION:
+				buffer.putPacket(OutgoingEventType.IF_SETANIM);
+				buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putInt(context.getMediaID());
+				break;
 		}
 		return buffer;
 	}

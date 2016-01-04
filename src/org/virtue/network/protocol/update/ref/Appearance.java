@@ -19,29 +19,29 @@ import org.virtue.utility.StructTypeList;
 
 /**
  * @author Tom
- * 
+ *
  */
 public class Appearance {
 
 	private static int[] DISABLED_SLOTS = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 };
-	
+
 	public static final int HAIR_WITH_HAT_PARAM = 790;
 	public static final int HAIR_WITH_FACE_MASK_PARAM = 791;
-	
+
 	//Params: 788 = normal, 789 = Beard with hair, 790 = Hat with hair, 791 = Hat with face mask
-	
-	public static final int FEMALE_HAIR_STRUCT_LOOKUP = 2341;	
-	
+
+	public static final int FEMALE_HAIR_STRUCT_LOOKUP = 2341;
+
 	public static final int MALE_HAIR_STRUCT_LOOKUP = 2338;
-	
+
 	public static final int MALE_HAIR_SLOT_LOOKUP = 2339;
-	
-	public static final int FEMALE_HAIR_SLOT_LOOKUP = 2342;	
-	
+
+	public static final int FEMALE_HAIR_SLOT_LOOKUP = 2342;
+
 	private static final int[] STYLE_LOOKUP = { -1, -1, -1, -1, 2, -1, 3, 5, 0, 4, 6, 1, -1, -1, -1, -1, -1, -1, -1 };
 	//private static final int[] STYLE_LOOKUP = { 7, -1, -1, -1, 2, -1, 3, 5, 0, 4, 6, 1, -1, -1, -1, -1, -1, -1, -1 };
 	short[][] capeColors;
-	
+
 	public static final byte SLOT_HAT = 0, SLOT_CAPE = 1, SLOT_AMULET = 2, SLOT_WEAPON = 3, SLOT_CHEST = 4, SLOT_OFFHAND = 5, SLOT_LEGS = 7, SLOT_HANDS = 9, SLOT_FEET = 10, SLOT_RING = 12, SLOT_ARROWS = 13, SLOT_AURA = 14, SLOT_POCKET = 15;
 
 	public enum Gender { MALE, FEMALE };
@@ -49,12 +49,13 @@ public class Appearance {
 	private transient Player player;
 	private transient byte[] appearanceHash;
 	private transient byte[] appearanceData;
-	
+
 	private transient int[] tempStyles;
 	private transient int[] tempColours;
 
 	public int[] styles;
 	private int[] colors;
+	private int[] textures;
 	private Gender gender;
 	private Render render;
 	private int npcId;
@@ -62,7 +63,7 @@ public class Appearance {
 	private boolean showSkill;
 	private String prefixTitle;
 	private String suffixTitle;
-	
+
 	/**
 	 * Custom render animation
 	 */
@@ -72,6 +73,7 @@ public class Appearance {
 		this.player = player;
 		this.styles = new int[8];
 		this.colors = new int[10];
+		this.textures = new int[10];
 		this.gender = Gender.MALE;
 		this.render = Render.PLAYER;
 		this.npcId = -1;
@@ -80,11 +82,11 @@ public class Appearance {
 		this.prefixTitle = "";
 		this.suffixTitle = "";
 		this.set();
-		
+
 		this.capeColors = new short[2][];
 		this.capeColors[0] = Arrays.copyOf(ItemTypeList.list(20767).recol_s, 4);
 		this.capeColors[1] = Arrays.copyOf(ItemTypeList.list(20769).recol_s, 4);
-		
+
 	}
 
 	private void set() {
@@ -159,29 +161,31 @@ public class Appearance {
 		if (showSkill) {
 			flagData |= 0x4;
 		}
-		
-		if(prefixTitle != "") {
+
+		if(!prefixTitle.equals("")){
 			flagData |= 0x40;
 		}
-		
-		if(suffixTitle != "") {
+
+		if(!suffixTitle.equals("")){
 			flagData |= 0x80;
 		}
+
+		System.out.println("APPEARANCE FLAGS="+((flagData)&0xFF));
 
 		/* Append flag data. */
 		update.putByte((byte) flagData);
 
-		if(prefixTitle != "") {
+		if(!prefixTitle.equals("")){
 			update.putJagString(prefixTitle);
 		}
-		
-		if(suffixTitle != "") {
+
+		if(!suffixTitle.equals("")){
 			update.putJagString(suffixTitle);
 		}
-		
+
 		/* hide player. */
 		update.putByte(Render.INVISIBLE.equals(render) ? 1 : 0);
-		
+
 		/* Pack the appearance block for the player */
 		if (Render.NPC.equals(render) && npcId >= 0) {
 			update.putShort(-1);
@@ -196,9 +200,15 @@ public class Appearance {
 			update.putByte((byte) colors[index]);
 		}
 
+		// Textures data.
+		for (int index = 0; index < textures.length; index++) {
+			update.putByte((byte) textures[index]);
+		}
+
+
 		// Render animation
 		update.putShort(renderAnimation == -1 ? player.getRenderAnimation() : renderAnimation);
-		
+
 		update.putString(player.getName());
 		update.putByte((byte) player.getSkills().getCombatLevel());
 
@@ -221,31 +231,39 @@ public class Appearance {
 		byte[] appeareanceData = new byte[update.offset()];
 		System.arraycopy(update.buffer(), 0, appeareanceData, 0, appeareanceData.length);
 
+
+
 		byte[] md5Hash = MD5Encryption.encrypt(appeareanceData);
 		this.appearanceData = appeareanceData;
 		this.appearanceHash = md5Hash;
+		System.out.printf("Appearance %02X %02X %02X %02X\n", this.appearanceData[0],this.appearanceData[1],this.appearanceData[2],this.appearanceData[3]);
 	}
-	
+
 	public void sendBlock(boolean isTemp) {
 		OutboundBuffer update = new OutboundBuffer();
 		update.putVarShort(OutgoingEventType.UPDATE_APPEARANCE, player);
 		update.putByte(gender.equals(Gender.FEMALE) ? 1 : 0);//Gender
-		
+
 		packStyles(update, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, isTemp ? tempStyles : styles);
-		
+
 		int[] colours = isTemp ? tempColours : colors;
 
 		/* Write colour data. */
 		for (int index = 0; index < colours.length; index++) {
 			update.putByte((byte) colours[index]);
 		}
+		
+		/* Write texture data. */
+		for (int index = 0; index < 10; index++) {
+			update.putByte((byte) -1);
+		}
 
 		update.putShort(renderAnimation == -1 ? player.getRenderAnimation() : renderAnimation);
-		
+
 		update.finishVarShort();
 		player.getDispatcher().sendBuffer(update);
 	}
-	
+
 	private void packStyles (OutboundBuffer update, boolean ignoreWorn, int[] styles) {
 		if (ignoreWorn) {
 			for (int slot=0;slot<DISABLED_SLOTS.length;slot++) {
@@ -314,7 +332,7 @@ public class Appearance {
 					} else {
 						update.putByte(0);
 					}
-				}				
+				}
 			} else {
 				update.putByte(0);
 			}
@@ -368,7 +386,7 @@ public class Appearance {
 			} else {
 				update.putByte((byte) 0);
 			}
-			
+
 			int initialPosition = update.offset();
 			update.putShort(0);
 
@@ -398,7 +416,7 @@ public class Appearance {
 						byte[] slots = override.getRecolSlots();
 						for (int slot = 0; slot < 4; slot++) {
 							if (slot < slots.length) {
-								slotFlags |= (slots[slot] & 0xf) << (slot*4);								
+								slotFlags |= (slots[slot] & 0xf) << (slot*4);
 							} else {
 								slotFlags |= 15 << (slot*4);
 							}
@@ -415,7 +433,7 @@ public class Appearance {
 						byte[] slots = override.getRetexSlots();
 						for (int slot = 0; slot < 2; slot++) {
 							if (slot < slots.length) {
-								slotFlags |= (slots[slot] & 0xf) << (slot*4);								
+								slotFlags |= (slots[slot] & 0xf) << (slot*4);
 							} else {
 								slotFlags |= 15 << (slot*4);
 							}
@@ -480,7 +498,7 @@ public class Appearance {
 			update.offset(currentPosition);
 		}
 	}
-	
+
 	private int getHatHairStyle (int baseStyle, boolean isFaceMask) {
 		EnumType lookup = EnumTypeList.list(Gender.MALE.equals(gender) ? MALE_HAIR_SLOT_LOOKUP : FEMALE_HAIR_SLOT_LOOKUP);
 		int slot = lookup.getValueInt(baseStyle);
@@ -488,20 +506,20 @@ public class Appearance {
 		int structID = structLookup.getValueInt(slot);
 		return StructTypeList.list(structID).getParam(isFaceMask ? HAIR_WITH_FACE_MASK_PARAM : HAIR_WITH_HAT_PARAM, -1);
 	}
-	
+
 	/**
 	 * Creates a "Temporary" appearance, which can be modified without changing the player's actual appearance
 	 */
 	public void setTemp () {
 		//if (tempStyles == null) {
-			tempStyles = new int[styles.length];
-			System.arraycopy(styles, 0, tempStyles, 0, styles.length);
-			tempColours = new int[colors.length];
-			System.arraycopy(colors, 0, tempColours, 0, colors.length);
-			sendBlock(true);
+		tempStyles = new int[styles.length];
+		System.arraycopy(styles, 0, tempStyles, 0, styles.length);
+		tempColours = new int[colors.length];
+		System.arraycopy(colors, 0, tempColours, 0, colors.length);
+		sendBlock(true);
 		//}
 	}
-	
+
 	/**
 	 * Applies the temporary styles to the player's main appearance
 	 */
@@ -513,7 +531,7 @@ public class Appearance {
 			//tempColours = null;
 		}
 	}
-	
+
 	public void clearTemp () {
 		if (tempStyles != null) {
 			tempStyles = null;
@@ -533,7 +551,7 @@ public class Appearance {
 	public byte[] getData() {
 		return appearanceData;
 	}
-	
+
 	public void setPrefixTitle(String title) {
 		this.prefixTitle = title;
 	}
@@ -541,19 +559,19 @@ public class Appearance {
 	public String getPrefixTitle() {
 		return prefixTitle;
 	}
-	
+
 	public void setSuffixTitle(String title) {
 		this.suffixTitle = title;
 	}
-	
+
 	public String getSuffixTitle() {
 		return suffixTitle;
 	}
-	
+
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
+
 	public int getTempStyle (int slot) {
 		if (slot < 0 || slot >= tempStyles.length) {
 			return -1;
@@ -565,47 +583,47 @@ public class Appearance {
 		this.tempStyles[slot] = style;
 		//setStyle(slot, style);
 	}
-	
+
 	public int getTempColour (int slot) {
 		if (slot < 0 || slot >= tempColours.length) {
 			return -1;
 		}
 		return tempColours[slot];
 	}
-	
+
 	public void setTempColour(int slot, int colour) {
 		this.tempColours[slot] = colour;
 		//setColor(slot, colour);
 	}
-	
+
 	public void setStyle(int slot, int style) {
 		this.styles[slot] = style;
 	}
-	
+
 	public void setStyles(int[] styles) {
 		this.styles = styles;
 	}
-	
+
 	public int[] getStyles() {
 		return styles;
 	}
-	
+
 	public void setColor(int index, int color) {
 		this.colors[index] = color;
 	}
-	
+
 	public void setColors(int[] colors) {
 		this.colors = colors;
 	}
-	
+
 	public int[] getColors() {
 		return colors;
 	}
-	
+
 	public boolean showSkillLevel() {
 		return showSkill;
 	}
-	
+
 	public void setShowSkillLevel(boolean showSkill) {
 		this.showSkill = showSkill;
 	}
@@ -616,15 +634,15 @@ public class Appearance {
 		}
 		return renderAnimation;
 	}
-	
+
 	public void setRenderAnimation (int renderID) {
 		this.renderAnimation = renderID;
 	}
-		
+
 	public Render getRender() {
 		return render;
 	}
-	
+
 	public void setRender(Render render) {
 		this.render = render;
 		this.renderAnimation = -1;
@@ -633,25 +651,25 @@ public class Appearance {
 	public Gender getGender() {
 		return gender;
 	}
-	
+
 	public void setGender(Gender gender) {
 		this.gender = gender;
 		this.set();
 	}
-	
+
 	public void setNPCId(int id) {
 		this.npcId = id;
 		setRenderAnimation(NpcTypeList.list(id).renderTypeID);
 	}
-	
+
 	public int getRenderNpc() {
 		return this.npcId;
 	}
-	
+
 	public void setWings(int id) {
 		this.wingsId = id;
 	}
-	
+
 	public boolean isMale() {
 		return gender.equals(Gender.MALE);
 	}

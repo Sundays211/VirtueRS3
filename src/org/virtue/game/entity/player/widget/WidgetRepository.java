@@ -77,8 +77,7 @@ public final class WidgetRepository {
 	 *            The player
 	 * @return True if the interface was opened successfully, false otherwise
 	 */
-	public boolean openCentralWidget(int widgetId, boolean alwaysOpen,
-			Player player) {
+	public boolean openCentralWidget(int widgetId, boolean alwaysOpen, Player player) {
 		System.out.println("Opening central interface. ID=" + widgetId);
 		return open(1477, Widget.CENTRAL_IF_WINDOW_SLOT, widgetId, alwaysOpen,
 				player);
@@ -108,7 +107,6 @@ public final class WidgetRepository {
 					alwaysOpen);
 			return false;
 		}
-		// System.out.println("Open stage 2...");
 		try {
 			widget.open(parentId, parentSlot, widgetId, alwaysOpen, player);
 			return true;
@@ -147,31 +145,26 @@ public final class WidgetRepository {
 	/**
 	 * Handles an RS Interface.
 	 * 
-	 * @param widgetId
-	 *            The interface ID.
-	 * @param widgetId
-	 *            The widget ID.
-	 * @param slot1
-	 *            The slot ID.
-	 * @param slot2
-	 *            The item ID.
-	 * @param player
-	 *            The player.
+	 * @param widgetId The interface ID.
+	 * @param componentId The component ID.
+	 * @param slot The slot ID.
+	 * @param itemId The item ID.
+	 * @param player The player.
 	 * @return True if the click was handled successfully, false otherwise
 	 */
-	public boolean handle(int widgetId, int componentId, int slot1, int slot2,
+	public boolean handle(int widgetId, int componentId, int slot, int itemId,
 			OptionButton button, Player player) {
 		Widget widget = getInterface(widgetId);
 		if (widget == null) {
 			return false;
 		}
 		try {
-			return widget.click(widgetId, componentId, slot1, slot2, player,
+			return widget.click(widgetId, componentId, slot, itemId, player,
 					button);
 		} catch (Exception e) {
 			logger.error("Failed handling widget click: " + widgetId
-					+ ", Component: " + componentId + ", Slot: " + slot1
-					+ ", Item: " + slot2 + ", Button: " + button, e);
+					+ ", Component: " + componentId + ", Slot: " + slot
+					+ ", Item: " + itemId + ", Button: " + button, e);
 			return false;
 		}
 	}

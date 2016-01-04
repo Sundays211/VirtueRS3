@@ -31,8 +31,6 @@ import org.virtue.network.event.context.impl.in.OptionButton;
  * @since Oct 9, 2014
  */
 public abstract class Widget {
-	
-	public static final int DIALOG_WINDOW_SLOT = 397;
 	public static final int CENTRAL_IF_WINDOW_SLOT = 386;
 	
 	/**

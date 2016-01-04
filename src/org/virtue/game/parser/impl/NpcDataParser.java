@@ -59,10 +59,6 @@ public class NpcDataParser {
 			for (JsonElement element : array) {
 				JsonObject obj = element.getAsJsonObject();
 				int npcID = obj.get("npcID").getAsInt();
-				int deathAnim = -1;
-				if (obj.has("deathAnim")) {
-					deathAnim = obj.get("deathAnim").getAsInt();
-				}
 				int attAnim = -1;
 				if (obj.has("attackAnim")) {
 					attAnim = obj.get("attackAnim").getAsInt();
@@ -75,7 +71,11 @@ public class NpcDataParser {
 				if (obj.has("walkRange")) {
 					range = obj.get("walkRange").getAsInt();
 				}
-				NpcTypeList.registerCustomData(new CustomNpcData(deathAnim, attAnim, defAnim, range), npcID);
+				int interact = 1;
+				if (obj.has("interactRange")) {
+					interact = obj.get("interactRange").getAsInt();
+				}
+				NpcTypeList.registerCustomData(new CustomNpcData(attAnim, defAnim, range, interact), npcID);
 			}
 		} catch (IOException ex) {
 			logger.error("Error loading NPC custom data", ex);

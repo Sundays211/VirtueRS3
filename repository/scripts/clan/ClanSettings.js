@@ -27,7 +27,6 @@
  * @author Sundays211
  * @since 28/12/2014
  */
-var api;
 
 var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
@@ -172,7 +171,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			setPermissionTab(player, 5);
 			return true;
 		case 537:
-			var held = canBlockKeep(player, api.getVarBit(player, 6155));
+			var held = ClanPermissions.canBlockKeep(player, api.getVarBit(player, 6155));
 			if (setBlockKeep(player, api.getVarBit(player, 6155), held ? 0 : 1)) {
 				return true;
 			} else {
@@ -275,7 +274,6 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var widgetListener = new WidgetListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
 };
@@ -302,6 +300,7 @@ function showMember (player, member) {
 		api.setVarc(player, 1568, -1);//Probation status
 		api.setVarc(player, 2521, "");//Display name
 	} else {
+		//1844 = selected member hash
 		player.getChat().setSelectedClanMember(member.getUserHash());
 		api.setVarp(player, 1845, member.getVarValue());
 		api.setVarp(player, 1846, member.getRank().getID());
@@ -408,7 +407,7 @@ function setPermissionGroup (player, rank) {
 	api.setVarc(player, 1569, rank);
 	api.setVarc(player, 1571, 0);
 	api.setVarc(player, 1570, 0);
-	api.setVarc(player, 1572, canBlockKeep(player, rank));//Lock keep
+	api.setVarc(player, 1572, ClanPermissions.canBlockKeep(player, rank));//Lock keep
 	api.setVarc(player, 1574, canBlockCitadel(player, rank));//Lock citadel
 	api.setVarc(player, 1573, 0);//Enter keep
 	api.setVarc(player, 1575, 0);//Enter citadel
@@ -436,24 +435,26 @@ function setPermissionGroup (player, rank) {
 	api.setVarc(player, 4125, canChangeBroadcasts(player, rank));//Modify broadcast settings	
 }
 
-function canBlockKeep (player, rank) {
-	switch (rank) {
-	case 100:
-		return api.getVarBit(player, 6182);
-	case 101:
-		return api.getVarBit(player, 6183);
-	case 102:
-		return api.getVarBit(player, 6184);
-	case 103:
-		return api.getVarBit(player, 6185);
-	case 125:
-		return api.getVarBit(player, 6186);
-	case 126:
-	case 127:
-		return 1;
-	default:
-		return 0;
-	}
+var ClanPermissions = {
+		canBlockKeep : function (player, rank) {
+			switch (rank) {
+			case 100:
+				return api.getVarBit(player, 6182);
+			case 101:
+				return api.getVarBit(player, 6183);
+			case 102:
+				return api.getVarBit(player, 6184);
+			case 103:
+				return api.getVarBit(player, 6185);
+			case 125:
+				return api.getVarBit(player, 6186);
+			case 126:
+			case 127:
+				return 1;
+			default:
+				return 0;
+			}
+		}
 }
 
 function canBlockCitadel (player, rank) {
@@ -1025,7 +1026,7 @@ function canChangeBroadcasts (player, rank) {
 }
 
 function setBlockKeep (player, rank, holds) {
-	if (!canBlockKeep(player, clanApi.getRank(api.getClanHash(player), player.getUserHash()))) {
+	if (!ClanPermissions.canBlockKeep(player, clanApi.getRank(api.getClanHash(player), player.getUserHash()))) {
 		api.sendMessage(player, "You may only allow locking of the keep if your rank has this permission.", 43);
 		return false;
 	}

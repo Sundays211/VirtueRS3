@@ -35,9 +35,9 @@ import org.virtue.game.entity.player.container.ContainerState;
 import org.virtue.game.entity.player.container.Item;
 import org.virtue.game.entity.player.container.ItemContainer;
 import org.virtue.game.entity.player.container.ItemTypeList;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
-import org.virtue.game.entity.player.widget.var.VarKey;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**
@@ -349,7 +349,7 @@ public class BankWidget extends Widget {
 	
 	private boolean handleTabAction (Player player, int tab, OptionButton option) {
 		if (OptionButton.ONE.equals(option)) {
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_BANK_TAB, tab);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_BANK_TAB, tab);
 			return true;
 		} else {
 			return false;
@@ -363,17 +363,14 @@ public class BankWidget extends Widget {
 	 * @param desiredTab The tab to move to
 	 */
 	private void moveToTab (Player player, int fromSlot, int desiredTab) {
-		int tabSize = 0;
+		int toSlot = 0;
+		int fromTab = getTab(player, fromSlot);
 		for (int tab = 2; tab <= desiredTab; tab++) {
-			tabSize += getTabSize(player, tab);
+			toSlot += getTabSize(player, tab);
 		}
-		if (tabSize == -1) {
-			return;
-		} else {
-			player.getInvs().getContainer(ContainerState.BANK).shiftItem(fromSlot, tabSize);
-			player.getInvs().sendContainer(ContainerState.BANK);
-		}
-		incrementTab(player, getTab(player, fromSlot), -1);
+		player.getInvs().getContainer(ContainerState.BANK).shiftItem(fromSlot, toSlot);
+		player.getInvs().sendContainer(ContainerState.BANK);
+		incrementTab(player, fromTab, -1);
 		incrementTab(player, desiredTab, 1);
 	}
 	
@@ -417,36 +414,39 @@ public class BankWidget extends Widget {
 		}
 	}
 	
-	private void setTabSize (Player player, int tab, int amount) {
+	private void setTabSize (Player player, int tab, int size) {
 		switch (tab) {
 		case 2:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_2, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_2, size);
 			return;
 		case 3:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_3, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_3, size);
 			return;
 		case 4:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_4, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_4, size);
 			return;
 		case 5:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_5, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_5, size);
 			return;
 		case 6:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_6, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_6, size);
 			return;
 		case 7:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_7, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_7, size);
 			return;
 		case 8:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_8, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_8, size);
 			return;
 		case 9:
-			player.getVars().setVarpBit(VarKey.Bit.BANK_TAB_9, amount);
+			player.getVars().setVarBitValue(VarKey.Bit.BANK_TAB_9, size);
 			return;
 		}
 	}
 	
 	private void incrementTab (Player player, int tab, int amount) {
+		if (tab == 1) {
+			return;//Don't need to do anything for tab 1
+		}
 		if (amount < 0 && getTabSize(player, tab) == 1) {
 			int tabSize;//If the tab is now empty, drop each tab higher than it by one
 			for (int t = tab; t <= 9; t++) {
@@ -456,7 +456,7 @@ public class BankWidget extends Widget {
 					break;
 				}
 			}				
-			player.getVars().setVarpBit(VarKey.Bit.SELECTED_BANK_TAB, 1);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_BANK_TAB, 1);
 			return;
 		}
 		switch (tab) {
@@ -549,8 +549,7 @@ public class BankWidget extends Widget {
 		ItemContainer backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
 		Item item = player.getInvs().getContainer(ContainerState.BANK).get(slot);
 		if (item == null) {
-			// || item.getID() != itemID
-			System.out.println("Items do not match: expected="+itemID+", found="+item);
+			player.getInvs().sendContainer(ContainerState.BACKPACK);
 			return false;//Something is wrong, as there should be an item in the slot with the same ID
 		}
 		amount = Math.min(amount, item.getAmount());
@@ -622,15 +621,13 @@ public class BankWidget extends Widget {
 		}
 		itemID = item.getType().certtemplate == -1 ? item.getId() : item.getType().certlink;
 		player.getInvs().sendContainer(ContainerState.BACKPACK);
-		//int[] slots = player.getInvs().getContainer(ContainerState.BANK).add(Item.create(itemID, amount));
-		//player.getInvs().updateContainer(ContainerState.BANK, slots);	
 		return depositItem(player, Item.create(itemID, amount));
 	}
 	
 	private boolean depositItem (Player player, Item item) {
 		boolean contains = player.getInvs().getContainer(ContainerState.BANK).containsOne(item.getId());
 		if (!canDeposit(player, item)) {
-			System.out.println("Full bank!");
+			player.getDispatcher().sendGameMessage("Full bank!");
 			return false;//Full bank
 		}
 		
@@ -660,8 +657,19 @@ public class BankWidget extends Widget {
 		for (int slot = 0; slot < capacity; slot++) {
 			Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot);
 			if (item != null) {
-				if (!depositItems(player, slot, item.getId(), item.getAmount())) {
-					continue;//Out of space
+				if (!canDeposit(player, item)) {
+					player.getDispatcher().sendGameMessage("Full bank!");
+					break;//Full bank
+				}
+				if (item.getAmount() > (Integer.MAX_VALUE - player.getInvs().getContainer(ContainerState.BANK).getNumberOf(item.getId()))) {
+					int amount = Integer.MAX_VALUE - player.getInvs().getContainer(ContainerState.BANK).getNumberOf(item.getId());
+					if (amount > 0) {
+						item.setAmount(item.getAmount() - amount);
+						depositItem(player, Item.create(item.getId(), amount));
+					}
+				} else {
+					player.getInvs().getContainer(ContainerState.BACKPACK).clearSlot(slot);
+					depositItem(player, item);
 				}
 			}
 		}
@@ -673,7 +681,7 @@ public class BankWidget extends Widget {
 			Item item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(slot);
 			if (item != null) {
 				if (!canDeposit(player, item)) {
-					System.out.println("Full bank!");
+					player.getDispatcher().sendGameMessage("Full bank!");
 					break;//Full bank
 				}
 				if (item.getAmount() > (Integer.MAX_VALUE - player.getInvs().getContainer(ContainerState.BANK).getNumberOf(item.getId()))) {

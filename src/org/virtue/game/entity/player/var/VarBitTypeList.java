@@ -19,35 +19,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.widget.var;
+package org.virtue.game.entity.player.var;
+
+import java.nio.ByteBuffer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.virtue.cache.Archive;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.cache.config.vartype.VarBitType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 11/02/2015
+ * @since 25/12/2014
  */
-public class IntScriptVar implements ScriptVar {
-	
-	private int value;
-	
-	public IntScriptVar (int value) {
-		this.value = value;
-	}
+public class VarBitTypeList {
 
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.player.widget.var.ScriptVar#scriptValue()
+	/**
+	 * The {@link Logger} instance
 	 */
-	@Override
-	public int scriptValue() {
-		return value;
-	}
+	private static Logger logger = LoggerFactory.getLogger(VarBitTypeList.class);
 	
-	@Override
-	public String toString () {
-		return Integer.toString(value);
+	private static VarBitType[] varBitTypes;
+	
+	public static void init (Archive varbits, ReferenceTable.Entry tableEntry) {
+		varBitTypes = new VarBitType[tableEntry.capacity()];
+		for (int slot=0;slot<varbits.size();slot++) {
+			ReferenceTable.ChildEntry child = tableEntry.getEntry(slot);
+			if (child == null) {
+				continue;
+			}
+			int id = child.index();
+			ByteBuffer entry = varbits.getEntry(id);
+			if (entry == null) {
+				continue;
+			}
+			varBitTypes[id] = VarBitType.decode(entry, id);
+		}
+		logger.info("Found "+varBitTypes.length+" varBitType definitions.");
 	}
 
+	public static VarBitType list (int id) {
+		if (id < 0 || id >= varBitTypes.length) {
+			return null;
+		}
+		return varBitTypes[id];
+	}
+
+	public static int capacity () {
+		return varBitTypes.length;
+	}
 }

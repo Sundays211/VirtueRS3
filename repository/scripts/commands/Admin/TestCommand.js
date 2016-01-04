@@ -89,6 +89,14 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.createLocation(84871, 3090, 6107, 0, 10, 1);
 			api.createLocation(84873, 3090, 6116, 0, 10, 2);
 			return;
+		case 6:
+			var loc = api.createLocation(38787, api.getCoords(player), 10, 0);
+			api.spawnLocation(loc, 100);
+			Java.type("org.virtue.Virtue").getInstance().getWidgetRepository().open(1477, 386, 673, false, player, loc);
+			api.sendMessage(player, "Opened interface on location...");
+			return;
+		case 7:
+			api.openWidget(player, 1477, 503, 1418, true)
 		}
 	}
 });

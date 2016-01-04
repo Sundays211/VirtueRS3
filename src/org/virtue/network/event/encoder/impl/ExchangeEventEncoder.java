@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,26 +45,32 @@ public class ExchangeEventEncoder implements EventEncoder<ExchangeEventContext> 
 	public OutboundBuffer encode(Player player, ExchangeEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(OutgoingEventType.UPDATE_EXCHANGE);
+		buffer.putByte(context.getExchange());
 		buffer.putByte(context.getSlot());
-		int status = context.getStatus().getCode();
-		if (context.isSellOffer() && !ExchangeOfferStatus.EMPTY.equals(context.getStatus())) {
-			status |= 0x8;
+		if (ExchangeOfferStatus.EMPTY.equals(context.getStatus())) {
+			buffer.putByte(0);
+			return buffer;
+		}else {
+			int status = context.getStatus().getCode();
+			if (context.isSellOffer()) {
+				status |= 0x8;
+			}
+			buffer.putByte(status);
+			if (status != 0) {
+				buffer.putShort(context.getItemID());
+				buffer.putInt(context.getOfferPrice());
+				buffer.putInt(context.getOfferCount());
+				buffer.putInt(context.getCompletedCount());
+				buffer.putInt(context.getCompletedGold());
+			} else {
+				buffer.putShort(-1);
+				buffer.putInt(1);
+				buffer.putInt(1);
+				buffer.putInt(1);
+				buffer.putInt(1);
+			}
+			return buffer;
 		}
-		buffer.putByte(status);
-		if (status != 0) {
-			buffer.putShort(context.getItemID());
-			buffer.putInt(context.getOfferPrice());
-			buffer.putInt(context.getOfferCount());
-			buffer.putInt(context.getCompletedCount());
-			buffer.putInt(context.getCompletedGold());
-		} else {
-			buffer.putShort(-1);
-			buffer.putInt(1);
-			buffer.putInt(1);
-			buffer.putInt(1);
-			buffer.putInt(1);
-		}
-		return buffer;
 	}
 
 }

@@ -39,11 +39,20 @@ import org.virtue.network.protocol.message.ondemand.OnDemandStateMessage;
  */
 public class OnDemandDecoder extends ByteToMessageDecoder {
 
+	private boolean needsToSkip = true;
+
 	/* (non-Javadoc)
 	 * @see io.netty.handler.codec.ByteToMessageDecoder#decode(io.netty.channel.ChannelHandlerContext, io.netty.buffer.ByteBuf, java.util.List)
 	 */
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
+		if(needsToSkip) {
+			if (buf.readableBytes() < 1)
+				return;
+			buf.readUnsignedByte();
+			needsToSkip=false;
+		}
+
 		if (buf.readableBytes() < 6)
 			return;
 		

@@ -25,7 +25,7 @@ public final class UpdateBlockQueue {
 	/**
 	 * The update blocks
 	 */
-	private final Block[] updateBlocks = new Block[24];
+	private final Block[] updateBlocks = new Block[26];
 	
 	/**
 	 * If entity needs blocks to be update

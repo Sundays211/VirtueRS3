@@ -21,6 +21,7 @@
  */
 package org.virtue.network.event.decoder.impl;
 
+import org.virtue.game.content.social.ChatOptionType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.ChatOptionEventContext;
@@ -43,11 +44,11 @@ public class ChatOptionEventDecoder implements EventDecoder<ChatOptionEventConte
 	 */
 	@Override
 	public ChatOptionEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int chatType = buffer.getByteA();
-		OptionButton button = OptionButton.forID(buffer.getByteC());
-		int hash = buffer.getLEInt();
-		String name = buffer.getString();
+		ChatOptionType chatType = ChatOptionType.getById(buffer.getByteC());
 		int slot = buffer.getLEShortA();
+		OptionButton button = OptionButton.getById(buffer.getByteA());
+		String name = buffer.getString();
+		int hash = buffer.getLEInt();
 		return new ChatOptionEventContext(hash, slot, button, name, chatType);
 	}
 

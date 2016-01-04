@@ -82,8 +82,9 @@ public class EntityList<T extends Entity> extends AbstractCollection<T> {
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
 		synchronized (lock) {
-			if (index >= entities.length)
+			if (index >= entities.length || index < 0) {
 				return null;
+			}
 			return (T) entities[index];
 		}
 	}

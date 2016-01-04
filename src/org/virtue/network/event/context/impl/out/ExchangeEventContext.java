@@ -35,6 +35,7 @@ import org.virtue.network.event.context.GameEventContext;
 public class ExchangeEventContext implements GameEventContext {
 	
 	private int slot;
+	private int exchange;
 	private ExchangeOfferStatus status;
 	private boolean isSell;
 	private int itemID;
@@ -43,7 +44,8 @@ public class ExchangeEventContext implements GameEventContext {
 	private int offerCompletedCount;
 	private int offerCompletedGold;
 	
-	public ExchangeEventContext (int slot, ExchangeOfferStatus status, boolean isSell, int itemID, int offerPrice, int amount, int amountProcessed, int coinsReceived) {
+	public ExchangeEventContext (int exchange, int slot, ExchangeOfferStatus status, boolean isSell, int itemID, int offerPrice, int amount, int amountProcessed, int coinsReceived) {
+		this.exchange = exchange;
 		this.slot = slot;
 		this.status = status;
 		this.isSell = isSell;
@@ -84,6 +86,10 @@ public class ExchangeEventContext implements GameEventContext {
 	
 	public int getCompletedGold () {
 		return offerCompletedGold;
+	}
+
+	public int getExchange() {
+		return exchange;
 	}
 
 }

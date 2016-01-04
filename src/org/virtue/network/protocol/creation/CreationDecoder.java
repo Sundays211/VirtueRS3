@@ -34,7 +34,7 @@ import org.virtue.Constants;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
-import org.virtue.game.entity.player.widget.var.LoginDispatcher;
+import org.virtue.game.entity.player.var.LoginDispatcher;
 import org.virtue.network.NetworkHandler;
 import org.virtue.network.protocol.ProtocolDecoder;
 import org.virtue.network.session.impl.GameSession;

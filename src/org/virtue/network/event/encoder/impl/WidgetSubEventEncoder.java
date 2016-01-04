@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +30,7 @@ import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.OutgoingEventType;
 
 /**
- * 
+ *
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
@@ -47,14 +47,14 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 			if (context.getParentEntity() instanceof NPC) {
 				NPC npc = (NPC) context.getParentEntity();
 				buffer.putPacket(OutgoingEventType.IF_OPENSUB_ACTIVE_NPC, player);
-				buffer.putIntB(context.getKeys()[2]);
-				buffer.putIntB(context.getKeys()[0]);
-				buffer.putA(context.alwaysOpen() ? 1 : 0);
-				buffer.putShort(context.getWidgetId());
-				buffer.putIntA(context.getKeys()[3]);
 				buffer.putShortA(npc.getIndex());
-				buffer.putInt(context.getKeys()[1]);
-				buffer.putInt(context.getRoot() << 16 | context.getComponent());
+				buffer.putInt(context.getKeys()[3]);
+				buffer.putS(context.alwaysOpen() ? 1 : 0);
+				buffer.putIntB(context.getRoot() << 16 | context.getComponent());
+				buffer.putIntA(context.getKeys()[2]);
+				buffer.putIntA(context.getKeys()[1]);
+				buffer.putLEInt(context.getKeys()[0]);
+				buffer.putShort(context.getWidgetId());
 			}
 		} else if (context.getParentLoc() != null) {
 			SceneLocation loc = context.getParentLoc();
@@ -71,13 +71,13 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 			buffer.putLEInt(context.getKeys()[0]);
 		} else {
 			buffer.putPacket(OutgoingEventType.IF_OPENSUB, player);
+			buffer.putLEInt(context.getKeys()[0]);
+			buffer.putIntA(context.getKeys()[2]);
+			buffer.putShort(context.getWidgetId());
 			buffer.putIntB(context.getKeys()[3]);
-			buffer.putInt(context.getRoot() << 16 | context.getComponent());
-			buffer.putLEShort(context.getWidgetId());
-			buffer.putIntB(context.getKeys()[0]);
-			buffer.putIntB(context.getKeys()[2]);
-			buffer.putA(context.alwaysOpen() ? 1 : 0);
-			buffer.putIntB(context.getKeys()[1]);
+			buffer.putS(context.alwaysOpen() ? 1 : 0);
+			buffer.putLEInt(context.getRoot() << 16 | context.getComponent());
+			buffer.putLEInt(context.getKeys()[1]);
 		}
 		return buffer;
 	}

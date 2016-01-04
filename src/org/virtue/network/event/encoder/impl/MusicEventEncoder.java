@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.MusicEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.OutgoingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,9 +42,9 @@ public class MusicEventEncoder implements EventEncoder<MusicEventContext> {
 	@Override
 	public OutboundBuffer encode(Player player, MusicEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(6, player);
+		buffer.putPacket(OutgoingEventType.PLAY_MUSIC, player);
+		buffer.putS(context.getVolume());
 		buffer.putLEShort(context.getId());
-		buffer.putA(context.getVolume());
 		return buffer;
 	}
 

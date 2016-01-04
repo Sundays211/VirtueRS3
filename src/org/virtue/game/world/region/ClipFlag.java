@@ -65,4 +65,9 @@ public class ClipFlag {
 	public static final int CORNEROBJ_NORTHEAST_BLOCKSWALK_ALTERNATIVE = 0x1000000;
 	public static final int CORNEROBJ_SOUTHEAST_BLOCKSWALK_ALTERNATIVE = 0x4000000;
 	public static final int CORNEROBJ_SOUTHWEST_BLOCKSWALK_ALTERNATIVE = 0x10000000;
+	
+	public static boolean isTraversableSouth (int flags) {
+		return (flags & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
+				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE)) != 0;
+	}
 }

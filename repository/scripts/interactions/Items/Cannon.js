@@ -50,25 +50,17 @@ function ProcessCannon (player) {
 	player.setAction(new Action());
 }
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.LocationListener'), {
-
-	/* The location ids to bind to */
-	getIDs : function() {
-		return [ 6, 7 ];
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, object, option) {
-		if (option != 1) {
-			return false;
-		}
+var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		var loc = args.location;
 		
 		if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 			api.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
 		
-		switch (object.getID()) {
+		switch (locTypeId) {
 			case 6://Cannon Full
 				api.destroyLoc(loc);
 				return true;
@@ -78,18 +70,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 			default:
 				return false;
 		}		
-	},
-	
-	/* The range that a player must be within to interact */
-	getInteractRange : function (object, option) {
-		return 1;
-	},
-	
-	/* A backpack item used on the location */
-	handleItemOnLoc : function (player, location, item, invSlot) {
-		return false;
 	}
-
 });
 
 var listen = function(scriptManager) {
@@ -97,5 +78,6 @@ var listen = function(scriptManager) {
 	scriptManager.registerListener(EventType.OPHELD1, 6, itemListener);
 	
 	var listener = new LocationListener();
-	scriptManager.registerLocationListener(listener, listener.getIDs());
+	scriptManager.registerListener(EventType.OPLOC2, 6, listener);//Cannon
+	scriptManager.registerListener(EventType.OPLOC1, 7, listener);//Cannon base
 }

@@ -109,10 +109,11 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		buffer.putByte(flags);
 		if ((flags & 0x1) != 0) {
 			buffer.putString(context.getName());
+			if ((flags & 0x2) != 0) {
+				buffer.putString(context.getNameUnfiltered());
+			}
 		}
-		if ((flags & 0x2) != 0) {
-			buffer.putString(context.getNameUnfiltered());
-		}
+
 		int maxSize = 255 - buffer.offset();
 		String message = context.getMessage();
 		if (message.length() > maxSize) {

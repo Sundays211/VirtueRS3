@@ -30,16 +30,15 @@ import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
-import org.virtue.engine.script.listeners.LocationListener;
 import org.virtue.game.World;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.container.ContainerState;
 import org.virtue.game.entity.player.container.Item;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
-import org.virtue.game.entity.player.widget.var.VarKey;
 import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
@@ -204,19 +203,12 @@ public class BackpackWidget extends Widget {
 			scripts.invokeScriptChecked(ScriptEventType.OPLOCU, location.getId(), args);
 			return true;
 		}
-		boolean handled = false;
-		
-		LocationListener listener = scripts.forLocationID(location.getId());
-		if (listener != null) {
-			handled = listener.handleItemOnLoc(player, location, item, slot);
-		}
-		if (!handled) {
-			String message = "Nothing interesting happens.";
-			if (player.getPrivilegeLevel().getRights() >= 2) {
-				message = "Unhandled location use: location="+location+", useitem="+item+", useslot="+slot;
-			}		
-			player.getDispatcher().sendGameMessage(message);
-		}
+
+		String message = "Nothing interesting happens.";
+		if (player.getPrivilegeLevel().getRights() >= 2) {
+			message = "Unhandled location use: location="+location+", useitem="+item+", useslot="+slot;
+		}		
+		player.getDispatcher().sendGameMessage(message);
 		return true;
 	}
 
@@ -264,7 +256,7 @@ public class BackpackWidget extends Widget {
 			return;
 		}
 		
-		int optionId = option.getID();
+		int optionId = option.getId();
 		if (optionId == 7) {
 			optionId = 4;
 		} else if (optionId == 8) {

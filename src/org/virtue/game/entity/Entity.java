@@ -35,7 +35,7 @@ import org.virtue.game.entity.combat.CombatSchedule;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.ImpactHandler;
 import org.virtue.game.entity.combat.death.DeathEvent;
-import org.virtue.game.entity.player.widget.var.ScriptVar;
+import org.virtue.game.entity.player.var.ScriptVar;
 import org.virtue.game.node.Node;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.Tile;

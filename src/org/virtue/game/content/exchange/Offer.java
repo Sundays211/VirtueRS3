@@ -33,6 +33,7 @@ import org.virtue.game.entity.player.Player;
  */
 public class Offer {
 	
+	private int exchange;
 	private long ownerHash;
 	private long id;
 	private int slot;
@@ -45,10 +46,11 @@ public class Offer {
 	private int offerCompletedCount;
 	private int offerCompletedGold;
 	
-	public Offer (long ownerHash, long id, int slot, boolean isSell, int itemID, int amount, int offerPrice) {
+	public Offer (int exchange, long ownerHash, long id, int slot, boolean isSell, int itemID, int amount, int offerPrice) {
 		if (amount < 1 || offerPrice < 1) {
 			throw new IllegalArgumentException("Offer price and amount must be at least one! amount="+amount+", offerPrice="+offerPrice);
 		}
+		this.exchange = exchange;
 		this.ownerHash = ownerHash;
 		this.id = id;
 		this.slot = slot;
@@ -61,11 +63,16 @@ public class Offer {
 	public Offer (Player owner, long id, ExchangeOffer offer) {
 		this.ownerHash = owner.getUserHash();
 		this.id = id;
+		this.exchange = offer.getExchange();
 		this.slot = offer.getSlot();
 		this.isSell = offer.isSell();
 		this.itemID = offer.getOfferItem();
 		this.offerCount = offer.getOfferCount();
 		this.offerPrice = offer.getOfferPrice();
+	}
+	
+	public int getExchange() {
+		return exchange;
 	}
 	
 	public long getOwner () {

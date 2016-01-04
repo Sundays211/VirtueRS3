@@ -42,7 +42,6 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.container.Item;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
-import org.virtue.game.entity.player.widget.var.ScriptVar;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
 import org.virtue.game.world.region.Region;
@@ -100,6 +99,20 @@ public interface ScriptAPI {
 	 * @return True if the name was set, false otherwise
 	 */
 	public boolean setDisplayName (Player setBy, Long userHash, String desiredName);
+	
+	/**
+	 * Gets the base 37 hash of the specified name
+	 * @param name The name to hash
+	 * @return The resulting hash
+	 */
+	public Long getBase37Hash(String name);
+	
+	/**
+	 * Gets the name from the specified base 37 hash
+	 * @param hash The hash
+	 * @return The resulting name
+	 */
+	public String fromBase37Hash(Long hash);
 	
 	/**
 	 * Returns whether the specified player holds administrative rights in the server
@@ -304,12 +317,43 @@ public interface ScriptAPI {
 	public ClanSettingsAPI getClanSettings ();
 	
 	/**
+	 * Gets the specified friends chat data for the player
+	 * @param player The player
+	 * @param dataType The data type, as specified in {@link org.virtue.game.content.social.friendchat.FriendChatDataType}
+	 * @return The value
+	 */
+	public Object getFriendChatData(Player player, int dataType);
+	
+	/**
+	 * Sets the specified friends chat data for the player to the specified value
+	 * @param player The player
+	 * @param dataType The data type, as specified in {@link org.virtue.game.content.social.friendchat.FriendChatDataType}
+	 * @param value The data value.
+	 */
+	public void setFriendChatData(Player player, int dataType, Object value);
+	
+	/**
 	 * Returns the {@link EnumType} for the specified enum ID.
 	 * Note that enumTypes are referred to as "cs2 maps" in some servers
 	 * @param enumID The id of the enum to lookup
 	 * @return The enumType, or null if none were found.
 	 */
 	public EnumType getEnumType (int enumID);
+	
+	/**
+	 * Returns the value of the {@link EnumType} with the specified key
+	 * @param enumId The id of the enum to lookup
+	 * @param key The key to lookup
+	 * @return The value linked to the specified key or the default value if no key was found
+	 */
+	public Object getEnumValue (int enumId, int key);
+	
+	/**
+	 * Returns the size of the given enum
+	 * @param enumId The id of the enum to lookup
+	 * @return The enum size, or -1 if the enum does not exist
+	 */
+	public int getEnumSize (int enumId);
 	
 	/**
 	 * Returns the {@link StructType} for the specified struct ID.
@@ -525,17 +569,9 @@ public interface ScriptAPI {
 	 * Gets the int value of the player variable (varp) with the specified key
 	 * @param player The player
 	 * @param key The id of the variable to get
-	 * @return The variable value, or 0 if the value has not yet been set
+	 * @return The variable value, or null if the value has not yet been set
 	 */
-	public int getVarp (Player player, int key);
-	
-	/**
-	 * Sets the value of the player variable (varp) with the specified key
-	 * @param player The player
-	 * @param key The id of the variable to set
-	 * @param value The integer value to change to
-	 */
-	public void setVarp (Player player, int key, int value);
+	public Object getVarp (Player player, int key);
 	
 	/**
 	 * Sets the value of the player variable (varp) with the specified key
@@ -543,7 +579,7 @@ public interface ScriptAPI {
 	 * @param key The id of the variable to set
 	 * @param value The value to change to
 	 */
-	public void setVarp (Player player, int key, ScriptVar value);
+	public void setVarp (Player player, int key, Object value);
 	
 	/**
 	 * Increases the value of a player variable by the specified amount.
@@ -815,15 +851,15 @@ public interface ScriptAPI {
 	
 	public void setTradeAccepted (Player player, boolean accepted);
 	
-	public ExchangeOffer getExchangeOffer (Player player, int slot);
+	public ExchangeOffer getExchangeOffer (Player player, int exchange, int slot);
 	
-	public void sendExchangeOffer (Player player, int slot, boolean isSell, int itemID, int amount, int price);
+	public void sendExchangeOffer (Player player, int exchange, int slot, boolean isSell, int itemID, int amount, int price);
 	
-	public void abortExchangeOffer (Player player, int slot);
+	public void abortExchangeOffer (Player player, int exchange, int slot);
 	
-	public boolean exchangeOfferFinished (Player player, int slot);
+	public boolean exchangeOfferFinished (Player player, int exchange, int slot);
 	
-	public void clearExchangeOffer (Player player, int slot);
+	public void clearExchangeOffer (Player player, int exchange, int slot);
 	
 	public void runAnimation (Entity entity, int animationID);
 	
@@ -1035,12 +1071,12 @@ public interface ScriptAPI {
 	 * Creates a new {@link SceneLocation} at the provided tile with the specified data.
 	 * Note that this method does not add the location to the region; this must be done separately
 	 * @param id The locType ID of the new location
-	 * @param coord The coordinates on which to spawn the location
+	 * @param coords The coordinates on which to spawn the location
 	 * @param type The node type of the location
 	 * @param rotation The rotation
 	 * @return The newly created SceneLocation.
 	 */
-	public SceneLocation createLocation (int id, Tile coord, int type, int rotation);
+	public SceneLocation createLocation (int id, Tile coords, int type, int rotation);
 	
 	public SceneLocation createLocation (int id, int x, int y, int z, int type, int rotation);
 	

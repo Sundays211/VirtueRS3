@@ -54,11 +54,15 @@ public abstract class Block {
 	 */
 	private int npcPosition;
 	
+	public Block(BlockType type) {
+		this(type.getPlayerMask(), type.getPlayerPos(), type.getNpcMask(), type.getNpcPos());
+	}
+	
 	/**
 	 * Creates a new block with the block's mask
 	 * @param flag
 	 */
-	public Block(int mask, int position, int npcmask, int npcpos) {
+	private Block(int mask, int position, int npcmask, int npcpos) {
 		this.mask = mask;
 		this.position = position;
 		this.npcMask = npcmask;

@@ -29,8 +29,8 @@ import java.util.Map;
 import org.virtue.cache.config.vartype.VarBitType;
 import org.virtue.cache.def.ConfigType;
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.game.entity.player.widget.var.VarBitTypeList;
-import org.virtue.game.entity.player.widget.var.VarDomain;
+import org.virtue.game.entity.player.var.VarBitTypeList;
+import org.virtue.game.entity.player.var.VarDomain;
 import org.virtue.utility.QuestTypeList;
 
 /**
