@@ -742,10 +742,10 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#addItem(int, int, int)
 	 */
 	@Override
-	public boolean addItem(Player player, int containerID, int itemID, int amount) {
-		ContainerState state = ContainerState.getById(containerID);
+	public boolean addItem(Player player, int invId, int itemID, int amount) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			return false;
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		int[] slots = player.getInvs().getContainer(state).add(Item.create(itemID, amount));
 		if (slots == null) {
@@ -775,10 +775,10 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#delItem(org.virtue.game.entity.player.Player, int, int, int, int)
 	 */
 	@Override
-	public int delItem(Player player, int containerID, int itemID, int amount, int slot) {
-		ContainerState state = ContainerState.getById(containerID);
+	public int delItem(Player player, int invId, int itemID, int amount, int slot) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			return 0;
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		ItemContainer container = player.getInvs().getContainer(state);
 		if (container == null) {
@@ -915,8 +915,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#defaultItemTotal(org.virtue.game.entity.player.Player, int, int)
 	 */
 	@Override
-	public int defaultItemTotal(Player player, int containerID, int itemID) {
-		ContainerState state = ContainerState.getById(containerID);
+	public int defaultItemTotal(Player player, int invId, int itemID) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
 			return -1;
 		}
@@ -925,6 +925,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 			return -1;
 		}
 		return container.getDefaultCount(itemID);
+	}
+
+	@Override
+	public int invCapacity(Player player, int invId) {
+		ContainerState state = ContainerState.getById(invId);
+		if (state == null) {
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
+		}
+		return player.getInvs().getContainer(state).getSize();
 	}
 
 	/* (non-Javadoc)

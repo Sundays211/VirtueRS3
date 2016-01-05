@@ -20,10 +20,6 @@
  * SOFTWARE.
  */
 
-var GroundItem = Java.type('org.virtue.game.world.region.GroundItem');
-var Region = Java.type('org.virtue.game.world.region.Region');
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -32,8 +28,6 @@ var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.Graphics
  * @author Sundays211
  * @since 01/29/2015
  */
-var api;
-var BACKPACK = 93;
 
 var Animals = {
 		BALLOON : {
@@ -50,36 +44,19 @@ var Animals = {
 	    }
 };
 
-var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
-
-	/* The npc ids to bind to */
-	getIDs: function() {
-		return [2275, 2276, 2277, 2278];
-	},
-
-	/* The first option on an npc */
-	handleInteraction: function(player, npc, option) {
-		switch (option) {
-			case 1:
-				startParty(player, npc);
-				break;
-			default:
-				break;
-		}
-		return true;
-	},
-	
-	getInteractRange : function (npc, option) {
-		return 1;
+var PartyNpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		startParty(args.player, args.npc);
 	}
-
 });
 
 /* Listen to the npc ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
-	var party = new NpcListener();
-	scriptManager.registerNpcListener(party, party.getIDs());
+	var npcs = [ 2275, 2276, 2277, 2278 ];
+	var listener = new PartyNpcListener();
+	for (var i in npcs) {
+		scriptManager.registerListener(EventType.OPNPC1, npcs[i], listener);
+	}
 };
 
 function startParty (player, npc) {
@@ -88,26 +65,26 @@ function startParty (player, npc) {
 	}
 	//print(api.getNpcType(npc.getID()).name+"\n");
 	var party = forPartyNPC(npc.getID());
-		player.queueUpdateBlock(new FaceEntityBlock(npc));
-		api.runAnimation(player, 794);
-		npc.setCanRespawn(false);
-		npc.setExists(false);
-		giveRandomItem(player, npc);
-		api.pausePlayer(player, 2);
+	player.queueUpdateBlock(new FaceEntityBlock(npc));
+	api.runAnimation(player, 794);
+	npc.setCanRespawn(false);
+	npc.setExists(false);
+	giveRandomItem(player, npc);
+	api.pausePlayer(player, 2);
 }
 
 function giveRandomItem (player, npc) {
 	if (api.isPaused(player)) {
 		return false;
 	}
-	if (api.freeSpaceTotal(player, "backpack") < 1) {
+	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 		api.sendMessage(player, "Not enough space in your inventory space.");
 		return;
 	}
 	if (Math.random() <= 0.01) {
 		World.getInstance().sendBroadcast(api.getName(player) + " has received the big prize from the balloon animal event! ");
-		api.runAnimation(player, 862)
-		player.queueUpdateBlock(new GraphicsBlock(1, 199));
+		api.runAnimation(player, 862);
+		api.queueSpot(player, 1, 199);
 		api.addCarriedItem(player, 1050, 1);
 		api.pausePlayer(player, 2);
 	} else {

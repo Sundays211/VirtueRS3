@@ -106,8 +106,9 @@ public class OnDemandSession extends Session {
 					buf = Unpooled.wrappedBuffer(Virtue.getInstance().getChecksumTable());
 				} else {
 					buf = Unpooled.wrappedBuffer(cache.getStore().read(type, file));
-					if (type != 255)
+					if (type != 255) {
 						buf = buf.slice(0, buf.readableBytes() - 2);
+					}
 				}
 				channel.writeAndFlush(new OnDemandResponseMessage(request.isPriority(), type, file, buf));
 			} catch (IOException ex) {

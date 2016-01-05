@@ -27,93 +27,76 @@
  * @author Sundays211
  * @since 20/12/2014
  */
-var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interfaces to bind to */
-	getIDs: function() {
-		return [982];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
+var ChatSettingsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, interfaceID, args) {
+		var player = args.player;
+		var slot = args.slot;
 		
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		switch (component) {
+		switch (args.component) {
 		case 7:
 			var mode = api.getVarBit(player, 24562);
 			switch (mode) {
 			case 0://Friend chat
 				api.setVarBit(player, 1190, slot);
-				return true;
+				return;
 			case 1://Private chat
 				api.setVarp(player, 457, slot);
-				return true;
+				return;
 			case 2://Clan chat
 				api.setVarBit(player, 1188, slot);
-				return true;
+				return;
 			case 3://Guest clan chat
 				api.setVarBit(player, 1191, slot);
-				return true;
+				return;
 			case 4://Group chat
 				api.setVarBit(player, 24560, slot);
-				return true;
+				return;
 			case 5://Team Group chat
 				api.incrementVarBit(player, 24560, 0);//Work-around, since the interface does not watch varp 4737
 				api.setVarBit(player, 24561, slot);
-				return true;
+				return;
 			case 6://Twitch chat
 				api.setVarBit(player, 21371, slot);
-				return true;
+				return;
 			default:
-				return false;
+				api.sendMessage(player, "Unhandled chat mode: component="+args.component+", slot="+args.slot+", button="+args.button+", mode="+mode);
+				return;
 			}
 		case 9://Friend chat colour
 			api.setVarBit(player, 24562, 0);
-			return true;
+			return;
 		case 10://Private chat colour
 			api.setVarBit(player, 24562, 1);
-			return true;
+			return;
 		case 24://Clan chat colour
 			api.setVarBit(player, 24562, 2);
-			return true;
+			return;
 		case 25://Guest clan chat colour
 			api.setVarBit(player, 24562, 3);
-			return true;
+			return;
 		case 26://Group chat colour
 			api.setVarBit(player, 24562, 4);
-			return true;
+			return;
 		case 27://Group team chat
 			api.setVarBit(player, 24562, 5);
-			return true;
+			return;
 		case 28://Twitch chat
 			api.setVarBit(player, 24562, 6);
-			return true;
+			return;
 		case 35://Chat effects
 			var enabled = api.getVarp(player, 456) == 0;
 			api.setVarp(player, 456, enabled ? 1 : 0);
-			return true;
+			return;
 		default:
-			return false;
+			api.sendMessage(player, "Unhandled chat settings button: component="+args.component+", slot="+args.slot+", button="+args.button);
+			return;
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 /* Listen to the interface ids specified */
-var listen = function(scriptLoader) {
-	api = scriptLoader.getApi();
-	var widgetListener = new WidgetListener();
-	scriptLoader.registerWidgetListener(widgetListener, widgetListener.getIDs());
+var listen = function(scriptManager) {
+	var chatSettingsListener = new ChatSettingsListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 982, chatSettingsListener);
 };

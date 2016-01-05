@@ -29,56 +29,53 @@
  * @since 01/16/2015
  */
 
-var NpcListener = Java.extend(Java.type('org.virtue.engine.script.listeners.NpcListener'), {
-
-	/* The npc ids to bind to */
-	getIDs: function() {
-		return [17101, 17102, 18528, 18529];
-	},
-
-	/* The first option on an npc */
-	handleInteraction: function(player, npc, option) {
-		switch (option) {
-			case 1:
-				switch (npc.getID()) {
+var MusicBoxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		var player = args.player;
+		var npc = args.npc;
+		switch (event) {
+			case EventType.OPNPC1:
+				switch (npcTypeId) {
 				case 17101:
 				case 17102:
 					startMusicBox(player, npc);
-					return true;
+					return;
 				case 18528:
 					startMorytanianMusicBox(player, npc);
-					return true;
+					return;
 				case 18529:
 					startKharidianMusicBox(player, npc);
-					return true;
-				}					
-				return true;
-			case 2:
+					return;
+				default:
+					return;
+				}
+			case EventType.OPNPC2:
 				api.sendMessage(player, "This option is unavailable.");
-				return true;
-			case 3:
+				return;
+			case EventType.OPNPC3:
 				api.sendMessage(player, "This option is unavailable.");
-				return true;
-			case 4:
+				return;
+			case EventType.OPNPC4:
 				checkOwnership(player, npc);
-				return true;
+				return;
 			default:
-				api.sendMessage(player, "Unhandled NPC Interaction action: npcId="+npc.getID()+", option="+option);
+				api.sendMessage(player, "Unhandled NPC Interaction action: npc="+npc);
 				break;
 		}
-		return true;
-	},
-	
-	getInteractRange : function (npc, option) {
-		return 1;
 	}
-
 });
 
 /* Listen to the npc ids specified */
 var listen = function(scriptManager) {
-	var listener = new NpcListener();
-	scriptManager.registerNpcListener(listener, listener.getIDs());
+	var npcs = [ 17101, 17102, 18528, 18529 ];
+	var listener = new MusicBoxListener();
+	for (var i in npcs) {
+		//Binds all options on all music boxes to this listener
+		scriptManager.registerListener(EventType.OPNPC1, npcs[i], listener);
+		scriptManager.registerListener(EventType.OPNPC2, npcs[i], listener);
+		scriptManager.registerListener(EventType.OPNPC3, npcs[i], listener);
+		scriptManager.registerListener(EventType.OPNPC4, npcs[i], listener);
+	}
 };
 
 function checkOwnership(player, npc) {

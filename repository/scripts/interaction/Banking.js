@@ -74,7 +74,7 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPLOC3, locs[i], listener);
 	}
 	
-	var npcs = [ 494, 495, 496, 497, 498, 499, 3416, 4907 ];
+	var npcs = [ 494, 495, 496, 497, 498, 499, 2718, 3416, 4907 ];
 	var bankerListener = new BankerListener();
 	for (var i in npcs) {
 		//Binds option one and four on all bankers to this listener

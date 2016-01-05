@@ -129,17 +129,24 @@ public class Constants {
 	/**
 	 * The packed npc extra data, which includes descriptions and animations
 	 */
-	public static File NPC_DATA = new File("./repository/npc/npc_data_840.dat");
+	public static File NPC_DATA = new File("./repository/npc_data_861.dat");
 	
 	/**
 	 * The packed item extra data, which includes descriptions and weights
 	 */
-	public static File ITEM_DATA = new File("./repository/item_data_849.dat");
+	public static File ITEM_DATA = new File("./repository/item_data_861.dat");
 	
 	/**
 	 * The OnDemand Delta Keys
 	 */
-	public static int[] ONDEMAND_DELTA = { 2617, 69795, 41651, 35866, 358716, 44375, 18189, 29557, 151882, 1033023, 379571, 513743, 724913, 1038833, 31503, 720956, 18773, 1244, 49640, 2060, 119, 1253096, 3798365, 8991, 22279 };
+	public static int[] ONDEMAND_DELTA = { 2617, 69795, 41651, 35866, 358716,
+			44375, 18189, 29557, 151882, 1033023, 379571, 513743, 724913,
+			1038833, 31503, 720956, 18773, 1244, 49640, 2060, 119, 1253096,
+			3798365, 8991, 22279 };
+	/*public static int[] ONDEMAND_DELTA = { 2669, 69795, 41651, 35866, 358716,
+			44375, 18239, 20659, 169721, 1097108, 424520, 554913, 810107,
+			1150265, 34839, 819640, 20552, 1244, 65295, 2109, 119, 1349461,
+			4157265, 8991, 23087 };*/
 	
 	/**
 	 * The OnDemand Session Token

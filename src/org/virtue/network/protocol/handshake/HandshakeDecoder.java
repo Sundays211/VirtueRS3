@@ -112,7 +112,11 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
         	int major = buf.readInt();
         	int minor = buf.readInt();
         	String token = BufferUtility.readString(buf);
-            if (major != Constants.FRAME_MAJOR && minor != Constants.FRAME_MINOR) {
+        	int languageId = buf.readByte();//Language ID
+        	if (languageId != 0) {
+        		logger.warn("Bad connection: Invalid language (sent: "+languageId+", expected: 0)");
+                buffer.writeByte(6);
+        	} else if (major != Constants.FRAME_MAJOR && minor != Constants.FRAME_MINOR) {
         	   logger.warn("Bad connection: Invalid major-minor version (sent: "+major+"_"+minor+", expected: "+Constants.FRAME_MAJOR+"_"+Constants.FRAME_MINOR+")");
                buffer.writeByte(6);
             } else {

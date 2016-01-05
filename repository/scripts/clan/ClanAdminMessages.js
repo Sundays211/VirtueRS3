@@ -28,34 +28,16 @@
  * @since 29/12/2014
  */
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The object ids to bind to */
-	getIDs: function() {
-		return [573];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
+var AdminMessageOpenListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, comphash, args) {
+		var player = args.player;
+		
 		api.setWidgetEvents(player, 573, 59, 0, 126, 2);//Rank select dropdown option
 		api.setWidgetEvents(player, 573, 5, 0, 30, 2);//Selected rank dropdown
 		api.setWidgetEvents(player, 573, 20, 0, 30, 2);//Enable specific
 		api.setWidgetEvents(player, 573, 19, 0, 6, 2);//Enable category
 		ClanAdminMessages.load(player);
-	},
-
-	/* A button pressed on the interface */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		return false;
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 var AdminMessageListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
@@ -108,8 +90,8 @@ var listen = function(scriptManager) {
 		//Bind button one on the specified components
 		scriptManager.registerCompListener(EventType.IF_BUTTON1, 573, components[i], listener);
 	}
-	var widgetListener = new WidgetListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
+	listener = new AdminMessageOpenListener();
+	scriptManager.registerListener(EventType.IF_OPEN, 573, listener);
 };
 
 var ClanAdminMessages = {

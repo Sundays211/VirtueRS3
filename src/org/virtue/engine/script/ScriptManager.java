@@ -24,7 +24,6 @@ package org.virtue.engine.script;
 import java.util.Map;
 
 import org.virtue.engine.script.listeners.ItemOnEntityListener;
-import org.virtue.engine.script.listeners.NpcListener;
 import org.virtue.engine.script.listeners.WidgetListener;
 
 /**
@@ -78,9 +77,6 @@ public interface ScriptManager {
 
 	@Deprecated
 	public ItemOnEntityListener forItemOnEntity(int itemID);
-
-	@Deprecated
-	public NpcListener forNpcID(int id);
 
 	public WidgetListener forWidgetID(int id);
 

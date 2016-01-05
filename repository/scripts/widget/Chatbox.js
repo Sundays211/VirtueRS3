@@ -28,21 +28,13 @@
  * @author Sundays211
  * @since 20/01/2015
  */
-var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interface ids to bind to */
-	getIDs: function() {
-		return [ 137, 1467, 1472, 1471, 1470, 464, 1529 ];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
+var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, interfaceID, args) {
+		var player = args.player;
+		var option = args.button;
+		var component = args.component;
 		
-	},
-
-	/* A button clicked on an interface */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
 		if (interfaceID == 1529) {
 			switch (component) {
 			case 58://Chat box
@@ -222,57 +214,57 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			}			
 		} else if (interfaceID == 137) {//All chat
 			switch (component) {
-			case 64://Toggle game filter
+			case 65://Toggle game filter
 				Filters.toggleGame(player, 18);
-				return true;
-			case 67:
+				return;
+			case 68:
 				Filters.togglePublic(player, 18);
-				return true;
-			case 70:
+				return;
+			case 71:
 				Filters.togglePrivate(player, 18);
-				return true;	
-			case 73:
+				return;	
+			case 74:
 				Filters.toggleFriendChat(player, 18);
-				return true;
-			case 76:
+				return;
+			case 77:
 				Filters.toggleClan(player, 18);
-				return true;
-			case 79:
+				return;
+			case 80:
 				Filters.toggleGuestClan(player, 18);
-				return true;
-			case 82:
+				return;
+			case 83:
 				Filters.toggleTrade(player, 18);
-				return true;
-			case 85:
+				return;
+			case 86:
 				Filters.toggleAssist(player, 18);
-				return true;
-			case 88:
-				Filters.toggleProfanity(player, 18);
-				return true;
+				return;
 			case 89:
-				Filters.toggleBroadcasts(player, 18);
-				return true;
+				Filters.toggleProfanity(player, 18);
+				return;
 			case 90:
+				Filters.toggleBroadcasts(player, 18);
+				return;
+			case 91:
 				Filters.toggleGroup(player, 18);
-				return true;
-			case 99://Toggle online status - This is handled via a different packet
-				return true;
-			case 102://Toggle always-on chat mode
+				return;
+			case 100://Toggle online status - This is handled via a different packet
+				return;
+			case 103://Toggle always-on chat mode
 				GlobalActions.toggleAlwaysOn(player);
 				return true;
-			case 113:
+			case 114:
 				GlobalActions.toggleVipBadge(player);
 				return true;
-			case 116:
+			case 117:
 				GlobalActions.report(player);
 				return true;
-			case 126://Clicked quick chat bubble
+			case 127://Clicked quick chat bubble
 				return true;
-			case 129://Clicked chat box
+			case 130://Clicked chat box
 				return true;
-			case 253://Legacy switch to "All"
+			case 254://Legacy switch to "All"
 				return true;
-			case 258://Legacy "Game"
+			case 259://Legacy "Game"
 				if (option == 2) {
 					LegacyFilters.setGame(player, 18, 0);
 				} else if (option == 3) {
@@ -281,7 +273,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					LegacyFilters.setGame(player, 18, 2);
 				}
 				return true;
-			case 263://Legacy "Public"
+			case 264://Legacy "Public"
 				if (option == 2) {
 					LegacyFilters.setPublic(player, 18, 0);
 				} else if (option == 3) {
@@ -290,7 +282,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					LegacyFilters.setPublic(player, 18, 2);
 				}
 				return true;
-			case 268://Legacy "Private"
+			case 269://Legacy "Private"
 				if (option == 2) {
 					LegacyFilters.setPrivate(player, 18, 0);
 				} else if (option == 3) {
@@ -359,27 +351,20 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				GlobalActions.report(player);
 				return true;
 			default:
-				api.sendMessage(player, "Unhandled chat box action: iface="+interfaceID+", comp="+component+", slot="+slot+", option="+option);
+				api.sendMessage(player, "Unhandled chat box action: iface="+interfaceID+", comp="+component+", button="+option);
 				return true;
 			}
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 /* Listen to the interface ids specified */
-var listen = function(scriptLoader) {
-	api = scriptLoader.getApi();
-	var widgetListener = new WidgetListener();
-	scriptLoader.registerWidgetListener(widgetListener, widgetListener.getIDs());
+var listen = function(scriptManager) {
+	var ids = [ 137, 1467, 1472, 1471, 1470, 464, 1529 ];
+	var chatboxListener = new ChatboxListener();
+	for (var i in ids) {
+		scriptManager.registerListener(EventType.IF_BUTTON, ids[i], chatboxListener);
+	}
 };
 
 var Filters = {

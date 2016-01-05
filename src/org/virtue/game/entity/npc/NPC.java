@@ -35,7 +35,6 @@ import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.engine.script.listeners.CombatHandler;
-import org.virtue.engine.script.listeners.NpcListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackEvent;
@@ -340,12 +339,6 @@ public class NPC extends Entity {
 			args.put("npc", this);
 			scripts.invokeScriptChecked(eventType, this.getId(), args);
 			return true;
-		}
-		
-		//Legacy listener
-		NpcListener listener = scripts.forNpcID(typeId);
-		if (listener != null) {
-			return listener.handleInteraction(player, this, option.getId());
 		}
 		return false;
 	}

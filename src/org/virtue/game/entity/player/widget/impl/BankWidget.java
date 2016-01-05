@@ -105,7 +105,7 @@ public class BankWidget extends Widget {
 				zeroTab = true;
 			}
 			if ((tabSize+offset) > bankSize) {
-				setTabSize(player, tab, offset-bankSize);
+				setTabSize(player, tab, (offset+tabSize)-bankSize);
 				offset = bankSize;
 			} else {
 				offset += tabSize;

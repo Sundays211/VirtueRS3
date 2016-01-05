@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Constants;
@@ -64,11 +65,15 @@ public class ItemDataPacker {
 	
 	
 	public static void main (String... args) throws IOException {
+		BasicConfigurator.configure();
 		if (args.length >= 1) {
 			input = new File(args[0]);
 		}
 		if (input == null || !input.exists()) {
 			logger.error("You must provide a file containing the item data as an argument to this program.");
+			if (input != null) {
+				logger.error("input="+input.getAbsolutePath());
+			}
 			return;
 		}
 		Map<Integer, ByteBuffer> itemsData = parseData(input);
@@ -99,7 +104,7 @@ public class ItemDataPacker {
 			JsonParser parser = new JsonParser();
 			while (reader.ready()) {
 				String line = reader.readLine().trim();
-				if (!line.equalsIgnoreCase("undefined")) {
+				if (line.startsWith("{")) {
 					JsonObject obj = parser.parse(line).getAsJsonObject();
 					ByteBuffer buffer = ByteBuffer.wrap(encode(obj));
 					data.put(obj.get("id").getAsInt(), buffer);

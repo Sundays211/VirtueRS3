@@ -429,7 +429,7 @@ public interface ScriptAPI {
 	
 	public int carriedItemTotal (Player player, int itemID);
 	
-	public Item getItem (Player player, int containerID, int slot);
+	public Item getItem (Player player, int invId, int slot);
 	
 	/**
 	 * Gets the item in the specified slot in the player's inventory
@@ -440,7 +440,7 @@ public interface ScriptAPI {
 	 */
 	public Item getItem (Player player, String invName, int slot);
 	
-	public boolean addItem (Player player, int containerID, int itemID, int amount);
+	public boolean addItem (Player player, int invId, int itemID, int amount);
 	
 	/**
 	 * Adds an item to the player's inventory
@@ -473,11 +473,11 @@ public interface ScriptAPI {
 	 */
 	public void setInvSlot (Player player, int invId, int slot, int itemId, int amount);
 		
-	public int delItem (Player player, int containerID, int itemID, int amount);
+	public int delItem (Player player, int invId, int itemID, int amount);
 	
 	public int delItem (Player player, String container, int itemID, int amount);
 
-	public int delItem (Player player, int containerID, int itemID, int amount, int slot);
+	public int delItem (Player player, int invId, int itemID, int amount, int slot);
 	
 	/**
 	 * Removes an item of the specified type from the player's inventory
@@ -490,7 +490,7 @@ public interface ScriptAPI {
 	 */
 	public int delItem (Player player, String invName, int itemID, int amount, int slot);
 	
-	public int itemTotal (Player player, int containerID, int itemID);
+	public int itemTotal (Player player, int invId, int itemID);
 	
 	/**
 	 * Counts the number of items held by the player in the specified inventory
@@ -507,7 +507,7 @@ public interface ScriptAPI {
 	 * @param containerID The inventory to check. 
 	 * @return The number of free slots
 	 */
-	public int freeSpaceTotal (Player player, int containerID);
+	public int freeSpaceTotal (Player player, int invId);
 	
 	/**
 	 * Counts the number of empty slots in an inventory of the specified player
@@ -517,7 +517,9 @@ public interface ScriptAPI {
 	 */
 	public int freeSpaceTotal (Player player, String invName);
 	
-	public int defaultItemTotal (Player player, int containerID, int itemID);
+	public int defaultItemTotal (Player player, int invId, int itemID);
+	
+	public int invCapacity (Player player, int invId);
 	
 	/**
 	 * @param player

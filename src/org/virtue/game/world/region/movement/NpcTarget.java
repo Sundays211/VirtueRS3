@@ -60,7 +60,7 @@ public class NpcTarget implements EntityTarget {
 	 */
 	public boolean onReachTarget() {
 		if (!runInteraction && !target.interact(player, option)) {
-			System.out.println("<col=ffff00>Unhandled NPC option: npc=" + target.getID() + ", button="+option);
+			player.getDispatcher().sendGameMessage("<col=ffff00>Unhandled NPC option: npc=" + target.getID() + ", button="+option);
 			return true;
 		}
 		runInteraction = true;

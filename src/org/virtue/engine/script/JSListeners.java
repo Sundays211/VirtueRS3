@@ -45,7 +45,6 @@ import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.DialogListener;
 import org.virtue.engine.script.listeners.EventListener;
 import org.virtue.engine.script.listeners.ItemOnEntityListener;
-import org.virtue.engine.script.listeners.NpcListener;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
 import org.virtue.engine.script.listeners.WidgetListener;
@@ -127,8 +126,6 @@ public class JSListeners implements ScriptManager {
 	private Map<Integer, ItemOnEntityListener> itemOnEntityMap;
 
 	private Map<Integer, WidgetListener> widgetMap;
-
-	private Map<Integer, NpcListener> npcMap;
 	
 	private Map<String, DialogListener> dialogMap;
 	
@@ -152,7 +149,6 @@ public class JSListeners implements ScriptManager {
 		listeners = new HashMap<>();
 		itemOnEntityMap = new HashMap<Integer, ItemOnEntityListener>();
 		widgetMap = new HashMap<Integer, WidgetListener>();
-		npcMap = new HashMap<Integer, NpcListener>();
 		abstractNPCMap = new HashMap<Integer, AbstractNPC>();
 		combatScriptMap = new HashMap<Integer, CombatHandler>();
 		dialogMap = new HashMap<String, DialogListener>();
@@ -234,7 +230,7 @@ public class JSListeners implements ScriptManager {
 				}
 			}			
 		}
-		logger.info("Registerd " + npcMap.size() + " NPC Script(s), " + itemOnEntityMap.size() + " ItemOnEntity Script(s), " + widgetMap.size() + " Widget Script(s).");
+		logger.info("Registerd "  + itemOnEntityMap.size() + " ItemOnEntity Script(s), " + widgetMap.size() + " Widget Script(s).");
 		return success;
 	}
 	
@@ -265,7 +261,6 @@ public class JSListeners implements ScriptManager {
 		listeners.clear();
 		itemOnEntityMap.clear();
 		widgetMap.clear();
-		npcMap.clear();
 		dialogMap.clear();
 		abstractNPCMap.clear();
 		varMap.clear();
@@ -315,18 +310,6 @@ public class JSListeners implements ScriptManager {
 	
 	public void registerCompListener(int eventTypeId, int iface, int comp, EventListener listener) {
 		registerListener(eventTypeId, iface << 16 | (comp & 0xffff), listener);
-	}
-
-	/**
-	 * Registers a {@link NpcListener} which is called whenever an npc of the specified type is interacted with
-	 * @param listener The listener 
-	 * @param ids The ids of the npcs to bind to
-	 */
-	@Deprecated
-	public void registerNpcListener(NpcListener listener, int[] ids) {		
-		for (int id : ids) {
-			npcMap.put(id, listener);
-		}
 	}
 
 	/**
@@ -430,11 +413,6 @@ public class JSListeners implements ScriptManager {
 	@Override
 	public WidgetListener forWidgetID(int id) {
 		return widgetMap.get(id);
-	}
-
-	@Override
-	public NpcListener forNpcID(int id) {
-		return npcMap.get(id);
 	}
 	
 	@Override

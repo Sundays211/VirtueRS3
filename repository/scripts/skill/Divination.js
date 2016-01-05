@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -379,7 +377,7 @@ function convertMemories (player, memoryType, convertType) {
 					}					
 				}
 				api.runAnimation(player, 21234);
-				player.queueUpdateBlock(new GraphicsBlock(1, 4240));
+				api.queueSpot(player, 1, 4240);
 				convertMemory(player, memoryType, convertType);
 				delay = 3;
 			}
@@ -499,12 +497,12 @@ function forHarvestItem (player, harvest) {
 		energyAmount = 3;
 	}
 	if (harvest.enriched) {
-		player.queueUpdateBlock(new GraphicsBlock(1, harvest.memoryGfx));
+		api.queueSpot(player, 1, harvest.memoryGfx);
 		api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
 		api.addCarriedItem(player, harvest.memoryID, 1);
 		api.addCarriedItem(player, harvest.energyID, energyAmount*2);
 	} else {
-		player.queueUpdateBlock(new GraphicsBlock(1, harvest.memoryGfx));
+		api.queueSpot(player, 1, harvest.memoryGfx);
 		api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
 		api.addCarriedItem(player, harvest.memoryID, 1);
 		api.addCarriedItem(player, harvest.energyID, energyAmount);

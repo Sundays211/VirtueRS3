@@ -32,7 +32,7 @@
 var Spots = {
 		NORMAL : {
 	        level : 1,
-	        xp : 25*45,
+	        xp : 25,
 	        catches : [317],
 	        catchLevels : [1],
 	        baseTime : 20,
@@ -43,7 +43,7 @@ var Spots = {
 	    },
 	    RIVER_LURE : {
 	    	level : 1,
-	        xp : 25*45,
+	        xp : 25,
 	        catches : [335, 331],
 	        catchLevels : [1, 1],//TODO: Fix levels and times
 	        baseTime : 20,
@@ -54,7 +54,7 @@ var Spots = {
 	    },
 	    RIVER_BAIT : {
 	    	level : 1,
-	        xp : 25*45,
+	        xp : 25,
 	        catches : [335],
 	        catchLevels : [1],
 	        baseTime : 20,
@@ -98,7 +98,6 @@ var listen = function(scriptManager) {
 };
 
 function startFish (player, npc) {
-	print(api.getNpcType(npc.getID()).name+"\n");
 	var spots = forSpots(npc.getID(), option);
 	var tool = forTool(player);
 	if (api.isPaused(player)) {
