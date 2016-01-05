@@ -410,12 +410,16 @@ public interface ScriptAPI {
 	 */
 	public String getDesc(ItemType itemType);
 	
+	public String getItemDesc(Item item);
+	
 	/**
 	 * Gets the current grand exchange price of the given item
 	 * @param itemId The ID of the item to lookup
 	 * @return The grand exchange value, or -1 if the item isn't tradable on the exchange
 	 */
 	public int getExchangeCost(int itemId);
+	
+	public int getExchangeCost(Item item);
 	
 	public NpcType getNpcType (int npcID);
 	
@@ -509,14 +513,6 @@ public interface ScriptAPI {
 	 */
 	public int freeSpaceTotal (Player player, int invId);
 	
-	/**
-	 * Counts the number of empty slots in an inventory of the specified player
-	 * @param player The player.
-	 * @param invName The inventory to check. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
-	 * @return The number of empty slots.
-	 */
-	public int freeSpaceTotal (Player player, String invName);
-	
 	public int defaultItemTotal (Player player, int invId, int itemID);
 	
 	public int invCapacity (Player player, int invId);
@@ -528,7 +524,7 @@ public interface ScriptAPI {
 	 */
 	public Item getWeapon(Player player, boolean offhand);
 	
-	public boolean containerReady(Player player, int containerID);	
+	public boolean containerReady(Player player, int invId);	
 	
 	/**
 	 * Combat Mode
@@ -551,9 +547,9 @@ public interface ScriptAPI {
 	 */
 	public void sendInvTo(Player player, Player target, int invId);
 	
-	public void clearContainer (Player player, int containerID);
+	public void clearContainer (Player player, int invId);
 	
-	public void unloadContainer (Player player, int containerID);
+	public void unloadContainer (Player player, int invId);
 	
 	/**
 	 * Triggers a client script to be run on the player's client
@@ -635,14 +631,6 @@ public interface ScriptAPI {
 	public int getStatByName (String name);
 	
 	/**
-	 * Returns the level of a player in the skill. This level is affected by temporary skill boosts
-	 * @param player The player
-	 * @param skill The name of the skill to add xp to. The name is specified in {@link org.virtue.game.content.skills.StatType}
-	 * @return The boosted skill level
-	 */
-	public int getCurrentLevel (Player player, String skill);
-	
-	/**
 	 * Gets the current level of the specified stat (eg 74 in 74/99)
 	 * @param player The player
 	 * @param statId The ID of the stat to get the level of
@@ -665,25 +653,16 @@ public interface ScriptAPI {
 	 * @param skill The ID of the stat.
 	 * @return The base stat level
 	 */
-	public int getBaseLevel (Player player, int skillID);
+	public int getBaseLevel (Player player, int statId);
 	
 	/**
 	 * Adds experience to the player's skill.
 	 * @param player The player
 	 * @param skill The id of the skill to add xp to.
-	 * @param xp The amount of xp to add
-	 * @param boostable Whether bonus xp can be applied to this xp gain. Should be false for one-off xp gains (xp lamps, quest rewards, etc)
-	 */
-	public void addExperience (Player player, int skill, double xp, boolean boostable);
-	
-	/**
-	 * Adds experience to the player's skill
-	 * @param player The player
-	 * @param skill The name of the skill to add xp to. The name is specified in {@link org.virtue.game.content.skills.StatType}
 	 * @param xp The amount of xp to add. You should use only positive values, otherwise this method can behave unexpectedly.
 	 * @param boostable Whether bonus xp can be applied to this xp gain. Should be false for one-off xp gains (xp lamps, quest rewards, etc)
 	 */
-	public void addExperience (Player player, String skill, double xp, boolean boostable);
+	public void addExperience (Player player, int statId, double xp, boolean boostable);
 	
 	/**
 	 * Temporarily increases the player's stat by the specified amount

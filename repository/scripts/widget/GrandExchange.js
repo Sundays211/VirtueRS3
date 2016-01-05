@@ -423,14 +423,14 @@ var Exchange = {
 			if (option == 1 && item.getAmount() > 1 && api.getItemType(item).certlink != -1) {
 				itemID = api.getItemType(item).certlink;
 			}
-			if (itemID != 995 && api.freeSpaceTotal(player, "backpack") < 1) {
+			if (itemID != 995 && api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 				api.sendMessage(player, "You don't have enough room in your inventory.");
 				return;
 			}
 			var amount = item.getAmount();
 			if (!api.getItemType(itemID).isStackable()) {
-				if (amount > api.freeSpaceTotal(player, "backpack")) {
-					amount = api.freeSpaceTotal(player, "backpack");
+				if (amount > api.freeSpaceTotal(player, Inv.BACKPACK)) {
+					amount = api.freeSpaceTotal(player, Inv.BACKPACK);
 				}
 			}
 			api.delItem(player, returnInv, item.getID(), amount);

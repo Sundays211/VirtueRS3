@@ -77,14 +77,14 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			api.setWidgetEvents(player, 335, 51, -1, -1, 1024);
 			api.setVarc(player, 2519, api.getName(targetPlayer));
 			Trade.refreshTrade(player);
-			//api.setWidgetText(player, 335, 22, "has "+api.freeSpaceTotal(targetPlayer, BACKPACK)+" free inventory slots.");
+			//api.setWidgetText(player, 335, 22, "has "+api.freeSpaceTotal(targetPlayer, Inv.BACKPACK)+" free inventory slots.");
 			//api.setVarc(player, 729, 0);
 			//api.setVarc(player, 697, 0);
 		} else if (interfaceID == 334) {
 			api.setWidgetText(player, 334, 14, "Are you sure you want to make this trade?");
 			api.setTradeAccepted(player, false);
-			if (api.freeSpaceTotal(player, "loan_offer") < 1) {
-				var item = api.getItem(player, "loan_offer", 0);
+			if (api.freeSpaceTotal(player, Inv.LOAN_OFFER) < 1) {
+				var item = api.getItem(player, Inv.LOAN_OFFER, 0);
 				var duration = api.getVarBit(player, 1046);
 				if (duration == 0) {
 					duration = "until logout";
@@ -101,8 +101,8 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			if (targetPlayer != null) {
 				api.setVarc(player, 2519, api.getName(targetPlayer));
 				api.setTradeAccepted(targetPlayer, false);
-				if (api.freeSpaceTotal(targetPlayer, "loan_offer") < 1) {
-					var item = api.getItem(targetPlayer, "loan_offer", 0);
+				if (api.freeSpaceTotal(targetPlayer, Inv.LOAN_OFFER) < 1) {
+					var item = api.getItem(targetPlayer, Inv.LOAN_OFFER, 0);
 					var duration = api.getVarBit(player, 1047);
 					if (duration == 0) {
 						duration = "until logout";
@@ -238,7 +238,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				if (targetPlayer == null) {
 					return true;
 				}
-				var item = api.getItem(targetPlayer, "loan_offer", 0);
+				var item = api.getItem(targetPlayer, Inv.LOAN_OFFER, 0);
 				if (item != null) {
 					var text = api.getItemType(item).getExamineText();
 					api.sendMessage(player, text);
@@ -246,7 +246,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				}
 				return true;
 			case 55://Remove loan item
-				var item = api.getItem(player, "loan_offer", 0);
+				var item = api.getItem(player, Inv.LOAN_OFFER, 0);
 				if (item != null) {
 					if (option == 1) {
 						Trade.removeLoanItem(player, item);
@@ -410,8 +410,8 @@ var Trade = {
 				return;
 			} else if (!Trade.canAcceptLoanItems(player)) {
 				api.sendMessage(player, "[TODO:Message]Other player cannot accept lent item");
-			} else if (api.freeSpaceTotal(player, "loan_offer") < 1
-					|| api.freeSpaceTotal(player, LOAN_RETURN) < 1) {
+			} else if (api.freeSpaceTotal(player, Inv.LOAN_OFFER) < 1
+					|| api.freeSpaceTotal(player, Inv.LOAN_RETURN) < 1) {
 				api.sendMessage(player, "You've already lent out an item; you cannot lend out any more items until it's been returned and you've collected it from your Returned Items box.");
 				api.sendMessage(player, "Most bankers will let you access your Returned Items box.");
 			} else if (api.getItemType(item).lentlink == -1) {
@@ -420,7 +420,7 @@ var Trade = {
 				api.sendMessage(player, "That item cannot be lent.");
 			} else {
 				api.delItem(player, BACKPACK, item.getID(), 1, slot);
-				api.addItem(player, "loan_offer", item.getID(), 1);
+				api.addItem(player, Inv.LOAN_OFFER, item.getID(), 1);
 				api.setVarBit(player, 1046, 0);
 				api.setVarBit(targetPlayer, 1047, 0);
 				//api.sendMessage(player, "Offering loan item: "+item+", slot="+slot);
@@ -433,7 +433,7 @@ var Trade = {
 			//api.sendMessage(player, "Removing item: item="+item+", slot="+slot+", amount="+amount);
 		},
 		removeLoanItem : function (player, item) {
-			api.delItem(player, "loan_offer", item.getID(), 1, 0);
+			api.delItem(player, Inv.LOAN_OFFER, item.getID(), 1, 0);
 			api.addCarriedItem(player, item.getID(), 1);
 			api.setVarBit(player, 1046, 0);
 			var targetPlayer = api.getInteractionTarget(player);
@@ -443,7 +443,7 @@ var Trade = {
 		},
 		removeAll : function (player) {
 			api.setTradeAccepted(player, false);
-			var item = api.getItem(player, "loan_offer", 0);
+			var item = api.getItem(player, Inv.LOAN_OFFER, 0);
 			if (item != null) {
 				Trade.removeLoanItem(player, item);
 			}
@@ -477,7 +477,7 @@ var Trade = {
 			}
 			api.setVarc(player, 729, total);
 			api.setVarc(targetPlayer, 697, total);
-			api.setWidgetText(targetPlayer, 335, 22, "has "+api.freeSpaceTotal(player, "backpack")+" free inventory slots.");
+			api.setWidgetText(targetPlayer, 335, 22, "has "+api.freeSpaceTotal(player, Inv.BACKPACK)+" free inventory slots.");
 		},
 		showValue : function (player, item) {
 			var value = api.getItemType(item).getExchangeValue();
@@ -544,19 +544,19 @@ var Trade = {
 			}
 		},
 		processTrade : function (player1, player2) {
-			var loanItem1 = api.getItem(player1, "loan_offer", 0);
-			var loanItem2 = api.getItem(player2, "loan_offer", 0);
-			var p1TradeTotal = 28-api.freeSpaceTotal(player1, "trade")+(loanItem1 != null ? 1 : 0);
-			var p2TradeTotal = 28-api.freeSpaceTotal(player2, "trade")+(loanItem2 != null ? 1 : 0);
+			var loanItem1 = api.getItem(player1, Inv.LOAN_OFFER, 0);
+			var loanItem2 = api.getItem(player2, Inv.LOAN_OFFER, 0);
+			var p1TradeTotal = 28-api.freeSpaceTotal(player1, Inv.TRADE)+(loanItem1 != null ? 1 : 0);
+			var p2TradeTotal = 28-api.freeSpaceTotal(player2, Inv.TRADE)+(loanItem2 != null ? 1 : 0);
 			var p1NoSpace, p2NoSpace;
-			if (api.freeSpaceTotal(player1, "backpack")+p1TradeTotal < p2TradeTotal) {
+			if (api.freeSpaceTotal(player1, Inv.BACKPACK)+p1TradeTotal < p2TradeTotal) {
 				p1NoSpace = true;
-			} else if (api.freeSpaceTotal(player2, "backpack")+p2TradeTotal < p1TradeTotal) {
+			} else if (api.freeSpaceTotal(player2, Inv.BACKPACK)+p2TradeTotal < p1TradeTotal) {
 				p2NoSpace = true;
 			} else {
 				for (var slot=0; slot<28; slot++) {
-					var p1Item = api.getItem(player1, "trade", slot);
-					var p2Item = api.getItem(player2, "trade", slot);
+					var p1Item = api.getItem(player1, Inv.TRADE, slot);
+					var p2Item = api.getItem(player2, Inv.TRADE, slot);
 					if (p1Item != null) {
 						if (p1Item.getAmount() > 2147483647 - api.carriedItemTotal(player2, p1Item.getID())) {
 							p2NoSpace = true;
@@ -580,8 +580,8 @@ var Trade = {
 			} else {
 				if (loanItem1 != null) {
 					Trade.processLend(player1, player2, loanItem1);
-					/*api.delItem(player1, LOAN_OFFER, loanItem1.getID(), 1);
-					api.addItem(player1, LOAN_RETURN, loanItem1.getID(), 1);
+					/*api.delItem(player1, Inv.LOAN_OFFER, loanItem1.getID(), 1);
+					api.addItem(player1, Inv.LOAN_RETURN, loanItem1.getID(), 1);
 					var lentID = api.getItemType(loanItem1).lentlink;
 					api.addCarriedItem(player2, lentID, 1);
 					var duration = api.getVarBit(player1, 1046);
@@ -596,8 +596,8 @@ var Trade = {
 				}
 				if (loanItem2 != null) {
 					Trade.processLend(player2, player1, loanItem2);
-					/*api.delItem(player2, LOAN_OFFER, loanItem2.getID(), 1);
-					api.addItem(player2, LOAN_RETURN, loanItem2.getID(), 1);
+					/*api.delItem(player2, Inv.LOAN_OFFER, loanItem2.getID(), 1);
+					api.addItem(player2, Inv.LOAN_RETURN, loanItem2.getID(), 1);
 					var lentID = api.getItemType(loanItem2).lentlink;
 					api.addCarriedItem(player1, lentID, 1);
 					var duration = api.getVarBit(player2, 1046);
@@ -637,8 +637,8 @@ var Trade = {
 			api.closeCentralWidgets(player2);
 		},
 		processLend : function (from, to, item) {
-			api.delItem(from, "loan_offer", item.getID(), 1);
-			api.addItem(from, "loan_return", item.getID(), 1);
+			api.delItem(from, Inv.LOAN_OFFER, item.getID(), 1);
+			api.addItem(from, Inv.LOAN_RETURN, item.getID(), 1);
 			var lentID = api.getItemType(item).lentlink;
 			api.addCarriedItem(to, lentID, 1);
 			var duration = api.getVarBit(from, 1046);

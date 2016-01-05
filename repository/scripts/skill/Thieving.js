@@ -253,7 +253,7 @@ var Thieving = {
 						+ api.getNpcType(thieving.npcID).name + ".");
 				return;
 			}
-			if (api.freeSpaceTotal(player, "backpack") < 1) {
+			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 				api.sendMessage(player, "Not enough space in your inventory.");
 				return;
 			}

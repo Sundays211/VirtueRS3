@@ -51,11 +51,11 @@ var ItemOnEntityListener = Java.extend(Java.type('org.virtue.engine.script.liste
 		var idx2 = Math.floor(Math.random()*extraPossibles.length);
 		var choice = possibles[idx];
 		var choice2 = extraPossibles[idx2];
-		if (api.freeSpaceTotal(player, "backpack") < 3) {
+		if (api.freeSpaceTotal(player, Inv.BACKPACK) < 3) {
 			api.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
-		if (api.freeSpaceTotal(target, "backpack") < 3) {
+		if (api.freeSpaceTotal(target, Inv.BACKPACK) < 3) {
 			api.sendMessage(player, "The person you are trying to use this item on does not have enough inventory space.");
 			return;
 		}

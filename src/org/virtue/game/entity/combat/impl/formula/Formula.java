@@ -2,6 +2,7 @@ package org.virtue.game.entity.combat.impl.formula;
 
 import org.virtue.Virtue;
 import org.virtue.engine.script.api.ScriptAPI;
+import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;
@@ -25,7 +26,7 @@ public class Formula {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			Item mainHand = player.getEquipment().getWorn(3);
-			double strBaseLvl = api.getCurrentLevel(player, "STRENGTH");
+			double strBaseLvl = player.getSkills().getCurrentLevel(StatType.STRENGTH);
 			double armourBonus = getTotalArmourDamageBonus(entity);
 			double bonus = 1;
 			if (mainHand != null) {
@@ -66,7 +67,7 @@ public class Formula {
 			Player player = (Player) entity;
 			Item mainHand = player.getEquipment().getWorn(3);
 			Item arrowSlot = player.getEquipment().getWorn(13);
-			double rngBaseLvl = api.getCurrentLevel(player, "RANGED");
+			double rngBaseLvl = player.getSkills().getCurrentLevel(StatType.RANGED);
 			double armourBonus = getTotalArmourRangeDamageBonus(entity);
 			double arrowDamage = 0;
 			if (mainHand != null) {//
@@ -101,7 +102,7 @@ public class Formula {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			Item mainHand = player.getEquipment().getWorn(3);
-			double atkBaseLvl = F(api.getCurrentLevel(player, "ATTACK"));
+			double atkBaseLvl = F(player.getSkills().getCurrentLevel(StatType.ATTACK));
 			if (mainHand != null) {
 				int accuracy = mainHand.getType().getMeleeWeaponAccuracy();
 				double calcTotal = (atkBaseLvl + accuracy);
@@ -126,7 +127,7 @@ public class Formula {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			Item mainHand = player.getEquipment().getWorn(3);
-			double rngBaseLvl = F(api.getCurrentLevel(player, "RANGED"));
+			double rngBaseLvl = F(player.getSkills().getCurrentLevel(StatType.RANGED));
 			if (mainHand != null) {
 				int accuracy = mainHand.getType().getRangedAccuracy();
 				double calcTotal = (rngBaseLvl + accuracy);
@@ -151,7 +152,7 @@ public class Formula {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			Item mainHand = player.getEquipment().getWorn(3);
-			double magicBaseLvl = api.getCurrentLevel(player, "MAGIC");
+			double magicBaseLvl = player.getSkills().getCurrentLevel(StatType.MAGIC);
 			if (mainHand != null) {
 				double accuacy = mainHand.getType().getMagicAccuracy();
 				double calcTotal = (magicBaseLvl + accuacy);
@@ -206,7 +207,7 @@ public class Formula {
 	public static int getArmourTotalDefence(Entity entity, Entity enemy) {
 		if (enemy instanceof Player) {
 			Player player = (Player) enemy;
-			double defenceBaseLvl = F(api.getCurrentLevel(player, "DEFENCE")) + 0.5d;
+			double defenceBaseLvl = F(player.getSkills().getCurrentLevel(StatType.DEFENCE)) + 0.5d;
 			int headBonus = getHeadDefenceBonus(entity, enemy);
 			int bodyBonus = getChestDefenceBonus(entity, enemy);
 			int legsBonus = getLegsDefenceBonus(entity, enemy);

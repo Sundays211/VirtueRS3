@@ -145,8 +145,8 @@ public class SkillManager {
 	 * @param skillType The skill to check
 	 * @return The skill level, or 1 if the skill has not been loaded
 	 */
-	public int getCurrentLevel (StatType skillType) {
-		SkillData data = skills.get(skillType);
+	public int getCurrentLevel (StatType statType) {
+		SkillData data = skills.get(statType);
 		return data == null ? 1 : data.getCurrentLevel();
 	}	
 

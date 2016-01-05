@@ -605,12 +605,22 @@ public class VirtueScriptAPI implements ScriptAPI {
 		return itemType.getDescription();
 	}
 
+	@Override
+	public String getItemDesc(Item item) {
+		return item.getType().getDescription();
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ScriptAPI#getExchangeCost(int)
 	 */
 	@Override
 	public int getExchangeCost(int itemId) {
 		return ItemTypeList.list(itemId).getExchangeValue();
+	}
+
+	@Override
+	public int getExchangeCost(Item item) {
+		return getExchangeCost(item.getId());
 	}
 
 	/* (non-Javadoc)
@@ -896,22 +906,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#freeSpaceTotal(org.virtue.game.entity.player.Player, java.lang.String)
-	 */
-	@Override
-	public int freeSpaceTotal(Player player, String invName) {
-		ContainerState state = ContainerState.valueOf(invName.toUpperCase());
-		if (state == null) {
-			throw new IllegalArgumentException("Container "+invName+" does not exist!");
-		}
-		ItemContainer container = player.getInvs().getContainer(state);
-		if (container == null) {
-			throw new IllegalStateException("Container "+invName+" has not yet been loaded.");
-		}
-		return container.freeSlots();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#defaultItemTotal(org.virtue.game.entity.player.Player, int, int)
 	 */
 	@Override
@@ -1192,24 +1186,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getCurrentLevel(org.virtue.game.entity.player.Player, java.lang.String)
-	 */
-	@Override
-	public int getCurrentLevel(Player player, String skillName) {
-		StatType skill = StatType.valueOf(skillName.toUpperCase());
-		if (skill == null) {
-			throw new IllegalArgumentException("Invalid skill: "+skillName);
-		}
-		return player.getSkills().getCurrentLevel(skill);
-	}
-
-	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getCurrentLevel(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
 	public int getStatLevel(Player player, int statId) {
-		StatType skill = StatType.getById(statId);		
-		return skill == null ? -1 : player.getSkills().getCurrentLevel(skill);
+		StatType stat = StatType.getById(statId);		
+		if (stat == null) {
+			throw new IllegalArgumentException("Invalid stat: "+statId);
+		}
+		return  player.getSkills().getCurrentLevel(stat);
 	}
 
 	/* (non-Javadoc)
@@ -1228,21 +1213,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getBaseLevel(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public int getBaseLevel(Player player, int skillID) {
-		StatType skill = StatType.getById(skillID);		
-		return skill == null ? -1 : player.getSkills().getBaseLevel(skill);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#addExperience(org.virtue.game.entity.player.Player, java.lang.String, double, boolean)
-	 */
-	@Override
-	public void addExperience(Player player, String skillName, double xp, boolean boostable) {
-		StatType skill = StatType.valueOf(skillName.toUpperCase());
+	public int getBaseLevel(Player player, int statId) {
+		StatType skill = StatType.getById(statId);		
 		if (skill == null) {
-			throw new IllegalArgumentException("Invalid skill: "+skillName);
+			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
-		player.getSkills().addExperience(skill, xp);
+		return player.getSkills().getBaseLevel(skill);
 	}
 
 	/* (non-Javadoc)
