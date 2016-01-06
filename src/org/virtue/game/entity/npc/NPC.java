@@ -322,10 +322,10 @@ public class NPC extends Entity {
 		case THREE:
 			eventType = ScriptEventType.OPNPC3;
 			break;
-		case SEVEN:
+		case FOUR:
 			eventType = ScriptEventType.OPNPC4;
 			break;
-		case EIGHT:
+		case FIVE:
 			eventType = ScriptEventType.OPNPC5;
 			break;
 		default:

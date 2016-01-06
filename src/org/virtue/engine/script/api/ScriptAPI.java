@@ -24,7 +24,7 @@ package org.virtue.engine.script.api;
 import java.util.Iterator;
 
 import org.virtue.Constants;
-import org.virtue.cache.def.impl.EnumType;
+import org.virtue.cache.config.enumtype.EnumType;
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.cache.def.impl.LocType;
 import org.virtue.cache.def.impl.NpcType;
@@ -356,12 +356,21 @@ public interface ScriptAPI {
 	public int getEnumSize (int enumId);
 	
 	/**
-	 * Returns the {@link StructType} for the specified struct ID.
+	 * Gets the {@link StructType} for the specified struct ID.
 	 * Note that structTypes are referred to as "general maps" in some servers
 	 * @param structID The id of the struct to lookup
 	 * @return The structType, or null if none were found.
 	 */
 	public StructType getStructType (int structID);
+	
+	/**
+	 * Gets the paramater of the specified {@link StructType}
+	 * @param structId The ID of the struct to lookup
+	 * @param paramType The param to get
+	 * @return The struct param value or default value if the struct does not contain the given param
+	 * @throws IllegalArgumentException If an invalid structId or paramType is specified
+	 */
+	public Object getStructParam(int structId, int paramType) throws IllegalArgumentException;
 	
 	public LocType getLocType (int locTypeID);
 	
@@ -785,9 +794,9 @@ public interface ScriptAPI {
 	 * @param slot The slot to check
 	 * @return The style, or -1 if one is not set.
 	 */
-	public int getPlayerStyle (Player player, int slot);
+	public int getPlayerKit (Player player, int slot);
 	
-	public void setPlayerStyle (Player player, int slot, int style);
+	public void setPlayerKit (Player player, int slot, int style);
 	
 	public int getPlayerColour (Player player, int slot);
 	

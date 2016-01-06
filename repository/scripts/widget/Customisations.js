@@ -42,8 +42,8 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			api.startStyleEdit(player);
 			api.setVarc(player, 2017, api.getPlayerColour(player, 0));//Primary hair colour
 			api.setVarc(player, 2018, 0);//Secondary hair colour
-			api.setVarp(player, 261, api.getPlayerStyle(player, 0));//Current hair style
-			api.setVarp(player, 262, api.getPlayerStyle(player, 1));//Current facial hair style
+			api.setVarp(player, 261, api.getPlayerKit(player, 0));//Current hair style
+			api.setVarp(player, 262, api.getPlayerKit(player, 1));//Current facial hair style
 			api.setVarp(player, 779, 1426);
 			api.setVarc(player, 2699, -1);
 			api.setWidgetEvents(player, 1311, 83, 0, 3030, 14);
@@ -149,9 +149,8 @@ var Customisation = {
 			switch (type) {
 			case 1://Set hairstyle
 				var enumID = api.isFemale(player) ? 2341 : 2338;
-				var hairstyleEnum = api.getEnumType(enumID);
-				var struct = api.getStructType(hairstyleEnum.getValueInt(slot));
-				Customisation.setHairstyle(player, struct.getParam(788, -1), option != 2, false);
+				var hairstyleStructId = api.getEnumValue(enumID, slot);
+				Customisation.setHairstyle(player, api.getStructParam(hairstyleStructId, 788), option != 2, false);
 				return true;
 			case 2://Set beard
 			case 4://Set premium hairstyle
@@ -162,7 +161,7 @@ var Customisation = {
 			}
 		},
 		setHairstyle : function (player, style, isPreview, isBeard) {
-			api.setPlayerStyle(player, isBeard ? 1 : 0, style);
+			api.setPlayerKit(player, isBeard ? 1 : 0, style);
 			if (!isPreview) {
 				Customisation.applyCustomStyles(player);
 			} else {
@@ -194,8 +193,8 @@ var Customisation = {
 		},
 		applyCustomStyles : function (player) {
 			api.applyPlayerStyles(player);
-			api.setVarp(player, 261, api.getPlayerStyle(player, 0));
-			api.setVarp(player, 262, api.getPlayerStyle(player, 1));
+			api.setVarp(player, 261, api.getPlayerKit(player, 0));
+			api.setVarp(player, 262, api.getPlayerKit(player, 1));
 			api.setVarp(player, 265, 0);
 			api.runClientScript(player, 6874, []);
 			api.setVarc(player, 1968, 1);

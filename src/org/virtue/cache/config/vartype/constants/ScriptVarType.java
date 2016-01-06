@@ -195,13 +195,13 @@ public enum ScriptVarType {
 		if (null == varByLegacyChar) {
 		    varByLegacyChar = new ScriptVarType[256];
 		}
-		varByLegacyChar[StringUtility.charToByte(varType.legacyChar) & 0xff] = varType;
+		varByLegacyChar[StringUtility.charToCp1252(varType.legacyChar) & 0xff] = varType;
     }
     
-    public static ScriptVarType forChar(char c) {
+    public static ScriptVarType getByChar(char c) {
 		if ('O' == c) {
 		    return OBJECT;
 		}
-		return varByLegacyChar[StringUtility.charToByte(c) & 0xff];
+		return varByLegacyChar[StringUtility.charToCp1252(c) & 0xff];
     }
 }

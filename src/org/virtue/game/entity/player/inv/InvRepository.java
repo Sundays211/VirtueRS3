@@ -30,7 +30,7 @@ import java.util.List;
 import org.virtue.Virtue;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.config.inv.InvType;
+import org.virtue.cache.config.invtype.InvType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.event.context.impl.out.InvEventContext;

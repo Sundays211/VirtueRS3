@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.cache.config.inv;
+package org.virtue.cache.config.invtype;
 
 import java.nio.ByteBuffer;
 

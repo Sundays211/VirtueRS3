@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.virtue.Virtue;
-import org.virtue.cache.def.impl.EnumType;
+import org.virtue.cache.config.enumtype.EnumType;
 import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;

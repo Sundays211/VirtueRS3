@@ -27,11 +27,13 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.cache.config.enumtype.EnumType;
+import org.virtue.cache.config.paramtype.ParamType;
+import org.virtue.cache.config.paramtype.ParamTypeList;
 import org.virtue.cache.config.vartype.VarBitOverflowException;
 import org.virtue.cache.config.vartype.VarBitType;
 import org.virtue.cache.config.vartype.VarType;
 import org.virtue.cache.config.vartype.constants.BaseVarType;
-import org.virtue.cache.def.impl.EnumType;
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.cache.def.impl.LocType;
 import org.virtue.cache.def.impl.NpcType;
@@ -523,6 +525,23 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public StructType getStructType(int structID) {
 		return StructTypeList.list(structID);
+	}
+
+	@Override
+	public Object getStructParam(int structId, int paramTypeId) throws IllegalArgumentException {
+		StructType structType = StructTypeList.list(structId);
+		if (structType == null) {
+			throw new IllegalArgumentException("Invalid struct: "+structId);
+		}
+		ParamType paramType = ParamTypeList.list(paramTypeId);
+		if (paramType == null) {
+			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
+		}
+		if (paramType.stringBase()) {
+			return structType.getParam(paramTypeId, paramType.defaultstr);
+		} else {
+			return structType.getParam(paramTypeId, paramType.defaultint);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -1404,7 +1423,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getPlayerStyle(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public int getPlayerStyle(Player player, int slot) {
+	public int getPlayerKit(Player player, int slot) {
 		return player.getAppearance().getTempStyle(slot);
 	}
 
@@ -1412,8 +1431,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#setPlayerStyle(org.virtue.game.entity.player.Player, int, int)
 	 */
 	@Override
-	public void setPlayerStyle(Player player, int slot, int style) {
-		player.getAppearance().setTempStyle(slot, style);
+	public void setPlayerKit(Player player, int slot, int kitId) {
+		player.getAppearance().setTempStyle(slot, kitId);
 		player.getAppearance().sendBlock(true);
 	}
 

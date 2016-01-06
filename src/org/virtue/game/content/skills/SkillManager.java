@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.virtue.Constants;
 import org.virtue.Virtue;
-import org.virtue.cache.def.impl.EnumType;
+import org.virtue.cache.config.enumtype.EnumType;
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;

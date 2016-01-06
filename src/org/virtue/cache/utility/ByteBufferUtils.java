@@ -93,6 +93,14 @@ public final class ByteBufferUtils {
 		return shortValue == 32767 ? -1 : shortValue;
 	}
 	
+	public static int getUnsignedSmartInt(ByteBuffer buffer) {
+		if ((buffer.get(buffer.position()) & 0xff) < 128) {
+			return buffer.get() & 0xff;
+		}
+		int shortValue = buffer.getShort() & 0xFFFF;
+		return shortValue - 32769;
+	}
+	
 	/**
 	 * Gets a small smart integer from the buffer.
 	 * @param buffer The buffer.

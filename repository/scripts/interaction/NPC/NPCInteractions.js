@@ -93,7 +93,7 @@ var listen = function(scriptManager) {
 	
 	listener = new ThessaliaListener();
 	scriptManager.registerListener(EventType.OPNPC1, 548, listener);
-	scriptManager.registerListener(EventType.OPNPC4, 548, listener);
+	//scriptManager.registerListener(EventType.OPNPC4, 548, listener);
 	
 	listener = new NastrothListener();
 	scriptManager.registerListener(EventType.OPNPC1, 6539, listener);
@@ -101,11 +101,3 @@ var listen = function(scriptManager) {
 	listener = new LadyDeathknellListener();
 	scriptManager.registerListener(EventType.OPNPC1, 16014, listener);
 };
-
-function startMakeover (player, npc) {
-	if(api.freeSpaceTotal(player, Inv.EQUIPMENT) != api.invCapacity(player, Inv.EQUIPMENT)) {
-		chatnpc(player, npc, "You're not able to try on my clothes with all that armour. Take it off and then speak to me again.");
-		return;
-	}
-	api.openCentralWidget(player, 729, false);
-} 

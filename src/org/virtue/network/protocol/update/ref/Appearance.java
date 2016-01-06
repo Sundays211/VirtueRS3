@@ -2,7 +2,7 @@ package org.virtue.network.protocol.update.ref;
 
 import java.util.Arrays;
 
-import org.virtue.cache.def.impl.EnumType;
+import org.virtue.cache.config.enumtype.EnumType;
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.cache.def.impl.NpcType;
 import org.virtue.game.entity.npc.NpcTypeList;

@@ -45,6 +45,7 @@ import org.virtue.cache.FileStore;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.cache.config.Js5Archive;
 import org.virtue.cache.config.Js5ConfigGroup;
+import org.virtue.cache.config.paramtype.ParamTypeList;
 import org.virtue.engine.GameEngine;
 import org.virtue.engine.cycle.ticks.SystemUpdateTick;
 import org.virtue.engine.script.JSListeners;
@@ -90,7 +91,7 @@ import com.google.common.collect.Maps;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Aug 8, 2014
  */
-public class Virtue {//
+public class Virtue {
 
 	/**
 	 * The {@link Logger} Instance
@@ -172,11 +173,6 @@ public class Virtue {//
 	 */
 	private MinigameProcessor controller;
 	
-	/**
-	 * The current number of days since SERVER_DAY_0
-	 */
-	private int serverDay0;
-	
 	private Properties properties;
 	
 	private int updateTimer = -1;
@@ -197,8 +193,6 @@ public class Virtue {//
 			propertiesFile = new File(args[0]);
 		}
 		instance.loadProperties(propertiesFile);
-		instance.serverDay0 = Constants.SERVER_DAY_INITIAL;
-		//instance.serverDay0 =  Long.parseLong(instance.properties.getProperty("server.date.initial"));
 		try {
 			instance.initLogging();
 			instance.loadEngine();
@@ -332,6 +326,8 @@ public class Virtue {//
 		ReferenceTable configTable = ReferenceTable.decode(container.getData());
 		Archive invs = Archive.decode(cache.read(2, Js5ConfigGroup.INVTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.INVTYPE.id).size());
+		Archive params = Archive.decode(cache.read(2, Js5ConfigGroup.PARAMTYPE.id).getData(), 
+				configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id).size());
 		Archive varbits = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_BIT.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_BIT.id).size());
 		Archive varps = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_PLAYER.id).getData(), 
@@ -339,6 +335,7 @@ public class Virtue {//
 		Archive varclans = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_CLAN_SETTING.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id).size());
 		InvRepository.init(invs, configTable.getEntry(Js5ConfigGroup.INVTYPE.id));
+		ParamTypeList.init(params, configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id));
 		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));
 		VarBitTypeList.init(varbits, configTable.getEntry(Js5ConfigGroup.VAR_BIT.id));
 		ClanSettings.init(varclans, configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id));
@@ -469,7 +466,7 @@ public class Virtue {//
 	 * @return The number of days
 	 */
 	public int getServerDay () {
-		return ((int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis())) - serverDay0;
+		return ((int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis())) - Constants.SERVER_DAY_INITIAL;
 	}
 	
 	public int getTickInDay () {

@@ -44,7 +44,7 @@ public class ExchangeEventEncoder implements EventEncoder<ExchangeEventContext> 
 	@Override
 	public OutboundBuffer encode(Player player, ExchangeEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.UPDATE_EXCHANGE);
+		buffer.putPacket(OutgoingEventType.UPDATE_EXCHANGE, player);
 		buffer.putByte(context.getExchange());
 		buffer.putByte(context.getSlot());
 		if (ExchangeOfferStatus.EMPTY.equals(context.getStatus())) {

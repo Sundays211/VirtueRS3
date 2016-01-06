@@ -1,6 +1,6 @@
 package org.virtue.game.content.skills;
 
-import org.virtue.cache.def.impl.EnumType;
+import org.virtue.cache.config.enumtype.EnumType;
 import org.virtue.cache.def.impl.ItemType;
 import org.virtue.cache.def.impl.StructType;
 import org.virtue.game.content.social.ChannelType;

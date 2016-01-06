@@ -314,7 +314,7 @@ public class OutboundBuffer extends Buffer {
 	}
 
 	public void putPacket(int packetId) {
-		System.out.println("Outgoing: " + packetId);
+		//System.out.println("Outgoing: " + packetId);
 		if (packetId >= 128) {
 			putByte((packetId >> 8) + 128);
 			putByte(packetId);

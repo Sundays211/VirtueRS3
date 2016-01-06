@@ -37,7 +37,7 @@ import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.cache.config.Js5Archive;
 import org.virtue.cache.config.Js5ConfigGroup;
-import org.virtue.cache.def.impl.EnumType;
+import org.virtue.cache.config.enumtype.EnumType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

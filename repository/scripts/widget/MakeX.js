@@ -230,11 +230,10 @@ function getMaxAmount (player, product) {
 	return Math.min(maxAmount, 60);
 }
 
-function getStructInvAmount (player, structID, productAmount) {
-	var struct = api.getStructType(structID);
-	var id = struct.getParam(2655, -1);
-	var matCountReq = struct.getParam(2665, 0);
-	var separateAmount = struct.getParam(2686, 1) == 1;
+function getStructInvAmount (player, structId, productAmount) {
+	var id = api.getStructParam(structId, 2655);
+	var matCountReq = api.getStructParam(structId, 2665);
+	var separateAmount = api.getStructParam(structId, 2686) == 1;
 	var total = 0;
 	var v1 = 0;
 	var v9 = 0;
@@ -255,49 +254,49 @@ function getStructInvAmount (player, structID, productAmount) {
 		loop++;
 		switch (loop) {
 		case 2:
-			id = struct.getParam(2656, -1);
-			matCountReq = struct.getParam(2666, -1);
-			separateAmount = struct.getParam(2687, 1) == 1;
+			id = api.getStructParam(structId, 2656);
+			matCountReq = api.getStructParam(structId, 2666);
+			separateAmount = api.getStructParam(structId, 2687) == 1;
 			break;
 		case 3:
-			id = struct.getParam(2657, -1);
-			matCountReq = struct.getParam(2667, -1);
-			separateAmount = struct.getParam(2688, 1) == 1;
+			id = api.getStructParam(structId, 2657);
+			matCountReq = api.getStructParam(structId, 2667);
+			separateAmount = api.getStructParam(structId, 2688) == 1;
 			break;
 		case 4:
-			id = struct.getParam(2658, -1);
-			matCountReq = struct.getParam(2668, -1);
-			separateAmount = struct.getParam(2689, 1) == 1;
+			id = api.getStructParam(structId, 2658);
+			matCountReq = api.getStructParam(structId, 2668);
+			separateAmount = api.getStructParam(structId, 2689) == 1;
 			break;
 		case 5:
-			id = struct.getParam(2659, -1);
-			matCountReq = struct.getParam(2669, -1);
-			separateAmount = struct.getParam(2690, 1) == 1;
+			id = api.getStructParam(structId, 2659);
+			matCountReq = api.getStructParam(structId, 2669);
+			separateAmount = api.getStructParam(structId, 2690) == 1;
 			break;
 		case 6:
-			id = struct.getParam(2660, -1);
-			matCountReq = struct.getParam(2670, -1);
-			separateAmount = struct.getParam(2691, 1) == 1;
+			id = api.getStructParam(structId, 2660);
+			matCountReq = api.getStructParam(structId, 2670);
+			separateAmount = api.getStructParam(structId, 2691) == 1;
 			break;
 		case 7:
-			id = struct.getParam(2661, -1);
-			matCountReq = struct.getParam(2671, -1);
-			separateAmount = struct.getParam(2692, 1) == 1;
+			id = api.getStructParam(structId, 2661);
+			matCountReq = api.getStructParam(structId, 2671);
+			separateAmount = api.getStructParam(structId, 2692) == 1;
 			break;
 		case 8:
-			id = struct.getParam(2662, -1);
-			matCountReq = struct.getParam(2672, -1);
-			separateAmount = struct.getParam(2693, 1) == 1;
+			id = api.getStructParam(structId, 2662);
+			matCountReq = api.getStructParam(structId, 2672);
+			separateAmount = api.getStructParam(structId, 2693) == 1;
 			break;
 		case 9:
-			id = struct.getParam(2663, -1);
-			matCountReq = struct.getParam(2673, -1);
-			separateAmount = struct.getParam(2694, 1) == 1;
+			id = api.getStructParam(structId, 2663);
+			matCountReq = api.getStructParam(structId, 2673);
+			separateAmount = api.getStructParam(structId, 2694) == 1;
 			break;
 		case 10:
-			id = struct.getParam(2664, -1);
-			matCountReq = struct.getParam(2674, -1);
-			separateAmount = struct.getParam(2695, 1) == 1;
+			id = api.getStructParam(structId, 2664);
+			matCountReq = api.getStructParam(structId, 2674);
+			separateAmount = api.getStructParam(structId, 2695) == 1;
 			break;
 		default:
 			id = -1;

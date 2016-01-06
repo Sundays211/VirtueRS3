@@ -83,7 +83,7 @@ public class StringUtility {
 		return output;
     }
 
-	public static char charFromByte(byte i) {
+	public static char cp1252ToChar(byte i) {
 		int i_7_ = i & 0xff;
 		if (i_7_ == 0) {
 		    throw new IllegalArgumentException(new StringBuilder().append
@@ -99,7 +99,7 @@ public class StringUtility {
 		return (char) i_7_;
 	}
     
-    public static byte charToByte(char c) {
+    public static byte charToCp1252(char c) {
 		byte byteVal;
 		if (c > 0 && c < '\u0080' || c >= '\u00a0' && c <= '\u00ff') {
 		    byteVal = (byte) c;

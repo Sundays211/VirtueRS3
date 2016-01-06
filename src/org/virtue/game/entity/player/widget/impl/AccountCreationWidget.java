@@ -23,7 +23,7 @@ package org.virtue.game.entity.player.widget.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.cache.def.impl.EnumType;
+import org.virtue.cache.config.enumtype.EnumType;
 import org.virtue.cache.def.impl.StructType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;

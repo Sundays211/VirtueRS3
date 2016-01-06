@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.cache.def.impl;
+package org.virtue.cache.config.enumtype;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -47,10 +47,10 @@ public class EnumType {
 		for (int opcode = buffer.get() & 0xff; opcode != 0; opcode = buffer.get() & 0xff) {
 			if (opcode == 1) {
 				buffer.get();
-				enumType.keyType = ScriptVarType.forChar(StringUtility.charFromByte(buffer.get()));
+				enumType.keyType = ScriptVarType.getByChar(StringUtility.cp1252ToChar(buffer.get()));
 			} else if (opcode == 2) {
 				buffer.get();
-				enumType.valueType = ScriptVarType.forChar(StringUtility.charFromByte(buffer.get()));
+				enumType.valueType = ScriptVarType.getByChar(StringUtility.cp1252ToChar(buffer.get()));
 			} else if (3 == opcode) {
 				enumType.defaultstr = ByteBufferUtils.getString(buffer);
 			} else if (4 == opcode) {
@@ -81,9 +81,9 @@ public class EnumType {
 					}
 			    }
 			} else if (101 == opcode) {
-				enumType.keyType = ScriptVarType.getById(ByteBufferUtils.getSmallSmartInt(buffer)+1);
+				enumType.keyType = ScriptVarType.getById(ByteBufferUtils.getUnsignedSmartInt(buffer));
 			} else if (102 == opcode) {
-				enumType.valueType = ScriptVarType.getById(ByteBufferUtils.getSmallSmartInt(buffer)+1);
+				enumType.valueType = ScriptVarType.getById(ByteBufferUtils.getUnsignedSmartInt(buffer));
 			}
 		}
 		return enumType;
