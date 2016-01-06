@@ -283,7 +283,7 @@ var Exchange = {
 				}				
 			}
 
-			var item = api.getItem(player, 93, invSlot);
+			var item = api.getItem(player, Inv.BACKPACK, invSlot);
 			if (item != null) {
 				var exchangePrice = api.getItemType(item).getExchangeValue();
 				if (exchangePrice != -1) {
@@ -391,9 +391,9 @@ var Exchange = {
 					}
 					if (carriedTotal >= amount) {
 						var fullAmount = amount;
-						amount -= api.delItem(player, BACKPACK, itemID, amount);
+						amount -= api.delItem(player, Inv.BACKPACK, itemID, amount);
 						if (api.getItemType(itemID).certlink != -1) {
-							api.delItem(player, BACKPACK, api.getItemType(itemID).certlink, amount);
+							api.delItem(player, Inv.BACKPACK, api.getItemType(itemID).certlink, amount);
 						}
 						api.addItem(player, offerInv, itemID, fullAmount);
 						api.sendExchangeOffer(player, slot, isSell, itemID, fullAmount, price);

@@ -57,7 +57,6 @@ import org.virtue.game.content.social.clan.ClanChannelAPI;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.content.social.friendchat.FriendChatDataType;
 import org.virtue.game.entity.Entity;
-import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.AccountInfo;
@@ -691,63 +690,29 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#backpackItemTotal(org.virtue.game.entity.player.Player, int)
-	 */
-	@Override
-	public Item getWeapon(Player player, boolean offhand) {
-		Item item;
-		if (offhand) {
-			item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(5);
-		} else {
-			item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(3);
-		}
-		return item;
-	}
-	
-	@Override
-	/**
-	 * Returns the players combat mode
-	 */
-	public CombatMode getMode(Player player, CombatMode mode) {
-		return mode;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getItem(org.virtue.game.entity.player.Player, int, int)
 	 */
 	@Override
-	public Item getItem(Player player, int containerID, int slot) {
-		ContainerState state = ContainerState.getById(containerID);
+	public Item getItem(Player player, int invId, int slot) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			return null;
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		return player.getInvs().getContainer(state).get(slot);
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getItem(org.virtue.game.entity.player.Player, java.lang.String, int)
+	 * @see org.virtue.engine.script.ScriptAPI#addItem(int, int, int)
 	 */
 	@Override
-	public Item getItem(Player player, String invName, int slot) {
-		ContainerState state = ContainerState.valueOf(invName.toUpperCase());
+	public void addItem(Player player, int invId, int itemID, int count) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			throw new IllegalArgumentException("The container "+invName+" does not exist.");
-		}
-		return player.getInvs().getContainer(state).get(slot);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#addItem(org.virtue.game.entity.player.Player, java.lang.String, int, int)
-	 */
-	@Override
-	public void addItem(Player player, String invName, int itemID, int amount) {
-		ContainerState state = ContainerState.valueOf(invName.toUpperCase());
-		if (state == null) {
-			throw new IllegalArgumentException("The container "+invName+" does not exist or has not yet been registered.");
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		ItemContainer inv = player.getInvs().getContainer(state);
 		if (inv == null) {
-			throw new IllegalStateException("The container "+invName+" has not been loaded yet!");
+			throw new IllegalStateException("The inventory "+state+" has not been loaded yet!");
 		}
 		int freeSpace = inv.getFreeSlots();
 		if (ItemTypeList.getInstance().list(itemID).isStackable()) {
@@ -756,32 +721,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 				freeSpace = Integer.MAX_VALUE - numOf;
 			}			
 		}
-		if (amount > freeSpace) {
+		if (count > freeSpace) {
 			Region region = World.getInstance().getRegions().getRegionByID(player.getCurrentTile().getRegionID());
 			if (region != null && region.isLoaded()) {
-				region.dropItem(itemID, amount - freeSpace, player);
+				region.dropItem(itemID, count - freeSpace, player);
 			}
-			amount = freeSpace;
+			count = freeSpace;
 		}
-		int[] slots = inv.add(Item.create(itemID, amount));
+		int[] slots = inv.add(Item.create(itemID, count));
 		player.getInvs().updateContainer(state, slots);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#addItem(int, int, int)
-	 */
-	@Override
-	public boolean addItem(Player player, int invId, int itemID, int amount) {
-		ContainerState state = ContainerState.getById(invId);
-		if (state == null) {
-			throw new IllegalArgumentException("Invalid inventory: "+invId);
-		}
-		int[] slots = player.getInvs().getContainer(state).add(Item.create(itemID, amount));
-		if (slots == null) {
-			return false;
-		}
-		player.getInvs().updateContainer(state, slots);
-		return true;
 	}
 
 	/* (non-Javadoc)
@@ -790,14 +738,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public int delItem(Player player, int containerID, int itemID, int amount) {
 		return delItem(player, containerID, itemID, amount, 0);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#delItem(org.virtue.game.entity.player.Player, java.lang.String, int, int)
-	 */
-	@Override
-	public int delItem(Player player, String invName, int itemID, int amount) {
-		return delItem(player, invName, itemID, amount, 0);
 	}
 
 	/* (non-Javadoc)
@@ -822,51 +762,13 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#delItem(org.virtue.game.entity.player.Player, java.lang.String, int, int, int)
-	 */
-	@Override
-	public int delItem(Player player, String invName, int itemID, int amount, int slot) {
-		ContainerState state = ContainerState.valueOf(invName.toUpperCase());
-		if (state == null) {
-			throw new IllegalArgumentException("The container "+invName+" does not exist.");
-		}
-		ItemContainer container = player.getInvs().getContainer(state);
-		if (container == null) {
-			throw new IllegalStateException("The container "+invName+" has not been loaded yet!");
-		}
-		if (container.getNumberOf(itemID) < amount) {
-			return 0;
-		}
-		container.remove(slot, Item.create(itemID, amount));
-		player.getInvs().sendContainer(state);
-		return amount;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#setInvSlot(org.virtue.game.entity.player.Player, java.lang.String, int, int, int)
-	 */
-	@Override
-	public void setInvSlot(Player player, String invName, int slot, int itemID, int amount) {
-		ContainerState state = ContainerState.valueOf(invName.toUpperCase());
-		if (state == null) {
-			throw new IllegalArgumentException("The container "+invName+" does not exist.");
-		}
-		ItemContainer container = player.getInvs().getContainer(state);
-		if (container == null) {
-			throw new IllegalStateException("The container "+invName+" has not been loaded yet!");
-		}
-		container.set(slot, Item.create(itemID, amount));
-		player.getInvs().updateContainer(state, slot);
-	}
-
-	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ScriptAPI#setInvSlot(org.virtue.game.entity.player.Player, int, int, int, int)
 	 */
 	@Override
 	public void setInvSlot(Player player, int invId, int slot, int itemId, int amount) {
 		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			throw new IllegalArgumentException("Container "+invId+" does not exist!");
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		ItemContainer container = player.getInvs().getContainer(state);
 		if (container == null) {
@@ -877,29 +779,13 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#itemTotal(org.virtue.game.entity.player.Player, java.lang.String, int)
-	 */
-	@Override
-	public int itemTotal(Player player, String containerName, int itemID) {
-		ContainerState state = ContainerState.valueOf(containerName.toUpperCase());
-		if (state == null) {
-			throw new IllegalArgumentException("Container "+containerName+" does not exist!");
-		}
-		ItemContainer container = player.getInvs().getContainer(state);
-		if (container == null) {
-			throw new IllegalStateException("Container "+containerName+" has not yet been loaded.");
-		}
-		return container.getNumberOf(itemID);
-	}
-
-	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#itemTotal(int, int)
 	 */
 	@Override
 	public int itemTotal(Player player, int invId, int itemID) {
 		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			return -1;
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		ItemContainer container = player.getInvs().getContainer(state);
 		if (container == null) {
@@ -912,10 +798,10 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getFreeSpace(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public int freeSpaceTotal(Player player, int containerID) {
-		ContainerState state = ContainerState.getById(containerID);
+	public int freeSpaceTotal(Player player, int invId) {
+		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			return 0;
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		ItemContainer container = player.getInvs().getContainer(state);
 		if (container == null) {
@@ -931,7 +817,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	public int defaultItemTotal(Player player, int invId, int itemID) {
 		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
-			return -1;
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
 		ItemContainer container = player.getInvs().getContainer(state);
 		if (container == null) {
@@ -1905,6 +1791,18 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void spawnLocation(SceneLocation loc, int removalDelay) {
 		World.getInstance().getRegions().getRegionByID(loc.getTile().getRegionID()).spawnTempLocation(loc, removalDelay);		
+	}
+
+	@Override
+	public void spawnLocation(int locTypeId, Tile coords, int removalDelay) {
+		spawnLocation(locTypeId, coords, 10, 0, removalDelay);
+	}
+
+	@Override
+	public void spawnLocation(int locTypeId, Tile coords, int type,
+			int rotation, int removalDelay) {
+		SceneLocation loc = SceneLocation.create(locTypeId, coords, type, rotation);
+		spawnLocation(loc, removalDelay);
 	}
 
 	/* (non-Javadoc)

@@ -29,8 +29,6 @@
  * @since 22/01/2015
  */
 
-var api;
-
 var BACKPACK = 93;
 var TRADE_CONTAINER = 90;
 var LOAN_OFFER = 541;
@@ -132,7 +130,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				}				
 				return true;
 			}
-			var item = api.getItem(player, "backpack", slot);
+			var item = api.getItem(player, Inv.BACKPACK, slot);
 			if (item == null) {
 				return false;
 			}
@@ -175,7 +173,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		} else if (interfaceID == 335) {
 			switch (component) {
 			case 24://Trade screen
-				var item = api.getItem(player, "trade", slot);
+				var item = api.getItem(player, Inv.TRADE, slot);
 				if (item == null) {
 					return false;
 				}
@@ -212,7 +210,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				if (targetPlayer == null) {
 					return true;
 				}
-				var item = api.getItem(targetPlayer, "trade", slot);
+				var item = api.getItem(targetPlayer, Inv.TRADE, slot);
 				if (item == null) {
 					return false;
 				}
@@ -385,7 +383,6 @@ var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarL
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var widgetListener = new WidgetListener();
 	var varListener = new VarListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
@@ -394,15 +391,15 @@ var listen = function(scriptManager) {
 
 var Trade = {
 		offerItem : function (player, item, slot, amount) {
-			amount = Math.min(amount, api.itemTotal(player, "backpack", item.getID()));
-			amount = api.delItem(player, "backpack", item.getID(), amount, slot);
-			api.addItem(player, "trade", item.getID(), amount);			
+			amount = Math.min(amount, api.itemTotal(player, Inv.BACKPACK, api.getId(item)));
+			amount = api.delItem(player, Inv.BACKPACK, api.getId(item), amount, slot);
+			api.addItem(player, Inv.TRADE, api.getId(item), amount);			
 			//api.sendMessage(player, "Offering item: "+item+", slot="+slot+", amount="+amount);
 		},
 		offerCoins : function (player, amount) {
 			amount = Math.min(amount, api.carriedItemTotal(player, 995));
 			amount = api.delCarriedItem(player, 995, amount);
-			api.addItem(player, "trade", 995, amount);
+			api.addItem(player, Inv.TRADE, 995, amount);
 		},
 		offerLoanItem : function (player, item, slot) {
 			var targetPlayer = api.getInteractionTarget(player);
@@ -419,7 +416,7 @@ var Trade = {
 			} else if (api.getItemType(item).lenttemplate != -1) {
 				api.sendMessage(player, "That item cannot be lent.");
 			} else {
-				api.delItem(player, BACKPACK, item.getID(), 1, slot);
+				api.delItem(player, Inv.BACKPACK, item.getID(), 1, slot);
 				api.addItem(player, Inv.LOAN_OFFER, item.getID(), 1);
 				api.setVarBit(player, 1046, 0);
 				api.setVarBit(targetPlayer, 1047, 0);
@@ -427,8 +424,8 @@ var Trade = {
 			}
 		},
 		removeItem : function (player, slot, item, amount) {
-			amount = Math.min(amount, api.itemTotal(player, "trade", item.getID()));
-			amount = api.delItem(player, "trade", item.getID(), amount, slot);
+			amount = Math.min(amount, api.itemTotal(player, Inv.TRADE, item.getID()));
+			amount = api.delItem(player, Inv.TRADE, item.getID(), amount, slot);
 			api.addCarriedItem(player, item.getID(), amount);
 			//api.sendMessage(player, "Removing item: item="+item+", slot="+slot+", amount="+amount);
 		},
@@ -448,7 +445,7 @@ var Trade = {
 				Trade.removeLoanItem(player, item);
 			}
 			for (var slot=0; slot<28; slot++) {
-				item = api.getItem(player, "trade", slot);
+				item = api.getItem(player, Inv.TRADE, slot);
 				if (item != null) {
 					Trade.removeItem(player, slot, item, 2147483647);
 				}
@@ -466,7 +463,7 @@ var Trade = {
 			api.setTradeAccepted(player, false);//Remove "accept" if the trade is modified
 			var total = 0;
 			for (var slot=0; slot<28; slot++) {
-				var item = api.getItem(player, "trade", slot);
+				var item = api.getItem(player, Inv.TRADE, slot);
 				if (item != null) {
 					if (api.getItemType(item).getExchangeValue() != -1) {
 						total += api.getItemType(item).getExchangeValue() * item.getAmount();
@@ -611,20 +608,20 @@ var Trade = {
 					}*/
 				}
 				for (var slot=0; slot<28; slot++) {
-					var p1Item = api.getItem(player1, "trade", slot);
-					var p2Item = api.getItem(player2, "trade", slot);
+					var p1Item = api.getItem(player1, Inv.TRADE, slot);
+					var p2Item = api.getItem(player2, Inv.TRADE, slot);
 					if (p1Item != null) {
-						amount = api.delItem(player1, "trade", p1Item.getID(), p1Item.getAmount(), slot);
+						amount = api.delItem(player1, Inv.TRADE, p1Item.getID(), p1Item.getAmount(), slot);
 						api.addCarriedItem(player2, p1Item.getID(), amount);
 					}
 					if (p2Item != null) {
-						amount = api.delItem(player2, "trade", p2Item.getID(), p2Item.getAmount(), slot);
+						amount = api.delItem(player2, Inv.TRADE, p2Item.getID(), p2Item.getAmount(), slot);
 						api.addCarriedItem(player1, p2Item.getID(), amount);
 					}
 				}
 				/*for (var slot=0; slot<28; slot++) {
 					if (item != null) {
-						amount = api.delItem(player2, TRADE_CONTAINER, item.getID(), item.getAmount(), slot);
+						amount = api.delItem(player2, Inv.TRADE, item.getID(), item.getAmount(), slot);
 						api.addCarriedItem(player1, item.getID(), amount);
 					}
 				}*/

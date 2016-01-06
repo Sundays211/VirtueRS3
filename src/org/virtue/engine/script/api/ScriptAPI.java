@@ -36,7 +36,6 @@ import org.virtue.game.content.exchange.ExchangeOffer;
 import org.virtue.game.content.social.clan.ClanChannelAPI;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.entity.Entity;
-import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
@@ -442,38 +441,23 @@ public interface ScriptAPI {
 	
 	public int carriedItemTotal (Player player, int itemID);
 	
-	public Item getItem (Player player, int invId, int slot);
-	
 	/**
 	 * Gets the item in the specified slot in the player's inventory
 	 * @param player The player
-	 * @param invName The inventory to get the item from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
+	 * @param invName The inventory to get the item from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid inventories
 	 * @param slot The slot to check
 	 * @return The {@link Item} in the slot, or null if no item exists
 	 */
-	public Item getItem (Player player, String invName, int slot);
-	
-	public boolean addItem (Player player, int invId, int itemID, int amount);
+	public Item getItem (Player player, int invId, int slot);
 	
 	/**
 	 * Adds an item to the player's inventory
 	 * @param player The player
-	 * @param inv The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
+	 * @param invId The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid inventories
 	 * @param itemID The id of the item to add
 	 * @param amount The amount of the item to add
 	 */
-	public void addItem (Player player, String inv, int itemID, int amount);
-	
-	/**
-	 * Replaces an item in the player's inventory with a new item.
-	 * This should be used with care, as it deletes the old item without warning and can cause issues in some inventories (such as shops and banks).
-	 * @param player The player
-	 * @param invName The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
-	 * @param slot The slot to set
-	 * @param itemID The id of the new item to add
-	 * @param amount The number of items to add
-	 */
-	public void setInvSlot (Player player, String invName, int slot, int itemID, int amount);
+	public void addItem (Player player, int invId, int itemID, int count);
 	
 	/**
 	 * Replaces an item in the player's inventory with a new item.
@@ -484,40 +468,34 @@ public interface ScriptAPI {
 	 * @param itemID The id of the new item to add
 	 * @param amount The number of items to add
 	 */
-	public void setInvSlot (Player player, int invId, int slot, int itemId, int amount);
+	public void setInvSlot (Player player, int invId, int slot, int itemId, int count);
 		
-	public int delItem (Player player, int invId, int itemID, int amount);
-	
-	public int delItem (Player player, String container, int itemID, int amount);
+	public int delItem (Player player, int invId, int itemID, int count);
 
-	public int delItem (Player player, int invId, int itemID, int amount, int slot);
-	
 	/**
 	 * Removes an item of the specified type from the player's inventory
 	 * @param player The player
-	 * @param invName The inventory to delete the item from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
+	 * @param invId The inventory to delete the item from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid inventories
 	 * @param itemID The id of the item to delete
 	 * @param amount The number of items to delete
 	 * @param slot The prefered slot to delete from
 	 * @return The number of items actually removed
 	 */
-	public int delItem (Player player, String invName, int itemID, int amount, int slot);
-	
-	public int itemTotal (Player player, int invId, int itemID);
+	public int delItem (Player player, int invId, int itemID, int count, int slot);
 	
 	/**
 	 * Counts the number of items held by the player in the specified inventory
 	 * @param player The player
-	 * @param container The inventory to check. See {@link org.virtue.game.entity.player.inv.ContainerState} for the names of valid containers
-	 * @param itemID The type of items to count
+	 * @param invId The inventory to check. 
+	 * @param itemId The type of items to count
 	 * @return The number of items of the specified id held in the specified container
 	 */
-	public int itemTotal (Player player, String container, int itemID);
+	public int itemTotal (Player player, int invId, int itemId);
 	
 	/**
 	 * Counts the number of empty slots in the specified inventory
 	 * @param player The player.
-	 * @param containerID The inventory to check. 
+	 * @param invId The inventory to check. 
 	 * @return The number of free slots
 	 */
 	public int freeSpaceTotal (Player player, int invId);
@@ -526,20 +504,7 @@ public interface ScriptAPI {
 	
 	public int invCapacity (Player player, int invId);
 	
-	/**
-	 * @param player
-	 * @param offhand
-	 * @return
-	 */
-	public Item getWeapon(Player player, boolean offhand);
-	
-	public boolean containerReady(Player player, int invId);	
-	
-	/**
-	 * Combat Mode
-	 * @return 
-	 */
-	public CombatMode getMode(Player player, CombatMode mode);
+	public boolean containerReady(Player player, int invId);
 	
 	/**
 	 * Loads the specified inventory and sends it to the player
@@ -1078,6 +1043,10 @@ public interface ScriptAPI {
 	 * @param removalDelay The number of ticks before the location is destroyed
 	 */
 	public void spawnLocation (SceneLocation loc, int removalDelay);
+	
+	public void spawnLocation (int locTypeId, Tile coords, int removalDelay);
+	
+	public void spawnLocation (int locTypeId, Tile coords, int type, int rotation, int removalDelay);
 	
 	/**
 	 * Retrieves the location of the specified node type at the specified coordinates on the map

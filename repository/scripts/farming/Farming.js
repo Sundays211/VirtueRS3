@@ -973,7 +973,7 @@ var Farming = {
 		},
 		growSaplings : function (player) {
 			for (var slot=0; slot<28; slot++) {
-				var item = api.getItem(player, 93, slot);
+				var item = api.getItem(player, Inv.BACKPACK, slot);
 				if (item == null) {
 					continue;
 				}
