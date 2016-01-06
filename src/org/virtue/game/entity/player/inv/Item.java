@@ -1,6 +1,7 @@
 package org.virtue.game.entity.player.inv;
 
-import org.virtue.cache.def.impl.ItemType;
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.node.Node;
 import org.virtue.utility.text.StringUtility;
@@ -86,7 +87,7 @@ public class Item extends Node {
 	 */
 	public ItemType getType () {
 		if (type == null) {
-			type = ItemTypeList.list(id);
+			type = ItemTypeList.getInstance().list(id);
 		}
 		return type;
 	}

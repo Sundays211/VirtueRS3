@@ -22,13 +22,13 @@
 package org.virtue.game.content.exchange;
 
 import org.virtue.Virtue;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.inv.ItemContainer;
-import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.game.parser.ParserDataType;
-import org.virtue.utility.EnumTypeList;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -112,7 +112,7 @@ public class ExchangeOffers {
 			if (offer.isSell()) {
 				offeredItems.remove(Item.create(offer.getOfferItem(), processed));
 				returnedItems.add(Item.create(995, coins));
-				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished selling " + offer.getCompletedCount() + " x " + ItemTypeList.list(offer.getOfferItem()).name + "");
+				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished selling " + offer.getCompletedCount() + " x " + ItemTypeList.getInstance().list(offer.getOfferItem()).name + "");
 			} else {
 				int extraCoins = (coins - offer.getOfferPrice()*processed);
 				offeredItems.remove(Item.create(995, coins));
@@ -120,7 +120,7 @@ public class ExchangeOffers {
 				if (extraCoins > 0) {
 					returnedItems.add(Item.create(995, extraCoins));
 				}
-				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished buying " + offer.getCompletedCount() + " x " + ItemTypeList.list(offer.getOfferItem()).name + "");
+				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished buying " + offer.getCompletedCount() + " x " + ItemTypeList.getInstance().list(offer.getOfferItem()).name + "");
 			}
 		}
 		

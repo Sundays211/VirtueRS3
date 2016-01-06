@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.config.Js5Archive;
+import org.virtue.config.Js5Archive;
 import org.virtue.game.world.region.Region.LoadStage;
 import org.virtue.network.event.buffer.InboundBuffer;
 

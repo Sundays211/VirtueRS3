@@ -22,7 +22,7 @@
 package org.virtue.game.content.social.clan;
 
 import org.virtue.Virtue;
-import org.virtue.cache.config.vartype.VarBitOverflowException;
+import org.virtue.config.vartype.bit.VarBitOverflowException;
 
 /**
  * Represents the data for a member of a clan

@@ -43,13 +43,7 @@ var HansListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Eve
 
 var ThessaliaListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, npcTypeId, args) {
-		var player = args.player;
-		var npc = args.npc;
-		if (event == EventType.OPNPC1) {
-			chatnpc(player, npc, "Would you like to buy any fine clothes?");
-		} else if (event == EventType.OPNPC4) {
-			startMakeover(player, npc);
-		}
+		chatnpc(player, npc, "Would you like to buy any fine clothes?");
 	}
 });
 
@@ -93,7 +87,6 @@ var listen = function(scriptManager) {
 	
 	listener = new ThessaliaListener();
 	scriptManager.registerListener(EventType.OPNPC1, 548, listener);
-	//scriptManager.registerListener(EventType.OPNPC4, 548, listener);
 	
 	listener = new NastrothListener();
 	scriptManager.registerListener(EventType.OPNPC1, 6539, listener);

@@ -21,7 +21,7 @@
  */
 package org.virtue.game.content.social.clan;
 
-import org.virtue.cache.config.vartype.VarBitType;
+import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.game.content.social.SocialUser;
 
 

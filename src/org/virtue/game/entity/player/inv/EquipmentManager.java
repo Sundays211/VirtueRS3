@@ -26,14 +26,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.virtue.Virtue;
-import org.virtue.cache.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.var.VarBitTypeList;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.network.protocol.update.ref.Appearance.Gender;
-import org.virtue.utility.EnumTypeList;
 import org.virtue.utility.text.StringUtility;
 
 /**
@@ -212,7 +213,7 @@ public class EquipmentManager {
 	 * @return {@code True} if so.
 	 */
 	public boolean isWearing(int itemId) {
-		return isWearing(itemId, ItemTypeList.list(itemId).wearpos);
+		return isWearing(itemId, ItemTypeList.getInstance().list(itemId).wearpos);
 	}
 	
 	/**

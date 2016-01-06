@@ -28,8 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.config.vartype.VarDomainType;
-import org.virtue.cache.config.vartype.VarType;
+import org.virtue.config.vartype.VarDomainType;
+import org.virtue.config.vartype.VarType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -22,11 +22,11 @@
 package org.virtue.game.content.social.clan;
 
 import org.virtue.Virtue;
-import org.virtue.cache.config.vartype.VarBitType;
+import org.virtue.config.vartype.bit.VarBitType;
+import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler;
-import org.virtue.game.entity.player.var.VarBitTypeList;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 

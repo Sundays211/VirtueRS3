@@ -27,8 +27,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.cache.config.enumtype.EnumType;
-import org.virtue.cache.def.impl.StructType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.structtype.StructType;
+import org.virtue.config.structtype.StructTypeList;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.engine.script.listeners.WidgetListener;
@@ -39,8 +41,6 @@ import org.virtue.network.event.context.impl.out.CloseWidgetEventContext;
 import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
 import org.virtue.network.event.encoder.impl.CloseWidgetEventEncoder;
 import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
-import org.virtue.utility.EnumTypeList;
-import org.virtue.utility.StructTypeList;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

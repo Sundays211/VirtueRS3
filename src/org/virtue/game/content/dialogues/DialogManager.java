@@ -22,8 +22,8 @@
 package org.virtue.game.content.dialogues;
 
 import org.virtue.Virtue;
+import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.engine.script.listeners.DialogListener;
-import org.virtue.game.entity.npc.NpcTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.entity.player.widget.WidgetState;

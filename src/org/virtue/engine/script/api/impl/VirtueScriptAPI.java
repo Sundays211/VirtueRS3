@@ -27,17 +27,23 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.cache.config.enumtype.EnumType;
-import org.virtue.cache.config.paramtype.ParamType;
-import org.virtue.cache.config.paramtype.ParamTypeList;
-import org.virtue.cache.config.vartype.VarBitOverflowException;
-import org.virtue.cache.config.vartype.VarBitType;
-import org.virtue.cache.config.vartype.VarType;
-import org.virtue.cache.config.vartype.constants.BaseVarType;
-import org.virtue.cache.def.impl.ItemType;
-import org.virtue.cache.def.impl.LocType;
-import org.virtue.cache.def.impl.NpcType;
-import org.virtue.cache.def.impl.StructType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.loctype.LocType;
+import org.virtue.config.loctype.LocTypeList;
+import org.virtue.config.npctype.NpcType;
+import org.virtue.config.npctype.NpcTypeList;
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.paramtype.ParamType;
+import org.virtue.config.paramtype.ParamTypeList;
+import org.virtue.config.structtype.StructType;
+import org.virtue.config.structtype.StructTypeList;
+import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.bit.VarBitOverflowException;
+import org.virtue.config.vartype.bit.VarBitType;
+import org.virtue.config.vartype.bit.VarBitTypeList;
+import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
@@ -53,7 +59,6 @@ import org.virtue.game.content.social.friendchat.FriendChatDataType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.entity.npc.NpcTypeList;
 import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.AccountInfo;
 import org.virtue.game.entity.player.Player;
@@ -62,14 +67,11 @@ import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.inv.ItemContainer;
-import org.virtue.game.entity.player.inv.ItemTypeList;
-import org.virtue.game.entity.player.var.VarBitTypeList;
 import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
 import org.virtue.game.world.region.GroundItem;
-import org.virtue.game.world.region.LocTypeList;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
@@ -78,8 +80,6 @@ import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
-import org.virtue.utility.EnumTypeList;
-import org.virtue.utility.StructTypeList;
 import org.virtue.utility.TimeUtility;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
@@ -573,7 +573,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean itemExists(int itemID) {
-		return ItemTypeList.itemExists(itemID);
+		return ItemTypeList.getInstance().exists(itemID);
 	}
 
 	/* (non-Javadoc)
@@ -581,7 +581,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public ItemType getItemType(int itemID) {
-		return ItemTypeList.list(itemID);
+		return ItemTypeList.getInstance().list(itemID);
 	}
 
 	/* (non-Javadoc)
@@ -634,7 +634,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getExchangeCost(int itemId) {
-		return ItemTypeList.list(itemId).getExchangeValue();
+		return ItemTypeList.getInstance().list(itemId).getExchangeValue();
 	}
 
 	@Override
@@ -750,7 +750,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			throw new IllegalStateException("The container "+invName+" has not been loaded yet!");
 		}
 		int freeSpace = inv.getFreeSlots();
-		if (ItemTypeList.list(itemID).isStackable()) {
+		if (ItemTypeList.getInstance().list(itemID).isStackable()) {
 			int numOf = inv.getNumberOf(itemID);
 			if (numOf != 0 || freeSpace != 0) {
 				freeSpace = Integer.MAX_VALUE - numOf;

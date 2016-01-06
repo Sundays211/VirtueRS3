@@ -33,8 +33,8 @@ import java.util.concurrent.TimeUnit;
 import org.virtue.Constants;
 import org.virtue.cache.Cache;
 import org.virtue.cache.FileStore;
-import org.virtue.cache.def.impl.ItemType;
-import org.virtue.game.entity.player.inv.ItemTypeList;
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ItemTypeList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -75,8 +75,8 @@ public class GrandExchangeDumper {
 		double amount = 0;
 		double index = arr.size();
 
-		for (int id = 0; id < ItemTypeList.size(); id++) {
-			ItemType type = ItemTypeList.list(id);
+		for (int id = 0; id < ItemTypeList.getInstance().getSize(); id++) {
+			ItemType type = ItemTypeList.getInstance().list(id);
 			if (type != null && type.stockmarket) {
 				amount++;
 			}
@@ -85,8 +85,8 @@ public class GrandExchangeDumper {
 		System.out.println("Total Items: " + amount + ", Starting ID: "
 				+ itemID);
 
-		for (int id = itemID; id < ItemTypeList.size(); id++) {
-			ItemType type = ItemTypeList.list(id);
+		for (int id = itemID; id < ItemTypeList.getInstance().getSize(); id++) {
+			ItemType type = ItemTypeList.getInstance().list(id);
 			if (type != null && type.stockmarket) {
 				try {
 					URL link = new URL("http://api.rsapi.net/ge/item/" + id

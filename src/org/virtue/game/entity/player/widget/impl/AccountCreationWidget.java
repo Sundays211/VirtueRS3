@@ -23,15 +23,15 @@ package org.virtue.game.entity.player.widget.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.cache.config.enumtype.EnumType;
-import org.virtue.cache.def.impl.StructType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.structtype.StructType;
+import org.virtue.config.structtype.StructTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.protocol.update.ref.Appearance.Gender;
-import org.virtue.utility.EnumTypeList;
-import org.virtue.utility.StructTypeList;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

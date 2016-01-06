@@ -34,7 +34,7 @@ import org.virtue.Virtue;
 import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.config.Js5Archive;
+import org.virtue.config.Js5Archive;
 import org.virtue.game.World;
 import org.virtue.game.world.region.Region.LoadStage;
 import org.virtue.game.world.region.movement.Direction;

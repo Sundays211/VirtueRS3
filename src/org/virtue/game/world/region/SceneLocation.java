@@ -21,7 +21,8 @@
  */
 package org.virtue.game.world.region;
 
-import org.virtue.cache.def.impl.LocType;
+import org.virtue.config.loctype.LocType;
+import org.virtue.config.loctype.LocTypeList;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;

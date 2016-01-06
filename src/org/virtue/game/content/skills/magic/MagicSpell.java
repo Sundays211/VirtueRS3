@@ -1,12 +1,12 @@
 package org.virtue.game.content.skills.magic;
 
+import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.inv.ItemContainer;
-import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.game.node.Node;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
@@ -132,7 +132,7 @@ public abstract class MagicSpell {
 				return false;
 			}
 			if (staffId > -1 && !player.getEquipment().isWearing(staffId)) {
-				player.getDispatcher().sendGameMessage("You need to be wearing a " + ItemTypeList.list(staffId).name + " to cast this spell.");
+				player.getDispatcher().sendGameMessage("You need to be wearing a " + ItemTypeList.getInstance().list(staffId).name + " to cast this spell.");
 				return false;
 			}
 			ItemContainer inv = player.getInvs().getContainer(ContainerState.BACKPACK);	

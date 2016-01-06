@@ -29,19 +29,19 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.cache.config.enumtype.EnumType;
-import org.virtue.cache.config.vartype.VarBitOverflowException;
-import org.virtue.cache.config.vartype.VarBitType;
-import org.virtue.cache.def.impl.StructType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.structtype.StructType;
+import org.virtue.config.structtype.StructTypeList;
+import org.virtue.config.vartype.bit.VarBitOverflowException;
+import org.virtue.config.vartype.bit.VarBitType;
+import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.SocialUser;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.var.VarBitTypeList;
 import org.virtue.game.parser.ParserDataType;
-import org.virtue.utility.EnumTypeList;
-import org.virtue.utility.StructTypeList;
 import org.virtue.utility.text.Base37Utility;
 
 /**

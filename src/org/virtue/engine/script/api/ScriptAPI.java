@@ -24,11 +24,11 @@ package org.virtue.engine.script.api;
 import java.util.Iterator;
 
 import org.virtue.Constants;
-import org.virtue.cache.config.enumtype.EnumType;
-import org.virtue.cache.def.impl.ItemType;
-import org.virtue.cache.def.impl.LocType;
-import org.virtue.cache.def.impl.NpcType;
-import org.virtue.cache.def.impl.StructType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.loctype.LocType;
+import org.virtue.config.npctype.NpcType;
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.structtype.StructType;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.dialogues.InputEnteredHandler;

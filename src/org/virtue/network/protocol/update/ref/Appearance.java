@@ -2,20 +2,20 @@ package org.virtue.network.protocol.update.ref;
 
 import java.util.Arrays;
 
-import org.virtue.cache.config.enumtype.EnumType;
-import org.virtue.cache.def.impl.ItemType;
-import org.virtue.cache.def.impl.NpcType;
-import org.virtue.game.entity.npc.NpcTypeList;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.npctype.NpcType;
+import org.virtue.config.npctype.NpcTypeList;
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.structtype.StructTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.EquipmentStyleOverride;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.OutgoingEventType;
-import org.virtue.utility.EnumTypeList;
 import org.virtue.utility.MD5Encryption;
-import org.virtue.utility.StructTypeList;
 
 /**
  * @author Tom
@@ -84,8 +84,8 @@ public class Appearance {
 		this.set();
 
 		this.capeColors = new short[2][];
-		this.capeColors[0] = Arrays.copyOf(ItemTypeList.list(20767).recol_s, 4);
-		this.capeColors[1] = Arrays.copyOf(ItemTypeList.list(20769).recol_s, 4);
+		this.capeColors[0] = Arrays.copyOf(ItemTypeList.getInstance().list(20767).recol_s, 4);
+		this.capeColors[1] = Arrays.copyOf(ItemTypeList.getInstance().list(20769).recol_s, 4);
 
 	}
 

@@ -21,7 +21,7 @@
  */
 package org.virtue.game.entity.combat.impl;
 
-import org.virtue.cache.def.impl.StructType;
+import org.virtue.config.structtype.StructType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 

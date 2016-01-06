@@ -21,8 +21,8 @@
  */
 package org.virtue.game.entity.player.var;
 
-import org.virtue.cache.config.vartype.VarBitType;
-import org.virtue.cache.config.vartype.VarType;
+import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.bit.VarBitType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -26,14 +26,14 @@ import java.util.List;
 
 import org.virtue.Constants;
 import org.virtue.Virtue;
-import org.virtue.cache.config.enumtype.EnumType;
-import org.virtue.cache.def.impl.ItemType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.inv.ItemTypeList;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
-import org.virtue.utility.EnumTypeList;
 import org.virtue.utility.text.StringUtility;
 
 /**
@@ -211,7 +211,7 @@ public class SkillManager {
 	 * @return True if the player meets all the requirements, false otherwise
 	 */
 	public boolean canCraft (int productID) {
-		ItemType itemType = ItemTypeList.list(productID);
+		ItemType itemType = ItemTypeList.getInstance().list(productID);
 		if (itemType == null) {
 			return false;
 		}
