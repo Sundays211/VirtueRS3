@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigItem;
 import org.virtue.utility.text.StringUtility;
@@ -37,11 +35,6 @@ import org.virtue.utility.text.StringUtility;
  * @since 13/11/2014
  */
 public class NpcType implements ConfigItem {
-
-	/**
-	 * The {@link Logger} instance
-	 */
-	private static Logger logger = LoggerFactory.getLogger(NpcType.class);
 	
     public static final int anInt8430 = 8;
     static final int anInt8439 = 6;
@@ -57,11 +50,7 @@ public class NpcType implements ConfigItem {
      */
 	public static NpcType load (int id, ByteBuffer buffer) {
 		NpcType npcType = new NpcType(id);
-		try {
-			npcType.decode(buffer);
-		} catch (RuntimeException ex) {
-			logger.error("Failed to load npctype "+id, ex);
-		}
+		npcType.decode(buffer);
 		return npcType;
 	}
 	
@@ -74,11 +63,7 @@ public class NpcType implements ConfigItem {
 	 */
 	public static NpcType load (int id, ByteBuffer cacheData, ByteBuffer extraData) {
 		NpcType npcType = load(id, extraData);
-		try {
-			npcType.decode(cacheData);
-		} catch (RuntimeException ex) {
-			logger.error("Failed to load npctype "+id, ex);
-		}
+		npcType.decode(cacheData);
 		return npcType;
 	}
 	
@@ -559,7 +544,6 @@ public class NpcType implements ConfigItem {
     public int getMagicAccuracy() {
     	return (getParam(3, -1)/10);
     }
-
     
     public int getParam(int key, int defaultInt) {
 		if (null == params) {

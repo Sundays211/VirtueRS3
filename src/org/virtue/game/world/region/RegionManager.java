@@ -54,7 +54,7 @@ public class RegionManager implements TraversalMap {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(RegionManager.class);
 
-	protected static ReferenceTable landscapesTable;
+	protected static ReferenceTable mapsTable;
 
 	private static final int DYNAMIC_REGION_START_X = 0x80;
 
@@ -73,7 +73,7 @@ public class RegionManager implements TraversalMap {
 	 *             If an error occurs while loading the cache
 	 */
 	public static void init(Cache cache) throws IOException {
-		landscapesTable = ReferenceTable.decode(Container.decode(
+		mapsTable = ReferenceTable.decode(Container.decode(
 				cache.getStore().read(255, Js5Archive.MAPS.getArchiveId()))
 				.getData());
 	}
@@ -245,7 +245,7 @@ public class RegionManager implements TraversalMap {
 		if (regionX > 127) {
 			return false;// 128-256 is reserved for dynamic regions
 		}
-		ReferenceTable.Entry entry = landscapesTable.getEntry(getArchiveKey(
+		ReferenceTable.Entry entry = mapsTable.getEntry(getArchiveKey(
 				regionX, regionY));
 		return entry != null && entry.getEntry(0) != null;
 	}

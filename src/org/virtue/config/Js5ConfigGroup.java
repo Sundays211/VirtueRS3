@@ -38,7 +38,7 @@ public enum Js5ConfigGroup {
 	NPCTYPE(9, 7),
 	ITEMTYPE(10, 8),
 	PARAMTYPE(11),
-	ANIMTYPE(12, 7),
+	SEQTYPE(12, 7),
 	SPOTTYPE(13, 8),
 	GROUP_14(14, 10),
 	GROUP_15(15),

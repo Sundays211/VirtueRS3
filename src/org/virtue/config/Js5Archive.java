@@ -43,7 +43,7 @@ public enum Js5Archive {
 	CONFIG_ENUM(17, "client.enum.config", true, false, false),
 	CONFIG_NPC(18, "client.npc.config", true, false, false),
 	CONFIG_ITEM(19, "client.obj.config", true, false, false),
-	CONFIG_ANIM(20, "client.seq.config", true, false, false),
+	CONFIG_SEQ(20, "client.seq.config", true, false, false),
 	CONFIG_SPOT(21, "client.spot.config", true, false, false),
 	CONFIG_STRUCT(22, "client.struct.config", true, false, false),
 	WORLDMAP(23, "client.worldmap", true, false, false),
@@ -65,15 +65,15 @@ public enum Js5Archive {
 	UNKNOWN_42(42, "", false, false, false);
 	
 	int archiveId;
-	boolean aBool8184;
+	boolean streamed;
     
     public boolean method1461(byte i) {
-    	return aBool8184;
+    	return streamed;
     }
     
-    Js5Archive(int id, String string, boolean bool, boolean bool_0_, boolean bool_1_) {
-		archiveId = id;
-		aBool8184 = bool_1_;
+    Js5Archive(int id, String string, boolean translated, boolean rt7, boolean streamed) {
+    	this.archiveId = id;
+		this.streamed = streamed;
     }
     
     public int getArchiveId() {

@@ -51,6 +51,7 @@ import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.config.paramtype.ParamTypeList;
 import org.virtue.config.quest.QuestTypeList;
+import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.engine.GameEngine;
@@ -299,7 +300,8 @@ public class Virtue {
 		parser.load();
 		widget = new WidgetRepository();
 		widget.load();
-		scripts = new JSListeners();
+		String scriptsFileDir = getProperty("scripts.dir", "./repository/scripts/");
+		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir));
 		scripts.load();
 		clans = new ClanManager();
 		clans.load();
@@ -328,6 +330,8 @@ public class Virtue {
 				configTable.getEntry(Js5ConfigGroup.INVTYPE.id).size());
 		Archive params = Archive.decode(cache.read(2, Js5ConfigGroup.PARAMTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id).size());
+		Archive quests = Archive.decode(cache.read(2, Js5ConfigGroup.QUESTTYPE.id).getData(), 
+				configTable.getEntry(Js5ConfigGroup.QUESTTYPE.id).size());
 		Archive varbits = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_BIT.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_BIT.id).size());
 		Archive varps = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_PLAYER.id).getData(), 
@@ -336,21 +340,20 @@ public class Virtue {
 				configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id).size());
 		InvRepository.init(invs, configTable.getEntry(Js5ConfigGroup.INVTYPE.id));
 		ParamTypeList.init(params, configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id));
+		QuestTypeList.init(quests, configTable);
 		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));
 		VarBitTypeList.init(varbits, configTable.getEntry(Js5ConfigGroup.VAR_BIT.id));
 		ClanSettings.init(varclans, configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id));
 		ItemTypeList.init(cache, Constants.ITEM_DATA);
 		LocTypeList.init(cache);
 		NpcTypeList.init(cache, Constants.NPC_DATA);
-		RegionManager.init(cache);
+		SeqTypeList.init(cache);
 		EnumTypeList.init(cache);
 		StructTypeList.init(cache);
 		RenderTypeList.init(Archive.decode(cache.read(2, Js5ConfigGroup.RENDERTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.RENDERTYPE.id).size()));
 		QuickChatTypeList.init(cache);
-		Archive quests = Archive.decode(cache.read(2, Js5ConfigGroup.QUESTTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.QUESTTYPE.id).size());
-		QuestTypeList.init(configTable, quests);
+		RegionManager.init(cache);
 		//Appearance.init(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.APPEARANCE.js5Id).getData());
 		Huffman.setHuffman(new Huffman(cache.read(10, cache.getFileId(Js5Archive.BINARY.getArchiveId(), "huffman")).getData()));
 	}

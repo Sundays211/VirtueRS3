@@ -37,6 +37,8 @@ import org.virtue.config.objtype.ItemType;
 import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.paramtype.ParamTypeList;
+import org.virtue.config.seqtype.SeqType;
+import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.VarType;
@@ -658,6 +660,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public NpcType getNpcType(NPC npc) {
 		return npc.getType();
+	}
+
+	@Override
+	public int getSeqTime(int seqTypeId) {
+		SeqType seqType = SeqTypeList.list(seqTypeId);
+		if (seqType == null) {
+			throw new IllegalArgumentException("Invalid sequence: "+seqTypeId);
+		}
+		return seqType.serverTime;
 	}
 
 	/* (non-Javadoc)

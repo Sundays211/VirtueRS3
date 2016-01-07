@@ -433,6 +433,8 @@ public interface ScriptAPI {
 	
 	public NpcType getNpcType (NPC npc);
 	
+	public int getSeqTime (int seqTypeId);
+	
 	public boolean addCarriedItem (Player player, int itemID, int amount);
 	
 	public int delCarriedItem (Player player, int itemID, int amount);

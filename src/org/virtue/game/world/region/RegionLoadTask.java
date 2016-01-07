@@ -65,7 +65,7 @@ public class RegionLoadTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			ReferenceTable.Entry entry = RegionManager.landscapesTable.getEntry(archiveKey);
+			ReferenceTable.Entry entry = RegionManager.mapsTable.getEntry(archiveKey);
 			if (entry == null || entry.getEntry(0) == null) {
 				logger.warn("Unable to load region "+regionID+": Invalid archive key "+archiveKey);
 				return;

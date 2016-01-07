@@ -46,7 +46,7 @@ public class QuestTypeList extends ConfigDecoder<QuestType> {
 	
 	private static QuestTypeList instance;
 	
-	public static void init (ReferenceTable configTable, Archive archive) {
+	public static void init (Archive archive, ReferenceTable configTable) {
 		instance = new QuestTypeList(configTable, archive);
 		logger.info("Found "+instance.getCount()+" quest definitions.");
 	}

@@ -142,17 +142,17 @@ public class JSListeners implements ScriptManager {
 	
 	private File scriptDir;
 
-	public JSListeners() {
-		listeners = new HashMap<>();
-		widgetMap = new HashMap<Integer, WidgetListener>();
-		abstractNPCMap = new HashMap<Integer, AbstractNPC>();
-		combatScriptMap = new HashMap<Integer, CombatHandler>();
-		dialogMap = new HashMap<String, DialogListener>();
-		varMap = new HashMap<Integer, VarListener>();
-		vars = new HashMap<Integer, VarListener>();
-		scriptAPI = new VirtueScriptAPI();
-		clanApi = new VirtueClanAPI(Virtue.getInstance().getClans());
-		scriptDir = new File("./repository/scripts/");
+	public JSListeners(File scriptDir) {
+		this.listeners = new HashMap<>();
+		this.widgetMap = new HashMap<Integer, WidgetListener>();
+		this.abstractNPCMap = new HashMap<Integer, AbstractNPC>();
+		this.combatScriptMap = new HashMap<Integer, CombatHandler>();
+		this.dialogMap = new HashMap<String, DialogListener>();
+		this.varMap = new HashMap<Integer, VarListener>();
+		this.vars = new HashMap<Integer, VarListener>();
+		this.scriptAPI = new VirtueScriptAPI();
+		this.clanApi = new VirtueClanAPI(Virtue.getInstance().getClans());
+		this.scriptDir = scriptDir;
 	}
 	
 	private void setConstants (ScriptEngine engine) {
