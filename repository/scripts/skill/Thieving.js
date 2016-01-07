@@ -246,7 +246,7 @@ var Thieving = {
 			if (npc == null) {
 				return;
 			}
-			player.queueUpdateBlock(new FaceEntityBlock(npc));
+			api.faceEntity(player, npc);
 			if (api.getStatLevel(player, Stat.THIEVING) < thieving.level) {
 				api.sendMessage(player, "You need a thieving level of "
 						+ thieving.level + " to steal from this "
@@ -259,9 +259,9 @@ var Thieving = {
 			}
 			if (Math.random() <= thieving.randomTime) {
 				player.lock(5);
-				npc.queueUpdateBlock(new FaceEntityBlock(player));
+				api.faceEntity(npc, player);
 				api.runAnimation(player, 834);
-				player.queueUpdateBlock(new GraphicsBlock(1, 80));
+				api.setSpotAnim(player, 1, 80);
 				api.pausePlayer(player, 5);//TODO: What is the correct stun time?
 			} else {
 				api.runAnimation(player, 881);

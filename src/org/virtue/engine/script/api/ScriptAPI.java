@@ -848,6 +848,19 @@ public interface ScriptAPI {
 	 */
 	public void faceCoords (Entity entity, Tile coords);
 	
+	/**
+	 * Tells an entity to face the specified target entity
+	 * @param entity The entity
+	 * @param target The target entity
+	 */
+	public void faceEntity (Entity entity, Entity target);
+	
+	/**
+	 * Tells an entity to stop facing the specified target entity
+	 * @param entity The entity
+	 */
+	public void clearFaceEntity (Entity entity);
+	
 	public void forceMovement (Entity entity, Tile t1, int delay1, Tile t2, int delay2, int direction);
 	
 	/**

@@ -430,7 +430,7 @@ function startHarvest (player, npc) {
 		api.sendMessage(player, "Not enough space in your inventory.");
 		return;
 	}
-	player.queueUpdateBlock(new FaceEntityBlock(npc));		
+	api.faceEntity(player, npc);	
 	if (npc.getID() == harvest.wispID) {
 		openWisp(npc, harvest);
 	}

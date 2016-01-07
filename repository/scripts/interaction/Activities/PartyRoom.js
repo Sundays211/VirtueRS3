@@ -65,7 +65,7 @@ function startParty (player, npc) {
 	}
 	//print(api.getNpcType(npc.getID()).name+"\n");
 	var party = forPartyNPC(npc.getID());
-	player.queueUpdateBlock(new FaceEntityBlock(npc));
+	api.faceEntity(player, npc);
 	api.runAnimation(player, 794);
 	npc.setCanRespawn(false);
 	npc.setExists(false);

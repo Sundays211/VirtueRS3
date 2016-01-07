@@ -77,6 +77,7 @@ import org.virtue.game.world.region.Tile;
 import org.virtue.game.world.region.movement.Direction;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
+import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
 import org.virtue.network.protocol.update.block.ForceTalkBlock;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
@@ -1513,6 +1514,16 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void faceCoords(Entity entity, Tile target) {
 		entity.queueUpdateBlock(new FaceDirectionBlock(target));
+	}
+
+	@Override
+	public void faceEntity(Entity entity, Entity target) {
+		entity.queueUpdateBlock(new FaceEntityBlock(target));
+	}
+
+	@Override
+	public void clearFaceEntity(Entity entity) {
+		entity.queueUpdateBlock(new FaceEntityBlock(null));
 	}
 
 	/* (non-Javadoc)
