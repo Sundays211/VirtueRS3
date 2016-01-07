@@ -46,35 +46,35 @@ public class WidgetOnNPCContext implements GameEventContext {
 		this.forceRun = force;
 	}
 	
-	public int getHash() {
+	public int getIfHash() {
 		return hash;
 	}
 	
 	/**
 	 * @return the widgetID
 	 */
-	public int getWidgetID() {
+	public int getIfInterface() {
 		return hash >> 16;
 	}
 
 	/**
 	 * @return the componentID
 	 */
-	public int getComponentID() {
+	public int getIfComponent() {
 		return hash & 0xFFFF;
 	}
 
 	/**
 	 * @return the slot1
 	 */
-	public int getSlot() {
+	public int getIfSlot() {
 		return slot;
 	}
 
 	/**
 	 * @return the slot2
 	 */
-	public int getItemID() {
+	public int getIfItem() {
 		return itemID;
 	}
 

@@ -75,7 +75,7 @@ public class WidgetOnLocEventHandler implements GameEventHandler<WidgetOnLocEven
 		if (player.getPrivilegeLevel().getRights() >= 2) {
 			message = "Unhanded interface-on-location: Interface: id="+context.getIfInterface()+", comp="+context.getIfComponent()
 					+", slot="+context.getIfSlot()+", item="+context.getIfItem()
-					+" Location: "+location;
+					+", location="+location;
 		}
 		player.getDispatcher().sendGameMessage(message);
 	}

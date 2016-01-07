@@ -44,7 +44,6 @@ import org.virtue.engine.script.listeners.AbilityListener;
 import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.DialogListener;
 import org.virtue.engine.script.listeners.EventListener;
-import org.virtue.engine.script.listeners.ItemOnEntityListener;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
 import org.virtue.engine.script.listeners.WidgetListener;
@@ -123,8 +122,6 @@ public class JSListeners implements ScriptManager {
 	 */
 	private Map<EventBind, EventListener> listeners;
 
-	private Map<Integer, ItemOnEntityListener> itemOnEntityMap;
-
 	private Map<Integer, WidgetListener> widgetMap;
 	
 	private Map<String, DialogListener> dialogMap;
@@ -147,7 +144,6 @@ public class JSListeners implements ScriptManager {
 
 	public JSListeners() {
 		listeners = new HashMap<>();
-		itemOnEntityMap = new HashMap<Integer, ItemOnEntityListener>();
 		widgetMap = new HashMap<Integer, WidgetListener>();
 		abstractNPCMap = new HashMap<Integer, AbstractNPC>();
 		combatScriptMap = new HashMap<Integer, CombatHandler>();
@@ -230,7 +226,7 @@ public class JSListeners implements ScriptManager {
 				}
 			}			
 		}
-		logger.info("Registerd "  + itemOnEntityMap.size() + " ItemOnEntity Script(s), " + widgetMap.size() + " Widget Script(s).");
+		logger.info("Registerd "  + widgetMap.size() + " Widget Script(s).");
 		return success;
 	}
 	
@@ -259,7 +255,6 @@ public class JSListeners implements ScriptManager {
 	@Override
 	public synchronized boolean reload() {
 		listeners.clear();
-		itemOnEntityMap.clear();
 		widgetMap.clear();
 		dialogMap.clear();
 		abstractNPCMap.clear();
@@ -345,12 +340,6 @@ public class JSListeners implements ScriptManager {
 			varMap.put(id, listener);
 		}
 	}
-
-	public void registerItemOnEntityListener(ItemOnEntityListener listener, int[] ids) {
-		for (int id : ids) {
-			itemOnEntityMap.put(id, listener);
-		}
-	}
 	
 	public void registerAbilityListener(AbilityListener listener, int shortcut) {
 		ActionBar.getAbilities().put(listener.getAbilityID(), new ScriptedAbility(listener));
@@ -413,11 +402,6 @@ public class JSListeners implements ScriptManager {
 	@Override
 	public WidgetListener forWidgetID(int id) {
 		return widgetMap.get(id);
-	}
-	
-	@Override
-	public ItemOnEntityListener forItemOnEntity (int itemID) {
-		return itemOnEntityMap.get(itemID);
 	}
 	
 	public DialogListener getDialog (String name) {

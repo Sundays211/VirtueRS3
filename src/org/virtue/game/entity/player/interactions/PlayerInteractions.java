@@ -87,7 +87,6 @@ public class PlayerInteractions {
 		addOption(PlayerOption.EXAMINE, new PlayerExamineHandler());
 		bindHandler(OptionButton.NINE, new ClanInviteResponse());
 		//bindWidgetHandler(new PlayerAbilityHandler());
-		bindWidgetHandler(new ItemOnPlayerHandler());
 		bindWidgetHandler(new ClanRecruitAction());
 		sendOptions();
 	}

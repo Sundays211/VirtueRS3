@@ -21,6 +21,12 @@
  */
 package org.virtue.game.world.region.movement;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.virtue.Virtue;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
@@ -38,12 +44,14 @@ public class WidgetOnEntityTarget implements EntityTarget {
 	private Player player;
 	private Entity target;
 	private int widgetID, component, slot, itemID;
+	private int compHash;
 	
-	public WidgetOnEntityTarget (Player player, Entity target, int widgetID, int component, int slot, int itemID) {
+	public WidgetOnEntityTarget (Player player, Entity target, int compHash, int slot, int itemID) {
 		this.player = player;
 		this.target = target;
-		this.widgetID = widgetID;
-		this.component = component;
+		this.compHash = compHash;
+		this.widgetID = compHash >> 16;
+		this.component = compHash & 0xffff;
 		this.slot = slot;
 		this.itemID = itemID;
 	}
@@ -72,15 +80,37 @@ public class WidgetOnEntityTarget implements EntityTarget {
 	 */
 	@Override
 	public boolean onReachTarget() {
+		ScriptEventType eventType;
 		if (target instanceof Player) {
-			if (!player.getInteractions().handleInterfaceOnPlayer((Player) target, widgetID, component, slot, itemID)) {
-				String message = "Interface: id="+widgetID+", comp="+component+", slot="+slot+", item="+itemID
-						+" Player: name="+target.getName()+", index="+target.getIndex();
-				System.out.println("Unhanded interface-on-player: "+message);
-				System.out.println(message);
-			}
+			eventType = ScriptEventType.IF_PLAYERU;
 		} else if (target instanceof NPC) {
-			//TODO: Npc handling
+			eventType = ScriptEventType.IF_NPCU;
+		} else {
+			throw new IllegalStateException("Invalid entity type: "+target.getClass());
+		}
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(eventType, compHash)) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put(((target instanceof Player) ? "target" : "npc"), target);
+			args.put("component", component);
+			args.put("interface", widgetID);
+			args.put("slot", slot);
+			scripts.invokeScriptChecked(eventType, compHash, args);
+			return true;
+		}
+		boolean handled = Virtue.getInstance().getWidgetRepository().handleUse(widgetID, component, slot, itemID, target, player);
+		if (!handled && target instanceof Player) {
+			handled = player.getInteractions().handleInterfaceOnPlayer((Player) target, widgetID, component, slot, itemID);
+		}
+		if (!handled) {
+			String message = "Nothing interesting happens.";
+			if (player.getPrivilegeLevel().getRights() >= 2) {
+				message = "Unhanded interface-on-entity: Interface: id="+widgetID+", comp="+component
+						+", slot="+slot+", item="+itemID
+						+", entity="+target;
+			}
+			player.getDispatcher().sendGameMessage(message);
 		}
 		return true;
 	}

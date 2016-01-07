@@ -23,7 +23,6 @@ package org.virtue.engine.script;
 
 import java.util.Map;
 
-import org.virtue.engine.script.listeners.ItemOnEntityListener;
 import org.virtue.engine.script.listeners.WidgetListener;
 
 /**
@@ -74,9 +73,6 @@ public interface ScriptManager {
 	 */
 	public void invokeScriptChecked(ScriptEventType type,
 			Object trigger, Map<String, Object> args) throws NullPointerException;
-
-	@Deprecated
-	public ItemOnEntityListener forItemOnEntity(int itemID);
 
 	public WidgetListener forWidgetID(int id);
 

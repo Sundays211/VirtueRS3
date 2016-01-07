@@ -33,6 +33,8 @@ import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.World;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.entity.Entity;
+import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
@@ -209,6 +211,61 @@ public class BackpackWidget extends Widget {
 			message = "Unhandled location use: location="+location+", useitem="+item+", useslot="+slot;
 		}		
 		player.getDispatcher().sendGameMessage(message);
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.player.widget.Widget#use(int, int, int, int, int, int, int, int, org.virtue.game.entity.player.Player)
+	 */
+	@Override
+	public boolean use(int widget, int component, int slot, int itemId,
+			Entity targetEntity, Player player) {
+		if (component != 34) {//Not item-on-location event
+			return false;
+		}
+		Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot);
+		if (item == null || item.getId() != itemId) {
+			//Client backpack is out of sync; re-synchronise it
+			player.getInvs().sendContainer(ContainerState.BACKPACK);
+			return false;
+		}
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		
+		if (targetEntity instanceof Player) {
+			Player targetPlayer = (Player) targetEntity;
+			if (scripts.hasBinding(ScriptEventType.OPPLAYERU, itemId)) {
+				Map<String, Object> args = new HashMap<>();
+				args.put("player", player);
+				args.put("target", targetPlayer);
+				args.put("useitem", item);
+				args.put("useslot", slot);
+				scripts.invokeScriptChecked(ScriptEventType.OPPLAYERU, itemId, args);
+				return true;
+			}
+			String message = "Nothing interesting happens.";
+			if (player.getPrivilegeLevel().getRights() >= 2) {
+				message = "Unhandled player use: player="+targetPlayer+", useitem="+item+", useslot="+slot;
+			}		
+			player.getDispatcher().sendGameMessage(message);
+		} else if (targetEntity instanceof NPC) {
+			NPC targetNpc = (NPC) targetEntity;
+			if (scripts.hasBinding(ScriptEventType.OPNPCU, targetNpc.getType().getId())) {
+				Map<String, Object> args = new HashMap<>();
+				args.put("player", player);
+				args.put("npc", targetNpc);
+				args.put("useitem", item);
+				args.put("useslot", slot);
+				scripts.invokeScriptChecked(ScriptEventType.OPNPCU, targetNpc.getType().getId(), args);
+				return true;
+			}
+			String message = "Nothing interesting happens.";
+			if (player.getPrivilegeLevel().getRights() >= 2) {
+				message = "Unhandled npc use: npc="+targetNpc+", useitem="+item+", useslot="+slot;
+			}		
+			player.getDispatcher().sendGameMessage(message);
+		} else {
+			logger.error("Unsupported entity type: "+targetEntity.getClass());
+		}
 		return true;
 	}
 

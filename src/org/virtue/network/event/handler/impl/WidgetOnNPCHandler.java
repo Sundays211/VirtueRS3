@@ -29,6 +29,7 @@ import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.world.region.movement.WidgetOnEntityTarget;
 import org.virtue.network.event.context.impl.in.WidgetOnNPCContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -43,26 +44,31 @@ public class WidgetOnNPCHandler implements GameEventHandler<WidgetOnNPCContext> 
 
 	@Override
 	public void handle(Player player, WidgetOnNPCContext context) {
-		System.out.println(context.getWidgetID() + ", " + context.getSlot() + ", " + context.getNpcIndex());
-		NPC npc = World.getInstance().getNPCs().get(context.getNpcIndex());
-		if (context.getWidgetID() == 1461) {
+		NPC target = World.getInstance().getNPCs().get(context.getNpcIndex());
+		if (context.getIfInterface() == 1461) {
 			Item mainHand = player.getEquipment().getWorn(3);
-			MagicSpell spell = Spellbook.MODERN.get(context.getSlot());
+			MagicSpell spell = Spellbook.MODERN.get(context.getIfSlot());
 			if (spell != null) {
 				if (mainHand == null) {
 					player.getDispatcher().sendGameMessage("This ability requires a magic weapon in your main hand.");
 					return;
 				}
-				spell.cast(player, npc);
+				spell.cast(player, target);
 				return;
 			}
 		}
-		Ability ability = ActionBar.getAbilities().get(context.getWidgetID() << 16 | context.getSlot());
-		player.getDispatcher().sendGameMessage("Ability Button ID: " + context.getSlot());
-		System.out.println("Ability: " + ability);
+		Ability ability = ActionBar.getAbilities().get(context.getIfHash());
 		if (ability != null) {
-			player.getCombatSchedule().lock(npc);
+			player.getDispatcher().sendGameMessage("Ability Button ID: " + context.getIfSlot());
+			System.out.println("Ability: " + ability);
+			player.getCombatSchedule().lock(target);
 			player.getCombatSchedule().run(ability);
+			return;
+		}
+		if (target != null) {
+			player.getMovement().setTarget(new WidgetOnEntityTarget(player, target, 
+					context.getIfHash(),
+					context.getIfSlot(), context.getIfItem()));
 		}
 	}
 }

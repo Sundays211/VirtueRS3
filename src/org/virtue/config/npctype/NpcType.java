@@ -85,7 +85,7 @@ public class NpcType implements ConfigItem {
 	short[] retex_s;
     public int[] headMeshes;
     public int attackOpCursor;
-    public int myid;
+    public int id;
     public String name = "null";
     public String desc = null;
     public int size = 1;
@@ -209,10 +209,14 @@ public class NpcType implements ConfigItem {
 		aBool8500 = true;
 		anInt8469 = 0;
 		hidePlayer = false;
-		myid = id;
+		this.id = id;
 		//myList = class537;
 		//anInterface8_7349 = interface8;
 		op = new String[] { null, null, null, null, null, "Examine" };
+    }
+    
+    public int getId() {
+    	return id;
     }
 	
 	@Override

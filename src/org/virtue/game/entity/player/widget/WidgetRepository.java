@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.impl.AccountCreationWidget;
 import org.virtue.game.entity.player.widget.impl.ActionBarWidget;
@@ -257,6 +258,32 @@ public final class WidgetRepository {
 			logger.error("Failed handling widget use: " + widgetId
 					+ ", component: " + component + ", slot: " + slot
 					+ ", item: " + item +", location: "+location, ex);
+			return false;
+		}
+	}
+	
+	/**
+	 * Handles an interface used with an {@link Entity}
+	 * @param widgetId The selected widget ID
+	 * @param component The selected widget component ID
+	 * @param slot The selected widget slot
+	 * @param item The selected widget item ID
+	 * @param entity The target entity
+	 * @param player The player
+	 * @return True if the use was handled successfully, false otherwise
+	 */
+	public boolean handleUse(int widgetId, int component, int slot,
+			int item, Entity entity, Player player) {
+		Widget widget = getInterface(widgetId);
+		if (widget == null) {
+			return false;
+		}
+		try {
+			return widget.use(widgetId, component, slot, item, entity, player);
+		} catch (Exception ex) {
+			logger.error("Failed handling widget use: " + widgetId
+					+ ", component: " + component + ", slot: " + slot
+					+ ", item: " + item +", entity: "+entity, ex);
 			return false;
 		}
 	}

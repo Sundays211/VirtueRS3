@@ -306,7 +306,12 @@ public enum ScriptEventType {
 	/**
 	 * Called when an option is selected on a chat line or chat list (eg friends list, friends chat list, group chat, etc)
 	 */
-	CHATLIST_OPTION(105);
+	CHATLIST_OPTION(105),
+	
+	/**
+	 * Called when an inventory item is used on a player. Note: In this case, the objType ID is used as the binding
+	 */
+	OPPLAYERU(106);
 	
 	private int id;
 	

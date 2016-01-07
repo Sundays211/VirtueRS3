@@ -30,21 +30,12 @@ var FaceEntityBlock = Java.type('org.virtue.network.protocol.update.block.FaceEn
  * @author Sundays211
  * @since 01/16/2015
  */
-var api;
 
-var ItemOnEntityListener = Java.extend(Java.type('org.virtue.engine.script.listeners.ItemOnEntityListener'), {
-
-	/* The item ids to bind to */
-	getIDs: function() {
-		return [962];
-	},
-
-	/* The first option on an npc */
-	//Target = used on
-	//isNpc = true if the target is an npc, false if it's a player
-	//item = The item used
-	//slot = The backpack slot of the item
-	handle: function(player, target, isNpc, item, slot) {
+var ChristmasCrackerListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, locTypeId, args) {
+		var player = args.player;
+		var target = args.target;
+		
 		var possibles = [1046, 1042, 1044, 1048, 1040, 1038];
 		var extraPossibles = [1127, 1079, 1201, 1163, 2581, 6571, 563, 554, 555, 995, 1973, 1635, 950, 1897, 1969, 1217];
 		var idx = Math.floor(Math.random()*possibles.length);
@@ -60,9 +51,9 @@ var ItemOnEntityListener = Java.extend(Java.type('org.virtue.engine.script.liste
 			return;
 		}
 		api.sendMessage(player, "You pulled the Christmas Cracker... ");
-		player.queueUpdateBlock(new AnimationBlock(15153));
+		api.runAnimation(player, 15153);
 		player.queueUpdateBlock(new FaceEntityBlock(target));
-		target.queueUpdateBlock(new AnimationBlock(15153));
+		api.runAnimation(target, 15153);
 		target.queueUpdateBlock(new FaceEntityBlock(player));
 		if (Math.random() <= 0.5) {
 			player.queueUpdateBlock(new FaceEntityBlock(null));
@@ -70,27 +61,20 @@ var ItemOnEntityListener = Java.extend(Java.type('org.virtue.engine.script.liste
 			api.addCarriedItem(player, choice2, 1); //Extra reward random
 			api.addCarriedItem(player, choice, 1); //Random Partyhat
 			api.addCarriedItem(player, 995, 100000); //Extra 100k for opening
-			api.delCarriedItem(player, 962, 1, slot);
+			api.delCarriedItem(player, 962, 1, args.slot);
 		} else {
 			target.queueUpdateBlock(new FaceEntityBlock(null));
 			target.queueUpdateBlock(new ForceTalkBlock("Hey! I got the cracker!"));
 			api.addCarriedItem(target, choice2, 1); //Extra reward random
 			api.addCarriedItem(target, choice, 1); //Random Partyhat
 			api.addCarriedItem(target, 995, 100000); //Extra 100k for opening 
-			api.delCarriedItem(player, 962, 1, slot);
+			api.delCarriedItem(player, 962, 1, args.slot);
 		}
-		return true;
-	},
-	
-	getRange : function (player, isNpc, itemID) {
-		return 1;
 	}
-
 });
 
 /* Listen to the npc ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();	
-	var listener = new ItemOnEntityListener();
-	scriptManager.registerItemOnEntityListener(listener, listener.getIDs());
+	var listener = new ChristmasCrackerListener();
+	scriptManager.registerListener(EventType.OPPLAYERU, 962, listener);
 };

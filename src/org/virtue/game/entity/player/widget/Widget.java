@@ -21,6 +21,7 @@
  */
 package org.virtue.game.entity.player.widget;
 
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -90,6 +91,20 @@ public abstract class Widget {
 	 * @return True if the use was handled successfully, false otherwise
 	 */
 	public boolean use (int widget1, int component1, int slot, int item, SceneLocation location, Player player) {
+		return false;
+	}
+	
+	/**
+	 * Called when this interface is used on a {@link Entity}
+	 * @param widget The selected widget ID
+	 * @param component The selected widget component ID
+	 * @param slot The selected widget slot ID
+	 * @param item The selected widget item ID
+	 * @param entity The entity on which the interface was used
+	 * @param player The player
+	 * @return True if the use was handled successfully, false otherwise
+	 */
+	public boolean use (int widget1, int component1, int slot, int item, Entity entity, Player player) {
 		return false;
 	}
 	
