@@ -84,7 +84,7 @@ function giveRandomItem (player, npc) {
 	if (Math.random() <= 0.01) {
 		World.getInstance().sendBroadcast(api.getName(player) + " has received the big prize from the balloon animal event! ");
 		api.runAnimation(player, 862);
-		api.queueSpot(player, 1, 199);
+		api.setSpotAnim(player, 1, 199);
 		api.addCarriedItem(player, 1050, 1);
 		api.pausePlayer(player, 2);
 	} else {

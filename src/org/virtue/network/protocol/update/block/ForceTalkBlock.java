@@ -34,13 +34,16 @@ import org.virtue.network.protocol.update.BlockType;
 public class ForceTalkBlock extends Block {
 
 	private String message;
+
+	private int flags;
 	
 	/**
 	 * The {@link ForceTalkBlock} constructor
 	 */
-	public ForceTalkBlock(String message) {
-		super(BlockType.SAY_PRIVATE);
+	public ForceTalkBlock(String message, int flags) {
+		super(BlockType.FORCE_SAY);
 		this.message = message;
+		this.flags = flags;
 	}
 
 
@@ -51,6 +54,7 @@ public class ForceTalkBlock extends Block {
 	public void encodeBlock(OutboundBuffer block,Entity entity) {
 		if (entity instanceof Player) {
 			block.putString(message);
+			block.putC(flags);
 		}
 	}
 }

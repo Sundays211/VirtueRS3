@@ -53,14 +53,14 @@ public enum BlockType {
 	MOVE(0x20, 20, 0x800, 0),
 	
 	/**
-	 * Forces the player to say the given message, which only appears in the chatbox of that player
+	 * Forces the player to say the given message.
 	 */
-	SAY_PRIVATE(0x100, 18),
+	FORCE_SAY(0x10000, 12),
 	
 	/**
-	 * Forces the entity to say the given message. If specified, it will appear in the chatbox of nearby players
+	 * Forces the entity to say the given message. Generally used in quest situations.
 	 */
-	SAY(0x10000, 12, 0x8, 15),
+	SAY(0x100, 18, 0x8, 15),
 	
 	GLOW(0x100000, 10, 0x10000000, 23),
 	

@@ -22,7 +22,6 @@
 package org.virtue.network.protocol.update.block;
 
 import org.virtue.game.entity.Entity;
-import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.BlockType;
@@ -39,17 +38,11 @@ public class TalkBlock extends Block {
 	private String message;
 
 	/**
-	 * The flags of the message
-	 */
-	private int flags;
-
-	/**
 	 * The {@link TalkBlock} constructor
 	 */
-	public TalkBlock(String message, int flags) {
+	public TalkBlock(String message) {
 		super(BlockType.SAY);
 		this.message = message;
-		this.flags = flags;
 	}
 
 
@@ -58,11 +51,6 @@ public class TalkBlock extends Block {
 	 */
 	@Override
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
-		if (entity instanceof Player) {
-			block.putString(message);
-			block.putC(flags);
-		} else {
-			block.putString(message);
-		}
+		block.putString(message);
 	}
 }

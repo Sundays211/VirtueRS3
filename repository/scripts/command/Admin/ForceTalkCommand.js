@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -42,7 +40,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 		var players = null;
 		while (iterate.hasNext()) {
 			players = iterate.next();
-			players.queueUpdateBlock(new ForceTalkBlock(message));
+			api.playerForceSay(player, message, false);
 		}
 		
 		return true;

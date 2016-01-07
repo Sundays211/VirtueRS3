@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
 var FaceEntityBlock = Java.type('org.virtue.network.protocol.update.block.FaceEntityBlock');
 
 /**
@@ -57,14 +56,14 @@ var ChristmasCrackerListener = Java.extend(Java.type('org.virtue.engine.script.l
 		target.queueUpdateBlock(new FaceEntityBlock(player));
 		if (Math.random() <= 0.5) {
 			player.queueUpdateBlock(new FaceEntityBlock(null));
-			player.queueUpdateBlock(new ForceTalkBlock("Hey! I got the cracker!"));
+			api.playerForceSay(player, "Hey! I got the cracker!", true);
 			api.addCarriedItem(player, choice2, 1); //Extra reward random
 			api.addCarriedItem(player, choice, 1); //Random Partyhat
 			api.addCarriedItem(player, 995, 100000); //Extra 100k for opening
 			api.delCarriedItem(player, 962, 1, args.slot);
 		} else {
 			target.queueUpdateBlock(new FaceEntityBlock(null));
-			target.queueUpdateBlock(new ForceTalkBlock("Hey! I got the cracker!"));
+			api.playerForceSay(target, "Hey! I got the cracker!", true);
 			api.addCarriedItem(target, choice2, 1); //Extra reward random
 			api.addCarriedItem(target, choice, 1); //Random Partyhat
 			api.addCarriedItem(target, 995, 100000); //Extra 100k for opening 

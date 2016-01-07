@@ -78,7 +78,9 @@ import org.virtue.game.world.region.movement.Direction;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
+import org.virtue.network.protocol.update.block.ForceTalkBlock;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.TalkBlock;
 import org.virtue.utility.TimeUtility;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
@@ -1475,11 +1477,25 @@ public class VirtueScriptAPI implements ScriptAPI {
 		entity.queueUpdateBlock(new AnimationBlock(-1));
 	}
 
+	@Override
+	public void playerForceSay(Player player, String message, boolean appearInChat) {
+		int flags = 0;
+		if (appearInChat) {
+			flags |= 0x1;
+		}
+		player.queueUpdateBlock(new ForceTalkBlock(message, flags));
+	}
+
+	@Override
+	public void entitySay(Entity entity, String message) {
+		entity.queueUpdateBlock(new TalkBlock(message));
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#addSpot(org.virtue.game.entity.Entity, int, int)
 	 */
 	@Override
-	public void queueSpot(Entity entity, int slot, int spotType) {
+	public void setSpotAnim(Entity entity, int slot, int spotType) {
 		entity.queueUpdateBlock(new GraphicsBlock(slot, spotType));
 	}
 
@@ -1487,7 +1503,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#addSpot(org.virtue.game.entity.Entity, int, int, int, int, int)
 	 */
 	@Override
-	public void queueSpot(Entity entity, int slot, int spotType, int height, int speed, int rotation) {
+	public void setSpotAnim(Entity entity, int slot, int spotType, int height, int speed, int rotation) {
 		entity.queueUpdateBlock(new GraphicsBlock(slot, spotType, height, speed, rotation));
 	}
 

@@ -352,7 +352,7 @@ var Runecrafting = {
 			player.lock(7);
 			api.delItem(player, Inv.BACKPACK, pureEss ? 7936 : 1436, essCount);
 			api.runAnimation(player, 23250);
-			api.queueSpot(player, 1, alter.gfxID, 0, 5, 0);
+			api.setSpotAnim(player, 1, alter.gfxID, 0, 5, 0);
 			api.addExperience(player, Stat.RUNECRAFTING, totalXp, true);
 			api.addItem(player, Inv.BACKPACK, alter.runeID, essCount * this.getHighestMultiple(alter, level))
 			api.sendMessage(player, "You bind the temple's power into "+api.getItemType(alter.runeID).name.toLowerCase()+"s.");

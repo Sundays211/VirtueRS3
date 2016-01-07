@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-var ForceTalkBlock = Java.type('org.virtue.network.protocol.update.block.ForceTalkBlock');
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -40,7 +38,6 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 		while (iterate.hasNext()) {
 			var animID = parseInt(args[0]);
 			p2 = iterate.next();
-			/*players.queueUpdateBlock(new ForceTalkBlock(message));*/
 			if (syntax.toLowerCase() == "forcedance") {
 				p2.getAppearance().setRenderAnimation(3171);
 				p2.getAppearance().refresh();

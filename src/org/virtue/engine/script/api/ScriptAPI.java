@@ -817,14 +817,29 @@ public interface ScriptAPI {
 	public void clearAnimation (Entity entity);
 	
 	/**
-	 * Queues a spot (aka graphics/gfx) on an entity.
+	 * Forces the specified message to appear above the head of the player
+	 * @param player The player on which to display the given message
+	 * @param message The message to display
+	 * @param appearInChat True if the message should appear in the chatbox of players, false otherwise
+	 */
+	public void playerForceSay(Player player, String message, boolean appearInChat);
+	
+	/**
+	 * Forces the specified message to appear above the head of the entity
+	 * @param entity The entity on which to display the given message
+	 * @param message The message to display
+	 */
+	public void entitySay (Entity entity, String message);
+	
+	/**
+	 * Sets the spot animation (aka graphics/gfx) at the specified slot on an entity.
 	 * @param entity The entity
 	 * @param slot The slot to use. This should be between 0 and 4.
 	 * @param id The spotType id (aka gfx id)
 	 */
-	public void queueSpot (Entity entity, int slot, int id);
+	public void setSpotAnim (Entity entity, int slot, int id);
 	
-	public void queueSpot (Entity entity, int slot, int id, int height, int speed, int rotation);
+	public void setSpotAnim (Entity entity, int slot, int id, int height, int speed, int rotation);
 	
 	/**
 	 * Tells an entity to face the specified coordinates

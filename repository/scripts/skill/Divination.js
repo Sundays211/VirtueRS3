@@ -377,7 +377,7 @@ function convertMemories (player, memoryType, convertType) {
 					}					
 				}
 				api.runAnimation(player, 21234);
-				api.queueSpot(player, 1, 4240);
+				api.setSpotAnim(player, 1, 4240);
 				convertMemory(player, memoryType, convertType);
 				delay = 3;
 			}
@@ -497,12 +497,12 @@ function forHarvestItem (player, harvest) {
 		energyAmount = 3;
 	}
 	if (harvest.enriched) {
-		api.queueSpot(player, 1, harvest.memoryGfx);
+		api.setSpotAnim(player, 1, harvest.memoryGfx);
 		api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
 		api.addCarriedItem(player, harvest.memoryID, 1);
 		api.addCarriedItem(player, harvest.energyID, energyAmount*2);
 	} else {
-		api.queueSpot(player, 1, harvest.memoryGfx);
+		api.setSpotAnim(player, 1, harvest.memoryGfx);
 		api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
 		api.addCarriedItem(player, harvest.memoryID, 1);
 		api.addCarriedItem(player, harvest.energyID, energyAmount);

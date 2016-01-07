@@ -332,7 +332,7 @@ var Firemaking = {
 			api.delCarriedItem(player, itemID, 1, slot);//Remove logs
 			api.addExperience(player, Stat.FIREMAKING, log.bonfirexp, true);//Add firemaking xp
 			api.runAnimation(player, 16703);
-			api.queueSpot(player, 1, log.bonfireGfx);
+			api.setSpotAnim(player, 1, log.bonfireGfx);
 			api.sendMessage(player, "You add a log to the fire.", MesType.GAME_SPAM);
 		},
 		firemakingSuccess : function (player, log) {
