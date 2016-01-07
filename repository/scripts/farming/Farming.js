@@ -874,19 +874,18 @@ var PlantPotListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 				return;
 			}
 		}
-		var wateringCans = api.getEnumType(136);
 		
 		if (Farming.getBySeedling(objTypeId) !== undefined) {
-			for (var i=0; i<wateringCans.getSize(); i++) {
-				if (wateringCans.getValueInt(i) == api.getId(useitem)) {
+			for (var i=0; i<api.getEnumSize(136); i++) {
+				if (api.getEnumValue(136, i) == api.getId(useitem)) {
 					Farming.waterPot(player, Farming.getBySeedling(objTypeId).seedlingW, 6826);
 					return;
 				}
 			}
 		}
 		
-		for (var i=0; i<wateringCans.getSize(); i++) {
-			if (wateringCans.getValueInt(i) == objTypeId) {
+		for (var i=0; i<api.getEnumSize(136); i++) {
+			if (api.getEnumValue(136, i) == objTypeId) {
 				if (Farming.getBySeedling(api.getId(useitem)) !== undefined) {
 					Farming.waterPot(player, Farming.getBySeedling(api.getId(useitem)).seedlingW, 6826);
 					return;
@@ -942,11 +941,10 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPHELDU, seedling, plantPotListener);
 	}
 	
-	var wateringCans = api.getEnumType(136);
-	for (var i=0; i<wateringCans.getSize(); i++) {
-		var itemID = wateringCans.getValueInt(i);
+	for (var i=0; i<api.getEnumSize(136); i++) {
+		var itemID = api.getEnumValue(136, i);
 		if (itemID != -1) {
-			scriptManager.registerListener(EventType.OPHELDU,itemID, plantPotListener);//Watering can
+			scriptManager.registerListener(EventType.OPHELDU, itemID, plantPotListener);//Watering can
 		}
 	}
 };
@@ -1368,7 +1366,7 @@ Farming.TREES.chopDown = function (player, patchID, tree, emptyStatus) {
 			return false;
 		},
 		stop : function (player) {
-			api.clearAnimation(player);
+			api.stopAnimation(player);
 		}
 		
 	});

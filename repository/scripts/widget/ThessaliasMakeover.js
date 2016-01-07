@@ -165,8 +165,7 @@ var Makeover = {
 			}
 		},
 		setKitInner : function (player, enumID, slot, type) {
-			var enumType = api.getEnumType(enumID);
-			var newStyle = enumType.getValueInt(slot);
+			var newStyle = api.getEnumValue(enumID, slot);
 			if (newStyle != -1) {
 				switch (type) {
 				case 0://From client script 1513

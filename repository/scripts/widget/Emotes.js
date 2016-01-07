@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 var Render = Java.type('org.virtue.network.protocol.update.ref.Appearance.Render');
-  /* The AnimationBlock for adding ability animations */
-var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 
  /* The GraphicsBlock for adding ability graphics */
 var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
@@ -673,13 +671,13 @@ function runCompCape (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.runAnimation(player, 356);
-				player.queueUpdateBlock(new GraphicsBlock(1, 307));
+				api.setSpotAnim(player, 1, 307);
 			} else if (frame == 3) {
 				player.getAppearance().setRender(Render.NPC);
 				player.getAppearance().setNPCId(1830);
 				player.getAppearance().refresh();
 				api.runAnimation(player, 1174);
-				player.queueUpdateBlock(new GraphicsBlock(1, 1443));
+				api.setSpotAnim(player, 1, 1443);
 			} else if (frame == 15) {
 				player.getAppearance().setRender(Render.PLAYER);
 				player.getAppearance().refresh();
@@ -689,8 +687,8 @@ function runCompCape (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());
@@ -702,13 +700,13 @@ function runTrimCompCape (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.runAnimation(player, 356);
-				player.queueUpdateBlock(new GraphicsBlock(1, 307));
+				api.setSpotAnim(player, 1, 307);
 			} else if (frame == 3) {
 				player.getAppearance().setRender(Render.NPC);
 				player.getAppearance().setNPCId(3372);
 				player.getAppearance().refresh();
 				api.runAnimation(player, 1174);
-				player.queueUpdateBlock(new GraphicsBlock(1, 1443));
+				api.setSpotAnim(player, 1, 1443);
 			} else if (frame == 15) {
 				player.getAppearance().setRender(Render.PLAYER);
 				player.getAppearance().refresh();
@@ -718,8 +716,8 @@ function runTrimCompCape (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());

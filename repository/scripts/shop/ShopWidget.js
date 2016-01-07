@@ -384,11 +384,10 @@ var Shop = {
 			return Math.max(price, 1);
 		},
 		canSellTo : function (player, invID, itemID) {
-			var enumType = api.getEnumType(921);
 			if (api.getItemType(itemID).certtemplate != -1) {
 				itemID = api.getItemType(itemID).certlink;
 			}
-			if (enumType.getValueInt(invID) != 1) {
+			if (api.getEnumValue(921, invID) != 1) {
 				if (api.defaultItemTotal(player, invID, itemID) == -1) {
 					return false;
 				}

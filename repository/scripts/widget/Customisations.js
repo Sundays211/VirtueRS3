@@ -28,7 +28,6 @@
  * @author Sundays211
  * @since 03/02/2015
  */
-var api;
 
 var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 	
@@ -118,7 +117,6 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var widgetListener = new WidgetListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
 };
@@ -127,10 +125,9 @@ var listen = function(scriptManager) {
 //Facial hair = 6571
 var Customisation = {
 		processOption : function (player, component, slot, option) {
-			var optionEnum = api.getEnumType(5961);
 			var optionType = -1;
-			for (var i = 0; i < optionEnum.getSize(); i++) {
-				if (component == (optionEnum.getValueInt(i) & 0xffff)) {
+			for (var i = 0; i < api.getEnumSize(5961); i++) {
+				if (component == (api.getEnumValue(5961, i) & 0xffff)) {
 					optionType = i;
 					break;
 				}
@@ -179,8 +176,7 @@ var Customisation = {
 			if (api.getVarBit(player, 673) != 1) {
 				return false;
 			}
-			var enumType = api.getEnumType(2345);
-			var newColour = enumType.getValueInt(slot/2);
+			var newColour = api.getEnumValue(2345, slot/2);
 			if (newColour != -1) {
 				api.setPlayerColour(player, 0, newColour);
 				api.setVarc(player, 2017, newColour);

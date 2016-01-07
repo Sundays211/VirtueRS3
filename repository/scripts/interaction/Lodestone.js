@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 var FaceDirectionBlock = Java.type('org.virtue.network.protocol.update.block.FaceDirectionBlock');
 
 /**
@@ -205,7 +203,6 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				var locType = api.getLocType(player, lodestone.base);
 				player.getDispatcher().sendGameMessage("You'll need to unlock the "+locType.name+" before you can Home Teleport there.");
 			}
-			//player.getMovement().teleportTo(lodestone.tile);
 		}
 		return true;
 	},
@@ -248,28 +245,27 @@ function runHomeTeleport (player, dest) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {//The initial emote (drawing circle/reading book)
-				player.queueUpdateBlock(new AnimationBlock(16385));
+				api.runAnimation(player, 16385);
 				api.setSpotAnim(player, 1, 3017);
 			} else if (frame == 18) {//Actually moving the player
 				api.teleportEntity(player, dest);
-				player.queueUpdateBlock(new FaceDirectionBlock(landSpot));
+				api.faceCoords(player, landSpot);
 				api.pausePlayer(player, 7);
 			} else if (frame == 19) {//The landing emotion
 				api.runAnimation(player, 16386);
 				api.setSpotAnim(player, 1, 3018);
 			} else if  (frame == 23) {//The post-landing movement
-				player.queueUpdateBlock(new AnimationBlock(16393));
+				api.runAnimation(player, 16393);
 			} else if (frame == 25) {//Corrects the player's tile (otherwise it resets after about 10 seconds)
 				api.teleportEntityBy(player, 0, -1, 0);
-				player.getMovement().teleportTo(landSpot);
 				return true;
 			}
 			frame++;
 			return false;
 		},
 		stop : function (player) {//Clear the current animation and graphics block
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	

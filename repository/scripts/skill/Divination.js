@@ -457,7 +457,7 @@ function startHarvest (player, npc) {
 			return !npc.exists();
 		},
 		stop : function (player) {
-			api.clearAnimation(player);
+			api.stopAnimation(player);
 			api.runAnimation(player, 21229);
 		}
 		

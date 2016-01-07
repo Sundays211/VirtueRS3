@@ -288,7 +288,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 var listen = function(scriptManager) {
 	var commands = [ "bc", "npc", "gfx", "graphic", "gender", "music", "inter",
 			"root", "widget", "if", "priceReload", "reloadPrice", "adr", "hair",
-			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow", "spot", "spotanim"
+			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow", "spot", "spotanim",
 			"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
 			"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey","xtest"];
 	var listener = new EventListener();

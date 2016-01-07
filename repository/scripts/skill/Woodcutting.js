@@ -320,7 +320,7 @@ var Woodcutting = {
 					return false;
 				},
 				stop : function (player) {
-					api.clearAnimation(player);
+					api.stopAnimation(player);
 				}
 				
 			});

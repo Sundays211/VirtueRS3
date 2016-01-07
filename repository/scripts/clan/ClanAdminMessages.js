@@ -54,10 +54,10 @@ var AdminMessageListener = Java.extend(Java.type('org.virtue.engine.script.liste
 			ClanAdminMessages.setAll(player, 0);
 			return true;
 		case 19://Enable category
-			slot = api.getEnumType(8661).getValueInt(slot);
+			slot = api.getEnumValue(8661, slot);
 			return ClanAdminMessages.enableCategory(player, slot);
 		case 20://Enable specific
-			slot = api.getEnumType(8659).getValueInt(slot);
+			slot = api.getEnumValue(8659, slot);
 			if (slot != -1) {
 				var enabled = ClanAdminMessages.isEnabled(player, slot);
 				return ClanAdminMessages.setEnabled(player, slot, enabled ? 0 : 1);
@@ -65,7 +65,7 @@ var AdminMessageListener = Java.extend(Java.type('org.virtue.engine.script.liste
 				return false;
 			}
 		case 5://Select rank dropdown
-			slot = api.getEnumType(8659).getValueInt(slot);
+			slot = api.getEnumValue(8659, slot);
 			api.setVarp(player, 4285, slot);
 			return true;
 		case 59://Select rank
@@ -125,21 +125,17 @@ var ClanAdminMessages = {
 			}
 		},
 		setAll : function (player, enabled) {
-			var entries = api.getEnumType(8660);
-			var entry;
-			for (var i=0; i<entries.getSize();i++) {
-				entry = api.getStructType(entries.getValueInt(i));
-				this.setEnabled(player, entry.getParam(4186, -1), enabled);
+			for (var i=0; i<api.getEnumSize(8660);i++) {
+				this.setEnabled(player, api.getStructParam(api.getEnumValue(8660, i), 4186), enabled);
 			}
 			return true;
 		},
 		enableCategory : function (player, category) {
-			var entries = api.getEnumType(8660);
-			var entry;
-			for (var i=0; i<entries.getSize();i++) {
-				entry = api.getStructType(entries.getValueInt(i));
-				if (entry.getParam(4187, -1) == category) {
-					this.setEnabled(player, entry.getParam(4186, -1), 1);
+			var structId;
+			for (var i=0; i<api.getEnumSize(8660);i++) {
+				structId = api.getEnumValue(8660, i);
+				if (api.getStructParam(structId, 418) == category) {
+					this.setEnabled(player, api.getStructParam(structId, 4186), 1);
 				}
 			}
 			return true;

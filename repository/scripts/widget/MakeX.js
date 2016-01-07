@@ -48,11 +48,11 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		var itemID = api.getVarp(player, 1170);
 		if (itemID == -1) {//Auto-select item
 			var category = api.getVarp(player, 1169);
-			var items = api.getEnumType(category);
-			for (var slot = 0; slot < items.getSize(); slot++) {
-				if (api.itemTotal(player, Inv.BACKPACK, items.getValueInt(slot)) > 1) {
-					itemID = items.getValueInt(slot);
-					api.setVarp(player, 1170, itemID);
+			var objTypeId;
+			for (var slot = 0; slot < api.getEnumSize(category); slot++) {
+				objTypeId = api.getEnumValue(category, slot);
+				if (api.itemTotal(player, Inv.BACKPACK, objTypeId) > 1) {
+					api.setVarp(player, 1170, objTypeId);
 					break;
 				}
 			}
@@ -64,7 +64,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		var itemType = api.getItemType(itemID);
 		
 		//Information about the selected item
-		api.setVarc(player, 2391, api.getDesc(itemType));//Examine text
+		api.setVarc(player, 2391, api.getItemDesc(itemType));//Examine text
 		api.setVarc(player, 2223, 1);
 		api.setVarc(player, 2224, api.getExchangeCost(itemID));//Exchange guide price
 		api.setVarc(player, 199, -1);//Varc: key=199, value=-1
@@ -88,9 +88,8 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		}
 		switch (component) {
 		case 62://Select product category
-			var categories = api.getEnumType(mainCategory);
-			if (categories != null && slot >= 0 && slot < categories.getSize()) {
-				var newCategory = categories.getValueInt(slot);
+			if (slot >= 0 && slot < api.getEnumSize(mainCategory)) {
+				var newCategory = api.getEnumValue(mainCategory, slot);
 				api.setVarp(player, 1169, newCategory);
 				api.setWidgetEvents(player, 1371, 44, 0, getSlotCount(newCategory), 2);
 				//player.getVars().setVarp(VarpKey.PRODUCT_SELECT_ITEM, getDefaultItem(newCategory));
@@ -155,9 +154,8 @@ function setSelectedProduct (player, slotID) {
 	if (subCategory < 0) {
 		return false;
 	}
-	var items = api.getEnumType(subCategory);
-	if (items != null && slotID >= 0 && slotID < items.getSize()) {
-		var itemID = items.getValueInt(slotID);
+	if (slotID >= 0 && slotID < api.getEnumSize(subCategory)) {
+		var itemID = api.getEnumValue(subCategory, slotID);
 		api.setVarp(player, 1170, itemID);
 		api.setVarp(player, 1174, 0);
 		var invCount = player.getSkills().canCraft(itemID) ? getMaxAmount(player, itemID) : 0;
@@ -168,7 +166,7 @@ function setSelectedProduct (player, slotID) {
 
 		var itemType = api.getItemType(itemID);
 		
-		api.setVarc(player, 2391, api.getDesc(itemType));//Examine text
+		api.setVarc(player, 2391, api.getItemDesc(itemType));//Examine text
 		api.setVarc(player, 2223, 1);//
 		api.setVarc(player, 2224, api.getExchangeCost(itemID));//Exchange guide price (Disabled as the exchange does not exist)
 		
@@ -317,10 +315,5 @@ function getEnumSlot (ifSlot) {
 }
 
 function getSlotCount (category) {
-	var items = api.getEnumType(category);
-	if (items != null) {
-		return items.getSize() * 4;
-	} else {
-		return 0;
-	}
+	return api.getEnumSize(category) * 4;
 }

@@ -259,7 +259,7 @@ var Mining = {
 					return false;
 				},
 				stop : function (player) {//Clear the current animation and graphics block
-					api.clearAnimation(player);
+					api.stopAnimation(player);
 				}
 
 			});

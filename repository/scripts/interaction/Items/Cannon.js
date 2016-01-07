@@ -43,8 +43,8 @@ function ProcessCannon (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());

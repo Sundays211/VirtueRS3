@@ -209,7 +209,7 @@ var Thieving = {
 					return false;
 				},
 				stop : function(player) {
-					api.clearAnimation(player);
+					api.stopAnimation(player);
 				}
 
 			});
@@ -274,7 +274,7 @@ var Thieving = {
 						return false;
 					},
 					stop : function(player) {
-						api.clearAnimation(player);
+						api.stopAnimation(player);
 					}
 
 				});

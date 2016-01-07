@@ -52,12 +52,12 @@ function runVarrockTele (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
-				player.queueUpdateBlock(new AnimationBlock(9597));
+				api.runAnimation(player, 9597);
 				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
-				player.getMovement().teleportTo(3212, 3424, 0);
+				api.teleportEntity(player, 3212, 3424, 0);
 			} else if (frame == 3) {
 				api.runAnimation(player, 9598);
 			}
@@ -65,8 +65,8 @@ function runVarrockTele (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());
@@ -78,12 +78,12 @@ function runFallyTele (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
-				player.queueUpdateBlock(new AnimationBlock(9597));
-				api.setSpotAnim(player, 1, 1680));
+				api.runAnimation(player, 9597);
+				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
-				player.getMovement().teleportTo(2965, 3379, 0);
+				api.teleportEntity(player, 2965, 3379, 0);
 			} else if (frame == 3) {
 				api.runAnimation(player, 9598);
 			}
@@ -91,8 +91,8 @@ function runFallyTele (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());
@@ -104,12 +104,12 @@ function runCammyTele (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
-				player.queueUpdateBlock(new AnimationBlock(9597));
-				api.setSpotAnim(player, 1, 1680));
+				api.runAnimation(player, 9597);
+				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
-				player.getMovement().teleportTo(2757, 3477, 0);
+				api.teleportEntity(player, 2757, 3477, 0);
 			} else if (frame == 3) {
 				api.runAnimation(player, 9598);
 			}
@@ -117,8 +117,8 @@ function runCammyTele (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());
@@ -130,12 +130,12 @@ function runLummyTele (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
-				player.queueUpdateBlock(new AnimationBlock(9597));
-				api.setSpotAnim(player, 1, 1680));
+				api.runAnimation(player, 9597);
+				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
-				player.getMovement().teleportTo(3222, 3218, 0);
+				api.teleportEntity(player, 3222, 3218, 0);
 			} else if (frame == 3) {
 				api.runAnimation(player, 9598);
 			}
@@ -143,8 +143,8 @@ function runLummyTele (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());
@@ -156,12 +156,12 @@ function runWatchTowerTele (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
-				player.queueUpdateBlock(new AnimationBlock(9597));
-				api.setSpotAnim(player, 1, 1680));
+				api.runAnimation(player, 9597);
+				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
-				player.getMovement().teleportTo(2549, 3112, 0);
+				api.teleportEntity(player, 2549, 3112, 0);
 			} else if (frame == 3) {
 				api.runAnimation(player, 9598);
 			}
@@ -169,8 +169,8 @@ function runWatchTowerTele (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());
@@ -182,12 +182,12 @@ function runGodwarsTele (player) {
 		process : function (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
-				player.queueUpdateBlock(new AnimationBlock(9597));
-				api.setSpotAnim(player, 1, 1680));
+				api.runAnimation(player, 9597);
+				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
-				player.getMovement().teleportTo(2886, 5309, 0);
+				api.teleportEntity(player, 2886, 5309, 0);
 			} else if (frame == 3) {
 				api.runAnimation(player, 9598);
 			}
@@ -195,8 +195,8 @@ function runGodwarsTele (player) {
 			return false;
 		},
 		stop : function (player) {
-			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(1, -1));
+			api.stopAnimation(player);
+			api.clearSpotAnim(player, 1);
 		}
 	});
 	player.setAction(new Action());

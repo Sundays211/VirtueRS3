@@ -332,15 +332,8 @@ public interface ScriptAPI {
 	public void setFriendChatData(Player player, int dataType, Object value);
 	
 	/**
-	 * Returns the {@link EnumType} for the specified enum ID.
-	 * Note that enumTypes are referred to as "cs2 maps" in some servers
-	 * @param enumID The id of the enum to lookup
-	 * @return The enumType, or null if none were found.
-	 */
-	public EnumType getEnumType (int enumID);
-	
-	/**
 	 * Returns the value of the {@link EnumType} with the specified key
+	 * Note that enumTypes are referred to as "cs2 maps" in some servers
 	 * @param enumId The id of the enum to lookup
 	 * @param key The key to lookup
 	 * @return The value linked to the specified key or the default value if no key was found
@@ -348,22 +341,16 @@ public interface ScriptAPI {
 	public Object getEnumValue (int enumId, int key);
 	
 	/**
-	 * Returns the size of the given enum
+	 * Returns the size of the given {@link EnumType}
+	 * Note that enumTypes are referred to as "cs2 maps" in some servers
 	 * @param enumId The id of the enum to lookup
-	 * @return The enum size, or -1 if the enum does not exist
+	 * @return The enum size, or 0 if the enum does not exist
 	 */
 	public int getEnumSize (int enumId);
 	
 	/**
-	 * Gets the {@link StructType} for the specified struct ID.
-	 * Note that structTypes are referred to as "general maps" in some servers
-	 * @param structID The id of the struct to lookup
-	 * @return The structType, or null if none were found.
-	 */
-	public StructType getStructType (int structID);
-	
-	/**
 	 * Gets the paramater of the specified {@link StructType}
+	 * Note that structTypes are referred to as "general maps" in some servers
 	 * @param structId The ID of the struct to lookup
 	 * @param paramType The param to get
 	 * @return The struct param value or default value if the struct does not contain the given param
@@ -416,7 +403,7 @@ public interface ScriptAPI {
 	 * @param itemType The ItemType of the item to lookup
 	 * @return The description
 	 */
-	public String getDesc(ItemType itemType);
+	public String getItemDesc(ItemType itemType);
 	
 	public String getItemDesc(Item item);
 	
@@ -433,6 +420,11 @@ public interface ScriptAPI {
 	
 	public NpcType getNpcType (NPC npc);
 	
+	/**
+	 * Gets the time (in server cycles) required for the given sequence to complete.
+	 * @param seqTypeId The sequence (animation) ID
+	 * @return The number of server cycles required, rounded up
+	 */
 	public int getSeqTime (int seqTypeId);
 	
 	public boolean addCarriedItem (Player player, int itemID, int amount);
@@ -816,7 +808,12 @@ public interface ScriptAPI {
 	
 	public void runAnimation (Entity entity, int animationID);
 	
-	public void clearAnimation (Entity entity);
+	/**
+	 * Stops the currently running animation on the entity.
+	 * If no animation is running, this method has no effect.
+	 * @param entity The entity
+	 */
+	public void stopAnimation (Entity entity);
 	
 	/**
 	 * Forces the specified message to appear above the head of the player
@@ -842,6 +839,13 @@ public interface ScriptAPI {
 	public void setSpotAnim (Entity entity, int slot, int id);
 	
 	public void setSpotAnim (Entity entity, int slot, int id, int height, int speed, int rotation);
+	
+	/**
+	 * Clears the current spot animation at the specified slot on an entity
+	 * @param entity The entity
+	 * @param slot The slot to clear. This should be between 0 and 4.
+	 */
+	public void clearSpotAnim (Entity entity, int slot);
 	
 	/**
 	 * Tells an entity to face the specified coordinates

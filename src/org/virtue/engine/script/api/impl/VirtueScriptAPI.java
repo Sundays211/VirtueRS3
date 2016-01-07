@@ -497,17 +497,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getEnumType(int)
-	 */
-	@Override
-	public EnumType getEnumType(int enumID) {
-		return EnumTypeList.list(enumID);
-	}
-
 	@Override
 	public Object getEnumValue(int enumId, int key) {
-		EnumType enumType = getEnumType(enumId);
+		EnumType enumType = EnumTypeList.list(enumId);
+		if (enumType == null) {
+			throw new IllegalArgumentException("Invalid enum: "+enumId);
+		}
 		Object value;
 		if (enumType.valueType.getVarBaseType() == BaseVarType.STRING) {
 			value = enumType.getValueString(key);
@@ -519,16 +514,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 
 	@Override
 	public int getEnumSize(int enumId) {
-		EnumType enumType = getEnumType(enumId);
-		return enumType == null ? -1 : enumType.getSize();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getStructType(int)
-	 */
-	@Override
-	public StructType getStructType(int structID) {
-		return StructTypeList.list(structID);
+		EnumType enumType = EnumTypeList.list(enumId);
+		return enumType == null ? 0 : enumType.getSize();
 	}
 
 	@Override
@@ -624,7 +611,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#getDesc(org.virtue.cache.def.impl.ItemType)
 	 */
 	@Override
-	public String getDesc(ItemType itemType) {
+	public String getItemDesc(ItemType itemType) {
 		return itemType.getDescription();
 	}
 
@@ -1485,7 +1472,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#clearAnimation(org.virtue.game.entity.Entity)
 	 */
 	@Override
-	public void clearAnimation(Entity entity) {
+	public void stopAnimation(Entity entity) {
 		entity.queueUpdateBlock(new AnimationBlock(-1));
 	}
 
@@ -1517,6 +1504,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void setSpotAnim(Entity entity, int slot, int spotType, int height, int speed, int rotation) {
 		entity.queueUpdateBlock(new GraphicsBlock(slot, spotType, height, speed, rotation));
+	}
+
+	@Override
+	public void clearSpotAnim(Entity entity, int slot) {
+		entity.queueUpdateBlock(new GraphicsBlock(slot, -1));
 	}
 
 	/* (non-Javadoc)

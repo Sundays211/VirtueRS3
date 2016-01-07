@@ -266,7 +266,7 @@ var Firemaking = {
 						return false;
 					},
 					stop : function (player) {//Clear the current animation block
-						api.clearAnimation(player);
+						api.stopAnimation(player);
 					}
 			
 				});

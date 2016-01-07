@@ -173,7 +173,7 @@ function joinHouse(player) {
 					var targetPlayer = api.getWorldPlayerByHash(hash);
 					if (targetPlayer != null) {
 						player.stopAll();
-						player.getMovement().teleportTo(targetPlayer.getCurrentTile());
+						api.teleportEntity(player, api.getCoords(targetPlayer));
 					} else {
 						api.sendMessage(player, value+" is not home.")
 					}

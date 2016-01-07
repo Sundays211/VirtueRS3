@@ -73,11 +73,11 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			switch (component) {	
 			case 47://Selected main category
 				api.setVarBit(player, 18336, slot*10);
-				var subCats = api.getEnumType(7427).getValueInt(slot);
+				var subCats = api.getEnumValue(7427, slot);
 				if (subCats == -1) {
 					api.setVarBit(player, 18337, slot*10);
 				} else {
-					var size = api.getEnumType(subCats).getSize();
+					var size = api.getEnumSize(subCats);
 					api.setWidgetEvents(player, 1405, 61, 0, size, 2);
 					api.setVarBit(player, 18337, 0);
 				}
