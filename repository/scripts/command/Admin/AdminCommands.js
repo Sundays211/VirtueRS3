@@ -5,8 +5,6 @@ var NPC = Java.type('org.virtue.game.entity.npc.NPC');
 var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
 var Tile = Java.type('org.virtue.game.world.region.Tile');
 
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
-
 /** An better optimize way, instead having tons of seperate command files.
  * @author Kayla
  * @date 11/28/2015
@@ -40,6 +38,8 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
 			npc.getCombatSchedule().lock(player);
 			return;
+		case "spot":
+		case "spotanim":
 		case "gfx":
 		case "graphic":
 			if (args.length < 1 || isNaN(args[0])) {
@@ -51,7 +51,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			if (args.length > 1) {
 				type = parseInt(args[1]);
 			}
-			player.queueUpdateBlock(new GraphicsBlock(type, gfxID));
+			api.setSpotAnim(player, type, gfxID);
 			return;
 		case "gender":
 			if (args[0] == 0) {
@@ -149,7 +149,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			return;
 		case "adminroom":
 			api.teleportEntity(player, 2845, 5154, 0);
-			player.queueUpdateBlock(new GraphicsBlock(1, 4200));
+			api.setSpotAnim(player, 1, 4200);
 			api.runAnimation(player, 18007);
 			return;
 		case "god":
@@ -288,7 +288,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 var listen = function(scriptManager) {
 	var commands = [ "bc", "npc", "gfx", "graphic", "gender", "music", "inter",
 			"root", "widget", "if", "priceReload", "reloadPrice", "adr", "hair",
-			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow",
+			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow", "spot", "spotanim"
 			"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
 			"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey","xtest"];
 	var listener = new EventListener();

@@ -20,9 +20,7 @@
  * SOFTWARE.
  */
 
-var api;
  /* The AnimationBlock for adding ability animations */
-var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 
 var FollowingType = Java.type('org.virtue.game.entity.combat.impl.FollowingType');
 
@@ -65,7 +63,7 @@ var AbilityListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 	/* permorms the ability */
 	perform: function(player, lock) {
 		api.runAnimation(player, 18160);
-		player.queueUpdateBlock(new GraphicsBlock(1, 3581));
+		api.setSpotAnim(player, 1, 3581);
 		api.sendMessage(player, "coming soon");
 	},
 	

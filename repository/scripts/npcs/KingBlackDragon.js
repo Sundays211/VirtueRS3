@@ -13,7 +13,6 @@ var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 var AbstractNPC = Java.type('org.virtue.game.entity.npc.AbstractNPC');
 var Projectile = Java.type('org.virtue.game.world.region.packets.Projectile');
 var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
 
 var meleeAttack1 = new MeleeAttackHandler(500, 1000) {
 	getAttackInfo: function(entity, lock) {

@@ -35,7 +35,6 @@ var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.Graphics
  * @author Sam Bartlett - Who added the skill cape emotes
  * @since 02/21/2015
  */
-var api;
 
 var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
@@ -49,7 +48,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		case 590:
 			api.setWidgetEvents(player, 590, 8, 0, 177, 6);
 			api.setWidgetEvents(player, 590, 13, 0, 11, 2);
-			player.getDispatcher().sendCS2Script(4717, 3874, 38666249, 38666247, 38666248);
+			api.runClientScript(player, 4717, [3874, 38666249, 38666247, 38666248]);
 			return true
 		}
 	},
@@ -120,7 +119,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 17://Blow Kiss
 					api.runAnimation(player, 21995);
-					player.queueUpdateBlock(new GraphicsBlock(1, 4418));
+					api.setSpotAnim(player, 1, 4418);
 					return true
 				case 18://Panic
 					api.runAnimation(player, 21995);
@@ -154,11 +153,11 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 28://Idea
 					api.runAnimation(player, 4276);
-					player.queueUpdateBlock(new GraphicsBlock(1, 712));
+					api.setSpotAnim(player, 1, 712);
 					return true
 				case 29://Stomp
 					api.runAnimation(player, 4278);
-					player.queueUpdateBlock(new GraphicsBlock(1, 713));
+					api.setSpotAnim(player, 1, 713);
 					return true
 				case 30://Flap
 					api.runAnimation(player, 4280);
@@ -174,7 +173,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 34://Zombie Hand
 					api.runAnimation(player, 7272);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1244));
+					api.setSpotAnim(player, 1, 1244);
 					return true
 				case 35://Scared
 					api.runAnimation(player, 2836);
@@ -183,176 +182,176 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					api.runAnimation(player, 6111);
 					return true
 				case 37://Skill Capes
-					item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(1);
+					var item = api.getItem(player, Inv.EQUIPMENT, WearPos.CAPE);
 					switch (item.getID()) {
 					case 9813://Quest Cape
 							api.runAnimation(player, 4945);
-							player.queueUpdateBlock(new GraphicsBlock(1, 816));
+							api.setSpotAnim(player, 1, 816);
 							return true
 					case 9747://Attack Cape
 					case 9748:
 					case 10639:
 							api.runAnimation(player, 4959);
-							player.queueUpdateBlock(new GraphicsBlock(1, 823));
+							api.setSpotAnim(player, 1, 823);
 							return true
 					case 9753://Defense cape
 					case 9754:
 					case 10641:
 						   api.runAnimation(player, 4961);
-						   player.queueUpdateBlock(new GraphicsBlock(1, 824));
+						   api.setSpotAnim(player, 1, 824);
 						   return true
 					case 9750://Strength cape
 					case 9751:
 					case 10640:
 						   api.runAnimation(player, 4981);
-						   player.queueUpdateBlock(new GraphicsBlock(1, 828));
+						   api.setSpotAnim(player, 1, 828);
 						   return true
 					case 9768://Constitution cape
 					case 9769:
 					case 10647:
 						   api.runAnimation(player, 14242);
-						   player.queueUpdateBlock(new GraphicsBlock(1, 2745));
+						   api.setSpotAnim(player, 1, 2745);
 						   return true
 					case 9756://Ranged cape
 					case 9757:
 					case 10642:
 						  api.runAnimation(player, 4973);
-						  player.queueUpdateBlock(new GraphicsBlock(1, 832));
+						  api.setSpotAnim(player, 1, 832);
 						  return true
 					case 9759://Prayer cape
 					case 9760:
 					case 10643:
 						   api.runAnimation(player, 4979);
-						   player.queueUpdateBlock(new GraphicsBlock(1, 829));
+						   api.setSpotAnim(player, 1, 829);
 						   return true
 					case 9762://Magic cape
 					case 9763:
 					case 10644:
 						   api.runAnimation(player, 4939);
-						   player.queueUpdateBlock(new GraphicsBlock(1, 813));
+						   api.setSpotAnim(player, 1, 813);
 						   return true
 					case 9801://Cooking cape
 					case 9802:
 					case 10658:
 						api.runAnimation(player, 4955);
-						player.queueUpdateBlock(new GraphicsBlock(1, 821));
+						api.setSpotAnim(player, 1, 821);
 						return true
 					case 9807:
 					case 9808:
 					case 10660://Woodcutting cape
 						api.runAnimation(player, 4957);
-						player.queueUpdateBlock(new GraphicsBlock(1, 822));
+						api.setSpotAnim(player, 1, 822);
 						return true
 					case 9783:
 					case 9784:
 					case 10652://Fletching cape
 						api.runAnimation(player, 4937);
-						player.queueUpdateBlock(new GraphicsBlock(1, 812));
+						api.setSpotAnim(player, 1, 812);
 						return true
 					case 9798:
 					case 9799:
 					case 10657://Fishing cape
 						api.runAnimation(player, 4951);
-						player.queueUpdateBlock(new GraphicsBlock(1, 819));
+						api.setSpotAnim(player, 1, 819);
 						return true
 					case 9804:
 					case 9805:
 					case 10659://Firemaking cape
 						api.runAnimation(player, 4975);
-						player.queueUpdateBlock(new GraphicsBlock(1, 831));
+						api.setSpotAnim(player, 1, 831);
 						return true
 					case 9780:
 					case 9781:
 					case 10651://Crafting cape
 						api.runAnimation(player, 4949);
-						player.queueUpdateBlock(new GraphicsBlock(1, 818));
+						api.setSpotAnim(player, 1, 818);
 						return true
 					case 9795:
 					case 9796:
 					case 10656://Smithing cape
 						api.runAnimation(player, 4943);
-						player.queueUpdateBlock(new GraphicsBlock(1, 815));
+						api.setSpotAnim(player, 1, 815);
 					case 9792:
 					case 9793:
 					case 10655://Mining cape
 						api.runAnimation(player, 4941);
-						player.queueUpdateBlock(new GraphicsBlock(1, 814));
+						api.setSpotAnim(player, 1, 814);
 						return true
 					case 9774:
 					case 9775:
 					case 10649://Herblore cape
 						api.runAnimation(player, 4969);
-						player.queueUpdateBlock(new GraphicsBlock(1, 835));
+						api.setSpotAnim(player, 1, 835);
 						return true
 					case 9771:
 					case 9772:
 					case 10648://Agility cape
 						api.runAnimation(player, 4977);
-						player.queueUpdateBlock(new GraphicsBlock(1, 830));
+						api.setSpotAnim(player, 1, 830);
 						return true
 					case 9777:
 					case 9778:
 					case 10650://Thieving cape
 						api.runAnimation(player, 4965);
-						player.queueUpdateBlock(new GraphicsBlock(1, 826));
+						api.setSpotAnim(player, 1, 826);
 						return true
 					case 9786:
 					case 9787:
 					case 10653://Slayer cape
 						api.runAnimation(player, 4967);
-						player.queueUpdateBlock(new GraphicsBlock(1, 1656));
+						api.setSpotAnim(player, 1, 1656);
 						return true
 					case 9810:
 					case 9811:
 					case 10611://Farming cape
 						api.runAnimation(player, 4967);
-						player.queueUpdateBlock(new GraphicsBlock(1, 1656));
+						api.setSpotAnim(player, 1, 1656);
 						return true
 					case 9765:
 					case 9766:
 					case 10645://Runecrafting cape
 						api.runAnimation(player, 4947);
-						player.queueUpdateBlock(new GraphicsBlock(1, 817));
+						api.setSpotAnim(player, 1, 817);
 						return true
 					case 9789:
 					case 9790:
 					case 10654://Construction cape
 						api.runAnimation(player, 4953);
-						player.queueUpdateBlock(new GraphicsBlock(1, 820));
+						api.setSpotAnim(player, 1, 820);
 						return true
 					case 12169:
 					case 12170:
 					case 12524://Summoning cape
 						api.runAnimation(player, 8525);
-						player.queueUpdateBlock(new GraphicsBlock(1, 1515));
+						api.setSpotAnim(player, 1, 1515);
 						return true
 					case 9948:
 					case 9949:
 					case 10646://Hunter cape
 						api.runAnimation(player, 5158);
-						player.queueUpdateBlock(new GraphicsBlock(1, 907));
+						api.setSpotAnim(player, 1, 907);
 						return true
 					case 9813:
 					case 10662://Quest cape
 						api.runAnimation(player, 4945);
-						player.queueUpdateBlock(new GraphicsBlock(1, 816));
+						api.setSpotAnim(player, 1, 816);
 						return true
 					case 18508:
 					case 18509://Dungeoneering cape
 						api.runAnimation(player, 13190);
-						player.queueUpdateBlock(new GraphicsBlock(1, 2442));
+						api.setSpotAnim(player, 1, 2442);
 						return true
 					case 24709://10yr. Vet Cape
 						api.runAnimation(player, 17118);
-						player.queueUpdateBlock(new GraphicsBlock(1, 3227));
+						api.setSpotAnim(player, 1, 3227);
 						return true
 					case 20763://Veteran cape
 						api.runAnimation(player, 352);
-						player.queueUpdateBlock(new GraphicsBlock(1, 1446));
+						api.setSpotAnim(player, 1, 1446);
 						return true
 					case 20765://Classic cape
 						api.runAnimation(player, 122);
-						player.queueUpdateBlock(new GraphicsBlock(1, 1466));
+						api.setSpotAnim(player, 1, 1466);
 						return true
 					case 20771:
 					case 32153:
@@ -371,45 +370,45 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 39://Air Guitar
 					api.runAnimation(player, 21998);
-					player.queueUpdateBlock(new GraphicsBlock(1, 4417));
+					api.setSpotAnim(player, 1, 4417);
 					return true
 				case 40://Safety First
 					api.runAnimation(player, 8770);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1553));
+					api.setSpotAnim(player, 1, 1553);
 					return true
 				case 41://Explore
 					api.runAnimation(player, 9990);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1734));
+					api.setSpotAnim(player, 1, 1734);
 					return true
 				case 42://Trick
 					api.runAnimation(player, 10530);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1864));
+					api.setSpotAnim(player, 1, 1864);
 					return true
 				case 43://Freeze
 					api.runAnimation(player, 11044);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1973));
+					api.setSpotAnim(player, 1, 1973);
 					return true
 				case 44://Give Thanks
 					//TODO give thanks
 					return true
 				case 45://Eggy Days
 					api.runAnimation(player, 11542);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2037));
+					api.setSpotAnim(player, 1, 2037);
 					return true
 				case 46://Dramatic Point
 					api.runAnimation(player, 12658);
-					player.queueUpdateBlock(new GraphicsBlock(1, 780));
+					api.setSpotAnim(player, 1, 780);
 					return true
 				case 47://Faint
 					api.runAnimation(player, 14165);
 					return true
 				case 48://Puppet Master
 					api.runAnimation(player, 14869);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2837));
+					api.setSpotAnim(player, 1, 2837);
 					return true
 				case 49://Task Master
-					api.runAnimation(player, player.getAppearance().isMale() ? 15033 : 15034);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2930));
+					api.runAnimation(player, api.isFemale(player) ? 15034 : 15033);
+					api.setSpotAnim(player, 1, 2930);
 					return true
 				case 50://TODO Add tick processing
 					api.runAnimation(player, 15104);
@@ -448,34 +447,34 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 60://Breathe Fire
 					api.runAnimation(player, 2238);
-					player.queueUpdateBlock(new GraphicsBlock(1, 358));
+					api.setSpotAnim(player, 1, 358);
 					return true
 				case 61://Storm
 					api.runAnimation(player, 2563);
-					player.queueUpdateBlock(new GraphicsBlock(1, 365));
+					api.setSpotAnim(player, 1, 365);
 					return true
 				case 62://Snow
 					api.runAnimation(player, 15357);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1391));
+					api.setSpotAnim(player, 1, 1391);
 					return true
 				case 63://Invoke Spring
 					api.runAnimation(player, 15357);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1391));
+					api.setSpotAnim(player, 1, 1391);
 					return true
 				case 64://Head in sand
 					api.runAnimation(player, 12926);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1761));
+					api.setSpotAnim(player, 1, 1761);
 					return true
 				case 65://Hula-hoop
 					api.runAnimation(player, 12928);
 					return true
 				case 66://Disappear
 					api.runAnimation(player, 12929);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1760));
+					api.setSpotAnim(player, 1, 1760);
 					return true
 				case 67://Ghost
 					api.runAnimation(player, 12932);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1762));
+					api.setSpotAnim(player, 1, 1762);
 					return true
 				case 68://Bring it!
 					api.runAnimation(player, 12934);
@@ -485,87 +484,87 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 93://Living on Borrowed Time
 					api.runAnimation(player, 13965);
-					player.queueUpdateBlock(new GraphicsBlock(1, 1766));
-					player.queueUpdateBlock(new GraphicsBlock(2, 4056));
+					api.setSpotAnim(player, 1, 1766);
+					api.setSpotAnim(player, 2, 4056);
 					return true
 				case 94://Troubadour dance
 					api.runAnimation(player, 15424);
 					return true
 				case 95://Evil Laugh
-					api.runAnimation(player, player.getAppearance().isMale() ? 15535 : 15536);
+					api.runAnimation(player, api.isFemale(player) ? 15536 : 15535);
 					return true
 				case 96://Golf Clap
 					api.runAnimation(player, 15520);
 					return true
 				case 97://LOLcano
-					api.runAnimation(player, player.getAppearance().isMale() ? 15532 : 15533);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2191));
+					api.runAnimation(player, api.isFemale(player) ? 15533 : 15532);
+					api.setSpotAnim(player, 1, 2191);
 					return true
 				case 98://Infernal Power
 					api.runAnimation(player, 15529);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2197));
+					api.setSpotAnim(player, 1, 2197);
 					return true
 				case 99://Divine Power
 					api.runAnimation(player, 15524);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2195));
+					api.setSpotAnim(player, 1, 2195);
 					return true
 				case 100://Your Dead
 					api.runAnimation(player, 14195);
 					return true
 				case 101://Scream
-					api.runAnimation(player, player.getAppearance().isMale() ? 15526 : 15527);
+					api.runAnimation(player, api.isFemale(player) ? 15527 : 15526);
 					return true
 				case 102://Tornado
 					api.runAnimation(player, 15530);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2196));
+					api.setSpotAnim(player, 1, 2196);
 					return true
 				case 103://Chaotic Cookery
 					api.runAnimation(player, 15604);
-					player.queueUpdateBlock(new GraphicsBlock(1, 2239));
+					api.setSpotAnim(player, 1, 2239);
 					return true
 				case 104://ROFLcopter
-					api.runAnimation(player, player.getAppearance().isMale() ? 16373 : 16374);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3010));
+					api.runAnimation(player, api.isFemale(player) ? 16374 : 16373);
+					api.setSpotAnim(player, 1, 3010);
 					return true
 				case 105://Nature Might
 					api.runAnimation(player, 16376);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3011));
+					api.setSpotAnim(player, 1, 3011);
 					return true
 				case 106://Inner Power
 					api.runAnimation(player, 16382);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3014));
+					api.setSpotAnim(player, 1, 3014);
 					return true
 				case 107://Werewolf Transformation
 					api.runAnimation(player, 16380);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3013));
-					player.queueUpdateBlock(new GraphicsBlock(1, 3016));
+					api.setSpotAnim(player, 1, 3013);
+					api.setSpotAnim(player, 1, 3016);
 					return true
 				case 108://Celebrate
 					api.runAnimation(player, 16913);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3175, 0, 0, -1));
+					api.setSpotAnim(player, 1, 3175, 0, 0, -1);
 					return true
 				case 109://Break Dance
 					api.runAnimation(player, 17079);
 					return true
 				case 110://Mag Transformation
 					api.runAnimation(player, 17103);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3222));
+					api.setSpotAnim(player, 1, 3222);
 					return true
 				case 111://breakwind
 					api.runAnimation(player, 17076);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3226));
+					api.setSpotAnim(player, 1, 3226);
 					return true
 				case 112://backflip
 					api.runAnimation(player, 17101);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3221));
+					api.setSpotAnim(player, 1, 3221);
 					return true
 				case 113://gravedigger		
 					api.runAnimation(player, 17077);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3219));
+					api.setSpotAnim(player, 1, 3219);
 					return true
 				case 114://frog transform
 					api.runAnimation(player, 17080);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3220));
+					api.setSpotAnim(player, 1, 3220);
 					return true
 				case 115://mexican wave
 					api.runAnimation(player, 17163);
@@ -575,59 +574,59 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 118://kick sand
 					api.runAnimation(player, 17186);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3252));
+					api.setSpotAnim(player, 1, 3252);
 					return true
 				case 119://crab transform
-					api.runAnimation(player, player.getAppearance().isMale() ? 17212 : 17213);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3257));
+					api.runAnimation(player, api.isFemale(player) ? 17213 : 17212);
+					api.setSpotAnim(player, 1, 3257);
 					return true
 				case 120://truster stomp
 					api.runAnimation(player, 17801);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3446));
+					api.setSpotAnim(player, 1, 3446);
 					return true
 				case 121://robot dance
 					api.runAnimation(player, 17799);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3445));
+					api.setSpotAnim(player, 1, 3445);
 					return true
 				case 126://Butterfly Dervish
 					api.runAnimation(player, 20009);
-					player.queueUpdateBlock(new GraphicsBlock(1, 3916));
-					player.queueUpdateBlock(new GraphicsBlock(2, 3917));
+					api.setSpotAnim(player, 1, 3916);
+					api.setSpotAnim(player, 2, 3917);
 					return true
 				case 169://Runescape through the ages
 					api.runAnimation(player, 23248);
-					player.queueUpdateBlock(new GraphicsBlock(1, 4745));
+					api.setSpotAnim(player, 1, 4745);
 					return true
 				case 171: //Cute Bunny
 					api.runAnimation(player, 23288);
-					player.queueUpdateBlock(new GraphicsBlock(1, 4779));
+					api.setSpotAnim(player, 1, 4779);
 					return true
 				case 172: //Sneaky Bunny
 					api.runAnimation(player, 23290);
-					player.queueUpdateBlock(new GraphicsBlock(1, 4780));
-					player.queueUpdateBlock(new GraphicsBlock(2, 4781));
+					api.setSpotAnim(player, 1, 4780);
+					api.setSpotAnim(player, 2, 4781);
 					return true
 				case 173://Demonic Rock Off
 					api.runAnimation(player, 23857);
-					player.queueUpdateBlock(new GraphicsBlock(1, 4945));
+					api.setSpotAnim(player, 1, 4945);
 					return true
 				case 174://Shadow to Praetor
 					api.runAnimation(player, 24492);
-					player.queueUpdateBlock(new GraphicsBlock(1, 5110));
+					api.setSpotAnim(player, 1, 5110);
 					return true
 				case 175://Praetor to Shadow
 					api.runAnimation(player, 24492);
-					player.queueUpdateBlock(new GraphicsBlock(1, 5109));
+					api.setSpotAnim(player, 1, 5109);
 					return true
 				case 177://Proto Pack
 					api.runAnimation(player, 24712);
-					player.queueUpdateBlock(new GraphicsBlock(1, 5185));
-					player.queueUpdateBlock(new GraphicsBlock(2, 5186));
+					api.setSpotAnim(player, 1, 5185);
+					api.setSpotAnim(player, 2, 5186);
 					return true
 				case 179://Pulled Away
 					api.runAnimation(player, 24853);
-					player.queueUpdateBlock(new GraphicsBlock(1, 5227));
-					player.queueUpdateBlock(new GraphicsBlock(2, 5228));
+					api.setSpotAnim(player, 1, 5227);
+					api.setSpotAnim(player, 2, 5228);
 					return true
 				case 180://Hefin Lotus
 					api.runAnimation(player, 25009);
@@ -643,7 +642,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 					return true
 				case 184://Cracker Pull
 					api.runAnimation(player, 25325);
-					player.queueUpdateBlock(new GraphicsBlock(1, 5293));
+					api.setSpotAnim(player, 1, 5293);
 					return true
 				default:
 					api.sendMessage(player, "This animation has not been added yet.");
@@ -728,7 +727,6 @@ function runTrimCompCape (player) {
 
 /* Listen to the interface ids specified */
 var listen = function(scriptLoader) {
-	api = scriptLoader.getApi();
 	var widgetListener = new WidgetListener();
 	scriptLoader.registerWidgetListener(widgetListener, widgetListener.getIDs());
 };

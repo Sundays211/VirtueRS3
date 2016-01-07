@@ -1,5 +1,3 @@
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
-var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 /**
  * @Author Kayla
  * @Date 11/14/2015
@@ -19,9 +17,9 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 						var targetPlayer = api.getWorldPlayerByHash(hash);
 						if (targetPlayer != null) {
 							api.sendMessage(player, "You have frozen the player named: " + targetPlayer)
-							player.queueUpdateBlock(new AnimationBlock(1979));
-							player.queueUpdateBlock(new GraphicsBlock(1, 366));
-							targetPlayer.queueUpdateBlock(new GraphicsBlock(1, 369));
+							api.runAnimation(player, 1979);
+							api.setSpotAnim(player, 1, 366);
+							api.setSpotAnim(targetPlayer, 1, 369);
 							targetPlayer.lock();
 							api.sendMessage(targetPlayer, "You have been frozen.")
 						} else {

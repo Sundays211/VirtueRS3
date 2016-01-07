@@ -244,20 +244,19 @@ var listen = function(scriptManager) {
 function runHomeTeleport (player, dest) {
 	var frame = 0;
 	var landSpot = api.offsetCoords(dest, 0, -1, 0);
-	var gfxType = 1;
 	
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {//The initial emote (drawing circle/reading book)
 				player.queueUpdateBlock(new AnimationBlock(16385));
-				player.queueUpdateBlock(new GraphicsBlock(gfxType, 3017));
+				api.setSpotAnim(player, 1, 3017);
 			} else if (frame == 18) {//Actually moving the player
 				api.teleportEntity(player, dest);
 				player.queueUpdateBlock(new FaceDirectionBlock(landSpot));
 				api.pausePlayer(player, 7);
 			} else if (frame == 19) {//The landing emotion
 				api.runAnimation(player, 16386);
-				player.queueUpdateBlock(new GraphicsBlock(gfxType, 3018));
+				api.setSpotAnim(player, 1, 3018);
 			} else if  (frame == 23) {//The post-landing movement
 				player.queueUpdateBlock(new AnimationBlock(16393));
 			} else if (frame == 25) {//Corrects the player's tile (otherwise it resets after about 10 seconds)
@@ -270,7 +269,7 @@ function runHomeTeleport (player, dest) {
 		},
 		stop : function (player) {//Clear the current animation and graphics block
 			player.queueUpdateBlock(new AnimationBlock(-1));
-			player.queueUpdateBlock(new GraphicsBlock(gfxType, -1));
+			player.queueUpdateBlock(new GraphicsBlock(1, -1));
 		}
 	});
 	

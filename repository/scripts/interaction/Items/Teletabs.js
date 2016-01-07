@@ -53,7 +53,7 @@ function runVarrockTele (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
 				player.queueUpdateBlock(new AnimationBlock(9597));
-				player.queueUpdateBlock(new GraphicsBlock(1, 1680));
+				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
@@ -79,7 +79,7 @@ function runFallyTele (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
 				player.queueUpdateBlock(new AnimationBlock(9597));
-				player.queueUpdateBlock(new GraphicsBlock(1, 1680));
+				api.setSpotAnim(player, 1, 1680));
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
@@ -105,7 +105,7 @@ function runCammyTele (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
 				player.queueUpdateBlock(new AnimationBlock(9597));
-				player.queueUpdateBlock(new GraphicsBlock(1, 1680));
+				api.setSpotAnim(player, 1, 1680));
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
@@ -131,7 +131,7 @@ function runLummyTele (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
 				player.queueUpdateBlock(new AnimationBlock(9597));
-				player.queueUpdateBlock(new GraphicsBlock(1, 1680));
+				api.setSpotAnim(player, 1, 1680));
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
@@ -157,7 +157,7 @@ function runWatchTowerTele (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
 				player.queueUpdateBlock(new AnimationBlock(9597));
-				player.queueUpdateBlock(new GraphicsBlock(1, 1680));
+				api.setSpotAnim(player, 1, 1680));
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {
@@ -183,7 +183,7 @@ function runGodwarsTele (player) {
 			if (frame === 0) {
 				api.pausePlayer(player, 7);
 				player.queueUpdateBlock(new AnimationBlock(9597));
-				player.queueUpdateBlock(new GraphicsBlock(1, 1680));
+				api.setSpotAnim(player, 1, 1680));
 			} else if (frame == 1) {//Actually moving the player
 				api.runAnimation(player, 4731);
 			} else if (frame == 2) {

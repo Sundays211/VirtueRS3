@@ -20,14 +20,10 @@
  * SOFTWARE.
  */
 
-var GraphicsBlock = Java
-		.type('org.virtue.network.protocol.update.block.GraphicsBlock');
-
 /**
  * @author Kayla
  * @since 01/16/2015
  */
-var THIEVING_SKILL = 17;
 var BACKPACK = 93;
 
 var Thieving = {
