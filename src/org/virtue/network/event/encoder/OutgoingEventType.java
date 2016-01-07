@@ -333,12 +333,12 @@ public enum OutgoingEventType {
 	/**
 	 * Opens the top-level game interface (aka "root" interface)
 	 */
-	IF_OPENTOP(35, 19), // Adjusted by Stefan for 861
+	IF_OPENTOP(35, 19),
 
 	/**
 	 * Opens an interface as a sub of the specified interface
 	 */
-	IF_OPENSUB(64, 23), // Adjusted by Stefan for 861
+	IF_OPENSUB(64, 23),
 
 	/**
 	 * Opens an interface as a sub of an npc

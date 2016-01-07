@@ -40,7 +40,7 @@ var VexListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Even
 		} else if (event == EventType.OPHELD1 || event == EventType.OPWORN1) {
 			//Option 1 (Place) as an inventory item
 			//Option 1 (Place) as a worn item
-			placeClanVex(player, args.item, args.slot);
+			ClanVex.place(player, args.item, args.slot);
 		}
 	}
 });
@@ -56,6 +56,20 @@ var listen = function(scriptManager) {
 	scriptManager.registerListener(EventType.OPNPC3, 13634, listener);
 }
 
+var ClanVex = {
+		place : function (player, item, slot) {
+			var npc = api.createNpc(13634, api.getCoords(player), false);
+			if(npc.getOwner() != null) {
+				api.sendMessage(player, "You already have a clan vex out.");
+			} else {
+			   npc.setOwner(player);
+			   api.spawnNpc(npc);
+			   api.runAnimation(player, 827);
+			   api.moveAdjacent(player);
+			}
+		}
+}
+
 function checkVexOwnership(player, npc) {
 	if(!npc.isOwner(player)) {
 		api.sendMessage(player, "You are not the owner of this Clan Vex.");
@@ -68,17 +82,4 @@ function checkVexOwnership(player, npc) {
 
 function readClanVex(player, npc) {
 	api.sendMessage(player, "There's no information about this clan.");
-}
-
-function placeClanVex (player, item, slot) {
-	var npc = NPC.create(13634, new Tile(player.getCurrentTile()));
-	if(npc.getOwner() != null) {
-		api.sendMessage(player, "You already have a clan vex out.");
-	} else {
-	   npc.setOwner(player);
-	   npc.setCanRespawn(false);
-	   Java.type('org.virtue.game.World').getInstance().addNPC(npc);
-	   api.runAnimation(player, 827);
-	   player.getMovement().moveAdjacent();
-	}
 }

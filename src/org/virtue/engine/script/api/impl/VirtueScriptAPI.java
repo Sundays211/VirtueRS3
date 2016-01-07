@@ -1684,6 +1684,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 		return tile.getRegionY();
 	}
 
+	@Override
+	public int getCoordHash(Tile coords) {
+		return coords.getTileHash();
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getCoord(int, int, int)
 	 */
@@ -1794,15 +1799,16 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	@Override
-	public void spawnLocation(int locTypeId, Tile coords, int removalDelay) {
-		spawnLocation(locTypeId, coords, 10, 0, removalDelay);
+	public SceneLocation spawnLocation(int locTypeId, Tile coords, int removalDelay) {
+		return spawnLocation(locTypeId, coords, 10, 0, removalDelay);
 	}
 
 	@Override
-	public void spawnLocation(int locTypeId, Tile coords, int type,
+	public SceneLocation spawnLocation(int locTypeId, Tile coords, int type,
 			int rotation, int removalDelay) {
 		SceneLocation loc = SceneLocation.create(locTypeId, coords, type, rotation);
 		spawnLocation(loc, removalDelay);
+		return loc;
 	}
 
 	/* (non-Javadoc)

@@ -73,6 +73,11 @@ public class ClanRecruitAction implements WidgetOnPlayerHandler {
 			}
 			return true;
 		}
+		if (Virtue.getInstance().getClans().getSettings().isBanned(recruiter.getClanHash(), recruit.getUserHash())) {
+			recruiter.getDispatcher().sendGameMessage(recruit.getName()+" is banned from this clan.");
+			//TODO: Check message
+			return true;
+		}
 		MessageEventContext invite = new MessageEventContext(ChannelType.CLAN_INVITE, recruiter.getName()+" is inviting you to join their clan.", recruiter.getName(), null);
 		recruit.getDispatcher().sendMessage(invite);
 		recruiter.getDispatcher().sendGameMessage("Inviting "+recruit.getName()+" to join your clan.");

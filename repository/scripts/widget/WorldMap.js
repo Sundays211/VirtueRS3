@@ -28,14 +28,10 @@
  * @since 9/11/2014
  */
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interface ids to bind to */
-	getIDs: function() {
-		return [1422];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {		
+var WorldMapOpen = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		var player = args.player;
+		
 		api.setWidgetEvents(player, 1422, 38, 2, 2, 2);
 		api.setWidgetEvents(player, 1422, 39, 2, 2, 2);
 		api.setWidgetEvents(player, 1422, 40, 2, 2, 2);
@@ -46,37 +42,26 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		api.setWidgetEvents(player, 1422, 45, 2, 2, 2);
 		api.setWidgetEvents(player, 1422, 46, 2, 2, 2);
 		api.setWidgetEvents(player, 1422, 47, 2, 2, 2);
-		api.setVarc(player, 622, player.getCurrentTile().getTileHash());
+		api.setVarc(player, 622, api.getCoordHash(api.getCoords(player)));
 		api.setWidgetEvents(player, 1422, 86, 0, 19, 2);
 		api.hideWidget(player, 1422, 49, true);
 		api.setVarc(player, 4197, -1);
-		api.setVarc(player, 674, player.getCurrentTile().getTileHash());
-		player.setAction(new WorldMapOpenAction());		
-	},
+		api.setVarc(player, 674, api.getCoordHash(api.getCoords(player)));
+		player.setAction(new WorldMapOpenAction());
+	}
+});
 
-	/* The first option on an object */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		switch (component) {
-		case 167://Close button
-			return true;
-		default:
-			return false;
-		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
+var WorldMapClose = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		var player = args.player;
+		
 		api.runClientScript(player, 8105, []);
 		api.setVarc(player, 622, -1);
 		api.setVarc(player, 674, -1);
 		api.openOverlaySub(player, 1015, 1215, true);
 		api.openWidget(player, 1477, 12, 1482, true);
 		player.clearAction();
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 var WorldMapOpenAction = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
@@ -93,6 +78,9 @@ var WorldMapOpenAction = Java.extend(Java.type('org.virtue.game.entity.player.ev
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	var widgetListener = new WidgetListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
+	var listener = new WorldMapOpen();
+	scriptManager.registerListener(EventType.IF_OPEN, 1422, listener);
+	
+	listener = new WorldMapClose();
+	scriptManager.registerListener(EventType.IF_BUTTON, 1422, listener);
 };

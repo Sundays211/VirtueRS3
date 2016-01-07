@@ -110,7 +110,7 @@ var ClanAdminMessages = {
 			return value == null ? def : value;
 		},
 		save : function (player) {
-			if (this.canChangeBroadcasts(player, clanApi.getRank(api.getClanHash(player), api.getUserHash(player)))) {
+			if (ClanPermissions.canChangeBroadcasts(player, clanApi.getRank(api.getClanHash(player), api.getUserHash(player)))) {
 				api.setVarClanSetting(player, 5, api.getVarp(player, 4276));
 				api.setVarClanSetting(player, 6, api.getVarp(player, 4277));
 				api.setVarClanSetting(player, 7, api.getVarp(player, 4278));
@@ -340,25 +340,6 @@ var ClanAdminMessages = {
 				return api.setVarBit(player, 22022, rank);
 			default:
 				return false;
-			}
-		},
-		canChangeBroadcasts : function (player, rank) {
-			switch (rank) {
-			case 100:
-				return api.getVarBit(player, 21735);
-			case 101:
-				return api.getVarBit(player, 21736);
-			case 102:
-				return api.getVarBit(player, 21737);
-			case 103:
-				return api.getVarBit(player, 21738);
-			case 125:
-				return api.getVarBit(player, 21739);
-			case 126:
-			case 127:
-				return 1;
-			default:
-				return 0;
 			}
 		}
 }

@@ -42,8 +42,8 @@ public class PlayerClickEventDecoder implements EventDecoder<PlayerClickEventCon
 	 */
 	@Override
 	public PlayerClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int index = buffer.getLEShort();
-		boolean forceRun = buffer.getByteA() == 1;
+		boolean forceRun = buffer.getByte() == 1;
+		int index = buffer.getShortA();
 		return new PlayerClickEventContext(index, forceRun, opcode);
 	}
 

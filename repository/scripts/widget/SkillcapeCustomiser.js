@@ -27,113 +27,98 @@
  * @author Sundays211
  * @since 24/01/2015
  */
-var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interface ids to bind to */
-	getIDs: function() {
-		return [20];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-
-	/* The first option on an object */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		switch (component) {
-		case 10://Colour 1
-			SkillcapeCustomiser.selectCapeColour(player, 1);
-			return true;
-		case 7://Colour 2
-			SkillcapeCustomiser.selectCapeColour(player, 2);
-			return true;
-		case 4://Colour 3
-			SkillcapeCustomiser.selectCapeColour(player, 3);
-			return true;
-		case 1://Colour 4
-			SkillcapeCustomiser.selectCapeColour(player, 4);
-			return true;
-		case 33://Change col1 to col2
-			SkillcapeCustomiser.copyCapeColour(player, 2, 1);
-			return true;
-		case 35://Change col1 to col3
-			SkillcapeCustomiser.copyCapeColour(player, 3, 1);
-			return true;
-		case 37://Change col1 to col4
-			SkillcapeCustomiser.copyCapeColour(player, 4, 1);
-			return true;
-		case 53://Change col2 to col1
-			SkillcapeCustomiser.copyCapeColour(player, 1, 2);
-			return true;
-		case 55://Change col2 to col3
-			SkillcapeCustomiser.copyCapeColour(player, 3, 2);
-			return true;
-		case 57://Change col2 to col4
-			SkillcapeCustomiser.copyCapeColour(player, 4, 2);
-			return true;
-		case 67://Change col3 to col1
-			SkillcapeCustomiser.copyCapeColour(player, 1, 3);
-			return true;
-		case 69://Change col3 to col2
-			SkillcapeCustomiser.copyCapeColour(player, 2, 3);
-			return true;
-		case 71://Change col3 to col4
-			SkillcapeCustomiser.copyCapeColour(player, 4, 3);
-			return true;		
-		case 81://Change col4 to col1
-			SkillcapeCustomiser.copyCapeColour(player, 1, 4);
-			return true;
-		case 83://Change col4 to col2
-			SkillcapeCustomiser.copyCapeColour(player, 2, 4);
-			return true;
-		case 85://Change col4 to col3
-			SkillcapeCustomiser.copyCapeColour(player, 3, 4);
-			return true;
-		case 111://Done
-			api.closeCentralWidgets(player);
-			return true;
-		case 101://Close button
-			return true;
-		case 153://Save as preset 1
-			SkillcapeCustomiser.handlePreset(player, 1, true);
-			return true;
-		case 160://Save as preset 2
-			SkillcapeCustomiser.handlePreset(player, 2, true);
-			return true;
-		case 167://Save as preset 3
-			SkillcapeCustomiser.handlePreset(player, 3, true);
-			return true;
-		case 174://Load preset 1
-			SkillcapeCustomiser.handlePreset(player, 1, false);
-			return true;
-		case 181://Load preset 2
-			SkillcapeCustomiser.handlePreset(player, 2, false);
-			return true;
-		case 188://Load preset 3
-			SkillcapeCustomiser.handlePreset(player, 3, false);
-			return true;
-		default:
-			return false;
+var SkillcapeCustomiserListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		var player = args.player;
+		if (event == EventType.IF_CLOSE) {
+			api.refreshEquipment(player);
+		} else {
+			switch (args.component) {
+			case 10://Colour 1
+				SkillcapeCustomiser.selectCapeColour(player, 1);
+				return;
+			case 7://Colour 2
+				SkillcapeCustomiser.selectCapeColour(player, 2);
+				return;
+			case 4://Colour 3
+				SkillcapeCustomiser.selectCapeColour(player, 3);
+				return;
+			case 1://Colour 4
+				SkillcapeCustomiser.selectCapeColour(player, 4);
+				return;
+			case 33://Change col1 to col2
+				SkillcapeCustomiser.copyCapeColour(player, 2, 1);
+				return;
+			case 35://Change col1 to col3
+				SkillcapeCustomiser.copyCapeColour(player, 3, 1);
+				return;
+			case 37://Change col1 to col4
+				SkillcapeCustomiser.copyCapeColour(player, 4, 1);
+				return;
+			case 53://Change col2 to col1
+				SkillcapeCustomiser.copyCapeColour(player, 1, 2);
+				return;
+			case 55://Change col2 to col3
+				SkillcapeCustomiser.copyCapeColour(player, 3, 2);
+				return;
+			case 57://Change col2 to col4
+				SkillcapeCustomiser.copyCapeColour(player, 4, 2);
+				return;
+			case 67://Change col3 to col1
+				SkillcapeCustomiser.copyCapeColour(player, 1, 3);
+				return;
+			case 69://Change col3 to col2
+				SkillcapeCustomiser.copyCapeColour(player, 2, 3);
+				return;
+			case 71://Change col3 to col4
+				SkillcapeCustomiser.copyCapeColour(player, 4, 3);
+				return;		
+			case 81://Change col4 to col1
+				SkillcapeCustomiser.copyCapeColour(player, 1, 4);
+				return;
+			case 83://Change col4 to col2
+				SkillcapeCustomiser.copyCapeColour(player, 2, 4);
+				return;
+			case 85://Change col4 to col3
+				SkillcapeCustomiser.copyCapeColour(player, 3, 4);
+				return;
+			case 111://Done
+				api.closeCentralWidgets(player);
+				return;
+			case 101://Close button
+				return;
+			case 153://Save as preset 1
+				SkillcapeCustomiser.handlePreset(player, 1, true);
+				return;
+			case 160://Save as preset 2
+				SkillcapeCustomiser.handlePreset(player, 2, true);
+				return;
+			case 167://Save as preset 3
+				SkillcapeCustomiser.handlePreset(player, 3, true);
+				return;
+			case 174://Load preset 1
+				SkillcapeCustomiser.handlePreset(player, 1, false);
+				return;
+			case 181://Load preset 2
+				SkillcapeCustomiser.handlePreset(player, 2, false);
+				return;
+			case 188://Load preset 3
+				SkillcapeCustomiser.handlePreset(player, 3, false);
+				return;
+			default:
+				api.sendMessage(player, "Unhandled skillcape customisation button: component="+args.component+", button="+args.button+", slot="+args.slot);
+				return;
+			}
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		api.refreshEquipment(player);		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
-	var widgetListener = new WidgetListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
+	var listener = new SkillcapeCustomiserListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 20, listener);
+	scriptManager.registerListener(EventType.IF_CLOSE, 20, listener);
 }
 
 var SkillcapeCustomiser = {

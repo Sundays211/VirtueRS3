@@ -972,6 +972,13 @@ public interface ScriptAPI {
 	public int getRegionId (Tile tile);
 	
 	/**
+	 * Gets the hash for the given coordinates
+	 * @param coords The coordinates
+	 * @return The coord hash (format: y | (x << 14) | (level << 28))
+	 */
+	public int getCoordHash(Tile coords);
+	
+	/**
 	 * Gets the coordinate from the specified components
 	 * @param x The x-component of the coordinate
 	 * @param y The y-component of the coordinate
@@ -1044,9 +1051,10 @@ public interface ScriptAPI {
 	 */
 	public void spawnLocation (SceneLocation loc, int removalDelay);
 	
-	public void spawnLocation (int locTypeId, Tile coords, int removalDelay);
 	
-	public void spawnLocation (int locTypeId, Tile coords, int type, int rotation, int removalDelay);
+	public SceneLocation spawnLocation (int locTypeId, Tile coords, int removalDelay);
+	
+	public SceneLocation spawnLocation (int locTypeId, Tile coords, int type, int rotation, int removalDelay);
 	
 	/**
 	 * Retrieves the location of the specified node type at the specified coordinates on the map

@@ -23,6 +23,8 @@ package org.virtue.game.content.social.clan;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.engine.cycle.Tick;
 import org.virtue.game.content.social.ChannelType;
@@ -36,6 +38,11 @@ import org.virtue.game.content.social.SocialUser;
  * @since 22/12/2014
  */
 public class ClanManager {
+
+	/**
+	 * The {@link Logger} instance
+	 */
+	private static Logger logger = LoggerFactory.getLogger(ClanManager.class);
 	
 	private ClanIndex index;
 	
@@ -189,7 +196,7 @@ public class ClanManager {
 	
 	public boolean joinClan (SocialUser player, long clanHash) {
 		ClanSettings clan = getClanData(clanHash);
-		if (clan == null) {			
+		if (clan == null) {
 			return false;
 		}
 		if (clan.isBanned(player.getHash())) {

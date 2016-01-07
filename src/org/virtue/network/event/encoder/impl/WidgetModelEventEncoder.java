@@ -44,8 +44,8 @@ public class WidgetModelEventEncoder implements EventEncoder<WidgetModelEventCon
 		OutboundBuffer buffer = new OutboundBuffer();
 		switch (context.getType()) {
 			case PLAYER_MODEL_OTHER:
-				buffer.putLEShort(context.getMediaID());
 				buffer.putPacket(OutgoingEventType.IF_SETPLAYERMODEL_OTHER, player);
+				buffer.putLEShort(context.getMediaID());
 				buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				buffer.putLEInt(context.getSettings());
 				break;

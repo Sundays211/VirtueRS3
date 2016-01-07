@@ -27,7 +27,6 @@
  * @author Sundays211
  * @since 25/12/2014
  */
-var api;
 
 var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
@@ -126,7 +125,6 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	api = scriptManager.getApi();
 	var widgetListener = new WidgetListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
 };

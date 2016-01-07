@@ -42,18 +42,18 @@ public class WidgetOnPlayerDecoder implements EventDecoder<WidgetOnPlayerEventCo
 	 */
 	@Override
 	public WidgetOnPlayerEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int slot = buffer.getLEShortA() & 0xffff;
+		int slot = buffer.getShort() & 0xffff;
 		if (slot == 65535) {
 			slot = -1;
 		}
-		int ifHash = buffer.getIntB();
-		int playerIndex = buffer.getShortA();
-		int itemID = buffer.getShort() & 0xffff;
+		int ifHash = buffer.getInt();
+		int pid = buffer.getLEShortA();
+		boolean forceRun = (buffer.getByteS() == 1);
+		int itemID = buffer.getLEShortA() & 0xffff;
 		if (itemID == 65535) {
 			itemID = -1;
 		}
-		boolean forceRun = (buffer.getByteC() == 1);
-		return new WidgetOnPlayerEventContext(ifHash, slot, itemID, playerIndex, forceRun);
+		return new WidgetOnPlayerEventContext(ifHash, slot, itemID, pid, forceRun);
 	}
 
 	/* (non-Javadoc)

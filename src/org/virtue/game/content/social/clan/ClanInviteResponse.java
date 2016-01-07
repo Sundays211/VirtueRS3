@@ -72,7 +72,8 @@ To be able to recruit others you must be given permission by your clan.
 			//System.out.println(recruiter.getName()+" is not in a clan.");
 			return false;//The recruiter is not in a clan. TODO: Implement clan founding
 		}
-		recruit.getChat().setGuestClanHash(recruiter.getClanHash(), true);
+		final long clanHash = recruiter.getClanHash();
+		recruit.getChat().setGuestClanHash(clanHash, true);
 		Virtue.getInstance().getClans().getSettings().registerPlayer(recruit.getChat(), true);
 		recruit.getWidgets().openCentralWidget(1095, false);
 		recruit.getInteractions().removePossiblePlayer(OptionButton.NINE, recruiter);
@@ -81,7 +82,7 @@ To be able to recruit others you must be given permission by your clan.
 			public void handle(Object value) {
 				Virtue.getInstance().getClans().getSettings().deregisterPlayer(recruit.getChat(), true);
 				recruit.getWidgets().closeWidgets(true);
-				Virtue.getInstance().getClans().joinClan(recruit.getChat(), recruit.getChat().getGuestClanHash(true));
+				Virtue.getInstance().getClans().joinClan(recruit.getChat(), clanHash);
 				recruit.getChat().setGuestClanHash(0L, true);
 			}			
 		});
