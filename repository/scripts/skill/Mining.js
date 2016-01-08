@@ -269,7 +269,7 @@ var Mining = {
 			api.addExperience(player, Stat.MINING, rock.xp, true);
 			api.transformLoc(location, getEmptyID(location), rock.respawnDelay);
 			api.addCarriedItem(player, rock.oreID, 1);
-			api.sendMessage(player, "You mine some " + api.getItemType(rock.oreID).name + ".", 109);
+			api.sendMessage(player, "You mine some " + api.getItemName(rock.oreID) + ".", 109);
 		},
 		getMiningDelay : function (player, mine, pickaxe) {
 			var timer = mine.baseTime - api.getStatLevel(player, Stat.MINING) - Math.floor(Math.random() * pickaxe.time);

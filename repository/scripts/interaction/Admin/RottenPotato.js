@@ -37,7 +37,7 @@ var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Eve
 		var slot = args.slot;
 		
 		if (!api.isAdmin(player)) {
-			player.getDialogs().sendNpcChat("Eww! This was yuck! I don't think I want another bite.", 2253);
+			chatplayer(player, "Eww! This was yuck! I don't think I want another bite.");
 			api.runAnimation(player, 18001);
 			api.delCarriedItem(player, objTypeId, 1);
 			return;

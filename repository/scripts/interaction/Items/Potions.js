@@ -45,7 +45,7 @@ function startPotion (player, item, slot) {
 	if (potion.potionText != null) {
 		api.sendFilterMessage(player, potion.potionText);		
 	} else {
-		api.sendFilterMessage(player, "You drink the " + api.getItemType(potion.itemID).name + ".");
+		api.sendFilterMessage(player, "You drink the " + api.getItemName(potion.itemID) + ".");
 	}
 	if(player.getCombat().inCombat() == true) {
 		api.runAnimation(player, 18002);

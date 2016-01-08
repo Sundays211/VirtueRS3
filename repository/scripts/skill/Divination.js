@@ -336,7 +336,7 @@ function startEnergyRift(player, object) {
 		return;
 	}
 	//if (api.carriedItemTotal(player, item.getID()) < 1) {
-		//api.sendMessage(player, "You need to have "+api.getItemType(energyRift.memoryID).name+" in your inventory.");
+		//api.sendMessage(player, "You need to have "+api.getItemName(energyRift.memoryID)+" in your inventory.");
 		//return true;
 	//}
 	var delay = 0;
@@ -420,7 +420,6 @@ function getCarriedMemory(player) {
 }
 
 function startHarvest (player, npc) {
-	print(api.getNpcType(npc.getID()).name+"\n");
 	var harvest = forHarvestNPC(npc.getID());
 	if (api.getStatLevel(player, Stat.DIVINATION) < harvest.level) {
 		api.sendMessage(player, "You need a Divination level of "+harvest.level+" to harvest from this " + api.getNpcType(harvest.wispID).name + ".");

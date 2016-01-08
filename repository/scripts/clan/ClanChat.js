@@ -138,25 +138,22 @@ function addClanBan (player) {
 		api.sendMessage(player, "You must be a clan admin to do that.");
 		return;
 	}
-	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-		handle : function (value) {
-			api.sendMessage(player, "Attempting to ban "+value+".");
-			var userHash = api.getUserHash(value);
-			if (userHash == null) {
-				api.sendMessage(player, "An error was found while attempting to ban "+value+". No player of that name could be found.");
-				return;
-			}
-			if (clanApi.isBanned(clanApi.getClanHash(player), userHash)) {
-				api.sendMessage(player, "That player is already banned from your clan.");
-				return;
-			}
-			var success = api.getClanSettings().addBan(api.getClanHash(player), player.getChat(), userHash);
-			if (success) {
-				clanApi.sendBroadcast(api.getClanHash(player), 15, ["[Player A]", "[Player B]"], [api.getName(player), api.getName(userHash)]);
-			}
+	requestString(player, "Enter the name to be banned:", function (name) {
+		api.sendMessage(player, "Attempting to ban "+name+".");
+		var userHash = api.getUserHash(name);
+		if (userHash == null) {
+			api.sendMessage(player, "An error was found while attempting to ban "+name+". No player of that name could be found.");
+			return;
 		}
-	});	
-	player.getDialogs().requestString("Enter the name to be banned:", new Handler());
+		if (clanApi.isBanned(clanApi.getClanHash(player), userHash)) {
+			api.sendMessage(player, "That player is already banned from your clan.");
+			return;
+		}
+		var success = api.getClanSettings().addBan(api.getClanHash(player), player.getChat(), userHash);
+		if (success) {
+			clanApi.sendBroadcast(api.getClanHash(player), 15, ["[Player A]", "[Player B]"], [api.getName(player), api.getName(userHash)]);
+		}
+	});
 }
 
 function removeClanBan (player, slot) {
@@ -171,11 +168,11 @@ function removeClanBan (player, slot) {
 	if (slot != -1) {
 		api.runClientScript(player, 4581, [slot]);
 	}
-	requestString(player, "Enter the name to be removed:", function (value) {
-		api.sendMessage(player, "Attempting to unban "+value+".");
+	requestString(player, "Enter the name to be removed:", function (name) {
+		api.sendMessage(player, "Attempting to unban "+name+".");
 		var userHash = api.getUserHash(value);
 		if (userHash == null) {
-			api.sendMessage(player, "An error was found while attempting to unban "+value+". No player of that name could be found.");
+			api.sendMessage(player, "An error was found while attempting to unban "+name+". No player of that name could be found.");
 			return;
 		}
 		if (!clanApi.isBanned(clanApi.getClanHash(player), userHash)) {

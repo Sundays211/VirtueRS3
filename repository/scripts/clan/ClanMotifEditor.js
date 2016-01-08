@@ -107,7 +107,7 @@ var MotifEditorListener = Java.extend(Java.type('org.virtue.engine.script.listen
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	var listener = new FriendChatListener();
+	var listener = new MotifEditorListener();
 	scriptManager.registerListener(EventType.IF_BUTTON, 1105, listener);
 	scriptManager.registerListener(EventType.IF_OPEN, 1105, listener);
 };

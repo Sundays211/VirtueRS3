@@ -116,7 +116,7 @@ function startFish (player, npc) {
 		return;
 	}
 	api.runAnimation(player, tool.anim);
-	api.sendFilterMessage(player, "You cast out your " + api.getItemType(tool.itemID).name +"...");
+	api.sendFilterMessage(player, "You cast out your " + api.getItemName(tool.itemID) +"...");
 	api.pausePlayer(player, delay+10);
 	var delay = getDelay(player, spots, tool);//Calculates the time taken to catch a fish
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
@@ -140,7 +140,7 @@ function fishingSuccess (player, spots, npc) {
 	api.addExperience(player, Stat.FISHING, spots.xp, true);
 	var fishID = getCatch(player, spots);
 	api.addCarriedItem(player, fishID, 1);
-	api.sendFilterMessage(player, "You catch some " + api.getItemType(fishID).name + ".");
+	api.sendFilterMessage(player, "You catch some " + api.getItemName(fishID) + ".");
 }
 
 function getDelay (player, spots, tool) {

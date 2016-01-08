@@ -63,7 +63,6 @@ function startParty (player, npc) {
 	if (api.isPaused(player)) {
 		return false;
 	}
-	//print(api.getNpcType(npc.getID()).name+"\n");
 	var party = forPartyNPC(npc.getID());
 	api.faceEntity(player, npc);
 	api.runAnimation(player, 794);

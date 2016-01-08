@@ -177,7 +177,7 @@ var Prayer = {
 			return null;
 		},
 		burySuccess : function (player, bones) {
-			api.sendMessage(player, "You bury the " + api.getItemType(bones.itemID).name + ".", MesType.GAME_SPAM);
+			api.sendMessage(player, "You bury the " + api.getItemName(bones.itemID) + ".", MesType.GAME_SPAM);
 			api.addExperience(player, Stat.PRAYER, bones.xp, true);
 		}
 }

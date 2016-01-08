@@ -85,7 +85,13 @@ var HousePortalListener = Java.extend(Java.type('org.virtue.engine.script.listen
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;
 		if (event == EventType.OPLOC1) {
-			api.openDialog(player, "HouseOptions");
+			multi4(player, "Select an Option", "Go to your house.", function () {
+				enterHouse(player);
+			}, "Go to your house (building mode).", function () {
+				api.sendMessage(player, "Build mode is not yet supported.");
+			}, "Go to a friend's house.", function () {
+				joinHouse(player);
+			}, "Never mind.");
 		} else if (event == EventType.OPLOC4) {
 			joinHouse(player);
 		} else if (event == EventType.OPLOC5) {
@@ -93,35 +99,6 @@ var HousePortalListener = Java.extend(Java.type('org.virtue.engine.script.listen
 		} else {
 			api.sendMessage(player, "Unhandled construction action: locationid="+locTypeId+", event="+event);
 		}
-	}
-});
-
-
-var DialogListener = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
-	startDialog : function (player) {
-		player.getDialogs().sendMultichoice("Select an Option", ["Go to your house.", "Go to your house (building mode).", "Go to a friend's house.", "Never mind."], [1, 2, 3, 4]);
-	},
-	continueDialog : function (player, option) {
-		switch (player.getDialogs().getStep()) {
-		case -1:
-			return true;
-		case 1:
-			enterHouse(player);
-			return true;
-		case 2:
-			return true;
-		case 3:
-			joinHouse(player);
-			return true;
-		case 4:
-			return true;
-		default:
-			return true;
-		}
-		
-	},
-	finishDialog : function (player) {
-		
 	}
 });
 
@@ -138,7 +115,6 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPLOC5, ids[i], listener);
 	}	
 	
-	scriptManager.registerDialogListener(new DialogListener(), "HouseOptions");
 	var widgetListener = new WidgetListener();
 	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
 };

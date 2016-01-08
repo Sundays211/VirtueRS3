@@ -305,7 +305,7 @@ var Woodcutting = {
 					if (delay <= 0) {
 						api.addExperience(player, Stat.WOODCUTTING, tree.type.xp, true);
 						api.addCarriedItem(player, tree.type.logId, 1);
-						api.sendMessage(player, "You get some " + getItemName(tree.type.logId)+ ".", MesType.GAME_SPAM);
+						api.sendMessage(player, "You get some " + api.getItemName(tree.type.logId)+ ".", MesType.GAME_SPAM);
 						if (tree.type == TreeType.NORMAL || Math.random() < 0.2) {//If the tree is not a normal tree, there is a 1 in 5 chance of felling it
 							fellTree();	
 							return true;

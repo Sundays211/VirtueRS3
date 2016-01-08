@@ -93,7 +93,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				}
 				//api.setVarBit(targetPlayer, 1047, value);
 				api.hideWidget(player, 334, 17, false);
-				api.setWidgetText(player, 334, 33, "Lend: <col=ffffff>"+api.getItemType(item).name+", "+duration);				
+				api.setWidgetText(player, 334, 33, "Lend: <col=ffffff>"+api.getItemName(item)+", "+duration);				
 			}
 			var targetPlayer = api.getInteractionTarget(player);
 			if (targetPlayer != null) {
@@ -110,7 +110,7 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 						duration = "for "+duration+" hours";
 					}
 					api.hideWidget(player, 334, 19, false);
-					api.setWidgetText(player, 334, 34, "Lend: <col=ffffff>"+api.getItemType(item).name+", "+duration);				
+					api.setWidgetText(player, 334, 34, "Lend: <col=ffffff>"+api.getItemName(item)+", "+duration);				
 				}
 			}
 		} else if (interfaceID == 336) {
@@ -479,7 +479,7 @@ var Trade = {
 		showValue : function (player, item) {
 			var value = api.getItemType(item).getExchangeValue();
 			if (value != -1) {
-				api.sendMessage(player, api.getItemType(item).name+": market price is "+value+" coins.");
+				api.sendMessage(player, api.getItemName(item)+": market price is "+value+" coins.");
 			}
 		},
 		selectLoanDuration : function (player) {

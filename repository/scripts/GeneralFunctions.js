@@ -30,10 +30,6 @@
  * @since 29/11/2015
  */
 
-function getItemName (itemId) {
-	return api.getItemType(itemId).name;
-}
-
 function requestCount (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
@@ -65,6 +61,15 @@ function requestString (player, message, callback) {
 		}
 	});	
 	api.requestString(player, message, new Handler());
+}
+
+function requestItem (player, message, callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			callback(value);
+		}
+	});
+	player.getDialogs().requestItem(message, new Handler());
 }
 
 function requestTool (player, message, tools, callback) {

@@ -33,7 +33,7 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;
 		
-		player.getDialogs().sendNpcChat("Hi "+api.getName(player)+", What would you like to do? TODO OPTIONS", 1);
+		chatnpc(player, "Hi "+api.getName(player)+", What would you like to do? TODO OPTIONS", 1);
 	}
 });
 

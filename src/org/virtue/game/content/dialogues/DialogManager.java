@@ -141,7 +141,7 @@ public class DialogManager {
 			i--;
 		}
 		if (options.length <= 5 && options.length > 1) {
-			player.getDispatcher().sendWidgetText(1188, 14, message);//Header bar (question)
+			player.getDispatcher().sendWidgetText(1188, 31, message);//Header bar (question)
 			params[0] = options.length;
 			player.getWidgets().openOverlaySub(WidgetManager.DIALOG_OVERLAY_SUB, 1188, false);//Interface
 			player.getDispatcher().sendCS2Script(5589, params);//Options
@@ -418,19 +418,19 @@ public class DialogManager {
 	private int getMultichoiceOption (int compID) {
 		int option = -1;
 		switch (compID) {
-		case 3:
+		case 5:
 			option = 1;
 			break;
-		case 4:
+		case 10:
 			option = 2;
 			break;
-		case 5:
+		case 15:
 			option = 3;
 			break;
-		case 6:
+		case 20:
 			option = 4;
 			break;
-		case 7:
+		case 25:
 			option = 5;
 			break;
 		}

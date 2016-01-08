@@ -22,8 +22,6 @@
 
 var BufferedWriter = Java.type('java.io.BufferedWriter');
 var FileWriter = Java.type('java.io.FileWriter');
-var NPC = Java.type('org.virtue.game.entity.npc.NPC');
-var Tile = Java.type('org.virtue.game.world.region.Tile');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -47,9 +45,9 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			writer = new BufferedWriter(new FileWriter("./repository/NPCSpawns.txt", true));
 			writer.newLine();
 			var npcType = parseInt(args[0]);
-			var posX = player.getCurrentTile().getX();
-			var posY = player.getCurrentTile().getY();
-			var posZ = player.getCurrentTile().getPlane();
+			var posX = api.getCoordX(player);
+			var posY = api.getCoordY(player);
+			var posZ = api.getCoordLevel(player);
 			if (args.length >= 3) {
 				posX = parseInt(args[1]);
 				posY = parseInt(args[2]);
@@ -57,10 +55,11 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			if (args.length >= 4) {
 				posZ = parseInt(args[3]);
 			}
-			writer.write("//Added by "+api.getName(player)+": "+api.getNpcType(npcType).name);
+			var npc = api.createNpc(npcType, api.getCoords(posX, posY, posZ), true);
+			writer.write("//Added by "+api.getName(player)+": "+api.getName(npc));
 			writer.newLine();
 			writer.write(npcType + " - " + posX + " " + posY + " " + posZ);
-			Java.type('org.virtue.game.World').getInstance().addNPC(NPC.create(npcType, new Tile(posX, posY, posZ)));
+			api.spawnNpc(npc);
 			writer.close();
 		} catch (e) { 
 			if (writer != null) {

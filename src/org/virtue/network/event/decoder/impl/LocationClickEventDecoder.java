@@ -41,10 +41,10 @@ public class LocationClickEventDecoder implements EventDecoder<LocationClickEven
 	 */
 	@Override
 	public LocationClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int baseY = buffer.getLEShortA() & 0xffff;
-		int id = buffer.getIntB();
-		boolean forcerun = (buffer.getByteA() == 1);
-		int baseX = buffer.getShort() & 0xffff;
+		int baseY = buffer.getLEShort() & 0xffff;
+		int baseX = buffer.getLEShortA() & 0xffff;
+		int id = buffer.getInt();
+		boolean forcerun = (buffer.getByteC() == 1);
 		return new LocationClickEventContext(id, baseX, baseY, forcerun, opcode);
 	}
 

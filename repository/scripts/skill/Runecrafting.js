@@ -354,7 +354,7 @@ var Runecrafting = {
 			api.setSpotAnim(player, 1, alter.gfxID, 0, 5, 0);
 			api.addExperience(player, Stat.RUNECRAFTING, totalXp, true);
 			api.addItem(player, Inv.BACKPACK, alter.runeID, essCount * this.getHighestMultiple(alter, level))
-			api.sendMessage(player, "You bind the temple's power into "+api.getItemType(alter.runeID).name.toLowerCase()+"s.");
+			api.sendMessage(player, "You bind the temple's power into "+api.getItemName(alter.runeID)+"s.");
 		},
 		forRunes : function (locTypeId) {
 			for (var ordinal in MysteriousRunes) {

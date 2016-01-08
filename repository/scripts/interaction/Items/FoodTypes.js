@@ -335,7 +335,7 @@ function startFood (player, item, slot) {
 	if (food.healText != null) {
 		api.sendFilterMessage(player, food.healText);		
 	} else {
-		api.sendFilterMessage(player, "You eat the " + api.getItemType(food.itemID).name + ".");
+		api.sendFilterMessage(player, "You eat the " + api.getItemName(food.itemID) + ".");
 	}
 	if(player.getCombat().inCombat() == true) {
 		api.runAnimation(player, 18002);

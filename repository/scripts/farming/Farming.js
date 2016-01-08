@@ -1354,7 +1354,7 @@ Farming.TREES.chopDown = function (player, patchID, tree, emptyStatus) {
 			if(delay <= 0) {
 				api.addExperience(player, Stat.WOODCUTTING, tree.xp, true);
 				api.addCarriedItem(player, tree.logID, 1);
-				api.sendFilterMessage(player, "You cut some " + api.getItemType(tree.logID).name + ".");
+				api.sendFilterMessage(player, "You cut some " + api.getItemName(tree.logID) + ".");
 				if (Math.random() > 0.9) {
 					Farming.TREES.setStatus(player, patchID, emptyStatus);
 					return true;

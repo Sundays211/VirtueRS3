@@ -63,7 +63,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			}
 			return;
 		case "music":
-			api.sendMessage(player, api.getItemType(4151).name.toString());
+			api.sendMessage(player, api.getItemName(4151));
 			//player.getDispatcher().sendMusic(parseInt(args[0]), parseInt(args[1]));
 			return;
 		case "inter":

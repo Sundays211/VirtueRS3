@@ -38,22 +38,18 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 		 */
 		
 		if (args.length < 1 || isNaN(args[0])) {
-			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-				handle : function (value) {
-					var amount = 1;
-					if (api.getItemType(value).isStackable()) {
-						requestCount(player, "Enter the number of items to spawn: ", function (amount) {
-							api.addItem(player, Inv.BACKPACK, value, amount);
-						});	
-					} else if (api.freeSpaceTotal(player, Inv.BACKPACK) >= amount) {
+			requestItem(player, "Choose an item to spawn.", function (value) {
+				var amount = 1;
+				if (api.getItemType(value).isStackable()) {
+					requestCount(player, "Enter the number of items to spawn: ", function (amount) {
 						api.addItem(player, Inv.BACKPACK, value, amount);
-					} else {
-						api.sendMessage(player, "You do not have enough space in your backpack to store this item.");
-					}
+					});	
+				} else if (api.freeSpaceTotal(player, Inv.BACKPACK) >= amount) {
+					api.addItem(player, Inv.BACKPACK, value, amount);
+				} else {
+					api.sendMessage(player, "You do not have enough space in your backpack to store this item.");
 				}
 			});
-			player.getDialogs().requestItem("Choose an item to spawn.", new Handler());
-			return true;
 		} else {
 			if (args.length < 1) {
 				sendCommandResponse(player, "Usage: "+syntax+" [id] [amount]", scriptArgs.console);
@@ -69,7 +65,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 				return;
 			}
 
-			var value = api.getItemType(itemID).getExchangeValue() * amount;
+			var value = api.getExchangeCost(itemID) * amount;
 			if (api.getItemType(itemID).isStackable() || api.freeSpaceTotal(player, Inv.BACKPACK) >= amount) {
 				api.addItem(player, Inv.BACKPACK, itemID, amount);
 				if (value == -1) {

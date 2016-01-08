@@ -56,31 +56,25 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			return;
 		}
 		
-		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-			handle : function (value) {
-				if (value.length > 0) {
-					var hash = api.getUserHash(value);
-					if (hash != null) {
-						var targetPlayer = api.getWorldPlayerByHash(hash);
-						if (targetPlayer != null) {
-							if (action == "mute") {
-								api.sendMessage(player, "Applying mute to "+api.getName(targetPlayer)+".")
-								targetPlayer.getChat().setMuted(true);
-							} else if (action == "unmute") {
-								api.sendMessage(player, "Removing mute on player "+api.getName(targetPlayer)+".")
-								targetPlayer.getChat().setMuted(false);
-							}
-						} else {
-							api.sendMessage(player, value+" is not currently in the game world.")
-						}
-					} else {
-						api.sendMessage(player, value+" is not registered on this server.")
+		requestName(player, "Please enter the display name of the player you wish to "+action+":", function (value) {
+			var hash = api.getUserHash(value);
+			if (hash != null) {
+				var targetPlayer = api.getWorldPlayerByHash(hash);
+				if (targetPlayer != null) {
+					if (action == "mute") {
+						api.sendMessage(player, "Applying mute to "+api.getName(targetPlayer)+".")
+						targetPlayer.getChat().setMuted(true);
+					} else if (action == "unmute") {
+						api.sendMessage(player, "Removing mute on player "+api.getName(targetPlayer)+".")
+						targetPlayer.getChat().setMuted(false);
 					}
+				} else {
+					api.sendMessage(player, value+" is not currently in the game world.")
 				}
+			} else {
+				api.sendMessage(player, value+" is not registered on this server.")
 			}
 		});
-		
-		player.getDialogs().requestString("Please enter the display name of the player you wish to "+action+":", new Handler());
 	}
 });
 

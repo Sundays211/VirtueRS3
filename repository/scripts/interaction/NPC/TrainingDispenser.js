@@ -31,34 +31,14 @@
 
 var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
+		multi3(args.player, "Which training dummy would you prefer?", "Range Dummy", function () {
+			api.sendMessage(player, "Training Dummy content coming soon.");
+		}, "Melee Dummy", function () {
+			api.sendMessage(player, "Training Dummy content coming soon.");
+		}, "Magic Dummy", function () {
+			api.sendMessage(player, "Training Dummy content coming soon.");
+		});
 		api.openDialog(args.player, "Dispenser");	
-	}
-});
-
-var Dispenser = Java.extend(Java.type('org.virtue.engine.script.listeners.DialogListener'), {
-	startDialog : function (player) {
-		player.getDialogs().sendMultichoice("Which training dummy would you prefer?", ["Range Dummy", "Melee Dummy", "Magic Dummy"], [1, 2, 3]);
-	},
-	continueDialog : function (player, option) {
-		switch (player.getDialogs().getStep()) {
-		case -1:
-			return true;
-		case 1:
-			api.sendMessage(player, "Training Dummy content coming soon.");
-			return true;
-		case 2:
-			api.sendMessage(player, "Training Dummy content coming soon.");
-			return true;
-		case 3:
-			api.sendMessage(player, "Training Dummy content coming soon.");
-			return true;
-		default:
-			return true;
-		}
-		
-	},
-	finishDialog : function (player) {
-		
 	}
 });
 
@@ -66,5 +46,4 @@ var Dispenser = Java.extend(Java.type('org.virtue.engine.script.listeners.Dialog
 var listen = function(scriptManager) {
 	var listener = new LocationListener();
 	scriptManager.registerListener(EventType.OPLOC1, 79034, listener);
-	scriptManager.registerDialogListener(new Dispenser(), "Dispenser");
 };
