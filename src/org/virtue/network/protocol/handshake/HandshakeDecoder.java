@@ -120,8 +120,8 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
         	   logger.warn("Bad connection: Invalid major-minor version (sent: "+major+"_"+minor+", expected: "+Constants.FRAME_MAJOR+"_"+Constants.FRAME_MINOR+")");
                buffer.writeByte(6);
             } else {
-            	if (!token.equals(Constants.ONDEMAND_TOKEN)) {
-            		logger.warn("Bad connection: Invalid server token (sent: "+token+", expected: "+Constants.ONDEMAND_TOKEN+")");
+            	if (!token.equals(Constants.getJs5Token())) {
+            		logger.warn("Bad connection: Invalid server token (sent: "+token+", expected: "+Constants.getJs5Token()+")");
             		buffer.writeByte(6);
             	} else {
             		buffer.writeByte(0);

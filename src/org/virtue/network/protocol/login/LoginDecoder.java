@@ -108,7 +108,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 
 		byte[] secureBytes = new byte[secureBufferSize];
 		buf.readBytes(secureBytes);
-		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
+		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.getLoginKey(), Constants.getLoginModulus()).toByteArray());
 
 		int blockOpcode = secureBuffer.readByte() & 0xFF;
 		if (blockOpcode != 10) {
@@ -158,7 +158,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		}
 		
 		String token = BufferUtility.readString(xteaBuffer);//Site Settings
-		if (!token.equals(Constants.LOGIN_TOKEN))
+		if (!token.equals(Constants.getLoginToken()))
 			throw new IllegalStateException("Invalid server token. " + token);
 		
 		int length = xteaBuffer.readUnsignedByte();
@@ -203,7 +203,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 
 		byte[] secureBytes = new byte[secureBufferSize];
 		buf.readBytes(secureBytes);
-		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
+		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.getLoginKey(), Constants.getLoginModulus()).toByteArray());
 
 		int blockOpcode = secureBuffer.readByte() & 0xFF;
 		if (blockOpcode != 10) {
@@ -250,8 +250,9 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		}
 		
 		String token = BufferUtility.readString(xteaBuffer);//Site Settings
-		if (!token.equals(Constants.LOGIN_TOKEN))
+		if (!token.equals(Constants.getLoginToken())) {
 			throw new IllegalStateException("Invalid server token.");
+		}
 			
 		xteaBuffer.readInt();
 		

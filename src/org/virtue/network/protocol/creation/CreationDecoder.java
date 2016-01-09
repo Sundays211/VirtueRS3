@@ -48,7 +48,6 @@ import org.virtue.utility.XTEACipher;
  */
 public class CreationDecoder extends ByteToMessageDecoder {
 
-
 	/* (non-Javadoc)
 	 * @see io.netty.handler.codec.ByteToMessageDecoder#decode(io.netty.channel.ChannelHandlerContext, io.netty.buffer.ByteBuf, java.util.List)
 	 */
@@ -73,7 +72,7 @@ public class CreationDecoder extends ByteToMessageDecoder {
 		
 		byte[] secureBytes = new byte[secureBufferSize];
 		buf.readBytes(secureBytes);
-		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
+		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.getLoginKey(), Constants.getLoginModulus()).toByteArray());
 
 		
 		int block = secureBuffer.readByte() & 0xFF;
@@ -98,8 +97,9 @@ public class CreationDecoder extends ByteToMessageDecoder {
 		ByteBuf xteaBuffer = Unpooled.wrappedBuffer(xteaBlock);
 		
 		String token = BufferUtility.readString(xteaBuffer);
-		if (!token.equals(Constants.ONDEMAND_TOKEN))
-			throw new ProtocolException("Invalid creation token: " + block);
+		if (!token.equals(Constants.getJs5Token())) {
+			throw new ProtocolException("Invalid creation token: " + token);
+		}
 		
 		xteaBuffer.readShort();
 		xteaBuffer.readInt();

@@ -431,21 +431,10 @@ FarmingPatch.prototype = {
 		},
 		
 		clearPatch : function (player) {
-			var delay = 2;
-			api.runAnimation(player, 22705);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-				process : function (player) {
-					if (delay <= 0) {
-						that.setEmpty(player);
-						return true;
-					}
-					delay--;
-					return false;
-				},
-				stop : function (player) { }
+			runAnimation(player, 22705, function () {
+				that.setEmpty(player);
 			});
-			player.setAction(new Action());
 		},
 		
 		//statusLookup : new Array(256),
@@ -585,27 +574,17 @@ FlowerPatch.prototype = Object.create(FarmingPatch.prototype);
 FlowerPatch.prototype.constructor = FlowerPatch;
 FlowerPatch.statusLookup = new Array(256);
 FlowerPatch.prototype.harvest = function (player, crop) {
-	delay = 2;//24910?
-	api.runAnimation(player, 22705);//Probably not the right animation, but at least it shows us doing something...
+	//24910?
 	var that = this;
-	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-		process : function (player) {
-			if (delay <= 0) {
-				if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-					api.sendMessage(player, "You need free space!");
-					return true;
-				}
-				api.addCarriedItem(player, crop.productId, 1);
-				api.addExperience(player, Stat.FARMING, crop.harvestXp, true);
-				that.setEmpty(player);
-				return true;//It's only possible to get one product from flower patches		
-			}
-			delay--;
-			return false;
-		},
-		stop : function (player) { }	
+	api.runAnimation(player, 22705, function () {//Probably not the right animation, but at least it shows us doing something...
+		if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
+			api.sendMessage(player, "You need free space!");
+			return;
+		}
+		api.addCarriedItem(player, crop.productId, 1);
+		api.addExperience(player, Stat.FARMING, crop.harvestXp, true);
+		that.setEmpty(player);
 	});
-	player.setAction(new Action());
 }
 
 for (var i in FarmingCrop) {

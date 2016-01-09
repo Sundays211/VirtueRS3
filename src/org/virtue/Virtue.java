@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -265,16 +266,14 @@ public class Virtue {
 	 * @throws IOException 
 	 */
 	private void loadCache() throws IOException {
-		File cachePath = new File(Constants.CACHE_REPOSITORY);
+		File cachePath = new File(getProperty("cache.dir", Constants.CACHE_REPOSITORY));
 		if (!cachePath.exists()) {
-			File test = new File("C:\\rscd\\data_861");
-			if(test.exists())
-				cachePath = test;
-			else
-				cachePath = new File("repository/cache/");
+			cachePath = new File("C:\\rscd\\data_861");
 		}
 		cache = new Cache(FileStore.open(cachePath));
-		container = new Container(Container.COMPRESSION_NONE, cache.createChecksumTable().encode(true, Constants.ONDEMAND_MODULUS, Constants.ONDEMAND_EXPONENT));
+		BigInteger js5Mod = new BigInteger(getProperty("js5.modulus", Constants.ONDEMAND_MODULUS));
+		BigInteger js5Key = new BigInteger(getProperty("js5.key", Constants.ONDEMAND_EXPONENT));
+		container = new Container(Container.COMPRESSION_NONE, cache.createChecksumTable().encode(true, js5Mod, js5Key));
 		checksum = container.encode();
 	}
 	

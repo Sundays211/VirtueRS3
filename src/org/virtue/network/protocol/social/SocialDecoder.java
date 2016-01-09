@@ -65,7 +65,7 @@ public class SocialDecoder extends ByteToMessageDecoder {
 
 		byte[] secureBytes = new byte[secureBufferSize];
 		buf.readBytes(secureBytes);
-		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
+		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.getLoginKey(), Constants.getLoginModulus()).toByteArray());
 		
 		secureBuffer.readByte();
 		secureBuffer.skipBytes(4);
