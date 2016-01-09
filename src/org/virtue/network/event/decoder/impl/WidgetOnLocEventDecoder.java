@@ -41,13 +41,13 @@ public class WidgetOnLocEventDecoder implements EventDecoder<WidgetOnLocEventCon
 	 */
 	@Override
 	public WidgetOnLocEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
+		boolean forceRun = (buffer.getByteC() == 1);
+		int slot = buffer.getLEShort() & 0xffff;
 		int baseX = buffer.getLEShortA() & 0xffff;
-		int locTypeID = buffer.getInt();
-		int slot = buffer.getShort() & 0xffff;
-		int baseY = buffer.getLEShort() & 0xffff;
 		int itemID = buffer.getLEShort() & 0xffff;
-		boolean forceRun = (buffer.getByteA() == 1);
-		int ifHash = buffer.getIntA();
+		int ifHash = buffer.getInt();
+		int locTypeID = buffer.getIntA();
+		int baseY = buffer.getShort() & 0xffff;
 		return new WidgetOnLocEventContext(ifHash, slot == 65535 ? -1 : slot, 
 				itemID == 65535 ? -1 : itemID, locTypeID, baseX, baseY, forceRun);
 	}

@@ -32,14 +32,14 @@
 
 function runAnimation (entity, animId, callback) {
 	if (callback == undefined) {
-		api.runAnimation(entity, animId);
+		return api.runAnimation(entity, animId);
 	} else {
 		var Handler = Java.extend(Java.type('java.lang.Runnable'), {
 			run : function () {
 				callback();
 			}
 		});	
-		api.runAnimation(entity, animId, new Handler());
+		return api.runAnimation(entity, animId, new Handler());
 	}
 }
 

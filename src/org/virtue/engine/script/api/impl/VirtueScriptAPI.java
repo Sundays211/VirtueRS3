@@ -1469,16 +1469,16 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#runAnimation(org.virtue.game.entity.Entity, int)
 	 */
 	@Override
-	public void runAnimation(Entity entity, int animId) {
-		entity.runAnimation(animId, null);
+	public boolean runAnimation(Entity entity, int animId) {
+		return entity.runAnimation(animId, null);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#runAnimation(org.virtue.game.entity.Entity, int, java.lang.Runnable)
 	 */
 	@Override
-	public void runAnimation(Entity entity, int animId, Runnable onComplete) {
-		entity.runAnimation(animId, onComplete);
+	public boolean runAnimation(Entity entity, int animId, Runnable onComplete) {
+		return entity.runAnimation(animId, onComplete);
 	}
 
 	/* (non-Javadoc)

@@ -813,9 +813,9 @@ public interface ScriptAPI {
 	
 	public void clearExchangeOffer (Player player, int exchange, int slot);
 	
-	public void runAnimation (Entity entity, int animId);
+	public boolean runAnimation (Entity entity, int animId);
 	
-	public void runAnimation(Entity entity, int animationID, Runnable onComplete);
+	public boolean runAnimation(Entity entity, int animationID, Runnable onComplete);
 	
 	/**
 	 * Stops the currently running animation on the entity.

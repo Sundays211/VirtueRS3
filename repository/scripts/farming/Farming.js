@@ -364,24 +364,14 @@ FarmingPatch.prototype = {
 		},
 		
 		plantSeed : function (player, crop) {
-			api.delCarriedItem(player, crop.seedId, crop.type.seedCount);
-			var delay = 2;
-			api.runAnimation(player, 24926);
-			api.pausePlayer(player, 3);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-				process : function (player) {
-					if (delay <= 0) {
-						api.addExperience(player, Stat.FARMING, crop.plantXp, true);
-						that.setStatus(player, crop.plantStage);
-						return true;
-					}
-					delay--;
-					return false;
-				},
-				stop : function (player) { }	
+			var success = runAnimation(player, 24926, function () {
+				api.addExperience(player, Stat.FARMING, crop.plantXp, true);
+				that.setStatus(player, crop.plantStage);
 			});
-			player.setAction(new Action());
+			if (success) {//Don't remove the seed unless the animation was actually run
+				api.delCarriedItem(player, crop.seedId, crop.type.seedCount);
+			}			
 		},
 		
 		harvest : function (player, crop) {
@@ -428,26 +418,16 @@ FarmingPatch.prototype = {
 		
 		applyCompost : function (player, type) {
 			var delay = 2;
-			api.runAnimation(player, 24912);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-				process : function (player) {
-					if (delay <= 0) {
-						if (type == 1) {//Regular compost
-							api.delCarriedItem(player, 6032, 1);
-						} else if (type == 2) {//Supercompost
-							api.delCarriedItem(player, 6034, 1);
-						}						
-						api.addCarriedItem(player, 1925, 1);
-						that.setCompost(player, type);
-						return true;
-					}
-					delay--;
-					return false;
-				},
-				stop : function (player) { }
+			runAnimation(player, 24912, function () {
+				if (type == 1) {//Regular compost
+					api.delCarriedItem(player, 6032, 1);
+				} else if (type == 2) {//Supercompost
+					api.delCarriedItem(player, 6034, 1);
+				}						
+				api.addCarriedItem(player, 1925, 1);
+				that.setCompost(player, type);
 			});
-			player.setAction(new Action());
 		},
 		
 		clearPatch : function (player) {
@@ -799,14 +779,13 @@ var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listen
 		var invSlot = args.useslot;
 		var item = args.useitem;
 		var itemId = api.getId(item);
-		api.sendMessage(player, "Used item "+item+" on patch "+args.location);
 		
 		if (locId in patches) {
 			var patch = patches[locId];
 			if (itemId in seedLookup) {
 				if (!patch.isEmpty(player)) {
 					api.sendMessage(player, "This patch needs to be weeded and empty before you can do that.");
-					return true;
+					return;
 				}
 				var crop = seedLookup[itemId];
 				if (crop.type == patch.type) {
@@ -814,7 +793,7 @@ var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listen
 				} else {
 					api.sendMessage(player, "You cannot plant the seed in this patch.");
 				}
-				return true;
+				return;
 			} else if (itemId == 6032 || itemId == 6034) {//Compost
 				if (patch.getCompost(player) != 0) {
 					api.sendMessage(player, "This patch has already been treated with compost.");
@@ -823,7 +802,7 @@ var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listen
 				} else {
 					api.sendMessage(player, "This patch needs to be weeded and empty before you can do that.");
 				}				
-				return true;
+				return;
 			}
 		}
 		switch (locId) {
