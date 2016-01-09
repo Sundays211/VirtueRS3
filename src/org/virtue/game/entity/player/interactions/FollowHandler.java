@@ -35,7 +35,7 @@ import org.virtue.game.world.region.movement.EntityTarget;
  */
 public class FollowHandler implements PlayerOptionHandler, EntityTarget {
 	
-	private Player target;
+	private Entity target;
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.region.movement.EntityTarget#getEntity()

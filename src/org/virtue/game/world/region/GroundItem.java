@@ -30,6 +30,7 @@ import org.virtue.Virtue;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.World;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
@@ -55,7 +56,7 @@ public class GroundItem extends Item {
 		return item;
 	}
 	
-	public static GroundItem create (int id, int amount, Tile tile, Player owner) {
+	public static GroundItem create (int id, int amount, Tile tile, Entity owner) {
 		GroundItem item = new GroundItem(id, amount);
 		item.tile = tile;
 		//item.owner = owner;
@@ -111,7 +112,7 @@ public class GroundItem extends Item {
 		this.exists = false;
 	}
 	
-	public Player getOwner () {
+	public Entity getOwner () {
 		return owner;
 	}
 	

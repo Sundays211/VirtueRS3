@@ -21,7 +21,7 @@
  */
 package org.virtue.game.world.region.packets;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
 
@@ -36,7 +36,7 @@ public interface SceneUpdatePacket {
 	
 	public SceneUpdateType getType ();
 	
-	public void encode (OutboundBuffer buffer, Player player);
+	public void encode (OutboundBuffer buffer, Entity player);
 	
 	public Tile getTile ();
 }

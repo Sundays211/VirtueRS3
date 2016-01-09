@@ -1,6 +1,7 @@
 package org.virtue.game.content.dialogues.impl;
 
 import org.virtue.engine.script.listeners.DialogListener;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 
 /**
@@ -16,13 +17,13 @@ public class BobDialogue implements DialogListener {
 	}
 
 	@Override
-	public boolean continueDialog(Player player, int option) {
+	public boolean continueDialog(Entity player, int option) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean finishDialog(Player player) {
+	public boolean finishDialog(Entity player) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -98,7 +98,7 @@ public class NPC extends Entity {
 	/**
 	 * Represents the player which "owns" this NPC
 	 */
-	private Player owner;
+	private Entity owner;
 
 	/**
 	 * Creates a new NPC object.
@@ -202,6 +202,7 @@ public class NPC extends Entity {
 	 */
 	@Override
 	public void process() {
+		super.process();
 		if (owner != null) {
 			if (!owner.exists()) {
 				this.destroy();
@@ -430,9 +431,9 @@ public class NPC extends Entity {
 	public void sendDrop(Entity killer) {
 		Region region = World.getInstance().getRegions().getRegionByID(this.getCurrentTile().getRegionID());
 		if (region != null && region.isLoaded()) {
-			Player player = null;
+			Entity player = null;
 			if (killer instanceof Player) {
-				player = (Player) killer;
+				player = (Entity) killer;
 			}
 			for (NpcDrops loot : NpcDropParser.forID(this.getID()).getLootChance(0)) {
 				if (itemDropCalls.contains(loot.getItemID())) {
@@ -477,15 +478,15 @@ public class NPC extends Entity {
 		return anim;
 	};	
 	
-	public void setOwner (Player player) {
+	public void setOwner (Entity player) {
 		this.owner = player;
 	}
 	
-	public Player getOwner () {
+	public Entity getOwner () {
 		return owner;
 	}
 	
-	public boolean isOwner (Player player) {
+	public boolean isOwner (Entity player) {
 		return player.equals(owner);
 	}
 	

@@ -97,7 +97,7 @@ public interface ScriptAPI {
 	 * @param desiredName The new display name
 	 * @return True if the name was set, false otherwise
 	 */
-	public boolean setDisplayName (Player setBy, Long userHash, String desiredName);
+	public boolean setDisplayName (Entity setBy, Long userHash, String desiredName);
 	
 	/**
 	 * Gets the base 37 hash of the specified name
@@ -166,7 +166,7 @@ public interface ScriptAPI {
 	 * @param userHash The user hash
 	 * @return The player, or null if the player is not in the world.
 	 */
-	public Player getWorldPlayerByHash (Long userHash);
+	public Entity getWorldPlayerByHash (Long userHash);
 	
 	/**
 	 * Gets the player in the specified game world at the specified index
@@ -174,7 +174,7 @@ public interface ScriptAPI {
 	 * @param index The index (pid) to lookup
 	 * @return The player, or null if no player exists at the given index
 	 */
-	public Player getWorldPlayerByIndex (World world, int index);
+	public Entity getWorldPlayerByIndex (World world, int index);
 	
 	public NPC getWorldNpcByIndex (World world, int index);
 	
@@ -727,11 +727,18 @@ public interface ScriptAPI {
 	public void pausePlayer (Player player, int duration);
 	
 	/**
+	 * Prevents the entity from moving for a number of ticks
+	 * @param player The entity
+	 * @param duration The number of game cycles to freeze the entity for
+	 */
+	public void freezeEntity (Entity entity, int duration);
+	
+	/**
 	 * Checks whether the player is currently unable to move
 	 * @param player The player
 	 * @return False if the player is able to move, true otherwise
 	 */
-	public boolean isPaused (Player player);
+	public boolean isPaused (Entity player);
 	
 	/**
 	 * Runs a task on a worker thread. Should be used for particularly intensive tasks where disrupting the main thread is not desireable.
@@ -782,7 +789,7 @@ public interface ScriptAPI {
 	
 	public void refreshEquipment (Player player);
 	
-	public Player getInteractionTarget (Player player);
+	public Entity getInteractionTarget (Player player);
 	
 	public void clearInteractionTarget (Player player);
 	
@@ -806,7 +813,9 @@ public interface ScriptAPI {
 	
 	public void clearExchangeOffer (Player player, int exchange, int slot);
 	
-	public void runAnimation (Entity entity, int animationID);
+	public void runAnimation (Entity entity, int animId);
+	
+	public void runAnimation(Entity entity, int animationID, Runnable onComplete);
 	
 	/**
 	 * Stops the currently running animation on the entity.
@@ -821,7 +830,7 @@ public interface ScriptAPI {
 	 * @param message The message to display
 	 * @param appearInChat True if the message should appear in the chatbox of players, false otherwise
 	 */
-	public void playerForceSay(Player player, String message, boolean appearInChat);
+	public void playerForceSay(Entity player, String message, boolean appearInChat);
 	
 	/**
 	 * Forces the specified message to appear above the head of the entity

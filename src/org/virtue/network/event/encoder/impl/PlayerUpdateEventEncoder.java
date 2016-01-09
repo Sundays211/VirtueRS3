@@ -24,6 +24,7 @@ package org.virtue.network.event.encoder.impl;
 import java.security.MessageDigest;
 
 import org.virtue.game.World;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
@@ -63,7 +64,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		return buffer;
 	}
 
-	private void processLocalPlayers(Player player, OutboundBuffer buffer, OutboundBuffer block, Viewport context, boolean nsn0) {
+	private void processLocalPlayers(Entity player, OutboundBuffer buffer, OutboundBuffer block, Viewport context, boolean nsn0) {
 		buffer.setBitAccess();
 		int skipCount = 0;
 
@@ -199,7 +200,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		buffer.setByteAccess();
 	}
 
-	private void processOutsidePlayers(Player player, OutboundBuffer buffer, OutboundBuffer block, Viewport context, boolean nsn2) {
+	private void processOutsidePlayers(Entity player, OutboundBuffer buffer, OutboundBuffer block, Viewport context, boolean nsn2) {
 		buffer.setBitAccess();
 		int skipCount = 0;
 		for (int index = 0; index < context.getOutPlayerIndexCount(); index++) {
@@ -243,7 +244,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 						if (nsn2 ? (0x1 & context.getSlotFlags()[p2Index]) == 0 : (0x1 & context.getSlotFlags()[p2Index]) != 0) {
 							continue;
 						}
-						Player p2 = World.getInstance().getPlayers().get(p2Index);
+						Entity p2 = World.getInstance().getPlayers().get(p2Index);
 						if (needsAdd(player, p2, context) || (p2 != null && p2.getCurrentTile().getRegionHash() != context.getRegionHashes()[p2Index])) {
 							break;
 						}
@@ -258,11 +259,11 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		buffer.setByteAccess();
 	}
 
-	private boolean needsRemove(Player player, Player p) {
+	private boolean needsRemove(Entity player, Entity p) {
 		return p == null || !p.getCurrentTile().withinDistance(player.getCurrentTile(), 14) || !p.exists() || p.getIndex() == -1;
 	}
 
-	private boolean needsAdd(Player player, Player p, Viewport context) {
+	private boolean needsAdd(Entity player, Entity p, Viewport context) {
 		return p != null && p.exists() && p.getCurrentTile().withinDistance(player.getCurrentTile(), 14) && context.getLocalAddedPlayers() < MAX_PLAYER_ADD;
 	}
 
@@ -321,7 +322,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		}
 	}
 
-	private boolean needsMovementTypeUpdate (Player p2, Viewport context) {
+	private boolean needsMovementTypeUpdate (Entity p2, Viewport context) {
 		return p2.getMovement().getMovementType() != context.getMovementTypes()[p2.getIndex()];
 	}
 
@@ -360,7 +361,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		return context.getHeadIconHashes()[index] == null || !MessageDigest.isEqual(context.getHeadIconHashes()[index], hash);
 	}
 
-	private void appendRegionHash(OutboundBuffer buffer, Player p, int lastRegionHash, int currentRegionHash) {
+	private void appendRegionHash(OutboundBuffer buffer, Entity p, int lastRegionHash, int currentRegionHash) {
 		int lastRegionX = (lastRegionHash >> 8) & 0xff;
 		int lastRegionY = 0xff & lastRegionHash;
 		int lastPlane = (lastRegionHash >> 16) & 0x3;

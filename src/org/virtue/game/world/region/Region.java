@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.virtue.Constants;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.packets.AddItem;
@@ -365,7 +366,7 @@ public class Region {
 		}
 	}
 	
-	public void dropItem (int itemID, int amount, Player owner) {
+	public void dropItem (int itemID, int amount, Entity owner) {
 		dropItem(itemID, amount, owner, owner.getCurrentTile());
 	}
 	
@@ -376,7 +377,7 @@ public class Region {
 	 * @param owner The player who can pick up the item by default
 	 * @param dropper The entity which dropped the item
 	 */
-	public void dropItem (int itemID, int amount, Player owner, Tile tile) {
+	public void dropItem (int itemID, int amount, Entity owner, Tile tile) {
 		GroundItem groundItem = GroundItem.create(itemID, amount, tile, owner);
 		groundItem.setSpawnTime(Constants.ITEM_REMOVAL_DELAY);
 		addItem(groundItem);
@@ -389,7 +390,7 @@ public class Region {
 	 * @param owner The player who can pick up the item by default
 	 * @param dropper The entity which dropped the item
 	 */
-	public void dropItem (int npcId, int itemID, int amount, Player owner, Tile tile) {
+	public void dropItem (int npcId, int itemID, int amount, Entity owner, Tile tile) {
 		GroundItem groundItem = GroundItem.create(itemID, amount, tile, owner);
 		groundItem.setSpawnTime(Constants.ITEM_REMOVAL_DELAY);
 		addItem(groundItem);
@@ -431,7 +432,7 @@ public class Region {
 	 * Removes the specified player from the region's update list.
 	 * @param player The player to remove
 	 */
-	public void removePlayer (Player player) {
+	public void removePlayer (Entity player) {
 		players.remove(player);
 	}
 	

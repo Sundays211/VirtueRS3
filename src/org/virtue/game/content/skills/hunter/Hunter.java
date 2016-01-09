@@ -1,5 +1,6 @@
 package org.virtue.game.content.skills.hunter;
 
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.world.region.SceneLocation;
@@ -31,7 +32,7 @@ public class Hunter {
 		}
 	}
 
-	public static void handleItemTrap(Player player, InvRepository inventory, int TYPE) {
+	public static void handleItemTrap(Entity player, InvRepository inventory, int TYPE) {
 		switch (TYPE) {
 		case ITEM_BOXTRAP:
 			break;

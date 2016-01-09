@@ -25,7 +25,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.config.seqtype.SeqType;
+import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.engine.cycle.GameTick;
 import org.virtue.game.World;
 import org.virtue.game.content.minigame.Controller;
@@ -35,7 +39,6 @@ import org.virtue.game.entity.combat.CombatSchedule;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.ImpactHandler;
 import org.virtue.game.entity.combat.death.DeathEvent;
-import org.virtue.game.entity.player.var.ScriptVar;
 import org.virtue.game.node.Node;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.Tile;
@@ -49,7 +52,12 @@ import org.virtue.network.protocol.update.ref.HeadIcons;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Aug 8, 2014
  */
-public abstract class Entity extends Node implements ScriptVar {
+public abstract class Entity extends Node {
+
+	/**
+	 * The {@link Logger} Instance
+	 */
+	private static Logger logger = LoggerFactory.getLogger(Entity.class);
 
 	/**
 	 * The entity index
@@ -95,6 +103,21 @@ public abstract class Entity extends Node implements ScriptVar {
 	 * with this, all task can be looped through and stopped.
 	 */
 	private List<GameTick> ticks;
+
+	/**
+	 * Represents the number of ticks the player is frozen for (cannot move)
+	 */
+	protected int freezeDuration;
+	
+	/**
+	 * The number of server cycles remaining on the current animation
+	 */
+	private int animTimeRemaining;
+	
+	/**
+	 * The event run when the animation is finished
+	 */
+	private Runnable animCompleteEvent;
 	
 	/**
 	 * Called on creation of this {@link Entity}
@@ -136,7 +159,7 @@ public abstract class Entity extends Node implements ScriptVar {
 	 */
 	public void submitTick(GameTick tick) {
 		if (ticks.contains(tick)) {
-			System.out.println("GameTick "+tick+" is already running.");
+			logger.warn("GameTick "+tick+" is already running.");
 			return;
 		}
 		
@@ -269,7 +292,30 @@ public abstract class Entity extends Node implements ScriptVar {
 	/**
 	 * Called when processing an action
 	 */
-	public abstract void process ();
+	public void process () {
+		if (freezeDuration > 0) {
+			freezeDuration--;
+		}	
+		if (animTimeRemaining > 0) {
+			animTimeRemaining -= 30;
+			if (animTimeRemaining <= 0) {
+				onAnimCompleted();
+			}
+		}
+	}
+	
+	private void onAnimCompleted () {
+		animTimeRemaining = 0;
+		if (animCompleteEvent != null) {
+			Runnable event = animCompleteEvent;
+			animCompleteEvent = null;
+			try {
+				event.run();
+			} catch (RuntimeException ex) {
+				logger.error("Error processing anim completion event for entity "+getName()+": ", ex);
+			}
+		}
+	}
 	
 	/**
 	 * Finds out whether the entity still exists (false if a player logs out, or an NPC dies)
@@ -336,14 +382,6 @@ public abstract class Entity extends Node implements ScriptVar {
 	
 	public abstract int getRenderAnimation ();
 
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.player.widget.var.ScriptVar#scriptValue()
-	 */
-	@Override
-	public int scriptValue() {
-		return index;
-	}
-
 	/**
 	 * @return the minigame
 	 */
@@ -408,10 +446,47 @@ public abstract class Entity extends Node implements ScriptVar {
 	public ImpactHandler getImpactHandler() {
 		return impactHandler;
 	}
-	
-	@Override
-	public String toString () {
-		return new StringBuilder("{").append(getName()).append("}").toString();
+
+	/**
+	 * Freezes the player, preventing them from moving, for the provided number of game cycles.
+	 * Calling this method will replace any existing freezes, and calling setFreezeDuration(0) will unfreeze the player.
+	 * @param freezeDuration The number of game cycles to freeze the player for.
+	 */
+	public void setFreezeDuration(int freezeDuration) {
+		this.freezeDuration = freezeDuration;
 	}
 	
+	public void clearAnimation () {
+		this.animTimeRemaining = 0;
+		this.animCompleteEvent = null;
+		this.queueUpdateBlock(new AnimationBlock(-1));
+	}
+	
+	public boolean runAnimation (int animId, Runnable completeEvent) {
+		if (animId == -1) {
+			clearAnimation();
+			return true;
+		}
+		if (animTimeRemaining > 0) {
+			return false;
+		}
+		SeqType seqType = SeqTypeList.list(animId);
+		if (seqType == null) {
+			throw new IllegalArgumentException("Invalid animation: "+animId);
+		}
+		this.animTimeRemaining = seqType.time + 30;//Add one extra tick as this will be processed once before sent to the client
+		this.animCompleteEvent = completeEvent;
+		this.queueUpdateBlock(new AnimationBlock(animId));
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Entity [index=" + index + ", name=" + getName() + ", coords=" + getCurrentTile() + "]";
+	}
+	
+		
 }

@@ -30,6 +30,19 @@
  * @since 29/11/2015
  */
 
+function runAnimation (entity, animId, callback) {
+	if (callback == undefined) {
+		api.runAnimation(entity, animId);
+	} else {
+		var Handler = Java.extend(Java.type('java.lang.Runnable'), {
+			run : function () {
+				callback();
+			}
+		});	
+		api.runAnimation(entity, animId, new Handler());
+	}
+}
+
 function requestCount (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {

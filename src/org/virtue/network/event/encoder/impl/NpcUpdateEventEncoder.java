@@ -25,6 +25,7 @@ import java.security.MessageDigest;
 import java.util.Iterator;
 
 import org.virtue.game.World;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -61,7 +62,7 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 		return buffer;
 	}
 	
-	private void packNpcMovement (Player player, OutboundBuffer buffer, OutboundBuffer block, Viewport context) {
+	private void packNpcMovement (Entity player, OutboundBuffer buffer, OutboundBuffer block, Viewport context) {
 		buffer.putBits(8, context.getLocalNpcs().size());
 		for (Iterator<NPC> iterator = context.getLocalNpcs().iterator(); iterator.hasNext();) {
 			NPC npc = iterator.next();
@@ -94,7 +95,7 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 		}
 	}
 	
-	private void packNpcAddition(Player player, OutboundBuffer buffer, OutboundBuffer block, Viewport context) {
+	private void packNpcAddition(Entity player, OutboundBuffer buffer, OutboundBuffer block, Viewport context) {
 		for (NPC npc : World.getInstance().getNPCs()) {
 			if (context.getLocalNpcs().size() >= 250) {
 				//System.out.println("Unable to add npc "+npc.getID()+" to viewport of player "+player.getName());

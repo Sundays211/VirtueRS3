@@ -83,7 +83,7 @@ public class Projectile implements SceneUpdatePacket {
 	}
 
 	@Override
-	public void encode(OutboundBuffer buffer, Player player) {
+	public void encode(OutboundBuffer buffer, Entity player) {
 		int localX = source.getLocalX(player.getLastTile());
 		int localY = source.getLocalY(player.getLastTile());
 		int offsetX = localX - ((localX >> 3) << 3);

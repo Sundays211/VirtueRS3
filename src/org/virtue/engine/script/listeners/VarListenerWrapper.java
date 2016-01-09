@@ -21,7 +21,7 @@
  */
 package org.virtue.engine.script.listeners;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.Entity;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -56,7 +56,7 @@ public class VarListenerWrapper implements VarListener {
 	 * @see org.virtue.engine.script.listeners.VarListener#onLogin(org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public boolean onLogin(Player player, int tickDifference) {
+	public boolean onLogin(Entity player, int tickDifference) {
 		return listener.onLogin(player, tickDifference);
 	}
 
@@ -72,7 +72,7 @@ public class VarListenerWrapper implements VarListener {
 	 * @see org.virtue.engine.script.listeners.VarListener#process(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public boolean process(Player player, int tick) {
+	public boolean process(Entity player, int tick) {
 		return listener.process(player, tick);
 	}
 
@@ -80,7 +80,7 @@ public class VarListenerWrapper implements VarListener {
 	 * @see org.virtue.engine.script.listeners.VarListener#onValueChange(org.virtue.game.entity.player.Player, int, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public boolean onValueChange(Player player, int varID, Object oldValue, Object newValue) {
+	public boolean onValueChange(Entity player, int varID, Object oldValue, Object newValue) {
 		return listener.onValueChange(player, varID, oldValue, newValue);
 	}
 

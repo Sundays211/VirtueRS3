@@ -22,6 +22,7 @@
 package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.World;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.movement.WidgetOnEntityTarget;
 import org.virtue.network.event.context.impl.in.WidgetOnPlayerEventContext;
@@ -42,7 +43,7 @@ public class WidgetOnPlayerEventHandler implements GameEventHandler<WidgetOnPlay
 	 */
 	@Override
 	public void handle(Player player, WidgetOnPlayerEventContext context) {
-		Player target = World.getInstance().getPlayers().get(context.getPlayerIndex());
+		Entity target = World.getInstance().getPlayers().get(context.getPlayerIndex());
 		if (target != null) {
 			player.getMovement().setTarget(new WidgetOnEntityTarget(player, target, 
 					context.getIfHash(),

@@ -9,6 +9,7 @@ import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ItemType;
 import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.config.structtype.StructTypeList;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.EquipmentStyleOverride;
@@ -540,7 +541,7 @@ public class Appearance {
 		}
 	}
 
-	public Player getPlayer() {
+	public Entity getPlayer() {
 		return player;
 	}
 

@@ -89,7 +89,7 @@ public class SeqTypeList extends CacheLoader<Integer, SeqType> {
 			.softValues().build(new CacheLoader<Integer, Archive>() {
 	             public Archive load(Integer groupId) throws IOException {
 	                 return Archive.decode(
-	 						cache.read(Js5Archive.CONFIG_LOC.getArchiveId(), groupId).getData(), 
+	 						cache.read(Js5Archive.CONFIG_SEQ.getArchiveId(), groupId).getData(), 
 							referenceTable.getEntry(groupId).size());
 	               }
 	             });

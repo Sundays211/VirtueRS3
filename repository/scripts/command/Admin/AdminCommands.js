@@ -33,10 +33,20 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 				return;
 			}
 			var npcID = parseInt(args[0]);
-			var npc = NPC.create(npcID, new Tile(player.getCurrentTile()));
-			npc.setCanRespawn(false);
-			Java.type('org.virtue.game.World').getInstance().addNPC(npc);
+			var npc = api.createNpc(npcID, api.getCoords(player), false);
+			api.spawnNpc(npc);
 			npc.getCombatSchedule().lock(player);
+			return;
+		case "anim":
+			if (args.length < 1 || isNaN(args[0])) {
+				sendCommandResponse(player, "Usage: "+syntax+" [id]", scriptArgs.console);
+				return;
+			}
+			var animId = parseInt(args[0]);
+			runAnimation(player, animId, function () {
+				api.sendMessage(player, "Finished animation "+animId);
+			});
+			sendCommandResponse(player, "Running animation "+animId, scriptArgs.console);
 			return;
 		case "spot":
 		case "spotanim":
@@ -173,15 +183,6 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.resetStat(player, Stat.CONSTITUTION);
 			api.restoreLifePoints(player);
 			api.setRenderAnim(player, -1);
-			return;
-		case "anim":
-			if (args.length < 1 || isNaN(args[0])) {
-				sendCommandResponse(player, "Usage: "+syntax+" [id]", scriptArgs.console);
-				return;
-			}
-			var animID = parseInt(args[0]);
-			api.runAnimation(player, animID);
-			sendCommandResponse(player, "Running animation "+animID, scriptArgs.console);
 			return;
 		case "devTitle":
 			player.getAppearance().setPrefixTitle("<col=33CCFF>");

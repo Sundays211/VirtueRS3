@@ -268,7 +268,7 @@ public class GameEventDispatcher {
 	}
 
 	public void sendOtherPlayerWidgetModel(int widget, int component,
-			Player otherPlayer) {
+			Entity otherPlayer) {
 		int namehash = BKDR.hash(otherPlayer.getName());
 		sendEvent(WidgetModelEventEncoder.class, new WidgetModelEventContext(
 				ModelType.PLAYER_MODEL_OTHER, widget, component, otherPlayer.getIndex(), namehash));

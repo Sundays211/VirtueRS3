@@ -33,6 +33,7 @@ import org.virtue.game.World;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.OnlineStatus;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.AccountInfo;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
@@ -366,7 +367,7 @@ public class FriendsList {
 	 * Gets the {@link Player} to use.
 	 * @return the player
 	 */
-	public Player getPlayer() {
+	public Entity getPlayer() {
 		return player;
 	}
 

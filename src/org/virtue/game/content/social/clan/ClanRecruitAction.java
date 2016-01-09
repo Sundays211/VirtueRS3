@@ -25,6 +25,7 @@ import org.virtue.Virtue;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -89,7 +90,7 @@ public class ClanRecruitAction implements WidgetOnPlayerHandler {
 	 * @see org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler#getRange(int, int, int, int)
 	 */
 	@Override
-	public int getRange(Player player, int interfaceID, int component, int slot, int itemID) {
+	public int getRange(Entity player, int interfaceID, int component, int slot, int itemID) {
 		return 1;
 	}
 

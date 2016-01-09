@@ -253,11 +253,10 @@ public class Player extends Entity {
 	private ExchangeOffers exchangeOffers;
 
 	/**
-	 * Represents the number of ticks the player is "locked" for (ie cannot
-	 * move)
+	 * Represents whether the player is currently paused
 	 */
-	private int pauseDuration;
-
+	private boolean paused;
+	
 	/**
 	 * The owner of the "last entered channel" field
 	 */
@@ -995,14 +994,12 @@ public class Player extends Entity {
 	 */
 	@Override
 	public void process() {
+		super.process();
 		if (GameState.WORLD_READY.equals(gameState)) {
 			inactivityTimer++;
 		}
 		if (inactivityTimer > Constants.KICKOUT_TIME) {
 			kick(true);
-		}
-		if (pauseDuration > 0) {
-			pauseDuration--;
 		}
 		restoreRunEnergy();
 		var.process();
@@ -1159,25 +1156,24 @@ public class Player extends Entity {
 	public DialogManager getDialogs() {
 		return dialogs;
 	}
-
+	
 	/**
-	 * Prevents the player from moving for the specified period of time
-	 * 
-	 * @param duration
-	 *            The time to lock for
+	 * Sets whether the player is currently paused or not.
+	 * Pausing the player will temporarily stop any processes running on the player (eg movement) until unpaused.
+	 * Note that the player can cancel any pause by attempting to move.
+	 * @param paused True if the player is paused, false otherwise.
 	 */
-	public void pause(int duration) {
-		this.pauseDuration = duration;
+	public void setPaused(boolean paused) {
+		this.paused = paused;
 	}
 
 	/**
-	 * Returns whether or not the player is currently locked (unable to move)
-	 * 
-	 * @return True if the player is locked, false otherwise
+	 * Returns whether or not the player is currently paused
+	 * @return True if the player is paused, false otherwise
 	 */
 	@Override
 	public boolean isPaused() {
-		return pauseDuration > 0;
+		return paused;
 	}
 
 	/**
@@ -1308,7 +1304,7 @@ public class Player extends Entity {
 		player.getInteractions().sendOptions();
 	}
 
-	public void pvpDrops(Player player) {
+	public void pvpDrops(Entity player) {
 		Region region = World.getInstance().getRegions()
 				.getRegionByID(player.getCurrentTile().getRegionID());
 		if (region != null && region.isLoaded()) {

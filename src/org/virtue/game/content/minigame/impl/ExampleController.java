@@ -25,7 +25,6 @@ import org.virtue.game.content.minigame.Controller;
 import org.virtue.game.content.minigame.Minigame;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -46,7 +45,7 @@ public class ExampleController implements Controller {
 		minigame.getNpcs().add(npc);
 		
 		for (int i = 0; i < minigame.getTeams().size(); i++) {
-			for (Player player : minigame.getTeams().get(i).getPlayers()) {
+			for (Entity player : minigame.getTeams().get(i).getPlayers()) {
 				if (i == 0)
 					player.getMovement().teleportTo(new Tile(1234, 4321, 0));
 				else
@@ -104,7 +103,7 @@ public class ExampleController implements Controller {
 	 * @see org.virtue.game.content.minigame.Controller#objectClick(org.virtue.game.content.minigame.Minigame, org.virtue.game.entity.player.Player, org.virtue.game.entity.region.SceneLocation, org.virtue.network.event.context.impl.in.OptionButton)
 	 */
 	@Override
-	public void objectClick(Minigame minigame, Player player, SceneLocation loc, OptionButton option) {
+	public void objectClick(Minigame minigame, Entity player, SceneLocation loc, OptionButton option) {
 		// TODO Auto-generated method stub
 		
 	}

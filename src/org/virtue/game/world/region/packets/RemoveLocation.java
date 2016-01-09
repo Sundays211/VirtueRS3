@@ -21,7 +21,7 @@
  */
 package org.virtue.game.world.region.packets;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -55,7 +55,7 @@ public class RemoveLocation implements SceneUpdatePacket {
 	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#encode(org.virtue.network.event.buffer.OutboundBuffer, org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public void encode(OutboundBuffer buffer, Player player) {
+	public void encode(OutboundBuffer buffer, Entity player) {
 		buffer.putByte(((tile.getX() % 8) & 0x7) << 4 | (tile.getY() % 8) & 0x7);
 		buffer.putS(settings);
 	}

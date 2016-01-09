@@ -1,6 +1,6 @@
 package org.virtue.game.content.skills.hunter;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.world.region.SceneLocation;
 
@@ -26,12 +26,12 @@ public class NetTrapMethod extends Hunter {
 	private static long objectReplacement = 10 * 1000;//10 seconds
 	private static Item[] itemset = new Item[] { new Item(954, 1), new Item(303, 1) };
 	
-	public static void newTrap(Player player, SceneLocation object) {
+	public static void newTrap(Entity player, SceneLocation object) {
 		//TODO: Check to make sure trap is not in use, level requirements are OK
 		setTrap(player, object);
 	}
 	
-	private static void setTrap(Player player, SceneLocation object) {
+	private static void setTrap(Entity player, SceneLocation object) {
 		int testO2 = 19662;
 		int testObject = 19665;
 		System.out.println("Set trap method called from NetTrapMethod.java");

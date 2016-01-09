@@ -141,27 +141,20 @@ function enterHouse (player) {
 }
 
 function joinHouse(player) {
-	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-		handle : function (value) {
-			if (value.length > 0) {
-				var hash = api.getUserHash(value);
-				if (hash != null) {
-					var targetPlayer = api.getWorldPlayerByHash(hash);
-					if (targetPlayer != null) {
-						player.stopAll();
-						api.teleportEntity(player, api.getCoords(targetPlayer));
-					} else {
-						api.sendMessage(player, value+" is not home.")
-					}
-				} else {
-					api.sendMessage(player, value+" is not registered on this server.")
-				}
+	requestName(player, "Enter name:", function (value) {
+		var hash = api.getUserHash(value);
+		if (hash != null) {
+			var targetPlayer = api.getWorldPlayerByHash(hash);
+			if (targetPlayer != null) {
+				api.teleportEntity(player, api.getCoords(targetPlayer));
+			} else {
+				api.sendMessage(player, "They do not seem to be at home.")
 			}
+			//They don't own a house.
+		} else {
+			api.sendMessage(player, "That player is offline, or has privacy mode enabled.")
 		}
 	});
-	
-	player.getDialogs().requestString("Please enter the display name of the player you wish to teleport too:", new Handler());
-	return true;
 }
 
 function buildRoom(player, object) {

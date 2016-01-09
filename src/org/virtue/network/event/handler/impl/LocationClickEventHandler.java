@@ -114,12 +114,12 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 			int level = location.getCurrentTile().getPlane();
 			Tile clickCoords = new Tile(clickX, clickY, level);
 			
-			if (scripts.hasBinding(type, location.getID())) {
+			if (scripts.hasBinding(type, location.getId())) {
 				Map<String, Object> args = new HashMap<>();
 				args.put("player", player);
 				args.put("location", location);
 				args.put("coords", clickCoords);
-				scripts.invokeScriptChecked(type, location.getID(), args);
+				scripts.invokeScriptChecked(type, location.getId(), args);
 			} else {
 				String message = "Nothing interesting happens.";
 				if (player.getPrivilegeLevel().getRights() >= 2) {

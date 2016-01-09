@@ -149,14 +149,9 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				api.setVarp(player, 137, api.getVarp(player, 140));
 				return true;
 			case 152://Select custom price
-				var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-					handle : function (value) {
-						if (value > 0) {
-							api.setVarp(player, 137, value);
-						}									
-					}
+				requestCount(player, "Enter the price you wish to buy for:", function (value) {
+					api.setVarp(player, 137, value);
 				});
-				player.getDialogs().requestInteger("Enter the price you wish to buy for:", new Handler());
 				return true;
 			case 158://Increase price by 5%
 				Exchange.setPrice(player, 105);
@@ -301,18 +296,14 @@ var Exchange = {
 			}
 		},
 		searchForItem : function (player) {
-			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-				handle : function (value) {
-					//print(value);
-					var exchangePrice = api.getItemType(value).getExchangeValue();
-					if (exchangePrice != -1) {
-						api.setVarp(player, 140, exchangePrice);
-						api.setVarp(player, 135, value);
-						api.setVarp(player, 137, exchangePrice);
-					}					
+			requestItem(player, "Grand Exchange Item Search", function (objId) {
+				var exchangePrice = api.getExchangeCost(objId);
+				if (exchangePrice != -1) {
+					api.setVarp(player, 140, exchangePrice);
+					api.setVarp(player, 135, objId);
+					api.setVarp(player, 137, exchangePrice);
 				}
 			});
-			player.getDialogs().requestItem("Grand Exchange Item Search", new Handler());
 		},
 		setPrice : function (player, percent) {
 			if (api.getVarp(player, 135) == -1) {
@@ -362,12 +353,9 @@ var Exchange = {
 				}	
 				break;
 			case 5://Choose amount
-				var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-					handle : function (value) {
-						api.setVarp(player, 136, value);				
-					}
+				requestCount(player, "Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":", function (value) {
+					api.setVarp(player, 136, value);
 				});
-				player.getDialogs().requestInteger("Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":", new Handler());
 				break;
 			}
 		},

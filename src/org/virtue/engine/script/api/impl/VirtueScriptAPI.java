@@ -100,7 +100,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	/**
 	 * The {@link Logger} Instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(ScriptAPI.class);
+	private static Logger logger = LoggerFactory.getLogger(VirtueScriptAPI.class);
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getHash(java.lang.String)
@@ -179,7 +179,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#setDisplayName(org.virtue.game.entity.player.Player, java.lang.Long, java.lang.String)
 	 */
 	@Override
-	public boolean setDisplayName(Player setBy, Long userHash, String desiredName) {
+	public boolean setDisplayName(Entity setBy, Long userHash, String desiredName) {
 		desiredName = desiredName.trim();
 		if (desiredName == null || desiredName.length() < 1 || desiredName.length() > 12) {
 			return false;
@@ -260,7 +260,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getPlayerByHash(long)
 	 */
 	@Override
-	public Player getWorldPlayerByHash(Long userHash) {
+	public Entity getWorldPlayerByHash(Long userHash) {
 		return World.getInstance().getPlayerByHash(userHash);
 	}
 
@@ -268,7 +268,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getWorldPlayerByIndex(org.virtue.game.World, int)
 	 */
 	@Override
-	public Player getWorldPlayerByIndex(World world, int index) {
+	public Entity getWorldPlayerByIndex(World world, int index) {
 		return world.getPlayers().get(index);
 	}
 
@@ -655,7 +655,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (seqType == null) {
 			throw new IllegalArgumentException("Invalid sequence: "+seqTypeId);
 		}
-		return seqType.serverTime;
+		return seqType.time;
 	}
 
 	/* (non-Javadoc)
@@ -1271,14 +1271,19 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void pausePlayer(Player player, int duration) {
-		player.pause(duration);
+		player.setPaused(true);
+	}
+	
+	@Override
+	public void freezeEntity(Entity entity, int duration) {
+		entity.setFreezeDuration(duration);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#isPaused(org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public boolean isPaused(Player player) {
+	public boolean isPaused(Entity player) {
 		return player.isPaused();
 	}
 
@@ -1389,7 +1394,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getInteractionTarget(org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public Player getInteractionTarget(Player player) {		
+	public Entity getInteractionTarget(Player player) {		
 		return player.getInteractions().getCurrentTarget();
 	}
 
@@ -1464,8 +1469,16 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#runAnimation(org.virtue.game.entity.Entity, int)
 	 */
 	@Override
-	public void runAnimation(Entity entity, int animationID) {
-		entity.queueUpdateBlock(new AnimationBlock(animationID));
+	public void runAnimation(Entity entity, int animId) {
+		entity.runAnimation(animId, null);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.ScriptAPI#runAnimation(org.virtue.game.entity.Entity, int, java.lang.Runnable)
+	 */
+	@Override
+	public void runAnimation(Entity entity, int animId, Runnable onComplete) {
+		entity.runAnimation(animId, onComplete);
 	}
 
 	/* (non-Javadoc)
@@ -1477,7 +1490,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	@Override
-	public void playerForceSay(Player player, String message, boolean appearInChat) {
+	public void playerForceSay(Entity player, String message, boolean appearInChat) {
 		int flags = 0;
 		if (appearInChat) {
 			flags |= 0x1;

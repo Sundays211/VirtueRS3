@@ -66,8 +66,8 @@ var FarmingCrop = {
 	POTATOES : {
 		type : PatchType.ALLOTMENT,
 		level : 1,
-		plantxp : 45*8,
-		harvestxp : 45*9,
+		plantxp : 8,
+		harvestxp : 9,
 		seedId : 5318,
 		productId : 1942,
 		plantStage : 6,
@@ -81,8 +81,8 @@ var FarmingCrop = {
 	ONIONS : {
 		type : PatchType.ALLOTMENT,
 		level : 5,
-		plantxp : 45*9.5,
-		harvestxp : 45*10.5,
+		plantxp : 9.5,
+		harvestxp : 10.5,
 		seedId : 5319,
 		productId : 1957,
 		plantStage : 13,
@@ -96,8 +96,8 @@ var FarmingCrop = {
 	CABBAGES : {
 		type : PatchType.ALLOTMENT,
 		level : 7,
-		plantxp : 45*10,
-		harvestxp : 45*11.5,
+		plantxp : 10,
+		harvestxp : 11.5,
 		seedId : 5324,
 		productId : 1965,
 		plantStage : 20,
@@ -111,8 +111,8 @@ var FarmingCrop = {
 	TOMATOES : {
 		type : PatchType.ALLOTMENT,
 		level : 12,
-		plantxp : 45*12.5,
-		harvestxp : 45*14,
+		plantxp : 12.5,
+		harvestxp : 14,
 		seedId : 5322,
 		productId : 1982,
 		plantStage : 27,
@@ -126,8 +126,8 @@ var FarmingCrop = {
 	SWEETCORN : {
 		type : PatchType.ALLOTMENT,
 		level : 20,
-		plantxp : 45*17,
-		harvestxp : 45*19,
+		plantxp : 17,
+		harvestxp : 19,
 		seedId : 5320,
 		productId : 5986,
 		plantStage : 34,
@@ -141,8 +141,8 @@ var FarmingCrop = {
 	GUAM : {
 		type : PatchType.HERB,
 		level : 9,
-		plantxp : 45*11,
-		harvestxp : 45*12.5,
+		plantxp : 11,
+		harvestxp : 12.5,
 		seedId : 5291,
 		productId : 199,
 		plantStage : 4,
@@ -156,8 +156,8 @@ var FarmingCrop = {
 	MARRENTILL : {
 		type : PatchType.HERB,
 		level : 14,
-		plantxp : 45*13.5,
-		harvestxp : 45*15,
+		plantxp : 13.5,
+		harvestxp : 15,
 		seedId : 5292,
 		productId : 201,
 		plantStage : 11,
@@ -171,8 +171,8 @@ var FarmingCrop = {
 	TARROMIN : {
 		type : PatchType.HERB,
 		level : 19,
-		plantxp : 45*16,
-		harvestxp : 45*18,
+		plantxp : 16,
+		harvestxp : 18,
 		seedId : 5293,
 		productId : 203,
 		plantStage : 18,
@@ -186,8 +186,8 @@ var FarmingCrop = {
 	HARRALANDER : {
 		type : PatchType.HERB,
 		level : 26,
-		plantxp : 45*21.5,
-		harvestxp : 45*24,
+		plantxp : 21.5,
+		harvestxp : 24,
 		seedId : 5294,
 		productId : 205,
 		plantStage : 25,
@@ -201,8 +201,8 @@ var FarmingCrop = {
 	MARIGOLD : {
 		type : PatchType.FLOWER,
 		level : 2,
-		plantxp : 45*8.5,
-		harvestxp : 45*47,
+		plantxp : 8.5,
+		harvestxp : 47,
 		seedId : 5096,
 		productId : 6010,
 		plantStage : 8,
@@ -216,7 +216,7 @@ var FarmingCrop = {
 	OAK : {
 		type : PatchType.TREE,
 		level : 15,
-		plantxp : 45*14,
+		plantxp : 14,
 		checkHealthxp : 45*467.3,
 		saplingId : 5096,
 		productId : 6010,
@@ -289,25 +289,13 @@ FarmingPatch.prototype = {
 		 * @param newStatus The status to set this farming patch to once finished
 		 */
 		water : function (player, oldStatus, newStatus) {
-			var delay = 2;
-			api.runAnimation(player, 24924);
-			api.pausePlayer(player, 3);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-				process : function (player) {
-					if (delay <= 0) {
-						if (that.getStatus(player) == oldStatus) {//Protect against the crop changing status while we're watering it
-							api.delCarriedItem(player, 5338, 1);
-							that.setStatus(player, newStatus);
-						}						
-						return true;
-					}
-					delay--;
-					return false;
-				},
-				stop : function (player) { }
+			runAnimation(player, 24924, function () {
+				if (that.getStatus(player) == oldStatus) {//Protect against the crop changing status while we're watering it
+					api.delCarriedItem(player, 5338, 1);
+					that.setStatus(player, newStatus);
+				}
 			});
-			player.setAction(new Action());
 		},
 		
 		/**
@@ -913,10 +901,13 @@ var listen = function(scriptManager) {
 	
 	var locTypes = [ 7836, 7837, 7838, 7839, 8388, 8389, 8390, 8391 ];
 	for (var key in patches) {
-		locTypes.push(key);
+		locTypes.push(parseInt(key));
 	}
 	var patchListener = new PatchListener();
 	var itemOnPatchListener = new ItemOnPatchListener();
+	print(JSON.stringify(locTypes));
+	scriptManager.registerListener(EventType.OPLOC1, 7847, patchListener);
+	scriptManager.registerListener(EventType.OPLOCU, 7847, itemOnPatchListener);
 	for (var i in locTypes) {
 		scriptManager.registerListener(EventType.OPLOCU, locTypes[i], itemOnPatchListener);
 		//For now we'll bind all events, but most are probably not needed...

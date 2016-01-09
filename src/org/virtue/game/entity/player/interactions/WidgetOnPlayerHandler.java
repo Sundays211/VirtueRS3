@@ -21,6 +21,7 @@
  */
 package org.virtue.game.entity.player.interactions;
 
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 
 /**
@@ -37,6 +38,6 @@ public interface WidgetOnPlayerHandler {
 	
 	public boolean handle (Player player, int interfaceID, int component, int slot, int itemID, Player target);
 	
-	public int getRange (Player player, int interfaceID, int component, int slot, int itemID);
+	public int getRange (Entity player, int interfaceID, int component, int slot, int itemID);
 
 }

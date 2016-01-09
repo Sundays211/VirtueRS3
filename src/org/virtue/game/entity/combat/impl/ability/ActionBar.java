@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.ability.keybind.Keybind;
 import org.virtue.game.entity.combat.impl.ability.keybind.KeybindBar;
 import org.virtue.game.entity.player.Player;
@@ -226,7 +227,7 @@ public final class ActionBar {
 	/**
 	 * @return the player
 	 */
-	public Player getPlayer() {
+	public Entity getPlayer() {
 		return player;
 	}
 

@@ -21,7 +21,7 @@
  */
 package org.virtue.game.world.region.packets;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -55,7 +55,7 @@ public class AddItem implements SceneUpdatePacket {
 	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#encode(org.virtue.network.event.buffer.OutboundBuffer, org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public void encode(OutboundBuffer buffer, Player player) {
+	public void encode(OutboundBuffer buffer, Entity player) {
 		if (hidden) {
 			buffer.putLEShortA(item.getId());
 			buffer.putShort(item.getOwner().getIndex());

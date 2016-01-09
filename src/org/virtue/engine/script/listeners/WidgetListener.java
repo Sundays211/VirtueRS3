@@ -21,7 +21,7 @@
  */
 package org.virtue.engine.script.listeners;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.Entity;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -48,7 +48,7 @@ public interface WidgetListener {
 	 * @param option The option selected. Ranges from 1 to 10
 	 * @return True if the interaction was handled, false otherwise
 	 */
-	public boolean handleInteraction(Player player, int widgetId, int component, int slot, int itemId, int option);
+	public boolean handleInteraction(Entity player, int widgetId, int component, int slot, int itemId, int option);
 	
 	/**
 	 * Called when the widget is opened. 
@@ -58,7 +58,7 @@ public interface WidgetListener {
 	 * @param parentComponent The id of the parent component in which this was attached
 	 * @param id The id of the widget being opened
 	 */
-	public void open (Player player, int parentId, int parentComponent, int id);
+	public void open (Entity player, int parentId, int parentComponent, int id);
 	
 	/**
 	 * Called when the widget is closed. 
@@ -67,7 +67,7 @@ public interface WidgetListener {
 	 * @param parentComponent The id of the parent component in which this was attached
 	 * @param id The id of the widget being closed
 	 */
-	public void close (Player player, int parentId, int parentComponent, int id);
+	public void close (Entity player, int parentId, int parentComponent, int id);
 	
 	/**
 	 * Called when a component within the widget is dragged. This includes sliders, item drags, moving interfaces, etc
@@ -82,6 +82,6 @@ public interface WidgetListener {
 	 * @param itemId2 The id of the item dragged onto, or -1 if there was no item
 	 * @return True if the interaction was handled, false otherwise
 	 */
-	public boolean drag (Player player, int widget1, int component1, int slot1, int itemId1, int widget2, int component2, int slot2, int itemId2);
+	public boolean drag (Entity player, int widget1, int component1, int slot1, int itemId1, int widget2, int component2, int slot2, int itemId2);
 	
 }

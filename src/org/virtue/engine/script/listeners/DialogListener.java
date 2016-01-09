@@ -21,6 +21,7 @@
  */
 package org.virtue.engine.script.listeners;
 
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 
 /**
@@ -44,12 +45,12 @@ public interface DialogListener {
 	 * @param option The option selected (if the last screen was multiple-choice), or -1
 	 * @return True if the dialog is completed, false otherwise
 	 */
-	public boolean continueDialog (Player player, int option);
+	public boolean continueDialog (Entity player, int option);
 	
 	/**
 	 * Called when the dialog is closed. 
 	 * @param player
 	 * @return
 	 */
-	public boolean finishDialog (Player player);
+	public boolean finishDialog (Entity player);
 }

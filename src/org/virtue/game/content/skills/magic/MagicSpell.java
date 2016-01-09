@@ -168,7 +168,7 @@ public abstract class MagicSpell {
 	 * @param rune The rune type.
 	 * @return {@code True} if the player is wearing a staff.
 	 */
-	public static boolean hasValidStaff(Player player, Item rune) {
+	public static boolean hasValidStaff(Entity player, Item rune) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -21,6 +21,7 @@
  */
 package org.virtue.game.entity.player.interactions;
 
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.ability.Ability;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.player.Player;
@@ -61,7 +62,7 @@ public class PlayerAbilityHandler implements WidgetOnPlayerHandler {
 	 * @see org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler#getRange(org.virtue.game.entity.player.Player, int, int, int, int)
 	 */
 	@Override
-	public int getRange(Player player, int interfaceID, int component,
+	public int getRange(Entity player, int interfaceID, int component,
 			int slot, int itemID) {
 		return 20;
 	}

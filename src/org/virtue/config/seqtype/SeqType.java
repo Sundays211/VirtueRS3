@@ -29,8 +29,8 @@ public class SeqType implements ConfigItem {
 	public int id;
 	public int[] frames;
 	public int[] interfaceFrames;
-	public int[] anIntArray2090;
-	public int clientTime;
+	public int[] delays;
+	public int time;
 	//public Class186 aClass186_2092;
 	int anInt2093;
 	public int replayMode;
@@ -48,11 +48,9 @@ public class SeqType implements ConfigItem {
 	public int animatingMode;
 	Map<Integer, Object> params;
 	public int soundRepeats;
-	
-	public int serverTime;
 
 	SeqType(int id) {
-		clientTime = 0;
+		time = 0;
 		anInt2093 = -1;
 		loop = -1;
 		priority = 5;
@@ -79,9 +77,9 @@ public class SeqType implements ConfigItem {
 	void decode(ByteBuffer buffer, int code) {
 		if (code == 1) {
 			int i_2_ = buffer.getShort() & 0xffff;
-			anIntArray2090 = new int[i_2_];
+			delays = new int[i_2_];
 			for (int i_3_ = 0; i_3_ < i_2_; i_3_++) {
-				anIntArray2090[i_3_] = buffer.getShort() & 0xffff;
+				delays[i_3_] = buffer.getShort() & 0xffff;
 			}
 			frames = new int[i_2_];
 			for (int i_4_ = 0; i_4_ < i_2_; i_4_++) {
@@ -204,26 +202,33 @@ public class SeqType implements ConfigItem {
 
 	@Override
 	public void postDecode() {
-		if (-1 == animatingMode * -119157517) {
+		if (-1 == animatingMode) {
 			//if (aClass186_2092 != null && null != aClass186_2092.aBoolArray2116) {
 			//	animatingMode = 31479926;
 			//} else {
 				animatingMode = 0;
 			//}
 		}
-		if (walkingMode * 23372197 == -1) {
+		if (walkingMode == -1) {
 			//if (null != aClass186_2092 && aClass186_2092.aBoolArray2116 != null) {
-				walkingMode = 1411562586;
+			//	walkingMode = 1411562586;
 			//} else {
-			//	walkingMode = 0;
+				walkingMode = 0;
 			//}
 		}
-		if (anIntArray2090 != null) {
-			clientTime = 0;
-			for (int i_21_ = 0; i_21_ < anIntArray2090.length; i_21_++) {
-				clientTime += anIntArray2090[i_21_] * 1626428635;
+		if (delays != null) {
+			time = 0;
+
+			if (loop == -1) {
+				for (int i_21_ = 0; i_21_ < delays.length; i_21_++) {
+					time += delays[i_21_];
+				}
+			} else {
+				for (int i=delays.length-loop;i<delays.length;i++) {
+					time += delays[i];
+				}
+				time *= cycles;
 			}
-			serverTime = (int) Math.ceil(clientTime*50f/600f);
 		}
 	}
     

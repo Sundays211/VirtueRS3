@@ -21,6 +21,7 @@
  */
 package org.virtue.engine.script.listeners;
 
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 
 /**
@@ -45,7 +46,7 @@ public interface VarListener {
 	 * @param tickDifference The number of game ticks since the player last logged in
 	 * @return True if the listener should be added to the regular process queue, false otherwise
 	 */
-	public boolean onLogin (Player player, int tickDifference);
+	public boolean onLogin (Entity player, int tickDifference);
 	
 	/**
 	 * Gets the interval (in 600ms game ticks) between regular runs of the {@link #process(Player, int) process()} method
@@ -60,7 +61,7 @@ public interface VarListener {
 	 * @param tick The number of ticks elapsed since the player logged in
 	 * @return False if the process is finished, true if it should continue.
 	 */
-	public boolean process (Player player, int tick);
+	public boolean process (Entity player, int tick);
 	
 	/**
 	 * 
@@ -70,6 +71,6 @@ public interface VarListener {
 	 * @param newValue The value after change
 	 * @return True if the varp should be re-added to the regular process queue, false otherwise
 	 */
-	public boolean onValueChange (Player player, int varID, Object oldValue, Object newValue);
+	public boolean onValueChange (Entity player, int varID, Object oldValue, Object newValue);
 
 }

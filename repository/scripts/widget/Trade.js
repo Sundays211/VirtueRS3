@@ -29,11 +29,6 @@
  * @since 22/01/2015
  */
 
-var BACKPACK = 93;
-var TRADE_CONTAINER = 90;
-var LOAN_OFFER = 541;
-var LOAN_RETURN = 540;
-
 var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
 
 	/* The interfaces to bind to */
@@ -47,11 +42,11 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			if (targetPlayer == null) {
 				return;
 			}
-			api.sendInv(player, TRADE_CONTAINER);
-			api.sendInv(player, targetPlayer, TRADE_CONTAINER);
-			api.sendInv(player, LOAN_OFFER);
-			api.sendInv(player, targetPlayer, LOAN_OFFER);
-			api.sendInv(player, LOAN_RETURN);
+			api.sendInv(player, Inv.TRADE);
+			api.sendInv(player, targetPlayer, Inv.TRADE);
+			api.sendInv(player, Inv.LOAN_OFFER);
+			api.sendInv(player, targetPlayer, Inv.LOAN_OFFER);
+			api.sendInv(player, Inv.LOAN_RETURN);
 			api.setVarc(player, 199, -1);
 			api.setVarc(player, 3678, -1);
 			api.openOverlaySub(player, 1008, 336, false);
@@ -223,13 +218,10 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 				}
 				return false;
 			case 38://Add from money pouch
-				var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-					handle : function (value) {
-						Trade.offerCoins(player, value);
-						Trade.refreshTrade(player);
-					}
+				requestCount(player, "Add how many coins to your offer?", function (value) {
+					Trade.offerCoins(player, value);
+					Trade.refreshTrade(player);
 				});
-				player.getDialogs().requestInteger("Add how many coins to your offer?", new Handler());
 				return false;
 			case 51://Other player loan item
 				var targetPlayer = api.getInteractionTarget(player);
@@ -465,8 +457,8 @@ var Trade = {
 			for (var slot=0; slot<28; slot++) {
 				var item = api.getItem(player, Inv.TRADE, slot);
 				if (item != null) {
-					if (api.getItemType(item).getExchangeValue() != -1) {
-						total += api.getItemType(item).getExchangeValue() * item.getAmount();
+					if (api.getExchangeCost(item) != -1) {
+						total += api.getExchangeCost(item) * item.getAmount();
 					} else if (item.getID() == 995) {
 						total += item.getAmount();
 					}					
@@ -483,21 +475,16 @@ var Trade = {
 			}
 		},
 		selectLoanDuration : function (player) {
-			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-				handle : function (value) {
-					//api.sendMessage(player, "Set duration to: "+value);
-					if (value <= 72) {
-						var targetPlayer = api.getInteractionTarget(player);
-						if (targetPlayer != null) {
-							api.setVarBit(player, 1046, value);
-							api.setVarBit(targetPlayer, 1047, value);
-						}
+			requestCount(player, "Set the loan duration in hours: (1-72)<br>"
+					+"(Enter 0 for 'Just until logout'.)", function (value) {
+				if (value <= 72) {
+					var targetPlayer = api.getInteractionTarget(player);
+					if (targetPlayer != null) {
+						api.setVarBit(player, 1046, value);
+						api.setVarBit(targetPlayer, 1047, value);
 					}
-					
 				}
 			});
-			player.getDialogs().requestInteger("Set the loan duration in hours: (1-72)<br>"
-					+"(Enter 0 for 'Just until logout'.)", new Handler());
 		},
 		canAcceptLoanItems : function (player) {
 			if (api.getVarp(player, 430) > 0) {

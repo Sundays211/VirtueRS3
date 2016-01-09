@@ -39,6 +39,7 @@ import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.config.vartype.constants.VarLifetime;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.game.World;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
@@ -115,7 +116,7 @@ public class VarRepository implements VarDomain {
 			switch (varType.dataType) {
 			case PLAYER:
 				if ((value instanceof Player)) {
-					value = ((Player) value).getIndex();
+					value = ((Entity) value).getIndex();
 				}
 			default:
 				if (!(value instanceof Integer)) {
@@ -149,12 +150,6 @@ public class VarRepository implements VarDomain {
 		}
 		VarListener listener = Virtue.getInstance().getScripts().forVarID(key);
 		if (listener != null && player.exists() && tick > 0) {
-			if (oldValue instanceof ScriptVar) {
-				oldValue = ((ScriptVar) oldValue).scriptValue();
-			}
-			if (value instanceof ScriptVar) {
-				value = ((ScriptVar) value).scriptValue();
-			}
 			if (listener.onValueChange(player, key, oldValue, value)) {
 				tickTasks.add(listener);
 			}
@@ -213,9 +208,6 @@ public class VarRepository implements VarDomain {
 		Object value = getVarValue(key);
 		if (value == null) {
 			return 0;
-		}
-		if (value instanceof ScriptVar) {
-			return ((ScriptVar) value).scriptValue();
 		}
 		return ((Integer) value);
 	}
@@ -341,7 +333,7 @@ public class VarRepository implements VarDomain {
 		//Checks the player that the current item is loaned to
 		Object value = this.getVarValue(VarKey.Player.LOAN_TO_PLAYER);
 		if (value != null && value instanceof Player) {
-			if (!((Player) value).exists()) {
+			if (!((Entity) value).exists()) {
 				Player p2 = (Player) value;
 				//().getEquipment().returnBorrowedItem();
 				player.getDispatcher().sendGameMessage(p2.getName()+" has returned the item "+(Gender.MALE.equals(p2.getAppearance().getGender()) ? "he" : "she")+" borrowed from you.");
@@ -352,7 +344,7 @@ public class VarRepository implements VarDomain {
 		//Checks the player that the current item is loaned from
 		value = this.getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
 		if (value != null && value instanceof Player) {
-			if (!((Player) value).exists()) {
+			if (!((Entity) value).exists()) {
 				player.getDispatcher().sendGameMessage("Your item has been returned.");
 				setVarValueInt(VarKey.Player.LOAN_FROM_PLAYER, -1);
 				player.getEquipment().destroyBorrowedItems();

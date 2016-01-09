@@ -232,7 +232,7 @@ public class BackpackWidget extends Widget {
 		ScriptManager scripts = Virtue.getInstance().getScripts();
 		
 		if (targetEntity instanceof Player) {
-			Player targetPlayer = (Player) targetEntity;
+			Entity targetPlayer = (Entity) targetEntity;
 			if (scripts.hasBinding(ScriptEventType.OPPLAYERU, itemId)) {
 				Map<String, Object> args = new HashMap<>();
 				args.put("player", player);
@@ -404,7 +404,7 @@ public class BackpackWidget extends Widget {
 			player.getDialogs().sendMessageBox(message);
 			player.getDialogs().setInputHandler(handler);
 		} else if (loanFrom != null && loanFrom instanceof Player) {
-			Player p = (Player) loanFrom;
+			Entity p = (Entity) loanFrom;
 			if (p.exists()) {
 				String message = "<center>~Session-based loan~</center><br>";
 				message += "If you discard this item, it will return to its owner, "+p.getName();

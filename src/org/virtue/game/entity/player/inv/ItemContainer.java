@@ -3,14 +3,13 @@ package org.virtue.game.entity.player.inv;
 import java.util.Arrays;
 
 import org.virtue.config.invtype.InvType;
-import org.virtue.game.entity.player.var.ScriptVar;
 
 /**
  * Container class.
  * 
  * @author Graham / edited by Dragonkk(Alex)
  */
-public final class ItemContainer implements ScriptVar {
+public final class ItemContainer {
 
 	private Item[] data;
 	private boolean alwaysStackable = false;
@@ -534,10 +533,5 @@ public final class ItemContainer implements ScriptVar {
 	@Override
 	public String toString () {
 		return Arrays.toString(data);
-	}
-
-	@Override
-	public int scriptValue() {
-		return invType.getID();
 	}
 }

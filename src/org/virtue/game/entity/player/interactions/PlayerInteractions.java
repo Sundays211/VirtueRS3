@@ -29,6 +29,7 @@ import java.util.Set;
 
 import org.virtue.game.content.social.clan.ClanInviteResponse;
 import org.virtue.game.content.social.clan.ClanRecruitAction;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
@@ -74,7 +75,7 @@ public class PlayerInteractions {
 	
 	private EnumMap<OptionButton, Set<Player>> availablePlayers = new EnumMap<OptionButton, Set<Player>>(OptionButton.class);
 	
-	private Player currentTarget;
+	private Entity currentTarget;
 	
 	public PlayerInteractions (Player player) {
 		this.player = player;		
@@ -128,14 +129,14 @@ public class PlayerInteractions {
 		availablePlayers.get(button).add(player);
 	}
 	
-	public boolean isPossiblePlayer (OptionButton button, Player player) {
+	public boolean isPossiblePlayer (OptionButton button, Entity player) {
 		if (!availablePlayers.containsKey(button)) {
 			return false;
 		}
 		return availablePlayers.get(button).contains(player);
 	}
 	
-	public void removePossiblePlayer (OptionButton button, Player player) {
+	public void removePossiblePlayer (OptionButton button, Entity player) {
 		if (!availablePlayers.containsKey(button)) {
 			return;
 		}
@@ -171,11 +172,11 @@ public class PlayerInteractions {
 		return false;
 	}
 	
-	public void setCurrentTarget (Player target) {
+	public void setCurrentTarget (Entity target) {
 		this.currentTarget = target;
 	}
 	
-	public Player getCurrentTarget () {
+	public Entity getCurrentTarget () {
 		return currentTarget;
 	}
 }

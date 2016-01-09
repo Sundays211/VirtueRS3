@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.virtue.game.World;
+import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.DynamicRegion;
@@ -172,7 +173,7 @@ public class Viewport implements GameEventContext {
 			if (playerIndex == player.getIndex()) {
 				continue;
 			}
-			Player p = World.getInstance().getPlayers().get(playerIndex);
+			Entity p = World.getInstance().getPlayers().get(playerIndex);
 			stream.putBits(18, regionHashes[playerIndex] = p == null ? 0 : p.getCurrentTile().getRegionHash());
 			outPlayersIndexes[outPlayersIndexesCount++] = playerIndex;
 		}
@@ -190,7 +191,7 @@ public class Viewport implements GameEventContext {
 		localAddedPlayers = 0;
 		for (int playerIndex = 1; playerIndex < 2048; playerIndex++) {
 			slotFlags[playerIndex] >>= 1;
-			Player player = localPlayers[playerIndex];
+			Entity player = localPlayers[playerIndex];
 			if (player == null) {
 				outPlayersIndexes[outPlayersIndexesCount++] = playerIndex;
 			} else {
