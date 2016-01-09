@@ -905,9 +905,6 @@ var listen = function(scriptManager) {
 	}
 	var patchListener = new PatchListener();
 	var itemOnPatchListener = new ItemOnPatchListener();
-	print(JSON.stringify(locTypes));
-	scriptManager.registerListener(EventType.OPLOC1, 7847, patchListener);
-	scriptManager.registerListener(EventType.OPLOCU, 7847, itemOnPatchListener);
 	for (var i in locTypes) {
 		scriptManager.registerListener(EventType.OPLOCU, locTypes[i], itemOnPatchListener);
 		//For now we'll bind all events, but most are probably not needed...

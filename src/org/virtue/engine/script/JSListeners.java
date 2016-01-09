@@ -290,11 +290,26 @@ public class JSListeners implements ScriptManager {
 	
 	/**
 	 * Registers a general event listener of the given type which is bound to the given object
+	 * @param eventTypeId The event type ID. Must match a valid id in {@link ScriptEventType}, otherwise an {@link IllegalArgumentException} will be thrown. 
+	 * @param binding The item to bind to. The use of this paramater depends on the event type specified.
+	 * @param listener The listener to bind
+	 */
+	public void registerListener (int eventTypeId, int binding, EventListener listener) {
+		ScriptEventType eventType = ScriptEventType.getById(eventTypeId);
+		if (eventType == null) {
+			throw new IllegalArgumentException("Invalid event type ID: "+eventTypeId);
+		}
+		EventBind bind = new EventBind(eventType, binding);
+		listeners.put(bind, listener);
+	}
+	
+	/**
+	 * Registers a general event listener of the given type which is bound to the given object
 	 * @param eventTypeId
 	 * @param binding
 	 * @param listener
 	 */
-	public void registerListener (int eventTypeId, Object binding, EventListener listener) {
+	public void registerListener (int eventTypeId, String binding, EventListener listener) {
 		ScriptEventType eventType = ScriptEventType.getById(eventTypeId);
 		if (eventType == null) {
 			throw new IllegalArgumentException("Invalid event type ID: "+eventTypeId);

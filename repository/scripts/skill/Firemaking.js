@@ -162,7 +162,9 @@ var LOG_IDS = [];
 /* Listen to the events specified */
 var listen = function(scriptManager) {	
 	for (var log in Log) {
-		FIRE_IDS.push(Log[log].fireID);
+		if (Log[log].fireID !== undefined) {
+			FIRE_IDS.push(Log[log].fireID);
+		}		
 	}
 	var fireListener = new FireListener();
 	for (var i in FIRE_IDS) {
@@ -172,7 +174,9 @@ var listen = function(scriptManager) {
 	}
 	
 	for (var log in Log) {
-		LOG_IDS.push(Log[log].itemID);
+		if (Log[log].itemID !== undefined) {
+			LOG_IDS.push(Log[log].itemID);
+		}
 	}
 	var logListener = new LogListener();
 	for (var i in LOG_IDS) {
