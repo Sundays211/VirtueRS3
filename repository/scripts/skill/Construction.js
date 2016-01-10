@@ -1,81 +1,76 @@
-var Tile = Java.type('org.virtue.game.world.region.Tile');
-var DynamicRegion = Java.type('org.virtue.game.world.region.DynamicRegion');
-var RegionTools = Java.type('org.virtue.game.world.region.RegionTools');
 /**
  * @author Kayla
  * @since 11/17/2015
  */
 
-var BACKPACK = 93;
-
 var RoomTypes = {
     DEFAULT : {
         level : 1,
-        tile : new Tile(1864, 5056, 0),
+        tile : api.getCoords(1864, 5056, 0),
     },
     GARDEN : {
         level : 1,
-        tile : new Tile(1859, 5066, 0),
+        tile : api.getCoords(1859, 5066, 0),
     },
     THRONE : {
         level : 1,
-        tile : new Tile(1904, 5096, 0),
+        tile : api.getCoords(1904, 5096, 0),
     },
     GAME : {
         level : 1,
-        tile : new Tile(1864, 5104, 0),
+        tile : api.getCoords(1864, 5104, 0),
     },
     FLOOR_2 : {
         level : 1,
-        tile : new Tile(1903, 5095, 0),
+        tile : api.getCoords(1903, 5095, 0),
     },
     PARLOUR : {
         level : 1,
-        tile : new Tile(1856, 5112, 0),
+        tile : api.getCoords(1856, 5112, 0),
     },
     KITCEN : {
         level : 1,
-        tile : new Tile(1872, 5112, 0),
+        tile : api.getCoords(1872, 5112, 0),
     },
     DINING : {
         level : 1,
-        tile : new Tile(1890, 5112, 0),
+        tile : api.getCoords(1890, 5112, 0),
     },
     WORK_SHOP : {
         level : 1,
-        tile : new Tile(1856, 5096, 0),
+        tile : api.getCoords(1856, 5096, 0),
     },
     BED_ROOM : {
         level : 1,
-        tile : new Tile(1904, 5112, 0),
+        tile : api.getCoords(1904, 5112, 0),
     },
     SKILL_HALL : {
         level : 1,
-        tile : new Tile(1880, 5104, 0),
+        tile : api.getCoords(1880, 5104, 0),
     },
     COMBAT : {
         level : 1,
-        tile : new Tile(1880, 5088, 0),
+        tile : api.getCoords(1880, 5088, 0),
     },
     QUEST_HALL : {
         level : 1,
-        tile : new Tile(1912, 5104, 0),
+        tile : api.getCoords(1912, 5104, 0),
     },
     STUDY : {
         level : 1,
-        tile : new Tile(1888, 5096, 0),
+        tile : api.getCoords(1888, 5096, 0),
     },
     COSTUME_ROOM : {
         level : 1,
-        tile : new Tile(1904, 5064, 0),
+        tile : api.getCoords(1904, 5064, 0),
     },
     CHAPEL : {
         level : 1,
-        tile : new Tile(1872, 5096, 0),
+        tile : api.getCoords(1872, 5096, 0),
     },
     PORTAL_CHAMBER : {
         level : 1,
-        tile : new Tile(1864, 5088, 0),
+        tile : api.getCoords(1864, 5088, 0),
     }
     //TODO REST
 };
@@ -120,21 +115,21 @@ var listen = function(scriptManager) {
 };
 
 function enterHouse (player) {
-	var house = RegionTools.createRegion();
+	var house = mapApi.createArea();
 	for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 		for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-			RegionTools.setChunk(house, xOffSet, yOffSet, 1, 232, 632, 0, 0);
+			mapApi.setChunk(house, xOffSet, yOffSet, 1, 232, 632, 0, 0);
 		}
 	}
-	//RegionTools.setChunk(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
+	//mapApi.setChunk(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
 	//Format: region, housePosX, hosePosY, hoseLevel, originalPosX, originalPosY, originalLevel, rotation
-	RegionTools.setChunk(house, 4, 4, 1, 232, 633, 0, 0);//Add a garden at 2,2
-	RegionTools.setChunk(house, 4, 5, 1, 232, 639, 0, 0);//Add a parlor at 2,3
-	RegionTools.setChunk(house, 4, 5, 2, 235, 634, 0, 0);//Add a parlor Roof
-	RegionTools.setChunk(house, 5, 5, 1, 234, 637, 0, 0);//Add a parlor at 2,4
-	RegionTools.buildRegion(house);
-	var squareX = api.getSquareX(house.getBaseTile());
-	var squareY = api.getSquareY(house.getBaseTile());
+	mapApi.setChunk(house, 4, 4, 1, 232, 633, 0, 0);//Add a garden at 2,2
+	mapApi.setChunk(house, 4, 5, 1, 232, 639, 0, 0);//Add a parlor at 2,3
+	mapApi.setChunk(house, 4, 5, 2, 235, 634, 0, 0);//Add a parlor Roof
+	mapApi.setChunk(house, 5, 5, 1, 234, 637, 0, 0);//Add a parlor at 2,4
+	mapApi.buildArea(house);
+	var squareX = mapApi.getSquareX(house);
+	var squareY = mapApi.getSquareY(house);
 	api.teleportEntity(player, 1, squareX, squareY, 10, 10);
 	player.setHouse(house);
 	api.sendMessage(player, "Welcome to your house!");

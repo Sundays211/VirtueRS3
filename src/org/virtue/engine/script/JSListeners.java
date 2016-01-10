@@ -37,8 +37,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.engine.script.api.ClanAPI;
+import org.virtue.engine.script.api.MapAPI;
 import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.engine.script.api.impl.VirtueClanAPI;
+import org.virtue.engine.script.api.impl.VirtueMapAPI;
 import org.virtue.engine.script.api.impl.VirtueScriptAPI;
 import org.virtue.engine.script.listeners.AbilityListener;
 import org.virtue.engine.script.listeners.CombatHandler;
@@ -138,6 +140,8 @@ public class JSListeners implements ScriptManager {
 	
 	private ClanAPI clanApi;
 	
+	private MapAPI mapApi;
+	
 	private ScriptEngine engine;
 	
 	private File scriptDir;
@@ -152,12 +156,14 @@ public class JSListeners implements ScriptManager {
 		this.vars = new HashMap<Integer, VarListener>();
 		this.scriptAPI = new VirtueScriptAPI();
 		this.clanApi = new VirtueClanAPI(Virtue.getInstance().getClans());
+		this.mapApi = new VirtueMapAPI();
 		this.scriptDir = scriptDir;
 	}
 	
 	private void setConstants (ScriptEngine engine) {
 		engine.put("api", getApi());
 		engine.put("clanApi", clanApi);
+		engine.put("mapApi", mapApi);
 		
 		Map<String, Integer> map = new HashMap<>();
 		for (ScriptEventType type : ScriptEventType.values()) {
