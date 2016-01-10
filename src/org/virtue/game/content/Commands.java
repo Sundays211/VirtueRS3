@@ -11,9 +11,6 @@ import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.DynamicRegion;
-import org.virtue.game.world.region.RegionTools;
-import org.virtue.game.world.region.Tile;
 
 public class Commands {
 
@@ -147,11 +144,6 @@ public class Commands {
 			case "scripts":
 				reloadScripts(player, category, console);
 				return true;
-			case "script":
-				player.getDispatcher().sendCS2Script(6722,
-						new Object[] { Integer.parseInt(args[0]) });
-				player.getDispatcher().sendGameMessage("script sent");
-				return true;
 			case "setvarp":
 				if (args.length < 2) {
 					sendCommandResponse(player, "Usage: setvarp {id} {value}", console);
@@ -162,42 +154,6 @@ public class Commands {
 				sendCommandResponse(player, 
 						"varp=" + Integer.parseInt(args[0]) + ", value="
 								+ Integer.parseInt(args[1]), console);
-				return true;
-			case "createregion":
-				try {
-					int startX = Integer.parseInt(args[0]);
-					int startY = Integer.parseInt(args[1]);
-					int widthRegions = Integer.parseInt(args[2]);
-					int heightRegions = Integer.parseInt(args[3]);
-					DynamicRegion region = RegionTools.createRegion();
-					for (int xOffSet = 0; xOffSet < widthRegions; xOffSet++) {
-						for (int yOffSet = 0; yOffSet < heightRegions; yOffSet++) {
-							RegionTools
-									.setChunk(
-											region,
-											xOffSet,
-											yOffSet,
-											player.getCurrentTile().getPlane(),
-											new Tile(
-													startX
-															+ (xOffSet * widthRegions),
-													startY
-															+ (yOffSet * heightRegions),
-													player.getCurrentTile()
-															.getPlane()), 0);
-						}
-					}
-					RegionTools.buildRegion(region);
-					player.getMovement().teleportTo(region.getBaseTile());
-					player.setArmarDynamicRegion(region);
-
-				} catch (Exception e) {
-					player.getDispatcher().sendGameMessage("Wrong usage!");
-				}
-				return true;
-			case "destroy":
-				DynamicRegion region = player.getArmarDynamicRegion();
-				RegionTools.destroyRegion(region);
 				return true;
 			default:
 				return false;

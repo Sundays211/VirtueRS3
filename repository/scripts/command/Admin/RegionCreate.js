@@ -19,10 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var DynamicRegion = Java.type('org.virtue.game.world.region.DynamicRegion');
-var RegionTools = Java.type('org.virtue.game.world.region.RegionTools');
-var ClipFlag = Java.type('org.virtue.game.world.region.ClipFlag');
-var Region = Java.type('org.virtue.game.world.region.Region');
 /**
  * @author Kayla
  * @date 11/17/2015
@@ -34,21 +30,21 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 		var args = scriptArgs.cmdArgs;
 		
 		if (syntax.toLowerCase() == "makeregion") {
-			DynamicRegion = RegionTools.createRegion();
+			var dynamicRegion = mapApi.createArea();
 			for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 				for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-					RegionTools.setChunk(DynamicRegion, xOffSet, yOffSet, 0, 14, 624, 0, 0);
+					mapApi.setChunk(dynamicRegion, xOffSet, yOffSet, 0, 14, 624, 0, 0);
 				}
 			}
-			RegionTools.setChunk(DynamicRegion, 1, 1, 0, 18, 532, 0, 0);
-			RegionTools.buildRegion(DynamicRegion);
-			var squareX = api.getSquareX(DynamicRegion.getBaseTile());
-			var squareY = api.getSquareY(DynamicRegion.getBaseTile());
+			mapApi.setChunk(dynamicRegion, 1, 1, 0, 18, 532, 0, 0);
+			mapApi.buildArea(dynamicRegion);
+			var squareX = mapApi.getSquareX(dynamicRegion);
+			var squareY = mapApi.getSquareY(dynamicRegion);
 			api.teleportEntity(player, 0, squareX, squareY, 10, 10);
 			api.sendMessage(player, "You made a dynamic region!");
 		} else if (syntax.toLowerCase() == "delregion") {
-			DynamicRegion = player.getArmarDynamicRegion();
-			RegionTools.destroyRegion(DynamicRegion);
+			var dynamicRegion = player.getArmarDynamicRegion();
+			mapApi.destroyArea(dynamicRegion);
 			api.sendMessage(player, "Dynamic Region deleted!");
 		}
 	}

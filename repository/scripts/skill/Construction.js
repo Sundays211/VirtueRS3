@@ -122,7 +122,7 @@ function enterHouse (player) {
 		}
 	}
 	//mapApi.setChunk(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
-	//Format: region, housePosX, hosePosY, hoseLevel, originalPosX, originalPosY, originalLevel, rotation
+	//Format: region, housePosX, housePosY, houseLevel, originalPosX, originalPosY, originalLevel, rotation
 	mapApi.setChunk(house, 4, 4, 1, 232, 633, 0, 0);//Add a garden at 2,2
 	mapApi.setChunk(house, 4, 5, 1, 232, 639, 0, 0);//Add a parlor at 2,3
 	mapApi.setChunk(house, 4, 5, 2, 235, 634, 0, 0);//Add a parlor Roof
