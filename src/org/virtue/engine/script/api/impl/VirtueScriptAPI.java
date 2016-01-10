@@ -55,7 +55,6 @@ import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.ChannelType;
-import org.virtue.game.content.social.clan.ClanChannelAPI;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.content.social.friendchat.FriendChatDataType;
 import org.virtue.game.entity.Entity;
@@ -77,7 +76,6 @@ import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
 import org.virtue.game.world.region.movement.Direction;
-import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
@@ -419,22 +417,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void setWidgetEvents(Player player, int widgetID, int componentID, int from, int to, int events) {
 		player.getDispatcher().sendWidgetSettings(widgetID, componentID, from, to, events);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getClanChannels()
-	 */
-	@Override
-	public ClanChannelAPI getClanChannels() {
-		return Virtue.getInstance().getClans().getChannels();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getClanSettings()
-	 */
-	@Override
-	public ClanSettingsAPI getClanSettings() {
-		return Virtue.getInstance().getClans().getSettings();
 	}
 
 	/* (non-Javadoc)
@@ -1486,7 +1468,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void stopAnimation(Entity entity) {
-		entity.queueUpdateBlock(new AnimationBlock(-1));
+		entity.clearAnimation();
 	}
 
 	@Override

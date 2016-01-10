@@ -202,7 +202,6 @@ public class NPC extends Entity {
 	 */
 	@Override
 	public void process() {
-		super.process();
 		if (owner != null) {
 			if (!owner.exists()) {
 				this.destroy();
@@ -232,6 +231,7 @@ public class NPC extends Entity {
 				currentAction = null;
 			}
 		}
+		super.process();
 	}
 	
 	private void processRandomWalk () {

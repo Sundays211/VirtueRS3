@@ -226,7 +226,7 @@ public class JSListeners implements ScriptManager {
 				}
 			}			
 		}
-		logger.info("Registerd "  + widgetMap.size() + " Widget Script(s).");
+		logger.info("Registerd " + dialogMap.size() + " Dialog Script(s), "  + widgetMap.size() + " Widget Script(s).");
 		return success;
 	}
 	

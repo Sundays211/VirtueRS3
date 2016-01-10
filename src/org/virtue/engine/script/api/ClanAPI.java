@@ -43,11 +43,27 @@ public interface ClanAPI {
 	
 	public boolean isClanOwner (Player player);
 	
+	public boolean hasReplacementOwner(Long clanHash);
+	
 	public boolean isClanAdmin (Player player);
 	
-	public boolean isBanned (Long clanHash, long userHash);
+	public boolean isBanned (Long clanHash, Long userHash);
 	
-	public int getClanMemberCount (Long clanHash);
+	/**
+	 * Adds the specified user to the clan ban list
+	 * @param player The player adding the ban. Must hold a rank of admin or above in their clan, otherwise this will fail.
+	 * @param userHash The hash of the user to ban
+	 */
+	public void addBan(Player player, Long userHash);
+	
+	/**
+	 * Removes the specified user from the clan ban list
+	 * @param player The player removing the ban. Must hold a rank of admin or above their clan, otherwise this will fail.
+	 * @param userHash The hash of the user to remove
+	 */
+	public void removeBan(Player player, Long userHash);
+	
+	public int getMemberCount (Long clanHash);
 	
 	public ClanChannelAPI getClanChannels ();
 	
@@ -59,14 +75,14 @@ public interface ClanAPI {
 	 * @param userHash The hash of the user to check
 	 * @return The rank held by the user in the clan, or -1 if the user is not in the clan.
 	 */
-	public byte getRank (long clanHash, long userHash);
+	public byte getRank (Long clanHash, Long userHash);
 	
-	public boolean setRank (Player player, long userhash, byte rank);
+	public boolean setRank (Player player, Long userhash, byte rank);
 	
-	public int getMemberVarBit(Player player, long userhash, int start, int end);
+	public int getMemberVarBit(Player player, Long userhash, int start, int end);
 	
-	public boolean setMemberVarBit(Player player, long userhash, int value, int start, int end);
+	public boolean setMemberVarBit(Player player, Long userhash, int value, int start, int end);
 	
-	public void sendBroadcast (long clanHash, int type, String[] find, String[] replace);
+	public void sendBroadcast (Long clanHash, int type, String[] find, String[] replace);
 
 }

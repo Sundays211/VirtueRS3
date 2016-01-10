@@ -33,8 +33,6 @@ import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.exchange.ExchangeOffer;
-import org.virtue.game.content.social.clan.ClanChannelAPI;
-import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
@@ -310,10 +308,6 @@ public interface ScriptAPI {
 	public void setWidgetEvents (Player player, int widgetID, int componentID, int from, int to, int events);
 	
 	public Long getClanHash (Player player);
-	
-	public ClanChannelAPI getClanChannels ();
-	
-	public ClanSettingsAPI getClanSettings ();
 	
 	/**
 	 * Gets the specified friends chat data for the player

@@ -134,7 +134,6 @@ public class EntityUpdate extends Tick {
 	public void preprocess(Entity entity, int cycle) {
 		if (cycle == 0) {
 			entity.getCombatSchedule().update();//.process();
-			entity.getMovement().process();
 			entity.process();
 		}
 		else if (cycle == 1) {

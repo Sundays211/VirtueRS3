@@ -78,7 +78,7 @@ var ClanSettingsButtonListener = Java.extend(Java.type('org.virtue.engine.script
 			api.setVarc(player, 1516, args.slot);
 			return;
 		case 46://Arrow beside member
-			var member = api.getClanSettings().getMemberData(api.getClanHash(player), args.slot);
+			var member = clanApi.getClanSettings().getMemberData(api.getClanHash(player), args.slot);
 			ClanSettings.showMember(player, member);
 			return;
 		case 63://Member banned from citadel
@@ -370,7 +370,7 @@ var ClanSettings = {
 			var displayName = api.getName(userHash);
 			if (displayName != null) {
 				multi2(player, "Really kick "+displayName+"?", "Yes, kick.", function () {
-					api.getClanSettings().kickClanMember(api.getClanHash(player), player.getChat(), userHash);
+					clanApi.getClanSettings().kickClanMember(api.getClanHash(player), player.getChat(), userHash);
 					clanApi.sendBroadcast(api.getClanHash(player), 29, ["[Player A]", "[Player B]"], [api.getName(player), displayName]);
 					api.closeCentralWidgets(player);
 				}, "No, cancel.", function () {

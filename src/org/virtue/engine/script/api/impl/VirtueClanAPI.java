@@ -91,6 +91,11 @@ public class VirtueClanAPI implements ClanAPI {
 		return owner == null ? false : owner.getUserHash() == player.getUserHash();
 	}
 
+	@Override
+	public boolean hasReplacementOwner(Long clanHash) {
+		return getManager().getSettings().hasReplacementOwner(clanHash);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ClanAPI#isClanAdmin(org.virtue.game.entity.player.Player)
 	 */
@@ -107,15 +112,25 @@ public class VirtueClanAPI implements ClanAPI {
 	 * @see org.virtue.engine.script.api.ClanAPI#isBannedFromClan(java.lang.Long, long)
 	 */
 	@Override
-	public boolean isBanned(Long clanHash, long userHash) {
+	public boolean isBanned(Long clanHash, Long userHash) {
 		return getManager().getSettings().isBanned(clanHash, userHash);
+	}
+
+	@Override
+	public void addBan(Player player, Long userHash) {
+		getManager().getSettings().addBan(player.getClanHash(), player.getChat(), userHash);
+	}
+
+	@Override
+	public void removeBan(Player player, Long userHash) {
+		getManager().getSettings().removeBan(player.getClanHash(), player.getChat(), userHash);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ClanAPI#getClanMemberCount(java.lang.Long)
 	 */
 	@Override
-	public int getClanMemberCount(Long clanHash) {
+	public int getMemberCount(Long clanHash) {
 		return getManager().getSettings().getMemberCount(clanHash);
 	}
 
@@ -139,7 +154,7 @@ public class VirtueClanAPI implements ClanAPI {
 	 * @see org.virtue.engine.script.api.ClanAPI#getClanRank(long, long)
 	 */
 	@Override
-	public byte getRank(long clanHash, long userHash) {
+	public byte getRank(Long clanHash, Long userHash) {
 		ClanRank rank = getManager().getSettings().getRank(clanHash, userHash);
 		return rank == null ? -1 : rank.getID();
 	}
@@ -148,7 +163,7 @@ public class VirtueClanAPI implements ClanAPI {
 	 * @see org.virtue.engine.script.api.ClanAPI#setClanRank(org.virtue.game.entity.player.Player, long, byte)
 	 */
 	@Override
-	public boolean setRank(Player player, long userhash, byte rank) {
+	public boolean setRank(Player player, Long userhash, byte rank) {
 		return getManager().getSettings().setRank(player.getClanHash(), player.getChat(), userhash, ClanRank.forID(rank));
 	}
 
@@ -156,7 +171,7 @@ public class VirtueClanAPI implements ClanAPI {
 	 * @see org.virtue.engine.script.api.ClanAPI#getClanMemberVarBit(org.virtue.game.entity.player.Player, long, int, int)
 	 */
 	@Override
-	public int getMemberVarBit(Player player, long userhash, int start, int end) {
+	public int getMemberVarBit(Player player, Long userhash, int start, int end) {
 		return getManager().getSettings().getMemberVarBit(player.getClanHash(), player.getChat(), userhash, start, end);
 	}
 
@@ -164,7 +179,7 @@ public class VirtueClanAPI implements ClanAPI {
 	 * @see org.virtue.engine.script.api.ClanAPI#setClanMemberVarBit(org.virtue.game.entity.player.Player, long, int, int, int)
 	 */
 	@Override
-	public boolean setMemberVarBit(Player player, long userhash, int value, int start, int end) {
+	public boolean setMemberVarBit(Player player, Long userhash, int value, int start, int end) {
 		return getManager().getSettings().setMemberVarBit(player.getClanHash(), player.getChat(), userhash, value, start, end);
 	}
 
@@ -172,7 +187,7 @@ public class VirtueClanAPI implements ClanAPI {
 	 * @see org.virtue.engine.script.api.ClanAPI#sendClanBroadcast(long, int, java.lang.String[], java.lang.String[])
 	 */
 	@Override
-	public void sendBroadcast(long clanHash, int type, String[] find, String[] replace) {
+	public void sendBroadcast(Long clanHash, int type, String[] find, String[] replace) {
 		getManager().getSettings().sendBroadcast(clanHash, type, find, replace);
 	}
 

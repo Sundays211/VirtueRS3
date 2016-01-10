@@ -63,8 +63,7 @@ public class Constants {
 	public static int MAINTANANCE_INTERVAL = 1;
 	
 	/**
-	 * Represents the initial server day. This is used to determine when the "day" ticks over and the age of accounts. 
-	 * MUST be set to a date earlier than the day the server was first launched, otherwise problems will occur.
+	 * Represents the initial server day. This is a day determined by Jagex, a few months prior to the release of RS2.
 	 */
 	public static int SERVER_DAY_INITIAL = 11745;
 	

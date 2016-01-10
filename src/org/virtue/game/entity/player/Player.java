@@ -994,7 +994,6 @@ public class Player extends Entity {
 	 */
 	@Override
 	public void process() {
-		super.process();
 		if (GameState.WORLD_READY.equals(gameState)) {
 			inactivityTimer++;
 		}
@@ -1014,6 +1013,7 @@ public class Player extends Entity {
 				currentAction = null;
 			}
 		}
+		super.process();
 	}
 
 	public void resetInactivityTime() {

@@ -302,6 +302,7 @@ public abstract class Entity extends Node {
 				onAnimCompleted();
 			}
 		}
+		movement.process();
 	}
 	
 	private void onAnimCompleted () {
@@ -313,6 +314,10 @@ public abstract class Entity extends Node {
 				event.run();
 			} catch (RuntimeException ex) {
 				logger.error("Error processing anim completion event for entity "+getName()+": ", ex);
+			}
+			//If the completion event set another animation, process that.
+			if (animTimeRemaining > 0) {
+				animTimeRemaining -= 30;
 			}
 		}
 	}

@@ -212,8 +212,8 @@ public class DialogManager {
 			modelType = ModelType.NPC_HEAD;
 		case PLAYER_L:
 			player.getDispatcher().sendWidgetText(1191, 2, name);
-			player.getDispatcher().sendWidgetModel(modelType, 1191, 13, entityID);
-			player.getDispatcher().sendWidgetModel(ModelType.ANIMATION, 1191, 13, emote.getAnimID());
+			player.getDispatcher().sendWidgetModel(modelType, 1191, 10, entityID);
+			player.getDispatcher().sendWidgetModel(ModelType.ANIMATION, 1191, 10, emote.getAnimID());
 			player.getDispatcher().sendHideWidget(1191, 7, false);
 			player.getDispatcher().sendWidgetText(1191, 6, message);
 			player.getWidgets().openOverlaySub(WidgetManager.DIALOG_OVERLAY_SUB, 1191, false);//Send chat dialog
@@ -222,7 +222,7 @@ public class DialogManager {
 			name = NpcTypeList.list(entityID).name;
 			modelType = ModelType.NPC_HEAD;
 		case PLAYER_R://1184
-			player.getDispatcher().sendWidgetText(1184, 10, name);
+			player.getDispatcher().sendWidgetText(1184, 11, name);
 			player.getDispatcher().sendWidgetModel(modelType, 1184, 2, entityID);
 			player.getDispatcher().sendWidgetModel(ModelType.ANIMATION, 1184, 2, emote.getAnimID());
 			player.getDispatcher().sendHideWidget(1184, 11, false);
