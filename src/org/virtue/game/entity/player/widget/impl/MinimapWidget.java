@@ -52,7 +52,7 @@ public class MinimapWidget extends Widget {
 			return true;
 		case 22://Money pouch
 			return handleMoneyPouch(player, option);
-		case 40://Toggle run
+		case 45://Toggle run
 			if (OptionButton.ONE.equals(option)) {
 				int currentStatus = player.getVars().getVarValueInt(VarKey.Player.RUN_STATUS);
 				if (currentStatus == 1) {
@@ -69,7 +69,7 @@ public class MinimapWidget extends Widget {
 				return true;
 			}
 			break;
-		case 38://World map
+		case 43://World map
 			player.getVars().setVarValueInt(3926, 0);
 			player.getVars().setVarValueInt(3928, -1);
 			player.getVars().setVarValueInt(3929, -1);
@@ -101,11 +101,9 @@ public class MinimapWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1422, 49, true);
 			player.getDispatcher().sendVarc(4197, -1);
 			player.getVars().setVarp(674, player.getCurrentTile().getTileHash());*/
-			break;
-		case 51://Open lodestone interface
-			player.getDispatcher().sendVarc(199, -1);
-			player.getDispatcher().sendVarc(3678, -1);
-			player.getWidgets().openWidget(1477, 426, 1092, false);
+			return true;
+		case 56://Open lodestone interface
+			player.getWidgets().openCentralWidget(1092, false);
 			return true;
 		case 37:
 			player.getVars().setVarValueInt(3708, 137110532);

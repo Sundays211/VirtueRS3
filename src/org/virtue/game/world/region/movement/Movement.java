@@ -143,7 +143,7 @@ public class Movement {
 	 * @return true if the movement was successful, false otherwise
 	 */
 	public synchronized boolean moveTo (int destX, int destY) {
-		if (entity.isPaused()) {
+		if (!entity.canMove()) {
 			return false;
 		}
 		entity.stopAll();
@@ -170,7 +170,7 @@ public class Movement {
 	 * @return True if the step was successfully queued for the entity, false if they were blocked.
 	 */
 	public synchronized boolean move (Direction direction) {
-		if (entity.isPaused()) {
+		if (!entity.canMove()) {
 			return false;
 		}
 		entity.stopAll();
@@ -190,7 +190,7 @@ public class Movement {
 	 * @return true if the movement was successful, false otherwise
 	 */
 	public synchronized boolean moveTo (Entity target) {
-		if (entity.isPaused()) {
+		if (!entity.canMove()) {
 			return false;
 		}
 		entity.stopAll();
@@ -198,13 +198,12 @@ public class Movement {
 			destination = entity.getCurrentTile();
 			return true;//Already on an adjacent tile
 		}
-		Path path = AbstractPathfinder.find(entity, target, false, pathFinder);//.find(entity, destX, destY);
+		Path path = AbstractPathfinder.find(entity, target, false, pathFinder);
 		if (path == null) {
 			return false;
 		}
 		addWalkSteps(path.getPoints());
 		destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
-		//entity.queueUpdateBlock(new FaceEntityBlock(null));
 		return true;
 	}
 	
@@ -214,7 +213,7 @@ public class Movement {
 	 * @return true if the movement was successful, false otherwise
 	 */
 	public synchronized boolean moveTo (SceneLocation location, int x, int y) {
-		if (entity.isPaused()) {
+		if (!entity.canMove()) {
 			return false;
 		}
 		entity.stopAll();

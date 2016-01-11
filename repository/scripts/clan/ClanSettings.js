@@ -37,11 +37,11 @@ var ClanSettingsOpenListener = Java.extend(Java.type('org.virtue.engine.script.l
 		api.hideWidget(player, 1096, 208, false);
 		api.setWidgetEvents(player, 1096, 281, 0, 126, 2);
 		api.setWidgetEvents(player, 1096, 267, 0, 225, 2);
-		api.setWidgetEvents(player, 1096, 372, 0, 127, 2);
+		api.setWidgetEvents(player, 1096, 371, 0, 127, 2);
 		api.setWidgetEvents(player, 1096, 246, 0, 144, 2);
-		api.setWidgetEvents(player, 1096, 296, 1, 201, 2);
-		api.setWidgetEvents(player, 1096, 213, 0, 3, 2);
-		api.setWidgetEvents(player, 1096, 228, 0, 4, 2);
+		api.setWidgetEvents(player, 1096, 295, 1, 201, 2);
+		api.setWidgetEvents(player, 1096, 212, 0, 3, 2);
+		api.setWidgetEvents(player, 1096, 227, 0, 4, 2);
 	}
 });
 

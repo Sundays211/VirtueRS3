@@ -818,6 +818,8 @@ public interface ScriptAPI {
 	 */
 	public void stopAnimation (Entity entity);
 	
+	public boolean isRunningAnim(Entity entity);
+	
 	/**
 	 * Forces the specified message to appear above the head of the player
 	 * @param player The player on which to display the given message

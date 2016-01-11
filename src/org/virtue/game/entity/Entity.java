@@ -109,6 +109,8 @@ public abstract class Entity extends Node {
 	 */
 	protected int freezeDuration;
 	
+	private SeqType currentAnim = null;
+	
 	/**
 	 * The number of server cycles remaining on the current animation
 	 */
@@ -269,6 +271,7 @@ public abstract class Entity extends Node {
 	public void stopAll () {
 		movement.stop();
 		combatSchedule.terminate();
+		clearAnimation();
 	}
 	
 	/**
@@ -302,7 +305,9 @@ public abstract class Entity extends Node {
 				onAnimCompleted();
 			}
 		}
-		movement.process();
+		if (!isPaused()) {
+			movement.process();
+		}
 	}
 	
 	private void onAnimCompleted () {
@@ -461,9 +466,24 @@ public abstract class Entity extends Node {
 		this.freezeDuration = freezeDuration;
 	}
 	
+	/**
+	 * Checks whether this entity is currently able to move.
+	 * @return True if the entity can move, false otherwise
+	 */
+	public boolean canMove () {
+		if (freezeDuration > 0) {
+			return false;
+		}
+		if (currentAnim != null) {
+			return currentAnim.walkingMode == 1;//If walk mode is 1, the entity can move, stopping the animation.
+		}
+		return true;
+	}
+	
 	public void clearAnimation () {
 		this.animTimeRemaining = 0;
 		this.animCompleteEvent = null;
+		this.currentAnim = null;
 		this.queueUpdateBlock(new AnimationBlock(-1));
 	}
 	
@@ -475,14 +495,18 @@ public abstract class Entity extends Node {
 		if (animTimeRemaining > 0) {
 			return false;
 		}
-		SeqType seqType = SeqTypeList.list(animId);
-		if (seqType == null) {
+		currentAnim = SeqTypeList.list(animId);
+		if (currentAnim == null) {
 			throw new IllegalArgumentException("Invalid animation: "+animId);
 		}
-		this.animTimeRemaining = seqType.time + 30;//Add one extra tick as this will be processed once before sent to the client
+		this.animTimeRemaining = currentAnim.time + 30;//Add one extra tick as this will be processed once before sent to the client
 		this.animCompleteEvent = completeEvent;
 		this.queueUpdateBlock(new AnimationBlock(animId));
 		return true;
+	}
+	
+	public int getAnimationId () {
+		return this.currentAnim == null ? -1 : this.currentAnim.id;
 	}
 
 	/* (non-Javadoc)

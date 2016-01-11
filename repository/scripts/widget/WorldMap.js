@@ -71,7 +71,7 @@ var WorldMapOpenAction = Java.extend(Java.type('org.virtue.game.entity.player.ev
 		return false;
 	},
 	stop : function (player) {
-		api.runAnimation(player, 22749);
+		api.stopAnimation(player);
 	}
 	
 });

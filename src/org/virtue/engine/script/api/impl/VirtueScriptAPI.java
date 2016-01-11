@@ -1471,6 +1471,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 		entity.clearAnimation();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#isRunningAnimation(org.virtue.game.entity.Entity)
+	 */
+	@Override
+	public boolean isRunningAnim(Entity entity) {
+		return entity.getAnimationId() != -1;
+	}
+
 	@Override
 	public void playerForceSay(Entity player, String message, boolean appearInChat) {
 		int flags = 0;

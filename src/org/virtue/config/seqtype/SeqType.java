@@ -218,8 +218,11 @@ public class SeqType implements ConfigItem {
 		}
 		if (delays != null) {
 			time = 0;
+			for (int i_21_ = 0; i_21_ < delays.length; i_21_++) {
+				time += delays[i_21_];
+			}
 
-			if (loop == -1) {
+			/*if (loop == -1) {
 				for (int i_21_ = 0; i_21_ < delays.length; i_21_++) {
 					time += delays[i_21_];
 				}
@@ -228,7 +231,7 @@ public class SeqType implements ConfigItem {
 					time += delays[i];
 				}
 				time *= cycles;
-			}
+			}*/
 		}
 	}
     
