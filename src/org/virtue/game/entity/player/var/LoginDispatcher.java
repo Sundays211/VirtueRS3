@@ -1386,7 +1386,7 @@ public class LoginDispatcher {
 		player.getVars().setVarValueInt(3705, 268500992);
 		player.getVars().setVarValueInt(3708, 139248136);
 		player.getVars().setVarValueInt(3709, 16);
-		player.getVars().setVarValueInt(3814, 62);
+		//player.getVars().setVarValueInt(3814, 62);
 		player.getVars().setVarValueInt(3820, 8192);
 		player.getVars().setVarValueInt(3829, 2147328);
 		player.getVars().setVarValueInt(3831, 31);
@@ -2060,7 +2060,7 @@ public class LoginDispatcher {
 		player.getVars().setVarValueInt(3708, 180407304);
 		player.getVars().setVarValueInt(3709, 327952);
 		player.getVars().setVarValueInt(3711, 11264);
-		player.getVars().setVarValueInt(3814,58);
+		//player.getVars().setVarValueInt(3814,58);
 		player.getVars().setVarValueInt(3829, 2147328);
 		player.getVars().setVarValueInt(3843, 536936448);
 		player.getVars().setVarValueInt(3857,-1);

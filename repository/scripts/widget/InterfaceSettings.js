@@ -33,7 +33,6 @@ var InterfaceSettingsListener = Java.extend(Java.type('org.virtue.engine.script.
 	invoke : function (event, interfaceID, args) {
 		var player = args.player;
 		if (event == EventType.IF_OPEN) {
-			api.setWidgetEvents(player, 1442, 132, 0, api.getEnumSize(9616), 2);
 			api.setWidgetEvents(player, 1442, 133, 0, api.getEnumSize(9616), 2);
 			return;
 		}
@@ -88,14 +87,31 @@ var InterfaceSettingsListener = Java.extend(Java.type('org.virtue.engine.script.
 			api.setVarBit(player, 24940, enabled ? 0 : 1);
 			return;
 		case 116://Ability cooldown timer
+			var enabled = api.getVarBit(player, 25401) == 1;
+			api.setVarBit(player, 25401, enabled ? 0 : 1);
+			return;
 		case 129://Skill target based xp pop-ups
-		case 133://Utc clock settings
+			var enabled = api.getVarBit(player, 26632) == 1;
+			api.setVarBit(player, 26632, enabled ? 0 : 1);
+			return;
 		case 139://Reset timers on game clock
-		case 150://Open edit mode
+			var enabled = api.getVarBit(player, 27160) == 1;
+			api.setVarBit(player, 27160, enabled ? 0 : 1);
+			return;
 		case 163://Favourites clock alarm
+			var enabled = api.getVarBit(player, 27171) == 1;
+			api.setVarBit(player, 27171, enabled ? 0 : 1);
+			return;
 		case 168://Timestamps in chatbox
+			var enabled = api.getVarBit(player, 27452) == 1;
+			api.setVarBit(player, 27452, enabled ? 0 : 1);
+			return;
 		case 177://Slayer counter
-			
+			var enabled = api.getVarBit(player, 28385) == 1;
+			api.setVarBit(player, 28385, enabled ? 0 : 1);
+			return;
+		case 150://Open edit mode
+		case 133://Utc clock settings
 		default:
 			api.sendMessage(player, "Unhandled Interface Settings button: comp="+args.component+", button="+args.button+", slot="+args.slot);
 			return;
