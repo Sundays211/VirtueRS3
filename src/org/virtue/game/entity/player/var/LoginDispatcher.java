@@ -23,8 +23,8 @@ package org.virtue.game.entity.player.var;
 
 import java.util.Map;
 
-import org.virtue.Constants;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.world.NewsItem;
 import org.virtue.network.event.buffer.OutboundBuffer;
 
@@ -1638,7 +1638,7 @@ public class LoginDispatcher {
 		player.getDispatcher().sendCS2Script2(10931, new Object[]{11,11484,1,-1,"Christmas Quest Pt 2 | Master Quest Cape | More Defenders","Week 2 of The Pinch who Stole Christmas, plus treats for questers and dual-wielders.","christmas-quest-pt-2--master-quest-cape--more-defenders","07-Dec-2015",0,});
 		player.getDispatcher().sendCS2Script2(10936, new Object[]{});*/
 		int id = 0;
-		for (NewsItem news : Constants.news) {
+		for (NewsItem news : NewsDataParser.news) {
 			player.getDispatcher().sendCS2Script2(
 					10931,
 					id, 10630, news.getCategory().getCode()

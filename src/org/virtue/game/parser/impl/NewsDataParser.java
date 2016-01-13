@@ -25,11 +25,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.Constants;
 import org.virtue.game.world.NewsItem;
 import org.virtue.game.world.NewsItem.Category;
 
@@ -53,13 +54,15 @@ public class NewsDataParser {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(NewsDataParser.class);
 	
+	public static final List<NewsItem> news = new ArrayList<NewsItem>();
+	
 	private static File PATH = new File("repository/news.json");
 	
 	public static void loadJsonNewsData () {
 		try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {
 			JsonParser parser = new JsonParser();
 			JsonArray array = parser.parse(reader).getAsJsonArray();
-			Constants.news.clear();
+			news.clear();
 			for (JsonElement element : array) {
 				JsonObject obj = element.getAsJsonObject();
 				
@@ -80,10 +83,10 @@ public class NewsDataParser {
 				}
 
 				//Format: title, message, category, date, isPinned
-				NewsItem news = new NewsItem(title, newsText, category, date, pinned);
-				Constants.news.add(news);
+				NewsItem item = new NewsItem(title, newsText, category, date, pinned);
+				news.add(item);
 			}
-			Collections.reverse(Constants.news);
+			Collections.reverse(news);
 		} catch (IOException ex) {
 			logger.error("Error loading News data", ex);
 			return;

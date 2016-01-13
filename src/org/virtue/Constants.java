@@ -23,10 +23,7 @@ package org.virtue;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.virtue.game.world.NewsItem;
 import org.virtue.game.world.region.Tile;
 
 
@@ -39,33 +36,33 @@ public class Constants {
 	/**
 	 * The Framework Name
 	 */
-	public static String FRAME_NAME = new String("Virtue");
+	public static final String FRAME_NAME = "Virtue";
 	
 	/**
 	 * The Framework Version
 	 */
-	public static double FRAME_VERSION = new Double(1.0);
+	public static final double FRAME_VERSION = 1.0;
 	
 	/**
 	 * The Framework Major Revision
 	 */
-	public static int FRAME_MAJOR = new Integer(835);
+	public static final int FRAME_MAJOR = 835;
 	
 	/**
 	 * The Framework Minor Revision
 	 */
-	public static int FRAME_MINOR = new Integer(1);
+	public static final int FRAME_MINOR = 1;
 	
 	/**
 	 * The interval between maintenance thread cycles, in minutes
 	 * The maintenance thread is responsible for auto-saving player data and the account index, and for performing cleanup operations
 	 */
-	public static int MAINTANANCE_INTERVAL = 1;
+	public static final int MAINTANANCE_INTERVAL = 1;
 	
 	/**
 	 * Represents the initial server day. This is a day determined by Jagex, a few months prior to the release of RS2.
 	 */
-	public static int SERVER_DAY_INITIAL = 11745;
+	public static final int SERVER_DAY_INITIAL = 11745;
 	
 	/**
 	 * The number of ticks before a ground item is destroyed, after being dropped
@@ -77,28 +74,11 @@ public class Constants {
 	 * NB: 100 ticks = 1 minute
 	 */
 	public static final int KICKOUT_TIME = 500;
-	
-	public static List<NewsItem> news = new ArrayList<NewsItem>();
 
 	/*
 	 * Server Name
 	 */
-	public static final String ServerName = "Virtue";
-	
-	/**
-	 * 1 - Game Updates Category
-	 * 2 - Website Category
-	 * 5 - Community Category
-	 * 6 - Behind the scenes Category
-	 * 13 - Solomons Store Category
-	 * 14 - Treasure Hunter Category
-	 */
-	public static final int Game_Update = 1;
-	public static final int Website = 2;
-	public static final int Community = 5;
-	public static final int Behind_the_Scenes = 6;
-	public static final int Solomons_Store = 13;
-	public static final int Treasure_Hunter = 14;
+	public static final String SERVER_NAME = "Virtue";
 	
 	/**
 	 * The rate to multiply all xp gains by, where 1 is the normal RuneScape rate
@@ -123,22 +103,22 @@ public class Constants {
 	/**
 	 * The Cache Repository
 	 */
-	public static String CACHE_REPOSITORY = new String(System.getProperty("user.home") + "/Desktop/861/");
+	public static final String CACHE_REPOSITORY = System.getProperty("user.home") + "/Desktop/861/";
 	
 	/**
 	 * The packed npc extra data, which includes descriptions and animations
 	 */
-	public static File NPC_DATA = new File("./repository/npc_data_861.dat");
+	public static final File NPC_DATA = new File("./repository/npc_data_861.dat");
 	
 	/**
 	 * The packed item extra data, which includes descriptions and weights
 	 */
-	public static File ITEM_DATA = new File("./repository/item_data_861.dat");
+	public static final File ITEM_DATA = new File("./repository/item_data_861.dat");
 	
 	/**
 	 * The OnDemand Delta Keys
 	 */
-	public static int[] ONDEMAND_DELTA = { 2617, 69795, 41651, 35866, 358716,
+	public static final int[] ONDEMAND_DELTA = { 2617, 69795, 41651, 35866, 358716,
 			44375, 18189, 29557, 151882, 1033023, 379571, 513743, 724913,
 			1038833, 31503, 720956, 18773, 1244, 49640, 2060, 119, 1253096,
 			3798365, 8991, 22279 };
@@ -150,7 +130,7 @@ public class Constants {
 	/**
 	 * The OnDemand Session Token
 	 */
-	private static String ONDEMAND_TOKEN = new String("IrP8BiXPvifVBgIcvrxpbv0QXvt7duk+");
+	private static final String ONDEMAND_TOKEN = "IrP8BiXPvifVBgIcvrxpbv0QXvt7duk+";
 		
 	
 	public static String getJs5Token () {
@@ -160,14 +140,14 @@ public class Constants {
 	/**
 	 * The Login Session Token
 	 */
-	private static String LOGIN_TOKEN = new String("wwGlrZHF5gKN6D3mDdihco3oPeYN2KFybL9hUUFqOvk");
+	private static final String LOGIN_TOKEN = "wwGlrZHF5gKN6D3mDdihco3oPeYN2KFybL9hUUFqOvk";
 	
 	public static String getLoginToken () {
 		return Virtue.getInstance().getProperty("login.token", LOGIN_TOKEN);
 	}
 	
 	
-	public static int SERVER_PORT = 43594;
+	public static final int SERVER_PORT = 43594;
 
 	/**
 	 * The OnDemand Modulus RSA Key
