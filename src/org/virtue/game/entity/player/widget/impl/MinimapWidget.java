@@ -45,7 +45,6 @@ public class MinimapWidget extends Widget {
 	public boolean click(int widgetId, int buttonId, int slotId, int itemId, Player player, OptionButton option) {
 		switch (buttonId) {
 		case 9://Logout
-			player.setWidgetState(WidgetState.LOGOUT_WIDGET);
 			player.getVars().setVarValueInt(3813, 6);
 			player.getWidgets().openWidget(1477, 787, 26, true);
 			player.getDispatcher().sendWidgetSettings(26, 22, -1, -1, 2);

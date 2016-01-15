@@ -77,7 +77,6 @@ public class ActionBarWidget extends Widget {
 			player.getCombatSchedule().getActionBar().switchLocked();
 			break;
 		case 250:
-			player.setWidgetState(WidgetState.POWERS_OVERLAY);
 			player.getVars().setVarValueInt(1757, 0);
 			player.getVars().setVarValueInt(1762, -1);
 			player.getVars().setVarValueInt(3708, 46973955);

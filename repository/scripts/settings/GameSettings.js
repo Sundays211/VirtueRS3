@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var WidgetState = Java.type('org.virtue.game.entity.player.widget.WidgetState');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -66,7 +65,6 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			api.setVarBit(player, 21242, enabled ? 0 : 1);
 			return true;
 		case 37:
-			player.setWidgetState(WidgetState.SWITCH_WIDGET);
 			api.setVarp(player, 3813, 9);
 			api.openWidget(player, 1477, 787, 26, true);
 			api.setWidgetEvents(player, 26, 22, -1, -1, 2);

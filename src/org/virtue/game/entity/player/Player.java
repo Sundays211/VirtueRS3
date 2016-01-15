@@ -21,6 +21,8 @@
  */
 package org.virtue.game.entity.player;
 
+import io.netty.channel.Channel;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -63,7 +65,6 @@ import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.var.VarRepository;
 import org.virtue.game.entity.player.widget.WidgetManager;
-import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.GroundItem;
@@ -82,8 +83,6 @@ import org.virtue.network.protocol.update.ref.Viewport;
 import org.virtue.utility.ISAACCipher;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
-
-import io.netty.channel.Channel;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -170,11 +169,6 @@ public class Player extends Entity {
 	 * Game event sender for the player
 	 */
 	private GameEventDispatcher sendOpcode;
-
-	/**
-	 * The playesr widget state
-	 */
-	private WidgetState widgetState;
 
 	/**
 	 * Represents the players amount of treasure hunter keys
@@ -767,20 +761,6 @@ public class Player extends Entity {
 	 */
 	public GameEventDispatcher getDispatcher() {
 		return sendOpcode;
-	}
-
-	/**
-	 * Returns the players widget state
-	 */
-	public WidgetState getWidgetState() {
-		return widgetState;
-	}
-
-	/**
-	 * Sets the players widget state with the specified state
-	 */
-	public void setWidgetState(WidgetState state) {
-		this.widgetState = state;
 	}
 
 	/**

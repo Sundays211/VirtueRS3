@@ -54,7 +54,6 @@ public class OverlayWidget extends Widget {
 			player.switchSheathing();
 			break;
 		case 68://Logout
-			player.setWidgetState(WidgetState.LOGOUT_WIDGET);
 			player.getVars().setVarValueInt(3813, 6);
 			player.getWidgets().openWidget(1477, 787, 26, true);
 			player.getDispatcher().sendWidgetSettings(26, 22, -1, -1, 2);
@@ -62,8 +61,8 @@ public class OverlayWidget extends Widget {
 		case 412:
 			switch (slotId) {
 			case 3:// First Tab
-				switch (player.getWidgetState()) {
-				case SETTINGS_OVERLAY:
+				switch (player.getVars().getVarBitValue(VarKey.Bit.SELECTED_OVERLAY)) {
+				case 8:
 					player.getVars().setVarValueInt(3709, 16);
 					player.getVars().setVarValueInt(97, 0);
 					player.getVars().setVarValueInt(98, -1);
@@ -93,7 +92,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case HERO_OVERLAY:
+				case 0:
 					player.getVars().setVarValueInt(3708, 38584832);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -114,7 +113,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case GEAR_OVERLAY:
+				case 1:
 					player.getVars().setVarValueInt(3708, 38544385);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -139,7 +138,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case ADVENTURES_OVERLAY:
+				case 3:
 					player.getVars().setVarValueInt(3708, 36488195);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -160,9 +159,9 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case POWERS_OVERLAY:
+				case 2:
 					break;
-				case COMMUNITY_OVERLAY:
+				case 4:
 					player.getVars().setVarValueInt(3708, 46973954);
 					player.getVars().setVarValueInt(3708, 46973956);
 					player.getVars().setVarValueInt(4041, 0);
@@ -233,8 +232,8 @@ public class OverlayWidget extends Widget {
 				}
 				break;
 			case 7:// Second Tab
-				switch (player.getWidgetState()) {
-				case SETTINGS_OVERLAY:
+				switch (player.getVars().getVarBitValue(VarKey.Bit.SELECTED_OVERLAY)) {
+				case 8:
 					player.getVars().setVarValueInt(3709, 32);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -254,7 +253,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case HERO_OVERLAY:
+				case 0://HERO_OVERLAY
 					player.getVars().setVarValueInt(3708, 181158912);
 					player.getVars().setVarValueInt(4012, 0);
 					player.getVars().setVarValueInt(260, 0);
@@ -290,7 +289,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(8862, new Object[] { 2, 1 });
 					// player.getDispatcher().sendRunScript(8862, new Object[] { 3, 1 });
 					break;
-				case ADVENTURES_OVERLAY:
+				case 3://ADVENTURES_OVERLAY
 					player.getVars().setVarValueInt(101, 0);
 					player.getVars().setVarValueInt(3708, 38585347);
 					player.getVars().setVarValueInt(101, 1);
@@ -336,7 +335,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(4021, new Object[] { "Cook's Assistant" });
 					// player.getDispatcher().sendRunScript(4017, new Object[] { 12, 0 });
 					break;
-				case GEAR_OVERLAY://Wardrobe
+				case 1://Wardrobe
 					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 2);
 					//player.getVars().setVarp(3708, 80495617);
 					player.getVars().setVarValueInt(256, 2);
@@ -402,9 +401,9 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(6874);
 					player.getDispatcher().sendHideWidget(1311, 190, true);
 					break;
-				case POWERS_OVERLAY:
+				case 2:
 					break;
-				case COMMUNITY_OVERLAY:
+				case 4:
 					player.getVars().setVarValueInt(3708, 80528388);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -450,8 +449,8 @@ public class OverlayWidget extends Widget {
 				}
 				break;
 			case 11:// Third Tab
-				switch (player.getWidgetState()) {
-				case SETTINGS_OVERLAY:
+				switch (player.getVars().getVarBitValue(VarKey.Bit.SELECTED_OVERLAY)) {
+				case 8://SETTINGS_OVERLAY
 					player.getVars().setVarValueInt(3709, 48);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -469,7 +468,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case HERO_OVERLAY:
+				case 0://HERO_OVERLAY
 					player.getVars().setVarValueInt(3708, 38585856);
 					player.getVars().setVarValueInt(256, 5);
 					player.getVars().setVarValueInt(256, 4161541);
@@ -533,7 +532,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(6874);
 					player.getDispatcher().sendHideWidget(1311, 190, true);
 					break;
-				case GEAR_OVERLAY://Titles
+				case 1://Titles
 					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 3);
 					//player.getVars().setVarp(3708, 38560769);
 					player.getVars().setVarValueInt(256, 4194275);
@@ -608,7 +607,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(6874);
 					player.getDispatcher().sendHideWidget(1311, 190, true);
 					break;
-				case ADVENTURES_OVERLAY:
+				case 3://ADVENTURES_OVERLAY
 					player.getVars().setVarValueInt(3708, 40682499);
 					player.getVars().setVarValueInt(3232, 63);
 					player.getVars().setVarValueInt(3233, 1);
@@ -637,7 +636,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case POWERS_OVERLAY:
+				case 2://POWERS_OVERLAY
 					player.getVars().setVarValueInt(3708, 46580738);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -728,7 +727,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case COMMUNITY_OVERLAY:
+				case 4://COMMUNITY_OVERLAY
 					player.getVars().setVarValueInt(3708, 114050052);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -763,8 +762,8 @@ public class OverlayWidget extends Widget {
 				}
 				break;
 			case 15:// Fourth Tab
-				switch (player.getWidgetState()) {
-				case SETTINGS_OVERLAY:
+				switch (player.getVars().getVarBitValue(VarKey.Bit.SELECTED_OVERLAY)) {
+				case 8:
 					player.getVars().setVarValueInt(3709, 64);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -782,7 +781,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case HERO_OVERLAY:
+				case 0:
 					player.getVars().setVarValueInt(3708, 38586368);
 					player.getVars().setVarValueInt(1270, 524168);
 					player.getVars().setVarValueInt(4012, 0);
@@ -824,7 +823,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(8862, new Object[] { 2, 1 });
 					// player.getDispatcher().sendRunScript(8862, new Object[] { 3, 1 });
 					break;
-				case GEAR_OVERLAY://Animations
+				case 1://Animations
 					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 4);
 					//player.getVars().setVarp(3708, 38568961);
 					player.getVars().setVarValueInt(256, 4194276);
@@ -900,7 +899,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(6874);
 					player.getDispatcher().sendHideWidget(1311, 190, true);
 					break;
-				case ADVENTURES_OVERLAY:
+				case 3:
 					//player.getWidgets().openWidget(1477, 315, 1215, true);
 					//player.getDispatcher().sendHideWidget(1477, 315, false);
 					//player.getDispatcher().sendHideWidget(745, 2, true);
@@ -924,9 +923,9 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case POWERS_OVERLAY:
+				case 2:
 					break;
-				case COMMUNITY_OVERLAY:
+				case 4:
 					player.getVars().setVarValueInt(3708, 147604484);
 					player.getVars().setVarValueInt(4719, -1);
 					player.getVars().setVarValueInt(4722, -1);
@@ -1018,8 +1017,8 @@ public class OverlayWidget extends Widget {
 				}
 				break;
 			case 19:// Fifth Tab
-				switch (player.getWidgetState()) {
-				case SETTINGS_OVERLAY:
+				switch (player.getVars().getVarBitValue(VarKey.Bit.SELECTED_OVERLAY)) {
+				case 8:
 					player.getVars().setVarValueInt(3709, 80);
 					player.getVars().setVarValueInt(83, 0);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
@@ -1045,7 +1044,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case GEAR_OVERLAY://Appearance
+				case 1://Appearance
 					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_GEAR_OVERLAY, 5);
 					//player.getVars().setVarp(3708, 38577153);
 					player.getVars().setVarBitValue(VarKey.Bit.SELECTED_CUSTOMISE_TYPE, 1);
@@ -1093,7 +1092,7 @@ public class OverlayWidget extends Widget {
 					player.getVars().setVarValueInt(779, 1426);
 					player.getDispatcher().sendVarc(2699, -1);
 					break;
-				case ADVENTURES_OVERLAY:
+				case 3:
 					player.getVars().setVarValueInt(3708, 44876803);
 					player.getVars().setVarValueInt(4448, 4);
 					player.getVars().setVarValueInt(4449, 7);
@@ -1121,7 +1120,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case POWERS_OVERLAY:
+				case 2:
 					player.getVars().setVarValueInt(3708, 46842882);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -1212,7 +1211,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case COMMUNITY_OVERLAY:
+				case 4:
 					player.getVars().setVarValueInt(3708, 181158916);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -1235,8 +1234,8 @@ public class OverlayWidget extends Widget {
 				}
 				break;
 			case 23:// Sixth Tab
-				switch (player.getWidgetState()) {
-				case GEAR_OVERLAY:
+				switch (player.getVars().getVarBitValue(VarKey.Bit.SELECTED_OVERLAY)) {
+				case 1:
 					player.getVars().setVarValueInt(3708, 38585345);
 					player.getVars().setVarValueInt(4338, 511705616);
 					player.getVars().setVarValueInt(4012, 0);
@@ -1448,7 +1447,7 @@ public class OverlayWidget extends Widget {
 					// player.getDispatcher().sendRunScript(8862, new Object[] { 2, 1 });
 					// player.getDispatcher().sendRunScript(8862, new Object[] { 3, 1 });
 					break;
-				case ADVENTURES_OVERLAY:
+				case 3:
 					player.getVars().setVarValueInt(3708, 46973955);
 					player.getVars().setVarValueInt(4517, 0);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
@@ -1475,7 +1474,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case POWERS_OVERLAY:
+				case 2:
 					player.getVars().setVarValueInt(3708, 46973954);
 					player.getDispatcher().sendHideWidget(1448, 3, false);
 					player.getWidgets().closeWidget(1448, 3);
@@ -1560,7 +1559,7 @@ public class OverlayWidget extends Widget {
 					player.getDispatcher().sendHideWidget(1448, 12, true);
 					player.getDispatcher().sendHideWidget(1448, 1, true);
 					break;
-				case COMMUNITY_OVERLAY:
+				case 4:
 					break;
 				default:
 					break;

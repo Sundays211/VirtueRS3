@@ -329,10 +329,10 @@ public class WidgetManager {
 	}
 	
 	public void sendOverlay (int type, int subtype) {
-		player.getDispatcher().sendHideWidget(1477, 413, false);
-		player.getDispatcher().sendWidgetSettings(1477, 412, 0, 24, 2);
-		player.getDispatcher().sendWidgetSettings(1477, 415, 1, 1, 2);
-		player.getDispatcher().sendWidgetSettings(1477, 414, 1, 1, 2);
+		player.getDispatcher().sendHideWidget(1477, 479, false);
+		player.getDispatcher().sendWidgetSettings(1477, 478, 0, 24, 2);
+		player.getDispatcher().sendWidgetSettings(1477, 481, 1, 1, 2);
+		player.getDispatcher().sendWidgetSettings(1477, 480, 1, 1, 2);
 		player.getDispatcher().sendVarc(2911, type);		
 	}
 

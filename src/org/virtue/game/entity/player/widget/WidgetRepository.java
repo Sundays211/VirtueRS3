@@ -38,7 +38,6 @@ import org.virtue.game.entity.player.widget.impl.MinimapWidget;
 import org.virtue.game.entity.player.widget.impl.OptionsMenuWidget;
 import org.virtue.game.entity.player.widget.impl.OverlayWidget;
 import org.virtue.game.entity.player.widget.impl.QuestsListWidget;
-import org.virtue.game.entity.player.widget.impl.RibbonWidget;
 import org.virtue.game.entity.player.widget.impl.TreasureHunterWidget;
 import org.virtue.game.entity.player.widget.impl.WornEquipmentWidget;
 import org.virtue.game.world.region.SceneLocation;
@@ -307,7 +306,6 @@ public final class WidgetRepository {
 		registerWidget(MinimapWidget.class);
 		registerWidget(OptionsMenuWidget.class);
 		registerWidget(OverlayWidget.class);
-		registerWidget(RibbonWidget.class);
 		registerWidget(TreasureHunterWidget.class);
 		registerWidget(BankWidget.class);
 		registerWidget(BackpackWidget.class);

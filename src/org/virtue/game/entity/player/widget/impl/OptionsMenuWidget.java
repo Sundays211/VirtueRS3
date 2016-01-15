@@ -22,6 +22,7 @@
 package org.virtue.game.entity.player.widget.impl;
 
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -53,7 +54,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendWidgetSettings(1475, 68, 2, 7, 2);
 			return true;
 		case 43:// Game Settings
-			player.setWidgetState(WidgetState.SETTINGS_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 8);
 			player.getVars().setVarValueInt(3709, 16);
 			player.getVars().setVarValueInt(3708, 38585352);
 			player.getVars().setVarValueInt(97, 0);
@@ -89,7 +90,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1448, 1, true);
 			break;
 		case 83:// Interface Settings
-			player.setWidgetState(WidgetState.SETTINGS_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 8);
 			player.getVars().setVarValueInt(3709, 32);
 			player.getVars().setVarValueInt(3708, 38585352);
 			player.getWidgets().sendOverlay(8, -1);
@@ -115,7 +116,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1448, 1, true);
 			break;
 		case 91:// Controls
-			player.setWidgetState(WidgetState.SETTINGS_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 8);
 			player.getVars().setVarValueInt(3709, 48);
 			player.getVars().setVarValueInt(3708, 38585352);
 			player.getWidgets().sendOverlay(8, -1);
@@ -139,7 +140,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1448, 1, true);
 			break;
 		case 51:// Graphics
-			player.setWidgetState(WidgetState.SETTINGS_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 8);
 			player.getVars().setVarValueInt(3709, 64);
 			player.getVars().setVarValueInt(3708, 38585352);
 			player.getWidgets().sendOverlay(8, -1);
@@ -164,7 +165,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1448, 1, true);
 			break;
 		case 59:// Audio
-			player.setWidgetState(WidgetState.SETTINGS_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 8);
 			player.getVars().setVarValueInt(3709, 80);
 			player.getVars().setVarValueInt(3708, 38585352);
 			player.getVars().setVarValueInt(83, 0);
@@ -196,7 +197,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1448, 1, true);
 			break;
 		case 25:// Hero
-			player.setWidgetState(WidgetState.HERO_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 0);
 			player.getVars().setVarValueInt(3708, 38585352);
 			player.getVars().setVarValueInt(3708, 38585344);
 			player.getVars().setVarValueInt(1228, 1551892544);
@@ -225,7 +226,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendWidgetSettings(1218, 57, 0, 0, 2);
 			break;
 		case 136:// Gear
-			player.setWidgetState(WidgetState.GEAR_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 1);
 			player.getVars().setVarValueInt(3708, 38544385);
 			player.getVars().setVarValueInt(3708, 38544385);
 			player.getWidgets().sendOverlay(1, -1);
@@ -257,7 +258,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1448, 1, true);
 			break;
 		case 137:// Adventures
-			player.setWidgetState(WidgetState.ADVENTURES_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 3);
 			player.getVars().setVarValueInt(101, 0);
 			player.getVars().setVarValueInt(101, 1);
 			player.getVars().setVarValueInt(101, 2);
@@ -302,7 +303,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendCS2Script(4017, new Object[] { 12, 0 });
 			break;
 		case 138:// Powers
-			player.setWidgetState(WidgetState.POWERS_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 2);
 			player.getVars().setVarValueInt(1757, 0);
 			player.getVars().setVarValueInt(1762, -1);
 			player.getVars().setVarValueInt(3708, 46973955);
@@ -395,7 +396,7 @@ public class OptionsMenuWidget extends Widget {
 			player.getDispatcher().sendHideWidget(1448, 1, true);
 			break;
 		case 139:// Community
-			player.setWidgetState(WidgetState.COMMUNITY_OVERLAY);
+			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 4);
 			player.getVars().setVarValueInt(3708, 46973954);
 			player.getVars().setVarValueInt(3708, 46973956);
 			player.getVars().setVarValueInt(4041, 0);

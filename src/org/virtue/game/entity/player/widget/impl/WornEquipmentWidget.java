@@ -64,7 +64,6 @@ public class WornEquipmentWidget extends Widget {
 		case 13:
 			switch (slot) {
 			case 12:
-				player.setWidgetState(WidgetState.GEAR_OVERLAY);
 				player.getVars().setVarValueInt(3708, 38544385);
 				player.getVars().setVarValueInt(3708, 38544385);
 				player.getWidgets().sendOverlay(1, -1);
