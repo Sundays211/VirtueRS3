@@ -166,7 +166,7 @@ var Overlay = {
 			} else {
 				api.hideWidget(player, 1448, 3, false);
 				api.openWidget(player, 1448, 3, ifaceId, true);
-			}			
+			}
 			api.hideWidget(player, 1448, 4, true);
 			
 			ifaceId = api.getStructParam(tabStruct, 3461);

@@ -111,6 +111,12 @@ var InterfaceSettingsListener = Java.extend(Java.type('org.virtue.engine.script.
 			api.setVarBit(player, 28385, enabled ? 0 : 1);
 			return;
 		case 150://Open edit mode
+			api.setVarc(player, 2911, -1);
+			//api.runClientScript(player, 187, [5, 1]);
+			api.setVarp(player, 659, 65537790);
+			api.openWidget(player, 1477, 506, 1475, false);
+			api.setWidgetEvents(player, 1475, 68, 2, 7, 2);
+			return;
 		case 133://Utc clock settings
 		default:
 			api.sendMessage(player, "Unhandled Interface Settings button: comp="+args.component+", button="+args.button+", slot="+args.slot);

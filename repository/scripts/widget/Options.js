@@ -44,7 +44,7 @@ var OptionsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			//IF open sub: parentId=1477, parentComp=506, id=1475, mode=0
 			//IF events: if=1475, comp=68, from=0, to=7, events=2
 			api.setVarp(player, 659, 65537790);
-			api.openWidget(player, 1477, 506, 1475, false);//430
+			api.openWidget(player, 1477, 506, 1475, false);
 			api.setWidgetEvents(player, 1475, 68, 2, 7, 2);
 			return true;
 		case 43://Game Settings

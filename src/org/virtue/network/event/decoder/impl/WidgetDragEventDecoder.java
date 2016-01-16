@@ -40,24 +40,24 @@ public class WidgetDragEventDecoder implements EventDecoder<WidgetDragEventConte
 	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
-	public WidgetDragEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int from_slot = buffer.getShortA() & 0xffff;
-		from_slot = (from_slot == 65535) ? -1 : from_slot;
+	public WidgetDragEventContext createContext(Player player, int opcode, InboundBuffer buffer) {		
+		int toSlot = buffer.getShortA() & 0xffff;
+		toSlot = (toSlot == 65535) ? -1 : toSlot;
 		
-		int from_item = buffer.getShort() & 0xffff;
-		from_item = (from_item == 65535) ? -1 : from_item;
+		int toObject = buffer.getLEShortA() & 0xffff;
+		toObject = (toObject == 65535) ? -1 : toObject;
 		
-		int to_item = buffer.getLEShortA() & 0xffff;
-		to_item = (to_item == 65535) ? -1 : to_item;
+		int fromHash = buffer.getIntB();
 		
-		int to_hash = buffer.getIntA();
+		int fromSlot = buffer.getShortA() & 0xffff;
+		fromSlot = (fromSlot == 65535) ? -1 : fromSlot;
 		
-		int from_hash = buffer.getIntB();
+		int fromObject = buffer.getLEShort() & 0xffff;
+		fromObject = (fromObject == 65535) ? -1 : fromObject;
 		
-		int to_slot = buffer.getShort() & 0xffff;
-		to_slot = (to_slot == 65535) ? -1 : to_slot;
+		int toHash = buffer.getLEInt();
 		
-		return new WidgetDragEventContext(from_hash, from_slot, from_item, to_hash, to_slot, to_item);
+		return new WidgetDragEventContext(fromHash, fromSlot, fromObject, toHash, toSlot, toObject);
 	}
 
 	/* (non-Javadoc)

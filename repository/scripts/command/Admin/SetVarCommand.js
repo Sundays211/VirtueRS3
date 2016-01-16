@@ -32,7 +32,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 	invoke : function (event, syntax, args) {
 		var player = args.player;
 		if (args.cmdArgs.length < 2) {
-			api.sendCommandResponse(player, "Usage: "+syntax+" [id] [value]", args.console);
+			sendCommandResponse(player, "Usage: "+syntax+" [id] [value]", args.console);
 			return;
 		}
 		var key = parseInt(args.cmdArgs[0]);

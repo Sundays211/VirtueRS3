@@ -86,9 +86,7 @@ var GameSettingsListener = Java.extend(Java.type('org.virtue.engine.script.liste
 				return;
 			case 18://Loot settings
 				api.setVarBit(player, 29043, 1);
-				openTab();
-				api.setWidgetEvents(player, 1623, 128, 0, 20, 2359296);
-				api.setWidgetEvents(player, 1623, 129, 0, 20, 2);
+				openTab();				
 				return;
 			case 27://Death store settings
 				api.setVarBit(player, 29043, 2);

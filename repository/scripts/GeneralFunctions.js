@@ -43,6 +43,18 @@ function runAnimation (entity, animId, callback) {
 	}
 }
 
+function inframeInput(player, ifaceId, comp, callback, type, maxlen) {
+	api.setVarc(player, 2235, getCompHash(ifaceId, comp));
+	api.setVarc(player, 2236, type);
+	api.setVarc(player, 2237, maxlen);
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			callback(value);
+		}
+	});
+	api.setInputHandler(player, new Handler());	
+}
+
 function requestCount (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
