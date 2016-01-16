@@ -35,7 +35,6 @@ import org.virtue.game.entity.player.widget.impl.BankWidget;
 import org.virtue.game.entity.player.widget.impl.CombatSettingsWidget;
 import org.virtue.game.entity.player.widget.impl.HopWorldsWidget;
 import org.virtue.game.entity.player.widget.impl.MinimapWidget;
-import org.virtue.game.entity.player.widget.impl.OptionsMenuWidget;
 import org.virtue.game.entity.player.widget.impl.OverlayWidget;
 import org.virtue.game.entity.player.widget.impl.QuestsListWidget;
 import org.virtue.game.entity.player.widget.impl.TreasureHunterWidget;
@@ -304,7 +303,6 @@ public final class WidgetRepository {
 	public void load() {
 		registerWidget(ActionBarWidget.class);
 		registerWidget(MinimapWidget.class);
-		registerWidget(OptionsMenuWidget.class);
 		registerWidget(OverlayWidget.class);
 		registerWidget(TreasureHunterWidget.class);
 		registerWidget(BankWidget.class);

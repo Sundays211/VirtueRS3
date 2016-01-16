@@ -213,8 +213,9 @@ public interface ScriptAPI {
 	/**
 	 * Kicks the specified player from the server
 	 * @param player The player to kick.
+	 * @param toLobby If true, the player will be kicked to the lobby. If false, they will be kicked to the login screen
 	 */
-	public void kickPlayer (Player player);
+	public void kickPlayer (Player player, boolean toLobby);
 	
 	public int getId (Node node);
 	

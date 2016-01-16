@@ -97,7 +97,7 @@ var PlayerAction = {
 				var targetPlayer = api.getWorldPlayerByHash(userHash);
 				if (targetPlayer != null) {
 					api.sendMessage(player, "Kicking "+api.getName(targetPlayer)+" from this server.")
-					api.kickPlayer(targetPlayer);
+					api.kickPlayer(targetPlayer, false);
 				} else {
 					api.sendMessage(player, "The specified player is not currently in the game world.")
 				}

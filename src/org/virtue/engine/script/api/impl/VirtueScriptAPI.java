@@ -1273,8 +1273,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#kickPlayer(org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public void kickPlayer(Player player) {
-		player.kick(false);
+	public void kickPlayer(Player player, boolean toLobby) {
+		player.kick(toLobby);
 	}
 
 	/* (non-Javadoc)

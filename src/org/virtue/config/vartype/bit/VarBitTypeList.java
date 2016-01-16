@@ -46,13 +46,12 @@ public class VarBitTypeList {
 	
 	public static void init (Archive varbits, ReferenceTable.Entry tableEntry) {
 		varBitTypes = new VarBitType[tableEntry.capacity()];
-		for (int slot=0;slot<varbits.size();slot++) {
-			ReferenceTable.ChildEntry child = tableEntry.getEntry(slot);
+		for (int id=0;id<tableEntry.capacity();id++) {
+			ReferenceTable.ChildEntry child = tableEntry.getEntry(id);
 			if (child == null) {
 				continue;
 			}
-			int id = child.index();
-			ByteBuffer entry = varbits.getEntry(id);
+			ByteBuffer entry = varbits.getEntry(child.index());
 			if (entry == null) {
 				continue;
 			}

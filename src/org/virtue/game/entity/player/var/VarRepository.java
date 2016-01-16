@@ -57,7 +57,7 @@ public class VarRepository implements VarDomain {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(VarRepository.class);
-	private static Object[] defaultVarps;
+	private static int[] defaultVarps;
 
 	private Player player;
 	private Map<Integer, Object> varValues = new HashMap<>();
@@ -70,11 +70,11 @@ public class VarRepository implements VarDomain {
 		this.player = player;
 		this.varValues = values;
 		if (defaultVarps == null) {
-			defaultVarps = new Object[varTypes.capacity()];
+			defaultVarps = new int[varTypes.capacity()];
 			DefaultVars.setDefaultVarps(defaultVarps);			
 		}
 		for (int key=0;key<defaultVarps.length;key++) {
-			if (!varValues.containsKey(key) && defaultVarps[key] != null) {
+			if (!varValues.containsKey(key) && defaultVarps[key] != 0) {
 				varValues.put(key, defaultVarps[key]);
 			}
 		}
@@ -169,12 +169,7 @@ public class VarRepository implements VarDomain {
 			return;
 		}
 		int baseKey = type.baseVarKey;
-		try {
-			setVarValueInt(baseKey, type.setVarbitValue(getVarValueInt(baseKey), value));
-		} catch (VarBitOverflowException ex) {
-			//logger.error("Failed to set varbit "+type.id, ex);
-			throw ex;
-		}
+		setVarValue(baseKey, Integer.valueOf(type.setVarbitValue(getVarValueInt(baseKey), value)));
 		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(type.id, value, true));
 	}
 	
@@ -246,6 +241,7 @@ public class VarRepository implements VarDomain {
 				continue;
 			}
 			Object value = varValues.get(type.id);
+
 			if (value != null && VarLifetime.PERMANENT.equals(type.lifeTime)) {
 				permVars.put(type.id, value);
 			}

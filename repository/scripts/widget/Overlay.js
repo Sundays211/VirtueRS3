@@ -62,6 +62,7 @@ var listen = function(scriptManager) {
 
 var Overlay = {
 		openOverlay : function (player, overlay) {
+			api.setVarc(player, 2911, -1);
 			api.hideWidget(player, 1477, 479, false);
 			api.setWidgetEvents(player, 1477, 478, 0, 24, 2);
 			api.setWidgetEvents(player, 1477, 481, 1, 1, 2);
@@ -85,15 +86,15 @@ var Overlay = {
 			case 4://Community
 				return api.getVarBit(player, 18999);
 			case 5://Grand exchange
-				break;
+				return api.getVarBit(player, 19000);
 			case 6://Grouping system
-				break;
+				return api.getVarBit(player, 19002);
 			case 7://Upgrades & Extras
-				break;
+				return api.getVarBit(player, 19003);
 			case 8://Settings
-				break;
+				return api.getVarBit(player, 19001);
 			case 9://Christmas 2015
-				break;
+				return api.getVarBit(player, 29931);
 			case 1001://Lobby
 				break;
 			}
@@ -118,14 +119,19 @@ var Overlay = {
 				api.setVarBit(player, 18999, tab);
 				break;
 			case 5://Grand exchange
+				api.setVarBit(player, 19000, tab);
 				break;
 			case 6://Grouping system
+				api.setVarBit(player, 19002, tab);
 				break;
 			case 7://Upgrades & Extras
+				api.setVarBit(player, 19003, tab);
 				break;
 			case 8://Settings
+				api.setVarBit(player, 19001, tab);
 				break;
 			case 9://Christmas 2015
+				api.setVarBit(player, 29931, tab);
 				break;
 			case 1001://Lobby
 				break;

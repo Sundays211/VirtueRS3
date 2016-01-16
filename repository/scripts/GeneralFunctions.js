@@ -227,6 +227,18 @@ function defaultOpHeldUseHandler (player, args) {
 	}	
 }
 
+function testBit (value, bit) {
+	return (value & 1 << bit) != 0;
+}
+
+function setBit (value, bit) {
+	return value | 1 << bit;
+}
+
+function unsetBit (value, bit) {
+	return value & -1 - (1 << bit);
+}
+
 function addBonusExperience (player, skill, xpToAdd) {
 	xpToAdd *= 10;//Make the decimal fit
 	switch (skill) {

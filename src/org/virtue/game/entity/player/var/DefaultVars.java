@@ -30,7 +30,7 @@ package org.virtue.game.entity.player.var;
  */
 public class DefaultVars {
 
-	public static void setDefaultVarps(Object[] varps) {
+	public static void setDefaultVarps(int[] varps) {
 		varps[2] = 16384;
 		varps[3] = -1469706249;
 		varps[4] = 2048;
@@ -912,7 +912,7 @@ public class DefaultVars {
 		varps[3705] = 268500992;
 		varps[3708] = 139248136;
 		varps[3709] = 16;
-		varps[3814] = 18;
+		//varps[3814] = 18; (Interface settings)
 		//varps[3820] = 8192;
 		varps[3829] = 2147328;
 		varps[3831] = 31;
