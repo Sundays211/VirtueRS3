@@ -39,73 +39,91 @@ var GameplaySettingsListener = Java.extend(Java.type('org.virtue.engine.script.l
 		case 15://Hide familiar options
 			var enabled = api.getVarBit(player, 18564) == 1;
 			api.setVarBit(player, 18564, enabled ? 0 : 1);
-			return true;
+			return;
 		case 21://Guidance system hints
 			var enabled = api.getVarBit(player, 20924) == 1;
 			api.setVarBit(player, 20924, enabled ? 0 : 1);
-			return true;
+			return;
 		case 27://Toggle quick-chat
 			var enabled = api.getVarBit(player, 21242) == 1;
 			api.setVarBit(player, 21242, enabled ? 0 : 1);
-			return true;
+			return;
+		case 33://Legacy combat mode
+			//varbit 27168 = combat mode (1=legacy, 0=EoC)
+			api.setVarp(player, 3813, 9);
+			api.openWidget(player, 1477, 853, 26, true);
+			return;
+		case 45://Legacy interfaces
+			//Varbit 27169 = interface mode (1=legacy, 0=EoC)
+			api.setVarp(player, 3813, 10);
+			api.openWidget(player, 1477, 853, 26, true);
+			return;
+		case 40://Drag and drop items
+			var enabled = api.getVarBit(player, 27164) == 1;
+			api.setVarBit(player, 27164, enabled ? 0 : 1);
+			return;
 		/*Adventurer log settings*/
 		case 53://Adv log quest complete
 			toggleAdvLog(player, 1);
-			return true;
+			return;
 		case 59://Adv log quest milestones
 			toggleAdvLog(player, 2);
-			return true;
+			return;
 		case 65://Adv log champion's challenge
 			toggleAdvLog(player, 3);
-			return true;
+			return;
 		case 71://Adv log court cases
 			toggleAdvLog(player, 4);
-			return true;
+			return;
 		case 77://Adv log music milestones
 			toggleAdvLog(player, 5);
-			return true;
+			return;
 		case 83://Adv log level-ups
 			toggleAdvLog(player, 6);
-			return true;
+			return;
 		case 89://Adv log level-up milestones
 			toggleAdvLog(player, 7);
-			return true;
+			return;
 		case 95://Adv log total level milestones
 			toggleAdvLog(player, 8);
-			return true;
+			return;
 		case 101://Adv log total xp milestones
 			toggleAdvLog(player, 9);
-			return true;
+			return;
 		case 107://Adv log item drops
 			toggleAdvLog(player, 10);
-			return true;
+			return;
 		case 113://Adv log npc kills
 			toggleAdvLog(player, 11);
-			return true;
+			return;
 		case 119://Adv log holiday events
 			toggleAdvLog(player, 13);
-			return true;
+			return;
 		case 125://Adv log misc
 			toggleAdvLog(player, 14);
-			return true;
+			return;
 		case 131://Adv log treasure trails
 			toggleAdvLog(player, 15);
-			return true;
+			return;
 		case 137://Adv log found item
 			toggleAdvLog(player, 16);
-			return true;
+			return;
 		case 143://Adv log dungeoneering deep floor
 			toggleAdvLog(player, 17);
-			return true;
+			return;
 		case 149://Adv log dungeoneering boss kills
 			toggleAdvLog(player, 18);
-			return true;
+			return;
 		case 155://Adv log dungeoneering spent tokens
 			toggleAdvLog(player, 19);
-			return true;
+			return;
 		case 161://Adv log dungeoneering found journals
 			toggleAdvLog(player, 20);
-			return true;
+			return;
+		case 166://Skip travel cutscenes
+			var enabled = api.getVarBit(player, 29889) == 1;
+			api.setVarBit(player, 29889, enabled ? 0 : 1);
+			return;
 		default:
 			api.sendMessage(player, "Unhandled gameplay settings button: comp="+args.component+", slot="+args.slot+", button="+args.button);
 			return;
