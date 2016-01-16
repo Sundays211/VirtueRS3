@@ -897,6 +897,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+key);
 		}
+		
 		return player.getVars().getVarValue(varType);
 	}
 

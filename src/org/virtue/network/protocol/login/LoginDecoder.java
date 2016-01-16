@@ -84,7 +84,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 		System.out.printf("LoginDecoder:: Type(%s) size(%d) version %d %d\n",type+"",size,version,subVersion);
 
 		if (version != Constants.FRAME_MAJOR && subVersion != Constants.FRAME_MINOR) {
-			throw new IllegalStateException("Invalid client version/sub-version!");
+			throw new ProtocolException("Invalid client version/sub-version! found: "+version+" "+subVersion+", expected: "+Constants.FRAME_MAJOR+" "+Constants.FRAME_MINOR);
 		}
 
 		if (type.equals(LoginTypeMessage.LOGIN_WORLD)) {
@@ -120,18 +120,18 @@ public class LoginDecoder extends ByteToMessageDecoder {
 			xteaKey[i] = secureBuffer.readInt();
 		}			
 
-		secureBuffer.readLong();
+		secureBuffer.readByte();
+		secureBuffer.readInt();
 		//if (loginHash != 0)
 			//throw new ProtocolException("Invalid login hash: " + loginHash);
 
-		secureBuffer.readByte();
-		secureBuffer.readerIndex(secureBuffer.readerIndex() - 4);
 		
 		String password = BufferUtility.readString(secureBuffer);
 
 		long[] loginSeeds = new long[2];
-		for (int i = 0; i < loginSeeds.length; i++)
+		for (int i = 0; i < loginSeeds.length; i++) {
 			loginSeeds[i] = secureBuffer.readLong();
+		}
 
 		byte[] xteaBlock = new byte[buf.readableBytes()];
 		buf.readBytes(xteaBlock);

@@ -53,8 +53,9 @@ public class CreationDecoder extends ByteToMessageDecoder {
 	 */
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
-		if (!buf.isReadable())
+		if (!buf.isReadable()) {
 			return;
+		}
 		
 		int size = buf.readShort() & 0xFFFF;
 		if (buf.readableBytes() < size)
@@ -62,12 +63,14 @@ public class CreationDecoder extends ByteToMessageDecoder {
 		
 		int major = buf.readShort();
 		int minor = buf.readShort();
-		if (major != Constants.FRAME_MAJOR && minor != Constants.FRAME_MINOR)
-			return;
+		if (major != Constants.FRAME_MAJOR && minor != Constants.FRAME_MINOR) {
+			throw new ProtocolException("Invalid client version/sub-version! found: "+major+" "+minor+", expected: "+Constants.FRAME_MAJOR+" "+Constants.FRAME_MINOR);
+		}
 		
 		int secureBufferSize = buf.readShort() & 0xFFFF;
-		if (buf.readableBytes() < secureBufferSize)
+		if (buf.readableBytes() < secureBufferSize) {
 			throw new IllegalStateException("Not enough readable bytes from buffer.");
+		}
 
 		
 		byte[] secureBytes = new byte[secureBufferSize];

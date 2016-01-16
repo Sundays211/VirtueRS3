@@ -102,6 +102,21 @@ public class VarKey {
 		public static final int TRADE_LOAN_TO_OFFER = 1046;
 		public static final int TRADE_LOAN_FROM_OFFER = 1047;
 		
+		/**
+		 * Represents the minimum value of an item required to trigger the lootbeam
+		 */
+		public static final int LOOTBEAM_ACTIVATION_VALUE = 21238;
+		
+		/**
+		 * Represents the lootbeam used (0=rotate, 1=default, 2=rainbow, 3=christmas, 4=beach)
+		 */
+		public static final int LOOTBEAM_TYPE = 23261;
+		
+		/**
+		 * Represents whether the lootbeam is enabled (1=enabled, 0=disabled)
+		 */
+		public static final int LOOTBEAM_ENABLED = 26778;
+		
 		public static final int PLAYER_INSPECT_STATUS = 26172;
 		public static final int PLAYER_INSPECT_TITLE = 26173;
 		
@@ -160,6 +175,11 @@ public class VarKey {
 		public static final int PLAYER_INSPECT_DUNGEONEERING_BASE = 26120;
 		public static final int PLAYER_INSPECT_DIVINATION = 26121;
 		public static final int PLAYER_INSPECT_DIVINATION_BASE = 26122;
+		
+		
+		public static final int LOOT_INVENTORY_ENABLED = 27942;
+		public static final int AREA_LOOT_ENABLED = 27943;
+		public static final int LOOT_INVENTORY_RIGHTCLICK = 27961;
 	}
 	
 	public static class Player {
@@ -230,6 +250,8 @@ public class VarKey {
 		public static final int PLAYER_INSPECT_A_DAMAGE = 4966;
 		
 		public static final int PLAYER_INSPECT_ARMOUR = 4975;
+		
+		public static final int PLAYER_INSPECT_MESSAGE = 4982;
 		
 		public static final int PLAYER_INSPECT_RENDER = 5005;
 		

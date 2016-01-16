@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,9 @@
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 08/01/2015
+ * @since 16/01/2016
  */
-var LootSettingsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+var HouseSettingsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, interfaceID, args) {
 		var player = args.player;
 		switch (args.component) {
@@ -50,6 +50,6 @@ var LootSettingsListener = Java.extend(Java.type('org.virtue.engine.script.liste
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	var listener = new LootSettingsListener();
+	var listener = new HouseSettingsListener();
 	scriptManager.registerListener(EventType.IF_BUTTON, 1664, listener);
 };

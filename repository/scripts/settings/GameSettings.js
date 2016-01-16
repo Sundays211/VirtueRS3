@@ -106,11 +106,7 @@ var GameSettingsListener = Java.extend(Java.type('org.virtue.engine.script.liste
 				return;
 			case 64://Misc settings
 				api.setVarBit(player, 29043, 6);
-				openTab();
-				api.setWidgetEvents(player, 1674, 91, 0, 8, 2359296);
-				api.setWidgetEvents(player, 1674, 92, 0, 8, 2);
-				api.setWidgetEvents(player, 1674, 67, 0, 8, 2359296);
-				api.setWidgetEvents(player, 1674, 68, 0, 8, 2);
+				openTab();				
 				return;
 			case 73://Aid settings
 				api.setVarBit(player, 29043, 7);

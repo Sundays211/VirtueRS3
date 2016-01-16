@@ -71,6 +71,10 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 			clan = "None";
 		}
 		player.getDispatcher().sendVarcString(VarKey.Client.PLAYER_INSPECT_CLAN, clan);
+		String message = (String) player.getVars().getVarValue(VarKey.Player.PLAYER_INSPECT_MESSAGE);
+		if (message != null) {
+			player.getDispatcher().sendVarcString(VarKey.Client.PLAYER_INSPECT_MESSAGE, message);
+		}
 		
 		player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_LIFEPOINTS, target.getVars().getVarBitValue(VarKey.Bit.PLAYER_HITPOINTS));
 		player.getVars().setVarValueInt(4972, 0);//Force the changes to take effect
