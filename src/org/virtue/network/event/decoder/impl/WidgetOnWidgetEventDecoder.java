@@ -41,15 +41,23 @@ public class WidgetOnWidgetEventDecoder implements EventDecoder<WidgetOnWidgetEv
 	 */
 	@Override
 	public WidgetOnWidgetEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int if2_hash = buffer.getIntB();
-		int if2_itemID = buffer.getShort() & 0xffff;
-		int if1_hash = buffer.getIntB();
-		int if2_slot = buffer.getLEShortA() & 0xffff;
-		int if1_itemID = buffer.getShortA() & 0xffff;	
-		int if1_slot = buffer.getLEShortA() & 0xffff;
-		return new WidgetOnWidgetEventContext(if1_hash, if1_slot == 65535 ? -1 : if1_slot, 
-				if1_itemID == 65535 ? -1 : if1_itemID, if2_hash, 
-				if2_slot == 65535 ? -1 : if2_slot, if2_itemID == 65535 ? -1 : if2_itemID);
+		int hash = buffer.getLEInt();
+		
+		int slot = buffer.getShortA() & 0xffff;
+		slot = slot == 65535 ? -1 : slot;
+
+		int useslot = buffer.getLEShortA() & 0xffff;
+		useslot = useslot == 65535 ? -1 : useslot;
+		
+		int objectId = buffer.getShortA() & 0xffff;
+		objectId = objectId == 65535 ? -1 : objectId;
+		
+		int useHash = buffer.getIntA();
+		
+		int useObject = buffer.getShort() & 0xffff;
+		useObject = useObject == 65535 ? -1 : useObject;
+		
+		return new WidgetOnWidgetEventContext(useHash, useslot, useObject, hash, slot, objectId);
 	}
 
 	/* (non-Javadoc)

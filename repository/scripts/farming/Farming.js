@@ -212,30 +212,29 @@ var FarmingCrop = {
 		diseaseStages : [137, 138, 139],
 		deadStages : [201, 202, 203],
 		harvestStages : [12]
-	},/*
+	},
 	OAK : {
 		type : PatchType.TREE,
 		level : 15,
 		plantxp : 14,
-		checkHealthxp : 45*467.3,
-		saplingId : 5096,
-		productId : 6010,
+		checkHealthxp : 467.3,
+		seedId : 5370,
+		productId : -1,
 		plantStage : 8,
 		wateredSeedling : -1,
 		growthStages : [9, 10, 11],
 		wateredStages : [],//Tree patches cannot be watered
 		diseaseStages : [73, 74, 75],
 		deadStages : [201, 202, 203],
-		harvestStages : [12]
-	}*/
+		harvestStages : [12, 13]
+	}
 }
 
 var FarmingPatch = function (products) {
 	
 }
 
-FarmingPatch.prototype = {
-		
+FarmingPatch.prototype = {		
 		canRunTick : function (serverTick) {
 			var gap = (serverTick / TICK_DURATION) | 0;
 			return gap % this.type.tickType == 0;
@@ -250,37 +249,27 @@ FarmingPatch.prototype = {
 		 * @param player The player
 		 */
 		rake : function (player) {
-			var delay = 2;
-			api.runAnimation(player, 10574);
-			//api.pausePlayer(player, 3);
 			var that = this;
-			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-				process : function (player) {
-					if (delay <= 0) {
-						var currentStatus = that.getStatus(player);
-						api.addCarriedItem(player, 6055, 1);
-						switch (currentStatus) {
-						case 0://Weeds 1
-							that.setStatus(player, 1);
-							break;
-						case 1://Weeds 2
-							that.setStatus(player, 2);
-							break;
-						case 2://Weeds 3
-							that.setStatus(player, 3);
-							//Carry over
-						default://Empty
-							return true;
-						}
-						delay = 3;
-						api.runAnimation(player, 10574);
-					}
-					delay--;
-					return false;
-				},
-				stop : function (player) { }
+			runAnimation(player, 10574, function () {
+				var currentStatus = that.getStatus(player);
+				api.addCarriedItem(player, 6055, 1);
+				switch (currentStatus) {
+				case 0://Weeds 1
+					that.setStatus(player, 1);
+					that.rake(player);
+					return;
+				case 1://Weeds 2
+					that.setStatus(player, 2);
+					that.rake(player);
+					return;
+				case 2://Weeds 3
+					that.setStatus(player, 3);
+					//Carry over
+				case 3://Empty
+				default://Unknown status
+					return;
+				}
 			});
-			player.setAction(new Action());
 		},
 		
 		/**
@@ -576,7 +565,7 @@ FlowerPatch.statusLookup = new Array(256);
 FlowerPatch.prototype.harvest = function (player, crop) {
 	//24910?
 	var that = this;
-	api.runAnimation(player, 22705, function () {//Probably not the right animation, but at least it shows us doing something...
+	runAnimation(player, 22705, function () {//Probably not the right animation, but at least it shows us doing something...
 		if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 			api.sendMessage(player, "You need free space!");
 			return;
@@ -585,6 +574,20 @@ FlowerPatch.prototype.harvest = function (player, crop) {
 		api.addExperience(player, Stat.FARMING, crop.harvestXp, true);
 		that.setEmpty(player);
 	});
+}
+
+var TreePatch = function (location, varbit, compostVarbit) {
+	this.location = location;
+	this.varbit = varbit;
+	this.compostVarbit = compostVarbit;
+	this.type = PatchType.TREE;
+}
+patchTypes[PatchType.TREE.id] = TreePatch;
+TreePatch.prototype = Object.create(FarmingPatch.prototype);
+TreePatch.prototype.constructor = TreePatch;
+TreePatch.statusLookup = new Array(256);
+TreePatch.prototype.harvest = function (player, crop) {
+	api.sendMessage(player, "Tree harvesting is not yet implemented.");
 }
 
 for (var i in FarmingCrop) {
@@ -613,6 +616,10 @@ for (var i in FarmingCrop) {
 }
 
 var patches = {};
+patches[8388] = new TreePatch(8388, 44, 95);//Taverly
+patches[8389] = new TreePatch(8389, 45, 96);//Falador
+patches[8390] = new TreePatch(8390, 46, 97);//Falador
+patches[8391] = new TreePatch(8391, 47, 98);//Lumbridge
 patches[8550] = new Allotment(8550, 52, 103);//North-West Falador
 patches[8551] = new Allotment(8551, 53, 104);//South-East Falador
 patches[8552] = new Allotment(8552, 54, 105);//North Catherby
@@ -675,7 +682,7 @@ var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarL
 		if (api.isAdmin(player)) {
 			api.sendMessage(player, "Running farming tick "+(tick/TICK_DURATION));
 		}
-		Farming.growSaplings(player);
+		PlantPots.process(player);
 		for (var key in patches) {
 			patches[key].growWeeds(player);
 			if (patches[key].canRunTick(serverTick)) {
@@ -718,34 +725,37 @@ var PatchListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 		if (locTypeId in patches) {
 			handled = patches[locTypeId].handlePatch(player, option);
 		}
-		switch (locTypeId) {
-		case 7836://Falador compost
-			handled = Farming.COMPOST.handleBin(player, 1, option);
-			break;
-		case 7837://Catherby compost
-			handled = Farming.COMPOST.handleBin(player, 2, option);
-			break;
-		case 7838://Morytania compost
-			handled = Farming.COMPOST.handleBin(player, 3, option);
-			break;
-		case 7839://Ardougne compost
-			handled = Farming.COMPOST.handleBin(player, 4, option);
-			break;
-		case 8388://Taverly tree patch
-			handled = Farming.TREES.handlePatch(player, 1, option);
-			break;
-		case 8389://Falador tree patch
-			handled = Farming.TREES.handlePatch(player, 2, option);
-			break;
-		case 8390://Varrock tree patch
-			handled = Farming.TREES.handlePatch(player, 3, option);
-			break;
-		case 8391://Lumbridge tree patch
-			handled = Farming.TREES.handlePatch(player, 4, option);
-			break;
-		default:
-			break;
-		}	
+		if (!handled) {
+			switch (locTypeId) {
+			case 7836://Falador compost
+				handled = Farming.COMPOST.handleBin(player, 1, option);
+				break;
+			case 7837://Catherby compost
+				handled = Farming.COMPOST.handleBin(player, 2, option);
+				break;
+			case 7838://Morytania compost
+				handled = Farming.COMPOST.handleBin(player, 3, option);
+				break;
+			case 7839://Ardougne compost
+				handled = Farming.COMPOST.handleBin(player, 4, option);
+				break;
+			case 8388://Taverly tree patch
+				handled = Farming.TREES.handlePatch(player, 1, option);
+				break;
+			case 8389://Falador tree patch
+				handled = Farming.TREES.handlePatch(player, 2, option);
+				break;
+			case 8390://Varrock tree patch
+				handled = Farming.TREES.handlePatch(player, 3, option);
+				break;
+			case 8391://Lumbridge tree patch
+				handled = Farming.TREES.handlePatch(player, 4, option);
+				break;
+			default:
+				break;
+			}
+		}
+			
 		if (!handled) {
 			api.sendMessage(player, "Unhandled farming patch option: patch="+locTypeId+", option="+option);
 		}
@@ -753,14 +763,14 @@ var PatchListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 });
 
 var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, locId, args) {
+	invoke : function (event, locTypeId, args) {
 		var player = args.player;		
 		var invSlot = args.useslot;
 		var item = args.useitem;
 		var itemId = api.getId(item);
 		
-		if (locId in patches) {
-			var patch = patches[locId];
+		if (locTypeId in patches) {
+			var patch = patches[locTypeId];
 			if (itemId in seedLookup) {
 				if (!patch.isEmpty(player)) {
 					api.sendMessage(player, "This patch needs to be weeded and empty before you can do that.");
@@ -782,73 +792,19 @@ var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listen
 					api.sendMessage(player, "This patch needs to be weeded and empty before you can do that.");
 				}				
 				return;
+			} else {
+				api.sendMessage(player, "Can't use "+itemId+" on farming patch.");
+				return;
 			}
 		}
-		switch (locId) {
-		case 8388://Taverly tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 1, item, invSlot);
-		case 8389://Falador tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 2, item, invSlot);
-		case 8390://Varrock tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 3, item, invSlot);
-		case 8391://Lumbridge tree patch
-			return Farming.handleItemUse(player, Farming.TREES, 4, item, invSlot);
+		switch (locTypeId) {
 		case 7836://Falador compost
 		case 7837://Catherby compost
 		case 7838://Morytania compost
 		case 7839://Ardougne compost
 		default:
-			api.sendMessage(player, "Used item on location: item="+item+", location="+args.location+", slot="+invSlot);
+			api.sendMessage(player, "Used item on farming patch: item="+item+", patch="+args.location+", slot="+invSlot);
 		}
-	}
-});
-
-var PlantPotListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, objTypeId, args) {
-		var player = args.player;		
-		var item = args.item;
-		var slot = args.slot;
-		var useitem = args.useitem;
-		var useslot = args.useslot;
-
-		if (objTypeId == 5354) {//Empty plant pot
-			if (Farming.TREE_SEEDS[api.getId(useitem)] !== undefined) {
-				Farming.plantInPot(player, Farming.TREE_SEEDS[api.getId(useitem)].seedling, 6825);
-				return;
-			} else {
-				defaultOpHeldUseHandler(player, args);
-				return;
-			}
-		}
-		
-		if (Farming.getBySeedling(objTypeId) !== undefined) {
-			for (var i=0; i<api.getEnumSize(136); i++) {
-				if (api.getEnumValue(136, i) == api.getId(useitem)) {
-					Farming.waterPot(player, Farming.getBySeedling(objTypeId).seedlingW, 6826);
-					return;
-				}
-			}
-		}
-		
-		for (var i=0; i<api.getEnumSize(136); i++) {
-			if (api.getEnumValue(136, i) == objTypeId) {
-				if (Farming.getBySeedling(api.getId(useitem)) !== undefined) {
-					Farming.waterPot(player, Farming.getBySeedling(api.getId(useitem)).seedlingW, 6826);
-					return;
-				} else {
-					defaultOpHeldUseHandler(player, args);
-					return;
-				}
-			}
-		}
-		if (Farming.TREE_SEEDS[objTypeId] !== undefined) {
-			if (api.getId(useitem) == 5354) {
-				Farming.plantInPot(player, Farming.TREE_SEEDS[objTypeId].seedling, 6825);
-				return;
-			}
-		}
-		defaultOpHeldUseHandler(player, args);
-		return;
 	}
 });
 
@@ -857,7 +813,7 @@ var listen = function(scriptManager) {
 	var varListener = new VarListener();
 	scriptManager.registerVarListener(varListener, varListener.getIDs());
 	
-	var locTypes = [ 7836, 7837, 7838, 7839, 8388, 8389, 8390, 8391 ];
+	var locTypes = [ 7836, 7837, 7838, 7839 ];
 	for (var key in patches) {
 		locTypes.push(parseInt(key));
 	}
@@ -872,27 +828,6 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPLOC4, locTypes[i], patchListener);
 		scriptManager.registerListener(EventType.OPLOC5, locTypes[i], patchListener);
 	}
-	
-	var treeSeeds = [ 5312, 5313, 5314, 5315, 5316 ];
-	var plantPotListener = new PlantPotListener();
-	scriptManager.registerListener(EventType.OPHELDU, 5354, plantPotListener);
-	for (var i in treeSeeds) {
-		var seed = treeSeeds[i];
-		scriptManager.registerListener(EventType.OPHELDU, seed, plantPotListener);
-	}
-	
-	var seedlings = [ 5358, 5359, 5360, 5361, 5362 ];
-	for (var i in seedlings) {
-		var seedling = seedlings[i];
-		scriptManager.registerListener(EventType.OPHELDU, seedling, plantPotListener);
-	}
-	
-	for (var i=0; i<api.getEnumSize(136); i++) {
-		var itemID = api.getEnumValue(136, i);
-		if (itemID != -1) {
-			scriptManager.registerListener(EventType.OPHELDU, itemID, plantPotListener);//Watering can
-		}
-	}
 };
 
 var Farming = {
@@ -901,117 +836,6 @@ var Farming = {
 		canRunTick : function (serverTick, type) {
 			var gap = (serverTick / TICK_DURATION) | 0;
 			return gap % type == 0;
-		},
-		TREE_SEEDS : { 5312 : { seed : 5312, seedling : 5358, seedlingW : 5364, sapling : 5370 }/*Oak*/,
-			5313 : { seed : 5313, seedling : 5359, sapling : 5371 } },
-		TREE_SEEDLINGS : null,
-		getBySeedling : function (seedlingID) {
-			if (Farming.TREE_SEEDLINGS == null) {
-				Farming.TREE_SEEDLINGS = {};
-				for (var i in Farming.TREE_SEEDS) {
-					var data = Farming.TREE_SEEDS[i];
-					Farming.TREE_SEEDLINGS[data.seedling] = data;
-				}
-			}
-			return Farming.TREE_SEEDLINGS[seedlingID];
-		},
-		growSaplings : function (player) {
-			for (var slot=0; slot<28; slot++) {
-				var item = api.getItem(player, Inv.BACKPACK, slot);
-				if (item == null) {
-					continue;
-				}
-				switch (item.getID()) {
-				case 5364://Oak seedling
-					Farming.growSapling(player, 5364, 5370);
-					break;
-				case 5365://Willow seedling
-					Farming.growSapling(player, 5365, 5371);
-					break;
-				case 5366://Maple seedling
-					Farming.growSapling(player, 5366, 5372);
-					break;
-				case 5367://Yew seedling
-					Farming.growSapling(player, 5367, 5373);
-					break;
-				case 5374://Magic seedling
-					Farming.growSapling(player, 5368, 5374);
-					break;
-				case 5369://Spirit seedling
-					Farming.growSapling(player, 5369, 5375);
-					break;
-				}
-			}
-		},
-		growSapling : function (player, from, to) {
-			api.delCarriedItem(player, from, 1);
-			api.addCarriedItem(player, to, 1);
-		},
-		fillPot : function (player) {
-			var delay = 2;
-			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-				process : function (player) {
-					if (delay <= 0) {
-						api.delCarriedItem(player, 5350, 1);
-						api.addCarriedItem(player, 5354, 1);
-						delay = 2;
-						return api.carriedItemTotal(player, 5350) <= 0;
-					}
-					if (delay == 2) {
-						api.runAnimation(player, 24898);
-					}
-					delay--;
-					return false;
-				},
-				stop : function (player) {
-					
-				}
-
-			});
-			player.setAction(new Action());
-		},
-		plantInPot : function (player, product, productCategory) {
-			api.setVarp(player, 1168, 6821);//Main category
-			api.setVarc(player, 2222, 6822);//Category text key
-			api.setVarp(player, 1169, productCategory);//Sub category (6825=Wood seedlings)
-			api.setVarp(player, 1170, product);//Product ID
-			api.openCentralWidget(player, 1370, false);
-			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-				
-				handle: function(value) {
-					var productID = api.getVarp(player, 1170);
-					var amount = api.getVarBit(player, 1003);
-					var itemType = api.getItemType(productID);
-					var xp = itemType.getParam(2697, 0) * amount;
-					api.addExperience(player, Stat.FARMING, xp, true);
-					api.delCarriedItem(player, 5354, amount);
-					api.delCarriedItem(player, itemType.getParam(2656, -1), amount);
-					api.addCarriedItem(player, productID, amount);
-				}
-			
-			});
-			api.setInputHandler(player, new Handler());
-		},
-		waterPot : function (player, product, productCategory) {
-			api.setVarp(player, 1168, 6823);//Main category
-			api.setVarc(player, 2222, 6824);//Category text key
-			api.setVarp(player, 1169, productCategory);//Sub category (6826=Wood seedlings)
-			api.setVarp(player, 1170, product);//Product ID
-			api.openCentralWidget(player, 1370, false);
-			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-				
-				handle: function(value) {
-					var productID = api.getVarp(player, 1170);
-					var amount = api.getVarBit(player, 1003);					
-					//api.sendMessage(player, "Selected product "+productID+", amount="+amount);
-					api.setVarp(player, 1175, productID);
-					var action = new CraftAction(productID, -1, 2, null);
-					action.start(player, amount);
-					player.setAction(action);
-				}
-			
-			});
-			api.setInputHandler(player, new Handler());
 		},
 		prune : function (player, patchID, patchType, newStatus) {
 			var delay = 2;
@@ -1035,7 +859,7 @@ var Farming = {
 		},
 		handleItemUse : function (player, patchType, patchID, item, invSlot) {
 			if (item.getID() == 5350) {
-				Farming.fillPot(player);
+				PlantPots.fill(player);
 				return true;
 			} else if (patchType.SEEDS.indexOf(item.getID()) !== -1) {
 				if (!patchType.isEmpty(player, patchID)) {
@@ -1051,7 +875,9 @@ var Farming = {
 						process : function (player) {
 							if (delay <= 0) {
 								patchType.setSapling(player, patchID, item.getID());
-								api.addCarriedItem(player, 5350, 1);
+								if (api.geVarBit(player, 29816) == 0) {
+									api.addCarriedItem(player, 5350, 1);
+								}								
 								return true;
 							}
 							delay--;
@@ -1230,6 +1056,12 @@ Farming.TREES.runTick = function (player) {
 	}
 }
 Farming.TREES.handlePatch = function (player, patch, option) {
+	if (option == 2) {
+		if (api.isAdmin(player)) {
+			api.sendMessage(player, "Status = "+this.getStatus(player, patch)+", compost = "+this.getCompost(player)+", statusVar="+this.varbit+", compostvar="+this.compostVarbit);
+		}
+		return true;
+	}
 	var currentStatus = this.getStatus(player, patch);
 	switch (currentStatus) {
 	case 0://Weeds 1
