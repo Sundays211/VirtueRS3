@@ -212,11 +212,10 @@ var PlantPots = {
 				handle: function(value) {
 					var productID = api.getVarp(player, 1170);
 					var count = api.getVarBit(player, 1003);
-					var itemType = api.getItemType(productID);
-					var xp = itemType.getParam(2697, 0) * count;
+					var xp = api.getItemParam(productID, 2697) * count;
 					api.addExperience(player, Stat.FARMING, xp, true);
 					api.delCarriedItem(player, 5354, count);
-					api.delCarriedItem(player, itemType.getParam(2656, -1), count);
+					api.delCarriedItem(player, api.getItemParam(productID, 2656), count);
 					api.addCarriedItem(player, productID, count);
 				}
 			

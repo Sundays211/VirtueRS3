@@ -603,6 +603,38 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#itemStacks(int)
+	 */
+	@Override
+	public boolean itemStacks(int objTypeId) {
+		ItemType itemType = ItemTypeList.getInstance().list(objTypeId);
+		if (itemType == null) {
+			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
+		}
+		return itemType.isStackable();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#getItemParam(int, int)
+	 */
+	@Override
+	public Object getItemParam(int objTypeId, int paramTypeId) {
+		ItemType itemType = ItemTypeList.getInstance().list(objTypeId);
+		if (itemType == null) {
+			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
+		}
+		ParamType paramType = ParamTypeList.list(paramTypeId);
+		if (paramType == null) {
+			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
+		}
+		if (paramType.stringBase()) {
+			return itemType.getParam(paramTypeId, paramType.defaultstr);
+		} else {
+			return itemType.getParam(paramTypeId, paramType.defaultint);
+		}
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ScriptAPI#getExchangeCost(int)
 	 */
 	@Override

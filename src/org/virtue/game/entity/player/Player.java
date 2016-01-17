@@ -1384,7 +1384,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public AnimationBlock getImpactAnimation() {
+	public int getImpactAnimation() {
 		Item shield = this.getEquipment().getWorn(3);
 		Item weapon = this.getEquipment().getWorn(5);
 		int animation = -1;
@@ -1400,7 +1400,7 @@ public class Player extends Entity {
 		if (animation == -1) {
 			animation = 424;
 		}
-		return new AnimationBlock(animation);
+		return animation;
 	}
 
 	private DynamicRegion armarRegion;// For testing

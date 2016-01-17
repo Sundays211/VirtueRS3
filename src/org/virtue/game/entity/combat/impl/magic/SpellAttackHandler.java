@@ -40,7 +40,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	/**
 	 * The animation block.
 	 */
-	private AnimationBlock impactAnimation;
+	private int impactAnimation;
 	
 	/**
 	 * The impact graphic.
@@ -71,7 +71,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param projectiles The projectiles.
 	 */
 	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, GraphicsBlock impactGraphic, Projectile projectile) {
-		this(maximumHit, animation, graphic, null, impactGraphic, false, projectile);
+		this(maximumHit, animation, graphic, -1, impactGraphic, false, projectile);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param impactGraphic The impact graphic.
 	 * @param projectiles The projectiles.
 	 */
-	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, AnimationBlock impactAnimation, GraphicsBlock impactGraphic, Projectile projectile) {
+	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, int impactAnimation, GraphicsBlock impactGraphic, Projectile projectile) {
 		this(maximumHit, animation, graphic, impactAnimation, impactGraphic, false, projectile, 1.0, 1.0);
 	}
 	
@@ -97,7 +97,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param multi If the spell is multi-target.
 	 * @param projectiles The projectiles.
 	 */
-	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, AnimationBlock impactAnimation, GraphicsBlock impactGraphic, boolean multi, Projectile projectile) {
+	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, int impactAnimation, GraphicsBlock impactGraphic, boolean multi, Projectile projectile) {
 		this(maximumHit, animation, graphic, impactAnimation, impactGraphic, multi, projectile, 1.0, 1.0);
 	}
 	
@@ -111,7 +111,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param multi If the spell is multi-target.
 	 * @param projectiles The projectiles.
 	 */
-	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, AnimationBlock impactAnimation, GraphicsBlock impactGraphic, boolean multi, Projectile projectile, double accuracyMod, double defenceMod) {
+	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, int impactAnimation, GraphicsBlock impactGraphic, boolean multi, Projectile projectile, double accuracyMod, double defenceMod) {
 		this.maximumHit = maximumHit;
 		this.animation = animation;
 		this.graphic = graphic;
@@ -142,8 +142,8 @@ public class SpellAttackHandler extends MagicAttackHandler {
 		int delay = CombatUtils.getImpactDelay(CombatStyle.MAGIC, entity, lock);
 		for (int i = 0; i < targets.length; i++) {
 			Entity target = targets[i];
-			AnimationBlock anim = impactAnimation;
-			if (anim == null) {
+			int anim = impactAnimation;
+			if (anim == -1) {
 				anim = target.getImpactAnimation();
 			}
 			int hit = 0;
@@ -254,7 +254,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * Gets the impactAnimation value.
 	 * @return The impactAnimation.
 	 */
-	public AnimationBlock getImpactAnimation() {
+	public int getImpactAnimation() {
 		return impactAnimation;
 	}
 
@@ -262,7 +262,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * Sets the impactAnimation value.
 	 * @param impactAnimation The impactAnimation to set.
 	 */
-	public void setImpactAnimation(AnimationBlock impactAnimation) {
+	public void setImpactAnimation(int impactAnimation) {
 		this.impactAnimation = impactAnimation;
 	}
 

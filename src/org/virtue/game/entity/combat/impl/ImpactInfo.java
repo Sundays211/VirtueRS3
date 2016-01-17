@@ -81,9 +81,9 @@ public class ImpactInfo {
 	 * @param hit The hit.
 	 * @param delay The delay before impact.
 	 */
-	public ImpactInfo(Entity victim, AnimationBlock animation, GraphicsBlock graphic, Projectile projectile, CombatStyle style, int hit, int delay) {
+	public ImpactInfo(Entity victim, int animation, GraphicsBlock graphic, Projectile projectile, CombatStyle style, int hit, int delay) {
 		this.victim = victim;
-		this.animation = animation;
+		this.animation = new AnimationBlock(animation);
 		this.graphic = graphic;
 		this.projectile = projectile;
 		this.style = style;

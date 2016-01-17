@@ -11,7 +11,6 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.network.protocol.update.block.AnimationBlock;
 
 
 public class CraftAction implements PlayerActionHandler {
@@ -56,7 +55,7 @@ public class CraftAction implements PlayerActionHandler {
 		player.getDispatcher().sendVarc(2228, amount);//Total products
 		player.getDispatcher().sendVarc(2229, amount);//Products remaining
 		remaining = amount;
-		player.queueUpdateBlock(new AnimationBlock(animationID));
+		player.runAnimation(animationID, null);
 	}
 
 	/* (non-Javadoc)
@@ -72,7 +71,7 @@ public class CraftAction implements PlayerActionHandler {
 			remaining--;
 			player.getDispatcher().sendVarc(2229, remaining);
 			if (remaining >= 1) {
-				player.queueUpdateBlock(new AnimationBlock(animationID));
+				player.runAnimation(animationID, null);
 			}
 			delay = timePerItem;
 		}
@@ -263,7 +262,7 @@ public class CraftAction implements PlayerActionHandler {
 	 */
 	@Override
 	public void stop(Player player) {
-		player.queueUpdateBlock(new AnimationBlock(-1));//Clear animation
+		player.clearAnimation();//Clear animation
 		player.getVars().setVarValueInt(1175, -1);//Clear product
 		player.getWidgets().closeOverlaySub(1018, true);//Close interface
 		player.getVars().setVarValueInt(1176, 0);//Clear experience gained counter

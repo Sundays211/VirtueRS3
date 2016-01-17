@@ -30,7 +30,6 @@ import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.network.event.context.impl.in.OptionButton;
-import org.virtue.network.protocol.update.block.AnimationBlock;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -64,7 +63,7 @@ public class MinimapWidget extends Widget {
 				return true;
 			}
 			if (OptionButton.TWO.equals(option)) {
-				player.queueUpdateBlock(new AnimationBlock(5713));
+				player.runAnimation(5713);
 				return true;
 			}
 			break;

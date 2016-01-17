@@ -403,6 +403,22 @@ public interface ScriptAPI {
 	public String getItemDesc(Item item);
 	
 	/**
+	 * Checks whether the specified item stacks in the player's inventory
+	 * @param itemId The item to check
+	 * @return True if the item stacks in the player's inventory, false otherwise
+	 */
+	public boolean itemStacks(int itemId);
+	
+	/**
+	 * Gets the paramater of the specified {@link ItemType}
+	 * @param itemId The ID of the item to lookup
+	 * @param paramType The param to get
+	 * @return The item param value or default value if the item does not contain the given parameter
+	 * @throws IllegalArgumentException If an invalid itemId or paramType is specified
+	 */
+	public Object getItemParam(int itemId, int paramType);
+	
+	/**
 	 * Gets the current grand exchange price of the given item
 	 * @param itemId The ID of the item to lookup
 	 * @return The grand exchange value, or -1 if the item isn't tradable on the exchange

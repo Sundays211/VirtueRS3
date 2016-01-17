@@ -341,9 +341,9 @@ public abstract class Entity extends Node {
 	
 	/**
 	 * Gets the animation played upon getting hit.
-	 * @return The impact animation.
+	 * @return The impact animation ID.
 	 */
-	public abstract AnimationBlock getImpactAnimation();
+	public abstract int getImpactAnimation();
 	
 	/**
 	 * Returns if this {@link Entity} is adjacent to the specified {@link Tile}
@@ -485,6 +485,10 @@ public abstract class Entity extends Node {
 		this.animCompleteEvent = null;
 		this.currentAnim = null;
 		this.queueUpdateBlock(new AnimationBlock(-1));
+	}
+	
+	public boolean runAnimation (int animId) {
+		return runAnimation(animId, null);
 	}
 	
 	public boolean runAnimation (int animId, Runnable completeEvent) {

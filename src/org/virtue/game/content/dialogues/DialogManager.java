@@ -39,8 +39,6 @@ import org.virtue.network.event.context.impl.out.WidgetModelEventContext.ModelTy
  * @since 19/11/2014
  */
 public class DialogManager {
-	
-	private static final int[] TOOL_SELECT_OPTION_VARCS = { 1703, 1704, 1705, 1706, 1707, 1708, 1709, 1710, 1711 };
 		
 	/**
 	 * The player linked to this dialog manager
@@ -248,74 +246,6 @@ public class DialogManager {
 	/*player.getActionSender().sendWidget(1477, 315, 1215, true);//Interface_sub: parent:1477, slot:333, id=1215, clipped=1
 	player.getActionSender().sendHideWidget(1477, 315, false);//IF_Sethide: id=1477, comp=333, hidden=0
 	player.getActionSender().sendHideWidget(745, 2, true);//IF_Sethide: id=745, comp=2, hidden=1*/
-	
-	/**
-	 * Sends a dialog for the player to select a tool to use
-	 * @param message The message on the dialog
-	 * @param handler The script to run when a tool has been selected
-	 * @param possibleTools A series of item IDs representing the tools available
-	 */
-	public void requestTool (String message, final ToolSelectHandler handler, final int... possibleTools) {
-		setInputHandler(new InputEnteredHandler () {
-			@Override
-			public void handle(Object input) {
-				player.getWidgets().closeWidgets(true);
-				Long value = (Long) input;
-				int compID = (int) (value & 0xffff);
-				int toolSlot = -1;
-				switch (compID) {
-				case 16://First tool ID
-					toolSlot = 0;
-					break;
-				case 33://Second tool ID
-					toolSlot = 1;
-					break;
-				case 36://Third tool ID
-					toolSlot = 2;
-					break;
-				case 39://Fourth tool ID
-					toolSlot = 3;
-					break;
-				case 42://Fifth tool ID
-					toolSlot = 4;
-					break;
-				case 45://Sixth tool ID
-					toolSlot = 5;
-					break;
-				case 48://Seventh tool ID
-					toolSlot = 6;
-					break;
-				case 51://Eighth tool ID
-					toolSlot = 7;
-					break;
-				case 54://Ninth tool ID
-					toolSlot = 8;
-					break;
-				case 57://Tenth tool ID
-					toolSlot = 9;
-					break;
-				case 60://Eleventh tool ID
-					toolSlot = 10;
-					break;
-				}
-				int toolID = toolSlot <= possibleTools.length ? possibleTools[toolSlot] : -1;
-				player.getWidgets().closeWidgets(true);
-				handler.onToolSelected(toolID);
-			}			
-		});
-		player.getVars().setVarValueInt(1104, 1511);//TODO: Find out what these four varps are for...
-		player.getVars().setVarValueInt(1106, -1);
-		player.getVars().setVarValueInt(1105, 19);
-		player.getVars().setVarValueInt(1106, -1);
-		player.getDispatcher().sendWidgetText(1179, 0, message);
-		for (int i=0; i<TOOL_SELECT_OPTION_VARCS.length; i++) {
-			int tool = i<possibleTools.length ? possibleTools[i] : -1;
-			player.getDispatcher().sendVarc(TOOL_SELECT_OPTION_VARCS[i], tool);
-		}
-		player.getDispatcher().sendCS2Script(8178);
-		player.getWidgets().openCentralWidget(1179, false);
-		//player.getActionSender().sendWidget(1477, Widget.CENTRAL_IF_WINDOW_SLOT, 1179, false);
-	}
 	
 	/**
 	 * Closes the dialog(s) which are currently open

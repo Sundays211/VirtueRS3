@@ -49,7 +49,6 @@ import org.virtue.game.world.region.movement.Direction;
 import org.virtue.game.world.region.movement.routefinder.NpcTraversalMap;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
-import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.NpcTypeBlock;
 import org.virtue.utility.RenderTypeList;
@@ -507,12 +506,12 @@ public class NPC extends Entity {
 	}
 
 	@Override
-	public AnimationBlock getImpactAnimation() {
+	public int getImpactAnimation() {
 		CustomNpcData data = NpcTypeList.getCustomData(id);
 		if (data != null) {
-			return new AnimationBlock(data.getDefendAnimation());
+			return data.getDefendAnimation();
 		}
-		return new AnimationBlock(-1);
+		return -1;
 	}
 
 	/**
