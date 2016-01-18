@@ -70,6 +70,26 @@ var TreeType = {
         respawnDelay : 8,
         randomLife : 0
     },
+    ACHEY : {
+        level : 1,
+        xp : 25,
+        logId : 2862,
+        baseTime : 20,
+        randomTime : 4,
+        stumpID : 69555,
+        respawnDelay : 8,
+        randomLife : 0
+    },
+	EUCALYPTUS : {
+        level : 1,
+        xp : 25,
+        logId : 12581,
+        baseTime : 20,
+        randomTime : 4,
+        stumpID : 70073,
+        respawnDelay : 8,
+        randomLife : 0
+    },
     OAK : {
         level : 15,
         xp : 35.7,
@@ -262,13 +282,71 @@ var Woodcutting = {
 		treeRegistry : {},
 		loadTrees : function () {
 			//Add new trees here. Try to find their stump ID if possible..
-			this.registerTree(TreeType.WILLOW, 38616, 38725)
-			this.registerTree(TreeType.OAK, 38732, 38754);
-			this.registerTree(TreeType.YEW, 38755, 38759);
 			this.registerTree(TreeType.NORMAL, 38760, 40350);
-			this.registerTree(TreeType.NORMAL, 38782, 40350);
-			this.registerTree(TreeType.NORMAL, 38783, 40352);
+                        this.registerTree(TreeType.NORMAL, 38785, 40354);
 			this.registerTree(TreeType.NORMAL, 38787, 40356);
+			this.registerTree(TreeType.NORMAL, 38786, 40355);
+			this.registerTree(TreeType.NORMAL, 38782, 40351);
+			this.registerTree(TreeType.NORMAL, 38782, 40352);
+			this.registerTree(TreeType.NORMAL, 38783, 40352);
+			this.registerTree(TreeType.NORMAL, 38788, 40357);
+			this.registerTree(TreeType.NORMAL, 1276, 1342);
+			this.registerTree(TreeType.NORMAL, 93384, 40352);
+			this.registerTree(TreeType.NORMAL, 79813, 79814);
+			
+			
+			
+			this.registerTree(TreeType.SWAMP, 9387, 10951);
+			this.registerTree(TreeType.SWAMP, 2409, 0);//members?
+			this.registerTree(TreeType.SWAMP, 9354, 11059);
+			this.registerTree(TreeType.SWAMP, 9366, 11864);
+			this.registerTree(TreeType.SWAMP, 9355, 11862);
+			this.registerTree(TreeType.SWAMP, 3300, 11865);
+			
+			
+			this.registerTree(TreeType.DEAD, 68903, 68906 );
+			this.registerTree(TreeType.DEAD, 68901, 68904);
+			this.registerTree(TreeType.DEAD, 68902, 68905 );
+			this.registerTree(TreeType.DEAD, 11866, 9389);
+			this.registerTree(TreeType.DEAD, 1286, 1351);
+			this.registerTree(TreeType.DEAD, 1283, 1347);
+			this.registerTree(TreeType.DEAD, 1282, 1347);
+			this.registerTree(TreeType.DEAD, 1383, 1358);
+			this.registerTree(TreeType.DEAD, 47600, 47601);
+			this.registerTree(TreeType.DEAD, 47594, 47595);
+			this.registerTree(TreeType.DEAD, 47598, 47599);
+			this.registerTree(TreeType.DEAD, 47596, 47597);
+			this.registerTree(TreeType.DEAD, 1289, 1353);
+			this.registerTree(TreeType.DEAD, 69144, 69146);
+			this.registerTree(TreeType.DEAD, 24168, 24169);//dying tree
+			
+			
+			
+			this.registerTree(TreeType.DEAD, 4820, 4821);//Jungle tree
+			this.registerTree(TreeType.DEAD, 4818, 4819);//Jungle tree
+			
+			
+			
+			this.registerTree(TreeType.ACHEY, 69554, 69555);//achey tree
+			
+			this.registerTree(TreeType.EUCALYPTUS, 70071, 70073);//EUCALYPTUS tree needs fix
+			this.registerTree(TreeType.EUCALYPTUS, 70068, 70070);//EUCALYPTUS tree needs fix
+			
+			
+			this.registerTree(TreeType.OAK, 38732, 38754);
+			this.registerTree(TreeType.OAK, 38731, 38741);
+			
+			
+			this.registerTree(TreeType.WILLOW, 38616, 38725);
+            this.registerTree(TreeType.WILLOW, 38627, 38725);
+			this.registerTree(TreeType.WILLOW, 58006, 38725);
+			
+			
+			this.registerTree(TreeType.MAPLE, 51843, 54766);
+			
+			this.registerTree(TreeType.YEW, 38755, 38759);
+			
+			this.registerTree(TreeType.MAGIC, 63176, 63179);
 		},
 		registerTree : function (type, treeId, stumpId) {
 			if (stumpId === undefined || stumpId === -1) {
