@@ -23,7 +23,6 @@ package org.virtue.game.content.dialogues;
 
 import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcTypeList;
-import org.virtue.engine.script.listeners.DialogListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.entity.player.widget.WidgetState;
@@ -49,10 +48,6 @@ public class DialogManager {
 	 * The event called when a player enters input (string or integer) on request
 	 */
 	private InputEnteredHandler onInputEntered;
-	
-	private int[] optionSteps;
-	
-	private DialogListener currentDialog;
 	
 	private WidgetState topInterface;
 	
@@ -131,7 +126,6 @@ public class DialogManager {
 	 * @param steps An array of steps to move to if the matching option is selected. The length of this should match the number of options provided
 	 */
 	public void sendMultichoice (String message, String[] options, int[] steps) {
-		this.optionSteps = steps;
 		Object[] params = new Object[options.length + 1];
 		int i = options.length - 1;
 		for (int slot = 1;slot<params.length;slot++) {
@@ -231,18 +225,6 @@ public class DialogManager {
 		player.getDispatcher().sendCS2Script(8178);
 	}
 	
-	/**
-	 * Opens the specified chat dialog
-	 * @param dialogName The name of the dialog to open
-	 */
-	public void openDialog (String dialogName) {
-		DialogListener dialog = Virtue.getInstance().getScripts().getDialog(dialogName);
-		if (dialog != null) {
-			this.currentDialog = dialog;
-			dialog.startDialog(player);
-		}
-	}
-	
 	/*player.getActionSender().sendWidget(1477, 315, 1215, true);//Interface_sub: parent:1477, slot:333, id=1215, clipped=1
 	player.getActionSender().sendHideWidget(1477, 315, false);//IF_Sethide: id=1477, comp=333, hidden=0
 	player.getActionSender().sendHideWidget(745, 2, true);//IF_Sethide: id=745, comp=2, hidden=1*/
@@ -251,13 +233,7 @@ public class DialogManager {
 	 * Closes the dialog(s) which are currently open
 	 */
 	public void closeDialog () {
-		/*player.getActionSender().sendCloseWidget(1477, Widget.DIALOG_WINDOW_SLOT);
-		player.getActionSender().sendCloseWidget(1477, Widget.CENTRAL_IF_WINDOW_SLOT);
-		player.getWidgets().closeCentralWidgets();*/
 		this.topInterface = null;
-		if (currentDialog != null) {
-			currentDialog = null;
-		}
 	}
 	
 	/**
@@ -308,39 +284,9 @@ public class DialogManager {
 				}
 				int ifaceID = (int) ((value >> 16) & 0xffff);
 				int compID = (int) (value & 0xffff);
-				System.out.println((currentDialog != null) + ", " + ifaceID);
-				if (currentDialog != null) {//Continue dialog
-					switch (ifaceID) {
-					case 1188://Multi-choice
-						int option = getMultichoiceOption(compID);
-						if (option == -1) {
-							return;//-1 means the dialog isn't completed yet
-						}
-						if (optionSteps != null) {
-							if (option > 0 && option <= optionSteps.length) {
-								setStep(optionSteps[option-1]);
-							}
-							optionSteps = null;
-						}
-						if (currentDialog.continueDialog(player, option)) {
-							player.getWidgets().closeWidgets(true);
-						}
-						break;
-					case 1191:
-					case 1184:
-					case 1186:
-						if (currentDialog.continueDialog(player, -1)) {
-							player.getWidgets().closeWidgets(true);
-						}
-						break;
-					default:
-						System.out.println("Unhandled resume pause: interface="+ifaceID+", component="+compID+", slot="+slotID);
-					}					
-				} else {
-					System.out.println("Unhandled resume pause: interface="+ifaceID+", component="+compID+", slot="+slotID);
-				}
+				player.getDispatcher().sendGameMessage("Unhandled resume pause: interface="+ifaceID+", component="+compID+", slot="+slotID);
 			} else {
-				System.out.println("Unhandled input: type="+type+", value="+input);
+				player.getDispatcher().sendGameMessage("Unhandled input: type="+type+", value="+input);
 			}
 		}
 	}

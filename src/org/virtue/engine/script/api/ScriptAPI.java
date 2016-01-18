@@ -526,7 +526,12 @@ public interface ScriptAPI {
 	 */
 	public void sendInvTo(Player player, Player target, int invId);
 	
-	public void clearContainer (Player player, int invId);
+	/**
+	 * Removes all items currently in the specified inventory
+	 * @param player The player to remove items from
+	 * @param invId The inventory ID
+	 */
+	public void emptyInv (Player player, int invId);
 	
 	public void unloadContainer (Player player, int invId);
 	
@@ -722,13 +727,6 @@ public interface ScriptAPI {
 	
 		
 	public void setAction (Player player, PlayerActionHandler action);
-	
-	/**
-	 * Initiates a dialog with the player
-	 * @param player The player
-	 * @param dialog The name of the dialog to start
-	 */
-	public void openDialog (Player player, String dialog);
 	
 	/**
 	 * Prevents the player from moving for a number of ticks
@@ -1149,10 +1147,9 @@ public interface ScriptAPI {
 	 * Creates a new NPC. NOTE: This method doesn't add the NPC to the world: to add the NPC, use {@link #spawnNpc(NPC)}
 	 * @param id The NPC type ID
 	 * @param coords The spawn coordinates
-	 * @param respawn True if the npc will respawn if/when killed, false otherwise
 	 * @return The new NPC instance
 	 */
-	public NPC createNpc (int id, Tile coords, boolean respawn);
+	public NPC createNpc (int id, Tile coords);
 	
 	/**
 	 * Transforms the specified NPC to another NPC of the provided type ID
@@ -1162,10 +1159,17 @@ public interface ScriptAPI {
 	public void transformNpc (NPC npc, int newID);
 	
 	/**
-	 * Adds the npc to the world
-	 * @param npc The npc to add
+	 * Adds the npc to the world. This NPC will not respawn if killed
+	 * @param npc The npc to spawn
 	 */
 	public void spawnNpc (NPC npc);
+	
+	/**
+	 * Adds the npc to the world
+	 * @param npc The npc to add
+	 * @param respawn True if the npc will respawn if/when killed, false otherwise
+	 */
+	public void spawnNpc (NPC npc, boolean respawn);
 	
 	/**
 	 * Despawns the specified npc. If "respawnDelay" is not -1, it will respawn after the numer of ticks specified 

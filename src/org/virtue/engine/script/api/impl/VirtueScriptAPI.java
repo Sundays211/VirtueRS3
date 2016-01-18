@@ -866,7 +866,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#clearContainer(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public void clearContainer(Player player, int containerID) {
+	public void emptyInv(Player player, int containerID) {
 		ContainerState state = ContainerState.getById(containerID);
 		if (state == null) {
 			return;
@@ -1271,14 +1271,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void setAction(Player player, PlayerActionHandler action) {
 		player.setAction(action);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#openDialog(org.virtue.game.entity.player.Player, java.lang.String)
-	 */
-	@Override
-	public void openDialog(Player player, String dialog) {
-		player.getDialogs().openDialog(dialog);
 	}
 
 	/* (non-Javadoc)
@@ -1924,9 +1916,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#createNpc(int, org.virtue.game.world.region.Tile, boolean)
 	 */
 	@Override
-	public NPC createNpc(int id, Tile coords, boolean respawn) {
+	public NPC createNpc(int id, Tile coords) {
 		NPC npc = NPC.create(id, coords);
-		npc.setCanRespawn(respawn);
 		return npc;
 	}
 
@@ -1939,10 +1930,19 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#spawnNpc(org.virtue.game.entity.npc.NPC)
+	 * @see org.virtue.engine.script.api.ScriptAPI#spawnNpc(org.virtue.game.entity.npc.NPC)
 	 */
 	@Override
 	public void spawnNpc(NPC npc) {
+		spawnNpc(npc, false);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.ScriptAPI#spawnNpc(org.virtue.game.entity.npc.NPC)
+	 */
+	@Override
+	public void spawnNpc(NPC npc, boolean respawn) {
+		npc.setCanRespawn(respawn);
 		World.getInstance().addNPC(npc);
 	}
 

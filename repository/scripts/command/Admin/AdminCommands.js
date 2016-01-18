@@ -33,7 +33,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 				return;
 			}
 			var npcID = parseInt(args[0]);
-			var npc = api.createNpc(npcID, api.getCoords(player), false);
+			var npc = api.createNpc(npcID, api.getCoords(player));
 			api.spawnNpc(npc);
 			npc.getCombatSchedule().lock(player);
 			return;

@@ -288,6 +288,26 @@ function multi4 (player, message, op1, op1callback, op2, op2callback, op3, op3ca
 	api.requestMulti(player, message, [op1, op2, op3, op4], [1, 2, 3, 4], new Handler());
 }
 
+function multi5 (player, message, op1, op1callback, op2, op2callback, op3, op3callback, op4, op4callback, op5, op5callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			if (value == 1 && op1callback !== undefined) {
+				op1callback();
+			} else if (value == 2 && op2callback !== undefined) {
+				op2callback();
+			} else if (value == 3 && op3callback !== undefined) {
+				op3callback();
+			} else if (value == 4 && op4callback !== undefined) {
+				op4callback();
+			} else if (value == 4 && op5callback !== undefined) {
+				op5callback();
+			}
+		}
+	});
+	
+	api.requestMulti(player, message, [op1, op2, op3, op4, op5], [1, 2, 3, 4, 5], new Handler());
+}
+
 function sendCommandResponse (player, message, console) {
 	api.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
 }

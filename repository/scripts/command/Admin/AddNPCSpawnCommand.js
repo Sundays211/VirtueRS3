@@ -55,11 +55,11 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			if (args.length >= 4) {
 				posZ = parseInt(args[3]);
 			}
-			var npc = api.createNpc(npcType, api.getCoords(posX, posY, posZ), true);
+			var npc = api.createNpc(npcType, api.getCoords(posX, posY, posZ));
 			writer.write("//Added by "+api.getName(player)+": "+api.getName(npc));
 			writer.newLine();
 			writer.write(npcType + " - " + posX + " " + posY + " " + posZ);
-			api.spawnNpc(npc);
+			api.spawnNpc(npc, true);
 			writer.close();
 		} catch (e) { 
 			if (writer != null) {

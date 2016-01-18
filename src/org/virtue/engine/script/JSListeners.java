@@ -44,7 +44,6 @@ import org.virtue.engine.script.api.impl.VirtueMapAPI;
 import org.virtue.engine.script.api.impl.VirtueScriptAPI;
 import org.virtue.engine.script.listeners.AbilityListener;
 import org.virtue.engine.script.listeners.CombatHandler;
-import org.virtue.engine.script.listeners.DialogListener;
 import org.virtue.engine.script.listeners.EventListener;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
@@ -126,8 +125,6 @@ public class JSListeners implements ScriptManager {
 
 	private Map<Integer, WidgetListener> widgetMap;
 	
-	private Map<String, DialogListener> dialogMap;
-	
 	private Map<Integer, VarListener> varMap;
 
 	private Map<Integer, AbstractNPC> abstractNPCMap;
@@ -151,7 +148,6 @@ public class JSListeners implements ScriptManager {
 		this.widgetMap = new HashMap<Integer, WidgetListener>();
 		this.abstractNPCMap = new HashMap<Integer, AbstractNPC>();
 		this.combatScriptMap = new HashMap<Integer, CombatHandler>();
-		this.dialogMap = new HashMap<String, DialogListener>();
 		this.varMap = new HashMap<Integer, VarListener>();
 		this.vars = new HashMap<Integer, VarListener>();
 		this.scriptAPI = new VirtueScriptAPI();
@@ -232,7 +228,7 @@ public class JSListeners implements ScriptManager {
 				}
 			}			
 		}
-		logger.info("Registerd " + dialogMap.size() + " Dialog Script(s), "  + widgetMap.size() + " Widget Script(s).");
+		logger.info("Registerd " + varMap.size() + " Var Script(s), "  + widgetMap.size() + " Widget Script(s).");
 		return success;
 	}
 	
@@ -262,7 +258,6 @@ public class JSListeners implements ScriptManager {
 	public synchronized boolean reload() {
 		listeners.clear();
 		widgetMap.clear();
-		dialogMap.clear();
 		abstractNPCMap.clear();
 		varMap.clear();
 		vars.clear();
@@ -340,15 +335,6 @@ public class JSListeners implements ScriptManager {
 	}
 	
 	/**
-	 * Registers a {@link DialogListener}, which is triggered by another script to provide a dialog chain
-	 * @param listener The listener
-	 * @param name The name which is used to trigger the dialog
-	 */
-	public void registerDialogListener(DialogListener listener, String name) {
-		dialogMap.put(name.toLowerCase(), listener);
-	}
-	
-	/**
 	 * Registers a {@link VarListener} which monitors player variables and is triggered when they change.
 	 * VarListeners also run once upon login, then on a regular basis if desired. Because of this, they do not have to be tied to a specific variable
 	 * @param listener The listener
@@ -423,10 +409,6 @@ public class JSListeners implements ScriptManager {
 	@Override
 	public WidgetListener forWidgetID(int id) {
 		return widgetMap.get(id);
-	}
-	
-	public DialogListener getDialog (String name) {
-		return dialogMap.get(name.toLowerCase());
 	}
 	
 	public VarListener forVarID (int varp) {

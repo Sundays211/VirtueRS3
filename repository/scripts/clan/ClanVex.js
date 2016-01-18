@@ -58,7 +58,7 @@ var listen = function(scriptManager) {
 
 var ClanVex = {
 		place : function (player, item, slot) {
-			var npc = api.createNpc(13634, api.getCoords(player), false);
+			var npc = api.createNpc(13634, api.getCoords(player));
 			if(npc.getOwner() != null) {
 				api.sendMessage(player, "You already have a clan vex out.");
 			} else {
