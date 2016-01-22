@@ -241,45 +241,25 @@ var Wisp = {
 	    
 };
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-	
-	/* The interface ids to bind to */
-	getIDs: function() {
-		return [91];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		api.setVarc(player, 3711, getCarriedMemory(player) == null ? 0 : 1);
-		//varc 3711 = Has memories
-		//varc 3713 = Has energy
-	},
-
-	/* A button clicked on the interface */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		switch (component) {
+var DivinationSelectListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		var player = args.player;
+		switch (args.component) {
 		case 1://Convert to energy
-			convertMemories(player, getCarriedMemory(player), 1);
+			Divination.convertMemories(player, getCarriedMemory(player), 1);
 			api.closeCentralWidgets(player);
 			return true;
 		case 6://Convert to xp
-			convertMemories(player, getCarriedMemory(player), 2);
+			Divination.convertMemories(player, getCarriedMemory(player), 2);
 			api.closeCentralWidgets(player);
 			return true;
 		case 7://Convert to enhanced xp
 		default:
+			api.sendMessage(player, "Unhandled divination button: comp="+args.component+", button="+args.button);
 			return false;
-		}		
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
+		}
 	}
 });
-
 
 var EnergyRiftListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
@@ -288,12 +268,15 @@ var EnergyRiftListener = Java.extend(Java.type('org.virtue.engine.script.listene
 		switch (event) {
 		case EventType.OPLOC1:
 			api.openCentralWidget(player, 91, false);
+			api.setVarc(player, 3711, getCarriedMemory(player) == null ? 0 : 1);
+			//varc 3711 = Has memories
+			//varc 3713 = Has energy
 			return;
 		case EventType.OPLOC2:
-			convertMemories(player, getCarriedMemory(player), 1);
+			Divination.convertMemories(player, getCarriedMemory(player), 1);
 			return;
 		case EventType.OPLOC3:
-			convertMemories(player, getCarriedMemory(player), 2);
+			Divination.convertMemories(player, getCarriedMemory(player), 2);
 			return;
 		}
 	}
@@ -301,7 +284,7 @@ var EnergyRiftListener = Java.extend(Java.type('org.virtue.engine.script.listene
 
 var WispListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, npcTypeId, args) {
-		startHarvest(args.player, args.npc);
+		Divination.startHarvest(args.player, args.npc);
 	}
 });
 
@@ -324,201 +307,194 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPNPC1, npcs[i], wispListener);
 	}
 	
-	var widgetListener = new WidgetListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
+	var selectListener = new DivinationSelectListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 91, selectListener);
 };
 
-
-function startEnergyRift(player, object) {
-	var memoryType = getCarriedMemory(item.getID());
-	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-		api.sendMessage(player, "Not enough space in your inventory.");
-		return;
-	}
-	//if (api.carriedItemTotal(player, item.getID()) < 1) {
-		//api.sendMessage(player, "You need to have "+api.getItemName(energyRift.memoryID)+" in your inventory.");
-		//return true;
-	//}
-	var delay = 0;
-	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-		process : function (player) {
-			if (delay <= 0) {
-				if (api.carriedItemTotal(player, memoryType.memoryID) < 1) {
-					return true;
+var Divination = {
+		startEnergyRift : function (player, object) {
+			var memoryType = this.getCarriedMemory(player);
+			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
+				api.sendMessage(player, "Not enough space in your inventory.");
+				return;
+			}
+			//if (api.carriedItemTotal(player, item.getID()) < 1) {
+				//api.sendMessage(player, "You need to have "+api.getItemName(energyRift.memoryID)+" in your inventory.");
+				//return true;
+			//}
+			var delay = 0;
+			var that = this;
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
+				process : function (player) {
+					if (delay <= 0) {
+						if (api.carriedItemTotal(player, memoryType.memoryID) < 1) {
+							return true;
+						}
+						that.convertMemories(player, memoryType, object);
+						delay = 3;
+					}
+					delay--;
+					return false;
+				},
+				stop : function (player) {//Clear the current animation block
+					api.resetRenderAnim(player);
 				}
-				convertMemory(player, memoryType, object);
-				delay = 3;
-			}
-			delay--;
-			return false;
+
+			});
+			player.setAction(new Action());
 		},
-		stop : function (player) {//Clear the current animation block
-			player.getAppearance().setRenderAnimation(-1);
-			player.getAppearance().refresh();
-		}
-
-	});
-	player.setAction(new Action());
-}
-
-function convertMemories (player, memoryType, convertType) {
-	if (memoryType == null) {
-		api.sendMessage(player, "You are not carrying any memories.");
-		return;
-	}
-	var delay = 3;
-	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-		process : function (player) {
-			if (delay <= 0) {
-				if (api.carriedItemTotal(player, memoryType.memoryID) < 1) {
-					memoryType = getCarriedMemory(player);
-					if (memoryType == null) {
-						return true;
-					}					
+		convertMemories : function (player, memoryType, convertType) {
+			if (memoryType == null) {
+				api.sendMessage(player, "You are not carrying any memories.");
+				return;
+			}
+			var delay = 3;
+			var that = this;
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
+				process : function (player) {
+					if (delay <= 0) {
+						if (api.carriedItemTotal(player, memoryType.memoryID) < 1) {
+							memoryType = that.getCarriedMemory(player);
+							if (memoryType == null) {
+								return true;
+							}					
+						}
+						api.runAnimation(player, 21234);
+						api.setSpotAnim(player, 1, 4240);
+						that.convertMemory(player, memoryType, convertType);
+						delay = 3;
+					}
+					delay--;
+					return false;
+				},
+				stop : function (player) {//Clear the current animation block
+					api.resetRenderAnim(player);
 				}
-				api.runAnimation(player, 21234);
-				api.setSpotAnim(player, 1, 4240);
-				convertMemory(player, memoryType, convertType);
-				delay = 3;
-			}
-			delay--;
-			return false;
+
+			});
+			player.setAction(new Action());
 		},
-		stop : function (player) {//Clear the current animation block
-			player.getAppearance().setRenderAnimation(-1);
-			player.getAppearance().refresh();
-		}
-
-	});
-	player.setAction(new Action());
-}
-
-function convertMemory(player, memoryType, convertType) {
-	if (memoryType == null || api.carriedItemTotal(player, memoryType.memoryID) < 1) {
-		api.sendMessage(player, "You are not carrying any memories.");
-		return;
-	}
-	api.delCarriedItem(player, memoryType.memoryID, 1);	
-	if (convertType == 1) {//To energy
-		var amount = 2+Math.floor(Math.random() * 4);
-		api.addCarriedItem(player, memoryType.energyID, amount);
-		api.addExperience(player, Stat.DIVINATION, 1, true);
-	} else if (convertType == 2) {//To xp
-		api.addExperience(player, Stat.DIVINATION, memoryType.convertXp, true);		
-	} else if (convertType == 3) {//To enhanced xp
-		
-	}
-}
-
-function getCarriedMemory(player) {
-	for (var ordinal in Wisp) {
-		if (api.carriedItemTotal(player, Wisp[ordinal].memoryID) > 1) {
-			return Wisp[ordinal];
-		}
-	}
-	return null;
-}
-
-function startHarvest (player, npc) {
-	var harvest = forHarvestNPC(npc.getID());
-	if (api.getStatLevel(player, Stat.DIVINATION) < harvest.level) {
-		api.sendMessage(player, "You need a Divination level of "+harvest.level+" to harvest from this " + api.getNpcType(harvest.wispID).name + ".");
-		return;
-	}
-	if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-		api.sendMessage(player, "Not enough space in your inventory.");
-		return;
-	}
-	api.faceEntity(player, npc);	
-	if (npc.getID() == harvest.wispID) {
-		openWisp(npc, harvest);
-	}
-	
-	var stop = getHarvestDelay(player, harvest);
-	var delay = 5;
-	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-		process : function (player) {
-			api.runAnimation(player, 21231);
-
-			if (delay <= 0) {
-				if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-						api.sendMessage(player, "Not enough space in your inventory.");
-						return true;
+		convertMemory : function (player, memoryType, convertType) {
+			if (memoryType == null || api.carriedItemTotal(player, memoryType.memoryID) < 1) {
+				api.sendMessage(player, "You are not carrying any memories.");
+				return;
+			}
+			api.delCarriedItem(player, memoryType.memoryID, 1);	
+			if (convertType == 1) {//To energy
+				var amount = 2+Math.floor(Math.random() * 4);
+				api.addCarriedItem(player, memoryType.energyID, amount);
+				api.addExperience(player, Stat.DIVINATION, 1, true);
+			} else if (convertType == 2) {//To xp
+				api.addExperience(player, Stat.DIVINATION, memoryType.convertXp, true);		
+			} else if (convertType == 3) {//To enhanced xp
+				
+			}
+		},
+		getCarriedMemory : function (player) {
+			for (var ordinal in Wisp) {
+				if (api.carriedItemTotal(player, Wisp[ordinal].memoryID) > 1) {
+					return Wisp[ordinal];
 				}
-				if (stop <= 0) {
-					return true;
+			}
+			return null;
+		},
+		startHarvest : function (player, npc) {
+			var harvest = this.forHarvestNPC(api.getId(npc));
+			if (api.getStatLevel(player, Stat.DIVINATION) < harvest.level) {
+				api.sendMessage(player, "You need a Divination level of "+harvest.level+" to harvest from this " + api.getNpcType(harvest.wispID).name + ".");
+				return;
+			}
+			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
+				api.sendMessage(player, "Not enough space in your inventory.");
+				return;
+			}
+			api.faceEntity(player, npc);	
+			if (npc.getID() == harvest.wispID) {
+				openWisp(npc, harvest);
+			}
+			
+			var stop = this.getHarvestDelay(player, harvest);
+			var delay = 5;
+			var that = this;
+			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
+				process : function (player) {
+					api.runAnimation(player, 21231);
+
+					if (delay <= 0) {
+						if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
+								api.sendMessage(player, "Not enough space in your inventory.");
+								return true;
+						}
+						if (stop <= 0) {
+							return true;
+						}
+						that.forHarvestItem(player, harvest);
+						delay = 5;
+					}
+					stop--;
+					delay--;
+					return !npc.exists();
+				},
+				stop : function (player) {
+					api.stopAnimation(player);
+					api.runAnimation(player, 21229);
 				}
-				forHarvestItem(player, harvest);
-				delay = 5;
-			}
-			stop--;
-			delay--;
-			return !npc.exists();
+				
+			});
+			player.setAction(new Action());
 		},
-		stop : function (player) {
-			api.stopAnimation(player);
-			api.runAnimation(player, 21229);
-		}
-		
-	});
-	player.setAction(new Action());
-}
-
-function openWisp (npc, harvest) {
-	api.transformNpc(npc, harvest.springID);
-	var lifespan = 50;
-	var Action = Java.extend(Java.type('org.virtue.game.entity.npc.NpcAction'), {	
-		process : function (npc) {
-			if (lifespan == 3) {
-				api.runAnimation(npc, 21203);
-			}
-			if (lifespan <= 0) {
-				return true
-			}
-			lifespan--;
-			return !npc.exists();
+		openWisp : function (npc, harvest) {
+			api.transformNpc(npc, harvest.springID);
+			var lifespan = 50;
+			var Action = Java.extend(Java.type('org.virtue.game.entity.npc.NpcAction'), {	
+				process : function (npc) {
+					if (lifespan == 3) {
+						api.runAnimation(npc, 21203);
+					}
+					if (lifespan <= 0) {
+						return true
+					}
+					lifespan--;
+					return !npc.exists();
+				},
+				stop : function (npc) {			
+					api.despawnNpc(npc, 10);//TODO: Correct respawn delay
+					api.transformNpc(npc, harvest.wispID);
+				}
+				
+			});
+			npc.setAction(new Action());
 		},
-		stop : function (npc) {			
-			api.despawnNpc(npc, 10);//TODO: Correct respawn delay
-			api.transformNpc(npc, harvest.wispID);
+		forHarvestItem : function (player, harvest) {
+			var energyAmount = 1;
+			if (api.getBaseLevel(player, Stat.DIVINATION) > 54) {
+				energyAmount = 2;
+			}
+			if (api.getBaseLevel(player, Stat.DIVINATION) > 74) {
+				energyAmount = 3;
+			}
+			if (harvest.enriched) {
+				api.setSpotAnim(player, 1, harvest.memoryGfx);
+				api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
+				api.addCarriedItem(player, harvest.memoryID, 1);
+				api.addCarriedItem(player, harvest.energyID, energyAmount*2);
+			} else {
+				api.setSpotAnim(player, 1, harvest.memoryGfx);
+				api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
+				api.addCarriedItem(player, harvest.memoryID, 1);
+				api.addCarriedItem(player, harvest.energyID, energyAmount);
+			}
+		},
+		getHarvestDelay : function (player, harvest) {
+			return harvest.enriched ? 80 : 50;
+		},
+		forHarvestNPC : function (id) {
+			for (ordinal in Wisp) {
+				if (Wisp[ordinal].wispID == id
+					|| Wisp[ordinal].springID == id) {
+					return Wisp[ordinal];
+				}
+			}
+			return null;
 		}
-		
-	});
-	npc.setAction(new Action());
-}
-
-function forHarvestItem (player, harvest) {
-	var energyAmount = 1;
-	if (api.getBaseLevel(player, Stat.DIVINATION) > 54) {
-		energyAmount = 2;
-	}
-	if (api.getBaseLevel(player, Stat.DIVINATION) > 74) {
-		energyAmount = 3;
-	}
-	if (harvest.enriched) {
-		api.setSpotAnim(player, 1, harvest.memoryGfx);
-		api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
-		api.addCarriedItem(player, harvest.memoryID, 1);
-		api.addCarriedItem(player, harvest.energyID, energyAmount*2);
-	} else {
-		api.setSpotAnim(player, 1, harvest.memoryGfx);
-		api.addExperience(player, Stat.DIVINATION, harvest.xp, true);
-		api.addCarriedItem(player, harvest.memoryID, 1);
-		api.addCarriedItem(player, harvest.energyID, energyAmount);
-	}
-}
-
-function getHarvestDelay (player, harvest) {
-	return harvest.enriched ? 80 : 50;
-}
-
-
-function forHarvestNPC(id) {
-	for (ordinal in Wisp) {
-		if (Wisp[ordinal].wispID == id
-			|| Wisp[ordinal].springID == id) {
-			return Wisp[ordinal];
-		}
-	}
-	return null;
 }

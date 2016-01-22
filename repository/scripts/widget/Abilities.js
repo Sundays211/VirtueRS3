@@ -27,44 +27,39 @@
  * @author Sundays211
  * @since 01/02/2015
  */
-var api;
 
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interfaces to bind to */
-	getIDs: function() {
-		return [ 1460, 1458, 1461, 1452, 1449, 1503 ];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		switch (interfaceID) {
+var AbilitiesOpenListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
+		switch (args["interface"]) {
 		case 1460://Melee
 			api.setWidgetEvents(player, 1460, 1, 0, 171, 97286);
 			api.setWidgetEvents(player, 1460, 4, 6, 14, 2);
 			break;
 		}
-	},
-	
+	}
+});
 
-	/* The first option on an object */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		switch (interfaceID) {
+var AbilitiesButtonListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
+		switch (args["interface"]) {
 		case 1460://Melee
-			var ability = ActionBar.getAbilities().get(interfaceID << 6 | component);
+			var ability = ActionBar.getAbilities().get(args["interface"] << 6 | args.component);
 			if (ability != null) {
 				player.getCombatSchedule().run(ability);
 			}
 			return true;
 		case 1458://Prayer
 			if(!player.getCombat().getPrayer().usingPrayer) {
-				player.getCombat().getPrayer().activate(slot);
+				player.getCombat().getPrayer().activate(args.slot);
 				api.runAnimation(player, 18018);
 			} else {
-				player.getCombat().getPrayer().deactivate(slot);
+				player.getCombat().getPrayer().deactivate(args.slot);
 			}
 			return false;
 		case 1461://Mage
-			var spell = org.virtue.game.content.skills.magic.Spellbook.MODERN.get(slot);
+			var spell = org.virtue.game.content.skills.magic.Spellbook.MODERN.get(args.slot);
 			if (player.getCombatSchedule().getAutocastSpell() != null) {
 				player.getCombatSchedule().setAutocastSpell(null);
 				api.sendMessage(player, "Auto-cast spell cleared.");
@@ -76,23 +71,21 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 		case 1452://Ranged
 		case 1449://Defence
 		default:
-			return false;
-		}		
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
+			api.sendMessage(player, "Unhandled ability button: interface="+args["interface"]+", comp="+args.component+", slot="+args.slot+", button="+args.button);
+			return;
+		}
 	}
-
 });
 
 /* Listen to the interface ids specified */
-var listen = function(scriptLoader) {
-	api = scriptLoader.getApi();
-	var widgetListener = new WidgetListener();
-	scriptLoader.registerWidgetListener(widgetListener, widgetListener.getIDs());
+var listen = function(scriptManager) {
+	var listener = new AbilitiesOpenListener();	
+	scriptManager.registerListener(EventType.IF_OPEN, 1460, listener);
+	
+	listener = new AbilitiesButtonListener();	
+	scriptManager.registerListener(EventType.IF_BUTTON, 1460, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 1458, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 1452, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 1449, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 1503, listener);
 };

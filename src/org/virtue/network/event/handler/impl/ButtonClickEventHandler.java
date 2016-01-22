@@ -27,7 +27,6 @@ import java.util.Map;
 import org.virtue.Virtue;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
-import org.virtue.engine.script.listeners.WidgetListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.ButtonClickEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
@@ -102,14 +101,10 @@ public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEven
 			args.put("button", context.getButton().getId());
 			scripts.invokeScriptChecked(ScriptEventType.IF_BUTTON, context.getInterfaceId(), args);
 		} else {
-			WidgetListener listener = scripts.forWidgetID(context.getInterfaceId());
-			if (listener == null || !listener.handleInteraction(player, context.getInterfaceId(), 
-					context.getComponentId(), context.getSlot(), context.getItemID(), context.getButton().getId())) {
-				String message = "Nothing interesting happens.";
-				if (player.getPrivilegeLevel().getRights() >= 2) {
-					message = "Unhandled Widget: " + context.getInterfaceId() + ", Component: " + context.getComponentId() + ", Slot: " + context.getSlot() + ", Item: " + context.getItemID() + ", Button: "+context.getButton();
-					player.getDispatcher().sendGameMessage(message);
-				}
+			String message = "Nothing interesting happens.";
+			if (player.getPrivilegeLevel().getRights() >= 2) {
+				message = "Unhandled Widget: " + context.getInterfaceId() + ", Component: " + context.getComponentId() + ", Slot: " + context.getSlot() + ", Item: " + context.getItemID() + ", Button: "+context.getButton();
+				player.getDispatcher().sendGameMessage(message);
 			}
 		}
 	}

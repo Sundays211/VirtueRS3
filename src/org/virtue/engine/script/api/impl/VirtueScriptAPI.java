@@ -1378,15 +1378,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 		player.getAppearance().refresh();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#setRenderAnim(org.virtue.game.entity.player.Player, int)
-	 */
-	@Override
-	public void setRenderAnim(Player player, int renderId) {
-		player.getAppearance().setRenderAnimation(renderId);
-		player.getAppearance().refresh();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#refreshEquipment(org.virtue.game.entity.player.Player)
@@ -1470,6 +1461,24 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void clearExchangeOffer(Player player, int exchange, int slot) {
 		player.getExchangeOffers().clearOffer(exchange, slot);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.ScriptAPI#setRenderAnim(org.virtue.game.entity.player.Player, int)
+	 */
+	@Override
+	public void setRenderAnim(Player player, int renderId) {
+		player.getAppearance().setRenderAnimation(renderId);
+		player.getAppearance().refresh();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#resetRenderAnim(org.virtue.game.entity.player.Player)
+	 */
+	@Override
+	public void resetRenderAnim(Player player) {
+		player.getAppearance().setRenderAnimation(-1);
+		player.getAppearance().refresh();
 	}
 
 	/* (non-Javadoc)

@@ -23,8 +23,6 @@ package org.virtue.engine.script;
 
 import java.util.Map;
 
-import org.virtue.engine.script.listeners.WidgetListener;
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -73,7 +71,5 @@ public interface ScriptManager {
 	 */
 	public void invokeScriptChecked(ScriptEventType type,
 			Object trigger, Map<String, Object> args) throws NullPointerException;
-
-	public WidgetListener forWidgetID(int id);
 
 }

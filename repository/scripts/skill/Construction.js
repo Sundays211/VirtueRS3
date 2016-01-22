@@ -108,10 +108,7 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPLOC3, ids[i], listener);
 		scriptManager.registerListener(EventType.OPLOC4, ids[i], listener);
 		scriptManager.registerListener(EventType.OPLOC5, ids[i], listener);
-	}	
-	
-	var widgetListener = new WidgetListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
+	}
 };
 
 function enterHouse (player) {
@@ -155,38 +152,3 @@ function joinHouse(player) {
 function buildRoom(player, object) {
 	
 }
-
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interfaces to bind to */
-	getIDs: function() {
-		return [ 402 ];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		if (interfaceID == 402) {
-		}
-	},
-
-	/* Pressed a button on the interface */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		if (interfaceID == 402) {
-			switch (component) {
-			case 93:
-				api.runAnimation(player, 898);
-				return true;
-			}
-		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		if (interfaceID == 402) {
-			closeCentralWidgets(player);
-		}
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
-	}
-});
-

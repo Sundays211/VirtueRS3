@@ -28,19 +28,11 @@
  * @author Sundays211
  * @since 17/02/2015
  */
-var api;
-
-var BACKPACK = 93;
-
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interfaces to bind to */
-	getIDs: function() {
-		return [ 105, 107 ];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		if (interfaceID == 105) {
+var ExchangeOpenListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
+		switch (args["interface"]) {
+		case 105:
 			api.setVarp(player, 163, 4);
 			api.setVarp(player, 138, -1);//Exchange slot
 			api.setVarp(player, 139, -1);//Buy or sell (1=buy, 0=sell)
@@ -55,176 +47,193 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			api.setWidgetEvents(player, 107, 4, 0, 27, 14682110);
 			api.setWidgetEvents(player, 105, 77, -1, -1, 8650758);
 			api.setWidgetEvents(player, 105, 79, -1, -1, 8650758); 
-		} else if (interfaceID == 107) {
+			return;
+		case 107:
 			api.runClientScript(player, 8862, [0, 2]);
-			api.runClientScript(player, 8862, [0, 3]);			
+			api.runClientScript(player, 8862, [0, 3]);
+			return;
 		}
-	},
+	}
+});
 
-	/* Pressed a button on the interface */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
-		if (interfaceID == 107 && component == 4) {
-			switch (option) {
-			case 1:
-				Exchange.offerItem(player, slot);
-				return true;
-			}
-			return false;
-		} else if (interfaceID == 105) {
+var ExchangeButtonListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
+		switch (args["interface"]) {
+		case 105:
 			switch (component) {	
 			case 9://Select item to buy
 				Exchange.searchForItem(player);
-				return true;
+				return;
 			case 28://View offer 0
 				Exchange.viewOffer(player, 0);
-				return true;
+				return;
 			case 30://View offer 1
 				Exchange.viewOffer(player, 1);
-				return true;
+				return;
 			case 33://View offer 2
 				Exchange.viewOffer(player, 2);
-				return true;
+				return;
 			case 34://View offer 3
 				Exchange.viewOffer(player, 3);
-				return true;
+				return;
 			case 36://View offer 4
 				Exchange.viewOffer(player, 4);
 				return true;
 			case 38://View offer 5
 				Exchange.viewOffer(player, 5);
-				return true;
+				return;
 			case 42://Pressed "Back" button
 				Exchange.clearOffer(player);
-				return true;
+				return;
 			case 75://Abort current offer
 				var slot = api.getVarp(player, 138);
 				if (slot >= 0 && slot < 6) {
 					api.abortExchangeOffer(player, slot);
 				}				
-				return true;
+				return;
 			case 77://Collect item
 				Exchange.collectItems(player, 0, option);
-				return true;
+				return;
 			case 79://Collect coins
 				Exchange.collectItems(player, 1, option);
-				return true;
+				return;
 			case 87://Close button
-				return true;
+				return;
 			case 98://Decrease quantity by one
 				if (api.getVarp(player, 136) > 0) {
 					api.incrementVarp(player, 136, -1);
 				}				
-				return true;
+				return;
 			case 101://Increase quantity by one
 				api.incrementVarp(player, 136, 1);			
-				return true;
+				return;
 			case 105:
 				Exchange.handleQuantityButton(player, 1);
-				return true;
+				return;
 			case 111://Increase quantity by ten
 				Exchange.handleQuantityButton(player, 2);
-				return true;
+				return;
 			case 117://Increase quantity by 100
 				Exchange.handleQuantityButton(player, 3);
-				return true;
+				return;
 			case 123://Increase quantity by 1000
 				Exchange.handleQuantityButton(player, 4);
-				return true;
+				return;
 			case 129://Select custom quantity
 				Exchange.handleQuantityButton(player, 5);
-				return true;
+				return;
 			case 134://Decrease price by 1gp
 				if (api.getVarp(player, 137) > 1) {
 					api.incrementVarp(player, 137, -1);
 				}				
-				return true;
+				return;
 			case 137://Increase price by 1gp
 				if (api.getVarp(player, 137) < 2147483647) {
 					api.incrementVarp(player, 137, 1);
 				}
+				return;
 			case 141://Decrease price by 5%
 				Exchange.setPrice(player, 95);
-				return true;
+				return;
 			case 147://Set to exchange price
 				api.setVarp(player, 137, api.getVarp(player, 140));
-				return true;
+				return;
 			case 152://Select custom price
 				requestCount(player, "Enter the price you wish to buy for:", function (value) {
 					api.setVarp(player, 137, value);
 				});
-				return true;
+				return;
 			case 158://Increase price by 5%
 				Exchange.setPrice(player, 105);
-				return true;
+				return;
 			case 164://Submit offer
 				Exchange.submitOffer(player);
-				return true;
+				return;
 			case 170://Buy offer 0
 				Exchange.openOffer(player, 0, false);
-				return true;
+				return;
 			case 175://Sell offer 0
 				Exchange.openOffer(player, 0, true);
-				return true;
+				return;
 			case 181://Buy offer 1
 				Exchange.openOffer(player, 1, false);
-				return true;
+				return;
 			case 187://Sell offer 1
 				Exchange.openOffer(player, 1, true);
-				return true;
+				return;
 			case 193://Buy offer 2
 				Exchange.openOffer(player, 2, false);
-				return true;
+				return;
 			case 199://Sell offer 2
 				Exchange.openOffer(player, 2, true);
-				return true;
+				return;
 			case 206://Buy offer 3
 				Exchange.openOffer(player, 3, false);
-				return true;
+				return;
 			case 212://Sell offer 3
 				Exchange.openOffer(player, 3, true);
-				return true;
+				return;
 			case 222://Buy offer 4
 				Exchange.openOffer(player, 4, false);
-				return true;
+				return;
 			case 228://Sell offer 4
 				Exchange.openOffer(player, 4, true);
-				return true;
+				return;
 			case 238://Buy offer 5
 				Exchange.openOffer(player, 5, false);
-				return true;
+				return;
 			case 244://Sell offer 5
 				Exchange.openOffer(player, 5, true);
-				return true;
+				return;
 			//Abort request acknowledged. Please be aware that your offer may have already been completed.
-			
 			default:
-				return false;
+				api.sendMessage(player, "Unhandled exchange button: comp="+args.component+", button="+args.button+", slot="+args.slot);
+				return;
 			}
-		} else {
-			return false;
+			return;
+		case 107:
+			if (args.component != 4) {
+				api.sendMessage(player, "Unhandled exchange inventory button: comp="+args.component+", button="+args.button+", slot="+args.slot);
+			}
+			if (args.button == 1) {
+				Exchange.offerItem(player, slot);
+			} else {
+				api.sendMessage(player, "Unhandled exchange inventory button: comp="+args.component+", button="+args.button+", slot="+args.slot);
+			}
+			return;
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		if (interfaceID == 107) {
+	}
+});
+
+var ExchangeCloseListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
+		switch (args["interface"]) {
+		case 105:
+			Exchange.clearOffer(player);
+			return;
+		case 107:
 			api.runClientScript(player, 8862, [1, 2]);
 			api.runClientScript(player, 8862, [1, 3]);
-		} else if (interfaceID == 105) {
-			Exchange.clearOffer(player);
+			return;
 		}
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
-
 });
 
 /* Listen to the interface ids specified */
-var listen = function(scriptLoader) {
-	api = scriptLoader.getApi();
-	var widgetListener = new WidgetListener();
-	scriptLoader.registerWidgetListener(widgetListener, widgetListener.getIDs());
+var listen = function(scriptManager) {	
+	var listener = new ExchangeOpenListener();
+	scriptManager.registerListener(EventType.IF_OPEN, 105, listener);
+	scriptManager.registerListener(EventType.IF_OPEN, 107, listener);
+	
+	listener = new ExchangeButtonListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 105, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 107, listener);
+	
+	listener = new ExchangeCloseListener();
+	scriptManager.registerListener(EventType.IF_CLOSE, 105, listener);
+	scriptManager.registerListener(EventType.IF_CLOSE, 107, listener);
 };
 
 var Exchange = {

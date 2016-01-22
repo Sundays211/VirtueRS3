@@ -47,7 +47,6 @@ import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.EventListener;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
-import org.virtue.engine.script.listeners.WidgetListener;
 import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.ChatOptionType;
@@ -122,8 +121,6 @@ public class JSListeners implements ScriptManager {
 	 * A map centralising all event listeners into one place
 	 */
 	private Map<EventBind, EventListener> listeners;
-
-	private Map<Integer, WidgetListener> widgetMap;
 	
 	private Map<Integer, VarListener> varMap;
 
@@ -145,7 +142,6 @@ public class JSListeners implements ScriptManager {
 
 	public JSListeners(File scriptDir) {
 		this.listeners = new HashMap<>();
-		this.widgetMap = new HashMap<Integer, WidgetListener>();
 		this.abstractNPCMap = new HashMap<Integer, AbstractNPC>();
 		this.combatScriptMap = new HashMap<Integer, CombatHandler>();
 		this.varMap = new HashMap<Integer, VarListener>();
@@ -228,7 +224,7 @@ public class JSListeners implements ScriptManager {
 				}
 			}			
 		}
-		logger.info("Registerd " + varMap.size() + " Var Script(s), "  + widgetMap.size() + " Widget Script(s).");
+		logger.info("Registerd " + varMap.size() + " Var Script(s).");
 		return success;
 	}
 	
@@ -257,7 +253,6 @@ public class JSListeners implements ScriptManager {
 	@Override
 	public synchronized boolean reload() {
 		listeners.clear();
-		widgetMap.clear();
 		abstractNPCMap.clear();
 		varMap.clear();
 		vars.clear();
@@ -321,17 +316,6 @@ public class JSListeners implements ScriptManager {
 	
 	public void registerCompListener(int eventTypeId, int iface, int comp, EventListener listener) {
 		registerListener(eventTypeId, iface << 16 | (comp & 0xffff), listener);
-	}
-
-	/**
-	 * Registers a {@link WidgetListener} which is called when a player interacts with a widget/interface
-	 * @param listener The listener
-	 * @param ids The ids of the widgets to bind to
-	 */
-	public void registerWidgetListener(WidgetListener listener, int[] ids) {		
-		for (int id : ids) {
-			widgetMap.put(id, listener);
-		}
 	}
 	
 	/**
@@ -404,11 +388,6 @@ public class JSListeners implements ScriptManager {
 		} catch (Exception ex) {
 			logger.warn("Error executing script: type="+type+", trigger="+trigger, ex);
 		}
-	}
-
-	@Override
-	public WidgetListener forWidgetID(int id) {
-		return widgetMap.get(id);
 	}
 	
 	public VarListener forVarID (int varp) {

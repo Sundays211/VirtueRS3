@@ -24,8 +24,6 @@ package org.virtue.game.entity.player.widget;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
@@ -33,7 +31,6 @@ import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
-import org.virtue.engine.script.listeners.WidgetListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.game.world.region.SceneLocation;
@@ -50,13 +47,7 @@ import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
  * @author Sundays211
  * @since 7/01/2015
  */
-public class WidgetManager {
-
-	/**
-	 * The {@link Logger} instance
-	 */
-	private static Logger logger = LoggerFactory.getLogger(WidgetManager.class);
-	
+public class WidgetManager {	
 	public static final int CENTRAL_OVERLAY_SUB = 1007;
 	public static final int DIALOG_OVERLAY_SUB = 1006;
 	
@@ -159,14 +150,7 @@ public class WidgetManager {
 			scripts.invokeScriptChecked(ScriptEventType.IF_OPEN, widgetID, args);
 			return true;
 		}
-		
-		WidgetListener listener = scripts.forWidgetID(widgetID);
-		if (listener == null) {
-			return Virtue.getInstance().getWidgetRepository().open(parentID, parentSlot, widgetID, alwaysOpen, player);
-		} else {
-			listener.open(player, parentID, parentSlot, widgetID);
-			return true;
-		}
+		return Virtue.getInstance().getWidgetRepository().open(parentID, parentSlot, widgetID, alwaysOpen, player);
 	}
 	
 	public boolean openWidget (int parentID, int parentSlot, int widgetID, boolean alwaysOpen, SceneLocation loc) {		
@@ -193,14 +177,7 @@ public class WidgetManager {
 			scripts.invokeScriptChecked(ScriptEventType.IF_OPEN, widgetID, args);
 			return true;
 		}
-		
-		WidgetListener listener = scripts.forWidgetID(widgetID);
-		if (listener == null) {
-			return Virtue.getInstance().getWidgetRepository().open(parentID, parentSlot, widgetID, alwaysOpen, player);
-		} else {
-			listener.open(player, parentID, parentSlot, widgetID);
-			return true;
-		}
+		return Virtue.getInstance().getWidgetRepository().open(parentID, parentSlot, widgetID, alwaysOpen, player);
 	}
 	
 	public void closeOverlaySub (int hudSlot, boolean handleClose) {
@@ -248,7 +225,6 @@ public class WidgetManager {
 		if (openWidgets.containsKey(hash)) {
 			int widgetID = openWidgets.get(hash);
 			ScriptManager scripts = Virtue.getInstance().getScripts();
-			WidgetListener listener = scripts.forWidgetID(widgetID);
 			if (scripts.hasBinding(ScriptEventType.IF_CLOSE, widgetID) && handleClose) {
 				Map<String, Object> args = new HashMap<>();
 				args.put("player", player);
@@ -256,12 +232,8 @@ public class WidgetManager {
 				args.put("parentComponent", parentSlot);
 				args.put("interface", widgetID);
 				scripts.invokeScriptChecked(ScriptEventType.IF_CLOSE, widgetID, args);
-			} else if (listener != null && handleClose) {
-				try {
-					listener.close(player, parentID, parentSlot, widgetID);
-				} catch (RuntimeException ex) {
-					logger.error("Error runing closeWidget code for "+widgetID+":", ex);
-				}
+			} else if (handleClose) {
+				Virtue.getInstance().getWidgetRepository().close(parentID, parentSlot, widgetID, player);
 			}
 			openWidgets.remove(hash);
 			closableWidgets.remove(hash);
@@ -277,7 +249,6 @@ public class WidgetManager {
 			int parentID = ((entry.getKey() >> 16) & 0xffff);
 			int parentSlot = (entry.getKey() & 0xffff);
 			ScriptManager scripts = Virtue.getInstance().getScripts();
-			WidgetListener listener = scripts.forWidgetID(entry.getValue());
 			if (scripts.hasBinding(ScriptEventType.IF_CLOSE, entry.getValue())) {
 				Map<String, Object> args = new HashMap<>();
 				args.put("player", player);
@@ -285,12 +256,6 @@ public class WidgetManager {
 				args.put("parentComponent", parentSlot);
 				args.put("interface", entry.getValue());
 				scripts.invokeScriptChecked(ScriptEventType.IF_CLOSE, entry.getValue(), args);
-			} else if (listener != null) {
-				try {
-					listener.close(player, parentID, parentSlot, entry.getValue());
-				} catch (RuntimeException ex) {
-					logger.error("Error runing closeWidget code for "+entry.getValue()+":", ex);
-				}
 			} else {
 				Virtue.getInstance().getWidgetRepository().close(parentID, parentSlot, entry.getValue(), player);
 			}
@@ -363,15 +328,8 @@ public class WidgetManager {
 			args.put("alwaysOpen", alwaysOpen);
 			scripts.invokeScriptChecked(ScriptEventType.IF_OPEN, widgetID, args);
 			return true;
-		}
-
-		WidgetListener listener = scripts.forWidgetID(widgetID);
-		if (listener == null) {
-			return Virtue.getInstance().getWidgetRepository().open(parentID, parentSlot, widgetID, alwaysOpen, player);
-		} else {
-			listener.open(player, parentID, parentSlot, widgetID);
-			return true;
-		}
+		}		
+		return Virtue.getInstance().getWidgetRepository().open(parentID, parentSlot, widgetID, alwaysOpen, player);
 	}
 
 }

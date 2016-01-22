@@ -789,13 +789,6 @@ public interface ScriptAPI {
 	
 	public void clearStyleEdit (Player player);
 	
-	/**
-	 * Sets the render base for the specified player
-	 * @param player The player
-	 * @param renderId The desired render animation
-	 */
-	public void setRenderAnim (Player player, int renderId);
-	
 	public void refreshEquipment (Player player);
 	
 	public Entity getInteractionTarget (Player player);
@@ -821,6 +814,19 @@ public interface ScriptAPI {
 	public boolean exchangeOfferFinished (Player player, int exchange, int slot);
 	
 	public void clearExchangeOffer (Player player, int exchange, int slot);
+	
+	/**
+	 * Sets the render base for the specified player
+	 * @param player The player
+	 * @param renderId The desired render animation
+	 */
+	public void setRenderAnim (Player player, int renderId);
+	
+	/**
+	 * Resets the render base for the specified player to the default value
+	 * @param player The player
+	 */
+	public void resetRenderAnim (Player player);
 	
 	public boolean runAnimation (Entity entity, int animId);
 	

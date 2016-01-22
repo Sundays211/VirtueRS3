@@ -28,16 +28,47 @@
  * @author Sundays211
  * @since 22/01/2015
  */
-
-var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.WidgetListener'), {
-
-	/* The interfaces to bind to */
-	getIDs: function() {
-		return [ 334, 335, 336 ];
-	},
-	
-	open : function (player, parentID, parentComponent, interfaceID) {
-		if (interfaceID == 335) {
+var TradeOpenListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
+		switch (args["interface"]) {
+		case 334:
+			api.setWidgetText(player, 334, 14, "Are you sure you want to make this trade?");
+			api.setTradeAccepted(player, false);
+			if (api.freeSpaceTotal(player, Inv.LOAN_OFFER) < 1) {
+				var item = api.getItem(player, Inv.LOAN_OFFER, 0);
+				var duration = api.getVarBit(player, 1046);
+				if (duration == 0) {
+					duration = "until logout";
+				} else if (duration == 1) {
+					duration = "for 1 hour";
+				} else {
+					duration = "for "+duration+" hours";
+				}
+				//api.setVarBit(targetPlayer, 1047, value);
+				api.hideWidget(player, 334, 17, false);
+				api.setWidgetText(player, 334, 33, "Lend: <col=ffffff>"+api.getItemName(item)+", "+duration);				
+			}
+			var targetPlayer = api.getInteractionTarget(player);
+			if (targetPlayer != null) {
+				api.setVarc(player, 2519, api.getName(targetPlayer));
+				api.setTradeAccepted(targetPlayer, false);
+				if (api.freeSpaceTotal(targetPlayer, Inv.LOAN_OFFER) < 1) {
+					var item = api.getItem(targetPlayer, Inv.LOAN_OFFER, 0);
+					var duration = api.getVarBit(player, 1047);
+					if (duration == 0) {
+						duration = "until logout";
+					} else if (duration == 1) {
+						duration = "for 1 hour";
+					} else {
+						duration = "for "+duration+" hours";
+					}
+					api.hideWidget(player, 334, 19, false);
+					api.setWidgetText(player, 334, 34, "Lend: <col=ffffff>"+api.getItemName(item)+", "+duration);				
+				}
+			}
+			return;
+		case 335:
 			var targetPlayer = api.getInteractionTarget(player);
 			if (targetPlayer == null) {
 				return;
@@ -73,196 +104,29 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			//api.setWidgetText(player, 335, 22, "has "+api.freeSpaceTotal(targetPlayer, Inv.BACKPACK)+" free inventory slots.");
 			//api.setVarc(player, 729, 0);
 			//api.setVarc(player, 697, 0);
-		} else if (interfaceID == 334) {
-			api.setWidgetText(player, 334, 14, "Are you sure you want to make this trade?");
-			api.setTradeAccepted(player, false);
-			if (api.freeSpaceTotal(player, Inv.LOAN_OFFER) < 1) {
-				var item = api.getItem(player, Inv.LOAN_OFFER, 0);
-				var duration = api.getVarBit(player, 1046);
-				if (duration == 0) {
-					duration = "until logout";
-				} else if (duration == 1) {
-					duration = "for 1 hour";
-				} else {
-					duration = "for "+duration+" hours";
-				}
-				//api.setVarBit(targetPlayer, 1047, value);
-				api.hideWidget(player, 334, 17, false);
-				api.setWidgetText(player, 334, 33, "Lend: <col=ffffff>"+api.getItemName(item)+", "+duration);				
-			}
-			var targetPlayer = api.getInteractionTarget(player);
-			if (targetPlayer != null) {
-				api.setVarc(player, 2519, api.getName(targetPlayer));
-				api.setTradeAccepted(targetPlayer, false);
-				if (api.freeSpaceTotal(targetPlayer, Inv.LOAN_OFFER) < 1) {
-					var item = api.getItem(targetPlayer, Inv.LOAN_OFFER, 0);
-					var duration = api.getVarBit(player, 1047);
-					if (duration == 0) {
-						duration = "until logout";
-					} else if (duration == 1) {
-						duration = "for 1 hour";
-					} else {
-						duration = "for "+duration+" hours";
-					}
-					api.hideWidget(player, 334, 19, false);
-					api.setWidgetText(player, 334, 34, "Lend: <col=ffffff>"+api.getItemName(item)+", "+duration);				
-				}
-			}
-		} else if (interfaceID == 336) {
+			return;
+		case 336:
 			api.runClientScript(player, 8862, [0, 2]);
-			api.runClientScript(player, 8862, [0, 3]);			
+			api.runClientScript(player, 8862, [0, 3]);
+			return;
 		}
-	},
+	}
+});
 
-	/* Pressed a button on the interface */
-	handleInteraction: function(player, interfaceID, component, slot, itemID, option) {
+var TradeButtonListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
 		if (interfaceID == 336 && component == 0) {//Backpack component
-			if (api.getCentralWidget(player) != 335) {
-				if (option == 10) {
-					item.examine();
-				} else {
-					api.sendMessage(player, "You cannot add new items in this trade screen!");
-				}				
-				return true;
-			}
-			var item = api.getItem(player, Inv.BACKPACK, slot);
-			if (item == null) {
-				return false;
-			}
-			var amount = 0;
-			switch (option) {
-			case 1://Add 1
-				amount = 1;
-				break;
-			case 2://Add 5
-				amount = 5;
-				break;
-			case 3://Add 10
-				amount = 10;
-				break;
-			case 4://Add All
-				amount = 2147483647;
-				break;
-			case 5://Add x
-				return false;//TODO: Add handler for this
-			case 6://Value
-				Trade.showValue(player, item);
-				return true;
-			case 7://Lend
-				Trade.offerLoanItem(player, item, slot);
-				Trade.refreshTrade(player);
-				return true;
-			case 10://Examine
-				item.examine();
-				return true;
-			}
-			if (amount > 0) {
-				if (!api.getItemType(item).isTradable()) {
-					api.sendMessage(player, "That item isn't tradeable.");
-				} else {
-					Trade.offerItem(player, item, slot, amount);
-					Trade.refreshTrade(player);
-				}				
-			}
+			
 			return false;
 		} else if (interfaceID == 335) {
-			switch (component) {
-			case 24://Trade screen
-				var item = api.getItem(player, Inv.TRADE, slot);
-				if (item == null) {
-					return false;
-				}
-				var amount = 0;
-				switch (option) {
-				case 1://Add 1
-					amount = 1;
-					break;
-				case 2://Add 5
-					amount = 5;
-					break;
-				case 3://Add 10
-					amount = 10;
-					break;
-				case 4://Add All
-					amount = 2147483647;
-					break;
-				case 5://Add x
-					return false;//TODO: Add handler for this
-				case 6://Value
-					Trade.showValue(player, item);
-					return true;
-				case 10://Examine
-					item.examine();
-					return true;
-				}
-				if (amount > 0) {
-					Trade.removeItem(player, slot, item, amount);
-					Trade.refreshTrade(player);
-				}
-				return true;
-			case 27://Other player offer
-				var targetPlayer = api.getInteractionTarget(player);
-				if (targetPlayer == null) {
-					return true;
-				}
-				var item = api.getItem(targetPlayer, Inv.TRADE, slot);
-				if (item == null) {
-					return false;
-				}
-				if (option == 1) {
-					Trade.showValue(player, item);
-					return true;
-				} else if (option == 10) {
-					item.examine();
-					return true;
-				}
-				return false;
-			case 38://Add from money pouch
-				requestCount(player, "Add how many coins to your offer?", function (value) {
-					Trade.offerCoins(player, value);
-					Trade.refreshTrade(player);
-				});
-				return false;
-			case 51://Other player loan item
-				var targetPlayer = api.getInteractionTarget(player);
-				if (targetPlayer == null) {
-					return true;
-				}
-				var item = api.getItem(targetPlayer, Inv.LOAN_OFFER, 0);
-				if (item != null) {
-					var text = api.getItemType(item).getExamineText();
-					api.sendMessage(player, text);
-					return true;
-				}
-				return true;
-			case 55://Remove loan item
-				var item = api.getItem(player, Inv.LOAN_OFFER, 0);
-				if (item != null) {
-					if (option == 1) {
-						Trade.removeLoanItem(player, item);
-						Trade.refreshTrade(player);
-						return true;
-					} else if (option == 10) {
-						item.examine();
-						return true;
-					}				
-				}
-				return false;
-			case 56://Select loan duration
-				Trade.selectLoanDuration(player);
-				return true;
-			case 60://Accept
-				Trade.acceptTrade(player);//For now, trade only has one screen.
-				return true;
-			case 66://Decline
-				//Trade.cancelTrade(player);
-				api.closeCentralWidgets(player);
-				return true;
-			default:
-				return false;
-			}
-		} else if (interfaceID == 334) {//Confirm screen
-			switch (component) {
+			
+		} else if (interfaceID == 334) {
+			
+		}
+		switch (args["interface"]) {
+		case 334://Confirm screen
+			switch (args.component) {
 			case 47://Accept
 				Trade.acceptTrade(player, true);
 				return true;
@@ -273,25 +137,191 @@ var WidgetListener = Java.extend(Java.type('org.virtue.engine.script.listeners.W
 			default:
 				return false;
 			}
-		} else {
-			return false;
+			return;
+		case 335:
+			switch (args.component) {
+			case 24://Trade screen
+				var item = api.getItem(player, Inv.TRADE, args.slot);
+				if (item == null) {
+					return;
+				}
+				var count = 0;
+				switch (args.button) {
+				case 1://Add 1
+					count = 1;
+					break;
+				case 2://Add 5
+					count = 5;
+					break;
+				case 3://Add 10
+					count = 10;
+					break;
+				case 4://Add All
+					count = 2147483647;
+					break;
+				case 5://Add x
+					requestCount(player, "Remove how many items from your offer?", function (count) {
+						Trade.removeItem(player, args.slot, item, count);
+						Trade.refreshTrade(player);
+					});
+					return;
+				case 6://Value
+					Trade.showValue(player, item);
+					return;
+				case 10://Examine
+					var desc = api.getItemDesc(item);
+					api.sendMessage(player, text);
+					return;
+				}
+				if (count > 0) {
+					Trade.removeItem(player, args.slot, item, count);
+					Trade.refreshTrade(player);
+				}
+				return;
+			case 27://Other player offer
+				var targetPlayer = api.getInteractionTarget(player);
+				if (targetPlayer == null) {
+					return;
+				}
+				var item = api.getItem(targetPlayer, Inv.TRADE, args.slot);
+				if (item == null) {
+					return;
+				}
+				if (args.button == 1) {
+					Trade.showValue(player, item);
+				} else if (args.button == 10) {
+					var desc = api.getItemDesc(item);
+					api.sendMessage(player, text);
+				} else {
+					api.sendMessage(player, "Unhandled button on other player trade offer: button="+args.button+", slot="+args.slot);
+				}
+				return;
+			case 38://Add from money pouch
+				requestCount(player, "Add how many coins to your offer?", function (value) {
+					Trade.offerCoins(player, value);
+					Trade.refreshTrade(player);
+				});
+				return;
+			case 51://Other player loan item
+				var targetPlayer = api.getInteractionTarget(player);
+				if (targetPlayer == null) {
+					return;
+				}
+				var item = api.getItem(targetPlayer, Inv.LOAN_OFFER, 0);
+				if (item != null) {
+					var desc = api.getItemDesc(item);
+					api.sendMessage(player, text);
+					return;
+				}
+				return;
+			case 55://Remove loan item
+				var item = api.getItem(player, Inv.LOAN_OFFER, 0);
+				if (item == null) {
+					return;		
+				}
+				if (args.button == 1) {
+					Trade.removeLoanItem(player, item);
+					Trade.refreshTrade(player);
+				} else if (args.button == 10) {
+					var desc = api.getItemDesc(item);
+					api.sendMessage(player, text);
+				} else {
+					api.sendMessage(player, "Unhandled button on other player loan offer: button="+args.button+", slot="+args.slot);
+				}
+				return false;
+			case 56://Select loan duration
+				Trade.selectLoanDuration(player);
+				return;
+			case 60://Accept
+				Trade.acceptTrade(player);//For now, trade only has one screen.
+				return;
+			case 66://Decline
+				//Trade.cancelTrade(player);
+				api.closeCentralWidgets(player);
+				return;
+			default:
+				api.sendMessage(player, "Unhandled trade button: comp="+args.component+", button="+args.button+", slot="+args.slot);
+				return;
+			}
+			return;
+		case 336:
+			if (args.component != 0) {
+				api.sendMessage(player, "Unhandled trade inventory button: comp="+args.component+", button="+args.button+", slot="+args.slot);
+			}
+			if (api.getCentralWidget(player) != 335) {
+				if (option == 10) {
+					var desc = api.getItemDesc(item);
+					api.sendMessage(player, text);
+				} else {
+					api.sendMessage(player, "You cannot add new items in this trade screen!");
+				}				
+				return true;
+			}
+			var item = api.getItem(player, Inv.BACKPACK, args.slot);
+			if (item == null) {
+				return;
+			}
+			var count = 0;
+			switch (args.button) {
+			case 1://Add 1
+				count = 1;
+				break;
+			case 2://Add 5
+				count = 5;
+				break;
+			case 3://Add 10
+				count = 10;
+				break;
+			case 4://Add All
+				count = 2147483647;
+				break;
+			case 5://Add x
+				requestCount(player, "Add how many items to your offer?", function (count) {
+					Trade.offerItem(player, item, args.slot, count);
+					Trade.refreshTrade(player);
+				});
+				return;
+			case 6://Value
+				Trade.showValue(player, item);
+				return;
+			case 7://Lend
+				Trade.offerLoanItem(player, item, slot);
+				Trade.refreshTrade(player);
+				return;
+			case 10://Examine
+				var desc = api.getItemDesc(item);
+				api.sendMessage(player, text);
+				return;
+			}
+			if (count > 0) {
+				if (!api.getItemType(item).isTradable()) {
+					api.sendMessage(player, "That item isn't tradeable.");
+				} else {
+					Trade.offerItem(player, item, args.slot, count);
+					Trade.refreshTrade(player);
+				}				
+			}
+			return;
 		}
-	},
-	
-	close : function (player, parentID, parentComponent, interfaceID) {
-		if (interfaceID == 335 || interfaceID == 334) {
+	}
+});
+
+var TradeCloseListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, binding, args) {
+		var player = args.player;
+		switch (args["interface"]) {
+		case 334:
+		case 335:
 			api.setVarc(player, 2504, "");
 			Trade.removeAll(player);
 			Trade.cancelTrade(player);
 			api.clearInteractionTarget(player);
-		} else if (interfaceID == 336) {
+			return;
+		case 336:
 			api.runClientScript(player, 8862, [1, 2]);
-			api.runClientScript(player, 8862, [1, 3]);			
+			api.runClientScript(player, 8862, [1, 3]);
+			return;
 		}
-	},
-	
-	drag : function (player, interface1, component1, slot1, item1, interface2, component2, slot2, item2) {
-		return false;
 	}
 });
 
@@ -375,10 +405,23 @@ var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarL
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	var widgetListener = new WidgetListener();
 	var varListener = new VarListener();
-	scriptManager.registerWidgetListener(widgetListener, widgetListener.getIDs());
 	scriptManager.registerVarListener(varListener, varListener.getIDs());
+	
+	var listener = new TradeOpenListener();
+	scriptManager.registerListener(EventType.IF_OPEN, 334, listener);
+	scriptManager.registerListener(EventType.IF_OPEN, 335, listener);
+	scriptManager.registerListener(EventType.IF_OPEN, 336, listener);
+	
+	listener = new TradeButtonListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 334, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 335, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 336, listener);
+	
+	listener = new TradeCloseListener();
+	scriptManager.registerListener(EventType.IF_CLOSE, 334, listener);
+	scriptManager.registerListener(EventType.IF_CLOSE, 335, listener);
+	scriptManager.registerListener(EventType.IF_CLOSE, 336, listener);
 };
 
 var Trade = {

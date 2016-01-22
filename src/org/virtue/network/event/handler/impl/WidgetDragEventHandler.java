@@ -27,7 +27,6 @@ import java.util.Map;
 import org.virtue.Virtue;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
-import org.virtue.engine.script.listeners.WidgetListener;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.WidgetDragEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
@@ -64,15 +63,6 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 			scripts.invokeScriptChecked(ScriptEventType.IF_DRAG, context.getIf1Hash(), args);
 			return;
 		}
-		WidgetListener listner = Virtue.getInstance().getScripts().forWidgetID(context.getIf1Interface());
-		if (listner == null || !listner.drag(player, 
-				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
-				context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item())) {
-			defaultHandler(player, context);
-		}
-	}
-	
-	private void defaultHandler(Player player, WidgetDragEventContext context) {
 		String message = "Interface1: id="+context.getIf1Interface()+", comp="+context.getIf1Component()
 				+", slot="+context.getIf1Slot()+", itemID="+context.getIf1Item()
 				+" Interface2: id="+context.getIf2Interface()+", comp="+context.getIf2Component()
@@ -81,5 +71,4 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 			player.getDispatcher().sendGameMessage("Unhanded interface drag: "+message);
 		}
 	}
-
 }
