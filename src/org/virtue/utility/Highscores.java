@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.stat.Stat;
  
 public class Highscores implements Runnable {
 
@@ -59,7 +59,7 @@ public class Highscores implements Runnable {
 			stmt2.setLong(3, player.getSkills().getTotalLevel());
 
 			int count = 0;
-			for (StatType type : StatType.values()) {
+			for (Stat type : Stat.values()) {
 				if (type == null)
 					continue;
 				
@@ -68,7 +68,7 @@ public class Highscores implements Runnable {
 				stmt2.setInt(4 + count, player.getSkills().getExperience(type)/10);
 				count++;
 
-				System.out.println(StatType.values());
+				System.out.println(Stat.values());
 
 			}
 			stmt2.execute();

@@ -120,7 +120,7 @@ public enum OutgoingEventType {
 	/**
 	 * Updates the experience (and current level) of the specified skill
 	 */
-	UPDATE_SKILL(4, 6),
+	UPDATE_STAT(4, 6),
 
 	/**
 	 * Updates the player's run energy level

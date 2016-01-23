@@ -35,7 +35,7 @@ public enum DefaultsGroup {
     APPEARANCE(6),
     KEYBOARD(7),
     GROUP_8(8),
-    SKILL(9),
+    STAT(9),
     ERROR(10);
 	
     public int js5Id;

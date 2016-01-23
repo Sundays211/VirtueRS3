@@ -27,8 +27,6 @@ import java.util.TimerTask;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.cache.utility.crypto.BKDR;
-import org.virtue.game.content.skills.SkillData;
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.OnlineStatus;
 import org.virtue.game.content.social.ignore.Ignore;
@@ -36,6 +34,8 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.entity.player.stat.PlayerStat;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.LoginDispatcher;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.world.region.MapSize;
@@ -184,7 +184,7 @@ public class GameEventDispatcher {
 			player.getCombatSchedule()
 					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
 			player.getImpactHandler()
-					.setMaximumLifepoints(player.getSkills().getBaseLevel(StatType.CONSTITUTION) * 100);
+					.setMaximumLifepoints(player.getSkills().getBaseLevel(Stat.CONSTITUTION) * 100);
 			player.getImpactHandler().restoreLifepoints();
 			player.getMoneyPouch().refresh(false);
 			player.getVars().processLogin(player.getLastLogin());
@@ -403,7 +403,7 @@ public class GameEventDispatcher {
 	 * @param skill
 	 *            The skill to update
 	 */
-	public void sendStat(SkillData skill) {
+	public void sendStat(PlayerStat skill) {
 		sendEvent(SkillEventEncoder.class, skill);
 	}
 

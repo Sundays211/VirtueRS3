@@ -47,7 +47,6 @@ import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.EventListener;
 import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.ChatOptionType;
 import org.virtue.game.content.social.friendchat.FriendChatDataType;
@@ -56,6 +55,7 @@ import org.virtue.game.entity.combat.impl.ability.ScriptedAbility;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.EquipmentManager.WearPos;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.utility.FileUtility;
 
 /**
@@ -170,7 +170,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("MesType", map);
 		
 		map = new HashMap<>();
-		for (StatType type : StatType.values()) {
+		for (Stat type : Stat.values()) {
 			map.put(type.name(), type.getId());
 		}
 		engine.put("Stat", map);

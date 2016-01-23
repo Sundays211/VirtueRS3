@@ -11,6 +11,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.entity.player.stat.Stat;
 
 
 public class CraftAction implements PlayerActionHandler {
@@ -23,8 +24,8 @@ public class CraftAction implements PlayerActionHandler {
 	private int animationID;
 	private int timePerItem;
 	private int amountPerBatch;
-	private StatType skill;
-	private StatType secondarySkill;
+	private Stat skill;
+	private Stat secondarySkill;
 	private String successText;
 	
 	public CraftAction (int productID, int animation, int craftTime, String successText) {
@@ -33,10 +34,10 @@ public class CraftAction implements PlayerActionHandler {
 		amountPerBatch = productType.getParam(2653, 1);
 		
 		int skillID = productType.getParam(2696, 0);
-		this.skill = skillID == 0 ? null : StatType.getById(levelEnum.getValueInt(skillID));
+		this.skill = skillID == 0 ? null : Stat.getById(levelEnum.getValueInt(skillID));
 		
 		int secondarySkillID = productType.getParam(2698, 0);
-		this.secondarySkill = secondarySkillID == 0 ? null : StatType.getById(levelEnum.getValueInt(secondarySkillID));
+		this.secondarySkill = secondarySkillID == 0 ? null : Stat.getById(levelEnum.getValueInt(secondarySkillID));
 		
 		this.productID = productID;
 		this.animationID = animation;

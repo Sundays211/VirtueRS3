@@ -45,8 +45,6 @@ import org.virtue.game.content.dialogues.DialogManager;
 import org.virtue.game.content.exchange.ExchangeOffers;
 import org.virtue.game.content.minigame.MinigameType;
 import org.virtue.game.content.quests.QuestManager;
-import org.virtue.game.content.skills.SkillManager;
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChatManager;
 import org.virtue.game.content.treasure.TreasureHunter;
 import org.virtue.game.entity.Entity;
@@ -62,6 +60,8 @@ import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.EquipmentManager;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.entity.player.stat.StatManager;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.var.VarRepository;
 import org.virtue.game.entity.player.widget.WidgetManager;
@@ -208,7 +208,7 @@ public class Player extends Entity {
 	/**
 	 * The player's skills
 	 */
-	private SkillManager skills;
+	private StatManager skills;
 
 	/**
 	 * The players viewport
@@ -368,7 +368,7 @@ public class Player extends Entity {
 		this.widgets = new WidgetManager(this);
 		this.appearance = new Appearance(this);
 		this.viewport = new Viewport(this);
-		this.skills = new SkillManager(this);
+		this.skills = new StatManager(this);
 		this.inv = new InvRepository(this);
 		this.equipment = new EquipmentManager(this);
 		this.interactions = new PlayerInteractions(this);
@@ -916,7 +916,7 @@ public class Player extends Entity {
 	 * 
 	 * @return skills
 	 */
-	public SkillManager getSkills() {
+	public StatManager getSkills() {
 		return skills;
 	}
 
@@ -1028,7 +1028,7 @@ public class Player extends Entity {
 
 	private void restoreRunEnergy() {
 		if (runEnergy < 100) {
-			float increase = 0.20f + skills.getBaseLevel(StatType.AGILITY) * 0.20f;
+			float increase = 0.20f + skills.getBaseLevel(Stat.AGILITY) * 0.20f;
 			// 99 agility should be about twice as fast as 1 agility
 			runEnergy += increase;
 			if (runEnergy > 100) {

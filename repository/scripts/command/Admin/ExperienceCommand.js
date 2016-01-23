@@ -56,7 +56,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			}
 			var stat = api.getStatByName(args[0]);
 			if (stat == -1) {
-				api.sendConsoleMessage(player, "Invalid skill: "+args[0]);
+				sendCommandResponse(player, "Invalid skill: "+args[0]);
 				return;
 			}
 			var xp = parseInt(args[1]);

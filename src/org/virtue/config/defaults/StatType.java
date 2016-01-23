@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2015 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,34 +19,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.encoder.impl;
-
-import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.stat.PlayerStat;
-import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+package org.virtue.config.defaults;
 
 /**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 27/10/2014
+ * @since 23/01/2016
  */
-public class SkillEventEncoder implements EventEncoder<PlayerStat> {
-
-	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
-	 */
-	@Override
-	public OutboundBuffer encode(Player player, PlayerStat context) {
-		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.UPDATE_STAT, player);
-		buffer.putIntB(context.getExperience()/10);
-		buffer.putS(context.getCurrentLevel());
-		buffer.putS(context.getType().getId());
-		return buffer;
+public class StatType {
+	int nonMemberXpCap;
+	int levelCap;
+	boolean members;
+	int id;
+	int nonMemberLevelCap;
+	ExperienceCurve xpCurve;
+	int initialLevel;
+	
+	StatType(int id, int maxLevel, boolean members, boolean bool_12_, int nonMemberCap,
+			ExperienceCurve xpCurve, int initialLevel) {
+		this.id = id;
+		this.levelCap = maxLevel;
+		this.members = members;
+		this.xpCurve = xpCurve;
+		this.initialLevel = initialLevel;
+		if (members) {
+			nonMemberLevelCap = nonMemberCap;
+			//nonMemberXpCap = method7186(nonMemberCap);
+		} else {
+			nonMemberLevelCap = -1;
+			nonMemberXpCap = -1;
+		}
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public int getNonMemberXpCap() {
+		return nonMemberXpCap;
+	}
+
+	public int getLevelCap() {
+		return levelCap;
+	}
+
+	public boolean isMembers() {
+		return members;
+	}
+
+	public int getNonMemberLevelCap() {
+		return nonMemberLevelCap;
+	}
+
+	public ExperienceCurve getXpCurve() {
+		return xpCurve;
+	}
+
+	public int getInitialLevel() {
+		return initialLevel;
+	}
 }

@@ -41,9 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.game.content.exchange.ExchangeOffer;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
-import org.virtue.game.content.skills.SkillData;
-import org.virtue.game.content.skills.SkillManager;
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.OnlineStatus;
 import org.virtue.game.content.social.clan.ClanBan;
@@ -60,6 +57,9 @@ import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.stat.PlayerStat;
+import org.virtue.game.entity.player.stat.StatManager;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.parser.Parser;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.game.world.region.Tile;
@@ -427,10 +427,10 @@ public class XmlParser implements Parser {
 				break;
 			case SKILL:
 				try {
-					SkillManager skills = (SkillManager) object;
+					StatManager skills = (StatManager) object;
 					Element root = document.createElement("skills");
 					document.appendChild(root);
-					for (StatType skillType : StatType.values()) {
+					for (Stat skillType : Stat.values()) {
 						Element skill = document.createElement("skill");
 						Attr attr = document.createAttribute("id");
 						attr.setValue(Integer.toString(skillType.getId()));
@@ -1002,7 +1002,7 @@ public class XmlParser implements Parser {
 				}
 			case SKILL:
 				try {
-					List<SkillData> skills = new ArrayList<>();
+					List<PlayerStat> skills = new ArrayList<>();
 					String name = (String) object;
 					
 					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -1017,10 +1017,10 @@ public class XmlParser implements Parser {
 						Node node = list.item(ordinal);
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
 							Element element = (Element) node;
-							StatType skillType = StatType.getById(Integer.parseInt(element.getAttribute("id")));
+							Stat skillType = Stat.getById(Integer.parseInt(element.getAttribute("id")));
 							int xp = Integer.parseInt(element.getElementsByTagName("experience").item(0).getTextContent());
 							int level = Integer.parseInt(element.getElementsByTagName("level").item(0).getTextContent());
-							skills.add(new SkillData(skillType, xp, level));
+							skills.add(new PlayerStat(skillType, xp, level));
 						}
 					}					
 					return skills;

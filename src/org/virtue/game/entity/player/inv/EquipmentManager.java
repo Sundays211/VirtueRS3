@@ -30,9 +30,9 @@ import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.network.protocol.update.ref.Appearance.Gender;
 import org.virtue.utility.text.StringUtility;
@@ -290,7 +290,7 @@ public class EquipmentManager {
 	
 	public boolean meetsEquipRequirements(Item item) {
 		for (int i=0;i<6;i+=2) {
-			StatType skill = StatType.getById(item.getType().getParam(749+i, -1));
+			Stat skill = Stat.getById(item.getType().getParam(749+i, -1));
 			if (skill == null) {
 				return true;
 			} else {

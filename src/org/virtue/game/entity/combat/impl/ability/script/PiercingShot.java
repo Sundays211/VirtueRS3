@@ -1,6 +1,5 @@
 package org.virtue.game.entity.combat.impl.ability.script;
 
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.impl.FollowingType;
@@ -8,6 +7,7 @@ import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.game.entity.combat.impl.ability.Ability;
 import org.virtue.game.entity.combat.impl.ability.AbilityType;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 
 public class PiercingShot extends Ability {
@@ -31,7 +31,7 @@ public class PiercingShot extends Ability {
 
 	@Override
 	public boolean canActivate(Entity entity, Entity lock) {
-		return hasRequirement(entity, StatType.RANGED, 0);
+		return hasRequirement(entity, Stat.RANGED, 0);
 	}
 
 	@Override

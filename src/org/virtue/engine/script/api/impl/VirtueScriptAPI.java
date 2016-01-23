@@ -52,7 +52,6 @@ import org.virtue.game.World;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.exchange.ExchangeOffer;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
-import org.virtue.game.content.skills.StatType;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.content.social.clan.ClanSettingsAPI;
@@ -67,6 +66,7 @@ import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.node.Node;
@@ -1099,7 +1099,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public int getStatByName(String name) {
 		try {
-			StatType stat = StatType.valueOf(name.toUpperCase());
+			Stat stat = Stat.valueOf(name.toUpperCase());
 			return stat == null ? -1 : stat.getId();
 		} catch (IllegalArgumentException ex) {
 			return -1;
@@ -1111,7 +1111,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getStatLevel(Player player, int statId) {
-		StatType stat = StatType.getById(statId);		
+		Stat stat = Stat.getById(statId);		
 		if (stat == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
@@ -1123,7 +1123,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setStatLevel(Player player, int statId, int level) {
-		StatType stat = StatType.getById(statId);	
+		Stat stat = Stat.getById(statId);	
 		if (stat == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
@@ -1135,7 +1135,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getBaseLevel(Player player, int statId) {
-		StatType skill = StatType.getById(statId);		
+		Stat skill = Stat.getById(statId);		
 		if (skill == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
@@ -1147,7 +1147,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void addExperience(Player player, int statId, double xp, boolean boostable) {
-		StatType skill = StatType.getById(statId);
+		Stat skill = Stat.getById(statId);
 		if (skill == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
@@ -1159,11 +1159,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void boostStat(Player player, int statId, int amount) {
-		StatType stat = StatType.getById(statId);
+		Stat stat = Stat.getById(statId);
 		if (stat == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
-		player.getSkills().boostSkill(stat, amount);		
+		player.getSkills().boostStat(stat, amount);		
 	}
 
 	/* (non-Javadoc)
@@ -1171,7 +1171,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void resetStat(Player player, int statId) {
-		StatType stat = StatType.getById(statId);
+		Stat stat = Stat.getById(statId);
 		if (stat == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}

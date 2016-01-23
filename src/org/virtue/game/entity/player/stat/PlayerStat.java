@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.skills;
+package org.virtue.game.entity.player.stat;
 
 import org.virtue.network.event.context.GameEventContext;
 
@@ -30,32 +30,25 @@ import org.virtue.network.event.context.GameEventContext;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class SkillData implements GameEventContext {
+public class PlayerStat implements GameEventContext {	
+	/**
+	 * The maximum amount of experience a player can gain in any stat. Includes 1dp, so 200 is actually 20.0xp
+	 */
+	public static final int EXPERIENCE_CAP = 2_000_000_000;
 
-	private int experience = 0;
-	private int currentLevel = 0;
+	private int xp = 0;
+	private int level = 0;
 	private int baseLevel = 1;
-	private final StatType skill;
+	private final Stat type;
 	
-	public static int[] levelXpNeeded = new int[120];
-	
-	static {
-		int xp = 0;
-		for (int level = 1; level <= 120; level++) {
-		    int difference = (int) ((double) level + 300.0 * Math.pow(2.0, (double) level / 7.0));
-		    xp += difference;
-		    levelXpNeeded[level-1] = xp / 4;
-		}
+	public PlayerStat (Stat stat) {
+		this(stat, 0, 1);
 	}
 	
-	public SkillData (StatType skill) {
-		this(skill, 0, 1);
-	}
-	
-	public SkillData (StatType skill, int xp, int level) {
-		this.skill = skill;
-		this.experience = xp;
-		this.currentLevel = level;
+	public PlayerStat (Stat skill, int xp, int level) {
+		this.type = skill;
+		this.xp = xp;
+		this.level = level;
 		calculateBaseLevel();
 	}
 	
@@ -63,8 +56,8 @@ public class SkillData implements GameEventContext {
 	 * Gets the id of the skill (the id should be between 1 and the total number of skills)
 	 * @return	The id.
 	 */
-	public StatType getSkill () {
-		return skill;
+	public Stat getType () {
+		return type;
 	}
 	
 	/**
@@ -72,15 +65,21 @@ public class SkillData implements GameEventContext {
 	 * @return The experience as an int
 	 */
 	public int getExperience () {
-		return experience;
+		return xp;
 	}
 	
 	/**
-	 * Gets the experience the player has in the skill
-	 * @return	The experience.
+	 * Sets the experience the player has in the skill. Must be an integer acounting for 1dp (eg 20.0 is 200)
+	 * @param xp The experience to set
 	 */
-	public float getExperienceFloat () {
-		return experience/10.0f;
+	public void setExperience(int xp) {
+		this.xp = xp;
+		if (xp < 0) {
+			xp = 0;
+		} else if (xp > EXPERIENCE_CAP) {
+			xp = EXPERIENCE_CAP;
+		}
+		calculateBaseLevel();
 	}
 	
 	/**
@@ -88,7 +87,7 @@ public class SkillData implements GameEventContext {
 	 * @return	The level.
 	 */
 	public int getCurrentLevel () {
-		return currentLevel;
+		return level;
 	}
 	
 	/**
@@ -99,58 +98,19 @@ public class SkillData implements GameEventContext {
 		return baseLevel;
 	}
 	
-	/**
-	 * Increments the current experience by the specified amount in the format "float". 
-	 * As experience is stored as an integer, this will multiply the amount by ten and remove any decimals
-	 * @param xpToAdd	The amount of xp to add, represented as a float.
-	 */
-	public void addExperienceFloat (double xpToAdd) {
-		addExperience((int) xpToAdd*10);
-	}
-	
-	/**
-	 * Increments the current experience by the specified amount
-	 * @param xpToAdd	The amount of xp to add
-	 */
-	public void addExperience (int xpToAdd) {
-		experience += xpToAdd;
-		if (experience < 0) {
-			experience = 0;
-		}	
-		calculateBaseLevel();
-	}
-	
-	private void calculateBaseLevel () {		
-		for (int i =0;i<skill.getMaxLevel();i++) {
-			if ((experience/10) >= levelXpNeeded[i]) {
-				continue;
-			} else {
-				baseLevel = i+1;
-				//currentLevel = i+1;
-				return;
-			}
-		}
-		baseLevel = skill.getMaxLevel();
-	}
-	
-	public void incrementCurrentLevel (int amount) {
-		if (currentLevel + amount > 255) {
-			currentLevel = 255;
-		} else if (currentLevel + amount < 0) {
-			currentLevel = 0;
-		}
-		currentLevel += amount;
+	private void calculateBaseLevel () {
+		baseLevel = type.getBaseLevel(xp/10);
 	}
 	
 	/**
 	 * Sets the current level for this skill (the boosted/lowered level)
 	 * @param level The level to set
 	 */
-	public void setCurrentLevel (int level) {
+	public void setLevel (int level) {
 		if (level > 255 || level < 0) {
 			throw new IllegalArgumentException("Level must be between 0 and 255");
 		}
-		currentLevel = level;
+		this.level = level;
 	}
 	
 }

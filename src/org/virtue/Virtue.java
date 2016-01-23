@@ -46,6 +46,8 @@ import org.virtue.cache.FileStore;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.Js5ConfigGroup;
+import org.virtue.config.defaults.DefaultsGroup;
+import org.virtue.config.defaults.StatDefaults;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.loctype.LocTypeList;
 import org.virtue.config.npctype.NpcTypeList;
@@ -71,6 +73,7 @@ import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.InvRepository;
+import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetRepository;
 import org.virtue.game.parser.ParserRepository;
@@ -353,6 +356,8 @@ public class Virtue {
 				configTable.getEntry(Js5ConfigGroup.RENDERTYPE.id).size()));
 		QuickChatTypeList.init(cache);
 		RegionManager.init(cache);
+		StatDefaults statDefaults = new StatDefaults(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.STAT.js5Id).getData());
+		Stat.setDefaults(statDefaults);		
 		//Appearance.init(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.APPEARANCE.js5Id).getData());
 		Huffman.setHuffman(new Huffman(cache.read(10, cache.getFileId(Js5Archive.BINARY.getArchiveId(), "huffman")).getData()));
 	}

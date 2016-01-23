@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.skills;
+package org.virtue.game.entity.player.stat;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -34,7 +34,6 @@ import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.protocol.update.block.GraphicsBlock;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -43,22 +42,20 @@ import org.virtue.utility.text.StringUtility;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class SkillManager {
+public class StatManager {
 	
-	private EnumMap<StatType, SkillData> skills = new EnumMap<StatType, SkillData>(StatType.class);
+	private EnumMap<Stat, PlayerStat> stats = new EnumMap<Stat, PlayerStat>(Stat.class);
 	
 	private Player player;
 		
-	public SkillManager (Player player) {
+	public StatManager (Player player) {
 		this.player = player;
 		setInitialLevels();
 		@SuppressWarnings("unchecked")
-		List<SkillData> savedValues = (List<SkillData>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.SKILL);
+		List<PlayerStat> savedValues = (List<PlayerStat>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.SKILL);
 		if (savedValues != null) {
-			for (SkillData entry : savedValues) {
-				if (entry.getCurrentLevel() > 0 && entry.getCurrentLevel() < 256) {
-					skills.put(entry.getSkill(), entry);
-				}
+			for (PlayerStat entry : savedValues) {
+				stats.put(entry.getType(), entry);
 			}
 		}
 	}
@@ -68,25 +65,25 @@ public class SkillManager {
 	 * @param stat The stat to set the level of
 	 * @param level The desired level (from 0 to 255)
 	 */
-	public void setLevel (StatType stat, int level) {
-		SkillData skillData = skills.get(stat);
-		skillData.setCurrentLevel(level);
-		player.getDispatcher().sendStat(skillData);
+	public void setLevel (Stat stat, int level) {
+		PlayerStat data = stats.get(stat);
+		data.setLevel(level);
+		player.getDispatcher().sendStat(data);
 	}
 	
 	/**
 	 * Increases (or decreases) the current level of a skill by the specified amount
-	 * @param skillType The skill to increase/decrease
+	 * @param stat The stat to increase/decrease
 	 * @param amount The amount to increase by, or a negative value to decrease
 	 */
-	public void boostSkill (StatType skillType, int amount) {
-		SkillData skillData = skills.get(skillType);
+	public void boostStat (Stat stat, int amount) {
+		PlayerStat skillData = stats.get(stat);
 		if (amount+skillData.getCurrentLevel() < 0) {
-			skillData.setCurrentLevel(0);
+			skillData.setLevel(0);
 		} else if (amount+skillData.getCurrentLevel() > 255) {
-			skillData.setCurrentLevel(255);
+			skillData.setLevel(255);
 		} else {
-			skillData.setCurrentLevel(skillData.getCurrentLevel()+amount);
+			skillData.setLevel(skillData.getCurrentLevel()+amount);
 		}
 		player.getDispatcher().sendStat(skillData);
 	}
@@ -95,21 +92,21 @@ public class SkillManager {
 	 * Restores the specified stat to its base level
 	 * @param stat The stat to restore
 	 */
-	public void restore (StatType stat) {
-		SkillData statData = skills.get(stat);
-		statData.setCurrentLevel(statData.getBaseLevel());
+	public void restore (Stat stat) {
+		PlayerStat statData = stats.get(stat);
+		statData.setLevel(statData.getBaseLevel());
 		player.getDispatcher().sendStat(statData);		
 	}
 	
 	/**
 	 * Adds experience to the specified skill
-	 * @param skill	 The skill to add experience to
-	 * @param totalXpToAdd The the amount of experience to add
+	 * @param stat The stat to add experience to
+	 * @param totalXpToAdd The amount of experience to add
 	 */
-	public void addExperience (StatType skillType, double totalXpToAdd) {
+	public void addExperience (Stat stat, double totalXpToAdd) {
 		totalXpToAdd *= Constants.GLOBAL_XP_MULTIPLYER;
-		SkillData skillData = skills.get(skillType);
-		double currentXp = skillData.getExperienceFloat();
+		PlayerStat skillData = stats.get(stat);
+		double currentXp = skillData.getExperience()/10d;
 		if (currentXp >= 200_000_000 - totalXpToAdd) {
 			totalXpToAdd = 200_000_000 - currentXp;
 		}
@@ -117,26 +114,18 @@ public class SkillManager {
 			return;//Don't add xp past the 200m cap.
 		}
 		int levelBefore = skillData.getBaseLevel();
-		skillData.addExperienceFloat(totalXpToAdd);
+		int newXp = skillData.getExperience() + (int) (totalXpToAdd*10);
+		skillData.setExperience(newXp);
 		int levelAfter = skillData.getBaseLevel();
 		if (levelAfter > levelBefore) {//Player has advanced in level
 			//System.out.println("levelBefore="+levelBefore+", levelAfter="+levelAfter);
-			skillData.incrementCurrentLevel(levelAfter - levelBefore);
+			boostStat(stat, levelAfter - levelBefore);
 			handleAdvancement(skillData, (levelAfter - levelBefore));
-			if (skillType == StatType.CONSTITUTION) {
+			if (stat == Stat.CONSTITUTION) {
 				player.getImpactHandler().setMaximumLifepoints(levelAfter * 100);
 			}
 		}
 		player.getDispatcher().sendStat(skillData);
-	}
-	
-	/**
-	 * Adds bonus experience to the specified skill
-	 * @param skillType The skill to add bonus experience to
-	 * @param xpToAdd The amount of bonus experience to add
-	 */
-	public void addBonusExperience(StatType skillType, double xpToAdd) {
-		player.getVars().incrementVarp(skillType.getBonusXpVarp(), (int) xpToAdd);
 	}
 	
 	/**
@@ -145,8 +134,8 @@ public class SkillManager {
 	 * @param skillType The skill to check
 	 * @return The skill level, or 1 if the skill has not been loaded
 	 */
-	public int getCurrentLevel (StatType statType) {
-		SkillData data = skills.get(statType);
+	public int getCurrentLevel (Stat statType) {
+		PlayerStat data = stats.get(statType);
 		return data == null ? 1 : data.getCurrentLevel();
 	}	
 
@@ -156,8 +145,8 @@ public class SkillManager {
 	 * @param skillType The skill to check
 	 * @return The skill level, or 1 if the skill has not been loaded
 	 */
-	public int getBaseLevel (StatType skillType) {
-		SkillData data = skills.get(skillType);
+	public int getBaseLevel (Stat skillType) {
+		PlayerStat data = stats.get(skillType);
 		return data == null ? 1 : data.getBaseLevel();
 	}
 	
@@ -167,8 +156,8 @@ public class SkillManager {
 	 * @param skillType The skill to check 
 	 * @return The experience, or 0 if the skill has not been loaded
 	 */
-	public int getExperience (StatType skillType) {
-		SkillData data = skills.get(skillType);
+	public int getExperience (Stat skillType) {
+		PlayerStat data = stats.get(skillType);
 		return data == null ? 0 : data.getExperience();
 	}
 	
@@ -177,9 +166,9 @@ public class SkillManager {
 	 * @param skillType The skill to check 
 	 * @return The experience, or 0 if the skill has not been loaded
 	 */
-	public double getRealExperience (StatType skillType) {
-		SkillData data = skills.get(skillType);
-		return data == null ? 0 : data.getExperienceFloat();
+	public double getRealExperience (Stat skillType) {
+		PlayerStat data = stats.get(skillType);
+		return data == null ? 0 : data.getExperience()/10f;
 	}
 	
 	/**
@@ -187,11 +176,11 @@ public class SkillManager {
 	 * Sets all experience to zero (and levels to 1), except for hitpoints which start at 10.
 	 */
 	public void setInitialLevels () {
-		for (StatType s : StatType.values()) {
-			if (s.equals(StatType.CONSTITUTION)) {
-				skills.put(s, new SkillData(s, 11840, 10));
+		for (Stat s : Stat.values()) {
+			if (s.equals(Stat.CONSTITUTION)) {
+				stats.put(s, new PlayerStat(s, 11840, 10));
 			} else {
-				skills.put(s, new SkillData(s));
+				stats.put(s, new PlayerStat(s));
 			}
 		}
 	}
@@ -200,7 +189,7 @@ public class SkillManager {
 	 * Sends the data for all skills to the client. Should be called on login
 	 */
 	public void sendAllSkills () {
-		for (SkillData skill : skills.values()) {
+		for (PlayerStat skill : stats.values()) {
 			player.getDispatcher().sendStat(skill);
 		}
 	}
@@ -254,11 +243,11 @@ public class SkillManager {
 		}
 		if (key > 0 && key < 61) {
 			if (boostable) {
-				if (getCurrentLevel(StatType.getById(levelEnum.getValueInt(key))) >= value) {
+				if (getCurrentLevel(Stat.getById(levelEnum.getValueInt(key))) >= value) {
 					// || reqID == 0 && script_7107(unk1) >= value
 					return true;
 				}
-			} else if (getBaseLevel(StatType.getById(levelEnum.getValueInt(key))) >= value) {
+			} else if (getBaseLevel(Stat.getById(levelEnum.getValueInt(key))) >= value) {
 				return true;
 			}
 			return false;
@@ -277,14 +266,14 @@ public class SkillManager {
 	}
 	
 	public int getCombatLevel() {
-		int attack = getBaseLevel(StatType.ATTACK);
-		int defence = getBaseLevel(StatType.DEFENCE);
-		int strength = getBaseLevel(StatType.STRENGTH);
-		int constitution = getBaseLevel(StatType.CONSTITUTION);
-		int prayer = getBaseLevel(StatType.PRAYER);
-		int summoning = getBaseLevel(StatType.SUMMONING);
-		int ranged = getBaseLevel(StatType.RANGED);
-		int magic = getBaseLevel(StatType.MAGIC);
+		int attack = getBaseLevel(Stat.ATTACK);
+		int defence = getBaseLevel(Stat.DEFENCE);
+		int strength = getBaseLevel(Stat.STRENGTH);
+		int constitution = getBaseLevel(Stat.CONSTITUTION);
+		int prayer = getBaseLevel(Stat.PRAYER);
+		int summoning = getBaseLevel(Stat.SUMMONING);
+		int ranged = getBaseLevel(Stat.RANGED);
+		int magic = getBaseLevel(Stat.MAGIC);
 		
 		int max = Math.max(strength + attack, Math.max(magic * 2, ranged * 2));
 		int combat = (int) (((max * 1.3) + defence + constitution
@@ -294,19 +283,19 @@ public class SkillManager {
 	
 	public int getTotalLevel() {
 		int totalLevel = 0;
-		for (StatType skill : StatType.values()) {
-			totalLevel += getBaseLevel(skill);
+		for (Stat stat : Stat.values()) {
+			totalLevel += getBaseLevel(stat);
 		}
 		return totalLevel;
 	}
 	
 	public long getTotalExperience() {
 		long totalExp = 0;
-		SkillData data;
-		for (int index = 0; index < StatType.values().length; index++) {
-			data = skills.get(index);
+		PlayerStat data;
+		for (int index = 0; index < Stat.values().length; index++) {
+			data = stats.get(index);
 			if (data != null) {
-				totalExp += data.getExperienceFloat();
+				totalExp += data.getExperience();
 			}
 		}
 		return totalExp;
@@ -314,17 +303,25 @@ public class SkillManager {
 
 	/**
 	 * Handles the player advancing in the specified number of levels
-	 * @param skill The skill the player has advanced in
+	 * @param stat The stat the player has advanced in
 	 * @param advancement The number of levels advanced
 	 */
-	private void handleAdvancement (SkillData skill, int advancement) {
-		boolean multiple = advancement != 1;
-		String levelPart = (multiple ? advancement : StringUtility.startsWithVowel(skill.getSkill().getName()) ? "an" : "a")+" "+skill.getSkill().getName()+" level"+(multiple ? "s" : "");
-		//skill.setCurrentLevel(skill.getCurrentLevel()+advancement);
-		if(skill.getBaseLevel() == 99 || skill.getBaseLevel() == 120) {
-			World.getInstance().sendBroadcast(player.getName().trim()+" has achieved "+skill.getBaseLevel()+" "+skill.getSkill().getName());
+	private void handleAdvancement (PlayerStat stat, int advancement) {
+		String message;
+		int statPos = EnumTypeList.list(1482).getValueInt(stat.getType().getId());
+		if (advancement == 1) {
+			EnumType levelUpEnum = EnumTypeList.list(1477);
+			message = levelUpEnum.getValueString(statPos);
+		} else {
+			EnumType startEnum = EnumTypeList.list(3644);
+			EnumType endEnum = EnumTypeList.list(3645);
+			message = startEnum.getValueString(statPos)+advancement+endEnum.getValueString(statPos);
 		}
-		player.getDispatcher().sendGameMessage("You have advanced "+levelPart+"! You have reached level "+skill.getBaseLevel()+".");
+		
+		if(stat.getBaseLevel() == stat.getType().getLevelCap()) {
+			World.getInstance().sendBroadcast(player.getName().trim()+" has achieved "+stat.getBaseLevel()+" "+stat.getType().getName());
+		}
+		player.getDispatcher().sendGameMessage(message+" You have reached level "+stat.getBaseLevel()+".");
 		player.queueUpdateBlock(new GraphicsBlock(3, 2457, 230, 0, 0));//Height: 230, speed: 0, rotation: 0, unk1=0
 		player.queueUpdateBlock(new GraphicsBlock(4, 2457, 270, 10, 3));//Height: 270, speed: 10, rotation: 3, unk1=15
 		player.queueUpdateBlock(new GraphicsBlock(5, 2457, 300, 30, 6));//Height: 300, speed: 30, rotation: 6, unk1=15

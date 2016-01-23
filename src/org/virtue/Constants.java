@@ -83,7 +83,7 @@ public class Constants {
 	/**
 	 * The rate to multiply all xp gains by, where 1 is the normal RuneScape rate
 	 */
-	public static final float GLOBAL_XP_MULTIPLYER = 15;
+	public static final float GLOBAL_XP_MULTIPLYER = 1;
 	
 	/**
 	 * Whether or not to lead GE Prices from a JSON File
