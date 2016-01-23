@@ -50,7 +50,6 @@ import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
-import org.virtue.game.content.exchange.ExchangeOffer;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.ChannelType;
@@ -60,6 +59,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.AccountInfo;
+import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
@@ -1425,7 +1425,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public ExchangeOffer getExchangeOffer(Player player, int exchange, int slot) {
-		return player.getExchangeOffers().getOffer(exchange, slot);
+		return player.getExchangeOffers().getOffer(exchange-1, slot);
 	}
 
 	/* (non-Javadoc)
@@ -1434,8 +1434,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void sendExchangeOffer(Player player, int exchange, int slot, boolean isSell,
 			int itemID, int amount, int price) {
-		ExchangeOffer offer = new ExchangeOffer(exchange, slot, isSell, itemID, amount, price);
-		player.getExchangeOffers().submitOffer(exchange, slot, offer);
+		ExchangeOffer offer = new ExchangeOffer(exchange-1, slot, isSell, itemID, amount, price);
+		player.getExchangeOffers().submitOffer(exchange-1, slot, offer);
 	}
 
 	/* (non-Javadoc)
@@ -1443,7 +1443,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void abortExchangeOffer(Player player, int exchange, int slot) {
-		player.getExchangeOffers().abortOffer(exchange, slot);
+		player.getExchangeOffers().abortOffer(exchange-1, slot);
 	}
 
 	/* (non-Javadoc)
@@ -1460,7 +1460,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void clearExchangeOffer(Player player, int exchange, int slot) {
-		player.getExchangeOffers().clearOffer(exchange, slot);
+		player.getExchangeOffers().clearOffer(exchange-1, slot);
 	}
 
 	/* (non-Javadoc)

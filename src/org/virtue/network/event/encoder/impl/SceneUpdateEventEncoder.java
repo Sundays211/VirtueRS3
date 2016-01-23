@@ -43,7 +43,7 @@ public class SceneUpdateEventEncoder implements EventEncoder<SceneUpdateEventCon
 	@Override
 	public OutboundBuffer encode(Player player, SceneUpdateEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.GAMESCENE_SET_BASETILE, player);
+		buffer.putPacket(OutgoingEventType.MAP_SET_BASETILE, player);
 		int localX = context.getTile().getLocalX(player.getViewport().getBaseTile());
 		int localY = context.getTile().getLocalY(player.getViewport().getBaseTile());
 		buffer.putC(localX >> 3);

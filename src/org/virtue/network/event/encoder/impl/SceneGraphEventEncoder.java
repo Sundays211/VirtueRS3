@@ -46,7 +46,7 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 	@Override
 	public OutboundBuffer encode(Player player, SceneGraphEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(context.isStatic() ? OutgoingEventType.GAMESCENE_STATIC : OutgoingEventType.GAMESCENE_DYNAMIC, player);
+		buffer.putVarShort(context.isStatic() ? OutgoingEventType.MAP_STATIC : OutgoingEventType.MAP_DYNAMIC, player);
 
 		if (context.isRender()) { 
 			player.getViewport().init(buffer);

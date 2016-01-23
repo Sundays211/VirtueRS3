@@ -170,7 +170,7 @@ var TradeButtonListener = Java.extend(Java.type('org.virtue.engine.script.listen
 					return;
 				case 10://Examine
 					var desc = api.getItemDesc(item);
-					api.sendMessage(player, text);
+					api.sendMessage(player, desc);
 					return;
 				}
 				if (count > 0) {

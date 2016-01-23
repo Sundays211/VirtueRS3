@@ -21,6 +21,7 @@
  */
 package org.virtue.game.content.exchange;
 
+import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
 
 /**

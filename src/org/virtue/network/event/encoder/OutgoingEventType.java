@@ -288,47 +288,47 @@ public enum OutgoingEventType {
 	/**
 	 * Represents a static map update
 	 */
-	GAMESCENE_STATIC(101, -2),//added but sceneRadius stuff might not work
+	MAP_STATIC(101, -2),//added but sceneRadius stuff might not work
 
 	/**
 	 * Represents a dynamic map update
 	 */
-	GAMESCENE_DYNAMIC(117, -2),//added but sceneRadius stuff might not work
+	MAP_DYNAMIC(117, -2),//added but sceneRadius stuff might not work
 
 	/**
-	 * Sets the base tile for game scene updates
+	 * Sets the base tile for map updates
 	 */
-	GAMESCENE_SET_BASETILE(28, 3),
+	MAP_SET_BASETILE(28, 3),
 
 	/**
-	 * Adds a ground item to the game scene
+	 * Adds a ground item to the map
 	 */
-	GAMESCENE_ADD_ITEM(136, 5),
+	MAP_ADD_OBJECT(136, 5),
 
 	/**
-	 * Adds a ground item to the game scene which is not visible to a specified entity
+	 * Adds a ground item to the map which is not visible to a specified entity
 	 */
-	GAMESCENE_ADD_HIDDEN_ITEM(127, 7),
+	MAP_ADD_HIDDEN_OBJECT(127, 7),
 
 	/**
-	 * Removes a ground item from the game scene
+	 * Removes a ground item from the map
 	 */
-	GAMESCENE_REMOVE_ITEM(59, 3),
+	MAP_REMOVE_OBJECT(59, 3),
 
 	/**
-	 * Adds or updates an object in the game scene
+	 * Adds or updates a location on the map
 	 */
-	GAMESCENE_UPDATE_LOC(44, 6),
+	MAP_UPDATE_LOC(44, 6),
 
 	/**
-	 * Removes an object from the game scene
+	 * Removes a location from the map
 	 */
-	GAMESCENE_REMOVE_LOC(93, 2),
+	MAP_REMOVE_LOC(93, 2),
 
 	/**
-	 * Sends a projectile within the game scene
+	 * Sends a projectile within the map
 	 */
-	GAMESCENE_PROJECTILE(123, 18),
+	MAP_PROJECTILE(123, 18),
 
 	/**
 	 * Opens the top-level game interface (aka "root" interface)

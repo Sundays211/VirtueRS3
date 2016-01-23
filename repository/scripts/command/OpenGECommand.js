@@ -35,15 +35,10 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 		/*****************************************WARNING****************************************
 		 * DO NOT PUT THIS COMMAND IN PlayerCommands.js! 
 		 * It will eventually be restricted to admin-only, and separating it will be more difficult if it's part of the player command script
-		 */
+		 */	
 		
-		if (api.getAccountType(player) == 6 || api.getAccountType(player) == 7
-				|| api.getAccountType(player) == 8) {
-			api.sendMessage(player, "You cannot use Grand Exchange while an Iron Man.");
-			return false;
-		}
-		api.openCentralWidget(player, 105, false);
-		return true;
+		Exchange.open(player);
+		return;
 	}
 });
 

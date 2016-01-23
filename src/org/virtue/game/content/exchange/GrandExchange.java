@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.game.World;
+import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;

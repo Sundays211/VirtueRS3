@@ -42,7 +42,6 @@ import org.virtue.game.World;
 import org.virtue.game.content.MoneyPouch;
 import org.virtue.game.content.PVPDrops;
 import org.virtue.game.content.dialogues.DialogManager;
-import org.virtue.game.content.exchange.ExchangeOffers;
 import org.virtue.game.content.minigame.MinigameType;
 import org.virtue.game.content.quests.QuestManager;
 import org.virtue.game.content.social.ChatManager;

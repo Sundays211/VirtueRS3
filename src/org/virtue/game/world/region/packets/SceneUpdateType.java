@@ -24,12 +24,12 @@ package org.virtue.game.world.region.packets;
 import org.virtue.network.event.encoder.OutgoingEventType;
 
 public enum SceneUpdateType { 
-	ADD_ITEM(4, 5, OutgoingEventType.GAMESCENE_ADD_ITEM),
-	ADD_ITEM_HIDDEN(7, 7, OutgoingEventType.GAMESCENE_ADD_HIDDEN_ITEM),
-	REMOVE_ITEM(5, 3, OutgoingEventType.GAMESCENE_REMOVE_ITEM),
-	UPDATE_LOC(11, 6, OutgoingEventType.GAMESCENE_UPDATE_LOC),
-	REMOVE_LOC(2, 2, OutgoingEventType.GAMESCENE_REMOVE_LOC),
-	PROJECTILE(13, 18, OutgoingEventType.GAMESCENE_PROJECTILE);
+	ADD_ITEM(4, 5, OutgoingEventType.MAP_ADD_OBJECT),
+	ADD_ITEM_HIDDEN(7, 7, OutgoingEventType.MAP_ADD_HIDDEN_OBJECT),
+	REMOVE_ITEM(5, 3, OutgoingEventType.MAP_REMOVE_OBJECT),
+	UPDATE_LOC(11, 6, OutgoingEventType.MAP_UPDATE_LOC),
+	REMOVE_LOC(2, 2, OutgoingEventType.MAP_REMOVE_LOC),
+	PROJECTILE(13, 18, OutgoingEventType.MAP_PROJECTILE);
 	
 	private int serialID;
 	private OutgoingEventType packetID;

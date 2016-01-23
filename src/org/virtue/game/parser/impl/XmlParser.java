@@ -39,7 +39,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.game.content.exchange.ExchangeOffer;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.OnlineStatus;
@@ -52,6 +51,7 @@ import org.virtue.game.content.social.friend.FriendsList;
 import org.virtue.game.content.social.ignore.Ignore;
 import org.virtue.game.content.social.ignore.IgnoreList;
 import org.virtue.game.entity.combat.CombatMode;
+import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.InvRepository;
@@ -90,6 +90,8 @@ public class XmlParser implements Parser {
 	private static final int FRIEND_VERSION = 4;
 	
 	private static final int CLAN_SETTINGS_VERSION = 5;
+	
+	private static final int EXCHANGE_VERSION = 2;
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.parser.Parser#saveObject(java.lang.String, java.lang.String)
@@ -452,17 +454,26 @@ public class XmlParser implements Parser {
 				break;
 			case EXCHANGE:
 				try {
-					ExchangeOffer[] offers = (ExchangeOffer[]) object;
+					ExchangeOffer[][] offers = (ExchangeOffer[][]) object;
 					Element root = document.createElement("exchange");
+					Attr attr = document.createAttribute("version");
+					attr.setValue(Integer.toString(EXCHANGE_VERSION));
+					root.setAttributeNode(attr);
+					
 					document.appendChild(root);
-					for (ExchangeOffer offer : offers) {
+					
+					for (ExchangeOffer offer : offers[0]) {
 						if (offer == null) {
 							continue;
 						}
 						Element offerElement = document.createElement("offer");
 						
-						Attr attr = document.createAttribute("id");
+						attr = document.createAttribute("id");
 						attr.setValue(Long.toHexString(0L));
+						offerElement.setAttributeNode(attr);
+						
+						attr = document.createAttribute("exchangeId");
+						attr.setValue(Byte.toString((byte) 0));
 						offerElement.setAttributeNode(attr);
 						
 						attr = document.createAttribute("slot");
@@ -1042,16 +1053,32 @@ public class XmlParser implements Parser {
 					Document doc = builder.parse(file);
 				
 					doc.getDocumentElement().normalize();
+					
+					NodeList list = doc.getElementsByTagName("exchange");
+					
+					Node node = list.item(0);
+					
+					int version = 0;
+					
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						Element element = (Element) node;						
+						if (element.hasAttribute("version")) {
+							version = Integer.parseInt(element.getAttribute("version"));
+						}
+					}
 
-					NodeList list = doc.getElementsByTagName("offer");
+					list = doc.getElementsByTagName("offer");
 
 					for (int ordinal = 0; ordinal < list.getLength(); ordinal++) {
-						Node node = list.item(ordinal);
+						node = list.item(ordinal);
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
 							Element element = (Element) node;
+														
+							int exchange = 1;
+							if (version > 1) {
+								exchange = Byte.parseByte(element.getAttribute("exchangeId"));
+							}
 							
-							
-							int exchange = Byte.parseByte(element.getAttribute("exchangeId"));
 							int slot = Byte.parseByte(element.getAttribute("slot"));
 							
 							boolean isSell = Boolean.parseBoolean(element.getAttribute("isSell"));

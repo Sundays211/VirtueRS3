@@ -98,7 +98,12 @@ public enum ContainerState {
 	/**
 	 * Contains the items worn by the player being inspected
 	 */
-	PLAYER_INSPECT_EQUIPMENT(742, false, false);
+	PLAYER_INSPECT_EQUIPMENT(742, false, false),
+	
+	EXCHANGE_OFFER_6(781, true, true),	
+	EXCHANGE_OFFER_7(782, true, true),	
+	EXCHANGE_RETURN_6(783, true, true),	
+	EXCHANGE_RETURN_7(784, true, true);
 	
 	private int id;
 	private boolean stackable;

@@ -19,9 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.exchange;
+package org.virtue.game.entity.player;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.network.event.context.impl.out.ExchangeEventContext;
 import org.virtue.network.event.encoder.impl.ExchangeEventEncoder;
 

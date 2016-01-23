@@ -2166,7 +2166,7 @@ public class LoginDispatcher {
 		player.getVars().setVarValueInt(4329,-1);
 		player.getVars().setVarValueInt(4330,-1);
 		player.getVars().setVarValueInt(4332, -2147483648);
-		player.getVars().setVarValueInt(4334,14);
+		//player.getVars().setVarValueInt(4334, 14);
 		player.getVars().setVarValueInt(4335,-1);
 		player.getVars().setVarValueInt(4408,-1);
 		player.getVars().setVarValueInt(4409,-1);

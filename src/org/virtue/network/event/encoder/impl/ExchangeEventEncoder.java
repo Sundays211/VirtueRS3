@@ -47,30 +47,25 @@ public class ExchangeEventEncoder implements EventEncoder<ExchangeEventContext> 
 		buffer.putPacket(OutgoingEventType.UPDATE_EXCHANGE, player);
 		buffer.putByte(context.getExchange());
 		buffer.putByte(context.getSlot());
-		if (ExchangeOfferStatus.EMPTY.equals(context.getStatus())) {
-			buffer.putByte(0);
-			return buffer;
-		}else {
-			int status = context.getStatus().getCode();
-			if (context.isSellOffer()) {
-				status |= 0x8;
-			}
-			buffer.putByte(status);
-			if (status != 0) {
-				buffer.putShort(context.getItemID());
-				buffer.putInt(context.getOfferPrice());
-				buffer.putInt(context.getOfferCount());
-				buffer.putInt(context.getCompletedCount());
-				buffer.putInt(context.getCompletedGold());
-			} else {
-				buffer.putShort(-1);
-				buffer.putInt(1);
-				buffer.putInt(1);
-				buffer.putInt(1);
-				buffer.putInt(1);
-			}
-			return buffer;
+		int status = context.getStatus().getCode();
+		if (context.isSellOffer() && !ExchangeOfferStatus.EMPTY.equals(context.getStatus())) {
+			status |= 0x8;
 		}
+		buffer.putByte(status);
+		if (status != 0) {
+			buffer.putShort(context.getItemID());
+			buffer.putInt(context.getOfferPrice());
+			buffer.putInt(context.getOfferCount());
+			buffer.putInt(context.getCompletedCount());
+			buffer.putInt(context.getCompletedGold());
+		} else {
+			buffer.putShort(-1);
+			buffer.putInt(1);
+			buffer.putInt(1);
+			buffer.putInt(1);
+			buffer.putInt(1);
+		}
+		return buffer;
 	}
 
 }

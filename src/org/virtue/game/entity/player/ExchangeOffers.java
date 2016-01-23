@@ -19,12 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.exchange;
+package org.virtue.game.entity.player;
 
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.objtype.ItemTypeList;
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.inv.ItemContainer;
@@ -53,8 +53,9 @@ public class ExchangeOffers {
 		
 
 		if (offers == null || offers.length != 3) {
-			offers = new ExchangeOffer[3][8];
+			throw new RuntimeException("Invalid offer count!");
 		}
+		
 		boolean hasOffersWaiting = false;
 		for(int exchange = 0; exchange < 3; exchange++) {
 			for (int slot=0; slot<8; slot++) {
@@ -136,7 +137,7 @@ public class ExchangeOffers {
 	}
 	
 	public void clearOffer (int exchange, int slot) {
-		if (slot >= 0 && slot < 8 && exchange >= 8 && exchange < 3) {
+		if (slot >= 0 && slot < 8 && exchange >= 0 && exchange < 3) {
 			if (offers[exchange][slot] != null) {
 				offers[exchange][slot].clear();
 				offers[exchange][slot].sendOffer(player);

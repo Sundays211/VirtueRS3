@@ -34,9 +34,9 @@ public enum BaseVarType {
 	public final Class<?> javaClass;
 	private int id;
 
-	private BaseVarType(int id, Class<?> var4) {
+	private BaseVarType(int id, Class<?> javaClass) {
 		this.id = id;
-		this.javaClass = var4;
+		this.javaClass = javaClass;
 	}
 
 	public int getId() {

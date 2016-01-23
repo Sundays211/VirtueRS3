@@ -31,26 +31,33 @@
 var OverlayTabSwap = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, trigger, args) {
 		var player = args.player;
-		switch (args.slot) {
-		case 3:
-			Overlay.setTab(player, 1);
+		switch (args.component) {
+		case 478://Overlay tab switch
+			switch (args.slot) {
+			case 3:
+				Overlay.setTab(player, 1);
+				return;
+			case 7:
+				Overlay.setTab(player, 2);
+				return;
+			case 11:
+				Overlay.setTab(player, 3);
+				return;
+			case 15:
+				Overlay.setTab(player, 4);
+				return;
+			case 19:
+				Overlay.setTab(player, 5);
+				return;
+			case 23:
+				Overlay.setTab(player, 6);
+				return;
+			}
 			return;
-		case 7:
-			Overlay.setTab(player, 2);
+		case 481://Overlay close button
+			Overlay.closeOverlay(player)
 			return;
-		case 11:
-			Overlay.setTab(player, 3);
-			return;
-		case 15:
-			Overlay.setTab(player, 4);
-			return;
-		case 19:
-			Overlay.setTab(player, 5);
-			return;
-		case 23:
-			Overlay.setTab(player, 6);
-			return;
-		}
+		}		
 	}
 });
 
@@ -58,6 +65,7 @@ var OverlayTabSwap = Java.extend(Java.type('org.virtue.engine.script.listeners.E
 var listen = function(scriptManager) {
 	var listener = new OverlayTabSwap();
 	scriptManager.registerCompListener(EventType.IF_BUTTON1, 1477, 478, listener);
+	scriptManager.registerCompListener(EventType.IF_BUTTON1, 1477, 481, listener);
 };
 
 var Overlay = {
@@ -69,7 +77,16 @@ var Overlay = {
 			api.setWidgetEvents(player, 1477, 480, 1, 1, 2);
 			api.setVarc(player, 2911, overlay);
 			api.setVarBit(player, 18994, overlay);
-			var tabStruct = this.getStructForTab(player, this.getSelectedTab(player));
+			var selectedTab = this.getSelectedTab(player);
+			if (this.tabLocked(player, overlay, selectedTab)) {
+				for (selectedTab=0;selectedTab<7;selectedTab++) {
+					if (!this.tabLocked(player, overlay, selectedTab)) {
+						break;
+					}
+				}
+				this.setTab(player, selectedTab);
+			}
+			var tabStruct = this.getStructForTab(player, selectedTab);
 			
 			this.openOverlayTab(player, tabStruct);
 		},
@@ -100,8 +117,7 @@ var Overlay = {
 			}
 			return 1;//Default to tab 1
 		},
-		setTab : function (player, tab) {	
-			api.sendMessage(player, "Clicked tab: "+tab);
+		setTab : function (player, tab) {
 			switch (api.getVarBit(player, 18994)) {
 			case 0://Hero
 				api.setVarBit(player, 18995, tab);
@@ -139,6 +155,108 @@ var Overlay = {
 			var tabStruct = this.getStructForTab(player, tab);
 			
 			this.openOverlayTab(player, tabStruct);
+		},
+		tabLocked : function (player, overlay, tab) {
+			switch (overlay) {
+			case 0://Hero
+				switch (tab) {
+				case 1:
+					return api.getVarBit(player, 19005) == 1;
+				case 2:
+					return api.getVarBit(player, 19006) == 1;
+				case 3:
+					return api.getVarBit(player, 29609) == 1;
+				case 4:
+					return api.getVarBit(player, 29614) == 1;
+				case 5:
+					return api.getVarBit(player, 19008) == 1;
+				case 6:
+					return api.getVarBit(player, 29615) == 1;
+				default:
+					return true;
+				}
+			case 1://Customisations
+				switch (tab) {
+				case 1:
+					return api.getVarBit(player, 29610) == 1;
+				case 2:
+					return api.getVarBit(player, 29616) == 1;
+				case 3:
+					return api.getVarBit(player, 29612) == 1;
+				case 4:
+					return api.getVarBit(player, 29613) == 1;
+				case 5:
+					return api.getVarBit(player, 29611) == 1;
+				case 6:
+					return api.getVarBit(player, 29608) == 1;
+				default:
+					return true;
+				}
+			case 2://Powers
+				switch (tab) {
+				case 1:
+					return api.getVarBit(player, 19014) == 1;
+				case 2:
+					return api.getVarBit(player, 19015) == 1;
+				case 3:
+					return api.getVarBit(player, 19016) == 1;
+				case 4:
+					return api.getVarBit(player, 19017) == 1;
+				case 5:
+					return api.getVarBit(player, 19018) == 1;
+				case 6:
+					return api.getVarBit(player, 21689) == 1;
+				default:
+					return true;
+				}
+			case 3://Adventures
+				switch (tab) {
+				case 1:
+					return api.getVarBit(player, 19019) == 1;
+				case 2:
+					return api.getVarBit(player, 19020) == 1;
+				case 3:
+					return api.getVarBit(player, 19021) == 1;
+				case 4:
+					return api.getVarBit(player, 19022) == 1;
+				case 5:
+					return api.getVarBit(player, 19023) == 1;
+				default:
+					return true;
+				}
+			case 4://Community
+			case 6://Grouping system
+				switch (tab) {
+				case 2:
+					return api.getVarBit(player, 19027) == 1;
+				case 3:
+					return api.getVarBit(player, 19028) == 1;
+				case 5:
+					return api.getVarBit(player, 23083) == 1;
+				case 4:
+					return api.getVarBit(player, 24594) == 1;
+				default:
+					return true;
+				}
+			case 5://Grand exchange
+				switch (tab) {
+				case 1://Grand Exchange
+					return api.getVarBit(player, 14173) == 1 || api.getVarBit(player, 29044) == 1 || api.getVarBit(player, 444) == 0;
+				case 2://Sale History
+					return api.getVarBit(player, 29045) == 1;
+				default:
+					return true;
+				}
+			case 7://Upgrades & Extras
+				switch (tab) {
+				case 1://Grand Exchange
+					return api.getVarBit(player, 27402) == 1;
+				case 2://Sale History
+					return api.getVarBit(player, 29508) == 1;
+				default:
+					return true;
+				}
+			}
 		},
 		getStructForTab : function (player, tab) {
 			var overlayStruct = api.getEnumValue(7699, api.getVarBit(player, 18994));
@@ -207,5 +325,12 @@ var Overlay = {
 			api.hideWidget(player, 1448, 12, true);
 			
 			api.hideWidget(player, 1448, 1, true);//Close loading overlay
+		},
+		closeOverlay : function (player) {
+			api.closeWidget(player, 1448, 3);
+			api.closeWidget(player, 1448, 5);
+			api.closeWidget(player, 1448, 7);
+			api.closeWidget(player, 1448, 9);
+			api.closeWidget(player, 1448, 11);
 		}
 }

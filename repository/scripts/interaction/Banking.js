@@ -60,7 +60,7 @@ var BankerListener = Java.extend(Java.type('org.virtue.engine.script.listeners.E
 
 var ExchangeClerkListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, npcTypeId, args) {
-		api.openCentralWidget(args.player, 105, false);		
+		Exchange.open(args.player);	
 	}
 });
 
@@ -82,7 +82,7 @@ var listen = function(scriptManager) {
 		scriptManager.registerListener(EventType.OPNPC4, npcs[i], bankerListener);
 	}
 	
-	npcs = [ 1419, 2593 ];
+	npcs = [ 1419, 2593, 2240 ];
 	var exchangeClerkListener = new ExchangeClerkListener();
 	for (var i in npcs) {
 		//Binds option one on all exchange clerks to this listener

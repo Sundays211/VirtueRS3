@@ -38,17 +38,15 @@ var ExchangeOpenListener = Java.extend(Java.type('org.virtue.engine.script.liste
 			api.setVarp(player, 139, -1);//Buy or sell (1=buy, 0=sell)
 			api.setVarp(player, 137, 1);//Amount
 			api.setVarp(player, 135, -1);//Item ID
-			//player.getDispatcher().sendCloseWidget(13, 2);
-			api.setVarc(player, 199, -1);
-			api.setVarc(player, 3678, -1);
-			api.openOverlaySub(player, 1008, 107, false);
+			//api.openOverlaySub(player, 1008, 107, false);
 			api.runClientScript(player, 8178, []);
 			api.runClientScript(player, 8865, [1]);
-			api.setWidgetEvents(player, 107, 4, 0, 27, 14682110);
-			api.setWidgetEvents(player, 105, 77, -1, -1, 8650758);
-			api.setWidgetEvents(player, 105, 79, -1, -1, 8650758); 
+			api.setWidgetEvents(player, 105, 63, -1, -1, 8650758);
+			api.setWidgetEvents(player, 105, 65, -1, -1, 8650758);
+			api.setWidgetEvents(player, 105, 99, -1, -1, 263170);
 			return;
 		case 107:
+			api.setWidgetEvents(player, 107, 7, 0, 27, 14682110);
 			api.runClientScript(player, 8862, [0, 2]);
 			api.runClientScript(player, 8862, [0, 3]);
 			return;
@@ -61,130 +59,158 @@ var ExchangeButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 		var player = args.player;
 		switch (args["interface"]) {
 		case 105:
-			switch (component) {	
-			case 9://Select item to buy
+			switch (args.component) {	
+			case -1://Select item to buy
 				Exchange.searchForItem(player);
 				return;
-			case 28://View offer 0
-				Exchange.viewOffer(player, 0);
-				return;
-			case 30://View offer 1
-				Exchange.viewOffer(player, 1);
-				return;
-			case 33://View offer 2
-				Exchange.viewOffer(player, 2);
-				return;
-			case 34://View offer 3
-				Exchange.viewOffer(player, 3);
-				return;
-			case 36://View offer 4
-				Exchange.viewOffer(player, 4);
-				return true;
-			case 38://View offer 5
-				Exchange.viewOffer(player, 5);
-				return;
-			case 42://Pressed "Back" button
+			case 15://Pressed "Back" button
 				Exchange.clearOffer(player);
 				return;
-			case 75://Abort current offer
+			case 17://View offer 0
+				Exchange.viewOffer(player, 0);
+				return;
+			case 18://View offer 1
+				Exchange.viewOffer(player, 1);
+				return;
+			case 19://View offer 2
+				Exchange.viewOffer(player, 2);
+				return;
+			case 20://View offer 3
+				Exchange.viewOffer(player, 3);
+				return;
+			case 21://View offer 4
+				Exchange.viewOffer(player, 4);
+				return;
+			case 22://View offer 5
+				Exchange.viewOffer(player, 5);
+				return;
+			case 23://View offer 6
+				Exchange.viewOffer(player, 6);
+				return;
+			case 24://View offer 7
+				Exchange.viewOffer(player, 7);
+				return;
+			case 61://Abort current offer
 				var slot = api.getVarp(player, 138);
-				if (slot >= 0 && slot < 6) {
-					api.abortExchangeOffer(player, slot);
+				if (slot >= 0 && slot < 8) {
+					api.abortExchangeOffer(player, 1, slot);
 				}				
 				return;
-			case 77://Collect item
-				Exchange.collectItems(player, 0, option);
+			case 63://Collect item
+				Exchange.collectItems(player, 0, args.button);
 				return;
-			case 79://Collect coins
-				Exchange.collectItems(player, 1, option);
+			case 65://Collect coins
+				Exchange.collectItems(player, 1, args.button);
 				return;
-			case 87://Close button
-				return;
-			case 98://Decrease quantity by one
+			case 121://Decrease quantity by one
 				if (api.getVarp(player, 136) > 0) {
 					api.incrementVarp(player, 136, -1);
 				}				
 				return;
-			case 101://Increase quantity by one
+			case 124://Increase quantity by one
 				api.incrementVarp(player, 136, 1);			
 				return;
-			case 105:
-				Exchange.handleQuantityButton(player, 1);
-				return;
-			case 111://Increase quantity by ten
+			case 128://Increase quantity by ten
 				Exchange.handleQuantityButton(player, 2);
 				return;
-			case 117://Increase quantity by 100
+			case 134://Increase quantity by 100
 				Exchange.handleQuantityButton(player, 3);
 				return;
-			case 123://Increase quantity by 1000
+			case 140://Increase quantity by 1000
 				Exchange.handleQuantityButton(player, 4);
 				return;
-			case 129://Select custom quantity
+			case -1://Select custom quantity
 				Exchange.handleQuantityButton(player, 5);
 				return;
-			case 134://Decrease price by 1gp
+			case 145://Decrease price by 1gp
 				if (api.getVarp(player, 137) > 1) {
 					api.incrementVarp(player, 137, -1);
 				}				
 				return;
-			case 137://Increase price by 1gp
+			case 148://Increase price by 1gp
 				if (api.getVarp(player, 137) < 2147483647) {
 					api.incrementVarp(player, 137, 1);
 				}
 				return;
-			case 141://Decrease price by 5%
+			case 152://Decrease price by 5%
 				Exchange.setPrice(player, 95);
 				return;
-			case 147://Set to exchange price
+			case 158://Set to exchange price
 				api.setVarp(player, 137, api.getVarp(player, 140));
 				return;
-			case 152://Select custom price
-				requestCount(player, "Enter the price you wish to buy for:", function (value) {
-					api.setVarp(player, 137, value);
-				});
-				return;
-			case 158://Increase price by 5%
+			case 163://Increase price by 5%
 				Exchange.setPrice(player, 105);
 				return;
-			case 164://Submit offer
+			case 169://Submit offer
 				Exchange.submitOffer(player);
 				return;
-			case 170://Buy offer 0
+			case 175://Buy offer 0
 				Exchange.openOffer(player, 0, false);
 				return;
-			case 175://Sell offer 0
+			case 180://Sell offer 0
 				Exchange.openOffer(player, 0, true);
 				return;
-			case 181://Buy offer 1
+			case 186://Buy offer 1
 				Exchange.openOffer(player, 1, false);
 				return;
-			case 187://Sell offer 1
+			case 192://Sell offer 1
 				Exchange.openOffer(player, 1, true);
 				return;
-			case 193://Buy offer 2
+			case 198://Buy offer 2
 				Exchange.openOffer(player, 2, false);
 				return;
-			case 199://Sell offer 2
+			case 204://Sell offer 2
 				Exchange.openOffer(player, 2, true);
 				return;
-			case 206://Buy offer 3
+			case 211://Buy offer 3
 				Exchange.openOffer(player, 3, false);
 				return;
-			case 212://Sell offer 3
+			case 217://Sell offer 3
 				Exchange.openOffer(player, 3, true);
 				return;
-			case 222://Buy offer 4
+			case 227://Buy offer 4
 				Exchange.openOffer(player, 4, false);
 				return;
-			case 228://Sell offer 4
+			case 233://Sell offer 4
 				Exchange.openOffer(player, 4, true);
 				return;
-			case 238://Buy offer 5
+			case 243://Buy offer 5
 				Exchange.openOffer(player, 5, false);
 				return;
-			case 244://Sell offer 5
+			case 249://Sell offer 5
 				Exchange.openOffer(player, 5, true);
+				return;
+			case 260://Buy offer 6
+				Exchange.openOffer(player, 6, false);
+				return;
+			case 266://Sell offer 6
+				Exchange.openOffer(player, 6, true);
+				return;
+			case 277://Buy offer 7
+				Exchange.openOffer(player, 7, false);
+				return;
+			case 283://Sell offer 7
+				Exchange.openOffer(player, 7, true);
+				return;
+			case 292://Custom quantity
+				inframeInput(player, 105, 289, function (value) {
+					if (value > 0) {
+						api.setVarp(player, 136, value-1);
+					}
+				}, 7, 7);
+				return;
+			case 298://Custom price
+				inframeInput(player, 105, 295, function (value) {
+					if (value > 0) {
+						api.setVarp(player, 137, value-1);
+					}
+				}, 7, 7);
+				return;
+			case 304://Search for item
+				Exchange.searchForItem(player);
+				return;
+			case 311://Increase quantity by one
+				Exchange.handleQuantityButton(player, 1);
 				return;
 			//Abort request acknowledged. Please be aware that your offer may have already been completed.
 			default:
@@ -193,14 +219,22 @@ var ExchangeButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 			}
 			return;
 		case 107:
-			if (args.component != 4) {
+			if (args.component != 7) {
 				api.sendMessage(player, "Unhandled exchange inventory button: comp="+args.component+", button="+args.button+", slot="+args.slot);
+				return;
 			}
 			if (args.button == 1) {
-				Exchange.offerItem(player, slot);
+				Exchange.offerItem(player, args.slot);
+			} else if (args.button == 10) {
+				var item = api.getItem(player, Inv.BACKPACK, args.slot);
+				var desc = api.getItemDesc(item);
+				api.sendMessage(player, desc);
 			} else {
 				api.sendMessage(player, "Unhandled exchange inventory button: comp="+args.component+", button="+args.button+", slot="+args.slot);
 			}
+			return;
+		case 1666://Money pouch option
+			api.sendMessage(player, "Unhandled exchange money pouch button: comp="+args.component+", button="+args.button+", slot="+args.slot);
 			return;
 		}
 	}
@@ -212,6 +246,7 @@ var ExchangeCloseListener = Java.extend(Java.type('org.virtue.engine.script.list
 		switch (args["interface"]) {
 		case 105:
 			Exchange.clearOffer(player);
+			api.setVarBit(player, 29044, 1);//Lock exchange tab
 			return;
 		case 107:
 			api.runClientScript(player, 8862, [1, 2]);
@@ -230,6 +265,7 @@ var listen = function(scriptManager) {
 	listener = new ExchangeButtonListener();
 	scriptManager.registerListener(EventType.IF_BUTTON, 105, listener);
 	scriptManager.registerListener(EventType.IF_BUTTON, 107, listener);
+	scriptManager.registerListener(EventType.IF_BUTTON, 1666, listener);
 	
 	listener = new ExchangeCloseListener();
 	scriptManager.registerListener(EventType.IF_CLOSE, 105, listener);
@@ -237,25 +273,38 @@ var listen = function(scriptManager) {
 };
 
 var Exchange = {
+		open : function (player) {
+			if (api.getAccountType(player) == 6 || api.getAccountType(player) == 7
+					|| api.getAccountType(player) == 8) {
+				api.sendMessage(player, "You cannot use Grand Exchange while an Iron Man.");
+				return;
+			}
+			api.setVarBit(player, 444, 1);//Pin entered successfully
+			api.setVarBit(player, 29044, 0);//Unlock exchange tab
+			Overlay.openOverlay(player, 5);
+			//api.openCentralWidget(player, 105, false);
+		},
 		openOffer : function (player, slot, isSell) {
 			api.setVarp(player, 138, slot);
 			api.setVarp(player, 139, isSell ? 1 : 0);
-			if (isSell) {
-				api.hideWidget(player, 105, 25, true);
-			} else {
-				Exchange.searchForItem(player);
+			if (!isSell) {
+				this.searchForItem(player);
 			}
 		},
 		viewOffer : function (player, slot) {
-			var offer = api.getExchangeOffer(player, slot);
+			var offer = api.getExchangeOffer(player, 1, slot);
 			if (offer != null) {
 				var returnInv = api.getEnumValue(1079, slot);
-				if (api.freeSpaceTotal(player, returnInv) == 2 && api.exchangeOfferFinished(player, slot)) {
-					api.clearExchangeOffer(player, slot);
+				if (api.freeSpaceTotal(player, returnInv) == 2 && api.exchangeOfferFinished(player, 1, slot)) {
+					api.clearExchangeOffer(player, 1, slot);
 				} else {
 					api.sendInv(player, returnInv);
-					var exchangePrice = api.getItemType(offer.getOfferItem()).getExchangeValue();
+					var objId = offer.getOfferItem();
+					api.setVarp(player, 135, objId);
+					var exchangePrice = api.getExchangeCost(objId);
 					api.setVarp(player, 140, exchangePrice);
+					api.setVarc(player, 2354, api.getItemDesc(objId));
+					api.setWidgetText(player, 105, 14, api.getItemDesc(objId));
 					api.setVarp(player, 138, slot);
 				}				
 			}			
@@ -272,7 +321,7 @@ var Exchange = {
 			if (api.getVarp(player, 139) != 1) {
 				if (api.getVarp(player, 139) == -1) {
 					for (var slot=0; slot<6; slot++) {
-						if (api.getExchangeOffer(player, slot) == null) {
+						if (api.getExchangeOffer(player, 1, slot) == null) {
 							api.setVarp(player, 139, 1);
 							api.setVarp(player, 138, slot);
 							break;
@@ -289,7 +338,7 @@ var Exchange = {
 
 			var item = api.getItem(player, Inv.BACKPACK, invSlot);
 			if (item != null) {
-				var exchangePrice = api.getItemType(item).getExchangeValue();
+				var exchangePrice = api.getExchangeCost(item);
 				if (exchangePrice != -1) {
 					var itemID = item.getID();
 					if (api.getItemType(item).certtemplate != -1) {
@@ -298,21 +347,25 @@ var Exchange = {
 					api.setVarp(player, 140, exchangePrice);
 					api.setVarp(player, 135, itemID);
 					api.setVarp(player, 137, exchangePrice);
-					api.setVarp(player, 136, api.carriedItemTotal(player, item.getID()));
+					api.setVarp(player, 136, api.carriedItemTotal(player, api.getId(item)));
+					api.setVarc(player, 2354, api.getItemDesc(api.getId(item)));
+					api.setWidgetText(player, 105, 14, api.getItemDesc(api.getId(item)));
 				} else {
 					api.sendMessage(player, "You can't buy or sell that item on the GE.");
 				}
 			}
 		},
 		searchForItem : function (player) {
-			requestItem(player, "Grand Exchange Item Search", function (objId) {
+			inframeInput(player, 105, 301, function (objId) {
 				var exchangePrice = api.getExchangeCost(objId);
 				if (exchangePrice != -1) {
 					api.setVarp(player, 140, exchangePrice);
 					api.setVarp(player, 135, objId);
 					api.setVarp(player, 137, exchangePrice);
+					api.setVarc(player, 2354, api.getItemDesc(objId));
+					api.setWidgetText(player, 105, 14, api.getItemDesc(objId));
 				}
-			});
+			}, 10, 0);
 		},
 		setPrice : function (player, percent) {
 			if (api.getVarp(player, 135) == -1) {
@@ -393,7 +446,7 @@ var Exchange = {
 							api.delItem(player, Inv.BACKPACK, api.getItemType(itemID).certlink, amount);
 						}
 						api.addItem(player, offerInv, itemID, fullAmount);
-						api.sendExchangeOffer(player, slot, isSell, itemID, fullAmount, price);
+						api.sendExchangeOffer(player, 1, slot, isSell, itemID, fullAmount, price);
 						Exchange.clearOffer(player);
 					} else {
 						api.sendMessage(player, "You do not have enough of this item in your inventory to cover the offer.")
@@ -403,7 +456,7 @@ var Exchange = {
 					if (api.carriedItemTotal(player, 995) >= totalCoins) {
 						api.delCarriedItem(player, 995, totalCoins);
 						api.addItem(player, offerInv, 995, totalCoins);
-						api.sendExchangeOffer(player, slot, isSell, itemID, amount, price);
+						api.sendExchangeOffer(player, 1, slot, isSell, itemID, amount, price);
 						Exchange.clearOffer(player);
 					} else {
 						api.sendMessage(player, "You do not have enough coins to cover the offer.")
@@ -432,8 +485,8 @@ var Exchange = {
 			}
 			api.delItem(player, returnInv, item.getID(), amount);
 			api.addCarriedItem(player, itemID, amount);
-			if (api.freeSpaceTotal(player, returnInv) == 2 && api.exchangeOfferFinished(player, exchangeSlot)) {
-				api.clearExchangeOffer(player, exchangeSlot);
+			if (api.freeSpaceTotal(player, returnInv) == 2 && api.exchangeOfferFinished(player, 1, exchangeSlot)) {
+				api.clearExchangeOffer(player, 1, exchangeSlot);
 			}
 		}
 }
