@@ -85,7 +85,7 @@ public class XmlParser implements Parser {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(XmlParser.class);
 	
-	private static final int CHARACTER_VERSION = 7;
+	private static final int CHARACTER_VERSION = 8;
 	
 	private static final int FRIEND_VERSION = 4;
 	
@@ -214,14 +214,6 @@ public class XmlParser implements Parser {
 					coins.appendChild(document.createTextNode(Integer.toString(player.getRuneCoins())));
 					def.appendChild(coins);
 					
-					Element gender = document.createElement("gender");
-					gender.appendChild(document.createTextNode(Integer.toString(player.getAppearance().getGender().ordinal())));
-					def.appendChild(gender);
-					
-					Element render = document.createElement("render");
-					render.appendChild(document.createTextNode(Integer.toString(player.getAppearance().getRender().ordinal())));
-					def.appendChild(render);
-					
 					Element pre = document.createElement("prefix");
 					pre.appendChild(document.createTextNode(player.getAppearance().getPrefixTitle()));
 					def.appendChild(pre);
@@ -234,31 +226,52 @@ public class XmlParser implements Parser {
 					showSkill.appendChild(document.createTextNode(Boolean.toString(player.getAppearance().showSkillLevel())));
 					def.appendChild(showSkill);
 					
-					for (int slot = 0; slot < player.getAppearance().getStyles().length; slot++) {
-						Element style = document.createElement("style");
-						def.appendChild(style);
+					Element render = document.createElement("render");
+					render.appendChild(document.createTextNode(Integer.toString(player.getAppearance().getRender().ordinal())));
+					def.appendChild(render);
+					
+					Element model = document.createElement("model");
+					
+					Element gender = document.createElement("gender");
+					gender.appendChild(document.createTextNode(Integer.toString(player.getAppearance().getGender().ordinal())));
+					model.appendChild(gender);
+					
+					int[] idk = player.getAppearance().getStyles();
+					for (byte slot = 0; slot < idk.length; slot++) {
+						Element kitElement = document.createElement("idk");
+						model.appendChild(kitElement);
 						
 						attr = document.createAttribute("slot");
-						attr.setValue(Integer.toString(slot));
-						style.setAttributeNode(attr);
+						attr.setValue(Byte.toString(slot));
+						kitElement.setAttributeNode(attr);
 						
-						attr = document.createAttribute("value");
-						attr.setValue(Integer.toString(player.getAppearance().getStyles()[slot]));
-						style.setAttributeNode(attr);
+						kitElement.setTextContent(Integer.toString(idk[slot]));
 					}
 					
-					for (int slot = 0; slot < player.getAppearance().getColors().length; slot++) {
-						Element color = document.createElement("color");
-						def.appendChild(color);
+					int[] recol = player.getAppearance().getColors();					
+					for (byte slot = 0; slot < recol.length; slot++) {
+						Element recolElement = document.createElement("recol");
+						model.appendChild(recolElement);
 						
 						attr = document.createAttribute("slot");
-						attr.setValue(Integer.toString(slot));
-						color.setAttributeNode(attr);
+						attr.setValue(Byte.toString(slot));
+						recolElement.setAttributeNode(attr);
 						
-						attr = document.createAttribute("value");
-						attr.setValue(Integer.toString(player.getAppearance().getColors()[slot]));
-						color.setAttributeNode(attr);
+						recolElement.setTextContent(Integer.toString(recol[slot]));
 					}
+					
+					int[] retex = player.getAppearance().getTextures();					
+					for (byte slot = 0; slot < retex.length; slot++) {
+						Element recolElement = document.createElement("retex");
+						model.appendChild(recolElement);
+						
+						attr = document.createAttribute("slot");
+						attr.setValue(Byte.toString(slot));
+						recolElement.setAttributeNode(attr);
+						
+						recolElement.setTextContent(Integer.toString(retex[slot]));
+					}
+					def.appendChild(model);
 				} catch (Exception ex) {
 					logger.error("Could not save definition for player "+file, ex);
 				}
@@ -665,14 +678,14 @@ public class XmlParser implements Parser {
 					Node node = list.item(0);
 	
 					if (node.getNodeType() == Node.ELEMENT_NODE) {
-						Element element = (Element) node;
+						Element charElement = (Element) node;
 						int version = 0;
-						if (element.hasAttribute("version")) {
-							version = Integer.parseInt(element.getAttribute("version"));
+						if (charElement.hasAttribute("version")) {
+							version = Integer.parseInt(charElement.getAttribute("version"));
 						}
 					
 						//String display = element.getElementsByTagName("display").item(0).getTextContent();
-						String password = element.getElementsByTagName("password").item(0).getTextContent();
+						String password = charElement.getElementsByTagName("password").item(0).getTextContent();
 						if (!password.equals(request.getPassword())) {
 							return ResponseTypeMessage.STATUS_INVALID_PASSWORD.getCode();
 						}
@@ -680,24 +693,24 @@ public class XmlParser implements Parser {
 						int posY = 3330;
 						int posZ = 1;
 						if (version > 1) {
-							posX = Integer.parseInt(element.getElementsByTagName("posX").item(0).getTextContent());
-							posY = Integer.parseInt(element.getElementsByTagName("posY").item(0).getTextContent());
-							posZ = Integer.parseInt(element.getElementsByTagName("posZ").item(0).getTextContent());
+							posX = Integer.parseInt(charElement.getElementsByTagName("posX").item(0).getTextContent());
+							posY = Integer.parseInt(charElement.getElementsByTagName("posY").item(0).getTextContent());
+							posZ = Integer.parseInt(charElement.getElementsByTagName("posZ").item(0).getTextContent());
 						}
-						int mode = Integer.parseInt(element.getElementsByTagName("mode").item(0).getTextContent());
+						int mode = Integer.parseInt(charElement.getElementsByTagName("mode").item(0).getTextContent());
 						
 						boolean sheathe = false;
-						if (element.getElementsByTagName("sheathe").item(0) != null) {
-							sheathe = Boolean.parseBoolean(element.getElementsByTagName("sheathe").item(0).getTextContent());
+						if (charElement.getElementsByTagName("sheathe").item(0) != null) {
+							sheathe = Boolean.parseBoolean(charElement.getElementsByTagName("sheathe").item(0).getTextContent());
 						}
-						long login = Long.parseLong(element.getElementsByTagName("login").item(0).getTextContent());
+						long login = Long.parseLong(charElement.getElementsByTagName("login").item(0).getTextContent());
 						long savedChannel = 0L;
 						long clanHash = 0L;
 						boolean mute = false;
 						boolean ban = false;
 						if (version > 6) {
-							mute = Boolean.parseBoolean(element.getElementsByTagName("mute").item(0).getTextContent());
-							ban = Boolean.parseBoolean(element.getElementsByTagName("ban").item(0).getTextContent());
+							mute = Boolean.parseBoolean(charElement.getElementsByTagName("mute").item(0).getTextContent());
+							ban = Boolean.parseBoolean(charElement.getElementsByTagName("ban").item(0).getTextContent());
 						}
 						if (ban) {
 							//return ResponseTypeMessage.STATUS_BANNED.getCode();
@@ -707,11 +720,11 @@ public class XmlParser implements Parser {
 							//savedChannel = Long.parseLong(element.getElementsByTagName("savedChat").item(0).getTextContent(), 16);
 						}
 						if (version > 3) {
-							clanHash = Long.parseLong(element.getElementsByTagName("clanHash").item(0).getTextContent());
+							clanHash = Long.parseLong(charElement.getElementsByTagName("clanHash").item(0).getTextContent());
 						}
 						int energy = 100;
 						if (version > 5) {
-							energy = Integer.parseInt(element.getElementsByTagName("runenergy").item(0).getTextContent());
+							energy = Integer.parseInt(charElement.getElementsByTagName("runenergy").item(0).getTextContent());
 							if (energy > 100) {
 								energy = 100;
 							} else if (energy < 0) {
@@ -719,57 +732,94 @@ public class XmlParser implements Parser {
 							}
 						}
 						
-						int keys = Integer.parseInt(element.getElementsByTagName("keys").item(0).getTextContent());
-						int hearts = Integer.parseInt(element.getElementsByTagName("hearts").item(0).getTextContent());
-						int loyatly = Integer.parseInt(element.getElementsByTagName("loyalty").item(0).getTextContent());
-						int coins = Integer.parseInt(element.getElementsByTagName("coins").item(0).getTextContent());
+						int keys = Integer.parseInt(charElement.getElementsByTagName("keys").item(0).getTextContent());
+						int hearts = Integer.parseInt(charElement.getElementsByTagName("hearts").item(0).getTextContent());
+						int loyatly = Integer.parseInt(charElement.getElementsByTagName("loyalty").item(0).getTextContent());
+						int coins = Integer.parseInt(charElement.getElementsByTagName("coins").item(0).getTextContent());
 						
-						int[] styless = null;
-						int[] colorss = null;
+						int[] idk = null;
+						int[] recol = null;
+						int[] retex = null;
 						String pre = "";
 						String suf = "";
 						boolean showSkill = false;
 						int gender = 0;
 						
 						if (version > 4) {
-							gender =  Integer.parseInt(element.getElementsByTagName("gender").item(0).getTextContent());
-							pre = element.getElementsByTagName("prefix").item(0).getTextContent();
-							suf = element.getElementsByTagName("suffix").item(0).getTextContent();
-							showSkill = Boolean.parseBoolean(element.getElementsByTagName("showSkill").item(0).getTextContent());
-									
-							styless = new int[8];
-							NodeList styles = element.getElementsByTagName("style");
-							for (int ordinal = 0; ordinal < styles.getLength(); ordinal++) {
-								Node style = styles.item(ordinal);
-								if (style.getNodeType() == Node.ELEMENT_NODE) {
-									Element el = (Element) style;
-									int value = Integer.parseInt(el.getAttribute("value"));
-									styless[ordinal] = value;
-								}
-							}
+							pre = charElement.getElementsByTagName("prefix").item(0).getTextContent();
+							suf = charElement.getElementsByTagName("suffix").item(0).getTextContent();
+							showSkill = Boolean.parseBoolean(charElement.getElementsByTagName("showSkill").item(0).getTextContent());
 							
-							colorss = new int[10];
-							NodeList colors = element.getElementsByTagName("color");
-							for (int ordinal = 0; ordinal < colors.getLength(); ordinal++) {
-								Node color = colors.item(ordinal);
-								if (color.getNodeType() == Node.ELEMENT_NODE) {
-									Element el = (Element) color;
-									int value = Integer.parseInt(el.getAttribute("value"));
-									colorss[ordinal] = value;
+							if (version > 7) {
+								Element model = (Element) charElement.getElementsByTagName("model").item(0);
+								
+								gender =  Integer.parseInt(model.getElementsByTagName("gender").item(0).getTextContent());
+								
+								NodeList kitElements = model.getElementsByTagName("idk");
+								idk = new int[8];
+								for (int ordinal = 0; ordinal < kitElements.getLength(); ordinal++) {
+									Element kitElement = (Element) kitElements.item(ordinal);
+									int slot = Byte.parseByte(kitElement.getAttribute("slot"));
+									idk[slot] = Integer.parseInt(kitElement.getTextContent());
 								}
-							}
+								
+								NodeList recolElements = model.getElementsByTagName("recol");
+								recol = new int[10];
+								for (int ordinal = 0; ordinal < recolElements.getLength(); ordinal++) {
+									Element recolElement = (Element) recolElements.item(ordinal);
+									int slot = Byte.parseByte(recolElement.getAttribute("slot"));
+									recol[slot] = Integer.parseInt(recolElement.getTextContent());
+								}
+								
+								NodeList retexElements = model.getElementsByTagName("retex");
+								retex = new int[10];
+								for (int ordinal = 0; ordinal < retexElements.getLength(); ordinal++) {
+									Element retexElement = (Element) retexElements.item(ordinal);
+									int slot = Byte.parseByte(retexElement.getAttribute("slot"));
+									retex[slot] = Integer.parseInt(retexElement.getTextContent());
+								}
+							} else {
+								gender =  Integer.parseInt(charElement.getElementsByTagName("gender").item(0).getTextContent());
+								
+								idk = new int[8];
+								NodeList styles = charElement.getElementsByTagName("style");
+								for (int ordinal = 0; ordinal < styles.getLength(); ordinal++) {
+									Node style = styles.item(ordinal);
+									if (style.getNodeType() == Node.ELEMENT_NODE) {
+										Element el = (Element) style;
+										int value = Integer.parseInt(el.getAttribute("value"));
+										idk[ordinal] = value;
+									}
+								}
+								
+								recol = new int[10];
+								NodeList colors = charElement.getElementsByTagName("color");
+								for (int ordinal = 0; ordinal < colors.getLength(); ordinal++) {
+									Node color = colors.item(ordinal);
+									if (color.getNodeType() == Node.ELEMENT_NODE) {
+										Element el = (Element) color;
+										int value = Integer.parseInt(el.getAttribute("value"));
+										recol[ordinal] = value;
+									}
+								}
+								
+								retex = new int[10];
+							}							
 						}
 						
 						Player player =  new Player(request.getChannel(), request.getUsername(), password, CombatMode.forOpcode(mode), request.getEncodingCipher(), request.getDecodingCipher());
 						
 						player.initialize(LoginTypeMessage.LOGIN_WORLD.equals(request.getLoginType()));
 						
-						if (styless != null && colorss != null) {
+						if (idk != null && recol != null) {
 							player.getAppearance().setGender(gender == 0 ? Gender.MALE : Gender.FEMALE);
 							player.getAppearance().setPrefixTitle(pre);
 							player.getAppearance().setSuffixTitle(suf);
-							player.getAppearance().setStyles(styless);
-							player.getAppearance().setColors(colorss);
+							player.getAppearance().setStyles(idk);
+							player.getAppearance().setColors(recol);
+							if (retex != null) {
+								player.getAppearance().setTextures(retex);						
+							}
 							player.getAppearance().setShowSkillLevel(showSkill);
 						}
 						player.setCurrentTile(posX, posY, posZ);

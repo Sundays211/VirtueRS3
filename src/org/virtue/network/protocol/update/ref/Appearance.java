@@ -614,6 +614,14 @@ public class Appearance {
 		this.colors = colors;
 	}
 
+	public void setTextures(int[] textures) {
+		this.textures = textures;
+	}
+
+	public int[] getTextures() {
+		return textures;
+	}
+
 	public int[] getColors() {
 		return colors;
 	}
