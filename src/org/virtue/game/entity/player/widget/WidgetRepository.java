@@ -35,8 +35,6 @@ import org.virtue.game.entity.player.widget.impl.BankWidget;
 import org.virtue.game.entity.player.widget.impl.CombatSettingsWidget;
 import org.virtue.game.entity.player.widget.impl.HopWorldsWidget;
 import org.virtue.game.entity.player.widget.impl.MinimapWidget;
-import org.virtue.game.entity.player.widget.impl.OverlayWidget;
-import org.virtue.game.entity.player.widget.impl.QuestsListWidget;
 import org.virtue.game.entity.player.widget.impl.TreasureHunterWidget;
 import org.virtue.game.entity.player.widget.impl.WornEquipmentWidget;
 import org.virtue.game.world.region.SceneLocation;
@@ -303,7 +301,6 @@ public final class WidgetRepository {
 	public void load() {
 		registerWidget(ActionBarWidget.class);
 		registerWidget(MinimapWidget.class);
-		registerWidget(OverlayWidget.class);
 		registerWidget(TreasureHunterWidget.class);
 		registerWidget(BankWidget.class);
 		registerWidget(BackpackWidget.class);
@@ -311,7 +308,6 @@ public final class WidgetRepository {
 		registerWidget(AccountCreationWidget.class);
 		registerWidget(CombatSettingsWidget.class);
 		registerWidget(HopWorldsWidget.class);
-		registerWidget(QuestsListWidget.class);
 		logger.info("Registered " + WIDGETS.size() + " Game Widget(s).");
 	}
 

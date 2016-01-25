@@ -28,10 +28,21 @@
  * @since 14/01/2016
  */
 
-var OverlayTabSwap = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+var OverlayListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, trigger, args) {
 		var player = args.player;
 		switch (args.component) {
+		case 36://Lock/unlock interfaces
+			var locked = api.getVarBit(player, 19925) == 1;
+			api.setVarBit(player, 19925, locked ? 0 : 1)
+			return;
+		case 37://Sheathing (TODO: Find which varp/varbit controls this)
+			player.switchSheathing();
+			break;
+		case 68://Logout
+			api.setVarp(player, 3813, 6);
+			api.openWidget(player, 1477, 853, 26, true);
+			return;
 		case 478://Overlay tab switch
 			switch (args.slot) {
 			case 3:
@@ -57,15 +68,17 @@ var OverlayTabSwap = Java.extend(Java.type('org.virtue.engine.script.listeners.E
 		case 481://Overlay close button
 			Overlay.closeOverlay(player)
 			return;
+		default:
+			api.sendMessage(player, "Unhandled overlay button: comp="+args.component+", slot="+args.slot+", button="+args.button)
+			return;
 		}		
 	}
 });
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
-	var listener = new OverlayTabSwap();
-	scriptManager.registerCompListener(EventType.IF_BUTTON1, 1477, 478, listener);
-	scriptManager.registerCompListener(EventType.IF_BUTTON1, 1477, 481, listener);
+	var listener = new OverlayListener();
+	scriptManager.registerListener(EventType.IF_BUTTON, 1477, listener);
 };
 
 var Overlay = {
@@ -327,6 +340,10 @@ var Overlay = {
 			api.hideWidget(player, 1448, 1, true);//Close loading overlay
 		},
 		closeOverlay : function (player) {
+			var overlay = api.getVarBit(player, 18994);
+			var tab = this.getSelectedTab(player);
+			api.setVarc(player, 2911, -1);
+			api.runClientScript(player, 187, [overlay, tab]);
 			api.closeWidget(player, 1448, 3);
 			api.closeWidget(player, 1448, 5);
 			api.closeWidget(player, 1448, 7);

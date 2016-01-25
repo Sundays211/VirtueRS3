@@ -802,7 +802,6 @@ public class LoginDispatcher {
 		player.getVars().setVarValueInt(1097, 12790);
 		player.getVars().setVarValueInt(1098, 1022);
 		player.getVars().setVarValueInt(1099, 469762368);
-		player.getQuestManager().refreshQuestsInterface();
 		player.getVars().setVarValueInt(1100, 14328);
 		player.getVars().setVarValueInt(1101, -1);
 		player.getVars().setVarValueInt(1102, 1048559);

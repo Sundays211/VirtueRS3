@@ -171,8 +171,6 @@ public class Appearance {
 			flagData |= 0x80;
 		}
 
-		System.out.println("APPEARANCE FLAGS="+((flagData)&0xFF));
-
 		/* Append flag data. */
 		update.putByte((byte) flagData);
 
@@ -237,7 +235,6 @@ public class Appearance {
 		byte[] md5Hash = MD5Encryption.encrypt(appeareanceData);
 		this.appearanceData = appeareanceData;
 		this.appearanceHash = md5Hash;
-		System.out.printf("Appearance %02X %02X %02X %02X\n", this.appearanceData[0],this.appearanceData[1],this.appearanceData[2],this.appearanceData[3]);
 	}
 
 	public void sendBlock(boolean isTemp) {

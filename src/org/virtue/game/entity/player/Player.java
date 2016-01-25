@@ -43,7 +43,6 @@ import org.virtue.game.content.MoneyPouch;
 import org.virtue.game.content.PVPDrops;
 import org.virtue.game.content.dialogues.DialogManager;
 import org.virtue.game.content.minigame.MinigameType;
-import org.virtue.game.content.quests.QuestManager;
 import org.virtue.game.content.social.ChatManager;
 import org.virtue.game.content.treasure.TreasureHunter;
 import org.virtue.game.entity.Entity;
@@ -372,7 +371,6 @@ public class Player extends Entity {
 		this.equipment = new EquipmentManager(this);
 		this.interactions = new PlayerInteractions(this);
 		this.moneyPouch = new MoneyPouch(this);
-		this.questManager = new QuestManager(this);
 		this.exchangeOffers = new ExchangeOffers(this);
 		this.treasureHunter = new TreasureHunter(this);
 		if (isWorld) {
@@ -935,16 +933,10 @@ public class Player extends Entity {
 		return moneyPouch;
 	}
 
-	private QuestManager questManager;
-
 	/**
 	 * Shooting Star's
 	 */
 	public boolean canTalkToSprite, taggedStar;
-
-	public QuestManager getQuestManager() {
-		return questManager;
-	}
 
 	/**
 	 * Sets the current action event for the player
@@ -1452,7 +1444,7 @@ public class Player extends Entity {
 		} else {
 			this.setSheathing(true);
 		}
-		this.queueUpdateBlock(new AnimationBlock(18027));
+		this.runAnimation(18027);
 		this.getAppearance().refresh();
 	}
 }
