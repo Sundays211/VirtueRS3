@@ -56,7 +56,7 @@ public class RSAKeyGenerator {
 		try {
 			KeyFactory ondemand_factory = KeyFactory.getInstance("RSA");
 			KeyPairGenerator ondemand_keygen = KeyPairGenerator.getInstance("RSA");
-			ondemand_keygen.initialize(2048);//15360
+			ondemand_keygen.initialize(4096);//15360
 			KeyPair ondemand_keypair = ondemand_keygen.genKeyPair();
 
 			KeyFactory login_factory = KeyFactory.getInstance("RSA");
