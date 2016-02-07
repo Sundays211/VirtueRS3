@@ -289,7 +289,7 @@ var Mining = {
 		forPickaxe : function (player) {
 			var pickaxe;
 			for (var ordial in Pickaxe) {
-				pickaxe = Pickaxe[ordial];//TODO: Run this backwards (from best to worst)
+				pickaxe = Pickaxe[Pickaxe.length-ordial-1];
 				if (api.itemTotal(player, Inv.BACKPACK, pickaxe.itemID) >= 1) {
 					return pickaxe;
 				}
