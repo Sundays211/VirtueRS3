@@ -286,16 +286,37 @@ var Mining = {
 			}
 			return null;
 		},
-		forPickaxe : function (player) {
-			var pickaxe;
-			for (var ordial in Pickaxe) {
-				pickaxe = Pickaxe[Object.keys(Pickaxe).length-ordial-1];
-				if (api.itemTotal(player, Inv.BACKPACK, pickaxe.itemID) >= 1) {
-					return pickaxe;
-				}
-			}
-			return Pickaxe.BRONZE;
-		},
+		picksById : null,
+        forPickaxe : function (player) {
+            if (this.picksById == null) {
+                this.picksById = {};
+                for (var ordial in Pickaxe) {
+                    this.picksById[Pickaxe[ordial].itemID] = Pickaxe[ordial];
+                }
+            }
+            var bestPick = null;
+            var item = api.getItem(player, Inv.EQUIPMENT, WearPos.WEAPON);
+            var pick;
+            if (item != null ) {
+                pick = this.picksById[item.getId()];
+                if (pick !== undefined) {
+                    return pick;
+                }
+            }
+            for (var slot=0;slot<28;slot++) {
+                item = api.getItem(player, Inv.BACKPACK, slot);
+                if (item == null) {
+                    continue;
+                }
+                pick = this.picksById[item.getId()];
+                if (pick !== undefined) {
+                    if (bestPick === null || pick.time > bestPick.time) {
+                        bestPick = pick;
+                    }
+                }
+            }
+            return bestPick;
+        },
 		getEmptyID : function (loc) {
 			if (api.getLocType(loc).hasMesh(65251)) {
 				return 5765;
