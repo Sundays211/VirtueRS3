@@ -205,7 +205,7 @@ var Pickaxe = {
 		itemID : 32646,
 		level : 71,
 		time : 16,
-		anim : 12190
+		anim : 25004
 	}
 };
 
@@ -233,7 +233,7 @@ var listen = function(scriptManager) {
 
 var Mining = {
 		runMiningAction : function (player, location) {
-			var pickaxe = forPickaxe(player);//Find the highest pickaxe the player holds and can use
+			var pickaxe = Mining.forPickaxe(player);//Find the highest pickaxe the player holds and can use
 			if (pickaxe === null) {
 				api.sendMessage(player, "You need a pickaxe to mine this rock.");
 				return;
@@ -267,7 +267,7 @@ var Mining = {
 		},
 		success : function (player, rock, location) {
 			api.addExperience(player, Stat.MINING, rock.xp, true);
-			api.transformLoc(location, getEmptyID(location), rock.respawnDelay);
+			api.transformLoc(location, Mining.getEmptyID(location), rock.respawnDelay);
 			api.addCarriedItem(player, rock.oreID, 1);
 			api.sendMessage(player, "You mine some " + api.getItemName(rock.oreID) + ".", 109);
 		},
@@ -289,7 +289,7 @@ var Mining = {
 		forPickaxe : function (player) {
 			var pickaxe;
 			for (var ordial in Pickaxe) {
-				pickaxe = Pickaxe[Pickaxe.length-ordial-1];
+				pickaxe = Pickaxe[Object.keys(Pickaxe).length-ordial-1];
 				if (api.itemTotal(player, Inv.BACKPACK, pickaxe.itemID) >= 1) {
 					return pickaxe;
 				}
