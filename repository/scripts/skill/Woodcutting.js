@@ -233,7 +233,7 @@ var Hatchet = {
 	},
 	CRYSTAL : {
 		level : 71,
-		time : 7,
+		time : 16,
 		anim : 25003, //25182 for canoe ?
 		itemID : 32645
 	}
