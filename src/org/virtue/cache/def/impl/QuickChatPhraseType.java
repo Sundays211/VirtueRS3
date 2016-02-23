@@ -57,7 +57,7 @@ public class QuickChatPhraseType {
 		return qcType;
 	}
 
-	QuickChatEncodingType[] variablePartTypes;
+	QuickChatDynamicCommand[] variablePartTypes;
 	int[][] variablePartConfigKeys;
 	String[] text;
     public int[] responses;
@@ -79,11 +79,11 @@ public class QuickChatPhraseType {
 		    }
 		} else if (3 == code) {
 		    int typeCount = buffer.get() & 0xff;
-		    variablePartTypes = new QuickChatEncodingType[typeCount];
+		    variablePartTypes = new QuickChatDynamicCommand[typeCount];
 		    variablePartConfigKeys = new int[typeCount][];
 		    for (int slot = 0; slot < typeCount; slot++) {
 				int i_6_ = buffer.getShort() & 0xffff;
-				QuickChatEncodingType type = QuickChatEncodingType.getByID(i_6_);
+				QuickChatDynamicCommand type = QuickChatDynamicCommand.getByID(i_6_);
 				if (null != type) {
 				    variablePartTypes[slot] = type;
 				    variablePartConfigKeys[slot] = new int[type.configKeyCount];
@@ -112,7 +112,7 @@ public class QuickChatPhraseType {
 		return variablePartTypes.length;
     }
 	
-	public QuickChatEncodingType getParamType (int pos) {
+	public QuickChatDynamicCommand getParamType (int pos) {
 		return variablePartTypes[pos];
 	}
     

@@ -29,7 +29,7 @@ package org.virtue.cache.def.impl;
  * @author Sundays211
  * @since 2/07/2015
  */
-public enum QuickChatEncodingType {
+public enum QuickChatDynamicCommand {
 	LISTDIALOG(0, 2, 2, 1),
 	OBJDIALOG(1, 2, 2, 0),
 	COUNTDIALOG(2, 4, 4, 0),
@@ -50,15 +50,15 @@ public enum QuickChatEncodingType {
     public int serverTransmitSize;
     public int configKeyCount;
     
-    QuickChatEncodingType(int id, int clientSize, int serverSize, int keyCount) {
+    QuickChatDynamicCommand(int id, int clientSize, int serverSize, int keyCount) {
 		serialID = id;
 		clientTransmitSize = clientSize;
 		serverTransmitSize = serverSize;
 		configKeyCount = keyCount;
     }
     
-    public static QuickChatEncodingType getByID(int id) {
-		for (QuickChatEncodingType key : values()) {
+    public static QuickChatDynamicCommand getByID(int id) {
+		for (QuickChatDynamicCommand key : values()) {
 		    if (id == key.serialID) {
 		    	return key;
 		    }

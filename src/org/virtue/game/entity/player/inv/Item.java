@@ -35,12 +35,12 @@ public class Item extends Node {
 	/**
 	 * Constructs a new {@code Item.java}.
 	 * @param id The id.
-	 * @param amount The amount.
+	 * @param count The amount.
 	 */
 	public Item(int id, int amount) {
 		super(id);
 		if (amount < 0) {
-			throw new IllegalArgumentException("Item amount must be a positive integer. Amount supplied: "+amount);
+			throw new IllegalArgumentException("Item count must be a positive integer. Count supplied: "+amount);
 		}
 		this.id = id;
 		this.amount = amount;
