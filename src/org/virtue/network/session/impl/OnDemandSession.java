@@ -125,8 +125,7 @@ public class OnDemandSession extends Session {
 		if (message instanceof OnDemandRequestMessage) {
 			OnDemandRequestMessage request = (OnDemandRequestMessage) message;
 
-//			if (request.isPriority())
-//				System.out.println(request.getType() + ", " + request.getFile());
+			//System.out.println(request.getType() + ", " + request.getFile());
 			
 			synchronized (fileQueue) {
 				if (request.isPriority()) {
@@ -143,6 +142,7 @@ public class OnDemandSession extends Session {
 		} else if (message instanceof OnDemandStateMessage) {
 			OnDemandStateMessage state = (OnDemandStateMessage) message;
 			if (state.getPadding() != 0L) {
+				logger.warn("Invalid state: "+state.getPadding());
 				channel.close();
 			}
 		} else if (message instanceof OnDemandEncryptionMessage) {
@@ -153,15 +153,18 @@ public class OnDemandSession extends Session {
 			}
 		} else if (message instanceof OnDemandInitMessage) {
 			OnDemandInitMessage init = (OnDemandInitMessage) message;
-			if (init.getHeader() != 3) {
+			if (init.getHeader() != 4) {
+				logger.warn("Invalid protocol: "+init.getHeader());
 				channel.close();
 			}
 			if (init.getPadding() != 0) {
+				logger.warn("Invalid padding: "+init.getPadding());
 				channel.close();
 			}
 		} else if (message instanceof OnDemandDropMessage) {
 			OnDemandDropMessage drop = (OnDemandDropMessage) message;
 			if (drop.getHeader() == 0L) {
+				System.out.println("Closing...");
 				fileQueue.clear();
 			}
 		}

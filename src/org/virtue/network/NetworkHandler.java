@@ -94,8 +94,9 @@ public class NetworkHandler implements ChannelInboundHandler {
 	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
 		logger.info("Channel is now unregistered from " + ctx.channel().remoteAddress());
 		ctx.channel().close();
-		if (ctx.channel().attr(attachment).get() != null)
+		if (ctx.channel().attr(attachment).get() != null) {
 			((Session) ctx.channel().attr(attachment).get()).disconnect();
+		}
 	}
 
 	/* (non-Javadoc)

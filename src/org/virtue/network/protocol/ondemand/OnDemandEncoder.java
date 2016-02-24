@@ -44,9 +44,10 @@ public class OnDemandEncoder extends MessageToByteEncoder<OnDemandResponseMessag
         int file = response.getFile();
         int compression = container.readUnsignedByte();
         int size = container.readInt();
-
-        if (!response.isPriority())
+        
+        if (!response.isPriority()) {
 			file |= ~0x7FFFFFFF;
+        }
         
         ByteBuf buffer = Unpooled.buffer();
         
@@ -54,19 +55,20 @@ public class OnDemandEncoder extends MessageToByteEncoder<OnDemandResponseMessag
         buffer.writeInt(file);
         buffer.writeByte(compression);
         buffer.writeInt(size);
-
+        //102400-5=102395, 102400-10 (512-5, 512-10)
 		int bytes = container.readableBytes();
-		if (bytes > 502) {
-			bytes = 502;
+		if (bytes > 102390) {
+			bytes = 102390;
 		}
         buffer.writeBytes(container.readBytes(bytes));
 
         while ((bytes = container.readableBytes()) != 0) {
             bytes = container.readableBytes();
-            if (bytes == 0)
+            if (bytes == 0) {
                 break;
-            else if (bytes > 507)
-                bytes = 507;
+            } else if (bytes > 102395) {
+                bytes = 102395;
+            }
 
             buffer.writeByte(type);
             buffer.writeInt(file);

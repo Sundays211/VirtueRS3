@@ -26,6 +26,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import org.virtue.cache.utility.crypto.Rsa;
 import org.virtue.cache.utility.crypto.Whirlpool;
@@ -334,6 +335,7 @@ public class ChecksumTable {
 
 				bytes = new byte[temp.limit()];
 				temp.get(bytes);
+				System.out.println(Arrays.toString(bytes));
 				os.write(bytes);
 			}
 

@@ -113,7 +113,7 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
         	int minor = buf.readInt();
         	String token = BufferUtility.readString(buf);
         	int languageId = buf.readByte();//Language ID
-        	if (languageId != 0) {
+    		if (languageId != 0) {
         		logger.warn("Bad connection: Invalid language (sent: "+languageId+", expected: 0)");
                 buffer.writeByte(6);
         	} else if (major != Constants.FRAME_MAJOR && minor != Constants.FRAME_MINOR) {
