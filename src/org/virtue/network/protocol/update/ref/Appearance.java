@@ -15,7 +15,7 @@ import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.EquipmentStyleOverride;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.utility.MD5Encryption;
 
 /**
@@ -239,7 +239,7 @@ public class Appearance {
 
 	public void sendBlock(boolean isTemp) {
 		OutboundBuffer update = new OutboundBuffer();
-		update.putVarShort(OutgoingEventType.UPDATE_APPEARANCE, player);
+		update.putVarShort(ServerProtocol.UPDATE_APPEARANCE, player);
 		update.putByte(gender.equals(Gender.FEMALE) ? 1 : 0);//Gender
 
 		packStyles(update, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, isTemp ? tempStyles : styles);

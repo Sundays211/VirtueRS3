@@ -26,7 +26,7 @@ import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.QuickMessageEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.utility.text.Huffman;
 import org.virtue.utility.text.QuickChatMessage;
 
@@ -103,7 +103,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 			}
 		}
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_GAME, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_GAME, player);
 		buffer.putSmart(context.getChannelType().getType());
 		buffer.putInt(0);
 		buffer.putByte(flags);
@@ -126,7 +126,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodePublicMessage(Player player, MessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_PUBLIC, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_PUBLIC, player);
 		buffer.putShort(context.getPlayerIndex());
 		int flags = context.getEffects();
 		if (context instanceof QuickMessageEventContext) {
@@ -147,7 +147,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodePrivateMessage(Player player, MessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.MESSAGE_PRIVATE, player);
+		buffer.putVarShort(ServerProtocol.MESSAGE_PRIVATE, player);
 		buffer.putByte(context.hasFilteredName() ? 1 : 0);
 		buffer.putString(context.getName());
 		if (context.hasFilteredName()) {
@@ -162,7 +162,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodePrivateQuickMessage(Player player, QuickMessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_PRIVATE_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_PRIVATE_QUICKCHAT, player);
 		buffer.putByte(context.hasFilteredName() ? 1 : 0);
 		buffer.putString(context.getName());
 		if (context.hasFilteredName()) {
@@ -178,7 +178,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodePrivateEchoMessage(Player player, MessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.MESSAGE_PRIVATE_ECHO, player);
+		buffer.putVarShort(ServerProtocol.MESSAGE_PRIVATE_ECHO, player);
 		buffer.putString(context.getName());
 		Huffman.compress(buffer, context.getMessage());
 		buffer.finishVarShort();
@@ -187,7 +187,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodePrivateEchoQuickMessage(Player player, QuickMessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_PRIVATE_ECHO_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_PRIVATE_ECHO_QUICKCHAT, player);
 		buffer.putString(context.getName());
 		buffer.putShort(context.getQuickMessage().getType().getId());
 		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getParams());
@@ -197,7 +197,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodeFriendChatMessage(Player player, MessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_FRIENDCHANNEL, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_FRIENDCHANNEL, player);
 		buffer.putByte(context.hasFilteredName() ? 1 : 0);
 		buffer.putString(context.getName());
 		if (context.hasFilteredName()) {
@@ -213,7 +213,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodeFriendQuickMessage(Player player, QuickMessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_FRIENDCHANNEL_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_FRIENDCHANNEL_QUICKCHAT, player);
 		buffer.putByte(context.hasFilteredName() ? 1 : 0);
 		buffer.putString(context.getName());
 		if (context.hasFilteredName()) {
@@ -230,7 +230,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 	
 	private OutboundBuffer encodeClanChatMessage(Player player, MessageEventContext context, boolean isGuest) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_CLANCHANNEL, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL, player);
 		buffer.putByte(isGuest ? 0 : 1);
 		buffer.putString(context.getName());
 		buffer.putBytes(context.getHash());
@@ -242,7 +242,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 	
 	private OutboundBuffer encodeClanQuickMessage(Player player, QuickMessageEventContext context, boolean isGuest) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_CLANCHANNEL_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL_QUICKCHAT, player);
 		buffer.putByte(isGuest ? 0 : 1);
 		buffer.putString(context.getName());
 		buffer.putBytes(context.getHash());
@@ -255,7 +255,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 	
 	private OutboundBuffer encodeClanBroadcast(Player player, MessageEventContext context, boolean isGuest) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.MESSAGE_CLANCHANNEL_BROADCAST, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL_BROADCAST, player);
 		buffer.putByte(isGuest ? 0 : 1);
 		buffer.putBytes(context.getHash());
 		Huffman.compress(buffer, context.getMessage());

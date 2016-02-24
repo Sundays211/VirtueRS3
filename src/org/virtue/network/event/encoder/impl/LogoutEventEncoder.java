@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.LogoutEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,9 +41,9 @@ public class LogoutEventEncoder implements EventEncoder<LogoutEventContext> {
 
 		OutboundBuffer buffer = new OutboundBuffer();
 		if (context.toLobby()) {
-			buffer.putPacket(OutgoingEventType.LOGOUT_LOBBY, player);
+			buffer.putPacket(ServerProtocol.LOGOUT_LOBBY, player);
 		} else {
-			buffer.putPacket(OutgoingEventType.LOGOUT_FULL, player);
+			buffer.putPacket(ServerProtocol.LOGOUT_FULL, player);
 		}
 		return buffer;
 	}

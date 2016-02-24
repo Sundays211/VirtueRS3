@@ -43,7 +43,7 @@ import org.virtue.network.event.context.impl.out.ClanSettingsEventContext;
 import org.virtue.network.event.context.impl.out.FriendChatEventContext;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.QuickMessageEventContext;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.event.encoder.impl.ClanChannelDeltaEventEncoder;
 import org.virtue.network.event.encoder.impl.ClanChannelEventEncoder;
 import org.virtue.network.event.encoder.impl.ClanSettingsDeltaEventEncoder;
@@ -432,7 +432,7 @@ public class ChatManager implements SocialUser {
 	@Override
 	public void sendLeaveFriendChat() {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.UPDATE_FRIENDCHANNEL_FULL, player);
+		buffer.putVarShort(ServerProtocol.UPDATE_FRIENDCHANNEL_FULL, player);
 		buffer.finishVarShort();
 		player.getDispatcher().sendBuffer(buffer);
 		setFriendChatOwner(0L);
@@ -542,7 +542,7 @@ public class ChatManager implements SocialUser {
 			//setInClanChannel(false);
 		}
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.CLANCHANNEL_FULL, player);
+		buffer.putVarShort(ServerProtocol.CLANCHANNEL_FULL, player);
 		buffer.putByte(isGuest ? 0 : 1);
 		buffer.finishVarShort();
 		player.getDispatcher().sendBuffer(buffer);

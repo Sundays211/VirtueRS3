@@ -5,7 +5,7 @@ import org.virtue.game.entity.player.inv.Item;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.InvEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  *
@@ -21,7 +21,7 @@ public class InvEventEncoder implements EventEncoder<InvEventContext> {
 	@Override
 	public OutboundBuffer encode(Player player, InvEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(context.getSlots() == null ? OutgoingEventType.UPDATE_INV_FULL : OutgoingEventType.UPDATE_INV_PARTIAL, player);
+		buffer.putVarShort(context.getSlots() == null ? ServerProtocol.UPDATE_INV_FULL : ServerProtocol.UPDATE_INV_PARTIAL, player);
 		buffer.putShort(context.getContainerID());
 
 		int flags = 0;

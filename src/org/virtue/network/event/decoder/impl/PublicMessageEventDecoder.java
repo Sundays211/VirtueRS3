@@ -26,8 +26,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.InMessageEventContext;
 import org.virtue.network.event.context.impl.in.InQuickMessageEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 import org.virtue.utility.text.Huffman;
 import org.virtue.utility.text.QuickChatMessage;
 
@@ -39,8 +39,8 @@ public class PublicMessageEventDecoder implements EventDecoder<InMessageEventCon
 
 	@Override
 	public InMessageEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		IncomingEventType type = IncomingEventType.forOpcode(opcode);
-		if (type == IncomingEventType.MESSAGE_QUICKCHAT_PUBLIC) {
+		ClientProtocol type = ClientProtocol.forOpcode(opcode);
+		if (type == ClientProtocol.MESSAGE_QUICKCHAT_PUBLIC) {
 			ChatMode mode = ChatMode.forOpcode(buffer.getUnsignedByte());
 			int phraseId = buffer.getUnsignedShort();
 			QuickChatMessage message = QuickChatMessage.decodeMessage(phraseId, buffer);
@@ -57,8 +57,8 @@ public class PublicMessageEventDecoder implements EventDecoder<InMessageEventCon
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] { IncomingEventType.MESSAGE_PUBLIC, IncomingEventType.MESSAGE_QUICKCHAT_PUBLIC };
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { ClientProtocol.MESSAGE_PUBLIC, ClientProtocol.MESSAGE_QUICKCHAT_PUBLIC };
 	}
 
 }

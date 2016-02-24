@@ -71,7 +71,7 @@ import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
 import org.virtue.network.event.context.impl.out.WidgetTextEventContext;
 import org.virtue.network.event.context.impl.out.WorldListEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.event.encoder.impl.ClientScriptEventEncoder;
 import org.virtue.network.event.encoder.impl.CutsceneEventEncoder;
 import org.virtue.network.event.encoder.impl.EnumEventEncoder;
@@ -338,7 +338,7 @@ public class GameEventDispatcher {
 	 * Sends the online status of the player
 	 */
 	public void sendOnlineStatus(OnlineStatus status) {
-		sendEnum(OutgoingEventType.ONLINE_STATUS, status);
+		sendEnum(ServerProtocol.ONLINE_STATUS, status);
 	}
 
 	/**
@@ -493,7 +493,7 @@ public class GameEventDispatcher {
 	/**
 	 * Sends a serialisable enumeration value
 	 */
-	public void sendEnum(OutgoingEventType type, SerialisableEnum value) {
+	public void sendEnum(ServerProtocol type, SerialisableEnum value) {
 		sendEvent(EnumEventEncoder.class, new EnumEventContext(type, value));
 	}
 

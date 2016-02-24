@@ -22,7 +22,7 @@
 package org.virtue.network.event.context.impl.in;
 
 import org.virtue.network.event.context.GameEventContext;
-import org.virtue.network.event.decoder.IncomingEventType;
+import org.virtue.network.event.decoder.ClientProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -67,26 +67,26 @@ public class ButtonClickEventContext implements GameEventContext {
 	}
 	
 	public static OptionButton forOpcode (int opcode) {
-		switch (IncomingEventType.forOpcode(opcode)) {
-		case IF_OPTION_1:
+		switch (ClientProtocol.forOpcode(opcode)) {
+		case IF_BUTTON1:
 			return OptionButton.ONE;
-		case IF_OPTION_2:
+		case IF_BUTTON2:
 			return OptionButton.TWO;
-		case IF_OPTION_3:
+		case IF_BUTTON3:
 			return OptionButton.THREE;
-		case IF_OPTION_4:
+		case IF_BUTTON4:
 			return OptionButton.FOUR;
-		case IF_OPTION_5:
+		case IF_BUTTON5:
 			return OptionButton.FIVE;
-		case IF_OPTION_6:
+		case IF_BUTTON6:
 			return OptionButton.SIX;
-		case IF_OPTION_7:
+		case IF_BUTTON7:
 			return OptionButton.SEVEN;
-		case IF_OPTION_8:
+		case IF_BUTTON8:
 			return OptionButton.EIGHT;
-		case IF_OPTION_9:
+		case IF_BUTTON9:
 			return OptionButton.NINE;
-		case IF_OPTION_10:
+		case IF_BUTTON10:
 			return OptionButton.TEN;
 		default:
 			return null;

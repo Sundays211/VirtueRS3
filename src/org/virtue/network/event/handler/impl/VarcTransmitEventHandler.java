@@ -26,7 +26,7 @@ import java.util.Map;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.in.VarcTransmitEventContext;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -49,7 +49,7 @@ public class VarcTransmitEventHandler implements GameEventHandler<VarcTransmitEv
 		}
 		if (context.isFinished()) {
 			OutboundBuffer buffer = new OutboundBuffer();
-			buffer.putPacket(OutgoingEventType.RESET_VARC_TRANSMIT, player);
+			buffer.putPacket(ServerProtocol.RESET_VARC_TRANSMIT, player);
 			player.getDispatcher().sendBuffer(buffer);
 		}
 	}

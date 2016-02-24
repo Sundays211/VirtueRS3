@@ -25,8 +25,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.CreationEventContext;
 import org.virtue.network.event.context.impl.in.CreationEventContext.Type;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 import org.virtue.utility.XTEACipher;
 
 /**
@@ -47,7 +47,7 @@ public class CreationEventDecoder implements EventDecoder<CreationEventContext> 
 		xtea.decrypt(buffer.buffer(), 0, buffer.length());
 		InboundBuffer xteaBuffer = new InboundBuffer(buffer.buffer());
 		
-		IncomingEventType packetType = IncomingEventType.forOpcode(opcode);
+		ClientProtocol packetType = ClientProtocol.forOpcode(opcode);
 		CreationEventContext context = null;
 		switch (packetType) {
 		case CREATION_SUBMIT:			
@@ -77,10 +77,10 @@ public class CreationEventDecoder implements EventDecoder<CreationEventContext> 
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] {
-				IncomingEventType.CREATION_SUBMIT, IncomingEventType.CREATION_CHECK_NAME,
-				IncomingEventType.CREATION_CHECK_EMAIL, IncomingEventType.CREATION_CHECK_AGE
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] {
+				ClientProtocol.CREATION_SUBMIT, ClientProtocol.CREATION_CHECK_NAME,
+				ClientProtocol.CREATION_CHECK_EMAIL, ClientProtocol.CREATION_CHECK_AGE
 		};
 	}
 

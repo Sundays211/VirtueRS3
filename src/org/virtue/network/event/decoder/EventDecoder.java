@@ -12,5 +12,5 @@ public interface EventDecoder<E extends GameEventContext> {
 
 	public E createContext(Player player, int opcode, InboundBuffer buffer);
 	
-	public IncomingEventType[] getTypes ();
+	public ClientProtocol[] getTypes ();
 }

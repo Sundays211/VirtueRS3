@@ -30,8 +30,8 @@ import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.network.event.encoder.PlayerUpdateConstants;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.HeadIconBlock;
 import org.virtue.network.protocol.update.ref.Viewport;
@@ -52,7 +52,7 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 	public OutboundBuffer encode(Player player, Viewport context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		OutboundBuffer block = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.NPC_UPDATE, player);
+		buffer.putVarShort(ServerProtocol.NPC_UPDATE, player);
 		buffer.setBitAccess();
 		packNpcMovement(player, buffer, block, context);
 		packNpcAddition(player, buffer, block, context);

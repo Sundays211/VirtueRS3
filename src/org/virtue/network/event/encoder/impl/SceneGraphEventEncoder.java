@@ -32,7 +32,7 @@ import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -46,7 +46,7 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 	@Override
 	public OutboundBuffer encode(Player player, SceneGraphEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(context.isStatic() ? OutgoingEventType.MAP_STATIC : OutgoingEventType.MAP_DYNAMIC, player);
+		buffer.putVarShort(context.isStatic() ? ServerProtocol.MAP_STATIC : ServerProtocol.MAP_DYNAMIC, player);
 
 		if (context.isRender()) { 
 			player.getViewport().init(buffer);

@@ -24,8 +24,8 @@ package org.virtue.network.event.decoder.impl;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.ButtonClickEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -55,13 +55,13 @@ public class ButtonClickEventDecoder implements EventDecoder<ButtonClickEventCon
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] {
-				IncomingEventType.IF_OPTION_1, IncomingEventType.IF_OPTION_2,
-				IncomingEventType.IF_OPTION_3, IncomingEventType.IF_OPTION_4,
-				IncomingEventType.IF_OPTION_5, IncomingEventType.IF_OPTION_6,
-				IncomingEventType.IF_OPTION_7, IncomingEventType.IF_OPTION_8,
-				IncomingEventType.IF_OPTION_9, IncomingEventType.IF_OPTION_10
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] {
+				ClientProtocol.IF_BUTTON1, ClientProtocol.IF_BUTTON2,
+				ClientProtocol.IF_BUTTON3, ClientProtocol.IF_BUTTON4,
+				ClientProtocol.IF_BUTTON5, ClientProtocol.IF_BUTTON6,
+				ClientProtocol.IF_BUTTON7, ClientProtocol.IF_BUTTON8,
+				ClientProtocol.IF_BUTTON9, ClientProtocol.IF_BUTTON10
 		};
 	}
 

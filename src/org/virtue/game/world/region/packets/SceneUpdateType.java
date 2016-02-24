@@ -21,20 +21,20 @@
  */
 package org.virtue.game.world.region.packets;
 
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 public enum SceneUpdateType { 
-	ADD_ITEM(4, 5, OutgoingEventType.MAP_ADD_OBJECT),
-	ADD_ITEM_HIDDEN(7, 7, OutgoingEventType.MAP_ADD_HIDDEN_OBJECT),
-	REMOVE_ITEM(5, 3, OutgoingEventType.MAP_REMOVE_OBJECT),
-	UPDATE_LOC(11, 6, OutgoingEventType.MAP_UPDATE_LOC),
-	REMOVE_LOC(2, 2, OutgoingEventType.MAP_REMOVE_LOC),
-	PROJECTILE(13, 18, OutgoingEventType.MAP_PROJECTILE);
+	ADD_ITEM(4, 5, ServerProtocol.MAP_ADD_OBJECT),
+	ADD_ITEM_HIDDEN(7, 7, ServerProtocol.MAP_ADD_HIDDEN_OBJECT),
+	REMOVE_ITEM(5, 3, ServerProtocol.MAP_REMOVE_OBJECT),
+	UPDATE_LOC(11, 6, ServerProtocol.MAP_UPDATE_LOC),
+	REMOVE_LOC(2, 2, ServerProtocol.MAP_REMOVE_LOC),
+	PROJECTILE(13, 18, ServerProtocol.MAP_PROJECTILE);
 	
 	private int serialID;
-	private OutgoingEventType packetID;
+	private ServerProtocol packetID;
 	
-	SceneUpdateType (int serialID, int size, OutgoingEventType packetID) {
+	SceneUpdateType (int serialID, int size, ServerProtocol packetID) {
 		this.serialID = serialID;
 		this.packetID = packetID;
 	}
@@ -43,7 +43,7 @@ public enum SceneUpdateType {
 		return serialID;
 	}
 	
-	public OutgoingEventType getPacketID () {
+	public ServerProtocol getPacketID () {
 		return packetID;
 	}
 }

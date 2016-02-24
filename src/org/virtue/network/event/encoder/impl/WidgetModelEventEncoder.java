@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WidgetModelEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -44,32 +44,32 @@ public class WidgetModelEventEncoder implements EventEncoder<WidgetModelEventCon
 		OutboundBuffer buffer = new OutboundBuffer();
 		switch (context.getType()) {
 			case PLAYER_MODEL_OTHER:
-				buffer.putPacket(OutgoingEventType.IF_SETPLAYERMODEL_OTHER, player);
+				buffer.putPacket(ServerProtocol.IF_SETPLAYERMODEL_OTHER, player);
 				buffer.putLEShort(context.getMediaID());
 				buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				buffer.putLEInt(context.getSettings());
 				break;
 			case PLAYER_MODEL_SELF:
-				buffer.putPacket(OutgoingEventType.IF_SETPLAYERMODEL_SELF, player);
+				buffer.putPacket(ServerProtocol.IF_SETPLAYERMODEL_SELF, player);
 				buffer.putIntB((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case NPC_HEAD:
-				buffer.putPacket(OutgoingEventType.IF_SETNPCHEAD, player);
+				buffer.putPacket(ServerProtocol.IF_SETNPCHEAD, player);
 				buffer.putIntB(context.getMediaID());
 				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case PLAYER_HEAD_SELF:
-				buffer.putPacket(OutgoingEventType.IF_SETPLAYERHEAD_SELF, player);
+				buffer.putPacket(ServerProtocol.IF_SETPLAYERHEAD_SELF, player);
 				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case PLAYER_HEAD_OTHER:
-				buffer.putPacket(OutgoingEventType.IF_SETPLAYERHEAD_OTHER, player);
+				buffer.putPacket(ServerProtocol.IF_SETPLAYERHEAD_OTHER, player);
 				buffer.putShortA(context.getMediaID());
 				buffer.putInt(context.getSettings());
 				buffer.putIntB((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case ANIMATION:
-				buffer.putPacket(OutgoingEventType.IF_SETANIM, player);
+				buffer.putPacket(ServerProtocol.IF_SETANIM, player);
 				buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				buffer.putInt(context.getMediaID());
 				break;

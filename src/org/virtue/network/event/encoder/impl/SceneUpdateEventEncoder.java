@@ -26,7 +26,7 @@ import org.virtue.game.world.region.packets.SceneUpdatePacket;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.SceneUpdateEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -43,7 +43,7 @@ public class SceneUpdateEventEncoder implements EventEncoder<SceneUpdateEventCon
 	@Override
 	public OutboundBuffer encode(Player player, SceneUpdateEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.MAP_SET_BASETILE, player);
+		buffer.putPacket(ServerProtocol.MAP_SET_BASETILE, player);
 		int localX = context.getTile().getLocalX(player.getViewport().getBaseTile());
 		int localY = context.getTile().getLocalY(player.getViewport().getBaseTile());
 		buffer.putC(localX >> 3);

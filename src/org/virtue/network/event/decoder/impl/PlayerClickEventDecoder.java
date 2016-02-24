@@ -24,8 +24,8 @@ package org.virtue.network.event.decoder.impl;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.PlayerClickEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -51,13 +51,13 @@ public class PlayerClickEventDecoder implements EventDecoder<PlayerClickEventCon
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {		
-		return new IncomingEventType[] { 
-				IncomingEventType.PLAYER_OPTION_1, IncomingEventType.PLAYER_OPTION_2,
-				IncomingEventType.PLAYER_OPTION_3, IncomingEventType.PLAYER_OPTION_4,
-				IncomingEventType.PLAYER_OPTION_5, IncomingEventType.PLAYER_OPTION_6,
-				IncomingEventType.PLAYER_OPTION_7, IncomingEventType.PLAYER_OPTION_8,
-				IncomingEventType.PLAYER_OPTION_9, IncomingEventType.PLAYER_OPTION_10
+	public ClientProtocol[] getTypes() {		
+		return new ClientProtocol[] { 
+				ClientProtocol.PLAYER_OPTION_1, ClientProtocol.PLAYER_OPTION_2,
+				ClientProtocol.PLAYER_OPTION_3, ClientProtocol.PLAYER_OPTION_4,
+				ClientProtocol.PLAYER_OPTION_5, ClientProtocol.PLAYER_OPTION_6,
+				ClientProtocol.PLAYER_OPTION_7, ClientProtocol.PLAYER_OPTION_8,
+				ClientProtocol.PLAYER_OPTION_9, ClientProtocol.PLAYER_OPTION_10
 		};
 	}
 

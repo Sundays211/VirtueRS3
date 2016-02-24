@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.PlayerOptionEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,7 +42,7 @@ public class PlayerOptionEventEncoder implements EventEncoder<PlayerOptionEventC
 	@Override
 	public OutboundBuffer encode(Player player, PlayerOptionEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(OutgoingEventType.PLAYER_SETOPTION, player);
+		buffer.putVarByte(ServerProtocol.PLAYER_SETOPTION, player);
 		buffer.putLEShortA(context.getCursor());
 		buffer.putString(context.getText());
 		buffer.putByte(context.getOption().getId());

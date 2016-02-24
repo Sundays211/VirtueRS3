@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.FriendChatEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -43,14 +43,14 @@ public class FriendChatEventEncoder implements EventEncoder<FriendChatEventConte
 	public OutboundBuffer encode(Player player, FriendChatEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		if (context.isFullUpdate()) {
-			buffer.putVarShort(OutgoingEventType.UPDATE_FRIENDCHANNEL_FULL, player);
+			buffer.putVarShort(ServerProtocol.UPDATE_FRIENDCHANNEL_FULL, player);
 			buffer.putString(context.getOwnerName());
 			buffer.putByte(0);//No need to send the owner unfiltered name, as it's never used
 			buffer.putString(context.getChannelName());
 			buffer.putByte(context.getKickReq().getId());
 			buffer.putByte(context.getUsers().length);
 		} else {
-			buffer.putVarByte(OutgoingEventType.UPDATE_FRIENDCHANNEL_PART, player);
+			buffer.putVarByte(ServerProtocol.UPDATE_FRIENDCHANNEL_PART, player);
 		}
 		for (FriendChatEventContext.User user : context.getUsers()) {
 			packUser(user, buffer);

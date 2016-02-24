@@ -31,7 +31,7 @@ import org.virtue.Virtue;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.EventDefinition;
 import org.virtue.network.event.context.GameEventContext;
-import org.virtue.network.event.decoder.IncomingEventType;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.network.protocol.message.event.GameEventMessage;
 import org.virtue.network.session.Session;
@@ -53,19 +53,19 @@ public class GameSession extends Session {
 	private static final boolean[] FILTER_OPCODES = new boolean[121];
 			
 	static {
-		registerFilter(IncomingEventType.WINDOW_STATUS);
-		registerFilter(IncomingEventType.EVENT_APPLET_FOCUS);
-		registerFilter(IncomingEventType.EVENT_CAMERA_POSITION);
-		registerFilter(IncomingEventType.EVENT_MOUSE_CLICK);
-		registerFilter(IncomingEventType.EVENT_MOUSE_CLICK_2);
-		registerFilter(IncomingEventType.CLIENT_STATISTICS);
-		registerFilter(IncomingEventType.EVENT_KEYBOARD);
-		registerFilter(IncomingEventType.EVENT_MOUSE_MOVE);
-		registerFilter(IncomingEventType.EVENT_MOUSE_MOVE_2);
-		registerFilter(IncomingEventType.TRANSMITVAR_VERIFYID);//This one could be removed and handled at some stage
+		registerFilter(ClientProtocol.WINDOW_STATUS);
+		registerFilter(ClientProtocol.EVENT_APPLET_FOCUS);
+		registerFilter(ClientProtocol.EVENT_CAMERA_POSITION);
+		registerFilter(ClientProtocol.EVENT_MOUSE_CLICK);
+		registerFilter(ClientProtocol.EVENT_MOUSE_CLICK_2);
+		registerFilter(ClientProtocol.CLIENT_STATISTICS);
+		registerFilter(ClientProtocol.EVENT_KEYBOARD);
+		registerFilter(ClientProtocol.EVENT_MOUSE_MOVE);
+		registerFilter(ClientProtocol.EVENT_MOUSE_MOVE_2);
+		registerFilter(ClientProtocol.TRANSMITVAR_VERIFYID);//This one could be removed and handled at some stage
 	};
 	
-	private static void registerFilter (IncomingEventType event) {
+	private static void registerFilter (ClientProtocol event) {
 		if (event.getOpcode() != -1) {
 			FILTER_OPCODES[event.getOpcode()] = true;
 		}
@@ -100,8 +100,8 @@ public class GameSession extends Session {
 				}
 				return;
 			}
-			if (request.getOpcode() != IncomingEventType.KEEP_ALIVE.getOpcode()
-					&& request.getOpcode() != IncomingEventType.CLIENT_STATISTICS.getOpcode()) {
+			if (request.getOpcode() != ClientProtocol.NO_TIMEOUT.getOpcode()
+					&& request.getOpcode() != ClientProtocol.CLIENT_STATISTICS.getOpcode()) {
 				player.resetInactivityTime();
 			}
 			

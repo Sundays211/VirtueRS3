@@ -28,7 +28,7 @@ import org.virtue.game.world.WorldList;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WorldListEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,7 +42,7 @@ public class WorldListEventEncoder implements EventEncoder<WorldListEventContext
 	@Override
 	public OutboundBuffer encode(Player player, WorldListEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.WORLDLIST, player);
+		buffer.putVarShort(ServerProtocol.WORLDLIST, player);
 		
 		buffer.putByte(1);
 		buffer.putByte(2);

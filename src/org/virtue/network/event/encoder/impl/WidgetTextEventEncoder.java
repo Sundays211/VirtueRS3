@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WidgetTextEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,7 +42,7 @@ public class WidgetTextEventEncoder implements EventEncoder<WidgetTextEventConte
 	@Override
 	public OutboundBuffer encode(Player player, WidgetTextEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.IF_SETTEXT, player);
+		buffer.putVarShort(ServerProtocol.IF_SETTEXT, player);
 		buffer.putString(context.getText());
 		buffer.putIntB((context.getWidget() << 16) | (context.getComponent() & 0xffff));
 		buffer.finishVarShort();

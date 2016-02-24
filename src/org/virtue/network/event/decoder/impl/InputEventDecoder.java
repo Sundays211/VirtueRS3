@@ -25,8 +25,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.InputEventContext;
 import org.virtue.network.event.context.impl.in.InputEventContext.InputType;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -44,7 +44,7 @@ public class InputEventDecoder implements EventDecoder<InputEventContext> {
 	public InputEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
 		Object value;
 		InputType type;
-		switch (IncomingEventType.forOpcode(opcode)) {
+		switch (ClientProtocol.forOpcode(opcode)) {
 		case RESUME_P_COUNTDIALOG:
 			type = InputType.COUNT;
 			value = buffer.getInt();
@@ -82,11 +82,11 @@ public class InputEventDecoder implements EventDecoder<InputEventContext> {
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] { IncomingEventType.RESUME_P_COUNTDIALOG,
-				IncomingEventType.RESUME_P_STRINGDIALOG, IncomingEventType.RESUME_P_NAMEDIALOG,
-				IncomingEventType.RESUME_PAUSEBUTTON, IncomingEventType.RESUME_P_OBJDIALOG,
-				IncomingEventType.RESUME_P_HSLDIALOG };
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { ClientProtocol.RESUME_P_COUNTDIALOG,
+				ClientProtocol.RESUME_P_STRINGDIALOG, ClientProtocol.RESUME_P_NAMEDIALOG,
+				ClientProtocol.RESUME_PAUSEBUTTON, ClientProtocol.RESUME_P_OBJDIALOG,
+				ClientProtocol.RESUME_P_HSLDIALOG };
 	}
 
 }

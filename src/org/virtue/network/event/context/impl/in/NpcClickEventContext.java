@@ -22,7 +22,7 @@
 package org.virtue.network.event.context.impl.in;
 
 import org.virtue.network.event.context.GameEventContext;
-import org.virtue.network.event.decoder.IncomingEventType;
+import org.virtue.network.event.decoder.ClientProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -58,7 +58,7 @@ public class NpcClickEventContext implements GameEventContext {
 	}
 	
 	public static OptionButton forOpcode (int opcode) {
-		switch (IncomingEventType.forOpcode(opcode)) {
+		switch (ClientProtocol.forOpcode(opcode)) {
 		case NPC_OPTION_1:
 			return OptionButton.ONE;
 		case NPC_OPTION_2:

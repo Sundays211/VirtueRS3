@@ -26,7 +26,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ClanChannelDeltaEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -43,7 +43,7 @@ public class ClanChannelDeltaEventEncoder implements EventEncoder<ClanChannelDel
 	@Override
 	public OutboundBuffer encode(Player player, ClanChannelDeltaEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.CLANCHANNEL_DELTA, player);
+		buffer.putVarShort(ServerProtocol.CLANCHANNEL_DELTA, player);
 		buffer.putByte(context.isGuestUpdate() ? 0 : 1);
 		buffer.putLong(context.getClanHash());
 		buffer.putLong(context.getUpdateNumber());

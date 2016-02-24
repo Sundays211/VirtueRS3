@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.RunEnergyEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,7 +42,7 @@ public class RunEnergyEventEncoder implements EventEncoder<RunEnergyEventContext
 	@Override
 	public OutboundBuffer encode(Player player, RunEnergyEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();//29
-		buffer.putPacket(OutgoingEventType.UPDATE_RUNENERGY, player);
+		buffer.putPacket(ServerProtocol.UPDATE_RUNENERGY, player);
 		buffer.putByte(context.getEnergy());
 		return buffer;
 	}

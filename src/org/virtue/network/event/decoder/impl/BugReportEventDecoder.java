@@ -24,8 +24,8 @@ package org.virtue.network.event.decoder.impl;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.BugReportEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -52,8 +52,8 @@ public class BugReportEventDecoder implements EventDecoder<BugReportEventContext
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] { IncomingEventType.BUG_REPORT };
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { ClientProtocol.BUG_REPORT };
 	}
 
 }

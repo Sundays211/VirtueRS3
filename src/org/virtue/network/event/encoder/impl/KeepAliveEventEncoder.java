@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.EmptyEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,7 +39,7 @@ public class KeepAliveEventEncoder implements EventEncoder<EmptyEventContext> {
 	@Override
 	public OutboundBuffer encode(Player player, EmptyEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.KEEP_ALIVE, player);
+		buffer.putPacket(ServerProtocol.NO_TIMEOUT, player);
 		return buffer;
 	}
 

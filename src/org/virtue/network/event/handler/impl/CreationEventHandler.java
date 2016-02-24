@@ -26,7 +26,7 @@ import org.virtue.Virtue;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.event.context.impl.in.CreationEventContext;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.utility.SerialisableEnum;
 import org.virtue.utility.text.Base37Utility;
@@ -75,7 +75,7 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 				|| Virtue.getInstance().getAccountIndex().lookupByDisplay(name) != null) {
 			status = NameStatus.IN_USE;
 		}
-		player.getDispatcher().sendEnum(OutgoingEventType.CREATION_NAME_STATUS, status);
+		player.getDispatcher().sendEnum(ServerProtocol.CREATION_NAME_STATUS, status);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 		if (Virtue.getInstance().getAccountIndex().lookupByEmail(email) != null) {
 			status = EmailStatus.IN_USE;
 		}
-		player.getDispatcher().sendEnum(OutgoingEventType.CREATION_EMAIL_STATUS, status);
+		player.getDispatcher().sendEnum(ServerProtocol.CREATION_EMAIL_STATUS, status);
 	}
 	
 	private static void processSubmit (Player player, CreationEventContext context) {
@@ -96,7 +96,7 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 		if (name == null || name.isEmpty() || !name.matches("^[a-zA-Z0-9_ ]{1,12}$") 
 				|| Virtue.getInstance().getAccountIndex().lookupByHash(Base37Utility.encodeBase37(name)) != null
 				|| Virtue.getInstance().getAccountIndex().lookupByDisplay(name) != null) {
-			player.getDispatcher().sendEnum(OutgoingEventType.CREATION_SUBMIT_STATUS, SubmitStatus.INVALID_NAME);
+			player.getDispatcher().sendEnum(ServerProtocol.CREATION_SUBMIT_STATUS, SubmitStatus.INVALID_NAME);
 			return;//Double check that the name is valid
 		}
 		//System.out.println("Email:"+context.getEmail());
@@ -121,7 +121,7 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 		Virtue.getInstance().getAccountIndex().addAccount(context.getEmail(), context.getName());
 		Virtue.getInstance().getAccountIndex().save();
 		Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(newPlayer, newPlayer.getUsername(), ParserDataType.CHARACTER);
-		player.getDispatcher().sendEnum(OutgoingEventType.CREATION_SUBMIT_STATUS, SubmitStatus.SUCCESS);
+		player.getDispatcher().sendEnum(ServerProtocol.CREATION_SUBMIT_STATUS, SubmitStatus.SUCCESS);
 	}
 	
 	private static enum NameStatus implements SerialisableEnum {

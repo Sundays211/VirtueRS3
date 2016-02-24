@@ -24,8 +24,8 @@ package org.virtue.network.event.decoder.impl;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.LocationClickEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -52,11 +52,11 @@ public class LocationClickEventDecoder implements EventDecoder<LocationClickEven
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] { 
-				IncomingEventType.LOC_OPTION_1, IncomingEventType.LOC_OPTION_2,
-				IncomingEventType.LOC_OPTION_3, IncomingEventType.LOC_OPTION_4,
-				IncomingEventType.LOC_OPTION_5, IncomingEventType.LOC_OPTION_6
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { 
+				ClientProtocol.LOC_OPTION_1, ClientProtocol.LOC_OPTION_2,
+				ClientProtocol.LOC_OPTION_3, ClientProtocol.LOC_OPTION_4,
+				ClientProtocol.LOC_OPTION_5, ClientProtocol.LOC_OPTION_6
 			};
 	}
 

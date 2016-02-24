@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.SystemUpdateEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,7 +39,7 @@ public class SystemUpdateEventEncoder implements EventEncoder<SystemUpdateEventC
 	@Override
 	public OutboundBuffer encode(Player player, SystemUpdateEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.UPDATE_REBOOT_TIMER, player);
+		buffer.putPacket(ServerProtocol.UPDATE_REBOOT_TIMER, player);
 		buffer.putShort(context.getDelay());
 		return buffer;
 	}

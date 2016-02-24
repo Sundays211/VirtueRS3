@@ -24,8 +24,8 @@ package org.virtue.network.event.decoder.impl;
 import org.virtue.game.content.social.ChatMode;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -48,7 +48,7 @@ public class ChatModeEventDecoder implements EventDecoder<ChatMode> {
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] { IncomingEventType.CHAT_SETMODE };
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { ClientProtocol.CHAT_SETMODE };
 	}
 }

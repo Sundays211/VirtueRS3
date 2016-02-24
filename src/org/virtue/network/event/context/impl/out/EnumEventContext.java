@@ -22,7 +22,7 @@
 package org.virtue.network.event.context.impl.out;
 
 import org.virtue.network.event.context.GameEventContext;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.utility.SerialisableEnum;
 
 /**
@@ -34,16 +34,16 @@ import org.virtue.utility.SerialisableEnum;
  */
 public class EnumEventContext implements GameEventContext {
 	
-	private OutgoingEventType type;
+	private ServerProtocol type;
 	
 	private SerialisableEnum value;
 	
-	public EnumEventContext (OutgoingEventType type, SerialisableEnum value) {
+	public EnumEventContext (ServerProtocol type, SerialisableEnum value) {
 		this.type = type;
 		this.value = value;
 	}
 	
-	public OutgoingEventType getEventType () {
+	public ServerProtocol getEventType () {
 		return type;
 	}
 	

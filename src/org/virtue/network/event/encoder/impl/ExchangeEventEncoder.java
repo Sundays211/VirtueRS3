@@ -26,7 +26,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ExchangeEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -44,7 +44,7 @@ public class ExchangeEventEncoder implements EventEncoder<ExchangeEventContext> 
 	@Override
 	public OutboundBuffer encode(Player player, ExchangeEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.UPDATE_EXCHANGE, player);
+		buffer.putPacket(ServerProtocol.UPDATE_EXCHANGE, player);
 		buffer.putByte(context.getExchange());
 		buffer.putByte(context.getSlot());
 		int status = context.getStatus().getCode();

@@ -4,7 +4,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.VarcEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * 
@@ -22,21 +22,21 @@ public class VarcEventEncoder implements EventEncoder<VarcEventContext> {
 		OutboundBuffer buffer = new OutboundBuffer();
 		if (context.isBit()) {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
-				buffer.putPacket(OutgoingEventType.VARCBIT_LARGE, player);//Large
+				buffer.putPacket(ServerProtocol.VARCBIT_LARGE, player);//Large
 				buffer.putLEInt(context.getValue());
 				buffer.putLEShort(context.getKey());
 			} else {
-				buffer.putPacket(OutgoingEventType.VARCBIT_SMALL, player);//Small
+				buffer.putPacket(ServerProtocol.VARCBIT_SMALL, player);//Small
 				buffer.putLEShortA(context.getKey());
 				buffer.putS(context.getValue());
 			}
 		} else {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
-				buffer.putPacket(OutgoingEventType.VARC_LARGE, player);
+				buffer.putPacket(ServerProtocol.VARC_LARGE, player);
 				buffer.putInt(context.getValue());
 				buffer.putLEShortA(context.getKey());
 			} else {
-				buffer.putPacket(OutgoingEventType.VARC_SMALL, player);
+				buffer.putPacket(ServerProtocol.VARC_SMALL, player);
 				buffer.putLEShortA(context.getKey());
 				buffer.putA(context.getValue());
 			}

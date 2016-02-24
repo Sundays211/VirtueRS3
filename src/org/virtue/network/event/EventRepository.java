@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.GameEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 import org.virtue.network.event.decoder.impl.BugReportEventDecoder;
 import org.virtue.network.event.decoder.impl.ButtonClickEventDecoder;
 import org.virtue.network.event.decoder.impl.ChatFilterEventDecoder;
@@ -117,7 +117,7 @@ public class EventRepository {
 	private Map<Class<?>, EventEncoder<? extends GameEventContext>> writeEvents = new HashMap<>();
 	
 	public void load() {
-		registerReadEvent(IncomingEventType.KEEP_ALIVE, new EmptyEventDecoder(), new KeepAliveEventHandler());
+		registerReadEvent(ClientProtocol.NO_TIMEOUT, new EmptyEventDecoder(), new KeepAliveEventHandler());
 		registerReadEvent(new WorldListEventDecoder(), new WorldListEventHandler());
 		registerReadEvent(new UrlRequestEventDecoder(), new UrlRequestEventHandler());
 		registerReadEvent(new ButtonClickEventDecoder(), new ButtonClickEventHandler());
@@ -135,15 +135,15 @@ public class EventRepository {
 		registerReadEvent(new ChatModeEventDecoder(), new ChatModeEventHandler());
 		registerReadEvent(new InputEventDecoder(), new InputEventHandler());
 		registerReadEvent(new ChatFilterEventDecoder(), new ChatFilterEventHandler());
-		registerReadEvent(IncomingEventType.MAP_BUILD_COMPLETE, new EmptyEventDecoder(), new MapBuildCompleteEventHandler());
-		registerReadEvent(IncomingEventType.CLOSE_MODAL, new EmptyEventDecoder(), new WidgetCloseEventHandler());
+		registerReadEvent(ClientProtocol.MAP_BUILD_COMPLETE, new EmptyEventDecoder(), new MapBuildCompleteEventHandler());
+		registerReadEvent(ClientProtocol.CLOSE_MODAL, new EmptyEventDecoder(), new WidgetCloseEventHandler());
 		registerReadEvent(new VarcTransmitEventDecoder(), new VarcTransmitEventHandler());
 		registerReadEvent(new ChatOptionEventDecoder(), new ChatOptionEventHandler());
 		registerReadEvent(new LocationClickEventDecoder(), new LocationClickEventHandler());
 		registerReadEvent(new ItemClickEventDecoder(), new ItemClickEventHandler());
 		registerReadEvent(new NpcClickEventDecoder(), new NpcClickEventHandler());
 		registerReadEvent(new BugReportEventDecoder(), new BugReportEventHandler());
-		registerReadEvent(IncomingEventType.CUTSCENE_END, new EmptyEventDecoder(), new CutsceneEndEventHandler());
+		registerReadEvent(ClientProtocol.CUTSCENE_END, new EmptyEventDecoder(), new CutsceneEndEventHandler());
 				
 		registerReadEvent(new CreationEventDecoder(), new CreationEventHandler());
 		logger.info("Registered " + readEvents.size() + " game read events.");
@@ -214,12 +214,12 @@ public class EventRepository {
 	}
 	
 	public <T extends GameEventContext> void registerReadEvent(EventDecoder<T> event, GameEventHandler<T> handler) {
-		for (IncomingEventType type : event.getTypes()) {
+		for (ClientProtocol type : event.getTypes()) {
 			registerReadEvent(type, event, handler);
 		}
 	}
 	
-	public <T extends GameEventContext> void registerReadEvent(IncomingEventType type, EventDecoder<T> event, GameEventHandler<T> handler) {
+	public <T extends GameEventContext> void registerReadEvent(ClientProtocol type, EventDecoder<T> event, GameEventHandler<T> handler) {
 		if (type.getOpcode() != -1) {
 			registerReadEvent(type.getOpcode(), new EventDefinition(event, handler));
 		} else {

@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.TargetEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,7 +42,7 @@ public class TargetEventEncoder implements EventEncoder<TargetEventContext> {
 	@Override
 	public OutboundBuffer encode(Player player, TargetEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.SET_TARGET, player);
+		buffer.putPacket(ServerProtocol.SET_TARGET, player);
 		//System.out.println("Sending map flag: x="+context.getLocalX()+", y="+context.getLocalY());
 		if (context.isReset()) {
 			buffer.putA(255);

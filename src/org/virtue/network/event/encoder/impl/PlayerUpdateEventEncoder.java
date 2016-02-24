@@ -28,8 +28,8 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
 import org.virtue.network.event.encoder.PlayerUpdateConstants;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.AppearenceBlock;
 import org.virtue.network.protocol.update.block.HeadIconBlock;
@@ -51,7 +51,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 	public OutboundBuffer encode(Player player, Viewport context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		OutboundBuffer block = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.PLAYER_UPDATE, player);
+		buffer.putVarShort(ServerProtocol.PLAYER_UPDATE, player);
 		//int startOffset = buffer.offset();
 		processLocalPlayers(player, buffer, block, context, true);
 		processLocalPlayers(player, buffer, block, context, false);

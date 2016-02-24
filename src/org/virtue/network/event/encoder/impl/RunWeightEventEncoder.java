@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.RunWeightEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -43,7 +43,7 @@ public class RunWeightEventEncoder implements EventEncoder<RunWeightEventContext
 	@Override
 	public OutboundBuffer encode(Player player, RunWeightEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();//29
-		buffer.putPacket(OutgoingEventType.UPDATE_RUNWEIGHT, player);
+		buffer.putPacket(ServerProtocol.UPDATE_RUNWEIGHT, player);
 		buffer.putShort(context.getWeight());
 		return buffer;
 	}

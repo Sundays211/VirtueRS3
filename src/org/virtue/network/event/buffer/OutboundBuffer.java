@@ -1,7 +1,7 @@
 package org.virtue.network.event.buffer;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.utility.text.JagStringUtility;
 
 /**
@@ -309,7 +309,7 @@ public class OutboundBuffer extends Buffer {
 		opcodeStart = offset - 2;
 	}
 	
-	public void putPacket(OutgoingEventType type) {
+	public void putPacket(ServerProtocol type) {
 		putPacket(type.getOpcode());
 	}
 
@@ -323,7 +323,7 @@ public class OutboundBuffer extends Buffer {
 		}
 	}
 	
-	public void putVarByte(OutgoingEventType type, Player player) {
+	public void putVarByte(ServerProtocol type, Player player) {
 		putVarByte(type.getOpcode(), player);
 	}
 	
@@ -334,7 +334,7 @@ public class OutboundBuffer extends Buffer {
 		opcodeStart = offset - 1;
 	}
 	
-	public void putVarShort(OutgoingEventType type, Player player) {
+	public void putVarShort(ServerProtocol type, Player player) {
 		putVarShort(type.getOpcode(), player);
 	}
 
@@ -344,7 +344,7 @@ public class OutboundBuffer extends Buffer {
 		opcodeStart = offset - 2;
 	}
 	
-	public void putPacket(OutgoingEventType type, Player player) {
+	public void putPacket(ServerProtocol type, Player player) {
 		putPacket(type.getOpcode(), player);
 	}
 

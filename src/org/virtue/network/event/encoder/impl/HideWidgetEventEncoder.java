@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.HideWidgetEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,7 +39,7 @@ public class HideWidgetEventEncoder implements EventEncoder<HideWidgetEventConte
 	@Override
 	public OutboundBuffer encode(Player player, HideWidgetEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.IF_SETHIDE, player);
+		buffer.putPacket(ServerProtocol.IF_SETHIDE, player);
 		buffer.putLEInt(context.getWidget() << 16 | context.getComponent());
 		buffer.putS(context.isHidden() ? 1 : 0);
 		return buffer;

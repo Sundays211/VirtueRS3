@@ -26,8 +26,8 @@ import org.virtue.game.content.social.SocialType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.SocialEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
-import org.virtue.network.event.decoder.IncomingEventType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -40,7 +40,7 @@ public class SocialEventDecoder implements EventDecoder<SocialEventContext> {
 	 */
 	@Override
 	public SocialEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		IncomingEventType type = IncomingEventType.forOpcode(opcode);		
+		ClientProtocol type = ClientProtocol.forOpcode(opcode);		
 		String name = buffer.available() > 0 ? buffer.getString() : "";
 		String note;
 		switch (type) {
@@ -75,12 +75,12 @@ public class SocialEventDecoder implements EventDecoder<SocialEventContext> {
 	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
 	 */
 	@Override
-	public IncomingEventType[] getTypes() {
-		return new IncomingEventType[] { IncomingEventType.FRIEND_SETRANK,
-				IncomingEventType.FRIENDLIST_ADD, IncomingEventType.FRIENDLIST_DEL,
-				IncomingEventType.IGNORELIST_ADD, IncomingEventType.IGNORELIST_DEL,
-				IncomingEventType.FRIENDCHAT_JOIN_LEAVE, IncomingEventType.FRIENDCHAT_KICK,
-				IncomingEventType.FRIEND_SETNOTE, IncomingEventType.IGNORE_SETNOTE };
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { ClientProtocol.FRIEND_SETRANK,
+				ClientProtocol.FRIENDLIST_ADD, ClientProtocol.FRIENDLIST_DEL,
+				ClientProtocol.IGNORELIST_ADD, ClientProtocol.IGNORELIST_DEL,
+				ClientProtocol.FRIENDCHAT_JOIN_LEAVE, ClientProtocol.FRIENDCHAT_KICK,
+				ClientProtocol.FRIEND_SETNOTE, ClientProtocol.IGNORE_SETNOTE };
 	}
 
 }

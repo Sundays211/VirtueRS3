@@ -26,7 +26,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.IgnoreListEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -40,7 +40,7 @@ public class IgnoreListEventEncoder implements EventEncoder<IgnoreListEventConte
 	@Override
 	public OutboundBuffer encode(Player player, IgnoreListEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(OutgoingEventType.UPDATE_IGNORELIST, player);
+		buffer.putVarShort(ServerProtocol.UPDATE_IGNORELIST, player);
 		for (Ignore i : context.getIgnores()) {
 			buffer.putByte(context.isNameChange() ? 1 : 0);
 			packIgnore(i, buffer);

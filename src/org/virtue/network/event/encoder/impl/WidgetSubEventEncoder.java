@@ -27,7 +27,7 @@ import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  *
@@ -46,7 +46,7 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 		if (context.getParentEntity() != null) {
 			if (context.getParentEntity() instanceof NPC) {
 				NPC npc = (NPC) context.getParentEntity();
-				buffer.putPacket(OutgoingEventType.IF_OPENSUB_ACTIVE_NPC, player);
+				buffer.putPacket(ServerProtocol.IF_OPENSUB_ACTIVE_NPC, player);
 				buffer.putShortA(npc.getIndex());
 				buffer.putInt(context.getKeys()[3]);
 				buffer.putS(context.alwaysOpen() ? 1 : 0);
@@ -58,7 +58,7 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 			}
 		} else if (context.getParentLoc() != null) {
 			SceneLocation loc = context.getParentLoc();
-			buffer.putPacket(OutgoingEventType.IF_OPENSUB_ACTIVE_LOC, player);
+			buffer.putPacket(ServerProtocol.IF_OPENSUB_ACTIVE_LOC, player);
 			buffer.putByte((loc.getNodeType() << 2) | (loc.getRotation() & 0x3));
 			buffer.putIntB(context.getKeys()[3]);
 			buffer.putInt(context.getKeys()[1]);
@@ -70,7 +70,7 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 			buffer.putIntA(loc.getTile().getTileHash());
 			buffer.putLEInt(context.getKeys()[0]);
 		} else {
-			buffer.putPacket(OutgoingEventType.IF_OPENSUB, player);
+			buffer.putPacket(ServerProtocol.IF_OPENSUB, player);
 			buffer.putLEInt(context.getKeys()[0]);
 			buffer.putIntA(context.getKeys()[2]);
 			buffer.putShort(context.getWidgetId());

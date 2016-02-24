@@ -25,7 +25,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.MusicEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.OutgoingEventType;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,7 +42,7 @@ public class MusicEventEncoder implements EventEncoder<MusicEventContext> {
 	@Override
 	public OutboundBuffer encode(Player player, MusicEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(OutgoingEventType.PLAY_MUSIC, player);
+		buffer.putPacket(ServerProtocol.PLAY_MUSIC, player);
 		buffer.putS(context.getVolume());
 		buffer.putLEShort(context.getId());
 		return buffer;
