@@ -53,7 +53,7 @@ import org.virtue.config.loctype.LocTypeList;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.config.paramtype.ParamTypeList;
-import org.virtue.config.quest.QuestTypeList;
+import org.virtue.config.questtype.QuestTypeList;
 import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;

@@ -50,9 +50,9 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 				buffer.putShortA(npc.getIndex());
 				buffer.putInt(context.getKeys()[3]);
 				buffer.putS(context.alwaysOpen() ? 1 : 0);
-				buffer.putIntB(context.getRoot() << 16 | context.getComponent());
-				buffer.putIntA(context.getKeys()[2]);
-				buffer.putIntA(context.getKeys()[1]);
+				buffer.putIntAlt3(context.getRoot() << 16 | context.getComponent());
+				buffer.putIntAlt2(context.getKeys()[2]);
+				buffer.putIntAlt2(context.getKeys()[1]);
 				buffer.putLEInt(context.getKeys()[0]);
 				buffer.putShort(context.getWidgetId());
 			}
@@ -60,24 +60,24 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 			SceneLocation loc = context.getParentLoc();
 			buffer.putPacket(ServerProtocol.IF_OPENSUB_ACTIVE_LOC, player);
 			buffer.putByte((loc.getNodeType() << 2) | (loc.getRotation() & 0x3));
-			buffer.putIntB(context.getKeys()[3]);
+			buffer.putIntAlt3(context.getKeys()[3]);
 			buffer.putInt(context.getKeys()[1]);
 			buffer.putC(context.alwaysOpen() ? 1 : 0);
 			buffer.putShort(context.getWidgetId());
-			buffer.putIntA(loc.getID());
-			buffer.putIntB(context.getRoot() << 16 | context.getComponent());
-			buffer.putIntA(context.getKeys()[2]);
-			buffer.putIntA(loc.getTile().getTileHash());
+			buffer.putIntAlt2(loc.getID());
+			buffer.putIntAlt3(context.getRoot() << 16 | context.getComponent());
+			buffer.putIntAlt2(context.getKeys()[2]);
+			buffer.putIntAlt2(loc.getTile().getTileHash());
 			buffer.putLEInt(context.getKeys()[0]);
 		} else {
 			buffer.putPacket(ServerProtocol.IF_OPENSUB, player);
-			buffer.putLEInt(context.getKeys()[0]);
-			buffer.putIntA(context.getKeys()[2]);
-			buffer.putShort(context.getWidgetId());
-			buffer.putIntB(context.getKeys()[3]);
-			buffer.putS(context.alwaysOpen() ? 1 : 0);
-			buffer.putLEInt(context.getRoot() << 16 | context.getComponent());
-			buffer.putLEInt(context.getKeys()[1]);
+			buffer.putLEShortA(context.getWidgetId());
+			buffer.putIntAlt2(context.getRoot() << 16 | context.getComponent());
+			buffer.putLEInt(context.getKeys()[2]);
+			buffer.putIntAlt3(context.getKeys()[1]);
+			buffer.putIntAlt2(context.getKeys()[0]);
+			buffer.putInt(context.getKeys()[3]);
+			buffer.putByte(context.alwaysOpen() ? 1 : 0);
 		}
 		return buffer;
 	}

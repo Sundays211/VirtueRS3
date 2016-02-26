@@ -46,19 +46,19 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 	@Override
 	public OutboundBuffer encode(Player player, SceneGraphEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(context.isStatic() ? ServerProtocol.MAP_STATIC : ServerProtocol.MAP_DYNAMIC, player);
+		buffer.putVarShort(context.isStatic() ? ServerProtocol.REBUILD_NORMAL : ServerProtocol.MAP_DYNAMIC, player);
 
 		if (context.isRender()) { 
 			player.getViewport().init(buffer);
 		} 
 		if (context.isStatic()) {
-			buffer.putByte(9);//Count
-			buffer.putS(context.isRender() ? 1 : 0);//Force
 			buffer.putLEShort(context.getBaseTile().getChunkY());//ChunkY
-			buffer.putS(context.getMapSize().getID());
-			buffer.putByte(5);
-			//buffer.putByte(context.getSceneRadius());
 			buffer.putShortA(context.getBaseTile().getChunkX());
+			buffer.putA(5);
+			//buffer.putA(context.getSceneRadius());
+			buffer.putS(9);//Count
+			buffer.putS(context.isRender() ? 1 : 0);//Force
+			buffer.putS(context.getMapSize().getID());
 		} else {
 			int baseChunkX = context.getBaseTile().getChunkX();
 			int baseChunkY = context.getBaseTile().getChunkY();

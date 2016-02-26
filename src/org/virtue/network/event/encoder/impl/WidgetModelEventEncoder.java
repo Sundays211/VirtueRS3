@@ -46,16 +46,16 @@ public class WidgetModelEventEncoder implements EventEncoder<WidgetModelEventCon
 			case PLAYER_MODEL_OTHER:
 				buffer.putPacket(ServerProtocol.IF_SETPLAYERMODEL_OTHER, player);
 				buffer.putLEShort(context.getMediaID());
-				buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putIntAlt2((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				buffer.putLEInt(context.getSettings());
 				break;
 			case PLAYER_MODEL_SELF:
 				buffer.putPacket(ServerProtocol.IF_SETPLAYERMODEL_SELF, player);
-				buffer.putIntB((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putIntAlt3((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case NPC_HEAD:
 				buffer.putPacket(ServerProtocol.IF_SETNPCHEAD, player);
-				buffer.putIntB(context.getMediaID());
+				buffer.putIntAlt3(context.getMediaID());
 				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case PLAYER_HEAD_SELF:
@@ -66,11 +66,11 @@ public class WidgetModelEventEncoder implements EventEncoder<WidgetModelEventCon
 				buffer.putPacket(ServerProtocol.IF_SETPLAYERHEAD_OTHER, player);
 				buffer.putShortA(context.getMediaID());
 				buffer.putInt(context.getSettings());
-				buffer.putIntB((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putIntAlt3((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case ANIMATION:
 				buffer.putPacket(ServerProtocol.IF_SETANIM, player);
-				buffer.putIntA((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putIntAlt2((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				buffer.putInt(context.getMediaID());
 				break;
 		}

@@ -38,7 +38,7 @@ public enum ClientProtocol {
 	/**
 	 * A packet sent by the client to ensure the connection remains open
 	 */
-	NO_TIMEOUT(-1, 0),
+	NO_TIMEOUT(51, 0),
 
 	/**
 	 * Sends the keys which are currently pressed on the client keyboard
@@ -377,7 +377,7 @@ public enum ClientProtocol {
 	 * Sent whenever the player changes their "online status".
 	 * Also includes legacy filters for public chat and trade status (no longer used)
 	 */
-	ONLINE_STATUS(-1, 3),
+	SET_CHATFILTERSETTINGS(121, 3),
 
 	/**
 	 * Sets the chat mode for the next message.
@@ -463,7 +463,7 @@ public enum ClientProtocol {
 	/**
 	 * A request for the server to send the world list
 	 */
-	WORLDLIST_FETCH(-1, 4),
+	WORLDLIST_FETCH(108, 4),
 
 	/**
 	 * A request to run the specified server-side command

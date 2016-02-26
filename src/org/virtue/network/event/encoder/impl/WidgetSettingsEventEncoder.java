@@ -41,7 +41,7 @@ public class WidgetSettingsEventEncoder implements EventEncoder<WidgetSettingsEv
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(ServerProtocol.IF_SETEVENTS, player);
 		buffer.putLEShortA(context.getFrom());
-		buffer.putIntA(context.getRoot() << 16 | context.getComponent());
+		buffer.putIntAlt2(context.getRoot() << 16 | context.getComponent());
 		buffer.putShortA(context.getTo());
 		buffer.putLEInt(context.getSettings());
 

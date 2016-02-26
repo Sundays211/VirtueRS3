@@ -22,13 +22,13 @@ public class VarcStringEventEncoder implements EventEncoder<VarcStringEventConte
 		OutboundBuffer buffer = new OutboundBuffer();
 			if (context.getValue().length() >= Byte.MAX_VALUE) {
 				buffer.putVarShort(ServerProtocol.VARCSTR_LARGE, player);
+				buffer.putShort(context.getKey());
 				buffer.putString(context.getValue());
-				buffer.putLEShortA(context.getKey());
 				buffer.finishVarShort();
 			} else {
 				buffer.putVarByte(ServerProtocol.VARCSTR_SMALL, player);
-				buffer.putShort(context.getKey());
 				buffer.putString(context.getValue());
+				buffer.putLEShortA(context.getKey());
 				buffer.finishVarByte();
 			}
 		return buffer;

@@ -61,7 +61,7 @@ public class InboundBuffer extends Buffer {
 		return value;
 	}
 
-	public int getIntA() {
+	public int getIntAlt2() {
 		int value = getUnsignedByte() << 8;
 		value |= getUnsignedByte();
 		value |= getUnsignedByte() << 24;
@@ -70,7 +70,7 @@ public class InboundBuffer extends Buffer {
 		//return ((getByte() & 0xFF) << 8) + (getByte() & 0xFF) + ((getByte() & 0xFF) << 24) + ((getByte() & 0xFF) << 16);
 	}
 
-	public int getIntB() {
+	public int getIntAlt3() {
 		int value = getUnsignedByte() << 16;
 		value |= getUnsignedByte() << 24;
 		value |= getUnsignedByte();
@@ -143,8 +143,8 @@ public class InboundBuffer extends Buffer {
 	}
 
 	public long getLongL() {
-		long first = getIntB();
-		long second = getIntB();
+		long first = getIntAlt3();
+		long second = getIntAlt3();
 		if (second < 0) {
 			second = second & 0xffffffffL;
 		}

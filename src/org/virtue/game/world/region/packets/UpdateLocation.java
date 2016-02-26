@@ -62,7 +62,7 @@ public class UpdateLocation implements SceneUpdatePacket {
 	 */
 	@Override
 	public void encode(OutboundBuffer buffer, Entity player) {
-		buffer.putIntA(locTypeID);
+		buffer.putIntAlt2(locTypeID);
 		buffer.putByte((location.getRotation() & 0x3) | (location.getNodeType() << 2));
 		buffer.putByte(((location.getTile().getX() % 8) & 0x7) << 4 | (location.getTile().getY() % 8) & 0x7);
 	}

@@ -39,7 +39,7 @@ public class UnlockFriendsEventEncoder implements EventEncoder<EmptyEventContext
 	@Override
 	public OutboundBuffer encode(Player player, EmptyEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(ServerProtocol.UNLOCK_FRIENDLIST, player);
+		buffer.putPacket(ServerProtocol.FRIENDLIST_LOADED, player);
 		return buffer;
 	}
 

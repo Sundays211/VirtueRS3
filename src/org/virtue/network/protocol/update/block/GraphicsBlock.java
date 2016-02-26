@@ -128,22 +128,22 @@ public class GraphicsBlock extends Block {
 				break;
 			case 2://done
 				block.putLEShortA(id);
-				block.putIntB(getSettingsHash());
+				block.putIntAlt3(getSettingsHash());
 				block.putC(getRotationHash());
 				break;
 			case 3://done
 				block.putLEShort(id);
-				block.putIntB(getSettingsHash());
+				block.putIntAlt3(getSettingsHash());
 				block.putS(getRotationHash());
 				break;
 			case 4://done
 				block.putLEShortA(id);
-				block.putIntB(getSettingsHash());
+				block.putIntAlt3(getSettingsHash());
 				block.putS(getRotationHash());
 				break;
 			case 5://done
 				block.putShort(id);
-				block.putIntB(getSettingsHash());
+				block.putIntAlt3(getSettingsHash());
 				block.putByte(getRotationHash());
 				break;
 			}
@@ -156,17 +156,17 @@ public class GraphicsBlock extends Block {
 				break;
 			case 2://done
 				block.putShort(id);
-				block.putIntA(getSettingsHash());
+				block.putIntAlt2(getSettingsHash());
 				block.putC(getRotationHash());
 				break;
 			case 3://done
 				block.putLEShortA(id);
-				block.putIntB(getSettingsHash());
+				block.putIntAlt3(getSettingsHash());
 				block.putByte(getRotationHash());
 				break;
 			case 4://done
 				block.putShort(id);
-				block.putIntB(getSettingsHash());
+				block.putIntAlt3(getSettingsHash());
 				block.putA(getRotationHash());
 				break;
 			case 5://done

@@ -46,7 +46,7 @@ public class WidgetOnLocEventDecoder implements EventDecoder<WidgetOnLocEventCon
 		int baseX = buffer.getLEShortA() & 0xffff;
 		int itemID = buffer.getLEShort() & 0xffff;
 		int ifHash = buffer.getInt();
-		int locTypeID = buffer.getIntA();
+		int locTypeID = buffer.getIntAlt2();
 		int baseY = buffer.getShort() & 0xffff;
 		return new WidgetOnLocEventContext(ifHash, slot == 65535 ? -1 : slot, 
 				itemID == 65535 ? -1 : itemID, locTypeID, baseX, baseY, forceRun);

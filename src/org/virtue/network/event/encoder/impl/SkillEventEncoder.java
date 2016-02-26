@@ -43,7 +43,7 @@ public class SkillEventEncoder implements EventEncoder<PlayerStat> {
 	public OutboundBuffer encode(Player player, PlayerStat context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(ServerProtocol.UPDATE_STAT, player);
-		buffer.putIntB(context.getExperience()/10);
+		buffer.putIntAlt3(context.getExperience()/10);
 		buffer.putS(context.getCurrentLevel());
 		buffer.putS(context.getType().getId());
 		return buffer;

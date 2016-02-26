@@ -40,7 +40,7 @@ public class CloseWidgetEventEncoder implements EventEncoder<CloseWidgetEventCon
 	public OutboundBuffer encode(Player player, CloseWidgetEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(ServerProtocol.IF_CLOSESUB, player);
-		buffer.putIntB(context.getWidget() << 16 | context.getComponent());
+		buffer.putIntAlt3(context.getWidget() << 16 | context.getComponent());
 		return buffer;
 	}
 

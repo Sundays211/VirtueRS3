@@ -44,7 +44,7 @@ public class WidgetTextEventEncoder implements EventEncoder<WidgetTextEventConte
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarShort(ServerProtocol.IF_SETTEXT, player);
 		buffer.putString(context.getText());
-		buffer.putIntB((context.getWidget() << 16) | (context.getComponent() & 0xffff));
+		buffer.putIntAlt3((context.getWidget() << 16) | (context.getComponent() & 0xffff));
 		buffer.finishVarShort();
 		return buffer;
 	}

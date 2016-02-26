@@ -123,9 +123,6 @@ public class EntityUpdate extends Tick {
 		}
 	}
 	
-	int[] slot = { 26, 27, 28, 29, 30 , 31, 32, 105, 106, 107, 108, 109, 110, 588, 589, 590, 591, 592, 593, 594, 595, 596, 507, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607 , 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 930, 031, 932, 933, 934, 935, 936, 937, 938, 939, 940, 941, 942, 943, 944, 945 };
-	int index = 0;
-	
 	/**
 	 * Runs the pre-process events for the entity which need to be done before transmitting, such as processing movement.
 	 * @param entity
@@ -149,10 +146,8 @@ public class EntityUpdate extends Tick {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			if (GameState.WORLD_READY.equals(player.getGameState())) {
-				//((Player) entity).getAppearance().setStyle(3, index == slot.length ? index = 0 : index++);
-				//((Player) entity).getAppearance().refresh();
-				player.getDispatcher().sendPlayerUpdate();
-				player.getDispatcher().sendNPCUpdate();
+				//player.getDispatcher().sendPlayerUpdate();
+				//player.getDispatcher().sendNPCUpdate();
 			}
 		}
 	}

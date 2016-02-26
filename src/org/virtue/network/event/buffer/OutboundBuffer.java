@@ -152,7 +152,7 @@ public class OutboundBuffer extends Buffer {
 
 	}
 
-	public void putIntA(int val) {
+	public void putIntAlt2(int val) {
 		putByte((byte) (val >> 8));
 		putByte((byte) val);
 		putByte((byte) (val >> 24));
@@ -160,26 +160,12 @@ public class OutboundBuffer extends Buffer {
 
 	}
 
-	public void putIntB(int val) {
+	public void putIntAlt3(int val) {
 		putByte((byte) (val >> 16));
 		putByte((byte) (val >> 24));
 		putByte((byte) val);
 		putByte((byte) (val >> 8));
 
-	}
-	
-	public void putIntV1(int val) {
-		putByte((byte) (val >> 8));
-		putByte((byte) (val >> 24));
-		putByte((byte) (val >> 16));
-		putByte((byte) val);
-	}
-	
-	public void putIntV2(int val) {
-		putByte((byte) val);
-		putByte((byte) (val >> 24));
-		putByte((byte) (val >> 16));
-		putByte((byte) (val >> 8));
 	}
 
 	public void putLong(long val) {

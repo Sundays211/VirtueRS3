@@ -53,7 +53,7 @@ public class ChatFilterEventDecoder implements EventDecoder<ChatFilterEventConte
 	 */
 	@Override
 	public ClientProtocol[] getTypes() {
-		return new ClientProtocol[] { ClientProtocol.ONLINE_STATUS };
+		return new ClientProtocol[] { ClientProtocol.SET_CHATFILTERSETTINGS };
 	}
 
 }

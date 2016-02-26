@@ -37,42 +37,42 @@ public enum ServerProtocol {
 	/**
 	 * Sends (and updates) the world list
 	 */
-	WORLDLIST(-1, -2),
+	WORLDLIST_FETCH_REPLY(33, -2),
 
 	/**
 	 * Updates the "System Update" (reboot) timer.
 	 */
-	UPDATE_REBOOT_TIMER(-1, 2),
+	UPDATE_REBOOT_TIMER(60, 2),
 
 	/**
 	 * Updates a player variable with a value of less than 127 but more than -127
 	 */
-	VARP_SMALL(-1, 3),
+	VARP_SMALL(79, 3),
 
 	/**
 	 * Updates a player variable with a value of more than 127 or less than -127
 	 */
-	VARP_LARGE(-1, 6),
+	VARP_LARGE(102, 6),
 
 	/**
 	 * Updates part of a player variable with a value of less than 127 but more than -127
 	 */
-	VARPBIT_SMALL(-1, 3),
+	VARBIT_SMALL(26, 3),
 
 	/**
 	 * Updates part of a player variable with a value of more than 127 or less than -127
 	 */
-	VARPBIT_LARGE(-1, 6),
+	VARBIT_LARGE(27, 6),
 
 	/**
 	 * Updates a client variable with a value of less than 127 but more than -127
 	 */
-	VARC_SMALL(-1, 3),
+	VARC_SMALL(17, 3),
 
 	/**
 	 * Updates a client variable with a value of more than 127 or less than -127
 	 */
-	VARC_LARGE(-1, 6),
+	VARC_LARGE(182, 6),
 
 	/**
 	 * Updates part of a client variable with a value of less than 127 but more than -127
@@ -87,17 +87,17 @@ public enum ServerProtocol {
 	/**
 	 * Updates a client variable which has a length of no more than 127 characters
 	 */
-	VARCSTR_SMALL(-1, -1),
+	VARCSTR_SMALL(56, -1),
 
 	/**
 	 * Updates a client variable which has a length of more than 127 characters
 	 */
-	VARCSTR_LARGE(-1, -2),
+	VARCSTR_LARGE(188, -2),
 
 	/**
 	 * Resets all the client varp values to zero
 	 */
-	VARCACHE_RESET(-1, 0),
+	VARCACHE_RESET(124, 0),
 
 	/**
 	 * Informs the client that the server is ready to receive more varc values
@@ -107,7 +107,7 @@ public enum ServerProtocol {
 	/**
 	 * Tells the client to run the specified client script with the provided paramaters
 	 */
-	RUNCLIENTSCRIPT(-1, -2),
+	RUNCLIENTSCRIPT(36, -2),
 
 	/**
 	 * Causes the client to disconnect from the game and connect to the lobby
@@ -157,12 +157,12 @@ public enum ServerProtocol {
 	/**
 	 * Sends a system message to the client.
 	 */
-	MESSAGE_GAME(-1, -1),
+	MESSAGE_GAME(137, -1),
 
 	/**
 	 * Sends a public chat message to the client
 	 */
-	MESSAGE_PUBLIC(-1, -1),
+	MESSAGE_PUBLIC(9, -1),
 
 	/**
 	 * Sends a private chat message to the client
@@ -212,25 +212,25 @@ public enum ServerProtocol {
 	/**
 	 * Unlocks the player's client friends list
 	 */
-	UNLOCK_FRIENDLIST(-1, 0),
+	FRIENDLIST_LOADED(18, 0),
 
 	/**
 	 * Sends the player's current online status.
 	 * Note that this does not need to be sent if the status is changed on the client side, but should be sent on login (and if the status is changed on the server side, for whatever reason)
 	 */
-	ONLINE_STATUS(-1, 1),
+	ONLINE_STATUS(157, 1),
 
 	/**
 	 * Updates or adds one or more entries in the player's friend list.
 	 * Note that friend list removals are handled on the client side only, and it is not possible to remotely remove friends.
 	 */
-	UPDATE_FRIENDLIST(-1, -2),
+	UPDATE_FRIENDLIST(58, -2),
 
 	/**
 	 * Updates or adds one or more entries in the player's ignore list.
 	 * Note that ignore list removals are handled on the client side only, and it is not possible to remotely remove ignores.
 	 */
-	UPDATE_IGNORELIST(-1, -2),
+	UPDATE_IGNORELIST(10, -2),
 
 	/**
 	 * Updates the entire friend chat channel that the player is currently in.
@@ -247,12 +247,12 @@ public enum ServerProtocol {
 	 * Updates/initialises the full clan channel that the player is currently in.
 	 * This packet is also used to leave the channel (if empty)
 	 */
-	CLANCHANNEL_FULL(-1, -2),
+	CLANCHANNEL_FULL(85, -2),
 
 	/**
 	 * Sends a series of updates for the clan channel the player is currently in.
 	 */
-	CLANCHANNEL_DELTA(-1, -2),
+	CLANCHANNEL_DELTA(109, -2),
 
 	/**
 	 * Updates/initialises the full clan settings for the clan that the player is currently in.
@@ -287,7 +287,7 @@ public enum ServerProtocol {
 	/**
 	 * Represents a static map update
 	 */
-	MAP_STATIC(-1, -2),
+	REBUILD_NORMAL(40, -2),
 
 	/**
 	 * Represents a dynamic map update
@@ -332,12 +332,12 @@ public enum ServerProtocol {
 	/**
 	 * Opens the top-level game interface (aka "root" interface)
 	 */
-	IF_OPENTOP(-1, 19),
+	IF_OPENTOP(4, 19),
 
 	/**
 	 * Opens an interface as a sub of the specified interface
 	 */
-	IF_OPENSUB(-1, 23),
+	IF_OPENSUB(91, 23),
 
 	/**
 	 * Opens an interface as a sub of an npc
@@ -399,6 +399,8 @@ public enum ServerProtocol {
 	 * Sets the events for an interface (including which options are handled by the server, whether it can be used on other elements, etc).
 	 */
 	IF_SETEVENTS(-1, 12),
+	
+	IF_SET_HTTP_IMAGE(146, 8),
 
 	/**
 	 * Sends a full update of an item container
@@ -419,8 +421,6 @@ public enum ServerProtocol {
 	 * Notifies a client to play the specified cutscene
 	 */
 	CUTSCENE(-1, -2),
-	
-	IF_SETGRAPHIC_EXTERNAL(-1, 8),
 
 	PLAY_MUSIC(-1, 3);
 	

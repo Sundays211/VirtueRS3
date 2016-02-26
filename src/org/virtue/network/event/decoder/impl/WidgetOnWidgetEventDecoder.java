@@ -52,7 +52,7 @@ public class WidgetOnWidgetEventDecoder implements EventDecoder<WidgetOnWidgetEv
 		int objectId = buffer.getShortA() & 0xffff;
 		objectId = objectId == 65535 ? -1 : objectId;
 		
-		int useHash = buffer.getIntA();
+		int useHash = buffer.getIntAlt2();
 		
 		int useObject = buffer.getShort() & 0xffff;
 		useObject = useObject == 65535 ? -1 : useObject;

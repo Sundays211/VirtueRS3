@@ -47,7 +47,7 @@ public class WidgetDragEventDecoder implements EventDecoder<WidgetDragEventConte
 		int toObject = buffer.getLEShortA() & 0xffff;
 		toObject = (toObject == 65535) ? -1 : toObject;
 		
-		int fromHash = buffer.getIntB();
+		int fromHash = buffer.getIntAlt3();
 		
 		int fromSlot = buffer.getShortA() & 0xffff;
 		fromSlot = (fromSlot == 65535) ? -1 : fromSlot;

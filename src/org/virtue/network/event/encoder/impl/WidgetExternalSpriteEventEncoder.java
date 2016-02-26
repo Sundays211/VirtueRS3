@@ -39,9 +39,9 @@ public class WidgetExternalSpriteEventEncoder implements EventEncoder<WidgetExte
 	@Override
 	public OutboundBuffer encode(Player player, WidgetExternalSpriteEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(ServerProtocol.IF_SETGRAPHIC_EXTERNAL, player);
-		buffer.putIntA((context.getWidget() << 16 | context.getComponent()));
-		buffer.putLEInt(context.getSpriteID());
+		buffer.putPacket(ServerProtocol.IF_SET_HTTP_IMAGE, player);
+		buffer.putIntAlt3(context.getSpriteID());
+		buffer.putInt((context.getWidget() << 16 | context.getComponent()));
 		return buffer;
 	}
 

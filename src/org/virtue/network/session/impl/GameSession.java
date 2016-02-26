@@ -50,7 +50,7 @@ public class GameSession extends Session {
 	/**
 	 * Contains opcodes which we don't want to handle but don't want clogging up the unhandled stream.
 	 */
-	private static final boolean[] FILTER_OPCODES = new boolean[121];
+	private static final boolean[] FILTER_OPCODES = new boolean[122];
 			
 	static {
 		registerFilter(ClientProtocol.WINDOW_STATUS);

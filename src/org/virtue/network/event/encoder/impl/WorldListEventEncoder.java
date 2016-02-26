@@ -42,7 +42,7 @@ public class WorldListEventEncoder implements EventEncoder<WorldListEventContext
 	@Override
 	public OutboundBuffer encode(Player player, WorldListEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(ServerProtocol.WORLDLIST, player);
+		buffer.putVarShort(ServerProtocol.WORLDLIST_FETCH_REPLY, player);
 		
 		buffer.putByte(1);
 		buffer.putByte(2);

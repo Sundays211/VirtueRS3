@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.config.quest;
+package org.virtue.config.questtype;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
