@@ -4,7 +4,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.CombatUtils;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Holds attack information used by the attack event.
@@ -21,7 +21,7 @@ public final class AttackInfo {
 	/**
 	 * The start graphic.
 	 */
-	private GraphicsBlock graphic;
+	private SpotAnimationBlock graphic;
 	
 	/**
 	 * The impact information array.
@@ -53,7 +53,7 @@ public final class AttackInfo {
 	 * @param graphic The start graphic.
 	 * @param impacts The impact information array.
 	 */
-	public AttackInfo(AnimationBlock animation, GraphicsBlock graphic, int cooldown, ImpactInfo...impacts) {
+	public AttackInfo(AnimationBlock animation, SpotAnimationBlock graphic, int cooldown, ImpactInfo...impacts) {
 		this.animation = animation;
 		this.graphic = graphic;
 		this.impacts = impacts;
@@ -68,7 +68,7 @@ public final class AttackInfo {
 	 * @param impacts The impact information array.
 	 * @return The {@code AttackInfo} {@code Object}.
 	 */
-	public static AttackInfo create(Entity entity, AnimationBlock animation, GraphicsBlock graphics, ImpactInfo...impacts) {
+	public static AttackInfo create(Entity entity, AnimationBlock animation, SpotAnimationBlock graphics, ImpactInfo...impacts) {
 		return create(entity, animation, graphics, CombatUtils.getCooldown(entity, false), impacts);
 	}
 	
@@ -80,7 +80,7 @@ public final class AttackInfo {
 	 * @param impacts The impact information array.
 	 * @return The {@code AttackInfo} {@code Object}.
 	 */
-	public static AttackInfo create(Entity entity, AnimationBlock animation, GraphicsBlock graphics, int cooldown, ImpactInfo...impacts) {
+	public static AttackInfo create(Entity entity, AnimationBlock animation, SpotAnimationBlock graphics, int cooldown, ImpactInfo...impacts) {
 		return new AttackInfo(animation, graphics, cooldown, impacts);
 	}
 
@@ -105,7 +105,7 @@ public final class AttackInfo {
 	 * Gets the startGraphic value.
 	 * @return The startGraphic.
 	 */
-	public GraphicsBlock getStartGraphic() {
+	public SpotAnimationBlock getStartGraphic() {
 		return graphic;
 	}
 
@@ -113,7 +113,7 @@ public final class AttackInfo {
 	 * Sets the startGraphic value.
 	 * @param startGraphic The startGraphic to set.
 	 */
-	public void setStartGraphic(GraphicsBlock startGraphic) {
+	public void setStartGraphic(SpotAnimationBlock startGraphic) {
 		this.graphic = startGraphic;
 	}
 

@@ -82,11 +82,11 @@ public class GlowColorBlock extends Block {
 	@Override
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
-			block.putS(red);
-			block.putS(green);
-			block.putC(blue);
+			block.putByte(red);
+			block.putA(green);
+			block.putA(blue);
 			block.putByte(alpha);
-			block.putShort(delay);
+			block.putShortA(delay);
 			block.putShort(duration);
 		} else {
 			block.putByte(red);

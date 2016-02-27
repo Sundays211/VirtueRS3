@@ -28,7 +28,6 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.PlayerUpdateConstants;
 import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.AppearenceBlock;
@@ -51,7 +50,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 	public OutboundBuffer encode(Player player, Viewport context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		OutboundBuffer block = new OutboundBuffer();
-		buffer.putVarShort(ServerProtocol.PLAYER_UPDATE, player);
+		buffer.putVarShort(ServerProtocol.PLAYER_INFO, player);
 		//int startOffset = buffer.offset();
 		processLocalPlayers(player, buffer, block, context, true);
 		processLocalPlayers(player, buffer, block, context, false);
@@ -160,8 +159,8 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 							dy += 32;
 						}
 						//System.out.println("New position: x="+p.getCurrentTile().getLocalX()+", y="+p.getCurrentTile().getLocalY());
-						buffer.putBits(15, dy + (dx << 5) + (0 << 10) + ((p.getMovement().getMovementType()+1) << 12));
-						context.getMovementTypes()[playerIndex] = p.getMovement().getMovementType();
+						buffer.putBits(15, dy + (dx << 5) + (0 << 10) + ((p.getMovement().getMoveSpeed().getId()+1) << 12));
+						context.getMovementTypes()[playerIndex] = p.getMovement().getMoveSpeed().getId();
 					} else if ((dx == 0 && dy == 0)) {
 						buffer.putBits(2, 0);
 					} else {
@@ -295,10 +294,10 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 			maskData |= p.getUpdateBlocks()[pos].getMask(false);
 		}
 		if (maskData >= 0x100) {
-			maskData |= PlayerUpdateConstants.PLAYER_2_BYTE_SIZE;
+			maskData |= 0x2;
 		}
 		if (maskData >= 0x10000) {
-			maskData |= PlayerUpdateConstants.PLAYER_3_BYTE_SIZE;
+			maskData |= 0x8000;
 		}
 		//System.out.println("Packing update for player "+p.getIndex()+": 0x"+Integer.toHexString(maskData));
 		block.putShort(p.getIndex());
@@ -323,7 +322,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 	}
 
 	private boolean needsMovementTypeUpdate (Entity p2, Viewport context) {
-		return p2.getMovement().getMovementType() != context.getMovementTypes()[p2.getIndex()];
+		return p2.getMovement().getMoveSpeed().getId() != context.getMovementTypes()[p2.getIndex()];
 	}
 
 	/**
@@ -401,7 +400,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 			int xOffset = currentRegionX - lastRegionX;
 			int yOffset = currentRegionY - lastRegionY;
 			buffer.putBits(2, 3);
-			buffer.putBits(20, (yOffset & 0xff) + ((xOffset & 0xff) << 8) + ((planeOffset & 0x3) << 16) + ((p.getMovement().getMovementType() + 1) << 18));
+			buffer.putBits(20, (yOffset & 0xff) + ((xOffset & 0xff) << 8) + ((planeOffset & 0x3) << 16) + ((p.getMovement().getMoveSpeed().getId() + 1) << 18));
 		}
 	}
 

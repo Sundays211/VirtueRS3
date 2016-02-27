@@ -2,7 +2,7 @@ package org.virtue.game.entity.combat.death;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * The player death handling event.
@@ -42,7 +42,7 @@ public final class DefaultDeathEvent extends DeathEvent {
 	 * @param animation The animation.
 	 * @param graphic The graphic.
 	 */
-	public DefaultDeathEvent(int ticks, AnimationBlock animation, GraphicsBlock graphic) {
+	public DefaultDeathEvent(int ticks, AnimationBlock animation, SpotAnimationBlock graphic) {
 		super(ticks);
 		super.deathAnimation = animation;
 		super.graphics = graphics;

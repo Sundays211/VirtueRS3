@@ -9,7 +9,7 @@ import org.virtue.game.entity.player.inv.ItemContainer;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.node.Node;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Represents a magic spell.
@@ -46,7 +46,7 @@ public abstract class MagicSpell {
 	/**
 	 * The cast graphic.
 	 */
-	private GraphicsBlock graphic;
+	private SpotAnimationBlock graphic;
 	
 	/**
 	 * The staff item id.
@@ -71,7 +71,7 @@ public abstract class MagicSpell {
 	 * @param graphic The casting graphic.
 	 * @param runes The runes required.
 	 */
-	public MagicSpell(int id, int level, double experience, AnimationBlock animation, GraphicsBlock graphic, Item...runes) {
+	public MagicSpell(int id, int level, double experience, AnimationBlock animation, SpotAnimationBlock graphic, Item...runes) {
 		this(id, level, experience, -1, null, null, runes);
 	}
 	
@@ -81,7 +81,7 @@ public abstract class MagicSpell {
 	 * @param level The level required.
 	 * @param runes The runes required.
 	 */
-	public MagicSpell(int id, int level, double experience, int staffId, AnimationBlock animation, GraphicsBlock graphic, Item...runes) {
+	public MagicSpell(int id, int level, double experience, int staffId, AnimationBlock animation, SpotAnimationBlock graphic, Item...runes) {
 		this.id = id;
 		this.level = level;
 		this.experience = experience;
@@ -193,7 +193,7 @@ public abstract class MagicSpell {
 	 * Gets the graphic value.
 	 * @return The graphic.
 	 */
-	public GraphicsBlock getGraphic() {
+	public SpotAnimationBlock getGraphic() {
 		return graphic;
 	}
 
@@ -201,7 +201,7 @@ public abstract class MagicSpell {
 	 * Sets the graphic value.
 	 * @param graphic The graphic to set.
 	 */
-	public void setGraphic(GraphicsBlock graphic) {
+	public void setGraphic(SpotAnimationBlock graphic) {
 		this.graphic = graphic;
 	}
 

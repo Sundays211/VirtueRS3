@@ -6,7 +6,7 @@ import org.virtue.game.entity.combat.impl.magic.CombatSpell;
 import org.virtue.game.entity.combat.impl.magic.SpellAttackHandler;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * @author Kayla
@@ -29,7 +29,7 @@ public class LunarSpells extends CombatSpell  {
 	 * Registers the Ancient Spells
 	 */
 	public static void register() {
-		SpellAttackHandler Vengeance = new SpellAttackHandler(-1, new AnimationBlock(4410), new GraphicsBlock(1, 726), null, null);
+		SpellAttackHandler Vengeance = new SpellAttackHandler(-1, new AnimationBlock(4410), new SpotAnimationBlock(1, 726), null, null);
 		Spellbook.MODERN.register(new AncientSpells(151, 94, 5.5, Vengeance, Runes.EARTH.get(10), Runes.ASTRAL.get(4), Runes.DEATH.get(2)));
 	}
 

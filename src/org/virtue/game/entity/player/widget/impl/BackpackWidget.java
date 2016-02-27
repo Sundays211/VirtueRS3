@@ -67,8 +67,8 @@ public class BackpackWidget extends Widget {
 	public void open (int parentId, int parentSlot, int widgetId, boolean clickThrough, Player player) {
 		super.open(parentId, parentSlot, widgetId, clickThrough, player);
 		player.getWidgets().openWidget(762, 112, 1463, true);
-		player.getDispatcher().sendWidgetSettings(1473, 34, -1, -1, 2097152);
-		player.getDispatcher().sendWidgetSettings(1473, 34, 0, 27, 15302030);
+		player.getDispatcher().sendWidgetEvents(1473, 34, -1, -1, 2097152);
+		player.getDispatcher().sendWidgetEvents(1473, 34, 0, 27, 15302030);
 		player.getInvs().loadContainer(ContainerState.BACKPACK);
 		player.getInvs().sendContainer(ContainerState.BACKPACK);
 		player.getInvs().loadContainer(ContainerState.MONEY_POUCH);

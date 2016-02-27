@@ -35,11 +35,14 @@ import org.virtue.network.protocol.update.BlockType;
  * @since Nov 2, 2014
  */
 public class ClanBlock extends Block {
+	
+	private boolean sameClan;
 
 	/**
 	 */
-	public ClanBlock() {
+	public ClanBlock(boolean sameClan) {
 		super(BlockType.CLAN);
+		this.sameClan = sameClan;
 	}
 
 	/* (non-Javadoc)
@@ -48,7 +51,7 @@ public class ClanBlock extends Block {
 	@Override
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
-			block.putByte(1);
+			block.putC(sameClan ? 1 : 0);
 		}
 	}
 }

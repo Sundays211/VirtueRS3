@@ -6,7 +6,7 @@
 var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 var AttackInfo = Java.type('org.virtue.game.entity.combat.impl.ImpactInfo');
 var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+var SpotAnimationBlock = Java.type('org.virtue.network.protocol.update.block.SpotAnimationBlock');
 
 var SpecialAttack = Java.extend(SpecialAttackHandler);
 var sliceAndDice = new SpecialAttack(CombatStyle.MELEE, [14484]) {
@@ -46,6 +46,6 @@ var sliceAndDice = new SpecialAttack(CombatStyle.MELEE, [14484]) {
 
 var listen = function(scriptManager) {
 	sliceAndDice.animation = new AnimationBlock(10961);
-	sliceAndDice.graphics = new GraphicsBlock(1, 1950);
+	sliceAndDice.graphics = new SpotAnimationBlock(1, 1950);
 	SpecialAttackHandler.register(sliceAndDice);
 };

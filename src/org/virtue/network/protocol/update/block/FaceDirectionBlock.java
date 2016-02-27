@@ -44,7 +44,7 @@ public class FaceDirectionBlock extends Block {
 	 * The {@link FaceDirectionBlock} constructor
 	 */
 	public FaceDirectionBlock(Tile target) {
-		super(BlockType.TURN);
+		super(BlockType.SET_FACING);
 		this.target = target;
 	}
 

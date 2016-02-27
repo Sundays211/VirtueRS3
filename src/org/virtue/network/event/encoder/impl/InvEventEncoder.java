@@ -25,8 +25,9 @@ public class InvEventEncoder implements EventEncoder<InvEventContext> {
 		buffer.putShort(context.getContainerID());
 
 		int flags = 0;
-		if(context.isOtherPlayer())
+		if(context.isOtherPlayer()) {
 			flags |= 0x1;
+		}
 
 //		TODO: no support yet :p
 //		if(context.hasItemProperties())

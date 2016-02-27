@@ -48,7 +48,7 @@ public class AppearenceBlock extends Block {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			byte[] renderData = player.getAppearance().getData();
-			block.putS(renderData.length);
+			block.putA(renderData.length);
 			block.putReverseA(renderData, 0, renderData.length);
 		}
 	}

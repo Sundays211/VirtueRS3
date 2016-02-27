@@ -8,7 +8,7 @@ import org.virtue.game.entity.combat.hit.Hit;
 import org.virtue.game.entity.combat.hit.Hit.HitType;
 import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Holds information for an attack impact.
@@ -30,7 +30,7 @@ public class ImpactInfo {
 	/**
 	 * The impact graphics.
 	 */
-	private GraphicsBlock graphic;
+	private SpotAnimationBlock graphic;
 	
 	/**
 	 * The projectile.
@@ -81,7 +81,7 @@ public class ImpactInfo {
 	 * @param hit The hit.
 	 * @param delay The delay before impact.
 	 */
-	public ImpactInfo(Entity victim, int animation, GraphicsBlock graphic, Projectile projectile, CombatStyle style, int hit, int delay) {
+	public ImpactInfo(Entity victim, int animation, SpotAnimationBlock graphic, Projectile projectile, CombatStyle style, int hit, int delay) {
 		this.victim = victim;
 		this.animation = new AnimationBlock(animation);
 		this.graphic = graphic;
@@ -99,7 +99,7 @@ public class ImpactInfo {
 	 * @param projectile The projectile.
 	 * @return The impact info object.
 	 */
-	public static ImpactInfo create(AttackHandler handler, Entity entity, Entity victim, CombatStyle style, GraphicsBlock graphic, Projectile projectile) {
+	public static ImpactInfo create(AttackHandler handler, Entity entity, Entity victim, CombatStyle style, SpotAnimationBlock graphic, Projectile projectile) {
 		return create(entity, victim, style, graphic, projectile, handler.getHit(entity, victim));
 	}
 	
@@ -111,7 +111,7 @@ public class ImpactInfo {
 	 * @param projectile The projectile.
 	 * @return The impact info object.
 	 */
-	public static ImpactInfo create(Entity entity, Entity victim, CombatStyle style, GraphicsBlock graphic, Projectile projectile, int hit) {
+	public static ImpactInfo create(Entity entity, Entity victim, CombatStyle style, SpotAnimationBlock graphic, Projectile projectile, int hit) {
 		return new ImpactInfo(victim, victim.getImpactAnimation(), graphic, projectile, style, hit, CombatUtils.getImpactDelay(style, entity, victim));
 	}
 	
@@ -123,7 +123,7 @@ public class ImpactInfo {
 	 * @param projectile The projectile.
 	 * @return The impact info object.
 	 */
-	public static ImpactInfo ability(Entity entity, Entity victim, CombatStyle style, GraphicsBlock graphic, Projectile projectile, int hit) {
+	public static ImpactInfo ability(Entity entity, Entity victim, CombatStyle style, SpotAnimationBlock graphic, Projectile projectile, int hit) {
 		ImpactInfo info = new ImpactInfo(victim, victim.getImpactAnimation(), graphic, projectile, style, hit, CombatUtils.getImpactDelay(style, entity, victim));
 		info.ability = true;
 		return info;
@@ -202,7 +202,7 @@ public class ImpactInfo {
 	 * Gets the graphic value.
 	 * @return The graphic.
 	 */
-	public GraphicsBlock getGraphic() {
+	public SpotAnimationBlock getGraphic() {
 		return graphic;
 	}
 
@@ -210,7 +210,7 @@ public class ImpactInfo {
 	 * Sets the graphic value.
 	 * @param graphic The graphic to set.
 	 */
-	public void setGraphic(GraphicsBlock graphic) {
+	public void setGraphic(SpotAnimationBlock graphic) {
 		this.graphic = graphic;
 	}
 

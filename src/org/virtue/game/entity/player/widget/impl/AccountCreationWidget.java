@@ -117,33 +117,33 @@ public class AccountCreationWidget extends Widget {
 			return true;
 		case 192://Skin colour
 			player.getDialogs().setStep(0);
-			player.getDispatcher().sendWidgetSettings(1420, 180, 0, 66, 2);
-			player.getDispatcher().sendWidgetSettings(1420, 158, 0, 46, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 180, 0, 66, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 158, 0, 46, 2);
 			return true;
 		case 219://Hairstyle
 			player.getDialogs().setStep(1);
-			player.getDispatcher().sendWidgetSettings(1420, 180, 0, 66, 2);
-			player.getDispatcher().sendWidgetSettings(1420, 158, 0, 46, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 180, 0, 66, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 158, 0, 46, 2);
 			return true;
 		case 220://Torso
 			player.getDialogs().setStep(2);
-			player.getDispatcher().sendWidgetSettings(1420, 180, 0, 66, 2);
-			player.getDispatcher().sendWidgetSettings(1420, 158, 0, 46, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 180, 0, 66, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 158, 0, 46, 2);
 			return true;
 		case 221://Legs
 			player.getDialogs().setStep(3);
-			player.getDispatcher().sendWidgetSettings(1420, 180, 0, 66, 2);
-			player.getDispatcher().sendWidgetSettings(1420, 158, 0, 46, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 180, 0, 66, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 158, 0, 46, 2);
 			return true;
 		case 222://Feet
 			player.getDialogs().setStep(4);
-			player.getDispatcher().sendWidgetSettings(1420, 180, 0, 66, 2);
-			player.getDispatcher().sendWidgetSettings(1420, 158, 0, 46, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 180, 0, 66, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 158, 0, 46, 2);
 			return true;
 		case 223://Facial hair
 			player.getDialogs().setStep(5);
-			player.getDispatcher().sendWidgetSettings(1420, 180, 0, 66, 2);
-			player.getDispatcher().sendWidgetSettings(1420, 158, 0, 46, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 180, 0, 66, 2);
+			player.getDispatcher().sendWidgetEvents(1420, 158, 0, 46, 2);
 			return true;
 		case 596://Ironman mode status
 			switch (slotId) {

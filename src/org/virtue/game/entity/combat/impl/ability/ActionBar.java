@@ -119,7 +119,7 @@ public final class ActionBar {
 				player.getVars().setVarValueInt(811 + s, k != null ? k.getItemId() : -1);
 				player.getVars().setVarValueInt(835 + s, -1);
 			}																					 //2097152			   2195454   11108350
-			player.getDispatcher().sendWidgetSettings(1430, SLOT_CHILD_IDS[s], -1, -1, k == null ? 2098176 : (locked ? 2195454 : 11108350));
+			player.getDispatcher().sendWidgetEvents(1430, SLOT_CHILD_IDS[s], -1, -1, k == null ? 2098176 : (locked ? 2195454 : 11108350));
 		}
 		player.getVars().setVarValueInt(679, player.getCombatSchedule().getAdrenaline() * 10);
 	}

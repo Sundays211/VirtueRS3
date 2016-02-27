@@ -335,6 +335,9 @@ public class OutboundBuffer extends Buffer {
 	}
 
 	public void putPacket(int packetId, Player player) {
+		if (packetId < 0) {
+			throw new IllegalArgumentException("Invalid packet ID: "+packetId);
+		}
 		if (packetId >= 128) {
 			putByte(((packetId >> 8) + 128) + player.getEncodingCipher().nextInt());
 			putByte(packetId + player.getEncodingCipher().nextInt());

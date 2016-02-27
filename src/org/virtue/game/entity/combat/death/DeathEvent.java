@@ -4,7 +4,7 @@ import org.virtue.Virtue;
 import org.virtue.engine.cycle.GameTick;
 import org.virtue.game.entity.Entity;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Handles a death event.
@@ -31,7 +31,7 @@ public abstract class DeathEvent {
 	/**
 	 * The graphic displayed when dying.
 	 */
-	protected GraphicsBlock graphics;
+	protected SpotAnimationBlock graphics;
 	
 	/**
 	 * Constructs a new {@code DeathEvent} {@code Object}.

@@ -49,8 +49,8 @@ public class HeadIconBlock extends Block {
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
 			byte[] renderData = entity.getHeadIcons().getData();
-			block.putC(renderData.length);
-			block.putBytesA(renderData, 0, renderData.length);
+			block.putByte(renderData.length);
+			block.putBytes(renderData, 0, renderData.length);
 		} else {
 			byte[] renderData = entity.getHeadIcons().getData();
 			block.putBytes(renderData, 0, renderData.length);

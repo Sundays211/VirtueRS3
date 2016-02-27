@@ -5,7 +5,7 @@ var SpecialAttackHandler = Java.type('org.virtue.game.entity.combat.impl.Special
 var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 var AttackInfo = Java.type('org.virtue.game.entity.combat.impl.ImpactInfo');
 var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+var SpotAnimationBlock = Java.type('org.virtue.network.protocol.update.block.SpotAnimationBlock');
 
 var SpecialAttack = Java.extend(SpecialAttackHandler);
 var disrupt = new SpecialAttack(CombatStyle.MELEE, [19784]) {
@@ -16,7 +16,7 @@ var disrupt = new SpecialAttack(CombatStyle.MELEE, [19784]) {
 
 var listen = function(scriptManager) {
 	disrupt.animation = new AnimationBlock(14788);
-	disrupt.graphics = new GraphicsBlock(1, 1729);
+	disrupt.graphics = new SpotAnimationBlock(1, 1729);
 	disrupt.damageModifier = 1.50;
 	SpecialAttackHandler.register(disrupt);
 };

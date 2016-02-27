@@ -12,7 +12,7 @@ import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.world.region.Tile;
 import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * @author Kayla
@@ -50,14 +50,14 @@ public class AraxxorCombat extends AbstractNPC {
 			new SwitchAttack(CombatStyle.MELEE, new MeleeAttackHandler(480, 1000) {
 				@Override
 				public AttackInfo getAttackInfo(Entity entity, Entity lock) {
-					return AttackInfo.create(entity, new AnimationBlock(24050), new GraphicsBlock(1, 4986), impact(entity, lock, CombatStyle.MELEE, null, null));
+					return AttackInfo.create(entity, new AnimationBlock(24050), new SpotAnimationBlock(1, 4986), impact(entity, lock, CombatStyle.MELEE, null, null));
 				}
 			}),
 			new SwitchAttack(CombatStyle.MAGIC, new MagicAttackHandler(750, 1000) {
 				@Override
 				public AttackInfo getAttackInfo(Entity entity, Entity lock) {
-					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(24047), new GraphicsBlock(1, 4988), 
-							impact(entity, lock, CombatStyle.MAGIC, new GraphicsBlock(2, 5007), new Projectile(4997, 35, 72, 16, 34, 16)));
+					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(24047), new SpotAnimationBlock(1, 4988), 
+							impact(entity, lock, CombatStyle.MAGIC, new SpotAnimationBlock(2, 5007), new Projectile(4997, 35, 72, 16, 34, 16)));
 					info.getImpacts()[0].setDelay(info.getImpacts()[0].getDelay() + 2);
 					return info;
 				}
@@ -65,8 +65,8 @@ public class AraxxorCombat extends AbstractNPC {
 			new SwitchAttack(CombatStyle.MAGIC, new MagicAttackHandler(750, 1000) {
 				@Override
 				public AttackInfo getAttackInfo(Entity entity, Entity lock) {
-					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(24047), new GraphicsBlock(1, 4988), 
-							impact(entity, lock, CombatStyle.MAGIC, new GraphicsBlock(2, 5007), new Projectile(4989, 35, 72, 16, 34, 16)));
+					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(24047), new SpotAnimationBlock(1, 4988), 
+							impact(entity, lock, CombatStyle.MAGIC, new SpotAnimationBlock(2, 5007), new Projectile(4989, 35, 72, 16, 34, 16)));
 					info.getImpacts()[0].setDelay(info.getImpacts()[0].getDelay() + 2);
 					return info;
 				}

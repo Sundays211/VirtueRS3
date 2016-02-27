@@ -33,7 +33,7 @@ import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -322,9 +322,9 @@ public class StatManager {
 			World.getInstance().sendBroadcast(player.getName().trim()+" has achieved "+stat.getBaseLevel()+" "+stat.getType().getName());
 		}
 		player.getDispatcher().sendGameMessage(message+" You have reached level "+stat.getBaseLevel()+".");
-		player.queueUpdateBlock(new GraphicsBlock(3, 2457, 230, 0, 0));//Height: 230, speed: 0, rotation: 0, unk1=0
-		player.queueUpdateBlock(new GraphicsBlock(4, 2457, 270, 10, 3));//Height: 270, speed: 10, rotation: 3, unk1=15
-		player.queueUpdateBlock(new GraphicsBlock(5, 2457, 300, 30, 6));//Height: 300, speed: 30, rotation: 6, unk1=15
+		player.queueUpdateBlock(new SpotAnimationBlock(3, 2457, 230, 0, 0));//Height: 230, speed: 0, rotation: 0, unk1=0
+		player.queueUpdateBlock(new SpotAnimationBlock(4, 2457, 270, 10, 3));//Height: 270, speed: 10, rotation: 3, unk1=15
+		player.queueUpdateBlock(new SpotAnimationBlock(5, 2457, 300, 30, 6));//Height: 300, speed: 30, rotation: 6, unk1=15
 		player.getAppearance().refresh();
 	}
 }

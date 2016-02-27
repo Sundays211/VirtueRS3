@@ -20,8 +20,8 @@ var MELEE = new MeleeAttackHandler(500, 1000) {
 	
 var RANGE = new MeleeAttackHandler(750, 1000) {
 	getAttackInfo: function(entity, lock) {
-		var info = AttackInfo.create(entity, new AnimationBlock(16202), new GraphicsBlock(1, 2994), 
-						Java.super(RANGE).impact(entity, lock, CombatStyle.RANGE, new GraphicsBlock(2, 3000), null));
+		var info = AttackInfo.create(entity, new AnimationBlock(16202), new SpotAnimationBlock(1, 2994), 
+						Java.super(RANGE).impact(entity, lock, CombatStyle.RANGE, new SpotAnimationBlock(2, 3000), null));
 		info.setEvent(function(e, l) {
 		});
 		return info;
@@ -31,7 +31,7 @@ var RANGE = new MeleeAttackHandler(750, 1000) {
 
 var MAGIC = new MeleeAttackHandler(750, 1000) {
 	getAttackInfo: function(entity, lock) {
-		var info = AttackInfo.create(entity, new AnimationBlock(16195), new GraphicsBlock(1, 2995),
+		var info = AttackInfo.create(entity, new AnimationBlock(16195), new SpotAnimationBlock(1, 2995),
 						Java.super(MAGIC).impact(entity, lock, CombatStyle.MAGIC, null, new Projectile(2984, 35, 72, 16, 58, 32)));
 		info.setEvent(function(e, l) {
 		});

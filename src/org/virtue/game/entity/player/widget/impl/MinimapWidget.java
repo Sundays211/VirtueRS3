@@ -46,7 +46,7 @@ public class MinimapWidget extends Widget {
 		case 9://Logout
 			player.getVars().setVarValueInt(3813, 6);
 			player.getWidgets().openWidget(1477, 787, 26, true);
-			player.getDispatcher().sendWidgetSettings(26, 22, -1, -1, 2);
+			player.getDispatcher().sendWidgetEvents(26, 22, -1, -1, 2);
 			return true;
 		case 22://Money pouch
 			return handleMoneyPouch(player, option);
@@ -128,20 +128,20 @@ public class MinimapWidget extends Widget {
 			player.getVars().setVarValueInt(4726, 0);
 			player.getVars().setVarValueInt(4720, -1);
 			player.getDispatcher().sendHideWidget(1477, 377, false);
-			player.getDispatcher().sendWidgetSettings(1477, 376, 0, 24, 2);
-			player.getDispatcher().sendWidgetSettings(1477, 379, 1, 1, 2);
-			player.getDispatcher().sendWidgetSettings(1477, 378, 1, 1, 2);
+			player.getDispatcher().sendWidgetEvents(1477, 376, 0, 24, 2);
+			player.getDispatcher().sendWidgetEvents(1477, 379, 1, 1, 2);
+			player.getDispatcher().sendWidgetEvents(1477, 378, 1, 1, 2);
 			player.getDispatcher().sendVarc(2911, 4);
 			player.getDispatcher().sendHideWidget(1448, 3, false);
 			player.getWidgets().openWidget(1448, 3, 1524, true);
 			player.getDispatcher().sendHideWidget(1448, 3, false);
 			player.getDispatcher().sendHideWidget(1448, 4, true);
-			player.getDispatcher().sendWidgetSettings(1524, 24, 0, 6, 2);
-			player.getDispatcher().sendWidgetSettings(1524, 26, 0, 39, 2);
-			player.getDispatcher().sendWidgetSettings(1524, 16, 0, 5, 2);
-			player.getDispatcher().sendWidgetSettings(1524, 16, 0, 5, 2);
-			player.getDispatcher().sendWidgetSettings(1524, 29, 0, 137, 2359296);
-			player.getDispatcher().sendWidgetSettings(1524, 66, 0, 137, 2);
+			player.getDispatcher().sendWidgetEvents(1524, 24, 0, 6, 2);
+			player.getDispatcher().sendWidgetEvents(1524, 26, 0, 39, 2);
+			player.getDispatcher().sendWidgetEvents(1524, 16, 0, 5, 2);
+			player.getDispatcher().sendWidgetEvents(1524, 16, 0, 5, 2);
+			player.getDispatcher().sendWidgetEvents(1524, 29, 0, 137, 2359296);
+			player.getDispatcher().sendWidgetEvents(1524, 66, 0, 137, 2);
 			player.getDispatcher().sendHideWidget(1448, 5, false);
 			player.getWidgets().openWidget(1448, 5, 1528, true);
 			player.getDispatcher().sendHideWidget(1448, 5, false);

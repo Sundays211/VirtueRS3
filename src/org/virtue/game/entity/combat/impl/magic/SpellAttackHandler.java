@@ -7,7 +7,7 @@ import org.virtue.game.entity.combat.impl.CombatUtils;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 import org.virtue.utility.RandomExt;
 
 /**
@@ -35,7 +35,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	/**
 	 * The cast graphic.
 	 */
-	private GraphicsBlock graphic;
+	private SpotAnimationBlock graphic;
 	
 	/**
 	 * The animation block.
@@ -45,7 +45,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	/**
 	 * The impact graphic.
 	 */
-	private GraphicsBlock impactGraphic;
+	private SpotAnimationBlock impactGraphic;
 	
 	/**
 	 * The projectiles.
@@ -70,7 +70,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param impactGraphic The impact graphic.
 	 * @param projectiles The projectiles.
 	 */
-	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, GraphicsBlock impactGraphic, Projectile projectile) {
+	public SpellAttackHandler(int maximumHit, AnimationBlock animation, SpotAnimationBlock graphic, SpotAnimationBlock impactGraphic, Projectile projectile) {
 		this(maximumHit, animation, graphic, -1, impactGraphic, false, projectile);
 	}
 
@@ -83,7 +83,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param impactGraphic The impact graphic.
 	 * @param projectiles The projectiles.
 	 */
-	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, int impactAnimation, GraphicsBlock impactGraphic, Projectile projectile) {
+	public SpellAttackHandler(int maximumHit, AnimationBlock animation, SpotAnimationBlock graphic, int impactAnimation, SpotAnimationBlock impactGraphic, Projectile projectile) {
 		this(maximumHit, animation, graphic, impactAnimation, impactGraphic, false, projectile, 1.0, 1.0);
 	}
 	
@@ -97,7 +97,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param multi If the spell is multi-target.
 	 * @param projectiles The projectiles.
 	 */
-	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, int impactAnimation, GraphicsBlock impactGraphic, boolean multi, Projectile projectile) {
+	public SpellAttackHandler(int maximumHit, AnimationBlock animation, SpotAnimationBlock graphic, int impactAnimation, SpotAnimationBlock impactGraphic, boolean multi, Projectile projectile) {
 		this(maximumHit, animation, graphic, impactAnimation, impactGraphic, multi, projectile, 1.0, 1.0);
 	}
 	
@@ -111,7 +111,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * @param multi If the spell is multi-target.
 	 * @param projectiles The projectiles.
 	 */
-	public SpellAttackHandler(int maximumHit, AnimationBlock animation, GraphicsBlock graphic, int impactAnimation, GraphicsBlock impactGraphic, boolean multi, Projectile projectile, double accuracyMod, double defenceMod) {
+	public SpellAttackHandler(int maximumHit, AnimationBlock animation, SpotAnimationBlock graphic, int impactAnimation, SpotAnimationBlock impactGraphic, boolean multi, Projectile projectile, double accuracyMod, double defenceMod) {
 		this.maximumHit = maximumHit;
 		this.animation = animation;
 		this.graphic = graphic;
@@ -222,7 +222,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * Gets the graphic value.
 	 * @return The graphic.
 	 */
-	public GraphicsBlock getGraphic() {
+	public SpotAnimationBlock getGraphic() {
 		return graphic;
 	}
 
@@ -230,7 +230,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * Sets the graphic value.
 	 * @param graphic The graphic to set.
 	 */
-	public void setGraphic(GraphicsBlock graphic) {
+	public void setGraphic(SpotAnimationBlock graphic) {
 		this.graphic = graphic;
 	}
 
@@ -270,7 +270,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * Gets the impactGraphic value.
 	 * @return The impactGraphic.
 	 */
-	public GraphicsBlock getImpactGraphic() {
+	public SpotAnimationBlock getImpactGraphic() {
 		return impactGraphic;
 	}
 	
@@ -278,7 +278,7 @@ public class SpellAttackHandler extends MagicAttackHandler {
 	 * Sets the impactGraphic value.
 	 * @param impactGraphic The impactGraphic to set.
 	 */
-	public void setImpactGraphic(GraphicsBlock impactGraphic) {
+	public void setImpactGraphic(SpotAnimationBlock impactGraphic) {
 		this.impactGraphic = impactGraphic;
 	}
 

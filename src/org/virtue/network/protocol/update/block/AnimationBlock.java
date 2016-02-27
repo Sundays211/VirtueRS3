@@ -74,7 +74,7 @@ public class AnimationBlock extends Block {
 			block.putBigSmart(frame);
 		}
 		if (entity instanceof Player) {
-			block.putByte(delay);//Delay
+			block.putA(delay);//Delay
 		} else {
 			block.putA(delay);//Delay
 		}

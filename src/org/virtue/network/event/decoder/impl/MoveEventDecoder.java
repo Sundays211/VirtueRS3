@@ -19,35 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.context.impl.in;
+package org.virtue.network.event.decoder.impl;
 
-import org.virtue.network.event.context.GameEventContext;
+import org.virtue.game.entity.player.Player;
+import org.virtue.network.event.buffer.InboundBuffer;
+import org.virtue.network.event.context.impl.in.MoveEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
+import org.virtue.network.event.decoder.EventDecoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 18, 2014
  */
-public class WalkEventContext implements GameEventContext {
-	
-	private int baseX;
-	private int baseY;
-	private boolean forceRun;
+public class MoveEventDecoder implements EventDecoder<MoveEventContext> {
 
-	public WalkEventContext (int baseX, int baseY, boolean forceRun) {
-		this.baseX = baseX;
-		this.baseY = baseY;
-		this.forceRun = forceRun;
+	/* (non-Javadoc)
+	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.network.event.buffer.InboundBuffer)
+	 */
+	@Override
+	public MoveEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
+		boolean forceRun = buffer.getByte() == 1;
+		int baseX = buffer.getLEShortA();
+		int baseY = buffer.getLEShort();
+		return new MoveEventContext(baseX, baseY, forceRun);
 	}
-	
-	public int getBaseX () {
-		return baseX;
+
+	/* (non-Javadoc)
+	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
+	 */
+	@Override
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { 
+				ClientProtocol.MOVE_MINIMAPCLICK, ClientProtocol.MOVE_GAMECLICK 
+		};
 	}
-	
-	public int getBaseY () {
-		return baseY;
-	}
-	
-	public boolean forceRun () {
-		return forceRun;
-	}
+
 }

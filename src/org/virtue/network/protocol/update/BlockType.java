@@ -25,80 +25,80 @@ public enum BlockType {
 	/**
 	 * Sends player appearance and other data
 	 */
-	APPEARANCE(0x4, 11),
+	APPEARANCE(0x10, 17),
 	
 	/**
 	 * Runs the given animation on an npc or player
 	 */
-	ANIMATION(0x8, 2, 0x4, 2),
+	ANIMATION(0x40, 0, 0x2, 16),
 	
 	/**
 	 * Specifies whether the player is in the same clan as the active player
 	 */
-	CLAN(0x8, 3),
+	CLAN(0x400000, 1),
 	
 	/**
 	 * Turns the entity to face the specified direction
 	 */
-	TURN(0x80, 9, 0x10, 25),
+	SET_FACING(0x1, 3, 0, -1),
 	
 	/**
 	 * Requests the entity follows the specified entity
 	 */
-	FACE_ENTITY(0x40, 15, 0x80, 10),
+	FACE_ENTITY(0x20, 7, 0x80, 15),
 	
 	/**
 	 * Forces the entity to move in the given sequence
 	 */
-	MOVE(0x20, 20, 0x800, 0),
+	MOVE(0x80, 5, 0, -1),
 	
 	/**
 	 * Forces the player to say the given message.
 	 */
-	FORCE_SAY(0x10000, 12),
+	FORCE_SAY(0x20000, 2),
 	
 	/**
 	 * Forces the entity to say the given message. Generally used in quest situations.
 	 */
-	SAY(0x100, 18, 0x8, 15),
+	SAY(0x1000, 9, 0, -1),
 	
-	GLOW(0x100000, 10, 0x10000000, 23),
+	GLOW(0x200000, 18, 0, -1),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the first slot
 	 */
-	SPOT_1(0x1, 7, 0x2, 21),
+	SPOT_1(0x4, 13, 0, -1),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the second slot
 	 */
-	SPOT_2(0x200, 17, 0x200, 13),
+	SPOT_2(0x200, 11, 0, -1),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the third slot
 	 */
-	SPOT_3(0x4000, 1, 0x20000000, 7),
+	SPOT_3(0x100, 14, 0, -1),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the fourth slot
 	 */
-	SPOT_4(0x800000, 6, 0x2000000, 6),
+	SPOT_4(0x10000, 20, 0, -1),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the fifth slot
 	 */
-	SPOT_5(0x40000, 5, 0x1000000, 9),
+	SPOT_5(0x800000, 6, 0, -1),
 	
 	/**
 	 * Displays the specified icons above the entity
 	 */
-	HEADICONS(0x2000, 0, 0x20000, 1),
+	HEADICONS(0x2000, 15, 0, -1),
 	
 	/**
 	 * Displays the specified hitmarks above the entity
 	 */
-	HITMARKS(0x2, 4, 0x1, 22),
-	NPCTYPE(0, -1, 0x20, 16);
+	HITMARKS(0x8, 19, 0x40, 13),
+	NPCTYPE(0, -1, 0, -1);
 	
 	private int playerMask;
 	private int playerPos;

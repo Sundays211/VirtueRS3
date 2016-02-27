@@ -38,17 +38,14 @@ public class ButtonClickEventDecoder implements EventDecoder<ButtonClickEventCon
 	 */
 	@Override
 	public ButtonClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int slot = buffer.getLEShortA() & 0xffff;
-		int hash = buffer.getInt();
-		int itemID = buffer.getShortA();
+		int hash = buffer.getLEInt();
+		int slot = buffer.getShortA() & 0xffff;
+		int objectId = buffer.getShortA() & 0xffff;
 		if (slot == 65535) {
 			slot = -1;
 		}
-		if(itemID == 65535) {
-			itemID = -1;
-		}
 
-		return new ButtonClickEventContext(hash, slot, itemID, opcode);
+		return new ButtonClickEventContext(hash, slot, objectId == 65535 ? -1 : objectId, opcode);
 	}
 
 	/* (non-Javadoc)

@@ -9,7 +9,7 @@ import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Handles ability attack events.
@@ -56,7 +56,7 @@ public abstract class Ability extends AttackEvent {
 	/**
 	 * The graphics block.
 	 */
-	protected GraphicsBlock graphic;
+	protected SpotAnimationBlock graphic;
 	
 	/**
 	 * Constructs a new {@code Ability} {@code Object}.
@@ -141,7 +141,7 @@ public abstract class Ability extends AttackEvent {
 	 * Gets the graphic value.
 	 * @return The graphic.
 	 */
-	public GraphicsBlock getGraphic() {
+	public SpotAnimationBlock getGraphic() {
 		return graphic;
 	}
 
@@ -149,7 +149,7 @@ public abstract class Ability extends AttackEvent {
 	 * Sets the graphic value.
 	 * @param graphic The graphic to set.
 	 */
-	public void setGraphic(GraphicsBlock graphic) {
+	public void setGraphic(SpotAnimationBlock graphic) {
 		this.graphic = graphic;
 	}
 

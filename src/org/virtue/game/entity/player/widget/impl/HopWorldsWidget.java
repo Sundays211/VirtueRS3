@@ -49,7 +49,7 @@ public class HopWorldsWidget extends Widget {
 			player.getVars().setVarValueInt(4735, 104005679);
 			player.getVars().setVarValueInt(4734, 7230);
 			player.getVars().setVarValueInt(4736, 0);
-			player.getDispatcher().sendWidgetSettings(1477, 801, 0, 3, 2);
+			player.getDispatcher().sendWidgetEvents(1477, 801, 0, 3, 2);
 			return true;
 		case 84:
 			player.getVars().setVarValueInt(20, -1761607680);
@@ -63,8 +63,8 @@ public class HopWorldsWidget extends Widget {
 			player.getDispatcher().sendVarc(3678, -1);
 			player.getDispatcher().sendCS2Script(8178, new Object[] { });
 			player.getWidgets().openWidget(1477, 426, 1587, false);
-			player.getDispatcher().sendWidgetSettings(1587, 26, 0, 200, 6);
-			player.getDispatcher().sendWidgetSettings(1587, 47, 0, 1, 2);
+			player.getDispatcher().sendWidgetEvents(1587, 26, 0, 200, 6);
+			player.getDispatcher().sendWidgetEvents(1587, 47, 0, 1, 2);
 			player.getDispatcher().sendHideWidget(1587, 29, true);
 			return true;
 		}

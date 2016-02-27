@@ -30,12 +30,12 @@ import org.virtue.network.event.context.GameEventContext;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class TargetEventContext implements GameEventContext {
+public class MapFlagEventContext implements GameEventContext {
 	
 	private int localX;
 	private int localY;
 	
-	public TargetEventContext (int localX, int localY) {
+	public MapFlagEventContext (int localX, int localY) {
 		this.localX = localX;
 		this.localY = localY;
 	}

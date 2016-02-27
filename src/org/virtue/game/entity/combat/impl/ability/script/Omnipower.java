@@ -9,14 +9,14 @@ import org.virtue.game.entity.combat.impl.ability.AbilityType;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 public class Omnipower extends Ability {
 
 	public Omnipower() {
 		super(FollowingType.MAGIC, AbilityType.BASIC, CombatStyle.MAGIC, 14736, 198, 3, 50);
 		super.animation = new AnimationBlock(18364);
-		super.graphic = new GraphicsBlock(1, 3564);
+		super.graphic = new SpotAnimationBlock(1, 3564);
 	}
 
 	@Override

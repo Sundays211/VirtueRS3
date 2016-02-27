@@ -23,7 +23,7 @@ package org.virtue.network.event.encoder.impl;
 
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.context.impl.out.TargetEventContext;
+import org.virtue.network.event.context.impl.out.MapFlagEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.ServerProtocol;
 
@@ -34,22 +34,22 @@ import org.virtue.network.event.encoder.ServerProtocol;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class TargetEventEncoder implements EventEncoder<TargetEventContext> {
+public class MapFlagEventEncoder implements EventEncoder<MapFlagEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public OutboundBuffer encode(Player player, TargetEventContext context) {
+	public OutboundBuffer encode(Player player, MapFlagEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(ServerProtocol.SET_TARGET, player);
+		buffer.putPacket(ServerProtocol.SET_MAP_FLAG, player);
 		//System.out.println("Sending map flag: x="+context.getLocalX()+", y="+context.getLocalY());
 		if (context.isReset()) {
-			buffer.putA(255);
 			buffer.putByte(255);
+			buffer.putA(255);
 		} else {
-			buffer.putA(context.getLocalX());
-			buffer.putByte(context.getLocalY());
+			buffer.putByte(context.getLocalX());
+			buffer.putA(context.getLocalY());
 		}
 		return buffer;
 	}

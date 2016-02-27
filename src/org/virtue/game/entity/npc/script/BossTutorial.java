@@ -13,7 +13,7 @@ import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.world.region.Tile;
 import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * How To make a Boss.
@@ -64,8 +64,8 @@ public final class BossTutorial extends AbstractNPC {
 			new SwitchAttack(CombatStyle.RANGE, new RangeAttackHandler(750, 1000) {
 				@Override
 				public AttackInfo getAttackInfo(Entity entity, Entity lock) {
-					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(16202), new GraphicsBlock(1, 2994), 
-							impact(entity, lock, CombatStyle.RANGE, new GraphicsBlock(2, 3000), null));
+					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(16202), new SpotAnimationBlock(1, 2994), 
+							impact(entity, lock, CombatStyle.RANGE, new SpotAnimationBlock(2, 3000), null));
 					info.getImpacts()[0].setDelay(info.getImpacts()[0].getDelay() + 2);
 					return info;
 				}
@@ -73,7 +73,7 @@ public final class BossTutorial extends AbstractNPC {
 			new SwitchAttack(CombatStyle.MAGIC, new MagicAttackHandler(750, 1000) {
 				@Override
 				public AttackInfo getAttackInfo(Entity entity, Entity lock) {
-					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(16195), new GraphicsBlock(1, 2995), 
+					AttackInfo info = AttackInfo.create(entity, new AnimationBlock(16195), new SpotAnimationBlock(1, 2995), 
 							impact(entity, lock, CombatStyle.MAGIC, null, new Projectile(2741, 35, 72, 16, 34, 16)));
 					info.getImpacts()[0].setDelay(info.getImpacts()[0].getDelay() + 2);
 					return info;

@@ -43,113 +43,113 @@ public enum ClientProtocol {
 	/**
 	 * Sends the keys which are currently pressed on the client keyboard
 	 */
-	EVENT_KEYBOARD(-1, -2),
+	EVENT_KEYBOARD(109, -2),
 
 	/**
 	 * Transmits whenever the player clicks on an element in the client
 	 */
-	EVENT_MOUSE_CLICK(-1, 6),
+	EVENT_MOUSE_CLICK(101, 6),
 
 	/**
-	 * Another version of the mouse click packet. Not sure why there's two of these...
+	 * Transmits whenever the player clicks on an element in the client
 	 */
-	EVENT_MOUSE_CLICK_2(-1, 7),
+	EVENT_NATIVE_MOUSE_CLICK(56, 7),
 
 	/**
 	 * Sends the recent movements of the client mouse. Mostly useless, besides preventing auto-logout or tracking bots.
 	 */
-	EVENT_MOUSE_MOVE(-1, -1),
+	EVENT_MOUSE_MOVE(54, -1),
 
 	/**
-	 * Another version of the mouse movement packet. Not sure why there's two of these...
+	 * Sends the recent movements of the client mouse.
 	 */
-	EVENT_MOUSE_MOVE_2(-1, -1),
+	EVENT_NATIVE_MOUSE_MOVE(56, -1),
 
 	/**
 	 * Transmits whenever the client applet window gains or looses focus (eg switching tabs/windows on the client machine)
 	 */
-	EVENT_APPLET_FOCUS(-1, 1),
+	EVENT_APPLET_FOCUS(79, 1),
 
 	/**
 	 * Transmits whenever the client's camera is rotated
 	 */
-	EVENT_CAMERA_POSITION(-1, 4),
+	EVENT_CAMERA_POSITION(28, 4),
 
 	/**
 	 * Includes the current display mode, window size, and screen size method (fixed, resizable, full screen).
 	 * Sent on login and whenever any of the settings change.
 	 */
-	WINDOW_STATUS(-1, 6),
+	WINDOW_STATUS(9, 6),
 
 	/**
 	 * Transmits once every 30-ish seconds. Includes the frame-per-second rate, ping rate, and heap size of the client.
 	 */
-	CLIENT_STATISTICS(-1, 4),
+	PING_STATISTICS(90, 4),
 
 	/**
 	 * Transmits whenever a variable or interface is updated. Increments on every update.
 	 */
-	TRANSMITVAR_VERIFYID(-1, 4),
+	TRANSMITVAR_VERIFYID(97, 4),
 
 	/**
 	 * Clicked on the minimap in a request to "Walk" to the specified position
 	 */
-	MOVE_MINIMAP(-1, 18),
+	MOVE_MINIMAPCLICK(13, 18),
 
 	/**
 	 * Clicked on the game scene in a request to "Walk" to the specified position
 	 */
-	MOVE_MAP(-1, 5),
+	MOVE_GAMECLICK(57, 5),
 
 	/**
 	 * The first context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON1(-1, 8),
+	IF_BUTTON1(45, 8),
 
 	/**
 	 * The second context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON2(-1, 8),
+	IF_BUTTON2(81, 8),
 
 	/**
 	 * The third context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON3(-1, 8),
+	IF_BUTTON3(16, 8),
 
 	/**
 	 * The fourth context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON4(-1, 8),
+	IF_BUTTON4(11, 8),
 
 	/**
 	 * The fifth context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON5(-1, 8),
+	IF_BUTTON5(41, 8),
 
 	/**
 	 * The sixth context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON6(-1, 8),
+	IF_BUTTON6(19, 8),
 
 	/**
 	 * The seventh context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON7(-1, 8),
+	IF_BUTTON7(96, 8),
 
 	/**
 	 * The eighth context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON8(-1, 8),
+	IF_BUTTON8(1, 8),
 
 	/**
 	 * The ninth context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON9(-1, 8),
+	IF_BUTTON9(112, 8),
 
 	/**
 	 * The tenth context-menu option selected on an interface action button component
 	 */
-	IF_BUTTON10(-1, 8),
+	IF_BUTTON10(10, 8),
 
 	/**
 	 * Called when an item on an interface button is targeted on another interface component

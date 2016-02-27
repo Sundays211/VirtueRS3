@@ -43,8 +43,8 @@ public class WornEquipmentWidget extends Widget {
 	@Override
 	public void open (int parentId, int parentSlot, int widgetId, boolean clickThrough, Player player) {
 		super.open(parentId, parentSlot, widgetId, clickThrough, player);
-		player.getDispatcher().sendWidgetSettings(1464, 15, 0, 18, 15302654);
-		player.getDispatcher().sendWidgetSettings(1464, 13, 2, 12, 2);
+		player.getDispatcher().sendWidgetEvents(1464, 15, 0, 18, 15302654);
+		player.getDispatcher().sendWidgetEvents(1464, 13, 2, 12, 2);
 		player.getInvs().loadContainer(ContainerState.EQUIPMENT);
 		player.getInvs().sendContainer(ContainerState.EQUIPMENT);
 	}
@@ -76,8 +76,8 @@ public class WornEquipmentWidget extends Widget {
 				player.getWidgets().openWidget(1448, 3, 1474, true);
 				player.getDispatcher().sendHideWidget(1448, 3, false);
 				player.getDispatcher().sendHideWidget(1448, 4, true);
-				player.getDispatcher().sendWidgetSettings(1474, 15, -1, -1, 2097152);
-				player.getDispatcher().sendWidgetSettings(1474, 15, 0, 27, 15302030);
+				player.getDispatcher().sendWidgetEvents(1474, 15, -1, -1, 2097152);
+				player.getDispatcher().sendWidgetEvents(1474, 15, 0, 27, 15302030);
 				player.getDispatcher().sendHideWidget(1448, 5, false);
 				player.getWidgets().openWidget(1448, 5, 1463, true);
 				player.getDispatcher().sendHideWidget(1448, 5, false);
@@ -86,8 +86,8 @@ public class WornEquipmentWidget extends Widget {
 				player.getWidgets().openWidget(1448, 7, 1462, true);
 				player.getDispatcher().sendHideWidget(1448, 7, false);
 				player.getDispatcher().sendHideWidget(1448, 8, true);
-				player.getDispatcher().sendWidgetSettings(1462, 14, 0, 18, 15302654);
-				player.getDispatcher().sendWidgetSettings(1462, 20, 2, 12, 2);
+				player.getDispatcher().sendWidgetEvents(1462, 14, 0, 18, 15302654);
+				player.getDispatcher().sendWidgetEvents(1462, 20, 2, 12, 2);
 				player.getDispatcher().sendHideWidget(1448, 9, true);
 				player.getDispatcher().sendHideWidget(1448, 10, true);
 				player.getDispatcher().sendHideWidget(1448, 11, true);
@@ -96,10 +96,10 @@ public class WornEquipmentWidget extends Widget {
 				return true;
 			case 7:
 				player.getWidgets().openCentralWidget(17, false);
-				player.getDispatcher().sendWidgetSettings(17, 18, 1024, 14, 1024);
-				player.getDispatcher().sendWidgetSettings(17, 17, 1024, 47, 1024);
-				player.getDispatcher().sendWidgetSettings(17, 20, 1024, 47, 1024);
-				player.getDispatcher().sendWidgetSettings(17, 22, 1024, 47, 1024);
+				player.getDispatcher().sendWidgetEvents(17, 18, 1024, 14, 1024);
+				player.getDispatcher().sendWidgetEvents(17, 17, 1024, 47, 1024);
+				player.getDispatcher().sendWidgetEvents(17, 20, 1024, 47, 1024);
+				player.getDispatcher().sendWidgetEvents(17, 22, 1024, 47, 1024);
 				return true;
 			case 2:
 				player.getWidgets().openCentralWidget(1178, false);

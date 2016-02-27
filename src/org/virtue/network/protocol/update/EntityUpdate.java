@@ -132,8 +132,7 @@ public class EntityUpdate extends Tick {
 		if (cycle == 0) {
 			entity.getCombatSchedule().update();//.process();
 			entity.process();
-		}
-		else if (cycle == 1) {
+		} else if (cycle == 1) {
 			entity.getImpactHandler().updateImpacts();
 		}
 	}
@@ -146,7 +145,7 @@ public class EntityUpdate extends Tick {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			if (GameState.WORLD_READY.equals(player.getGameState())) {
-				//player.getDispatcher().sendPlayerUpdate();
+				player.getDispatcher().sendPlayerUpdate();
 				//player.getDispatcher().sendNPCUpdate();
 			}
 		}

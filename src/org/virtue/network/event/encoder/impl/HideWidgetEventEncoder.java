@@ -41,7 +41,7 @@ public class HideWidgetEventEncoder implements EventEncoder<HideWidgetEventConte
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(ServerProtocol.IF_SETHIDE, player);
 		buffer.putLEInt(context.getWidget() << 16 | context.getComponent());
-		buffer.putS(context.isHidden() ? 1 : 0);
+		buffer.putByte(context.isHidden() ? 1 : 0);
 		return buffer;
 	}
 

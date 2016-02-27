@@ -21,8 +21,8 @@
  */
 var Render = Java.type('org.virtue.network.protocol.update.ref.Appearance.Render');
 
- /* The GraphicsBlock for adding ability graphics */
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+ /* The SpotAnimationBlock for adding ability graphics */
+var SpotAnimationBlock = Java.type('org.virtue.network.protocol.update.block.SpotAnimationBlock');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -233,10 +233,10 @@ var Emotes = {
 				return true
 			case 50://TODO Add tick processing
 				api.runAnimation(player, 15104);
-				player.queueUpdateBlock(new GraphicsBlock(1, 1287, 20));
+				player.queueUpdateBlock(new SpotAnimationBlock(1, 1287, 20));
 				api.runAnimation(player, 15106);
 				api.runAnimation(player, 15108);
-				player.queueUpdateBlock(new GraphicsBlock(1, 1287, 40));
+				player.queueUpdateBlock(new SpotAnimationBlock(1, 1287, 40));
 				api.runAnimation(player, 15105);
 				return true
 			case 51://Cat fight

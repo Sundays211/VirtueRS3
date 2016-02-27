@@ -40,16 +40,10 @@ public class WidgetSettingsEventEncoder implements EventEncoder<WidgetSettingsEv
 	public OutboundBuffer encode(Player player, WidgetSettingsEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putPacket(ServerProtocol.IF_SETEVENTS, player);
-		buffer.putLEShortA(context.getFrom());
-		buffer.putIntAlt2(context.getRoot() << 16 | context.getComponent());
+		buffer.putLEShort(context.getFrom());
 		buffer.putShortA(context.getTo());
-		buffer.putLEInt(context.getSettings());
-
-//
-//		buffer.putInt(context.getRoot() << 16 | context.getComponent());
-//		buffer.putIntA(context.getSettings());
-//		buffer.putShortA(context.getTo());
-//		buffer.putLEShortA(context.getFrom());
+		buffer.putInt(context.getSettings());
+		buffer.putIntAlt3(context.getRoot() << 16 | context.getComponent());
 		return buffer;
 	}
 

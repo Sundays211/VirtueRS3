@@ -11,7 +11,7 @@ import org.virtue.game.entity.combat.impl.range.RangeAttackEvent;
 import org.virtue.game.entity.combat.impl.range.RangeAttackHandler;
 import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Handles archer combat (just an example).
@@ -28,7 +28,7 @@ public final class ArcherCombat implements CombatHandler {
 	/**
 	 * The attack graphic.
 	 */
-	private static final GraphicsBlock GRAPHIC = new GraphicsBlock(1, 9, 96);
+	private static final SpotAnimationBlock GRAPHIC = new SpotAnimationBlock(1, 9, 96);
 	
 	/**
 	 * The projectile.

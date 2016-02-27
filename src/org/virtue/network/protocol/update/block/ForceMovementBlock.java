@@ -64,15 +64,15 @@ public class ForceMovementBlock extends Block {
 	@Override
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
-			block.putC(tile1.getX() - entity.getCurrentTile().getX());
+			block.putA(tile1.getX() - entity.getCurrentTile().getX());
 			block.putA(tile1.getY() - entity.getCurrentTile().getY());
 			block.putC(tile2.getX() - entity.getCurrentTile().getX());
-			block.putByte(tile2.getY() - entity.getCurrentTile().getY());
-			block.putC(tile1.getPlane() - entity.getCurrentTile().getPlane());
+			block.putA(tile2.getY() - entity.getCurrentTile().getY());
+			block.putA(tile1.getPlane() - entity.getCurrentTile().getPlane());
 			block.putA(tile2.getPlane() - entity.getCurrentTile().getPlane());
 			block.putShortA(delay1 * 30);
-			block.putLEShort(delay2 * 30);
-			block.putShort(this.direction.getID());
+			block.putLEShortA(delay2 * 30);
+			block.putLEShortA(this.direction.getID());
 		} else {
 			block.putA(tile1.getX() - entity.getCurrentTile().getX());
 			block.putS(tile1.getY() - entity.getCurrentTile().getY());

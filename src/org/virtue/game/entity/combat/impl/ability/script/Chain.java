@@ -9,14 +9,14 @@ import org.virtue.game.entity.combat.impl.ability.AbilityType;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 public class Chain extends Ability {
 
 	public Chain() {
 		super(FollowingType.MAGIC, AbilityType.BASIC, CombatStyle.MAGIC, 14670, 22, 5, 11);
 		super.animation = new AnimationBlock(18428);
-		super.graphic = new GraphicsBlock(1, 369);
+		super.graphic = new SpotAnimationBlock(1, 369);
 	}
 
 	@Override

@@ -80,7 +80,7 @@ import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
 import org.virtue.network.protocol.update.block.ForceTalkBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 import org.virtue.network.protocol.update.block.TalkBlock;
 import org.virtue.utility.TimeUtility;
 import org.virtue.utility.text.Base37Utility;
@@ -416,7 +416,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setWidgetEvents(Player player, int widgetID, int componentID, int from, int to, int events) {
-		player.getDispatcher().sendWidgetSettings(widgetID, componentID, from, to, events);
+		player.getDispatcher().sendWidgetEvents(widgetID, componentID, from, to, events);
 	}
 
 	/* (non-Javadoc)
@@ -1532,7 +1532,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setSpotAnim(Entity entity, int slot, int spotType) {
-		entity.queueUpdateBlock(new GraphicsBlock(slot, spotType));
+		entity.queueUpdateBlock(new SpotAnimationBlock(slot, spotType));
 	}
 
 	/* (non-Javadoc)
@@ -1540,12 +1540,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setSpotAnim(Entity entity, int slot, int spotType, int height, int speed, int rotation) {
-		entity.queueUpdateBlock(new GraphicsBlock(slot, spotType, height, speed, rotation));
+		entity.queueUpdateBlock(new SpotAnimationBlock(slot, spotType, height, speed, rotation));
 	}
 
 	@Override
 	public void clearSpotAnim(Entity entity, int slot) {
-		entity.queueUpdateBlock(new GraphicsBlock(slot, -1));
+		entity.queueUpdateBlock(new SpotAnimationBlock(slot, -1));
 	}
 
 	/* (non-Javadoc)

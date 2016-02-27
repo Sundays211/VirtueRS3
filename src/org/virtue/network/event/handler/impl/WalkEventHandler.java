@@ -23,17 +23,17 @@ package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.Tile;
-import org.virtue.network.event.context.impl.in.WalkEventContext;
+import org.virtue.network.event.context.impl.in.MoveEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 18, 2014
  */
-public class WalkEventHandler implements GameEventHandler<WalkEventContext> {
+public class WalkEventHandler implements GameEventHandler<MoveEventContext> {
 
 	@Override
-	public void handle(Player player, WalkEventContext context) {
+	public void handle(Player player, MoveEventContext context) {
 		if (player.getImpactHandler().isDead())
 			return;//No need for a dead player to move.
 		

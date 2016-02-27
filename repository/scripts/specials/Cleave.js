@@ -5,7 +5,7 @@ var SpecialAttackHandler = Java.type('org.virtue.game.entity.combat.impl.Special
 var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 var AttackInfo = Java.type('org.virtue.game.entity.combat.impl.ImpactInfo');
 var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
-var GraphicsBlock = Java.type('org.virtue.network.protocol.update.block.GraphicsBlock');
+var SpotAnimationBlock = Java.type('org.virtue.network.protocol.update.block.SpotAnimationBlock');
 
 var SpecialAttack = Java.extend(SpecialAttackHandler);
 var dragonLongsword = new SpecialAttack(CombatStyle.MELEE, [1305]) {
@@ -16,7 +16,7 @@ var dragonLongsword = new SpecialAttack(CombatStyle.MELEE, [1305]) {
 
 var listen = function(scriptManager) {
 	dragonLongsword.animation = new AnimationBlock(12033);
-	dragonLongsword.graphics = new GraphicsBlock(1, 2117);
+	dragonLongsword.graphics = new SpotAnimationBlock(1, 2117);
 	dragonLongsword.damageModifier = 1.25;
 	SpecialAttackHandler.register(dragonLongsword);
 };

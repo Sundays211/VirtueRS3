@@ -45,6 +45,7 @@ import org.virtue.game.world.region.movement.path.impl.SmartPathfinder;
 import org.virtue.game.world.region.movement.routefinder.TraversalMap;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
+import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -413,8 +414,8 @@ public class Movement {
 	 * Gets the movement type of the player
 	 * @return The movement type
 	 */
-	public byte getMovementType () {
-		return running ? (byte) 2 : (byte) 1;
+	public MoveSpeed getMoveSpeed () {
+		return running ? MoveSpeed.RUN : MoveSpeed.WALK;
 	}
 	
 	/**

@@ -57,11 +57,11 @@ public class GameSession extends Session {
 		registerFilter(ClientProtocol.EVENT_APPLET_FOCUS);
 		registerFilter(ClientProtocol.EVENT_CAMERA_POSITION);
 		registerFilter(ClientProtocol.EVENT_MOUSE_CLICK);
-		registerFilter(ClientProtocol.EVENT_MOUSE_CLICK_2);
-		registerFilter(ClientProtocol.CLIENT_STATISTICS);
+		registerFilter(ClientProtocol.EVENT_NATIVE_MOUSE_CLICK);
+		registerFilter(ClientProtocol.PING_STATISTICS);
 		registerFilter(ClientProtocol.EVENT_KEYBOARD);
 		registerFilter(ClientProtocol.EVENT_MOUSE_MOVE);
-		registerFilter(ClientProtocol.EVENT_MOUSE_MOVE_2);
+		registerFilter(ClientProtocol.EVENT_NATIVE_MOUSE_MOVE);
 		registerFilter(ClientProtocol.TRANSMITVAR_VERIFYID);//This one could be removed and handled at some stage
 	};
 	
@@ -101,7 +101,7 @@ public class GameSession extends Session {
 				return;
 			}
 			if (request.getOpcode() != ClientProtocol.NO_TIMEOUT.getOpcode()
-					&& request.getOpcode() != ClientProtocol.CLIENT_STATISTICS.getOpcode()) {
+					&& request.getOpcode() != ClientProtocol.PING_STATISTICS.getOpcode()) {
 				player.resetInactivityTime();
 			}
 			

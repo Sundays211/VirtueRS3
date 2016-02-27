@@ -4,7 +4,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Handles transforming into an NPC on death.
@@ -31,7 +31,7 @@ public final class TransformDeathEvent extends DeathEvent {
 	/**
 	 * The transformation graphic.
 	 */
-	private GraphicsBlock transformGraphic;
+	private SpotAnimationBlock transformGraphic;
 	
 	/**
 	 * Constructs a new {@code TransformDeathEvent} {@code Object}.
@@ -47,7 +47,7 @@ public final class TransformDeathEvent extends DeathEvent {
 	 * @param ticks The amount of ticks.
 	 * @param npcId The NPC id to transform into.
 	 */
-	public TransformDeathEvent(int ticks, int npcId, AnimationBlock animation, GraphicsBlock graphic) {
+	public TransformDeathEvent(int ticks, int npcId, AnimationBlock animation, SpotAnimationBlock graphic) {
 		this(ticks, ticks - 1, npcId, animation, graphic, null, null);
 	}
 	
@@ -56,7 +56,7 @@ public final class TransformDeathEvent extends DeathEvent {
 	 * @param ticks The amount of ticks.
 	 * @param npcId The NPC id to transform into.
 	 */
-	public TransformDeathEvent(int ticks, int npcId, AnimationBlock animation, GraphicsBlock graphic, AnimationBlock transformAnim, GraphicsBlock transformGraphic) {
+	public TransformDeathEvent(int ticks, int npcId, AnimationBlock animation, SpotAnimationBlock graphic, AnimationBlock transformAnim, SpotAnimationBlock transformGraphic) {
 		this(ticks, ticks - 1, npcId, animation, graphic, transformAnim, transformGraphic);
 	}
 	
@@ -65,7 +65,7 @@ public final class TransformDeathEvent extends DeathEvent {
 	 * @param ticks The amount of ticks.
 	 * @param npcId The NPC id to transform into.
 	 */
-	public TransformDeathEvent(int ticks, int transformTick, int npcId, AnimationBlock animation, GraphicsBlock graphic, AnimationBlock transformAnim, GraphicsBlock transformGraphic) {
+	public TransformDeathEvent(int ticks, int transformTick, int npcId, AnimationBlock animation, SpotAnimationBlock graphic, AnimationBlock transformAnim, SpotAnimationBlock transformGraphic) {
 		super(ticks);
 		this.transformTick = transformTick;
 		super.deathAnimation = animation;

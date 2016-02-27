@@ -26,9 +26,9 @@ public final class MeleeFollower extends FollowingType {
 		if (difference == 1) {
 			return Interaction.STILL;
 		}
-		int maximumDistance = entity.getMovement().getMovementType();
+		int maximumDistance = entity.getMovement().getMoveSpeed().getId();
 		if (entity instanceof Player && lock.getMovement().hasSteps()) {
-			maximumDistance += lock.getMovement().getMovementType();
+			maximumDistance += lock.getMovement().getMoveSpeed().getId();
 		}
 		if (difference == 0 || difference > maximumDistance) {
 			return Interaction.NONE;

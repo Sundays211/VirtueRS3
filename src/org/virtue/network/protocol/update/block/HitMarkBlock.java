@@ -46,7 +46,7 @@ public class HitMarkBlock extends Block {
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		int maximumLifepoints = entity.getImpactHandler().getMaximumLifepoints();
 		int size = entity.getImpactHandler().getQueuedHits().size();
-		block.putS(size);
+		block.putC(size);
 		if (size > 0) {
 			for (Hit hit : entity.getImpactHandler().getQueuedHits()) {
 				if (hit == null) {
@@ -65,57 +65,41 @@ public class HitMarkBlock extends Block {
 					if (entity instanceof Player) {
 						block.putByte(hit.getDamage());
 					} else {
-						block.putC(hit.getDamage());
+						block.putS(hit.getDamage());
 					}
 				}
 				block.putSmart(hit.getDelay());
 			}
 		}
 		int modifier = 255;
-		if (entity instanceof Player) {
-			int barSize = entity.getImpactHandler().getQueuedBars().size();
-			block.putC(barSize);
-			if (barSize > 0) {
-				for (Bar bar : entity.getImpactHandler().getQueuedBars()) {
-					if (bar == null) {
-						continue; //FIXME: wont this break stuff? o_O
-					}
-					block.putSmart(bar.getType());
-					int perc = bar.getNewLifepoints() * modifier / maximumLifepoints;
-					boolean display = bar.shouldDisplay(entity);
-					block.putSmart(display ? bar.getSpeed() : 32767); //Speed
-					if (display) {
-						block.putSmart(bar.getDelay() * 30); //Delay
-						if (bar.getSpeed() == 0) {
-							block.putByte(perc);
-						} else {
-							block.putByte((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
-							block.putC(perc);
-						}
-					}
+		int barSize = entity.getImpactHandler().getQueuedBars().size();
+		block.putByte(barSize);
+		if (barSize > 0) {
+			for (Bar bar : entity.getImpactHandler().getQueuedBars()) {
+				if (bar == null) {
+					continue; //FIXME: wont this break stuff? o_O
 				}
-			}
-		} else {//NPC
-			int barSize = entity.getImpactHandler().getQueuedBars().size();
-			block.putS(barSize);
-			if (barSize > 0) {
-				for (Bar bar : entity.getImpactHandler().getQueuedBars()) {
-					if (bar == null) {
-						continue;
-					}
-					block.putSmart(bar.getType());
-					int perc = bar.getNewLifepoints() * modifier / maximumLifepoints;
-					boolean display = bar.shouldDisplay(entity);
-					block.putSmart(display ? bar.getSpeed() : 32767); //Speed
-					if (display) {
-						block.putSmart(bar.getDelay() * 30); //Delay
+				block.putSmart(bar.getType());
+				int perc = bar.getNewLifepoints() * modifier / maximumLifepoints;
+				boolean display = bar.shouldDisplay(entity);
+				block.putSmart(display ? bar.getSpeed() : 32767); //Speed
+				if (display) {
+					block.putSmart(bar.getDelay() * 30); //Delay
+					if (entity instanceof Player) {
 						if (bar.getSpeed() == 0) {
-							block.putByte(perc);
+							block.putC(perc);
 						} else {
-							block.putByte((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
+							block.putC((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
+							block.putByte(perc);
+						}
+					} else {
+						if (bar.getSpeed() == 0) {
+							block.putC(perc);
+						} else {
+							block.putC((bar.getCurrentLifepoints() * modifier / maximumLifepoints));
 							block.putC(perc);
 						}
-					}
+					}					
 				}
 			}
 		}

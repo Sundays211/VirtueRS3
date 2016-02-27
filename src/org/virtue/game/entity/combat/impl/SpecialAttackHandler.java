@@ -11,7 +11,7 @@ import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * Handles special attacks.
@@ -38,12 +38,12 @@ public class SpecialAttackHandler extends AttackHandler {
 	/**
 	 * The graphics.
 	 */
-	public GraphicsBlock graphics;
+	public SpotAnimationBlock graphics;
 	
 	/**
 	 * The impact graphics.
 	 */
-	public GraphicsBlock impactGraphics;
+	public SpotAnimationBlock impactGraphics;
 	
 	/**
 	 * The projectile.
@@ -82,7 +82,7 @@ public class SpecialAttackHandler extends AttackHandler {
 	 * @param animation The animation.
 	 * @param graphics The graphics.
 	 */
-	public SpecialAttackHandler(CombatStyle style, AnimationBlock animation, GraphicsBlock graphics, int...itemIds) {
+	public SpecialAttackHandler(CombatStyle style, AnimationBlock animation, SpotAnimationBlock graphics, int...itemIds) {
 		this.style = style;
 		this.animation = animation;
 		this.graphics = graphics;
@@ -94,7 +94,7 @@ public class SpecialAttackHandler extends AttackHandler {
 	 * @param animation The animation.
 	 * @param graphics The graphics.
 	 */
-	public SpecialAttackHandler(CombatStyle style, AnimationBlock animation, GraphicsBlock graphics, GraphicsBlock impactGraphics, Projectile projectile, int...itemIds) {
+	public SpecialAttackHandler(CombatStyle style, AnimationBlock animation, SpotAnimationBlock graphics, SpotAnimationBlock impactGraphics, Projectile projectile, int...itemIds) {
 		this.style = style;
 		this.animation = animation;
 		this.graphics = graphics;
@@ -219,7 +219,7 @@ public class SpecialAttackHandler extends AttackHandler {
 	 * Gets the graphics value.
 	 * @return The graphics.
 	 */
-	public GraphicsBlock getGraphics() {
+	public SpotAnimationBlock getGraphics() {
 		return graphics;
 	}
 

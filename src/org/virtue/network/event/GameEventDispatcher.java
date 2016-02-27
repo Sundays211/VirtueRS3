@@ -60,7 +60,7 @@ import org.virtue.network.event.context.impl.out.RunEnergyEventContext;
 import org.virtue.network.event.context.impl.out.RunWeightEventContext;
 import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
 import org.virtue.network.event.context.impl.out.SystemUpdateEventContext;
-import org.virtue.network.event.context.impl.out.TargetEventContext;
+import org.virtue.network.event.context.impl.out.MapFlagEventContext;
 import org.virtue.network.event.context.impl.out.VarcEventContext;
 import org.virtue.network.event.context.impl.out.VarcStringEventContext;
 import org.virtue.network.event.context.impl.out.WidgetExternalSpriteEventContext;
@@ -93,7 +93,7 @@ import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
 import org.virtue.network.event.encoder.impl.SceneGraphEventEncoder;
 import org.virtue.network.event.encoder.impl.SkillEventEncoder;
 import org.virtue.network.event.encoder.impl.SystemUpdateEventEncoder;
-import org.virtue.network.event.encoder.impl.TargetEventEncoder;
+import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.UnlockFriendsEventEncoder;
 import org.virtue.network.event.encoder.impl.VarcEventEncoder;
 import org.virtue.network.event.encoder.impl.VarcStringEventEncoder;
@@ -147,7 +147,7 @@ public class GameEventDispatcher {
 		case LOGIN_WORLD:
 		case LOGIN_CONTINUE:
 			player.setGameState(GameState.WORLD);
-			sendSceneGraph(5, player.getCurrentTile(), MapSize.DEFAULT, true, false);
+			sendSceneGraph(5, player.getCurrentTile(), MapSize.DEFAULT, true, true);
 			if (Virtue.getInstance().hasUpdate()) {
 				sendSystemUpdate(Virtue.getInstance().getUpdateTime() - 2);
 				// Subtract a couple of ticks to account for delay
@@ -178,8 +178,8 @@ public class GameEventDispatcher {
 				LoginDispatcher.onLegacyLogin(player);
 				break;
 			}
-			player.getInteractions().initialise();
-			player.getExchangeOffers().init();
+			/*player.getInteractions().initialise();
+			player.getExchangeOffers().init();*/
 			player.getCombatSchedule().increaseAdrenaline(0);
 			player.getCombatSchedule()
 					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
@@ -188,7 +188,7 @@ public class GameEventDispatcher {
 			player.getImpactHandler().restoreLifepoints();
 			player.getMoneyPouch().refresh(false);
 			player.getVars().processLogin(player.getLastLogin());
-			sendMusic(36067, 100);
+			//sendMusic(36067, 100);
 			break;
 		}
 		sendOnlineStatus(player.getChat().getFriendsList().getOnlineStatus());
@@ -229,10 +229,6 @@ public class GameEventDispatcher {
 	public void sendVarcString(int key, String value) {
 		sendEvent(VarcStringEventEncoder.class, new VarcStringEventContext(key,
 				value));
-	}
-
-	public void sendRootWidget(int widget, int[] keys) {
-		sendEvent(RootWidgetEventEncoder.class, new RootWidgetEventContext(widget,keys));
 	}
 
 	public void sendRootWidget(int widget) {
@@ -280,7 +276,7 @@ public class GameEventDispatcher {
 				type, widget, component, modelID));
 	}
 
-	public void sendWidgetSettings(int root, int component, int from, int to,
+	public void sendWidgetEvents(int root, int component, int from, int to,
 			int settings) {
 		sendEvent(WidgetSettingsEventEncoder.class,
 				new WidgetSettingsEventContext(root, component, from, to,
@@ -447,7 +443,7 @@ public class GameEventDispatcher {
 	 *            The local y-coordinate of the map flag
 	 */
 	public void sendMapFlag(int posX, int posY) {
-		sendEvent(TargetEventEncoder.class, new TargetEventContext(posX, posY));
+		sendEvent(MapFlagEventEncoder.class, new MapFlagEventContext(posX, posY));
 	}
 
 	/**

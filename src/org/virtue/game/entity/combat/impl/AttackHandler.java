@@ -4,7 +4,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackInfo;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.world.region.packets.Projectile;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 import org.virtue.utility.RandomExt;
 
 /**
@@ -90,7 +90,7 @@ public abstract class AttackHandler {
 	 * @param projectile The projectile.
 	 * @return The impact info object.
 	 */
-	public ImpactInfo impact(Entity entity, Entity victim, CombatStyle style, GraphicsBlock graphic, Projectile projectile) {
+	public ImpactInfo impact(Entity entity, Entity victim, CombatStyle style, SpotAnimationBlock graphic, Projectile projectile) {
 		return ImpactInfo.create(entity, victim, style, graphic, projectile, getHit(entity, victim));
 	}
 	
@@ -102,7 +102,7 @@ public abstract class AttackHandler {
 	 * @param projectile The projectile.
 	 * @return The impact info object.
 	 */
-	public ImpactInfo impact(Entity entity, Entity victim, CombatStyle style, GraphicsBlock graphic, Projectile projectile, int hit) {
+	public ImpactInfo impact(Entity entity, Entity victim, CombatStyle style, SpotAnimationBlock graphic, Projectile projectile, int hit) {
 		return ImpactInfo.create(entity, victim, style, graphic, projectile, hit);
 	}
 	

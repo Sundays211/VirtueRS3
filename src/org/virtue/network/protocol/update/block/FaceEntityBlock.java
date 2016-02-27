@@ -58,7 +58,7 @@ public class FaceEntityBlock extends Block {
 	@Override
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
-			block.putLEShort(index);
+			block.putLEShortA(index);
 		} else {
 			block.putLEShort(index);
 		}

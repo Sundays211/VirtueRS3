@@ -68,20 +68,20 @@ public class BankWidget extends Widget {
 		player.getDispatcher().sendVarc(1324, 3);//Email registration status (this gives more f2p bank slots)
 		player.getDispatcher().sendCS2Script(8862, 0, 2);
 		player.getDispatcher().sendCS2Script(8862, 0, 3);
-		player.getDispatcher().sendWidgetSettings(762, 128, 0, 18, 15302654);
-		player.getDispatcher().sendWidgetSettings(762, 7, 0, 27, 14682110);
-		player.getDispatcher().sendWidgetSettings(762, 215, 0, 1121, 11011582);
-		player.getDispatcher().sendWidgetSettings(762, 272, 0, 1121, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 253, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 254, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 255, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 256, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 257, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 258, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 259, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 260, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 261, 0, 1, 2097152);
-		player.getDispatcher().sendWidgetSettings(762, 262, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 128, 0, 18, 15302654);
+		player.getDispatcher().sendWidgetEvents(762, 7, 0, 27, 14682110);
+		player.getDispatcher().sendWidgetEvents(762, 215, 0, 1121, 11011582);
+		player.getDispatcher().sendWidgetEvents(762, 272, 0, 1121, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 253, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 254, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 255, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 256, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 257, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 258, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 259, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 260, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 261, 0, 1, 2097152);
+		player.getDispatcher().sendWidgetEvents(762, 262, 0, 1, 2097152);
 		player.getDispatcher().sendVarc(95, 0);//Clear the "Eat" option...
 	}
 	

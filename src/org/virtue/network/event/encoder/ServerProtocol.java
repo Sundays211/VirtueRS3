@@ -112,27 +112,27 @@ public enum ServerProtocol {
 	/**
 	 * Causes the client to disconnect from the game and connect to the lobby
 	 */
-	LOGOUT_LOBBY(-1, 0),
+	LOGOUT_LOBBY(189, 0),
 
 	/**
 	 * Causes the client to disconnect from the game and return to the login screen
 	 */
-	LOGOUT_FULL(-1, 0),
+	LOGOUT_FULL(97, 0),
 
 	/**
 	 * Updates the experience (and current level) of the specified skill
 	 */
-	UPDATE_STAT(-1, 6),
+	UPDATE_STAT(185, 6),
 
 	/**
 	 * Updates the player's run energy level
 	 */
-	UPDATE_RUNENERGY(-1, 1),
+	UPDATE_RUNENERGY(22, 1),
 
 	/**
 	 * Updates the player's run weight
 	 */
-	UPDATE_RUNWEIGHT(-1, 2),
+	UPDATE_RUNWEIGHT(186, 2),
 
 	/**
 	 * Updates the player's own appearance
@@ -147,12 +147,12 @@ public enum ServerProtocol {
 	/**
 	 * Renders and updates the players in the game
 	 */
-	PLAYER_UPDATE(-1, -2),
+	PLAYER_INFO(119, -2),
 
 	/**
 	 * Renders and updates the local npcs
 	 */
-	NPC_UPDATE(-1, -2),
+	NPC_INFO(-1, -2),
 
 	/**
 	 * Sends a system message to the client.
@@ -257,12 +257,12 @@ public enum ServerProtocol {
 	/**
 	 * Updates/initialises the full clan settings for the clan that the player is currently in.
 	 */
-	CLANSETTINGS_FULL(-1, -2),
+	CLANSETTINGS_FULL(98, -2),
 
 	/**
 	 * Sends a series of updates of the settings for the clan the player is currently in.
 	 */
-	CLANSETTINGS_DELTA(-1, -2),
+	CLANSETTINGS_DELTA(6, -2),
 
 	/**
 	 * Represents the status of the chosen display name within the account creation procedure.
@@ -282,7 +282,7 @@ public enum ServerProtocol {
 	/**
 	 * Sets the position of the client minimap flag
 	 */
-	SET_TARGET(-1, 2),
+	SET_MAP_FLAG(16, 2),
 
 	/**
 	 * Represents a static map update
@@ -352,17 +352,17 @@ public enum ServerProtocol {
 	/**
 	 * Closes the interface which is a sub of the provided interface
 	 */
-	IF_CLOSESUB(-1, 4),
+	IF_CLOSESUB(11, 4),
 
 	/**
 	 * Hides (or unhides) an interface component
 	 */
-	IF_SETHIDE(-1, 5),
+	IF_SETHIDE(156, 5),
 
 	/**
 	 * Sets the text of an interface component
 	 */
-	IF_SETTEXT(-1, -2),
+	IF_SETTEXT(34, -2),
 
 	/**
 	 * Sets model on an interface component to another player's model
@@ -398,19 +398,19 @@ public enum ServerProtocol {
 	/**
 	 * Sets the events for an interface (including which options are handled by the server, whether it can be used on other elements, etc).
 	 */
-	IF_SETEVENTS(-1, 12),
+	IF_SETEVENTS(166, 12),
 	
 	IF_SET_HTTP_IMAGE(146, 8),
 
 	/**
 	 * Sends a full update of an item container
 	 */
-	UPDATE_INV_FULL(-1, -2),
+	UPDATE_INV_FULL(159, -2),
 
 	/**
 	 * Sends a partial update of an item container
 	 */
-	UPDATE_INV_PARTIAL(-1, -2),
+	UPDATE_INV_PARTIAL(47, -2),
 
 	/**
 	 * Updates a grand exchange offer

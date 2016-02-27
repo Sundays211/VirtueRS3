@@ -30,7 +30,6 @@ import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.PlayerUpdateConstants;
 import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.HeadIconBlock;
@@ -52,7 +51,7 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 	public OutboundBuffer encode(Player player, Viewport context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		OutboundBuffer block = new OutboundBuffer();
-		buffer.putVarShort(ServerProtocol.NPC_UPDATE, player);
+		buffer.putVarShort(ServerProtocol.NPC_INFO, player);
 		buffer.setBitAccess();
 		packNpcMovement(player, buffer, block, context);
 		packNpcAddition(player, buffer, block, context);
@@ -183,13 +182,13 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 			masks |= npc.getUpdateBlocks()[pos].getMask(true);
 		}
 		if (masks >= 0x100) {
-			masks |= PlayerUpdateConstants.NPC_2_BYTE_SIZE;
+			masks |= 0x20;
 		}
 		if (masks >= 0x10000) {
-			masks |= PlayerUpdateConstants.NPC_3_BYTE_SIZE;
+			masks |= 0x4000;
 		}
 		if (masks >= 0x1000000) {
-			masks |= PlayerUpdateConstants.NPC_4_BYTE_SIZE;
+			masks |= 0x20000;
 		}
 		block.putShort(npc.getIndex());		
 		block.putByte(masks & 0xff);

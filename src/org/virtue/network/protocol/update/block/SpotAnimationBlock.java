@@ -31,7 +31,7 @@ import org.virtue.network.protocol.update.BlockType;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 14, 2014
  */
-public class GraphicsBlock extends Block {
+public class SpotAnimationBlock extends Block {
 
 	/**
 	 * The graphics block type
@@ -59,17 +59,17 @@ public class GraphicsBlock extends Block {
 	private int speed;
 	
 	/**
-	 * The {@link GraphicsBlock} constructor
+	 * The {@link SpotAnimationBlock} constructor
 	 */
-	public GraphicsBlock(int type, int id) {
+	public SpotAnimationBlock(int type, int id) {
 		this(type, id, 0, 0, 0);
 	}
 	
-	public GraphicsBlock(int type, int id, int height) {
+	public SpotAnimationBlock(int type, int id, int height) {
 		this(type, id, height, 0, 0);
 	}
 	
-	public GraphicsBlock(int type, int id, int height, int speed, int rotation) {
+	public SpotAnimationBlock(int type, int id, int height, int speed, int rotation) {
 		super(getType(type));		
 		this.type = type;
 		this.id = id;
@@ -100,8 +100,8 @@ public class GraphicsBlock extends Block {
 	 * @param delay The delay.
 	 * @return The graphics block.
 	 */
-	public GraphicsBlock transform(int delay) {
-		return new GraphicsBlock(type, id, height, delay, rotation);
+	public SpotAnimationBlock transform(int delay) {
+		return new SpotAnimationBlock(type, id, height, delay, rotation);
 	}
 	
 	private int getSettingsHash () {
@@ -121,29 +121,29 @@ public class GraphicsBlock extends Block {
 		//System.out.println("Encoding graphics block. id="+id+", type="+type);
 		if (entity instanceof Player) {
 			switch (type) {
-			case 1://done
-				block.putShort(id);
+			case 1:
+				block.putLEShort(id);
 				block.putLEInt(getSettingsHash());
+				block.putA(getRotationHash());
+				break;
+			case 2:
+				block.putShortA(id);
+				block.putInt(getSettingsHash());
+				block.putS(getRotationHash());
+				break;
+			case 3:
+				block.putLEShortA(id);
+				block.putIntAlt3(getSettingsHash());
 				block.putByte(getRotationHash());
 				break;
-			case 2://done
-				block.putLEShortA(id);
-				block.putIntAlt3(getSettingsHash());
-				block.putC(getRotationHash());
-				break;
-			case 3://done
-				block.putLEShort(id);
-				block.putIntAlt3(getSettingsHash());
-				block.putS(getRotationHash());
-				break;
-			case 4://done
-				block.putLEShortA(id);
-				block.putIntAlt3(getSettingsHash());
-				block.putS(getRotationHash());
-				break;
-			case 5://done
+			case 4:
 				block.putShort(id);
 				block.putIntAlt3(getSettingsHash());
+				block.putS(getRotationHash());
+				break;
+			case 5:
+				block.putShortA(id);
+				block.putIntAlt2(getSettingsHash());
 				block.putByte(getRotationHash());
 				break;
 			}

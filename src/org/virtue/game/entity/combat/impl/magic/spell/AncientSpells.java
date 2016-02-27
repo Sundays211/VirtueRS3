@@ -7,7 +7,7 @@ import org.virtue.game.entity.combat.impl.magic.SpellAttackHandler;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.world.region.packets.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.block.GraphicsBlock;
+import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
  * @author Kayla
@@ -30,13 +30,13 @@ public class AncientSpells extends CombatSpell  {
 	 * Registers the Ancient Spells
 	 */
 	public static void register() {
-		SpellAttackHandler smokeRush = new SpellAttackHandler(1200, new AnimationBlock(23989), null, new GraphicsBlock(1, 385), new Projectile(385, 52, 72, 0, 18, 18));
+		SpellAttackHandler smokeRush = new SpellAttackHandler(1200, new AnimationBlock(23989), null, new SpotAnimationBlock(1, 385), new Projectile(385, 52, 72, 0, 18, 18));
 		Spellbook.MODERN.register(new AncientSpells(81, 50, 5.5, smokeRush, Runes.AIR.get(3), Runes.DEATH.get(1)));
 		
-		SpellAttackHandler bloodBarrage = new SpellAttackHandler(5500, new AnimationBlock(23989), null, new GraphicsBlock(1, 377), null);
+		SpellAttackHandler bloodBarrage = new SpellAttackHandler(5500, new AnimationBlock(23989), null, new SpotAnimationBlock(1, 377), null);
 		Spellbook.MODERN.register(new AncientSpells(102, 92, 5.5, bloodBarrage, Runes.FIRE.get(5), Runes.BLOOD.get(2)));
 		
-		SpellAttackHandler iceBarrage = new SpellAttackHandler(6000, new AnimationBlock(23989), null, new GraphicsBlock(1, 3946), new Projectile(366, 52, 72, 0, 18, 18));
+		SpellAttackHandler iceBarrage = new SpellAttackHandler(6000, new AnimationBlock(23989), null, new SpotAnimationBlock(1, 3946), new Projectile(366, 52, 72, 0, 18, 18));
 		Spellbook.MODERN.register(new AncientSpells(103, 95, 5.5, iceBarrage, Runes.WATER.get(5), Runes.BLOOD.get(2)));
 	}
 
