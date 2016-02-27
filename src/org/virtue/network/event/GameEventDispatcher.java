@@ -178,8 +178,8 @@ public class GameEventDispatcher {
 				LoginDispatcher.onLegacyLogin(player);
 				break;
 			}
-			/*player.getInteractions().initialise();
-			player.getExchangeOffers().init();*/
+			player.getInteractions().initialise();
+			player.getExchangeOffers().init();
 			player.getCombatSchedule().increaseAdrenaline(0);
 			player.getCombatSchedule()
 					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);

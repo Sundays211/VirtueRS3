@@ -19,14 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.world.region.packets;
+package org.virtue.game.world.region.zone;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.context.impl.out.SceneUpdateEventContext;
-import org.virtue.network.event.encoder.impl.SceneUpdateEventEncoder;
+import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
+import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -36,7 +36,7 @@ import org.virtue.network.event.encoder.impl.SceneUpdateEventEncoder;
  * @author Sundays211
  * @since 18/04/2015
  */
-public class Projectile implements SceneUpdatePacket {
+public class Projectile implements ZoneUpdatePacket {
 
 	private Tile source;
 	private Tile target;
@@ -75,10 +75,10 @@ public class Projectile implements SceneUpdatePacket {
 		Projectile p = transform(entity, target);
 		//TODO: Proper sending system!
 		if (entity instanceof Player) {
-			((Player) entity).getDispatcher().sendEvent(SceneUpdateEventEncoder.class, new SceneUpdateEventContext(p));
+			((Player) entity).getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(p));
 		}
 		if (target instanceof Player) {
-			((Player) target).getDispatcher().sendEvent(SceneUpdateEventEncoder.class, new SceneUpdateEventContext(p));
+			((Player) target).getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(p));
 		}
 	}
 
@@ -104,8 +104,8 @@ public class Projectile implements SceneUpdatePacket {
 	}
 	
 	@Override
-	public SceneUpdateType getType() {
-		return SceneUpdateType.PROJECTILE;
+	public ZoneProtocol getType() {
+		return ZoneProtocol.MAP_PROJANIM;
 	}
 
 	@Override

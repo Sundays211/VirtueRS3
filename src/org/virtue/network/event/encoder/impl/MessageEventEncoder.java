@@ -162,7 +162,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodePrivateQuickMessage(Player player, QuickMessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(ServerProtocol.MESSAGE_PRIVATE_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_QUICKCHAT_PRIVATE, player);
 		buffer.putByte(context.hasFilteredName() ? 1 : 0);
 		buffer.putString(context.getName());
 		if (context.hasFilteredName()) {
@@ -187,7 +187,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodePrivateEchoQuickMessage(Player player, QuickMessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(ServerProtocol.MESSAGE_PRIVATE_ECHO_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_QUICKCHAT_PRIVATE_ECHO, player);
 		buffer.putString(context.getName());
 		buffer.putShort(context.getQuickMessage().getType().getId());
 		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getParams());

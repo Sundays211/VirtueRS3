@@ -40,7 +40,7 @@ public enum BlockType {
 	/**
 	 * Turns the entity to face the specified direction
 	 */
-	SET_FACING(0x1, 3, 0, -1),
+	SET_FACING(0x1, 3, 0x1, 14),
 	
 	/**
 	 * Requests the entity follows the specified entity
@@ -50,7 +50,7 @@ public enum BlockType {
 	/**
 	 * Forces the entity to move in the given sequence
 	 */
-	MOVE(0x80, 5, 0, -1),
+	MOVE(0x80, 5, 0x8000, 0),
 	
 	/**
 	 * Forces the player to say the given message.
@@ -60,45 +60,45 @@ public enum BlockType {
 	/**
 	 * Forces the entity to say the given message. Generally used in quest situations.
 	 */
-	SAY(0x1000, 9, 0, -1),
+	SAY(0x1000, 9, 0x4, 8),
 	
-	GLOW(0x200000, 18, 0, -1),
+	GLOW(0x200000, 18, 0x2000000, 7),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the first slot
 	 */
-	SPOT_1(0x4, 13, 0, -1),
+	SPOT_1(0x4, 13, 0x8, 9),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the second slot
 	 */
-	SPOT_2(0x200, 11, 0, -1),
+	SPOT_2(0x200, 11, 0x2000, 19),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the third slot
 	 */
-	SPOT_3(0x100, 14, 0, -1),
+	SPOT_3(0x100, 14, 0x8000000, 24),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the fourth slot
 	 */
-	SPOT_4(0x10000, 20, 0, -1),
+	SPOT_4(0x10000, 20, 0x4000000, 23),
 	
 	/**
 	 * Attaches the specified spot (aka "graphic") to the entity in the fifth slot
 	 */
-	SPOT_5(0x800000, 6, 0, -1),
+	SPOT_5(0x800000, 6, 0x1000000, 20),
 	
 	/**
 	 * Displays the specified icons above the entity
 	 */
-	HEADICONS(0x2000, 15, 0, -1),
+	HEADICONS(0x2000, 15, 0x100000, 1),
 	
 	/**
 	 * Displays the specified hitmarks above the entity
 	 */
 	HITMARKS(0x8, 19, 0x40, 13),
-	NPCTYPE(0, -1, 0, -1);
+	NPCTYPE(0, -1, 0x10, 10);
 	
 	private int playerMask;
 	private int playerPos;

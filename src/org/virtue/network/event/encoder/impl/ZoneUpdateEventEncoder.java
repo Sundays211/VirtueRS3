@@ -19,12 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.world.region.packets;
+package org.virtue.network.event.encoder.impl;
 
-import org.virtue.game.entity.Entity;
-import org.virtue.game.world.region.GroundItem;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.world.region.zone.ZoneUpdatePacket;
 import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
+import org.virtue.network.event.encoder.EventEncoder;
+import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,47 +35,30 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Sundays211
  * @since 31/10/2014
  */
-public class AddItem implements SceneUpdatePacket {
-	
-	private GroundItem item;
-	private boolean hidden;
-	
-	public AddItem (GroundItem item) {
-		this.item = item;
-		this.hidden = item.getOwner() != null;
-	}
+public class ZoneUpdateEventEncoder implements EventEncoder<ZoneUpdateEventContext> {
 
 	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getType()
+	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public SceneUpdateType getType() {
-		return hidden ? SceneUpdateType.ADD_ITEM_HIDDEN : SceneUpdateType.ADD_ITEM;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#encode(org.virtue.network.event.buffer.OutboundBuffer, org.virtue.game.entity.player.Player)
-	 */
-	@Override
-	public void encode(OutboundBuffer buffer, Entity player) {
-		if (hidden) {
-			buffer.putLEShortA(item.getId());
-			buffer.putShort(item.getOwner().getIndex());
-			buffer.putShort(item.getAmount() & 0x7fff);
-			buffer.putByte((item.getOffsetX() & 0x7) << 4 | item.getOffsetY() & 0x7);
+	public OutboundBuffer encode(Player player, ZoneUpdateEventContext context) {
+		OutboundBuffer buffer = new OutboundBuffer();
+		buffer.putPacket(ServerProtocol.UPDATE_ZONE_PARTIAL_FOLLOWS, player);
+		int localX = context.getTile().getLocalX(player.getViewport().getBaseTile());
+		int localY = context.getTile().getLocalY(player.getViewport().getBaseTile());
+		buffer.putA(localX >> 3);
+		buffer.putS(localY >> 3);
+		buffer.putA(context.getTile().getPlane());
+		if (context.isSingle()) {
+			buffer.putPacket(context.getPacket().getType().getServerTransmitID(), player);
+			context.getPacket().encode(buffer, player);
 		} else {
-			buffer.putC((item.getOffsetX() & 0x7) << 4 | item.getOffsetY() & 0x7);
-			buffer.putLEShort(item.getAmount() & 0x7fff);
-			buffer.putLEShort(item.getId());
+			for (ZoneUpdatePacket packet : context.getPackets()) {
+				buffer.putPacket(packet.getType().getServerTransmitID(), player);
+				packet.encode(buffer, player);
+			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getTile()
-	 */
-	@Override
-	public Tile getTile() {
-		return item.getTile();
+		return buffer;
 	}
 
 }

@@ -103,27 +103,13 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 			if (npc == null || !npc.exists() || context.getLocalNpcs().contains(npc) || !npc.getCurrentTile().withinDistance(player.getCurrentTile(), ((1 << context.getSize() - 1) - 2))) {
 				continue;
 			}
+			context.getLocalNpcs().add(npc);
+			
 			buffer.putBits(15, npc.getIndex());//NPC entity index
 			
 			int dx = npc.getCurrentTile().getX() - player.getCurrentTile().getX();
 			int dy = npc.getCurrentTile().getY() - player.getCurrentTile().getY();
-			//System.out.println("dx="+dx+", dy="+dy);
-			/*if (dx < (1 << context.getSize() - 1) - 1) {
-				dx += 1 << context.getSize();
-			}
-			if (dy < (1 << context.getSize() - 1) - 1) {
-				dy += 1 << context.getSize();
-			}
 
-
-			buffer.putBits(1, npc.needsMaskUpdate() ? 1 : 0);
-			buffer.putBits(3, npc.getDirection().getID());
-			buffer.putBits(1, npc.getMovement().teleported() ? 1 : 0);
-			buffer.putBits(context.getSize(), dy);
-			buffer.putBits(2, npc.getCurrentTile().getPlane());
-			buffer.putBits(context.getSize(), dx);
-			buffer.putBits(15, npc.getID());//NPC type
-*/
 			if (dx < 15) {
 				dx += 32;
 			}
@@ -131,14 +117,13 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 				dy += 32;
 			}
 
-
-			buffer.putBits(1, npc.needsMaskUpdate() ? 1 : 0);
 			buffer.putBits(3, npc.getDirection().getID());
-			buffer.putBits(1, npc.getMovement().teleported() ? 1 : 0);
-			buffer.putBits(5, dy);
-			buffer.putBits(2, npc.getCurrentTile().getPlane());
 			buffer.putBits(5, dx);
+			buffer.putBits(5, dy);
 			buffer.putBits(15, npc.getID());//NPC type
+			buffer.putBits(1, npc.getMovement().teleported() ? 1 : 0);
+			buffer.putBits(1, npc.needsMaskUpdate() ? 1 : 0);
+			buffer.putBits(2, npc.getCurrentTile().getPlane());
 
 
 			if (npc.needsMaskUpdate()) {
@@ -180,7 +165,8 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 				continue;
 			}
 			masks |= npc.getUpdateBlocks()[pos].getMask(true);
-		}
+		}		
+		
 		if (masks >= 0x100) {
 			masks |= 0x20;
 		}
@@ -190,6 +176,9 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 		if (masks >= 0x1000000) {
 			masks |= 0x20000;
 		}
+		
+		//System.out.println("Mask: 0x"+Integer.toHexString(masks)+", uid="+npc.getIndex());
+		
 		block.putShort(npc.getIndex());		
 		block.putByte(masks & 0xff);
 		

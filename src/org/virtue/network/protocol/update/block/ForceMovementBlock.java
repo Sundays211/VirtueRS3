@@ -74,15 +74,15 @@ public class ForceMovementBlock extends Block {
 			block.putLEShortA(delay2 * 30);
 			block.putLEShortA(this.direction.getID());
 		} else {
-			block.putA(tile1.getX() - entity.getCurrentTile().getX());
+			block.putC(tile1.getX() - entity.getCurrentTile().getX());
 			block.putS(tile1.getY() - entity.getCurrentTile().getY());
 			block.putByte(tile2.getX() - entity.getCurrentTile().getX());
 			block.putA(tile2.getY() - entity.getCurrentTile().getY());
-			block.putByte(tile1.getPlane() - entity.getCurrentTile().getPlane());
-			block.putC(tile2.getPlane() - entity.getCurrentTile().getPlane());
-			block.putShort(delay1 * 30);
-			block.putLEShortA(delay2 * 30);
-			block.putShort(this.direction.getID());
+			block.putS(tile1.getPlane() - entity.getCurrentTile().getPlane());
+			block.putA(tile2.getPlane() - entity.getCurrentTile().getPlane());
+			block.putShortA(delay1 * 30);
+			block.putShort(delay2 * 30);
+			block.putLEShort(this.direction.getID());
 		}
 	}
 

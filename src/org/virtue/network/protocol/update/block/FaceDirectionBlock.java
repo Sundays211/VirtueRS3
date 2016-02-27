@@ -58,8 +58,8 @@ public class FaceDirectionBlock extends Block {
 		if (entity instanceof Player) {
 			block.putShort(direction);
 		} else if (entity instanceof NPC) {
-			block.putShortA(target.getX());
-			block.putShort(target.getY());
+			block.putShort(target.getX());
+			block.putLEShortA(target.getY());
 		}
 	}
 }

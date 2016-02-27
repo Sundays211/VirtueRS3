@@ -13,7 +13,7 @@ import org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler;
 import org.virtue.game.entity.combat.impl.range.RangeAttackHandler;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.packets.Projectile;
+import org.virtue.game.world.region.zone.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.utility.RandomExt;
 

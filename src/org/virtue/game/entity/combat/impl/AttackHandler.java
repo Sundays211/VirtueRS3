@@ -3,7 +3,7 @@ package org.virtue.game.entity.combat.impl;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackInfo;
 import org.virtue.game.entity.combat.CombatStyle;
-import org.virtue.game.world.region.packets.Projectile;
+import org.virtue.game.world.region.zone.Projectile;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 import org.virtue.utility.RandomExt;
 

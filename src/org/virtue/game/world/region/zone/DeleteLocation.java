@@ -19,52 +19,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.context.impl.out;
+package org.virtue.game.world.region.zone;
 
-import java.util.Collection;
-
+import org.virtue.game.entity.Entity;
+import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.packets.SceneUpdatePacket;
-import org.virtue.network.event.context.GameEventContext;
+import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 31/10/2014
+ * @since 4/11/2014
  */
-public class SceneUpdateEventContext implements GameEventContext {
+public class DeleteLocation implements ZoneUpdatePacket {
 	
-	private Collection<SceneUpdatePacket> packets;
+	private int flags;
+	private Tile coord;
 	
-	private SceneUpdatePacket packet;
-	
-	private Tile tile;
-	
-	public SceneUpdateEventContext (Collection<SceneUpdatePacket> packets, Tile tile) {
-		this.packets = packets;
-		this.tile = tile;
+	public DeleteLocation (SceneLocation object) {
+		this.flags = (object.getRotation() & 0x3) | (object.getNodeType() << 2);
+		this.coord = object.getTile();
 	}
-	
-	public SceneUpdateEventContext (SceneUpdatePacket packet) {
-		this.packet = packet;
-		this.tile = packet.getTile();
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getType()
+	 */
+	@Override
+	public ZoneProtocol getType() {
+		return ZoneProtocol.LOC_DEL;
 	}
-	
-	public Collection<SceneUpdatePacket> getPackets () {
-		return packets;
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#encode(org.virtue.network.event.buffer.OutboundBuffer, org.virtue.game.entity.player.Player)
+	 */
+	@Override
+	public void encode(OutboundBuffer buffer, Entity player) {
+		buffer.putByte(((coord.getX() % 8) & 0x7) << 4 | (coord.getY() % 8) & 0x7);
+		buffer.putS(flags);
 	}
-	
-	public SceneUpdatePacket getPacket () {
-		return packet;
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getTile()
+	 */
+	@Override
+	public Tile getTile() {
+		return coord;
 	}
-	
-	public boolean isSingle () {
-		return packets == null;
-	}
-	
-	public Tile getTile () {
-		return tile;
-	}
+
 }

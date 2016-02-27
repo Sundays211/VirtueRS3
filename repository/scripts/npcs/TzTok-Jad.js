@@ -10,7 +10,7 @@ var SwitchAttackEvent = Java.type('org.virtue.game.entity.combat.impl.combo.Swit
 var MeleeAttackHandler = Java.extend(Java.type('org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler'));
 var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 var AbstractNPC = Java.type('org.virtue.game.entity.npc.AbstractNPC');
-var Projectile = Java.type('org.virtue.game.world.region.packets.Projectile');
+var Projectile = Java.type('org.virtue.game.world.region.zone.Projectile');
 
 var MELEE = new MeleeAttackHandler(500, 1000) {
 	getAttackInfo: function(entity, lock) {

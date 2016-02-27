@@ -84,7 +84,7 @@ public class HeadIcons {
 		if (entity instanceof Player) {
 			update.putByte(flags);
 		} else if (entity instanceof NPC) {
-			update.putC(flags);
+			update.putS(flags);
 		}
 		for (int slot=0; slot<spriteIDs.length; slot++) {
 			if (spriteIDs[slot] != -1) {

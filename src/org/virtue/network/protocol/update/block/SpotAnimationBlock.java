@@ -149,29 +149,29 @@ public class SpotAnimationBlock extends Block {
 			}
 		} else {
 			switch (type) {
-			case 1://done
-				block.putShortA(id);
-				block.putInt(getSettingsHash());
-				block.putA(getRotationHash());
-				break;
-			case 2://done
-				block.putShort(id);
-				block.putIntAlt2(getSettingsHash());
+			case 1:
+				block.putLEShortA(id);
+				block.putLEInt(getSettingsHash());
 				block.putC(getRotationHash());
 				break;
-			case 3://done
-				block.putLEShortA(id);
-				block.putIntAlt3(getSettingsHash());
+			case 2:
+				block.putLEShort(id);
+				block.putIntAlt2(getSettingsHash());
 				block.putByte(getRotationHash());
 				break;
-			case 4://done
-				block.putShort(id);
+			case 3:
+				block.putLEShort(id);
 				block.putIntAlt3(getSettingsHash());
-				block.putA(getRotationHash());
+				block.putS(getRotationHash());
 				break;
-			case 5://done
-				block.putShort(id);
-				block.putInt(getSettingsHash());
+			case 4:
+				block.putLEShort(id);
+				block.putLEInt(getSettingsHash());
+				block.putS(getRotationHash());
+				break;
+			case 5:
+				block.putLEShort(id);
+				block.putIntAlt3(getSettingsHash());
 				block.putByte(getRotationHash());
 				break;
 			}

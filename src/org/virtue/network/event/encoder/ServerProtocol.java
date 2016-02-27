@@ -102,7 +102,7 @@ public enum ServerProtocol {
 	/**
 	 * Informs the client that the server is ready to receive more varc values
 	 */
-	RESET_VARC_TRANSMIT(-1, 0),
+	RESET_VARC_TRANSMIT(118, 0),
 
 	/**
 	 * Tells the client to run the specified client script with the provided paramaters
@@ -142,7 +142,7 @@ public enum ServerProtocol {
 	/**
 	 * Sets the text for context-menu options for other players (eg "trade", "attack", "follow", etc)
 	 */
-	PLAYER_SETOPTION(-1, -1),
+	SET_PLAYER_OP(46, -1),
 
 	/**
 	 * Renders and updates the players in the game
@@ -152,7 +152,7 @@ public enum ServerProtocol {
 	/**
 	 * Renders and updates the local npcs
 	 */
-	NPC_INFO(-1, -2),
+	NPC_INFO(7, -2),
 
 	/**
 	 * Sends a system message to the client.
@@ -167,22 +167,22 @@ public enum ServerProtocol {
 	/**
 	 * Sends a private chat message to the client
 	 */
-	MESSAGE_PRIVATE(-1, -2),
+	MESSAGE_PRIVATE(38, -2),
 
 	/**
 	 * Sends a private quick chat message to the client
 	 */
-	MESSAGE_PRIVATE_QUICKCHAT(-1, -1),
+	MESSAGE_QUICKCHAT_PRIVATE(39, -1),
 
 	/**
 	 * Sends a copy of the private message that was sent by the player (for the "To: " field)
 	 */
-	MESSAGE_PRIVATE_ECHO(-1, -2),
+	MESSAGE_PRIVATE_ECHO(53, -2),
 
 	/**
 	 * Sends a copy of the private quick message that was sent by the player (for the "To: " field)
 	 */
-	MESSAGE_PRIVATE_ECHO_QUICKCHAT(-1, -1),
+	MESSAGE_QUICKCHAT_PRIVATE_ECHO(24, -1),
 
 	/**
 	 * Sends a friend channel message to the client
@@ -267,17 +267,17 @@ public enum ServerProtocol {
 	/**
 	 * Represents the status of the chosen display name within the account creation procedure.
 	 */
-	CREATION_NAME_STATUS(-1, 1),
+	CREATE_CHECK_NAME_REPLY(108, 1),
 
 	/**
 	 * Represents the status of the chosen email address within the account creation procedure.
 	 */
-	CREATION_EMAIL_STATUS(-1, 1),
+	CREATE_CHECK_EMAIL_REPLY(96, 1),
 
 	/**
 	 * The response code for the account creation procedure submit function.
 	 */
-	CREATION_SUBMIT_STATUS(-1, 1),
+	CREATE_ACCOUNT_REPLY(128, 1),
 
 	/**
 	 * Sets the position of the client minimap flag
@@ -292,42 +292,42 @@ public enum ServerProtocol {
 	/**
 	 * Represents a dynamic map update
 	 */
-	MAP_DYNAMIC(-1, -2),
+	REBUILD_DYNAMIC(121, -2),
 
 	/**
 	 * Sets the base tile for map updates
 	 */
-	MAP_SET_BASETILE(-1, 3),
+	UPDATE_ZONE_PARTIAL_FOLLOWS(112, 3),
 
 	/**
-	 * Adds a ground item to the map
+	 * Adds an item to the floor
 	 */
-	MAP_ADD_OBJECT(-1, 5),
+	OBJ_ADD(180, 5),
 
 	/**
 	 * Adds a ground item to the map which is not visible to a specified entity
 	 */
-	MAP_ADD_HIDDEN_OBJECT(-1, 7),
+	OBJ_REVEAL(161, 7),
 
 	/**
 	 * Removes a ground item from the map
 	 */
-	MAP_REMOVE_OBJECT(-1, 3),
+	OBJ_DEL(114, 3),
 
 	/**
 	 * Adds or updates a location on the map
 	 */
-	MAP_UPDATE_LOC(-1, 6),
+	LOC_ADD_CHANGE(130, 6),
 
 	/**
 	 * Removes a location from the map
 	 */
-	MAP_REMOVE_LOC(-1, 2),
+	LOC_DEL(141, 2),
 
 	/**
 	 * Sends a projectile within the map
 	 */
-	MAP_PROJECTILE(-1, 18),
+	MAP_PROJECTILE(93, 18),
 
 	/**
 	 * Opens the top-level game interface (aka "root" interface)
@@ -415,7 +415,7 @@ public enum ServerProtocol {
 	/**
 	 * Updates a grand exchange offer
 	 */
-	UPDATE_EXCHANGE(-1, 21),
+	UPDATE_EXCHANGE(55, 21),
 
 	/**
 	 * Notifies a client to play the specified cutscene

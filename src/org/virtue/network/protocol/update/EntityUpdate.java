@@ -146,7 +146,7 @@ public class EntityUpdate extends Tick {
 			Player player = (Player) entity;
 			if (GameState.WORLD_READY.equals(player.getGameState())) {
 				player.getDispatcher().sendPlayerUpdate();
-				//player.getDispatcher().sendNPCUpdate();
+				player.getDispatcher().sendNPCUpdate();
 			}
 		}
 	}

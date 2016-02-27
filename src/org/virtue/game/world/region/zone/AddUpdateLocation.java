@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.world.region.packets;
+package org.virtue.game.world.region.zone;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.world.region.SceneLocation;
@@ -33,22 +33,28 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Sundays211
  * @since 4/11/2014
  */
-public class RemoveLocation implements SceneUpdatePacket {
+public class AddUpdateLocation implements ZoneUpdatePacket {
 	
-	private int settings;
-	private Tile tile;
+	private SceneLocation location;
 	
-	public RemoveLocation (SceneLocation object) {
-		this.settings = (object.getRotation() & 0x3) | (object.getNodeType() << 2);
-		this.tile = object.getTile();
+	private int locTypeID;
+	
+	public AddUpdateLocation (SceneLocation location, int newID) {
+		this.location = location;
+		this.locTypeID = newID;
+	}
+	
+	public AddUpdateLocation (SceneLocation location) {
+		this.location = location;
+		this.locTypeID = location.getID();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getType()
 	 */
 	@Override
-	public SceneUpdateType getType() {
-		return SceneUpdateType.REMOVE_LOC;
+	public ZoneProtocol getType() {
+		return ZoneProtocol.LOC_ADD_CHANGE;
 	}
 
 	/* (non-Javadoc)
@@ -56,8 +62,9 @@ public class RemoveLocation implements SceneUpdatePacket {
 	 */
 	@Override
 	public void encode(OutboundBuffer buffer, Entity player) {
-		buffer.putByte(((tile.getX() % 8) & 0x7) << 4 | (tile.getY() % 8) & 0x7);
-		buffer.putS(settings);
+		buffer.putIntAlt2(locTypeID);
+		buffer.putS(((location.getTile().getX() % 8) & 0x7) << 4 | (location.getTile().getY() % 8) & 0x7);
+		buffer.putC((location.getRotation() & 0x3) | (location.getNodeType() << 2));
 	}
 
 	/* (non-Javadoc)
@@ -65,7 +72,7 @@ public class RemoveLocation implements SceneUpdatePacket {
 	 */
 	@Override
 	public Tile getTile() {
-		return tile;
+		return location.getTile();
 	}
 
 }

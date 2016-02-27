@@ -89,12 +89,12 @@ public class GlowColorBlock extends Block {
 			block.putShortA(delay);
 			block.putShort(duration);
 		} else {
-			block.putByte(red);
-			block.putByte(green);
-			block.putA(blue);
-			block.putByte(alpha);
-			block.putLEShortA(delay);
-			block.putLEShort(duration);
+			block.putA(red);
+			block.putC(green);
+			block.putC(blue);
+			block.putS(alpha);
+			block.putLEShort(delay);
+			block.putLEShortA(duration);
 		}
 	}
 }

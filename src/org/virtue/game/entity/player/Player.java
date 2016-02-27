@@ -69,11 +69,11 @@ import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.Tile;
 import org.virtue.game.world.region.movement.Direction;
-import org.virtue.game.world.region.packets.Projectile;
-import org.virtue.game.world.region.packets.SceneUpdatePacket;
+import org.virtue.game.world.region.zone.Projectile;
+import org.virtue.game.world.region.zone.ZoneUpdatePacket;
 import org.virtue.network.event.GameEventDispatcher;
-import org.virtue.network.event.context.impl.out.SceneUpdateEventContext;
-import org.virtue.network.event.encoder.impl.SceneUpdateEventEncoder;
+import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
+import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.ref.Appearance;
 import org.virtue.network.protocol.update.ref.Appearance.Render;
@@ -638,7 +638,7 @@ public class Player extends Entity {
 
 	/** Testing Only */
 	public void sendProject() {
-		ArrayList<SceneUpdatePacket> list = new ArrayList<>();
+		ArrayList<ZoneUpdatePacket> list = new ArrayList<>();
 		list.add(new Projectile(getCurrentTile(), new Tile(
 				getLastTile().getX() - 6, getLastTile().getY() - 7,
 				getLastTile().getPlane()), null, 2263, 70, 150, 30, 41, 0));
@@ -663,8 +663,8 @@ public class Player extends Entity {
 		list.add(new Projectile(getCurrentTile(), new Tile(
 				getLastTile().getX() + 7, getLastTile().getY() + 4,
 				getLastTile().getPlane()), null, 2231, 70, 150, 30, 41, 0));
-		getDispatcher().sendEvent(SceneUpdateEventEncoder.class,
-				new SceneUpdateEventContext(list, getLastTile()));
+		getDispatcher().sendEvent(ZoneUpdateEventEncoder.class,
+				new ZoneUpdateEventContext(list, getLastTile()));
 	}
 
 	/*

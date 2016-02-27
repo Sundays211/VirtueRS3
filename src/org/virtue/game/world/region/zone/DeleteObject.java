@@ -19,36 +19,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.encoder.impl;
+package org.virtue.game.world.region.zone;
 
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.Entity;
+import org.virtue.game.world.region.GroundItem;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.context.impl.out.PlayerOptionEventContext;
-import org.virtue.network.event.encoder.EventEncoder;
-import org.virtue.network.event.encoder.ServerProtocol;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 6/11/2014
+ * @since 2/11/2014
  */
-public class PlayerOptionEventEncoder implements EventEncoder<PlayerOptionEventContext> {
+public class DeleteObject implements ZoneUpdatePacket {
+	
+	private GroundItem object;
+	
+	public DeleteObject (GroundItem object) {
+		this.object = object;
+	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
+	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getType()
 	 */
 	@Override
-	public OutboundBuffer encode(Player player, PlayerOptionEventContext context) {
-		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(ServerProtocol.SET_PLAYER_OP, player);
-		buffer.putA(context.isTop() ? 1 : 0);
-		buffer.putByte(context.getOption().getId());
-		buffer.putString(context.getText());
-		buffer.putShort(context.getCursor());
-		buffer.finishVarByte();
-		return buffer;
+	public ZoneProtocol getType() {
+		return ZoneProtocol.OBJ_DEL;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#encode(org.virtue.network.event.buffer.OutboundBuffer, org.virtue.game.entity.player.Player)
+	 */
+	@Override
+	public void encode(OutboundBuffer buffer, Entity player) {
+		buffer.putLEShort(object.getId());
+		buffer.putC((object.getOffsetX() & 0x7) << 4 | object.getOffsetY() & 0x7);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getTile()
+	 */
+	@Override
+	public Tile getTile() {
+		return object.getTile();
 	}
 
 }

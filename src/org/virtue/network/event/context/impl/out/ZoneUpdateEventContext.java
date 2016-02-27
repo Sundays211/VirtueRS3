@@ -19,11 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.world.region.packets;
+package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.entity.Entity;
+import java.util.Collection;
+
 import org.virtue.game.world.region.Tile;
-import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.game.world.region.zone.ZoneUpdatePacket;
+import org.virtue.network.event.context.GameEventContext;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -32,11 +34,37 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Sundays211
  * @since 31/10/2014
  */
-public interface SceneUpdatePacket {
+public class ZoneUpdateEventContext implements GameEventContext {
 	
-	public SceneUpdateType getType ();
+	private Collection<ZoneUpdatePacket> packets;
 	
-	public void encode (OutboundBuffer buffer, Entity player);
+	private ZoneUpdatePacket packet;
 	
-	public Tile getTile ();
+	private Tile tile;
+	
+	public ZoneUpdateEventContext (Collection<ZoneUpdatePacket> packets, Tile tile) {
+		this.packets = packets;
+		this.tile = tile;
+	}
+	
+	public ZoneUpdateEventContext (ZoneUpdatePacket packet) {
+		this.packet = packet;
+		this.tile = packet.getTile();
+	}
+	
+	public Collection<ZoneUpdatePacket> getPackets () {
+		return packets;
+	}
+	
+	public ZoneUpdatePacket getPacket () {
+		return packet;
+	}
+	
+	public boolean isSingle () {
+		return packets == null;
+	}
+	
+	public Tile getTile () {
+		return tile;
+	}
 }

@@ -23,7 +23,7 @@ package org.virtue.network.event.decoder.impl;
 
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
-import org.virtue.network.event.context.impl.in.WidgetOnWidgetEventContext;
+import org.virtue.network.event.context.impl.in.WidgetTargetEventContext;
 import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
 
@@ -34,13 +34,13 @@ import org.virtue.network.event.decoder.EventDecoder;
  * @author Sundays211
  * @since 6/11/2014
  */
-public class WidgetOnWidgetEventDecoder implements EventDecoder<WidgetOnWidgetEventContext> {
+public class WidgetTargetEventDecoder implements EventDecoder<WidgetTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
-	public WidgetOnWidgetEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
+	public WidgetTargetEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
 		int hash = buffer.getLEInt();
 		
 		int slot = buffer.getShortA() & 0xffff;
@@ -57,7 +57,7 @@ public class WidgetOnWidgetEventDecoder implements EventDecoder<WidgetOnWidgetEv
 		int useObject = buffer.getShort() & 0xffff;
 		useObject = useObject == 65535 ? -1 : useObject;
 		
-		return new WidgetOnWidgetEventContext(useHash, useslot, useObject, hash, slot, objectId);
+		return new WidgetTargetEventContext(useHash, useslot, useObject, hash, slot, objectId);
 	}
 
 	/* (non-Javadoc)

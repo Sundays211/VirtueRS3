@@ -19,69 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.context.impl.in;
+package org.virtue.game.world.region.zone;
 
-import org.virtue.network.event.context.GameEventContext;
+import org.virtue.game.entity.Entity;
+import org.virtue.game.world.region.Tile;
+import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 6/11/2014
+ * @since 31/10/2014
  */
-public class WidgetOnWidgetEventContext implements GameEventContext {
+public interface ZoneUpdatePacket {
 	
-	private int if1_hash, if1_slot, if1_item;
-	private int if2_hash, if2_slot, if2_item;
-
-	public WidgetOnWidgetEventContext (int if1_hash, int if1_slot, int if1_item, 
-			int if2_hash, int if2_slot, int if2_item) {
-		this.if1_hash = if1_hash;
-		this.if1_slot = if1_slot;
-		this.if1_item = if1_item;
-		this.if2_hash = if2_hash;
-		this.if2_slot = if2_slot;
-		this.if2_item = if2_item;
-	}
+	public ZoneProtocol getType ();
 	
-	public int getIf1Hash () {
-		return if1_hash;
-	}
+	public void encode (OutboundBuffer buffer, Entity player);
 	
-	public int getIf1Component () {
-		return if1_hash & 0xffff;
-	}
-	
-	public int getIf1Interface () {
-		return if1_hash >> 16;
-	}
-	
-	public int getIf1Slot () {
-		return if1_slot;
-	}
-	
-	public int getIf1Item () {
-		return if1_item;
-	}
-	
-	public int getIf2Hash () {
-		return if2_hash;
-	}
-	
-	public int getIf2Component () {
-		return if2_hash & 0xffff;
-	}
-	
-	public int getIf2Interface () {
-		return if2_hash >> 16;
-	}
-	
-	public int getIf2Slot () {
-		return if2_slot;
-	}
-	
-	public int getIf2Item () {
-		return if2_item;
-	}
+	public Tile getTile ();
 }

@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.world.region.packets;
+package org.virtue.game.world.region.zone;
 
 import org.virtue.game.entity.Entity;
-import org.virtue.game.world.region.SceneLocation;
+import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
 
@@ -31,30 +31,22 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 4/11/2014
+ * @since 31/10/2014
  */
-public class UpdateLocation implements SceneUpdatePacket {
+public class AddObject implements ZoneUpdatePacket {
 	
-	private SceneLocation location;
+	private GroundItem item;
 	
-	private int locTypeID;
-	
-	public UpdateLocation (SceneLocation location, int newID) {
-		this.location = location;
-		this.locTypeID = newID;
-	}
-	
-	public UpdateLocation (SceneLocation location) {
-		this.location = location;
-		this.locTypeID = location.getID();
+	public AddObject (GroundItem item) {
+		this.item = item;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getType()
 	 */
 	@Override
-	public SceneUpdateType getType() {
-		return SceneUpdateType.UPDATE_LOC;
+	public ZoneProtocol getType() {
+		return ZoneProtocol.OBJ_ADD;
 	}
 
 	/* (non-Javadoc)
@@ -62,9 +54,9 @@ public class UpdateLocation implements SceneUpdatePacket {
 	 */
 	@Override
 	public void encode(OutboundBuffer buffer, Entity player) {
-		buffer.putIntAlt2(locTypeID);
-		buffer.putByte((location.getRotation() & 0x3) | (location.getNodeType() << 2));
-		buffer.putByte(((location.getTile().getX() % 8) & 0x7) << 4 | (location.getTile().getY() % 8) & 0x7);
+		buffer.putLEShortA(item.getAmount() & 0x7fff);
+		buffer.putA((item.getOffsetX() & 0x7) << 4 | item.getOffsetY() & 0x7);
+		buffer.putShortA(item.getId());
 	}
 
 	/* (non-Javadoc)
@@ -72,7 +64,7 @@ public class UpdateLocation implements SceneUpdatePacket {
 	 */
 	@Override
 	public Tile getTile() {
-		return location.getTile();
+		return item.getTile();
 	}
 
 }

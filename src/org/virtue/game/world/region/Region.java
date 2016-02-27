@@ -34,13 +34,13 @@ import org.virtue.Constants;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.packets.AddItem;
-import org.virtue.game.world.region.packets.RemoveItem;
-import org.virtue.game.world.region.packets.RemoveLocation;
-import org.virtue.game.world.region.packets.SceneUpdatePacket;
-import org.virtue.game.world.region.packets.UpdateLocation;
-import org.virtue.network.event.context.impl.out.SceneUpdateEventContext;
-import org.virtue.network.event.encoder.impl.SceneUpdateEventEncoder;
+import org.virtue.game.world.region.zone.AddObject;
+import org.virtue.game.world.region.zone.DeleteObject;
+import org.virtue.game.world.region.zone.DeleteLocation;
+import org.virtue.game.world.region.zone.AddUpdateLocation;
+import org.virtue.game.world.region.zone.ZoneUpdatePacket;
+import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
+import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -195,9 +195,9 @@ public class Region {
 					item = iterator.next();
 					if (item.processTick()) {
 						iterator.remove();
-						SceneUpdateEventContext packet = new SceneUpdateEventContext(new RemoveItem(item));
+						ZoneUpdateEventContext packet = new ZoneUpdateEventContext(new DeleteObject(item));
 						for (Player p : players) {
-							p.getDispatcher().sendEvent(SceneUpdateEventEncoder.class, packet);
+							p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, packet);
 						}
 						item.destroy();
 						break;
@@ -207,25 +207,25 @@ public class Region {
 		}
 		
 		protected void sendUpdate (Player player) {
-			List<SceneUpdatePacket> packets = new ArrayList<SceneUpdatePacket>();
+			List<ZoneUpdatePacket> packets = new ArrayList<ZoneUpdatePacket>();
 			for (List<GroundItem> tileItems : items.values()) {
 				for (GroundItem item : tileItems) {
 					if (item != null) {
-						packets.add(new AddItem(item));
+						packets.add(new AddObject(item));
 					}
 				}
 			}
 			for (SceneLocation loc : tempLocs) {
 				if (loc != null) {
 					if (loc.getID() < 0) {
-						packets.add(new RemoveLocation(loc));
+						packets.add(new DeleteLocation(loc));
 					} else {
-						packets.add(new UpdateLocation(loc));
+						packets.add(new AddUpdateLocation(loc));
 					}
 				}
 			}
 			if (!packets.isEmpty()) {
-				player.getDispatcher().sendEvent(SceneUpdateEventEncoder.class, new SceneUpdateEventContext(packets, baseTile));
+				player.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(packets, baseTile));
 			}
 		}
 	}
@@ -329,7 +329,7 @@ public class Region {
 			chunks.get(hash).updateLocation(loc, localHash, true);
 		}
 		for (Player p : players) {
-			p.getDispatcher().sendEvent(SceneUpdateEventEncoder.class, new SceneUpdateEventContext(new UpdateLocation(loc)));
+			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new AddUpdateLocation(loc)));
 		}
 	}
 	
@@ -348,7 +348,7 @@ public class Region {
 			chunks.get(hash).updateLocation(loc, localHash, isTemp);
 		}
 		for (Player p : players) {
-			p.getDispatcher().sendEvent(SceneUpdateEventEncoder.class, new SceneUpdateEventContext(new UpdateLocation(loc)));
+			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new AddUpdateLocation(loc)));
 		}		
 	}
 	
@@ -362,7 +362,7 @@ public class Region {
 			chunks.get(hash).removeLocation(loc, localHash, wasTemp);
 		}
 		for (Player p : players) {
-			p.getDispatcher().sendEvent(SceneUpdateEventEncoder.class, new SceneUpdateEventContext(new RemoveLocation(loc)));
+			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new DeleteLocation(loc)));
 		}
 	}
 	
@@ -410,7 +410,7 @@ public class Region {
 			chunks.get(hash).addItem(item, localHash);
 		}
 		for (Player p : players) {
-			p.getDispatcher().sendEvent(SceneUpdateEventEncoder.class, new SceneUpdateEventContext(new AddItem(item)));
+			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new AddObject(item)));
 		}
 	}
 	
@@ -468,9 +468,9 @@ public class Region {
 			selected = chunks.get(hash).removeItem(itemID, getLocalHash(tile.getXInRegion(), tile.getYInRegion(), tile.getPlane()));
 		}
 		if (selected != null) {
-			SceneUpdateEventContext packet = new SceneUpdateEventContext(new RemoveItem(selected));
+			ZoneUpdateEventContext packet = new ZoneUpdateEventContext(new DeleteObject(selected));
 			for (Player p : players) {
-				p.getDispatcher().sendEvent(SceneUpdateEventEncoder.class, packet);
+				p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, packet);
 			}
 		}
 		return selected;

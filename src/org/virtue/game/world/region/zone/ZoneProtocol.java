@@ -19,22 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.world.region.packets;
+package org.virtue.game.world.region.zone;
 
 import org.virtue.network.event.encoder.ServerProtocol;
 
-public enum SceneUpdateType { 
-	ADD_ITEM(4, 5, ServerProtocol.MAP_ADD_OBJECT),
-	ADD_ITEM_HIDDEN(7, 7, ServerProtocol.MAP_ADD_HIDDEN_OBJECT),
-	REMOVE_ITEM(5, 3, ServerProtocol.MAP_REMOVE_OBJECT),
-	UPDATE_LOC(11, 6, ServerProtocol.MAP_UPDATE_LOC),
-	REMOVE_LOC(2, 2, ServerProtocol.MAP_REMOVE_LOC),
-	PROJECTILE(13, 18, ServerProtocol.MAP_PROJECTILE);
+public enum ZoneProtocol { 
+	LOC_ADD_CHANGE(0, 6, ServerProtocol.LOC_ADD_CHANGE),
+	LOC_DEL(1, 2, ServerProtocol.LOC_DEL),
+	OBJ_ADD(4, 5, ServerProtocol.OBJ_ADD),
+	OBJ_REVEAL(9, 7, ServerProtocol.OBJ_REVEAL),
+	OBJ_DEL(10, 3, ServerProtocol.OBJ_DEL),
+	MAP_PROJANIM(13, 18, ServerProtocol.MAP_PROJECTILE);
 	
 	private int serialID;
 	private ServerProtocol packetID;
 	
-	SceneUpdateType (int serialID, int size, ServerProtocol packetID) {
+	ZoneProtocol (int serialID, int size, ServerProtocol packetID) {
 		this.serialID = serialID;
 		this.packetID = packetID;
 	}
@@ -43,7 +43,7 @@ public enum SceneUpdateType {
 		return serialID;
 	}
 	
-	public ServerProtocol getPacketID () {
+	public ServerProtocol getServerTransmitID () {
 		return packetID;
 	}
 }

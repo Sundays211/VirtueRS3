@@ -23,7 +23,7 @@ package org.virtue.network.event.handler.impl;
 
 import org.virtue.Virtue;
 import org.virtue.game.entity.player.Player;
-import org.virtue.network.event.context.impl.in.WidgetOnWidgetEventContext;
+import org.virtue.network.event.context.impl.in.WidgetTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -33,13 +33,13 @@ import org.virtue.network.event.handler.GameEventHandler;
  * @author Sundays211
  * @since 6/11/2014
  */
-public class WidgetOnWidgetEventHandler implements GameEventHandler<WidgetOnWidgetEventContext> {
+public class WidgetOnWidgetEventHandler implements GameEventHandler<WidgetTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public void handle(Player player, WidgetOnWidgetEventContext context) {
+	public void handle(Player player, WidgetTargetEventContext context) {
 		if (!Virtue.getInstance().getWidgetRepository().handleUse(
 				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
 				context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item(), player)) {
@@ -47,7 +47,7 @@ public class WidgetOnWidgetEventHandler implements GameEventHandler<WidgetOnWidg
 		}
 	}
 	
-	private void defaultHandler(Player player, WidgetOnWidgetEventContext context) {
+	private void defaultHandler(Player player, WidgetTargetEventContext context) {
 		String message = "Nothing interesting happens.";
 		if (player.getPrivilegeLevel().getRights() >= 2) {
 			message = "Unhanded interface-on-interface: Interface1: id="+context.getIf1Interface()+", comp="+context.getIf1Component()
