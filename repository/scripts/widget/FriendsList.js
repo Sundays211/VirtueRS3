@@ -110,5 +110,5 @@ var listen = function(scriptManager) {
 	scriptManager.registerListener(EventType.IF_BUTTON, 550, listener);
 	scriptManager.registerListener(EventType.IF_OPEN, 550, listener);
 	var optionListener = new FriendOptionListener();
-	scriptManager.registerListener(EventType.CHATLIST_OPTION, ChatListType.FRIEND, listener);
+	scriptManager.registerListener(EventType.IF_PLAYER, ChatListType.FRIEND, listener);
 };

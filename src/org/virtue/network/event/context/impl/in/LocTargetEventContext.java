@@ -27,23 +27,27 @@ import org.virtue.network.event.context.GameEventContext;
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 18/01/2015
+ * @since 7/11/2014
  */
-public class WidgetOnPlayerEventContext implements GameEventContext {
+public class LocTargetEventContext implements GameEventContext {
 	
 	private int if_hash, if_slot, if_item;
 	
 	private boolean forceRun;
 	
-	private int playerIndex;
+	private int baseX, baseY;
 	
-	public WidgetOnPlayerEventContext (int if_hash, int if_slot, int if_item, int playerIndex, boolean forceRun) {
+	private int locID;
+	
+	public LocTargetEventContext(int if_hash, int if_slot, int if_item, 
+			int locID, int baseX, int baseY, boolean forceRun) {
 		this.if_hash = if_hash;
 		this.if_slot = if_slot;
 		this.if_item = if_item;
-		this.playerIndex = playerIndex;
+		this.locID = locID;
+		this.baseX = baseX;
+		this.baseY = baseY;
 		this.forceRun = forceRun;
 	}
 	
@@ -67,8 +71,16 @@ public class WidgetOnPlayerEventContext implements GameEventContext {
 		return if_item;
 	}
 	
-	public int getPlayerIndex () {
-		return playerIndex;
+	public int getLocTypeID () {
+		return locID;
+	}
+	
+	public int getBaseX () {
+		return baseX;
+	}
+	
+	public int getBaseY () {
+		return baseY;
 	}
 	
 	public boolean forceRun () {

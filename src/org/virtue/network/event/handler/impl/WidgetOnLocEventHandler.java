@@ -27,7 +27,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
-import org.virtue.network.event.context.impl.in.WidgetOnLocEventContext;
+import org.virtue.network.event.context.impl.in.LocTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 
@@ -38,13 +38,13 @@ import org.virtue.network.protocol.update.block.FaceDirectionBlock;
  * @author Sundays211
  * @since 7/11/2014
  */
-public class WidgetOnLocEventHandler implements GameEventHandler<WidgetOnLocEventContext> {
+public class WidgetOnLocEventHandler implements GameEventHandler<LocTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public void handle(final Player player, final WidgetOnLocEventContext context) {
+	public void handle(final Player player, final LocTargetEventContext context) {
 		Tile tile = new Tile(context.getBaseX(), context.getBaseY(), player.getCurrentTile().getPlane());
 		Region region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
 		if (region != null) {
@@ -70,7 +70,7 @@ public class WidgetOnLocEventHandler implements GameEventHandler<WidgetOnLocEven
 		}		
 	}
 	
-	private void defaultHandler(Player player, WidgetOnLocEventContext context, SceneLocation location) {
+	private void defaultHandler(Player player, LocTargetEventContext context, SceneLocation location) {
 		String message = "Nothing interesting happens.";
 		if (player.getPrivilegeLevel().getRights() >= 2) {
 			message = "Unhanded interface-on-location: Interface: id="+context.getIfInterface()+", comp="+context.getIfComponent()

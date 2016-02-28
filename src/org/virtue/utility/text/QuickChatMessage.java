@@ -38,7 +38,7 @@ public class QuickChatMessage {
 	
 	public static QuickChatMessage decodeMessage (int type, InboundBuffer buffer) {
 		QuickChatMessage message = new QuickChatMessage();
-		message.type = QuickChatTypeList.list(type);
+		message.type = QuickChatPhraseTypeList.list(type);
 		if (message.type == null) {
 			return null;
 		}
@@ -64,7 +64,7 @@ public class QuickChatMessage {
 	
 	public void setParams (Player player) {
 		for (int param=0;param<type.getParamCount();param++) {
-			switch (type.getParamType(param)) {
+			switch (type.getDynamicCommand(param)) {
 			case ENUM_STRING_STATBASE://Enum value related to base skill level
 				params[param] = player.getSkills().getBaseLevel(Stat.getById(type.getParamKey(param, 1)));
 				break;

@@ -87,7 +87,7 @@ import org.virtue.network.event.EventRepository;
 import org.virtue.utility.FileUtility;
 import org.virtue.utility.RenderTypeList;
 import org.virtue.utility.text.Huffman;
-import org.virtue.utility.text.QuickChatTypeList;
+import org.virtue.utility.text.QuickChatPhraseTypeList;
 
 import com.google.common.collect.Maps;
 
@@ -364,7 +364,7 @@ public class Virtue {
 		StructTypeList.init(cache);
 		RenderTypeList.init(Archive.decode(cache.read(2, Js5ConfigGroup.RENDERTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.RENDERTYPE.id).size()));
-		QuickChatTypeList.init(cache);
+		QuickChatPhraseTypeList.init(cache);
 		RegionManager.init(cache);
 		StatDefaults statDefaults = new StatDefaults(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.STAT.js5Id).getData());
 		Stat.setDefaults(statDefaults);		

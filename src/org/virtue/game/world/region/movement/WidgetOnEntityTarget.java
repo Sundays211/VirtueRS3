@@ -82,9 +82,9 @@ public class WidgetOnEntityTarget implements EntityTarget {
 	public boolean onReachTarget() {
 		ScriptEventType eventType;
 		if (target instanceof Player) {
-			eventType = ScriptEventType.IF_PLAYERU;
+			eventType = ScriptEventType.OPPLAYERT;
 		} else if (target instanceof NPC) {
-			eventType = ScriptEventType.IF_NPCU;
+			eventType = ScriptEventType.OPNPCT;
 		} else {
 			throw new IllegalStateException("Invalid entity type: "+target.getClass());
 		}

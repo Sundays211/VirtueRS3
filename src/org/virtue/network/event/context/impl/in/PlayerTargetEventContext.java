@@ -19,13 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.decoder.impl;
+package org.virtue.network.event.context.impl.in;
 
-import org.virtue.game.entity.player.Player;
-import org.virtue.network.event.buffer.InboundBuffer;
-import org.virtue.network.event.context.impl.in.WidgetOnPlayerEventContext;
-import org.virtue.network.event.decoder.ClientProtocol;
-import org.virtue.network.event.decoder.EventDecoder;
+import org.virtue.network.event.context.GameEventContext;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,33 +31,48 @@ import org.virtue.network.event.decoder.EventDecoder;
  * @author Sundays211
  * @since 18/01/2015
  */
-public class WidgetOnPlayerDecoder implements EventDecoder<WidgetOnPlayerEventContext> {
-
-	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
-	 */
-	@Override
-	public WidgetOnPlayerEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int slot = buffer.getShort() & 0xffff;
-		if (slot == 65535) {
-			slot = -1;
-		}
-		int ifHash = buffer.getInt();
-		int pid = buffer.getLEShortA();
-		boolean forceRun = (buffer.getByteS() == 1);
-		int itemID = buffer.getLEShortA() & 0xffff;
-		if (itemID == 65535) {
-			itemID = -1;
-		}
-		return new WidgetOnPlayerEventContext(ifHash, slot, itemID, pid, forceRun);
+public class PlayerTargetEventContext implements GameEventContext {
+	
+	private int if_hash, if_slot, if_item;
+	
+	private boolean forceRun;
+	
+	private int playerIndex;
+	
+	public PlayerTargetEventContext (int if_hash, int if_slot, int if_item, int playerIndex, boolean forceRun) {
+		this.if_hash = if_hash;
+		this.if_slot = if_slot;
+		this.if_item = if_item;
+		this.playerIndex = playerIndex;
+		this.forceRun = forceRun;
 	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
-	 */
-	@Override
-	public ClientProtocol[] getTypes() {
-		return new ClientProtocol[] { ClientProtocol.IF_ON_PLAYER };
+	
+	public int getIfHash () {
+		return if_hash;
+	}
+	
+	public int getIfComponent () {
+		return if_hash & 0xffff;
+	}
+	
+	public int getIfInterface () {
+		return if_hash >> 16;
+	}
+	
+	public int getIfSlot () {
+		return if_slot;
+	}
+	
+	public int getIfItem () {
+		return if_item;
+	}
+	
+	public int getPlayerIndex () {
+		return playerIndex;
+	}
+	
+	public boolean forceRun () {
+		return forceRun;
 	}
 
 }

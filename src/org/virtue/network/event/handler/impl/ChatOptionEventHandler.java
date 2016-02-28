@@ -49,7 +49,7 @@ public class ChatOptionEventHandler implements GameEventHandler<ChatOptionEventC
 	public void handle(Player player, ChatOptionEventContext context) {
 		
 		ScriptManager scripts = Virtue.getInstance().getScripts();
-		if (scripts.hasBinding(ScriptEventType.CHATLIST_OPTION, context.getType().getId())) {
+		if (scripts.hasBinding(ScriptEventType.IF_PLAYER, context.getType().getId())) {
 			Map<String, Object> args = new HashMap<>();
 			args.put("player", player);
 			args.put("interface", context.getInterfaceId());
@@ -58,7 +58,7 @@ public class ChatOptionEventHandler implements GameEventHandler<ChatOptionEventC
 			args.put("button", context.getButton().getId());
 			args.put("name", context.getName());
 			args.put("type", context.getType().getId());
-			scripts.invokeScriptChecked(ScriptEventType.CHATLIST_OPTION, context.getType().getId(), args);
+			scripts.invokeScriptChecked(ScriptEventType.IF_PLAYER, context.getType().getId(), args);
 		} else {
 			player.getDispatcher().sendGameMessage("Unhandled chat option: iface="+context.getInterfaceId()+", comp="+context.getComponentId()+", option="+context.getButton()+", slot="+context.getSlot()+", name="+context.getName()+", type="+context.getType());
 		}

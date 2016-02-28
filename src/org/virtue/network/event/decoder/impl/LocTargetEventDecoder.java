@@ -23,7 +23,7 @@ package org.virtue.network.event.decoder.impl;
 
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
-import org.virtue.network.event.context.impl.in.WidgetOnLocEventContext;
+import org.virtue.network.event.context.impl.in.LocTargetEventContext;
 import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
 
@@ -34,21 +34,21 @@ import org.virtue.network.event.decoder.EventDecoder;
  * @author Sundays211
  * @since 7/11/2014
  */
-public class WidgetOnLocEventDecoder implements EventDecoder<WidgetOnLocEventContext> {
+public class LocTargetEventDecoder implements EventDecoder<LocTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
-	public WidgetOnLocEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		boolean forceRun = (buffer.getByteC() == 1);
-		int slot = buffer.getLEShort() & 0xffff;
-		int baseX = buffer.getLEShortA() & 0xffff;
-		int itemID = buffer.getLEShort() & 0xffff;
-		int ifHash = buffer.getInt();
-		int locTypeID = buffer.getIntAlt2();
+	public LocTargetEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
+		int locTypeID = buffer.getIntAlt3();
+		int ifHash = buffer.getIntAlt3();
 		int baseY = buffer.getShort() & 0xffff;
-		return new WidgetOnLocEventContext(ifHash, slot == 65535 ? -1 : slot, 
+		int slot = buffer.getLEShortA() & 0xffff;		
+		boolean forceRun = (buffer.getByteS() == 1);
+		int itemID = buffer.getLEShort() & 0xffff;		
+		int baseX = buffer.getLEShortA() & 0xffff;
+		return new LocTargetEventContext(ifHash, slot == 65535 ? -1 : slot, 
 				itemID == 65535 ? -1 : itemID, locTypeID, baseX, baseY, forceRun);
 	}
 

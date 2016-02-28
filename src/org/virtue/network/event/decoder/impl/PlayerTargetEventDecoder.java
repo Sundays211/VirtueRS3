@@ -19,72 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.context.impl.in;
+package org.virtue.network.event.decoder.impl;
 
-import org.virtue.network.event.context.GameEventContext;
+import org.virtue.game.entity.player.Player;
+import org.virtue.network.event.buffer.InboundBuffer;
+import org.virtue.network.event.context.impl.in.PlayerTargetEventContext;
+import org.virtue.network.event.decoder.ClientProtocol;
+import org.virtue.network.event.decoder.EventDecoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
+ * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 7/11/2014
+ * @since 18/01/2015
  */
-public class WidgetOnLocEventContext implements GameEventContext {
-	
-	private int if_hash, if_slot, if_item;
-	
-	private boolean forceRun;
-	
-	private int baseX, baseY;
-	
-	private int locID;
-	
-	public WidgetOnLocEventContext(int if_hash, int if_slot, int if_item, 
-			int locID, int baseX, int baseY, boolean forceRun) {
-		this.if_hash = if_hash;
-		this.if_slot = if_slot;
-		this.if_item = if_item;
-		this.locID = locID;
-		this.baseX = baseX;
-		this.baseY = baseY;
-		this.forceRun = forceRun;
+public class PlayerTargetEventDecoder implements EventDecoder<PlayerTargetEventContext> {
+
+	/* (non-Javadoc)
+	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
+	 */
+	@Override
+	public PlayerTargetEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
+		int ifHash = buffer.getLEInt();
+		int pid = buffer.getLEShortA();
+		int slot = buffer.getLEShortA() & 0xffff;
+		boolean forceRun = (buffer.getByteS() == 1);
+		int objId = buffer.getShortA() & 0xffff;
+		return new PlayerTargetEventContext(ifHash, slot == 65535 ? -1 : slot, objId == 65535 ? -1 : objId, pid, forceRun);
 	}
-	
-	public int getIfHash () {
-		return if_hash;
-	}
-	
-	public int getIfComponent () {
-		return if_hash & 0xffff;
-	}
-	
-	public int getIfInterface () {
-		return if_hash >> 16;
-	}
-	
-	public int getIfSlot () {
-		return if_slot;
-	}
-	
-	public int getIfItem () {
-		return if_item;
-	}
-	
-	public int getLocTypeID () {
-		return locID;
-	}
-	
-	public int getBaseX () {
-		return baseX;
-	}
-	
-	public int getBaseY () {
-		return baseY;
-	}
-	
-	public boolean forceRun () {
-		return forceRun;
+
+	/* (non-Javadoc)
+	 * @see org.virtue.network.event.decoder.EventDecoder#getTypes()
+	 */
+	@Override
+	public ClientProtocol[] getTypes() {
+		return new ClientProtocol[] { ClientProtocol.OPPLAYERT };
 	}
 
 }

@@ -239,29 +239,29 @@ public enum ScriptEventType {
 	IF_BUTTON10(90),
 	
 	/**
-	 * Called when an interface component is used on another interface component
+	 * Called when an interface component is targeted on another interface component
 	 */
-	IF_IFU(91),
+	IF_BUTTONT(91),
 	
 	/**
-	 * Called when an interface component is used on a location
+	 * Called when an interface component is targeted on a location
 	 */
-	IF_LOCU(92),
+	OPLOCT(92),
 	
 	/**
-	 * Called when an interface component is used on an NPC
+	 * Called when an interface component is targeted on an NPC
 	 */
-	IF_NPCU(93),
+	OPNPCT(93),
 	
 	/**
-	 * Called when an interface component is used on a ground item
+	 * Called when an interface component is targeted on a ground item
 	 */
-	IF_OBJU(94),
+	OPOBJT(94),
 	
 	/**
-	 * Called when an interface component is used on a player
+	 * Called when an interface component is targeted on a player
 	 */
-	IF_PLAYERU(95),
+	OPPLAYERT(95),
 	
 	/**
 	 * Called when an interface component is dragged onto another interface component
@@ -306,7 +306,7 @@ public enum ScriptEventType {
 	/**
 	 * Called when an option is selected on a chat line or chat list (eg friends list, friends chat list, group chat, etc)
 	 */
-	CHATLIST_OPTION(105),
+	IF_PLAYER(105),
 	
 	/**
 	 * Called when an inventory item is used on a player. Note: In this case, the objType ID is used as the binding

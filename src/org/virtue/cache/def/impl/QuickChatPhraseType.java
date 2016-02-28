@@ -57,8 +57,8 @@ public class QuickChatPhraseType {
 		return qcType;
 	}
 
-	QuickChatDynamicCommand[] variablePartTypes;
-	int[][] variablePartConfigKeys;
+	QuickChatDynamicCommand[] dynamicCommands;
+	int[][] dynamicCommandConfigKeys;
 	String[] text;
     public int[] responses;
     public boolean aBool11355 = true;
@@ -79,16 +79,16 @@ public class QuickChatPhraseType {
 		    }
 		} else if (3 == code) {
 		    int typeCount = buffer.get() & 0xff;
-		    variablePartTypes = new QuickChatDynamicCommand[typeCount];
-		    variablePartConfigKeys = new int[typeCount][];
+		    dynamicCommands = new QuickChatDynamicCommand[typeCount];
+		    dynamicCommandConfigKeys = new int[typeCount][];
 		    for (int slot = 0; slot < typeCount; slot++) {
 				int i_6_ = buffer.getShort() & 0xffff;
 				QuickChatDynamicCommand type = QuickChatDynamicCommand.getByID(i_6_);
 				if (null != type) {
-				    variablePartTypes[slot] = type;
-				    variablePartConfigKeys[slot] = new int[type.configKeyCount];
+				    dynamicCommands[slot] = type;
+				    dynamicCommandConfigKeys[slot] = new int[type.configKeyCount];
 				    for (int pos = 0; pos < type.configKeyCount; pos++) {
-				    	variablePartConfigKeys[slot][pos] = buffer.getShort() & 0xffff;
+				    	dynamicCommandConfigKeys[slot][pos] = buffer.getShort() & 0xffff;
 				    }
 				}
 		    }
@@ -106,26 +106,26 @@ public class QuickChatPhraseType {
     }
     
     public int getParamCount() {
-		if (variablePartTypes == null) {
+		if (dynamicCommands == null) {
 		    return 0;
 		}
-		return variablePartTypes.length;
+		return dynamicCommands.length;
     }
 	
-	public QuickChatDynamicCommand getParamType (int pos) {
-		return variablePartTypes[pos];
+	public QuickChatDynamicCommand getDynamicCommand (int pos) {
+		return dynamicCommands[pos];
 	}
     
     public int getParamKey(int paramSlot, int keySlot) {
-		if (null == variablePartTypes || paramSlot < 0
-				|| paramSlot > variablePartTypes.length) {
+		if (null == dynamicCommands || paramSlot < 0
+				|| paramSlot > dynamicCommands.length) {
 			return -1;
 		}
-		if (variablePartConfigKeys[paramSlot] == null || keySlot < 0
-				|| keySlot > variablePartConfigKeys[paramSlot].length) {
+		if (dynamicCommandConfigKeys[paramSlot] == null || keySlot < 0
+				|| keySlot > dynamicCommandConfigKeys[paramSlot].length) {
 			return -1;
 		}
-		return variablePartConfigKeys[paramSlot][keySlot];
+		return dynamicCommandConfigKeys[paramSlot][keySlot];
     }
 	
 	public int getId () {
@@ -134,10 +134,10 @@ public class QuickChatPhraseType {
 	
 	public int[] unpack(InboundBuffer buffer) {
 		int[] params = new int[0];
-		if (variablePartTypes != null) {
-			params = new int[variablePartTypes.length];
-		    for (int pos = 0; pos < variablePartTypes.length; pos++) {
-				int size = variablePartTypes[pos].clientTransmitSize;
+		if (dynamicCommands != null) {
+			params = new int[dynamicCommands.length];
+		    for (int pos = 0; pos < dynamicCommands.length; pos++) {
+				int size = dynamicCommands[pos].clientTransmitSize;
 				if (size > 0) {
 					params[pos] = (int) buffer.getQuickchatParam(size);
 				}
@@ -147,9 +147,9 @@ public class QuickChatPhraseType {
     }
 	
 	public void pack(OutboundBuffer buffer, int[] params) {
-		if (variablePartTypes != null) {
-		    for (int pos = 0; pos < variablePartTypes.length && pos < params.length; pos++) {
-				int size = variablePartTypes[pos].serverTransmitSize;
+		if (dynamicCommands != null) {
+		    for (int pos = 0; pos < dynamicCommands.length && pos < params.length; pos++) {
+				int size = dynamicCommands[pos].serverTransmitSize;
 				if (size > 0) {
 					buffer.putQuickchatParam((long) params[pos], size);
 				}

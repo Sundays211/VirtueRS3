@@ -48,20 +48,20 @@ import com.google.common.cache.LoadingCache;
  * @author Sundays211
  * @since 2/07/2015
  */
-public class QuickChatTypeList extends CacheLoader<Integer, QuickChatPhraseType> {
+public class QuickChatPhraseTypeList extends CacheLoader<Integer, QuickChatPhraseType> {
 
 	/**
 	 * The {@link Logger} instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(QuickChatTypeList.class);
+	private static Logger logger = LoggerFactory.getLogger(QuickChatPhraseTypeList.class);
 
 	/**
 	 * The {@link LocTypeList} Instance
 	 */
-	private static QuickChatTypeList instance;
+	private static QuickChatPhraseTypeList instance;
 	
 	public static void init (Cache cache) {
-		instance = new QuickChatTypeList();
+		instance = new QuickChatPhraseTypeList();
 		try {
 			Container container = Container.decode(cache.getStore().read(255, Js5Archive.QUICKCHAT.getArchiveId()));
 			instance.index = ReferenceTable.decode(container.getData());
@@ -98,7 +98,7 @@ public class QuickChatTypeList extends CacheLoader<Integer, QuickChatPhraseType>
 	private Archive phrases;	
 	private Archive globalPhrases;
 	
-	private QuickChatTypeList () {
+	private QuickChatPhraseTypeList () {
 		//Prevent direct instantiation
 	}
 

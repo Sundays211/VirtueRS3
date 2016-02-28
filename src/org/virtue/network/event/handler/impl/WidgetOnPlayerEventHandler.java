@@ -25,7 +25,7 @@ import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.movement.WidgetOnEntityTarget;
-import org.virtue.network.event.context.impl.in.WidgetOnPlayerEventContext;
+import org.virtue.network.event.context.impl.in.PlayerTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -36,13 +36,13 @@ import org.virtue.network.event.handler.GameEventHandler;
  * @author Sundays211
  * @since 18/01/2015
  */
-public class WidgetOnPlayerEventHandler implements GameEventHandler<WidgetOnPlayerEventContext> {
+public class WidgetOnPlayerEventHandler implements GameEventHandler<PlayerTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public void handle(Player player, WidgetOnPlayerEventContext context) {
+	public void handle(Player player, PlayerTargetEventContext context) {
 		Entity target = World.getInstance().getPlayers().get(context.getPlayerIndex());
 		if (target != null) {
 			player.getMovement().setTarget(new WidgetOnEntityTarget(player, target, 

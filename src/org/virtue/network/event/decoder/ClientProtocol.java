@@ -154,7 +154,7 @@ public enum ClientProtocol {
 	/**
 	 * Called when an item on an interface button is targeted on another interface component
 	 */
-	IF_BUTTONT(-1, 16),
+	IF_BUTTONT(55, 16),
 
 	/**
 	 * Called when an interface button is dragged onto another interface
@@ -204,7 +204,7 @@ public enum ClientProtocol {
 	/**
 	 * Called when an item on an interface is targeted on a game scene location
 	 */
-	OPLOCT(-1, 17),
+	OPLOCT(8, 17),
 
 	/**
 	 * The first context-menu option selected on a ground item
@@ -324,7 +324,7 @@ public enum ClientProtocol {
 	/**
 	 * Called when an item on an interface is used on a player
 	 */
-	IF_ON_PLAYER(-1, 11),
+	OPPLAYERT(119, 11),
 
 	/**
 	 * Sends changes to client variables which are specified to transmit on change.
