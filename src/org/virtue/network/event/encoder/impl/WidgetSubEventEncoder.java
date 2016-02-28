@@ -47,28 +47,28 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 			if (context.getParentEntity() instanceof NPC) {
 				NPC npc = (NPC) context.getParentEntity();
 				buffer.putPacket(ServerProtocol.IF_OPENSUB_ACTIVE_NPC, player);
-				buffer.putShortA(npc.getIndex());
 				buffer.putInt(context.getKeys()[3]);
-				buffer.putS(context.alwaysOpen() ? 1 : 0);
-				buffer.putIntAlt3(context.getRoot() << 16 | context.getComponent());
-				buffer.putIntAlt2(context.getKeys()[2]);
+				buffer.putInt(context.getRoot() << 16 | context.getComponent());
 				buffer.putIntAlt2(context.getKeys()[1]);
-				buffer.putLEInt(context.getKeys()[0]);
+				buffer.putInt(context.getKeys()[0]);
+				buffer.putC(context.alwaysOpen() ? 1 : 0);
+				buffer.putShortA(npc.getIndex());
 				buffer.putShort(context.getWidgetId());
+				buffer.putIntAlt2(context.getKeys()[2]);
 			}
 		} else if (context.getParentLoc() != null) {
 			SceneLocation loc = context.getParentLoc();
 			buffer.putPacket(ServerProtocol.IF_OPENSUB_ACTIVE_LOC, player);
-			buffer.putByte((loc.getNodeType() << 2) | (loc.getRotation() & 0x3));
-			buffer.putIntAlt3(context.getKeys()[3]);
-			buffer.putInt(context.getKeys()[1]);
-			buffer.putC(context.alwaysOpen() ? 1 : 0);
-			buffer.putShort(context.getWidgetId());
-			buffer.putIntAlt2(loc.getID());
-			buffer.putIntAlt3(context.getRoot() << 16 | context.getComponent());
+			buffer.putIntAlt3(context.getKeys()[0]);
+			buffer.putInt(context.getRoot() << 16 | context.getComponent());
+			buffer.putLEInt(loc.getTile().getTileHash());
+			buffer.putIntAlt3(context.getKeys()[1]);
+			buffer.putC((loc.getNodeType() << 2) | (loc.getRotation() & 0x3));
+			buffer.putLEInt(context.getKeys()[3]);
+			buffer.putByte(context.alwaysOpen() ? 1 : 0);
+			buffer.putLEInt(loc.getID());
 			buffer.putIntAlt2(context.getKeys()[2]);
-			buffer.putIntAlt2(loc.getTile().getTileHash());
-			buffer.putLEInt(context.getKeys()[0]);
+			buffer.putShortA(context.getWidgetId());
 		} else {
 			buffer.putPacket(ServerProtocol.IF_OPENSUB, player);
 			buffer.putLEShortA(context.getWidgetId());

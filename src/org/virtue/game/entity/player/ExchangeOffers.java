@@ -53,7 +53,7 @@ public class ExchangeOffers {
 		
 
 		if (offers == null || offers.length != 3) {
-			throw new RuntimeException("Invalid offer count!");
+			offers = new ExchangeOffer[3][8];
 		}
 		
 		boolean hasOffersWaiting = false;

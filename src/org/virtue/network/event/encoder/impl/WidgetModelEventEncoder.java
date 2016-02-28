@@ -45,33 +45,33 @@ public class WidgetModelEventEncoder implements EventEncoder<WidgetModelEventCon
 		switch (context.getType()) {
 			case PLAYER_MODEL_OTHER:
 				buffer.putPacket(ServerProtocol.IF_SETPLAYERMODEL_OTHER, player);
-				buffer.putLEShort(context.getMediaID());
-				buffer.putIntAlt2((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
-				buffer.putLEInt(context.getSettings());
+				buffer.putShort(context.getMediaID());
+				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putIntAlt3(context.getSettings());
 				break;
 			case PLAYER_MODEL_SELF:
 				buffer.putPacket(ServerProtocol.IF_SETPLAYERMODEL_SELF, player);
-				buffer.putIntAlt3((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putIntAlt2((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case NPC_HEAD:
 				buffer.putPacket(ServerProtocol.IF_SETNPCHEAD, player);
-				buffer.putIntAlt3(context.getMediaID());
-				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putLEInt(context.getMediaID());
+				buffer.putIntAlt3((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case PLAYER_HEAD_SELF:
 				buffer.putPacket(ServerProtocol.IF_SETPLAYERHEAD_SELF, player);
-				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putIntAlt2((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case PLAYER_HEAD_OTHER:
 				buffer.putPacket(ServerProtocol.IF_SETPLAYERHEAD_OTHER, player);
-				buffer.putShortA(context.getMediaID());
-				buffer.putInt(context.getSettings());
-				buffer.putIntAlt3((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putLEInt(context.getSettings());
+				buffer.putLEShortA(context.getMediaID());
+				buffer.putInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 			case ANIMATION:
 				buffer.putPacket(ServerProtocol.IF_SETANIM, player);
-				buffer.putIntAlt2((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				buffer.putInt(context.getMediaID());
+				buffer.putLEInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
 		}
 		return buffer;

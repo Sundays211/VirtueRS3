@@ -342,12 +342,12 @@ public enum ServerProtocol {
 	/**
 	 * Opens an interface as a sub of an npc
 	 */
-	IF_OPENSUB_ACTIVE_NPC(-1, 25),
+	IF_OPENSUB_ACTIVE_NPC(23, 25),
 
 	/**
 	 * Opens an interface as a sub of a location
 	 */
-	IF_OPENSUB_ACTIVE_LOC(-1, 32),
+	IF_OPENSUB_ACTIVE_LOC(84, 32),
 
 	/**
 	 * Closes the interface which is a sub of the provided interface
@@ -367,33 +367,33 @@ public enum ServerProtocol {
 	/**
 	 * Sets model on an interface component to another player's model
 	 */
-	IF_SETPLAYERMODEL_OTHER(-1, 10),
+	IF_SETPLAYERMODEL_OTHER(82, 10),
 
 	/**
 	 * Sets the model on an interface component to the active player's model
 	 */
-	IF_SETPLAYERMODEL_SELF(-1, 4),
+	IF_SETPLAYERMODEL_SELF(148, 4),
 
 
 	/**
 	 * Sets the NPC head on an interface component
 	 */
-	IF_SETNPCHEAD(-1, 8),
+	IF_SETNPCHEAD(133, 8),
 
 	/**
 	 * Sets the model on an interface component to the player's chathead
 	 */
-	IF_SETPLAYERHEAD_SELF(-1, 4),
+	IF_SETPLAYERHEAD_SELF(31, 4),
 
 	/**
 	 * Sets the model on an interface component to another player's chathead
 	 */
-	IF_SETPLAYERHEAD_OTHER(-1, 10),
+	IF_SETPLAYERHEAD_OTHER(106, 10),
 
 	/**
 	 * Animates a model on an interface component
 	 */
-	IF_SETANIM(-1, 8),
+	IF_SETANIM(122, 8),
 
 	/**
 	 * Sets the events for an interface (including which options are handled by the server, whether it can be used on other elements, etc).
@@ -420,7 +420,7 @@ public enum ServerProtocol {
 	/**
 	 * Notifies a client to play the specified cutscene
 	 */
-	CUTSCENE(-1, -2),
+	CUTSCENE(92, -2),
 
 	PLAY_MUSIC(-1, 3);
 	
