@@ -72,47 +72,9 @@ public class DialogManager {
 	 */
 	public void requestInteger (String message, InputEnteredHandler handler) {
 		setInputHandler(handler);
-		player.getWidgets().openWidget(1477, 503, 1418, true);
+		player.getWidgets().openWidget(1477, 521, 1418, true);
 		player.getWidgets().openWidget(1418, 1, 1469, true);
 		player.getDispatcher().sendCS2Script(108, message);
-	}
-	
-	/**
-	 * Sends a dialog for the player to enter a name. The dialog is restricted to 12 characters
-	 * @param message The dialog message
-	 * @param handler The script to run when the input has been entered
-	 */
-	public void requestName (String message, InputEnteredHandler handler) {
-		setInputHandler(handler);
-		player.getWidgets().openWidget(1477, 503, 1418, true);
-		player.getWidgets().openWidget(1418, 1, 1469, true);
-		player.getDispatcher().sendCS2Script(109, message);
-	}
-	
-	/**
-	 * Sends a dialog for the player to enter a string
-	 * @param message The dialog message
-	 * @param handler The script to run when the input has been entered
-	 */
-	public void requestString (String message, InputEnteredHandler handler) {
-		setInputHandler(handler);
-		player.getWidgets().openWidget(1477, 503, 1418, true);
-		player.getWidgets().openWidget(1418, 1, 1469, true);
-		player.getDispatcher().sendCS2Script(110, message);
-	}
-	
-	/**
-	 * Sends a dialog for the player to choose an item
-	 * @param message The dialog message
-	 * @param handler The script to run when the item has been chosen
-	 */
-	public void requestItem (String message, InputEnteredHandler handler) {
-		setInputHandler(handler);
-		player.getWidgets().closeWidget(1418, 0);
-		player.getWidgets().openWidget(1477, 503, 1418, true);
-		player.getWidgets().openWidget(1418, 1, 389, true);
-		player.getDispatcher().sendCS2Script(8178);
-		player.getDispatcher().sendCS2Script(570, message);
 	}
 	
 	public void sendMultichoice (String message, String[] options) {

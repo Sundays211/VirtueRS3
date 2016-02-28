@@ -704,28 +704,9 @@ public interface ScriptAPI {
 	 * @param handler The function for handling the input
 	 */
 	public void setInputHandler (Player player, InputEnteredHandler handler);
-	
-	/**
-	 * Opens a dialog prompting the player to enter a string
-	 * @param player The player
-	 * @param message The dialog request message
-	 * @param callback The function to run when the string has been entered.
-	 */
-	public void requestString (Player player, String message, InputEnteredHandler callback);
-	
-	/**
-	 * Opens a dialog prompting the player to enter a player name
-	 * @param player The player
-	 * @param message The dialog request message
-	 * @param callback The function to run when the string has been entered.
-	 */
-	public void requestName (Player player, String message, InputEnteredHandler callback);
-	
-	public void requestCount (Player player, String message, InputEnteredHandler callback);
-	
+		
 	public void requestMulti (Player player, String message, String[] options, int[] steps, InputEnteredHandler callback);
 	
-		
 	public void setAction (Player player, PlayerActionHandler action);
 	
 	/**

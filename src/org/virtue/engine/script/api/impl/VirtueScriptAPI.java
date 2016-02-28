@@ -1231,31 +1231,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#requestString(org.virtue.game.entity.player.Player, java.lang.String, org.virtue.game.content.dialogues.InputEnteredHandler)
-	 */
-	@Override
-	public void requestString(Player player, String message, InputEnteredHandler callback) {
-		player.getDialogs().requestString(message, callback);
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#requestName(org.virtue.game.entity.player.Player, java.lang.String, org.virtue.game.content.dialogues.InputEnteredHandler)
-	 */
-	@Override
-	public void requestName(Player player, String message, InputEnteredHandler callback) {
-		player.getDialogs().requestName(message, callback);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#requestCount(org.virtue.game.entity.player.Player, java.lang.String, org.virtue.game.content.dialogues.InputEnteredHandler)
-	 */
-	@Override
-	public void requestCount(Player player, String message, InputEnteredHandler callback) {
-		player.getDialogs().requestInteger(message, callback);
-	}
-
-	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#requestMulti(org.virtue.game.entity.player.Player, java.lang.String, java.lang.String[], int[], org.virtue.game.content.dialogues.InputEnteredHandler)
 	 */
 	@Override

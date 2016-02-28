@@ -55,6 +55,11 @@ function inframeInput(player, ifaceId, comp, callback, type, maxlen) {
 	api.setInputHandler(player, new Handler());	
 }
 
+function openModalBase (player) {
+	api.openWidget(player, 1477, 521, 1418, true);
+	api.openWidget(player, 1418, 1, 1469, true);
+}
+
 function requestCount (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
@@ -63,9 +68,17 @@ function requestCount (player, message, callback) {
 			}
 		}
 	});	
-	api.requestCount(player, message, new Handler());
+	openModalBase(player);
+	api.runClientScript(player, 108, [message]);
+	api.setInputHandler(player, new Handler());
 }
 
+/**
+ * Sends a dialog for the player to enter a name
+ * @param player The player
+ * @param message The dialog message
+ * @param callback The callback to run when the input has been entered
+ */
 function requestName (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
@@ -74,9 +87,17 @@ function requestName (player, message, callback) {
 			}
 		}
 	});	
-	api.requestName(player, message, new Handler());
+	openModalBase(player);
+	api.runClientScript(player, 109, [message]);
+	api.setInputHandler(player, new Handler());
 }
 
+/**
+ * Sends a dialog for the player to enter a string
+ * @param player The player
+ * @param message The dialog message
+ * @param callback The callback to run when the input has been entered
+ */
 function requestString (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
@@ -85,16 +106,28 @@ function requestString (player, message, callback) {
 			}
 		}
 	});	
-	api.requestString(player, message, new Handler());
+	openModalBase(player);
+	api.runClientScript(player, 110, [message]);
+	api.setInputHandler(player, new Handler());
 }
 
+/**
+ * Sends a dialog for the player to choose an item
+ * @param player The player
+ * @param message The dialog message
+ * @param callback The callback to run when the item has been chosen
+ */
 function requestItem (player, message, callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
 			callback(value);
 		}
 	});
-	player.getDialogs().requestItem(message, new Handler());
+	api.openWidget(player, 1477, 521, 1418, true);
+	api.openWidget(player, 1418, 1, 389, true);
+	api.runClientScript(player, 8178, []);
+	api.runClientScript(player, 570, [message]);
+	api.setInputHandler(player, new Handler());	
 }
 
 /**
@@ -314,11 +347,6 @@ function sendCommandResponse (player, message, console) {
 
 function getCompHash (iface, comp) {
 	return (iface << 16) | comp;
-}
-
-function openModalBase (player) {
-	api.openWidget(player, 1477, 503, 1418, true);
-	api.openWidget(player, 1418, 1, 1469, true);
 }
 
 function defaultOpHeldUseHandler (player, args) {
