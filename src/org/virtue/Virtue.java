@@ -293,26 +293,36 @@ public class Virtue {
 	 * @throws Exception 
 	 */
 	private void loadGame() throws Exception {
-		accountIndex = new AccountIndex();
+		accountIndex = new AccountIndex();		
 		String indexFileLocation = getProperty("character.index.file", "./repository/character/index.xml");
 		accountIndex.load(FileUtility.parseFilePath(indexFileLocation));
+		
 		event = new EventRepository();
 		event.load();
 		parser = new ParserRepository();
 		parser.load();
 		widget = new WidgetRepository();
 		widget.load();
+		
 		String scriptsFileDir = getProperty("scripts.dir", "./repository/scripts/");
 		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir));
 		scripts.load();
+		
 		clans = new ClanManager();
-		clans.load();
+		String clanIndexFile = getProperty("clan.index.file", "./repository/clan/index.xml");
+		clans.load(FileUtility.parseFilePath(clanIndexFile));
+		
 		exchange = new GrandExchange();
 		exchange.load();
 		controller = new MinigameProcessor();
 		controller.start();
-		NewsDataParser.loadJsonNewsData();
-		NpcDataParser.loadJsonNpcData();
+
+		String newsDataFile = getProperty("news.file", "repository/news.json");
+		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile));
+		
+		String npcDataFile = getProperty("npc.data.file", "./repository/npc/NPCData.json");
+		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile));
+		
 		SpecialAttackHandler.init();
 		ActionBar.init();
 		AbstractNPC.init();

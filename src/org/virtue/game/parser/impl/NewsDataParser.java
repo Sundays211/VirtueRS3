@@ -56,10 +56,8 @@ public class NewsDataParser {
 	
 	public static final List<NewsItem> news = new ArrayList<NewsItem>();
 	
-	private static File PATH = new File("repository/news.json");
-	
-	public static void loadJsonNewsData () {
-		try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {
+	public static void loadJsonNewsData (File path) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
 			JsonParser parser = new JsonParser();
 			JsonArray array = parser.parse(reader).getAsJsonArray();
 			news.clear();

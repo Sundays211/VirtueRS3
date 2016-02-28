@@ -14,7 +14,7 @@ import org.virtue.network.event.decoder.impl.BugReportEventDecoder;
 import org.virtue.network.event.decoder.impl.ButtonClickEventDecoder;
 import org.virtue.network.event.decoder.impl.ChatFilterEventDecoder;
 import org.virtue.network.event.decoder.impl.ChatModeEventDecoder;
-import org.virtue.network.event.decoder.impl.ChatOptionEventDecoder;
+import org.virtue.network.event.decoder.impl.WidgetPlayerOptionEventDecoder;
 import org.virtue.network.event.decoder.impl.CommandEventDecoder;
 import org.virtue.network.event.decoder.impl.CreationEventDecoder;
 import org.virtue.network.event.decoder.impl.EmptyEventDecoder;
@@ -138,7 +138,7 @@ public class EventRepository {
 		registerReadEvent(ClientProtocol.MAP_BUILD_COMPLETE, new EmptyEventDecoder(), new MapBuildCompleteEventHandler());
 		registerReadEvent(ClientProtocol.CLOSE_MODAL, new EmptyEventDecoder(), new WidgetCloseEventHandler());
 		registerReadEvent(new VarcTransmitEventDecoder(), new VarcTransmitEventHandler());
-		registerReadEvent(new ChatOptionEventDecoder(), new ChatOptionEventHandler());
+		registerReadEvent(new WidgetPlayerOptionEventDecoder(), new ChatOptionEventHandler());
 		registerReadEvent(new LocationClickEventDecoder(), new LocationClickEventHandler());
 		registerReadEvent(new ItemClickEventDecoder(), new ItemClickEventHandler());
 		registerReadEvent(new NpcClickEventDecoder(), new NpcClickEventHandler());

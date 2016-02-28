@@ -50,8 +50,8 @@ public class ClanManager {
 	
 	private ClanChannelManager channelManager;
 	
-	public void load () {
-		index = new XMLClanIndex(new File("./repository/clan/", "index.xml"));
+	public void load (File indexFile) {
+		index = new XMLClanIndex(indexFile);
 		settingsManager = new ClanSettingsManager(this);
 		channelManager = new ClanChannelManager(this);
 		Virtue.getInstance().getEngine().invoke(new Tick () {

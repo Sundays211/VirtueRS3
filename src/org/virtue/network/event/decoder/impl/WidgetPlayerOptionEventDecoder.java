@@ -37,17 +37,17 @@ import org.virtue.network.event.decoder.EventDecoder;
  * @author Sundays211
  * @since 28/01/2015
  */
-public class ChatOptionEventDecoder implements EventDecoder<ChatOptionEventContext> {
+public class WidgetPlayerOptionEventDecoder implements EventDecoder<ChatOptionEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
 	public ChatOptionEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		ChatOptionType chatType = ChatOptionType.getById(buffer.getByteC());
+		ChatOptionType chatType = ChatOptionType.getById(buffer.getByte());
 		int slot = buffer.getLEShortA();
-		OptionButton button = OptionButton.getById(buffer.getByteA());
 		String name = buffer.getString();
+		OptionButton button = OptionButton.getById(buffer.getByte());
 		int hash = buffer.getLEInt();
 		return new ChatOptionEventContext(hash, slot, button, name, chatType);
 	}
@@ -57,7 +57,7 @@ public class ChatOptionEventDecoder implements EventDecoder<ChatOptionEventConte
 	 */
 	@Override
 	public ClientProtocol[] getTypes() {
-		return new ClientProtocol[] { ClientProtocol.CHAT_USER_OPTION };
+		return new ClientProtocol[] { ClientProtocol.IF_PLAYER };
 	}
 
 }

@@ -50,10 +50,8 @@ public class NpcDataParser {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(NpcDataParser.class);
 	
-	private static File PATH = new File("./repository/npc/NPCData.json");
-	
-	public static void loadJsonNpcData () {
-		try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {
+	public static void loadJsonNpcData (File path) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
 			JsonParser parser = new JsonParser();
 			JsonArray array = parser.parse(reader).getAsJsonArray();
 			for (JsonElement element : array) {

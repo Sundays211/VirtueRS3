@@ -162,9 +162,14 @@ public enum ClientProtocol {
 	IF_BUTTOND(-1, 16),
 
 	/**
+	 * Selected an option on an interface relating to chat
+	 */
+	IF_PLAYER(6, -1),
+
+	/**
 	 * Called when the client-side "closeWidgets" code is run
 	 */
-	CLOSE_MODAL(-1, 0),
+	CLOSE_MODAL(63, 0),
 
 	/**
 	 * The first context-menu option selected on a scene location
@@ -371,7 +376,7 @@ public enum ClientProtocol {
 	 * A client-side request to visit the specified URL.
 	 * Sent when a player clicks a link in-game.
 	 */
-	URL_REQUEST(-1, -2),
+	URL_REQUEST(102, -2),
 
 	/**
 	 * Sent whenever the player changes their "online status".
@@ -454,11 +459,6 @@ public enum ClientProtocol {
 	 * A request to kick/ban a user from the current friend chat channel.
 	 */
 	FRIENDCHAT_KICK(71, -1),
-
-	/**
-	 * Selected an option on an interface relating to chat
-	 */
-	CHAT_USER_OPTION(-1, -1),
 
 	/**
 	 * A request for the server to send the world list
