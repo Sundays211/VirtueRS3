@@ -50,7 +50,7 @@ public class CreationEventDecoder implements EventDecoder<CreationEventContext> 
 		ClientProtocol packetType = ClientProtocol.forOpcode(opcode);
 		CreationEventContext context = null;
 		switch (packetType) {
-		case CREATION_SUBMIT:			
+		case CREATE_ACCOUNT:			
 			String email = xteaBuffer.getString();
 			String password = xteaBuffer.getString();
 			int age = xteaBuffer.getByte();
@@ -58,13 +58,13 @@ public class CreationEventDecoder implements EventDecoder<CreationEventContext> 
 			String name = xteaBuffer.getString();
 			context = new CreationEventContext(Type.SEND, email, password, age, sendUpdates, name);
 			break;
-		case CREATION_CHECK_NAME:
+		case CREATE_CHECK_NAME:
 			context = new CreationEventContext(Type.CHECKNAME, xteaBuffer.getString());
 			break;
-		case CREATION_CHECK_EMAIL:
+		case CREATE_CHECK_EMAIL:
 			context = new CreationEventContext(Type.CHECKEMAIL, xteaBuffer.getString());
 			break;
-		case CREATION_CHECK_AGE:
+		case CREATE_LOG_PROGRESS:
 			context = new CreationEventContext(Type.CHECKAGE, xteaBuffer.getByte());
 			break;
 		default:
@@ -79,8 +79,8 @@ public class CreationEventDecoder implements EventDecoder<CreationEventContext> 
 	@Override
 	public ClientProtocol[] getTypes() {
 		return new ClientProtocol[] {
-				ClientProtocol.CREATION_SUBMIT, ClientProtocol.CREATION_CHECK_NAME,
-				ClientProtocol.CREATION_CHECK_EMAIL, ClientProtocol.CREATION_CHECK_AGE
+				ClientProtocol.CREATE_ACCOUNT, ClientProtocol.CREATE_CHECK_NAME,
+				ClientProtocol.CREATE_CHECK_EMAIL, ClientProtocol.CREATE_LOG_PROGRESS
 		};
 	}
 

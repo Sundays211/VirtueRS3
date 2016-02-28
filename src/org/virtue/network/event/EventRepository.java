@@ -143,7 +143,7 @@ public class EventRepository {
 		registerReadEvent(new ItemClickEventDecoder(), new ItemClickEventHandler());
 		registerReadEvent(new NpcClickEventDecoder(), new NpcClickEventHandler());
 		registerReadEvent(new BugReportEventDecoder(), new BugReportEventHandler());
-		registerReadEvent(ClientProtocol.CUTSCENE_END, new EmptyEventDecoder(), new CutsceneEndEventHandler());
+		registerReadEvent(ClientProtocol.CUTSCENE_FINISHED, new EmptyEventDecoder(), new CutsceneEndEventHandler());
 				
 		registerReadEvent(new CreationEventDecoder(), new CreationEventHandler());
 		logger.info("Registered " + readEvents.size() + " game read events.");

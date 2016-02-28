@@ -169,97 +169,97 @@ public enum ClientProtocol {
 	/**
 	 * The first context-menu option selected on a scene location
 	 */
-	LOC_OPTION_1(-1, 9),
+	OPLOC1(34, 9),
 
 	/**
 	 * The second context-menu option selected on a scene location
 	 */
-	LOC_OPTION_2(-1, 9),
+	OPLOC2(39, 9),
 
 	/**
 	 * The third context-menu option selected on a scene location
 	 */
-	LOC_OPTION_3(-1, 9),
+	OPLOC3(117, 9),
 
 	/**
 	 * The fourth context-menu option selected on a scene location
 	 */
-	LOC_OPTION_4(-1, 9),
+	OPLOC4(5, 9),
 
 	/**
 	 * The fifth context-menu option selected on a scene location
 	 */
-	LOC_OPTION_5(-1, 9),
+	OPLOC5(80, 9),
 
 	/**
 	 * The sixth context-menu option selected on a scene location (usually "examine")
 	 */
-	LOC_OPTION_6(-1, 9),
+	OPLOC6(43, 9),
 
 	/**
-	 * Called when an item on an interface is used on a game scene location
+	 * Called when an item on an interface is targeted on a game scene location
 	 */
-	IF_ON_LOC(-1, 17),
+	OPLOCT(-1, 17),
 
 	/**
 	 * The first context-menu option selected on a ground item
 	 */
-	ITEM_OPTION_1(-1, 7),
+	OPOBJ1(27, 7),
 
 	/**
 	 * The second context-menu option selected on a ground item
 	 */
-	ITEM_OPTION_2(-1, 7),
+	OPOBJ2(75, 7),
 
 	/**
 	 * The third context-menu option selected on a ground item
 	 */
-	ITEM_OPTION_3(-1, 7),
+	OPOBJ3(65, 7),
 
 	/**
 	 * The fourth context-menu option selected on a ground item
 	 */
-	ITEM_OPTION_4(-1, 7),
+	OPOBJ4(99, 7),
 
 	/**
 	 * The fifth context-menu option selected on a ground item
 	 */
-	ITEM_OPTION_5(-1, 7),
+	OPOBJ5(89, 7),
 
 	/**
 	 * The sixth context-menu option selected on a ground item (usually "examine")
 	 */
-	ITEM_OPTION_6(-1, 7),
+	OPOBJ6(29, 7),
 
 	/**
 	 * The first context-menu option selected on an npc
 	 */
-	NPC_OPTION_1(-1, 3),
+	OPNPC1(113, 3),
 
 	/**
 	 * The second context-menu option selected on an npc
 	 */
-	NPC_OPTION_2(-1, 3),
+	OPNPC2(31, 3),
 
 	/**
 	 * The third context-menu option selected on an npc
 	 */
-	NPC_OPTION_3(-1, 3),
+	OPNPC3(4, 3),
 
 	/**
 	 * The fourth context-menu option selected on an npc
 	 */
-	NPC_OPTION_4(-1, 3),
+	OPNPC4(21, 3),
 
 	/**
 	 * The fifth context-menu option selected on an npc
 	 */
-	NPC_OPTION_5(-1, 3),
+	OPNPC5(53, 3),
 
 	/**
 	 * The sixth context-menu option selected on an npc (usually "examine")
 	 */
-	NPC_OPTION_6(-1, 3),
+	OPNPC6(36, 3),
 
 	/**
 	 * Called when an interface is used on an npc
@@ -269,52 +269,52 @@ public enum ClientProtocol {
 	/**
 	 * The first context-menu option selected on another player
 	 */
-	PLAYER_OPTION_1(-1, 3),
+	OPPLAYER1(116, 3),
 
 	/**
 	 * The second context-menu option selected on another player
 	 */
-	PLAYER_OPTION_2(-1, 3),
+	OPPLAYER2(91, 3),
 
 	/**
 	 * The third context-menu option selected on another player
 	 */
-	PLAYER_OPTION_3(-1, 3),
+	OPPLAYER3(32, 3),
 
 	/**
 	 * The fourth context-menu option selected on another player
 	 */
-	PLAYER_OPTION_4(-1, 3),
+	OPPLAYER4(93, 3),
 
 	/**
 	 * The fifth context-menu option selected on another player
 	 */
-	PLAYER_OPTION_5(-1, 3),
+	OPPLAYER5(22, 3),
 
 	/**
 	 * The sixth context-menu option selected on another player
 	 */
-	PLAYER_OPTION_6(-1, 3),
+	OPPLAYER6(50, 3),
 
 	/**
 	 * The seventh context-menu option selected on another player
 	 */
-	PLAYER_OPTION_7(-1, 3),
+	OPPLAYER7(23, 3),
 
 	/**
 	 * The eighth context-menu option selected on another player
 	 */
-	PLAYER_OPTION_8(-1, 3),
+	OPPLAYER8(73, 3),
 
 	/**
 	 * The ninth context-menu option selected on another player
 	 */
-	PLAYER_OPTION_9(-1, 3),
+	OPPLAYER9(24, 3),
 
 	/**
 	 * The tenth context-menu option selected on another player
 	 */
-	PLAYER_OPTION_10(-1, 3),
+	OPPLAYER10(49, 3),
 
 	/**
 	 * Called when an item on an interface is used on a player
@@ -325,7 +325,7 @@ public enum ClientProtocol {
 	 * Sends changes to client variables which are specified to transmit on change.
 	 * Used to update the interface layout.
 	 */
-	VARC_TRANSMIT(-1, -2),
+	STORE_SERVERPERM_VARCS(14, -2),
 
 	/**
 	 * A player "report-abuse" request. Includes the player name, ruleID, and whether to mute the player.
@@ -335,37 +335,37 @@ public enum ClientProtocol {
 	/**
 	 * A bug report sent by a player. Includes the category, reproduce steps, and description
 	 */
-	BUG_REPORT(-1, -2),
+	BUG_REPORT(98, -2),
 
 	/**
 	 * Contains the results of an input dialog
 	 */
-	RESUME_PAUSEBUTTON(-1, 6),
+	RESUME_PAUSEBUTTON(47, 6),
 
 	/**
 	 * Contains the results of an integer input dialog (or 0 if nothing was entered)
 	 */
-	RESUME_P_COUNTDIALOG(-1, 4),
+	RESUME_P_COUNTDIALOG(58, 4),
 
 	/**
 	 * Contains the results of a string input dialog
 	 */
-	RESUME_P_STRINGDIALOG(-1, -1),
+	RESUME_P_STRINGDIALOG(7, -1),
 
 	/**
 	 * Contains the results of a name input dialog
 	 */
-	RESUME_P_NAMEDIALOG(-1, -1),
+	RESUME_P_NAMEDIALOG(88, -1),
 
 	/**
 	 * Contains the results of an object (item) select dialog
 	 */
-	RESUME_P_OBJDIALOG(-1, 2),
+	RESUME_P_OBJDIALOG(69, 2),
 
 	/**
 	 * Contains the result of a colour selection dialog (hsl)
 	 */
-	RESUME_P_HSLDIALOG(-1, 2),
+	RESUME_P_HSLDIALOG(61, 2),
 
 	/**
 	 * A client-side request to visit the specified URL.
@@ -382,78 +382,78 @@ public enum ClientProtocol {
 	/**
 	 * Sets the chat mode for the next message.
 	 * 	 */
-	CHAT_SETMODE(-1, 1),
+	CHAT_SETMODE(100, 1),
 
 	/**
 	 * A request to send a message in public chat to nearby players.
 	 * This packet includes chats for all other types (friendchat, clanchat, groupchat, etc), apart from private messages.
 	 */
-	MESSAGE_PUBLIC(-1, -1),
+	MESSAGE_PUBLIC(86, -1),
 
 	/**
 	 * A request to send a private message to the specified player
 	 */
-	MESSAGE_PRIVATE(-1, -2),
+	MESSAGE_PRIVATE(83, -2),
 
 	/**
 	 * A request to send a public quick chat message to nearby players.
 	 * This packet includes chats for all other types (friendchat, clanchat, groupchat, etc), apart from private messages.
 	 */
-	MESSAGE_QUICKCHAT_PUBLIC(-1, -1),
+	MESSAGE_QUICKCHAT_PUBLIC(26, -1),
 
 	/**
 	 * A request to send a private quick chat message to the specified player
 	 */
-	MESSAGE_QUICKCHAT_PRIVATE(-1, -1),
+	MESSAGE_QUICKCHAT_PRIVATE(67, -1),
 
 	/**
 	 * A request to add the specified name to the player's friend list.
 	 */
-	FRIENDLIST_ADD(-1, -1),
+	FRIENDLIST_ADD(64, -1),
 
 	/**
 	 * A request to add the specified name to the player's ignore list.
 	 * Also includes whether the ignore is temporary (till logout)
 	 */
-	IGNORELIST_ADD(-1, -1),
+	IGNORELIST_ADD(114, -1),
 
 	/**
 	 * A request to remove the specified name from the player's friend list
 	 * Note that the name is automatically removed on the client side; this only requires it to be removed on the server side
 	 */
-	FRIENDLIST_DEL(-1, -1),
+	FRIENDLIST_DEL(87, -1),
 
 	/**
 	 * A request to remove the specified name from the player's ignore list
 	 * Note that the name is automatically removed on the client side; this only requires it to be removed on the server side
 	 */
-	IGNORELIST_DEL(-1, -1),
-
-	/**
-	 * Sets the note of the specified name on the player's ignore list
-	 */
-	IGNORE_SETNOTE(-1, -1),
+	IGNORELIST_DEL(40, -1),
 
 	/**
 	 * Sets the note of the specified friend on the player's friends list
 	 */
-	FRIEND_SETNOTE(-1, -1),
+	FRIEND_SETNOTES(68, -1),
 
 	/**
 	 * Sets the rank of a friend within the player's friend chat channel
 	 */
-	FRIEND_SETRANK(-1, -1),
+	FRIEND_SETRANK(74, -1),
+
+	/**
+	 * Sets the note of the specified name on the player's ignore list
+	 */
+	IGNORE_SETNOTES(105, -1),
 
 	/**
 	 * A request for the player to join the specified friend chat channel, if the length is greater than one.
 	 * Otherwise, a request to leave the current channel.
 	 */
-	FRIENDCHAT_JOIN_LEAVE(-1, -1),
+	FRIENDCHAT_JOIN_LEAVE(3, -1),
 
 	/**
 	 * A request to kick/ban a user from the current friend chat channel.
 	 */
-	FRIENDCHAT_KICK(-1, -1),
+	FRIENDCHAT_KICK(71, -1),
 
 	/**
 	 * Selected an option on an interface relating to chat
@@ -468,32 +468,32 @@ public enum ClientProtocol {
 	/**
 	 * A request to run the specified server-side command
 	 */
-	COMMAND(-1, -1),
+	COMMAND(92, -1),
 
 	/**
 	 * A request to verify the display name chosen for a new account
 	 */
-	CREATION_CHECK_NAME(-1, -1),
+	CREATE_CHECK_NAME(118, -1),
 
 	/**
 	 * A request to verify the age used for creating a new account
 	 */
-	CREATION_CHECK_AGE(-1, 1),
+	CREATE_LOG_PROGRESS(70, 1),
 
 	/**
 	 * A request to verify the email address used for creating a new account
 	 */
-	CREATION_CHECK_EMAIL(-1, -2),
+	CREATE_CHECK_EMAIL(78, -2),
 
 	/**
 	 * A request to generate a name for a new account
 	 */
-	CREATION_GENERATE_NAME(-1, 0),
+	CREATE_SUGGEST_NAMES(12, 0),
 
 	/**
 	 * Sends all the details for the new account
 	 */
-	CREATION_SUBMIT(-1, -2),
+	CREATE_ACCOUNT(35, -2),
 
 	/**
 	 * Sent when the client map build is completed
@@ -503,7 +503,7 @@ public enum ClientProtocol {
 	/**
 	 * Sent when the cutscene which is currently playing ends
 	 */
-	CUTSCENE_END(-1, 1);
+	CUTSCENE_FINISHED(107, 1);
 
 	private final int opcode;
 

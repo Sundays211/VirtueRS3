@@ -72,17 +72,17 @@ public class ItemClickEventContext implements GameEventContext {
 	
 	public static OptionButton forOpcode (int opcode) {
 		switch (ClientProtocol.forOpcode(opcode)) {
-		case ITEM_OPTION_1:
+		case OPOBJ1:
 			return OptionButton.ONE;
-		case ITEM_OPTION_2:
+		case OPOBJ2:
 			return OptionButton.TWO;
-		case ITEM_OPTION_3:
+		case OPOBJ3:
 			return OptionButton.THREE;
-		case ITEM_OPTION_4:
+		case OPOBJ4:
 			return OptionButton.FOUR;
-		case ITEM_OPTION_5:
+		case OPOBJ5:
 			return OptionButton.FIVE;
-		case ITEM_OPTION_6:
+		case OPOBJ6:
 			return OptionButton.SIX;
 		default:
 			return null;

@@ -42,8 +42,8 @@ public class PlayerClickEventDecoder implements EventDecoder<PlayerClickEventCon
 	 */
 	@Override
 	public PlayerClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		boolean forceRun = buffer.getByte() == 1;
 		int index = buffer.getShortA();
+		boolean forceRun = buffer.getByte() == 1;
 		return new PlayerClickEventContext(index, forceRun, opcode);
 	}
 
@@ -53,11 +53,11 @@ public class PlayerClickEventDecoder implements EventDecoder<PlayerClickEventCon
 	@Override
 	public ClientProtocol[] getTypes() {		
 		return new ClientProtocol[] { 
-				ClientProtocol.PLAYER_OPTION_1, ClientProtocol.PLAYER_OPTION_2,
-				ClientProtocol.PLAYER_OPTION_3, ClientProtocol.PLAYER_OPTION_4,
-				ClientProtocol.PLAYER_OPTION_5, ClientProtocol.PLAYER_OPTION_6,
-				ClientProtocol.PLAYER_OPTION_7, ClientProtocol.PLAYER_OPTION_8,
-				ClientProtocol.PLAYER_OPTION_9, ClientProtocol.PLAYER_OPTION_10
+				ClientProtocol.OPPLAYER1, ClientProtocol.OPPLAYER2,
+				ClientProtocol.OPPLAYER3, ClientProtocol.OPPLAYER4,
+				ClientProtocol.OPPLAYER5, ClientProtocol.OPPLAYER6,
+				ClientProtocol.OPPLAYER7, ClientProtocol.OPPLAYER8,
+				ClientProtocol.OPPLAYER9, ClientProtocol.OPPLAYER10
 		};
 	}
 

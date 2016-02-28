@@ -197,7 +197,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodeFriendChatMessage(Player player, MessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(ServerProtocol.MESSAGE_FRIENDCHANNEL, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_FRIENDCHAT, player);
 		buffer.putByte(context.hasFilteredName() ? 1 : 0);
 		buffer.putString(context.getName());
 		if (context.hasFilteredName()) {
@@ -213,7 +213,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 
 	private OutboundBuffer encodeFriendQuickMessage(Player player, QuickMessageEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(ServerProtocol.MESSAGE_FRIENDCHANNEL_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_QUICKCHAT_FRIENDCHAT, player);
 		buffer.putByte(context.hasFilteredName() ? 1 : 0);
 		buffer.putString(context.getName());
 		if (context.hasFilteredName()) {
@@ -242,7 +242,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 	
 	private OutboundBuffer encodeClanQuickMessage(Player player, QuickMessageEventContext context, boolean isGuest) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL_QUICKCHAT, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_QUICKCHAT_CLANCHANNEL, player);
 		buffer.putByte(isGuest ? 0 : 1);
 		buffer.putString(context.getName());
 		buffer.putBytes(context.getHash());
@@ -255,7 +255,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 	
 	private OutboundBuffer encodeClanBroadcast(Player player, MessageEventContext context, boolean isGuest) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL_BROADCAST, player);
+		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL_SYSTEM, player);
 		buffer.putByte(isGuest ? 0 : 1);
 		buffer.putBytes(context.getHash());
 		Huffman.compress(buffer, context.getMessage());

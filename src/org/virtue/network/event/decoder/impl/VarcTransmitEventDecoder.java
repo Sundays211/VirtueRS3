@@ -60,7 +60,7 @@ public class VarcTransmitEventDecoder implements EventDecoder<VarcTransmitEventC
 	 */
 	@Override
 	public ClientProtocol[] getTypes() {
-		return new ClientProtocol[] { ClientProtocol.VARC_TRANSMIT };
+		return new ClientProtocol[] { ClientProtocol.STORE_SERVERPERM_VARCS };
 	}
 
 }

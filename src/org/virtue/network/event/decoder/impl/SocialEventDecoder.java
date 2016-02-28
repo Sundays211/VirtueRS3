@@ -57,12 +57,12 @@ public class SocialEventDecoder implements EventDecoder<SocialEventContext> {
 		case FRIENDCHAT_KICK:
 			return new SocialEventContext(SocialType.KICK_FRIENDCHAT, name);
 		case FRIEND_SETRANK:
-			ChannelRank rank = ChannelRank.forID(buffer.getByteC());
+			ChannelRank rank = ChannelRank.forID(buffer.getByte());
 			return new SocialEventContext(SocialType.SET_FRIEND_RANK, name, rank);
-		case FRIEND_SETNOTE:
+		case FRIEND_SETNOTES:
 			note = buffer.getString();
 			return new SocialEventContext(SocialType.SET_FRIEND_NOTE, note, name);
-		case IGNORE_SETNOTE:
+		case IGNORE_SETNOTES:
 			note = buffer.getString();
 			return new SocialEventContext(SocialType.SET_IGNORE_NOTE, note, name);
 		default:
@@ -80,7 +80,7 @@ public class SocialEventDecoder implements EventDecoder<SocialEventContext> {
 				ClientProtocol.FRIENDLIST_ADD, ClientProtocol.FRIENDLIST_DEL,
 				ClientProtocol.IGNORELIST_ADD, ClientProtocol.IGNORELIST_DEL,
 				ClientProtocol.FRIENDCHAT_JOIN_LEAVE, ClientProtocol.FRIENDCHAT_KICK,
-				ClientProtocol.FRIEND_SETNOTE, ClientProtocol.IGNORE_SETNOTE };
+				ClientProtocol.FRIEND_SETNOTES, ClientProtocol.IGNORE_SETNOTES };
 	}
 
 }

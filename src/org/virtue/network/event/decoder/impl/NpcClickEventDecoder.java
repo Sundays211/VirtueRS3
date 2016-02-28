@@ -41,9 +41,9 @@ public class NpcClickEventDecoder implements EventDecoder<NpcClickEventContext> 
 	 */
 	@Override
 	public NpcClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int index = buffer.getUnsignedShort();
-		boolean forceRun = buffer.getByte() == 1;
-		return new NpcClickEventContext(index, forceRun, opcode);
+		int uid = buffer.getShortA() & 0xffff;
+		boolean forceRun = buffer.getByteS() == 1;
+		return new NpcClickEventContext(uid, forceRun, opcode);
 	}
 
 	/* (non-Javadoc)
@@ -52,9 +52,9 @@ public class NpcClickEventDecoder implements EventDecoder<NpcClickEventContext> 
 	@Override
 	public ClientProtocol[] getTypes() {
 		return new ClientProtocol[] { 
-				ClientProtocol.NPC_OPTION_1, ClientProtocol.NPC_OPTION_2,
-				ClientProtocol.NPC_OPTION_3, ClientProtocol.NPC_OPTION_4,
-				ClientProtocol.NPC_OPTION_5, ClientProtocol.NPC_OPTION_6
+				ClientProtocol.OPNPC1, ClientProtocol.OPNPC2,
+				ClientProtocol.OPNPC3, ClientProtocol.OPNPC4,
+				ClientProtocol.OPNPC5, ClientProtocol.OPNPC6
 		};
 	}
 

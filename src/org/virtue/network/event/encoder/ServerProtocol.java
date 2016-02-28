@@ -77,12 +77,12 @@ public enum ServerProtocol {
 	/**
 	 * Updates part of a client variable with a value of less than 127 but more than -127
 	 */
-	VARCBIT_SMALL(-1, 3),
+	VARCBIT_SMALL(54, 3),
 
 	/**
 	 * Updates part of a client variable with a value of more than 127 or less than -127
 	 */
-	VARCBIT_LARGE(-1, 6),
+	VARCBIT_LARGE(19, 6),
 
 	/**
 	 * Updates a client variable which has a length of no more than 127 characters
@@ -137,7 +137,7 @@ public enum ServerProtocol {
 	/**
 	 * Updates the player's own appearance
 	 */
-	UPDATE_APPEARANCE(-1, -2),
+	UPDATE_APPEARANCE(117, -2),
 
 	/**
 	 * Sets the text for context-menu options for other players (eg "trade", "attack", "follow", etc)
@@ -187,27 +187,27 @@ public enum ServerProtocol {
 	/**
 	 * Sends a friend channel message to the client
 	 */
-	MESSAGE_FRIENDCHANNEL(-1, -1),
+	MESSAGE_FRIENDCHAT(123, -1),
 
 	/**
 	 * Sends a friend channel quick message to the client
 	 */
-	MESSAGE_FRIENDCHANNEL_QUICKCHAT(-1, -1),
+	MESSAGE_QUICKCHAT_FRIENDCHAT(71, -1),
 
 	/**
 	 * Sends a clan channel message to the client
 	 */
-	MESSAGE_CLANCHANNEL(-1, -1),
+	MESSAGE_CLANCHANNEL(153, -1),
 
 	/**
 	 * Sends a clan channel quick message to the client
 	 */
-	MESSAGE_CLANCHANNEL_QUICKCHAT(-1, -1),
+	MESSAGE_QUICKCHAT_CLANCHANNEL(51, -1),
 
 	/**
 	 * Sends a broadcast clan channel message to the client
 	 */
-	MESSAGE_CLANCHANNEL_BROADCAST(-1, -1),
+	MESSAGE_CLANCHANNEL_SYSTEM(105, -1),
 
 	/**
 	 * Unlocks the player's client friends list
@@ -236,12 +236,12 @@ public enum ServerProtocol {
 	 * Updates the entire friend chat channel that the player is currently in.
 	 * This packet is also used to leave the channel (if empty)
 	 */
-	UPDATE_FRIENDCHANNEL_FULL(-1, -2),
+	UPDATE_FRIENDCHANNEL_FULL(61, -2),
 
 	/**
 	 * Updates a single user in the current friend chat channel.
 	 */
-	UPDATE_FRIENDCHANNEL_PART(-1, -1),
+	UPDATE_FRIENDCHANNEL_PART(110, -1),
 
 	/**
 	 * Updates/initialises the full clan channel that the player is currently in.

@@ -60,25 +60,25 @@ public class PlayerClickEventContext implements GameEventContext {
 	
 	public static OptionButton forOpcode (int opcode) {
 		switch (ClientProtocol.forOpcode(opcode)) {
-		case PLAYER_OPTION_1:
+		case OPPLAYER1:
 			return OptionButton.ONE;
-		case PLAYER_OPTION_2:
+		case OPPLAYER2:
 			return OptionButton.TWO;
-		case PLAYER_OPTION_3:
+		case OPPLAYER3:
 			return OptionButton.THREE;
-		case PLAYER_OPTION_4:
+		case OPPLAYER4:
 			return OptionButton.FOUR;
-		case PLAYER_OPTION_5:
+		case OPPLAYER5:
 			return OptionButton.FIVE;
-		case PLAYER_OPTION_6:
+		case OPPLAYER6:
 			return OptionButton.SIX;
-		case PLAYER_OPTION_7:
+		case OPPLAYER7:
 			return OptionButton.SEVEN;
-		case PLAYER_OPTION_8:
+		case OPPLAYER8:
 			return OptionButton.EIGHT;
-		case PLAYER_OPTION_9:
+		case OPPLAYER9:
 			return OptionButton.NINE;
-		case PLAYER_OPTION_10:
+		case OPPLAYER10:
 			return OptionButton.TEN;
 		default:
 			return null;

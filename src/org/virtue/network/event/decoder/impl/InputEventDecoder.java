@@ -59,8 +59,8 @@ public class InputEventDecoder implements EventDecoder<InputEventContext> {
 			break;
 		case RESUME_PAUSEBUTTON:
 			type = InputType.BUTTON;
-			long slot = buffer.getShortA() & 0xffff;
-			long ifHash = buffer.getLEInt();
+			long slot = buffer.getLEShortA() & 0xffff;
+			long ifHash = buffer.getInt();
 			value = new Long((slot << 32) | ifHash);
 			break;
 		case RESUME_P_OBJDIALOG:

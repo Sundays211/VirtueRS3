@@ -72,17 +72,17 @@ public class LocationClickEventContext implements GameEventContext {
 	
 	public static OptionButton forOpcode (int opcode) {
 		switch (ClientProtocol.forOpcode(opcode)) {
-		case LOC_OPTION_1:
+		case OPLOC1:
 			return OptionButton.ONE;
-		case LOC_OPTION_2:
+		case OPLOC2:
 			return OptionButton.TWO;
-		case LOC_OPTION_3:
+		case OPLOC3:
 			return OptionButton.THREE;
-		case LOC_OPTION_4:
+		case OPLOC4:
 			return OptionButton.FOUR;
-		case LOC_OPTION_5:
+		case OPLOC5:
 			return OptionButton.FIVE;
-		case LOC_OPTION_6:
+		case OPLOC6:
 			return OptionButton.SIX;
 		default:
 			return null;

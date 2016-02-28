@@ -57,7 +57,7 @@ public class WidgetOnLocEventDecoder implements EventDecoder<WidgetOnLocEventCon
 	 */
 	@Override
 	public ClientProtocol[] getTypes() {
-		return new ClientProtocol[] { ClientProtocol.IF_ON_LOC };
+		return new ClientProtocol[] { ClientProtocol.OPLOCT };
 	}
 
 }

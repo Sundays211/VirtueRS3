@@ -41,10 +41,10 @@ public class ItemClickEventDecoder implements EventDecoder<ItemClickEventContext
 	 */
 	@Override
 	public ItemClickEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		boolean forcerun = (buffer.getByte() == 1);
 		int baseY = buffer.getShortA() & 0xffff;
-		int baseX = buffer.getShort() & 0xffff;
 		int id = buffer.getShort() & 0xffff;
+		boolean forcerun = (buffer.getByte() == 1);
+		int baseX = buffer.getLEShort() & 0xffff;
 		//System.out.println("Clicked item "+id+": "+Arrays.toString(buffer.buffer())+", opcode="+opcode);
 		return new ItemClickEventContext(id, baseX, baseY, forcerun, opcode);
 	}
@@ -55,9 +55,9 @@ public class ItemClickEventDecoder implements EventDecoder<ItemClickEventContext
 	@Override
 	public ClientProtocol[] getTypes() {
 		return new ClientProtocol[] { 
-				ClientProtocol.ITEM_OPTION_1, ClientProtocol.ITEM_OPTION_2,
-				ClientProtocol.ITEM_OPTION_3, ClientProtocol.ITEM_OPTION_4,
-				ClientProtocol.ITEM_OPTION_5, ClientProtocol.ITEM_OPTION_6 };
+				ClientProtocol.OPOBJ1, ClientProtocol.OPOBJ2,
+				ClientProtocol.OPOBJ3, ClientProtocol.OPOBJ4,
+				ClientProtocol.OPOBJ5, ClientProtocol.OPOBJ6 };
 	}
 
 }

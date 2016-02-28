@@ -59,17 +59,17 @@ public class NpcClickEventContext implements GameEventContext {
 	
 	public static OptionButton forOpcode (int opcode) {
 		switch (ClientProtocol.forOpcode(opcode)) {
-		case NPC_OPTION_1:
+		case OPNPC1:
 			return OptionButton.ONE;
-		case NPC_OPTION_2:
+		case OPNPC2:
 			return OptionButton.TWO;
-		case NPC_OPTION_3:
+		case OPNPC3:
 			return OptionButton.THREE;
-		case NPC_OPTION_4:
+		case OPNPC4:
 			return OptionButton.FOUR;
-		case NPC_OPTION_5:
+		case OPNPC5:
 			return OptionButton.FIVE;
-		case NPC_OPTION_6:
+		case OPNPC6:
 			return OptionButton.SIX;
 		default:
 			return null;

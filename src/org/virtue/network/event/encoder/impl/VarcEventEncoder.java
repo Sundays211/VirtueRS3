@@ -23,12 +23,12 @@ public class VarcEventEncoder implements EventEncoder<VarcEventContext> {
 		if (context.isBit()) {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
 				buffer.putPacket(ServerProtocol.VARCBIT_LARGE, player);//Large
-				buffer.putLEInt(context.getValue());
 				buffer.putLEShort(context.getKey());
+				buffer.putInt(context.getValue());
 			} else {
 				buffer.putPacket(ServerProtocol.VARCBIT_SMALL, player);//Small
-				buffer.putLEShortA(context.getKey());
-				buffer.putS(context.getValue());
+				buffer.putC(context.getValue());
+				buffer.putShort(context.getKey());
 			}
 		} else {
 			if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
