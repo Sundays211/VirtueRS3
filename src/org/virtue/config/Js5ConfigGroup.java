@@ -27,10 +27,10 @@ package org.virtue.config;
  * @since Oct 21, 2014
  */
 public enum Js5ConfigGroup {
-	GROUP_1(1),
+	FLOTYPE(1),
     GROUP_2(2),
-	STYLETYPE(3),
-	GROUP_4(4),
+	IDKTYPE(3),
+	FLUTYPE(4),
 	INVTYPE(5),
 	LOCTYPE(6, 8),
 	GROUP_7(7),
@@ -55,14 +55,14 @@ public enum Js5ConfigGroup {
 	STRUCTTYPE(26, 5),
 	CHATPHRASETYPE(27),
 	CHATCATTYPE(28),
-	GROUP_29(29),
+	SKYBOXTYPE(29),
 	GROUP_30(30),
-	GROUP_31(31),
-	RENDERTYPE(32),
+	LIGHTTYPE(31),
+	BASTYPE(32),
 	CURSORTYPE(33),
-	MAPSPRITETYPE(34),
+	MSITYPE(34),
 	QUESTTYPE(35),
-	MAPFIELDTYPE(36),
+	MELTYPE(36),
 	GROUP_37(37),
 	GROUP_38(38),
 	GROUP_39(39),
@@ -91,15 +91,15 @@ public enum Js5ConfigGroup {
 	GROUP_68(68),
 	VAR_BIT(69),
 	GAMELOGEVENT(70),
-	HITBARTYPE(72),
+	HEADBARTYPE(72),
 	GROUP_73(73),
 	GROUP_74(74),
 	GROUP_75(75),
-	GROUP_76(76),
-	GROUP_77(77),
+	WATERTYPE(76),
+	SEQGROUPTYPE(77),
 	GROUP_78(78),
 	GROUP_79(79),
-	VAR_GROUP(80);
+	VAR_PLAYER_GROUP(80);
     
     public final int id;
     int groupSizeInBits;

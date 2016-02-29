@@ -98,7 +98,7 @@ public final class ByteBufferUtils {
 			return buffer.get() & 0xff;
 		}
 		int shortValue = buffer.getShort() & 0xFFFF;
-		return shortValue - 32769;
+		return shortValue - 32768;
 	}
 	
 	/**

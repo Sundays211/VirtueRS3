@@ -21,25 +21,36 @@
  */
 package org.virtue.config.vartype.constants;
 
+import java.nio.ByteBuffer;
+import java.util.function.Function;
+
+import org.virtue.cache.utility.ByteBufferUtils;
+
 /**
  * 
  * @author Sundays211
  * @since 12/12/2015
  */
 public enum BaseVarType {
-	INTEGER(0, Integer.class),
-	LONG(1, Long.class),
-	STRING(2, String.class);	
+	INTEGER(0, Integer.class, (x -> x.getInt())),
+	LONG(1, Long.class, (x -> x.getLong())),
+	STRING(2, String.class, (x -> ByteBufferUtils.getString(x)));	
 
 	public final Class<?> javaClass;
 	private int id;
+	private Function<ByteBuffer, Object> decoder;
 
-	private BaseVarType(int id, Class<?> javaClass) {
+	private BaseVarType(int id, Class<?> javaClass, Function<ByteBuffer, Object> decoder) {
 		this.id = id;
 		this.javaClass = javaClass;
+		this.decoder = decoder;
 	}
 
 	public int getId() {
 		return id;
+	}
+	
+	public Object decode (ByteBuffer buffer) {
+		return decoder.apply(buffer);
 	}
 }

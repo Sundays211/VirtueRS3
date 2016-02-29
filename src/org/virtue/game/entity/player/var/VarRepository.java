@@ -114,7 +114,7 @@ public class VarRepository implements VarDomain {
 		switch (varType.dataType.getVarBaseType()) {
 		case INTEGER:
 			switch (varType.dataType) {
-			case PLAYER:
+			case PLAYER_UID:
 				if ((value instanceof Player)) {
 					value = ((Entity) value).getIndex();
 				}
@@ -187,7 +187,7 @@ public class VarRepository implements VarDomain {
 			return varType.dataType.getDefaultValue();
 		}
 		switch (varType.dataType) {
-		case PLAYER:
+		case PLAYER_UID:
 			return World.getInstance().getPlayers().get((Integer) value);
 		default:
 			return value;			
