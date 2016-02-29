@@ -55,7 +55,7 @@ var FriendListListener = Java.extend(Java.type('org.virtue.engine.script.listene
 				api.runClientScript(player, 8178, []);
 				api.runClientScript(player, 104, []);
 				return;
-			case 43://Recruit friend
+			case 42://Recruit friend
 				api.sendMessage(player, "Recruit friend has not been implemented");
 				return;
 			case 57://Add/set ignore note 
@@ -67,18 +67,20 @@ var FriendListListener = Java.extend(Java.type('org.virtue.engine.script.listene
 				}
 				api.sendMessage(player, "Unhandled ignore list option: "+args.button);
 				return;
-			case 67://Add ignore
+			case 74://Add ignore
 				openModalBase(player);
 				api.runClientScript(player, 8178, []);
 				api.runClientScript(player, 105, []);
 				return;
-			case 75://Remove ignore
+			case 82://Remove ignore
 				openModalBase(player);
 				api.runClientScript(player, 8178, []);
 				api.runClientScript(player, 1419, []);
 				return;
-			case 83:
-			case 85://Switching between friend and ignore tabs. We'll send this as handled so it doesn't spam the chatbox
+			case 49://Reorder friends list
+			case 90://Reorder ignore list
+			case 98:
+			case 100://Switching between friend and ignore tabs. We'll send this as handled so it doesn't spam the chatbox
 				return;
 			default:
 				api.sendMessage(player, "Unhandled friends list component: "+args.component);

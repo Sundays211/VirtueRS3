@@ -78,12 +78,12 @@ public class StatManager {
 	 */
 	public void boostStat (Stat stat, int amount) {
 		PlayerStat skillData = stats.get(stat);
-		if (amount+skillData.getCurrentLevel() < 0) {
+		if (amount+skillData.getLevel() < 0) {
 			skillData.setLevel(0);
-		} else if (amount+skillData.getCurrentLevel() > 255) {
+		} else if (amount+skillData.getLevel() > 255) {
 			skillData.setLevel(255);
 		} else {
-			skillData.setLevel(skillData.getCurrentLevel()+amount);
+			skillData.setLevel(skillData.getLevel()+amount);
 		}
 		player.getDispatcher().sendStat(skillData);
 	}
@@ -136,7 +136,7 @@ public class StatManager {
 	 */
 	public int getCurrentLevel (Stat statType) {
 		PlayerStat data = stats.get(statType);
-		return data == null ? 1 : data.getCurrentLevel();
+		return data == null ? 1 : data.getLevel();
 	}	
 
 	/**

@@ -86,7 +86,7 @@ public class PlayerStat implements GameEventContext {
 	 * Gets the current boosted/reduced skill level for the player.
 	 * @return	The level.
 	 */
-	public int getCurrentLevel () {
+	public int getLevel () {
 		return level;
 	}
 	

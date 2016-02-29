@@ -34,24 +34,20 @@ var FriendChatSettingsListener = Java.extend(Java.type('org.virtue.engine.script
 		if (event == EventType.IF_OPEN) {
 			//player.getVars().setVarp(1258, 299248);
 			var nameHash = api.getFriendChatData(player, FriendChatData.NAME);
-			api.setWidgetText(player, 1108, 1, nameHash == 0 ? "Chat disabled" : api.fromBase37Hash(nameHash));
-			api.setWidgetText(player, 1108, 2, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKJOIN), false));
-			api.setWidgetText(player, 1108, 3, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKTALK), false));
-			api.setWidgetText(player, 1108, 4, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKKICK), false));
+			api.setWidgetText(player, 1108, 9, nameHash == 0 ? "Chat disabled" : api.fromBase37Hash(nameHash));
+			api.setWidgetText(player, 1108, 11, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKJOIN), false));
+			api.setWidgetText(player, 1108, 13, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKTALK), false));
+			api.setWidgetText(player, 1108, 15, FriendChatSettings.nameFromRank(api.getFriendChatData(player, FriendChatData.RANKKICK), false));
 			api.setVarc(player, 199, -1);
 			api.setVarc(player, 3678, -1);
 			api.runClientScript(player, 8178, []);
-			api.setWidgetEvents(player, 1108, 22, 0, 199, 254);//Allow all rank options to be sent to the server
-			api.hideWidget(player, 1108, 16, true);
-			api.hideWidget(player, 1108, 15, true);
-			api.hideWidget(player, 1108, 14, true);
-			api.hideWidget(player, 1108, 13, true);
+			api.setWidgetEvents(player, 1108, 2, 0, 199, 254);//Allow all rank options to be sent to the server
 		} else {
 			var rank;
 			switch (args.component) {
-			case 38://Close interface
+			case 33://Close interface
 				return;
-			case 1://Set prefix/disable
+			case 9://Set prefix/disable
 				if (args.button == 1) {
 					requestString(player, "Enter chat prefix:", function (value) {
 						var prefix = api.getBase37Hash(value);
@@ -59,39 +55,39 @@ var FriendChatSettingsListener = Java.extend(Java.type('org.virtue.engine.script
 							return;
 						}
 						api.setFriendChatData(player, FriendChatData.NAME, prefix);
-						api.setWidgetText(player, 1108, 1, api.fromBase37Hash(prefix));
+						api.setWidgetText(player, 1108, 9, api.fromBase37Hash(prefix));
 					});
 					return;
 				} else if (args.button == 2) {
 					api.setFriendChatData(player, FriendChatData.NAME, api.getBase37Hash(""));
-					api.setWidgetText(player, 1108, 1, "Chat disabled");
+					api.setWidgetText(player, 1108, 9, "Chat disabled");
 					return;
 				}
 				api.sendMessage(player, "Unhandled friends chat settings component: "+args.component);
 				return;
-			case 2://Set join rank
+			case 11://Set join rank
 				var rankId = FriendChatSettings.rankFromButton(args.button, -8);
 				if (rankId != -8) {
 					api.setFriendChatData(player, FriendChatData.RANKJOIN, rankId);
-					api.setWidgetText(player, 1108, 2, FriendChatSettings.nameFromRank(rankId, false));
+					api.setWidgetText(player, 1108, 11, FriendChatSettings.nameFromRank(rankId, false));
 				}
 				return;
-			case 3://Set talk rank
+			case 13://Set talk rank
 				var rankId = FriendChatSettings.rankFromButton(args.button, -8);
 				if (rankId != -1) {
 					api.setFriendChatData(player, FriendChatData.RANKTALK, rankId);
-					api.setWidgetText(player, 1108, 3, FriendChatSettings.nameFromRank(rankId, false));
+					api.setWidgetText(player, 1108, 13, FriendChatSettings.nameFromRank(rankId, false));
 				}
 				return;
-			case 4://Set kick rank
+			case 15://Set kick rank
 				var rankId = FriendChatSettings.rankFromButton(args.button, -8);
 				if (rankId != -1) {
 					api.setFriendChatData(player, FriendChatData.RANKKICK, rankId);
-					api.setWidgetText(player, 1108, 4, FriendChatSettings.nameFromRank(rankId, false));
+					api.setWidgetText(player, 1108, 15, FriendChatSettings.nameFromRank(rankId, false));
 				}
 				return;
-			case 5://Set lootshare rank
-			case 12://Toggle coinshare
+			case 17://Set lootshare rank
+			case 20://Toggle coinshare
 			default:
 				api.sendMessage(player, "Unhandled friends chat settings component: "+args.component);
 				return;

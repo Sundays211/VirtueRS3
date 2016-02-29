@@ -50,7 +50,7 @@ var FriendChatListener = Java.extend(Java.type('org.virtue.engine.script.listene
 					api.runClientScript(player, 194, [1]);
 				}				
 				return;
-			case 37://Manual kick/ban
+			case 36://Manual kick/ban
 				openModalBase(player);
 				api.runClientScript(player, 8178, []);
 				api.runClientScript(player, 2688, []);
@@ -58,7 +58,7 @@ var FriendChatListener = Java.extend(Java.type('org.virtue.engine.script.listene
 			case 4://Settings
 				api.openCentralWidget(player, 1108, false);
 				return;
-			case 35://Loot share
+			case 34://Loot share
 			default:
 				api.sendMessage(player, "Unhandled friends chat component: "+args.component);
 				return;
