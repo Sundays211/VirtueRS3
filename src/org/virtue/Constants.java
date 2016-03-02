@@ -103,7 +103,7 @@ public class Constants {
 	/**
 	 * The Cache Repository
 	 */
-	public static final String CACHE_REPOSITORY = System.getProperty("user.home") + "/Desktop/863/";
+	public static final String CACHE_REPOSITORY = System.getProperty("user.home") + "/Desktop/865/";
 	
 	/**
 	 * The packed npc extra data, which includes descriptions and animations
@@ -113,7 +113,7 @@ public class Constants {
 	/**
 	 * The packed item extra data, which includes descriptions and weights
 	 */
-	public static final File ITEM_DATA = new File("./repository/item_data_861.dat");
+	public static final File ITEM_DATA = new File("./repository/item_data_863.dat");
 	
 	/**
 	 * The OnDemand Delta Keys
