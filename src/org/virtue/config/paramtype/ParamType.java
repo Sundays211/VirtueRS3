@@ -24,11 +24,11 @@ package org.virtue.config.paramtype;
 import java.nio.ByteBuffer;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.utility.text.StringUtility;
 
-public class ParamType implements ConfigItem {
+public class ParamType implements ConfigType {
 	
 	public static ParamType decode (ByteBuffer buffer, int id) {
 		ParamType paramType = new ParamType(id);

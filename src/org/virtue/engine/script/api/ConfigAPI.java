@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,22 +19,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.config;
+package org.virtue.engine.script.api;
 
-import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 21/11/2015
+ * @since 01/03/2016
  */
-public interface ConfigItem {
-	
-	public void decode(ByteBuffer buffer);
-	
-	public void postDecode();
+public interface ConfigAPI {
 
+	/**
+	 * Finds the row ID of the DB table at the specified row
+	 * @param dbTableId The ID of the DB table
+	 * @param rowPos The row position (0=first row in table, 1=second row, etc)
+	 * @return The ID for the row, used in {@link #getDbFieldValues(int, int, int)}
+	 * @throws Exception
+	 */
+	public int lookupDbRowId (int dbTableId, int rowPos) throws Exception;
+	
+	/**
+	 * Looks up all rows in the specified DB table index which match the given key
+	 * @param dbTableId The ID of the DB table
+	 * @param indexId The ID of the table index to use
+	 * @param key The key used in the lookup procedure
+	 * @return A list of values matching the key
+	 * @throws Exception
+	 */
+	public List<Integer> lookupDbRowIds (int dbTableId, int indexId, Object key) throws Exception;
+	
+	public List<Object> getDbFieldValues (int dbTableId, int dbRowId, int column) throws Exception;
 }

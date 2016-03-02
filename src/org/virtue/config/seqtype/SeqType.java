@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 
-public class SeqType implements ConfigItem {
+public class SeqType implements ConfigType {
 	
     /**
      * Retrieves the specified sequence type definition from the cache

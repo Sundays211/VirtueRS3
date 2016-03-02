@@ -243,4 +243,17 @@ public final class ByteBufferUtils {
 		return bytes;
 	}
 
+
+
+	public static int getSmartInt2(ByteBuffer buffer) {
+		int result = 0;
+		int bit = 0;
+		int value;
+		do {
+			value = buffer.get() & 0xff;
+			result |= (value & 0x7f) << bit;
+			bit += 7;
+		} while (value > 127);
+		return result;
+	}
 }

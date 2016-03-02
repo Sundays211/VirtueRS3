@@ -1,15 +1,13 @@
-/* Class23 - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package org.virtue.config.db.dbrowtype;
 
 import java.nio.ByteBuffer;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
+import org.virtue.config.db.DBUtils;
 import org.virtue.config.vartype.constants.ScriptVarType;
 
-public class DBRowType implements ConfigItem {
+public class DBRowType implements ConfigType {
 	Object[][] values;
 	ScriptVarType[][] dataTypes;
 	private int id;
@@ -39,7 +37,7 @@ public class DBRowType implements ConfigItem {
 						throw new RuntimeException("Invalid ScriptVarType: "+typeId);
 					}
 				}
-				values[column] = getDataValues(buffer, types);
+				values[column] = DBUtils.getDataValues(buffer, types);
 				dataTypes[column] = types;
 			}
 		}
@@ -55,7 +53,7 @@ public class DBRowType implements ConfigItem {
 		}
 	}
 
-	public Object[] getValue(int column) {
+	public Object[] getFieldValues(int column) {
 		if (values == null) {
 			return null;
 		}
@@ -68,17 +66,5 @@ public class DBRowType implements ConfigItem {
 
 	DBRowType() {
 		/* empty */
-	}
-	
-	static Object[] getDataValues(ByteBuffer buffer, ScriptVarType[] types) {
-		int valuesCount = ByteBufferUtils.getUnsignedSmartInt(buffer);
-		Object[] objects = new Object[valuesCount * types.length];
-		for (int i_1_ = 0; i_1_ < valuesCount; i_1_++) {
-			for (int i_2_ = 0; i_2_ < types.length; i_2_++) {
-				int i_3_ = i_2_ + i_1_ * types.length;				
-				objects[i_3_] = types[i_2_].getVarBaseType().decode(buffer);
-			}
-		}
-		return objects;
 	}
 }

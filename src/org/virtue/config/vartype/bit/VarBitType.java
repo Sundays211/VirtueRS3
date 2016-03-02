@@ -24,7 +24,7 @@ package org.virtue.config.vartype.bit;
 import java.nio.ByteBuffer;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.config.vartype.VarDomainType;
 
 /**
@@ -32,7 +32,7 @@ import org.virtue.config.vartype.VarDomainType;
  * @author Sundays211
  * @since Oct 21, 2014
  */
-public class VarBitType implements ConfigItem {
+public class VarBitType implements ConfigType {
 	/**
 	 * The masks for all bits between 0 and 31
 	 */

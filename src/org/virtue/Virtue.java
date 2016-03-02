@@ -47,6 +47,7 @@ import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.Js5ConfigGroup;
 import org.virtue.config.db.dbrowtype.DBRowTypeList;
+import org.virtue.config.db.dbtabletype.DBTableTypeList;
 import org.virtue.config.defaults.DefaultsGroup;
 import org.virtue.config.defaults.StatDefaults;
 import org.virtue.config.enumtype.EnumTypeList;
@@ -345,6 +346,8 @@ public class Virtue {
 				configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id).size());
 		Archive quests = Archive.decode(cache.read(2, Js5ConfigGroup.QUESTTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.QUESTTYPE.id).size());
+		Archive dbtables = Archive.decode(cache.read(2, Js5ConfigGroup.DBTABLETYPE.id).getData(), 
+				configTable.getEntry(Js5ConfigGroup.DBTABLETYPE.id).size());
 		Archive dbrows = Archive.decode(cache.read(2, Js5ConfigGroup.DBROWTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.DBROWTYPE.id).size());
 		Archive varbits = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_BIT.id).getData(), 
@@ -355,6 +358,7 @@ public class Virtue {
 				configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id).size());
 		InvRepository.init(invs, configTable.getEntry(Js5ConfigGroup.INVTYPE.id));
 		ParamTypeList.init(params, configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id));
+		DBTableTypeList.init(dbtables, configTable.getEntry(Js5ConfigGroup.DBTABLETYPE.id));
 		DBRowTypeList.init(dbrows, configTable.getEntry(Js5ConfigGroup.DBROWTYPE.id));
 		QuestTypeList.init(quests, configTable);
 		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));

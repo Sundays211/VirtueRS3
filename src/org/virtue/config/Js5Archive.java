@@ -34,9 +34,8 @@ public enum Js5Archive {
 	MAPS(5, "client.mapsv2", false, false, false),
 	MODELS(7, "client.models", false, false, false),
 	SPRITES(8, "client.sprites", false, false, false),
-	TEXTURES_DIFFUSE(9, "client.textures.diffuse", false, false, false),
 	BINARY(10, "client.binary", false, false, false),
-	SCRIPTS(12, "client.scripts", true, false, false),
+	CLIENTSCRIPTS(12, "client.clientscripts", true, false, false),
 	FONTMETRICS(13, "client.fontmetrics", false, false, false),
 	VORBIS(14, "client.vorbis", false, false, false),
 	CONFIG_LOC(16, "client.loc.config", true, false, false),
@@ -59,10 +58,16 @@ public enum Js5Archive {
 	LOADINGSCREENS(33, "client.loadingscreens", true, false, false),
 	LOADINGSPRITESRAW(34, "client.loadingspritesraw", false, false, false),
 	CUTSCENES(35, "client.cutscenes", true, false, false),
-	TEXTURES_HDR(37, "client.textures.hdr", false, false, false),
 	AUDIOSTREAMS(40, "client.audiostreams", false, false, true),
-	WORLDMAPLABELS(41, "client.worldmaplabels", false, false, false),
-	UNKNOWN_42(42, "", false, false, false);
+	WORLDMAPAREAS(41, "client.worldmapareas", false, false, false),
+	WORLDMAPLABELS(42, "client.worldmaplabels", false, false, false),
+	TEXTURES_DIFFUSE_PNG(43, "", false, false, false),
+	TEXTURES_HDR_PNG(44, "", false, false, false),
+	TEXTURES_DIFFUSE_DXT(45, "", false, false, false),
+	TEXTURES_HDR_PNG_MIPPED(46, "", false, false, false),
+	MODELSRT7(47, "", false, true, false),
+	ANIMSRT7(48, "", false, true, false),
+	DBTABLEINDEX(49, "", true, true, false);
 	
 	int archiveId;
 	boolean streamed;

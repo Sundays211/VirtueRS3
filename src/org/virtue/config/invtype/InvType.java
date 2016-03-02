@@ -23,14 +23,14 @@ package org.virtue.config.invtype;
 
 import java.nio.ByteBuffer;
 
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 
 /**
  * 
  * @author Sundays211
  * @since Oct 18, 2014
  */
-public class InvType implements ConfigItem {
+public class InvType implements ConfigType {
 	
 	public static InvType load (ByteBuffer buffer, int id) {
 		InvType invType = new InvType(id);

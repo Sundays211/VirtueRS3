@@ -29,14 +29,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Sundays211
  * @since 29/10/2014
  */
-public class LocType implements ConfigItem {
+public class LocType implements ConfigType {
 
 	/**
 	 * The {@link Logger} instance

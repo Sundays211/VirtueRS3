@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,7 +35,7 @@ import org.virtue.config.ConfigItem;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class StructType implements ConfigItem {
+public class StructType implements ConfigType {
 	
 	public static StructType decode (ByteBuffer buffer, int id) {
 		StructType struct = new StructType(id);

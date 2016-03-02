@@ -39,9 +39,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 		}
 		switch (stage) {
 		case 0:
-			requestCount(player, "Enter a number", function (value) {
-				api.sendMessage(player, "Entered: "+value);
-			});
+			api.sendMessage(player, "<sprite=6228,0>Test Message<sprite=2270,0>.");
 			return;
 		case 1:
 			if (args.length >= 4) {

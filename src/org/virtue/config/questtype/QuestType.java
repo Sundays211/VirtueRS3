@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.entity.player.var.VarDomain;
@@ -36,7 +36,7 @@ import org.virtue.game.entity.player.var.VarDomain;
  * @author Sundays211
  * @since 21/11/2015
  */
-public class QuestType implements ConfigItem {
+public class QuestType implements ConfigType {
 
 	public int questPoints;
     public String name;

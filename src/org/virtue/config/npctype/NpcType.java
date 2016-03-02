@@ -27,14 +27,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Sundays211
  * @since 13/11/2014
  */
-public class NpcType implements ConfigItem {
+public class NpcType implements ConfigType {
 	
     public static final int anInt8430 = 8;
     static final int anInt8439 = 6;

@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.utility.text.StringUtility;
@@ -38,7 +38,7 @@ import org.virtue.utility.text.StringUtility;
  * @author Sundays211
  * @since 22/10/2014
  */
-public class ItemType implements ConfigItem {
+public class ItemType implements ConfigType {
 
 	/**
 	 * The {@link Logger} instance

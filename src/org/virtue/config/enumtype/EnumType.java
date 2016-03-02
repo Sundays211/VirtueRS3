@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.virtue.cache.utility.ByteBufferUtils;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.utility.text.StringUtility;
 
@@ -40,7 +40,7 @@ import org.virtue.utility.text.StringUtility;
  * @author Sundays211
  * @since 19/11/2014
  */
-public class EnumType implements ConfigItem {
+public class EnumType implements ConfigType {
 	
 	public static EnumType load (ByteBuffer buffer, int id) {
 		EnumType enumType = new EnumType(id);		

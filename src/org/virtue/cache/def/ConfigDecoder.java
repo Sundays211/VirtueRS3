@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.config.ConfigItem;
+import org.virtue.config.ConfigType;
 import org.virtue.config.Js5ConfigGroup;
 
 import com.google.common.cache.CacheBuilder;
@@ -44,7 +44,7 @@ import com.google.common.cache.LoadingCache;
  * @author Sundays211
  * @since 21/11/2015
  */
-public abstract class ConfigDecoder<T extends ConfigItem> extends CacheLoader<Integer, T> implements Iterable<T> {
+public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<Integer, T> implements Iterable<T> {
 
 	/**
 	 * The {@link Logger} instance
@@ -86,12 +86,12 @@ public abstract class ConfigDecoder<T extends ConfigItem> extends CacheLoader<In
 	private ReferenceTable referenceTable;
 	private Archive dataArchive;
 	private Js5ConfigGroup configGroup;
-	private Class<? extends ConfigItem> configClass;
+	private Class<? extends ConfigType> configClass;
 
 	/**
 	 * 
 	 */
-	public ConfigDecoder(ReferenceTable configTable, Archive archive, Js5ConfigGroup group, Class<? extends ConfigItem> configClass) {
+	public ConfigDecoder(ReferenceTable configTable, Archive archive, Js5ConfigGroup group, Class<? extends ConfigType> configClass) {
 		this.referenceTable = configTable;
 		this.dataArchive = archive;
 		this.configGroup = group;
@@ -133,7 +133,7 @@ public abstract class ConfigDecoder<T extends ConfigItem> extends CacheLoader<In
 		if (data == null) {
 			return null;
 		}
-		ConfigItem type = configClass.getDeclaredConstructor(Integer.TYPE, ConfigDecoder.class).newInstance(id, this);
+		ConfigType type = configClass.getDeclaredConstructor(Integer.TYPE, ConfigDecoder.class).newInstance(id, this);
 		type.decode(data);
 		type.postDecode();
 		return (T) type;
