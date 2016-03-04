@@ -150,7 +150,7 @@ var CraftDialog = {
 			if (subCategory < 0) {
 				return false;
 			}
-			if (slotID >= 0 && slotID < api.getEnumSize(subCategory)) {
+			if (slot >= 0 && slot < api.getEnumSize(subCategory)) {
 				var itemID = api.getEnumValue(subCategory, slot);
 				api.setVarp(player, 1170, itemID);
 				api.setVarp(player, 1174, 0);

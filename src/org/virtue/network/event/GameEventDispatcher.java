@@ -141,7 +141,7 @@ public class GameEventDispatcher {
 			if (Virtue.getInstance().hasUpdate()) {
 				sendSystemUpdate(Virtue.getInstance().getUpdateTime() * 12);
 			}
-			sendGameMessage("Welcome to " + Constants.SERVER_NAME + ".");
+			sendGameMessage("Welcome to " + Constants.FRAME_NAME + ".");
 			LoginDispatcher.onLobbyLogin(player);
 			break;
 		case LOGIN_WORLD:
@@ -155,10 +155,7 @@ public class GameEventDispatcher {
 			player.setGameState(GameState.WORLD_READY);
 			player.getViewport().onMapLoaded();
 			
-			//if (player.getLastLogin() == 0) {
-				//sendRootWidget(1507); // Welcome Screen
-			//}
-			sendGameMessage("Welcome to " + Constants.SERVER_NAME + ".");
+			sendGameMessage("Welcome to " + Constants.FRAME_NAME + ".");
 			player.getEquipment().refresh(true);
 			player.getAppearance().refresh();
 			player.updateWeight();

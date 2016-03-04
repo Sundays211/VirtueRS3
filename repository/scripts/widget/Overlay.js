@@ -32,18 +32,18 @@ var OverlayListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 	invoke : function (event, trigger, args) {
 		var player = args.player;
 		switch (args.component) {
-		case 36://Lock/unlock interfaces
+		case 39://Lock/unlock interfaces
 			var locked = api.getVarBit(player, 19925) == 1;
 			api.setVarBit(player, 19925, locked ? 0 : 1)
 			return;
-		case 37://Sheathing (TODO: Find which varp/varbit controls this)
+		case 45://Sheathing (TODO: Find which varp/varbit controls this)
 			player.switchSheathing();
 			break;
-		case 68://Logout
+		case 71://Logout
 			api.setVarp(player, 3813, 6);
 			api.openWidget(player, 1477, 853, 26, true);
 			return;
-		case 478://Overlay tab switch
+		case 496://Overlay tab switch
 			switch (args.slot) {
 			case 3:
 				Overlay.setTab(player, 1);
@@ -65,7 +65,7 @@ var OverlayListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 				return;
 			}
 			return;
-		case 481://Overlay close button
+		case 499://Overlay close button
 			Overlay.closeOverlay(player)
 			return;
 		default:
@@ -85,9 +85,9 @@ var Overlay = {
 		openOverlay : function (player, overlay) {
 			api.setVarc(player, 2911, -1);
 			api.hideWidget(player, 1477, 479, false);
-			api.setWidgetEvents(player, 1477, 478, 0, 24, 2);
-			api.setWidgetEvents(player, 1477, 481, 1, 1, 2);
-			api.setWidgetEvents(player, 1477, 480, 1, 1, 2);
+			api.setWidgetEvents(player, 1477, 496, 0, 24, 2);
+			api.setWidgetEvents(player, 1477, 499, 1, 1, 2);
+			api.setWidgetEvents(player, 1477, 498, 1, 1, 2);
 			api.setVarc(player, 2911, overlay);
 			api.setVarBit(player, 18994, overlay);
 			var selectedTab = this.getSelectedTab(player);
@@ -121,10 +121,11 @@ var Overlay = {
 				return api.getVarBit(player, 19002);
 			case 7://Upgrades & Extras
 				return api.getVarBit(player, 19003);
-			case 8://Settings
+			case 8://RuneMetrics
+				//return api.getVarBit(player, 29931);
+				break;
+			case 9://Settings
 				return api.getVarBit(player, 19001);
-			case 9://Christmas 2015
-				return api.getVarBit(player, 29931);
 			case 1001://Lobby
 				break;
 			}
@@ -156,11 +157,11 @@ var Overlay = {
 			case 7://Upgrades & Extras
 				api.setVarBit(player, 19003, tab);
 				break;
-			case 8://Settings
-				api.setVarBit(player, 19001, tab);
+			case 8://RuneMetrics
+				//api.setVarBit(player, 29931, tab);
 				break;
-			case 9://Christmas 2015
-				api.setVarBit(player, 29931, tab);
+			case 9://Settings
+				api.setVarBit(player, 19001, tab);
 				break;
 			case 1001://Lobby
 				break;

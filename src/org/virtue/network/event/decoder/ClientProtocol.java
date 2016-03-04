@@ -159,7 +159,7 @@ public enum ClientProtocol {
 	/**
 	 * Called when an interface button is dragged onto another interface
 	 */
-	IF_BUTTOND(-1, 16),
+	IF_BUTTOND(2, 16),
 
 	/**
 	 * Selected an option on an interface relating to chat

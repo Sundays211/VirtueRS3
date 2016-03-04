@@ -43,29 +43,29 @@ var OptionsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			//IF hide: if=745, comp=5, hidden=1
 			//IF open sub: parentId=1477, parentComp=506, id=1475, mode=0
 			//IF events: if=1475, comp=68, from=0, to=7, events=2
-			api.setVarp(player, 659, 65537790);
-			api.openWidget(player, 1477, 506, 1475, false);
+			//api.setVarp(player, 659, 65537790);
+			api.openWidget(player, 1477, 524, 1475, false);
 			api.setWidgetEvents(player, 1475, 68, 2, 7, 2);
 			return true;
 		case 43://Game Settings
 			api.setVarBit(player, 19001, 1);
-			Overlay.openOverlay(player, 8);
+			Overlay.openOverlay(player, 9);
 			break;
 		case 83://Interface Settings
 			api.setVarBit(player, 19001, 2);
-			Overlay.openOverlay(player, 8);
+			Overlay.openOverlay(player, 9);
 			break;
 		case 91://Controls
 			api.setVarBit(player, 19001, 3);
-			Overlay.openOverlay(player, 8);
+			Overlay.openOverlay(player, 9);
 			break;
 		case 51://Graphics
 			api.setVarBit(player, 19001, 4);
-			Overlay.openOverlay(player, 8);
+			Overlay.openOverlay(player, 9);
 			break;
 		case 59://Audio
 			api.setVarBit(player, 19001, 5);
-			Overlay.openOverlay(player, 8);
+			Overlay.openOverlay(player, 9);
 			break;
 		case 25://Hero
 			Overlay.openOverlay(player, 0);

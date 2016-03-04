@@ -34,7 +34,7 @@ import org.virtue.game.world.region.Tile;
 public class Constants {
 	
 	/**
-	 * The Framework Name
+	 * The Framework Name & Server Name
 	 */
 	public static final String FRAME_NAME = "Virtue";
 	
@@ -74,11 +74,6 @@ public class Constants {
 	 * NB: 100 ticks = 1 minute
 	 */
 	public static final int KICKOUT_TIME = 500;
-
-	/*
-	 * Server Name
-	 */
-	public static final String SERVER_NAME = "Virtue";
 	
 	/**
 	 * The rate to multiply all xp gains by, where 1 is the normal RuneScape rate
@@ -139,7 +134,6 @@ public class Constants {
 		return Virtue.getInstance().getProperty("login.token", LOGIN_TOKEN);
 	}
 	
-	
 	public static final int SERVER_PORT = 43594;
 
 	public static BigInteger getLoginModulus () {
@@ -172,12 +166,12 @@ public class Constants {
 
 
 	/**
-	 * The 834 Packet Sizes
+	 * The 865 Packet Sizes
 	 */
 	public static final int[] PACKET_SIZES = new int[122];
 
 	/**
-	 * Loads the 834 Packet Sizes
+	 * Loads the 865 Packet Sizes
 	 */
 	static {
 		PACKET_SIZES[0] = 12;

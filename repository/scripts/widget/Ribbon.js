@@ -49,8 +49,8 @@ var RibbonListener = Java.extend(Java.type('org.virtue.engine.script.listeners.E
 		case 13://Upgrades & Extras
 			Overlay.openOverlay(player, 7);
 			return;
-		case 14://Christmas 2015
-			Overlay.openOverlay(player, 9);
+		case 14://RuneMetrics
+			Overlay.openOverlay(player, 8);
 			return;
 		default:
 			api.sendMessage(player, "Unhandled ribbon button: comp="+args.component+", slot="+args.slot+", button="+args.button);
