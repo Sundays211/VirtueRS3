@@ -51,12 +51,12 @@ var GameplaySettingsListener = Java.extend(Java.type('org.virtue.engine.script.l
 		case 33://Legacy combat mode
 			//varbit 27168 = combat mode (1=legacy, 0=EoC)
 			api.setVarp(player, 3813, 9);
-			api.openWidget(player, 1477, 853, 26, true);
+			api.openWidget(player, 1477, 871, 26, true);
 			return;
 		case 45://Legacy interfaces
 			//Varbit 27169 = interface mode (1=legacy, 0=EoC)
 			api.setVarp(player, 3813, 10);
-			api.openWidget(player, 1477, 853, 26, true);
+			api.openWidget(player, 1477, 871, 26, true);//853
 			return;
 		case 40://Drag and drop items
 			var enabled = api.getVarBit(player, 27164) == 1;

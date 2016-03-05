@@ -34,7 +34,7 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		
-		for (skill=0; skill < 7; skill++) {
+		for (skill=0; skill < 27; skill++) {
 			api.addExperience(player, skill, 13034431, false);
 		}
 		api.restoreLifePoints(player);

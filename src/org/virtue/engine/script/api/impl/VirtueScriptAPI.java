@@ -21,6 +21,7 @@
  */
 package org.virtue.engine.script.api.impl;
 
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -1960,6 +1961,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public String getFormattedTime(int ticks) {
 		return TimeUtility.ticksToString(ticks);
+	}
+
+	@Override
+	public String getFormattedNumber(int num) {
+		return NumberFormat.getInstance().format(num);
 	}
 
 	/* (non-Javadoc)

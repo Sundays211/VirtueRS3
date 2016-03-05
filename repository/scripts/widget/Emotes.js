@@ -624,6 +624,7 @@ var Emotes = {
 				return;
 			case 9813:
 			case 10662://Quest cape
+			case 36166://Quest master cape
 				api.runAnimation(player, 4945);
 				api.setSpotAnim(player, 1, 816);
 				return;
@@ -650,6 +651,10 @@ var Emotes = {
 				return;
 			case 32152://Comp cape
 				this.runCompCape(player);
+				return;
+			case 36356://Invention Master Cape
+				api.runAnimation(player, 27988);
+				api.setSpotAnim(player, 1, 6001);
 				return;
 			default:
 				api.sendMessage(player, "You need to be wearing a Skill Cape in order to perform this emote.");

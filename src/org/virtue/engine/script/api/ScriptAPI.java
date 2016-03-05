@@ -1184,6 +1184,8 @@ public interface ScriptAPI {
 	 */
 	public String getFormattedTime (int ticks);
 	
+	public String getFormattedNumber (int num);
+	
 	/**
 	 * Gets the player's run energy level
 	 * @param player The player
