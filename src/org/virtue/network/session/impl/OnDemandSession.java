@@ -164,7 +164,7 @@ public class OnDemandSession extends Session {
 		} else if (message instanceof OnDemandDropMessage) {
 			OnDemandDropMessage drop = (OnDemandDropMessage) message;
 			if (drop.getHeader() == 0L) {
-				System.out.println("Closing...");
+				logger.warn("Dropping connection: "+channel.remoteAddress());
 				fileQueue.clear();
 			}
 		}

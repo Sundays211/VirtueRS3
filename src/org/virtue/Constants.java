@@ -108,7 +108,7 @@ public class Constants {
 	/**
 	 * The packed item extra data, which includes descriptions and weights
 	 */
-	public static final File ITEM_DATA = new File("./repository/item_data_863.dat");
+	public static final File ITEM_DATA = new File("./repository/item_data_861.dat");
 	
 	/**
 	 * The OnDemand Delta Keys

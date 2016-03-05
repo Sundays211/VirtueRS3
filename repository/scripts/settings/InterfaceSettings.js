@@ -42,10 +42,6 @@ var InterfaceSettingsListener = Java.extend(Java.type('org.virtue.engine.script.
 			var slim = api.getVarBit(player, 19924) == 1;
 			api.setVarBit(player, 19924, slim ? 0 : 1);
 			return;
-		case 15://Click-through chat box
-			var enabled = api.getVarBit(player, 20188) == 1;
-			api.setVarBit(player, 20188, enabled ? 0 : 1);
-			return;
 		case 21://Hide title bars when locked
 			var hide = api.getVarBit(player, 19928) == 1;
 			api.setVarBit(player, 19928, hide ? 0 : 1);
@@ -78,14 +74,6 @@ var InterfaceSettingsListener = Java.extend(Java.type('org.virtue.engine.script.
 			var enabled = api.getVarBit(player, 19929) == 1;
 			api.setVarBit(player, 19929, enabled ? 0 : 1);
 			return;
-		case 103://Split private chat
-			var enabled = api.getVarBit(player, 20187) == 1;
-			api.setVarBit(player, 20187, enabled ? 0 : 1);
-			return;
-		case 109://Player login/out notifications notifications
-			var enabled = api.getVarBit(player, 24940) == 1;
-			api.setVarBit(player, 24940, enabled ? 0 : 1);
-			return;
 		case 116://Ability cooldown timer
 			var enabled = api.getVarBit(player, 25401) == 1;
 			api.setVarBit(player, 25401, enabled ? 0 : 1);
@@ -101,10 +89,6 @@ var InterfaceSettingsListener = Java.extend(Java.type('org.virtue.engine.script.
 		case 163://Favourites clock alarm
 			var enabled = api.getVarBit(player, 27171) == 1;
 			api.setVarBit(player, 27171, enabled ? 0 : 1);
-			return;
-		case 168://Timestamps in chatbox
-			var enabled = api.getVarBit(player, 27452) == 1;
-			api.setVarBit(player, 27452, enabled ? 0 : 1);
 			return;
 		case 177://Slayer counter
 			var enabled = api.getVarBit(player, 28385) == 1;

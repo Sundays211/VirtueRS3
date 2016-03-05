@@ -58,7 +58,8 @@ public enum Stat {
 	CONSTRUCTION(22, "Construction"),
 	SUMMONING(23, "Summoning"),
 	DUNGEONEERING(24, "Dungeoneering"),
-	DIVINATION(25, "Divination");
+	DIVINATION(25, "Divination"),
+	INVENTION(26, "Invention");
 	
 	private final String name;
 	private final int id;
