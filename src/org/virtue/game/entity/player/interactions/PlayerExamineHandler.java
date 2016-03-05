@@ -171,6 +171,9 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 		case DIVINATION:
 			player.getVars().setVarValueInt(VarKey.Player.PLAYER_INSPECT_DIVINATION_XP, value);
 			break;
+		case INVENTION:
+			player.getVars().setVarValueInt(VarKey.Player.PLAYER_INSPECT_INVENTION_XP, value);
+			break;
 		}
 	}
 	
@@ -254,6 +257,9 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 		case DIVINATION:
 			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DIVINATION_BASE, value);
 			break;
+		case INVENTION:
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_INVENTION_BASE, value);
+			break;
 		}
 	}
 	
@@ -336,6 +342,9 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 			break;
 		case DIVINATION:
 			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_DIVINATION, value);
+			break;
+		case INVENTION:
+			player.getVars().setVarBitValue(VarKey.Bit.PLAYER_INSPECT_INVENTION, value);
 			break;
 		}
 	}

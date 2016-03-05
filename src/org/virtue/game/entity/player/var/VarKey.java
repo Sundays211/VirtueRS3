@@ -175,6 +175,8 @@ public class VarKey {
 		public static final int PLAYER_INSPECT_DUNGEONEERING_BASE = 26120;
 		public static final int PLAYER_INSPECT_DIVINATION = 26121;
 		public static final int PLAYER_INSPECT_DIVINATION_BASE = 26122;
+		public static final int PLAYER_INSPECT_INVENTION = 30202;
+		public static final int PLAYER_INSPECT_INVENTION_BASE = 30203;
 		
 		
 		public static final int LOOT_INVENTORY_ENABLED = 27942;
@@ -282,6 +284,7 @@ public class VarKey {
 		public static final int PLAYER_INSPECT_SUMMONING_XP = 4959;
 		public static final int PLAYER_INSPECT_DUNGEONEERING_XP = 4942;
 		public static final int PLAYER_INSPECT_DIVINATION_XP = 4951;
+		public static final int PLAYER_INSPECT_INVENTION_XP = 6100;
 	}
 	
 	public static class Client {

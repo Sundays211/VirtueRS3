@@ -44,22 +44,8 @@ public class MoneyPouch {
 	  */
 	private Player player;
 	
-	/**
-	 * Represents if the money pouch is open
-	 */ 
-	private boolean open;
-	
 	public MoneyPouch(Player player) {
 		this.player = player;
-		this.open = false;
-	}
-
-	/**
-	 * Switches the pouch to open or close
-	 */
-	public void switchPouch() {
-		open = !open;
-		refresh(true);
 	}
 
 	/**
@@ -153,13 +139,5 @@ public class MoneyPouch {
 	public int getCoins() {
 		return player.getInvs().getContainer(ContainerState.MONEY_POUCH).get(0).getAmount();
 	}
-	
-	/**
-	 * Returns if the money pouch is open
-	 */ 
-	public boolean isOpen() {
-		return open;
-	}
-
 }
 	
