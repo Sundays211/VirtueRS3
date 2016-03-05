@@ -19,12 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.csdelta;
+package org.virtue.game.content.social.clans.csdelta;
 
 import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
- * Sets a part of a clan setting variable
+ * An interface for defining a clan settings update
  * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -32,31 +32,9 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Sundays211
  * @since 21/12/2014
  */
-public class SetVarBitValue implements ClanSettingsDelta {
+public interface ClanSettingsDelta {
+
+	public void packDelta (OutboundBuffer buffer);
 	
-	private final int key;
-	private final int value;
-	private final int start;
-	private final int end;
-
-	public SetVarBitValue (int key, int value, int start, int end) {
-		this.key = key;
-		this.value	= value;
-		this.start = start;
-		this.end = end;
-	}
-	
-	@Override
-	public void packDelta(OutboundBuffer buffer) {
-		buffer.putInt(key);
-		buffer.putInt(value);
-		buffer.putByte(start);
-		buffer.putByte(end);
-	}
-
-	@Override
-	public int getTypeID() {
-		return 11;
-	}
-
+	public int getTypeID ();
 }

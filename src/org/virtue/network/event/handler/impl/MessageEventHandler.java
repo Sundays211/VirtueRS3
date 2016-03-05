@@ -85,11 +85,11 @@ public class MessageEventHandler implements GameEventHandler<InMessageEventConte
 				break;
 			case CLANCHAT:
 				Virtue.getInstance().getClans().getChannels()
-						.sendQuickMessage(player.getChat(), message, false);
+						.sendQuickMessage(player.getChat(), message, true);
 				break;
 			case GUEST_CLANCHAT:
 				Virtue.getInstance().getClans().getChannels()
-						.sendQuickMessage(player.getChat(), message, true);
+						.sendQuickMessage(player.getChat(), message, false);
 				break;
 			case GROUPCHAT:
 			case TEAM_GROUPCHAT:
@@ -118,14 +118,14 @@ public class MessageEventHandler implements GameEventHandler<InMessageEventConte
 						.getClans()
 						.getChannels()
 						.sendMessage(player.getChat(), context.getMessage(),
-								false);
+								true);
 				break;
 			case GUEST_CLANCHAT:
 				Virtue.getInstance()
 						.getClans()
 						.getChannels()
 						.sendMessage(player.getChat(), context.getMessage(),
-								true);
+								false);
 				break;
 			case GROUPCHAT:
 			case TEAM_GROUPCHAT:

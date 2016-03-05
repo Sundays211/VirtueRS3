@@ -68,22 +68,22 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 			buffer = encodeFriendQuickMessage(player, (QuickMessageEventContext) context);
 			break;
 		case CLANCHANNEL:
-			buffer = encodeClanChatMessage(player, context, false);
-			break;
-		case CLANCHANNEL_SYSTEM:
-			buffer = encodeClanBroadcast(player, context, false);
-			break;
-		case CLANCHANNEL_QUICKCHAT:
-			buffer = encodeClanQuickMessage(player, (QuickMessageEventContext) context, false);
-			break;
-		case CLANCHANNEL_GUEST:
 			buffer = encodeClanChatMessage(player, context, true);
 			break;
-		case CLANCHANNEL_GUEST_SYSTEM:
+		case CLANCHANNEL_SYSTEM:
 			buffer = encodeClanBroadcast(player, context, true);
 			break;
-		case CLANCHANNEL_GUEST_QUICKCHAT:
+		case CLANCHANNEL_QUICKCHAT:
 			buffer = encodeClanQuickMessage(player, (QuickMessageEventContext) context, true);
+			break;
+		case CLANCHANNEL_GUEST:
+			buffer = encodeClanChatMessage(player, context, false);
+			break;
+		case CLANCHANNEL_GUEST_SYSTEM:
+			buffer = encodeClanBroadcast(player, context, false);
+			break;
+		case CLANCHANNEL_GUEST_QUICKCHAT:
+			buffer = encodeClanQuickMessage(player, (QuickMessageEventContext) context, false);
 			break;
 		case FRIENDCHANNEL_SYSTEM:
 		case PRIVATE_SYSTEM:
@@ -137,7 +137,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		if (context instanceof QuickMessageEventContext) {
 			QuickChatMessage message = ((QuickMessageEventContext) context).getQuickMessage();
 			buffer.putShort(message.getType().getId());
-			message.getType().pack(buffer, message.getParams());
+			message.getType().pack(buffer, message.getCommands());
 		} else {
 			Huffman.compress(buffer, context.getMessage());
 		}
@@ -171,7 +171,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		buffer.putBytes(context.getHash());
 		buffer.putByte(context.getRights().getId());
 		buffer.putShort(context.getQuickMessage().getType().getId());
-		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getParams());
+		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getCommands());
 		buffer.finishVarByte();
 		return buffer;
 	}
@@ -190,7 +190,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		buffer.putVarByte(ServerProtocol.MESSAGE_QUICKCHAT_PRIVATE_ECHO, player);
 		buffer.putString(context.getName());
 		buffer.putShort(context.getQuickMessage().getType().getId());
-		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getParams());
+		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getCommands());
 		buffer.finishVarByte();
 		return buffer;
 	}
@@ -223,15 +223,15 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		buffer.putBytes(context.getHash());
 		buffer.putByte(context.getRights().getId());
 		buffer.putShort(context.getQuickMessage().getType().getId());
-		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getParams());
+		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getCommands());
 		buffer.finishVarByte();
 		return buffer;
 	}
 	
-	private OutboundBuffer encodeClanChatMessage(Player player, MessageEventContext context, boolean isGuest) {
+	private OutboundBuffer encodeClanChatMessage(Player player, MessageEventContext context, boolean isAffined) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL, player);
-		buffer.putByte(isGuest ? 0 : 1);
+		buffer.putByte(isAffined ? 1 : 0);
 		buffer.putString(context.getName());
 		buffer.putBytes(context.getHash());
 		buffer.putByte(context.getRights().getId());
@@ -240,23 +240,23 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		return buffer;
 	}
 	
-	private OutboundBuffer encodeClanQuickMessage(Player player, QuickMessageEventContext context, boolean isGuest) {
+	private OutboundBuffer encodeClanQuickMessage(Player player, QuickMessageEventContext context, boolean isAffined) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarByte(ServerProtocol.MESSAGE_QUICKCHAT_CLANCHANNEL, player);
-		buffer.putByte(isGuest ? 0 : 1);
+		buffer.putByte(isAffined ? 1 : 0);
 		buffer.putString(context.getName());
 		buffer.putBytes(context.getHash());
 		buffer.putByte(context.getRights().getId());
 		buffer.putShort(context.getQuickMessage().getType().getId());
-		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getParams());
+		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getCommands());
 		buffer.finishVarByte();
 		return buffer;
 	}
 	
-	private OutboundBuffer encodeClanBroadcast(Player player, MessageEventContext context, boolean isGuest) {
+	private OutboundBuffer encodeClanBroadcast(Player player, MessageEventContext context, boolean isAffined) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarByte(ServerProtocol.MESSAGE_CLANCHANNEL_SYSTEM, player);
-		buffer.putByte(isGuest ? 0 : 1);
+		buffer.putByte(isAffined ? 1 : 0);
 		buffer.putBytes(context.getHash());
 		Huffman.compress(buffer, context.getMessage());
 		buffer.finishVarByte();

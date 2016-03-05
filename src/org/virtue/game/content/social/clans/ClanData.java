@@ -19,39 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.csdelta;
-
-import org.virtue.network.event.buffer.OutboundBuffer;
+package org.virtue.game.content.social.clans;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 28/12/2014
+ * @since 21/12/2014
  */
-public class DeleteBan implements ClanSettingsDelta {
-
-	private final int slot;
-	
-	public DeleteBan (int slot) {
-		this.slot = slot;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#packDelta(org.virtue.network.event.buffer.OutboundBuffer)
-	 */
-	@Override
-	public void packDelta(OutboundBuffer buffer) {
-		buffer.putShort(slot);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#getTypeID()
-	 */
-	@Override
-	public int getTypeID() {
-		return 6;
-	}
+public class ClanData {
 
 }

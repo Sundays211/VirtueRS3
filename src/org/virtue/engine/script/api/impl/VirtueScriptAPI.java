@@ -53,7 +53,7 @@ import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.content.social.ChannelRank;
 import org.virtue.game.content.social.ChannelType;
-import org.virtue.game.content.social.clan.ClanSettingsAPI;
+import org.virtue.game.content.social.clans.ClanSettingsAPI;
 import org.virtue.game.content.social.friendchat.FriendChatDataType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;

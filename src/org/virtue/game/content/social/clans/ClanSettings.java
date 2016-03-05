@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan;
+package org.virtue.game.content.social.clans;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -42,16 +42,15 @@ import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.game.content.social.SocialUser;
-import org.virtue.game.content.social.clan.ccdelta.UpdateDetails;
-import org.virtue.game.content.social.clan.csdelta.AddBan;
-import org.virtue.game.content.social.clan.csdelta.AddMember;
-import org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta;
-import org.virtue.game.content.social.clan.csdelta.DeleteBan;
-import org.virtue.game.content.social.clan.csdelta.DeleteMember;
-import org.virtue.game.content.social.clan.csdelta.SetMemberVarBit;
-import org.virtue.game.content.social.clan.csdelta.SetVarBitValue;
-import org.virtue.game.content.social.clan.csdelta.SetVarValue;
-import org.virtue.game.content.social.clan.csdelta.UpdateRank;
+import org.virtue.game.content.social.clans.csdelta.AddBan;
+import org.virtue.game.content.social.clans.csdelta.AddMember;
+import org.virtue.game.content.social.clans.csdelta.ClanSettingsDelta;
+import org.virtue.game.content.social.clans.csdelta.DeleteBan;
+import org.virtue.game.content.social.clans.csdelta.DeleteMember;
+import org.virtue.game.content.social.clans.csdelta.SetMemberVarBit;
+import org.virtue.game.content.social.clans.csdelta.SetVarBitValue;
+import org.virtue.game.content.social.clans.csdelta.SetVarValue;
+import org.virtue.game.content.social.clans.csdelta.UpdateRank;
 import org.virtue.game.entity.player.AccountInfo;
 import org.virtue.network.event.context.impl.out.ClanSettingsDeltaEventContext;
 import org.virtue.network.event.context.impl.out.ClanSettingsEventContext;
@@ -235,7 +234,7 @@ public class ClanSettings {
 		ClanSettingsEventContext.Variable[] varEntries;
 		synchronized (onlineMembers) {			
 			for (SocialUser u : initQueue) {
-				if (u.getMyClanHash() == clanHash) {
+				if (u.getAffinedClanHash() == clanHash) {
 					onlineMembers.add(u);
 				} else {
 					onlineGuests.add(u);
@@ -268,7 +267,7 @@ public class ClanSettings {
 				updateNum, allowNonMembers, minTalkRank, minKickRank, varEntries);
 		SocialUser user;
 		while ((user = initQueue.poll()) != null) {
-			if (user.getMyClanHash() == clanHash) {
+			if (user.getAffinedClanHash() == clanHash) {
 				user.sendClanSettingsFull(memberPacket);
 			} else {
 				user.sendClanSettingsFull(guestPacket);
@@ -383,6 +382,7 @@ public class ClanSettings {
 	
 	protected void setAllowNonMembers (boolean allowNonMembers) {
 		this.allowNonMembers = allowNonMembers;
+		updateChannelDetails();
 	}
 	
 	protected void setMinTalkRank (ClanRank minTalkRank) {
@@ -397,7 +397,7 @@ public class ClanSettings {
 	
 	private void updateChannelDetails () {
 		if (linkedChannel != null) {
-			linkedChannel.queueUpdate(new UpdateDetails(clanName, minKickRank, minKickRank));
+			linkedChannel.updateBaseSettings(clanName, allowNonMembers, minTalkRank.getID(), minKickRank.getID());
 		}
 	}
 	
@@ -607,7 +607,7 @@ public class ClanSettings {
 		}
 		queueUpdate(new AddMember(newMember.getDisplayName()));
 		if (linkedChannel != null) {
-			linkedChannel.updateUser(player.getHash());
+			linkedChannel.updateUserRank(player.getHash(), getRank(player.getHash()).getID());
 		}
 	}
 	
@@ -628,7 +628,7 @@ public class ClanSettings {
 			findClanOwner();
 		}
 		if (linkedChannel != null) {
-			linkedChannel.updateUser(member.getUserHash());
+			linkedChannel.updateUserRank(userhash, getRank(userhash).getID());
 		}		
 	}
 	
@@ -653,7 +653,7 @@ public class ClanSettings {
 			queueUpdate(new UpdateRank(slot, rank));
 		}
 		if (linkedChannel != null) {
-			linkedChannel.updateUser(member.getUserHash());
+			linkedChannel.updateUserRank(member.getUserHash(), rank.getID());
 		}
 		findClanOwner();
 	}

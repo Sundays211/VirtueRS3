@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan;
+package org.virtue.game.content.social.clans;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -97,9 +97,9 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 	 */
 	@Override
 	public void registerPlayer(SocialUser user, boolean isGuest) {
-		ClanSettings settings = getSettings(isGuest ? user.getGuestClanHash(true) : user.getMyClanHash());
+		ClanSettings settings = getSettings(isGuest ? user.getGuestClanHash(true) : user.getAffinedClanHash());
 		if (!isGuest && (settings == null || !settings.inClan(user.getHash()))) {
-			user.setMyClanHash(0L);
+			user.setAffinedClanHash(0L);
 			user.sendMessage("You're no longer a part of a clan.", ChannelType.GAME);
 			return;
 		} else if (settings == null) {
@@ -114,7 +114,7 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 	 */
 	@Override
 	public void deregisterPlayer(SocialUser user, boolean isGuest) {
-		ClanSettings settings = getSettings(isGuest ? user.getGuestClanHash(true) : user.getMyClanHash());
+		ClanSettings settings = getSettings(isGuest ? user.getGuestClanHash(true) : user.getAffinedClanHash());
 		if (settings == null) {
 			return;
 		}
@@ -233,7 +233,7 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 			targetPlayer = Lobby.getInstance().getPlayerByHash(userhash);
 		}
 		if (targetPlayer != null) {
-			clanManager.getChannels().leaveChannel(targetPlayer.getChat(), false, false);
+			clanManager.getChannels().leaveChannel(targetPlayer.getChat(), true, false);
 			clan.deregisterOnlineMember(targetPlayer.getChat());
 			targetPlayer.setClanHash(0L);
 			targetPlayer.getChat().clanDataUpdated();

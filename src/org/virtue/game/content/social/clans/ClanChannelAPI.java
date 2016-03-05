@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan;
+package org.virtue.game.content.social.clans;
 
 import org.virtue.game.content.social.SocialUser;
 import org.virtue.utility.text.QuickChatMessage;
@@ -49,10 +49,10 @@ public interface ClanChannelAPI {
 	/**
 	 * Sends a request to remove the player from their current clan chat channel
 	 * @param player The player leaving the channel
-	 * @param isGuest True if the player is leaving their guest channel
+	 * @param isAffined True if the player is leaving their affined clan channel
 	 * @param isLogout If true, the player will rejoin the channel when they next log in
 	 */
-	public void leaveChannel (SocialUser player, boolean isGuest, boolean isLogout);
+	public void leaveChannel (SocialUser player, boolean isAffined, boolean isLogout);
 	
 	/**
 	 * Forcefully removes the specified user from the channel. 
@@ -66,16 +66,16 @@ public interface ClanChannelAPI {
 	 * Sends a message in a clan channel the player is currently in
 	 * @param player The player sending the message
 	 * @param message The message to send
-	 * @param isGuest Whether the message is being sent in a guest channel or not
+	 * @param isAffined Whether the message is being sent in the affined clan channel or not
 	 */
-	public void sendMessage (SocialUser player, String message, boolean isGuest);
+	public void sendMessage (SocialUser player, String message, boolean isAffined);
 	
 	/**
 	 * Sends a quick chat message in a clan channel the player is currently in
 	 * @param player The player sending the message
 	 * @param message The quick chat message to send
-	 * @param isGuest Whether the message is being sent in a guest channel or not
+	 * @param isAffined Whether the message is being sent in the affined clan channel or not
 	 */
-	public void sendQuickMessage (SocialUser player, QuickChatMessage message, boolean isGuest);
+	public void sendQuickMessage (SocialUser player, QuickChatMessage message, boolean isAffined);
 
 }

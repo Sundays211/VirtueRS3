@@ -19,12 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.csdelta;
+package org.virtue.game.content.social.clans.csdelta;
 
 import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
- * An update which removes the specified member from the clan list
+ * An update which adds the specified member to the clan list
  * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -32,26 +32,23 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Sundays211
  * @since 21/12/2014
  */
-public class DeleteMember implements ClanSettingsDelta {
-
-	private final int slot;
+public class AddMember implements ClanSettingsDelta {
 	
-	/**
-	 * Creates a new {@code DeleteMember} delta object
-	 * @param slot	The slot of the member to remove from the clan list
-	 */
-	public DeleteMember (int slot) {
-		this.slot = slot;
+	private final String displayName;
+	
+	public AddMember (String displayName) {
+		this.displayName = displayName;
 	}
-	
+
 	@Override
 	public void packDelta(OutboundBuffer buffer) {
-		buffer.putShort(slot);
+		buffer.putByte(255);//Do not include user hash
+		buffer.putString(displayName);
 	}
 
 	@Override
 	public int getTypeID() {
-		return 5;
+		return 1;
 	}
 
 }

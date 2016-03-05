@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.content.social.clan.ccdelta.ClanChannelDelta;
+import org.virtue.game.content.social.clans.ClanChannelDelta;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -32,51 +32,29 @@ import org.virtue.network.event.context.GameEventContext;
  * @since 22/12/2014
  */
 public class ClanChannelDeltaEventContext implements GameEventContext {
-
-	private final long clanHash;
 	
-	private final long updateNum;
+	private final ClanChannelDelta delta;
 	
-	private final boolean isGuestCc;
+	private final boolean isAffined;
 	
-	private final ClanChannelDelta[] deltaNodes;
-	
-	public ClanChannelDeltaEventContext (boolean guestCc, long clanHash, long updateNum, ClanChannelDelta... deltaNodes) {
-		this.isGuestCc = guestCc;
-		this.clanHash = clanHash;
-		this.updateNum = updateNum;
-		this.deltaNodes = deltaNodes;
+	public ClanChannelDeltaEventContext (boolean isAffined, ClanChannelDelta delta) {
+		this.isAffined = isAffined;
+		this.delta = delta;
 	}
 	
 	/**
-	 * Returns whether or not this is an update for a guest clan chat
-	 * @return	True if this is a guest clan channel update, false if it's a main clan channel update
+	 * Returns whether or not this is an update for the affined clan channel
+	 * @return True if it's an affined clan channel update, false for a listed channel update
 	 */
-	public boolean isGuestUpdate () {
-		return isGuestCc;
+	public boolean isAffinedUpdate () {
+		return isAffined;
 	}
 	
 	/**
-	 * Returns the unique hash code for the clan
-	 * @return	The clan hash
+	 * Returns the delta for this update
+	 * @return The {@link ClanChannelDelta}
 	 */
-	public long getClanHash () {
-		return clanHash;
-	}
-	
-	/**
-	 * Returns the current channel update number
-	 * @return	The update number
-	 */
-	public long getUpdateNumber () {
-		return updateNum;
-	}
-	
-	/**
-	 * Returns the nodes for this delta update
-	 * @return	The delta nodes
-	 */
-	public ClanChannelDelta[] getDeltaNodes () {
-		return deltaNodes;
+	public ClanChannelDelta getDelta () {
+		return delta;
 	}
 }

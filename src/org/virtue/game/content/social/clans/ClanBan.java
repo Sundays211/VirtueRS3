@@ -19,22 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.csdelta;
-
-import org.virtue.network.event.buffer.OutboundBuffer;
+package org.virtue.game.content.social.clans;
 
 /**
- * An interface for defining a clan settings update
+ * Represents the data for a clan ban list entry
  * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 21/12/2014
+ * @since 22/12/2014
  */
-public interface ClanSettingsDelta {
-
-	public void packDelta (OutboundBuffer buffer);
+public class ClanBan {
 	
-	public int getTypeID ();
+	private final long userhash;
+	
+	private String displayName;
+	
+	public ClanBan (Long userhash) {
+		this.userhash = userhash;
+	}
+	
+	protected void setDisplayName (String name) {
+		this.displayName = name;
+	}
+	
+	public long getUserHash () {
+		return userhash;
+	}
+	
+	public String getDisplayName () {
+		return displayName;
+	}
+
 }

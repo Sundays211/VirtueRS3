@@ -254,7 +254,7 @@ public class AccountIndex {
 		AccountInfo info = lookupByHash(userHash);
 		info.setDisplayName(displayName);
 		needsSave = true;
-		Virtue.getInstance().getClans().notifyUserUpdated(userHash);
+		Virtue.getInstance().getClans().updateUserName(userHash, displayName);
 	}
 	
 	public void setAccountType (long userHash, PrivilegeLevel type) {

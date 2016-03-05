@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan;
+package org.virtue.game.content.social.clans;
 
 import java.io.File;
 
@@ -81,11 +81,12 @@ public class ClanManager {
 	}
 	
 	/**
-	 * Notifies all clan settings and channels that the specified user has been updated
+	 * Notifies all clan settings and channels that the specified users display name has changed
 	 * @param userHash The hash of the user to update
+	 * @param displayName The new user display name
 	 */
-	public void notifyUserUpdated (long userHash) {
-		channelManager.notifyUserUpdated(userHash);
+	public void updateUserName (long userHash, String displayName) {
+		channelManager.updateUserName(userHash, displayName);
 		settingsManager.notifyUserUpdated(userHash);
 	}
 	
@@ -143,12 +144,12 @@ public class ClanManager {
 			long clanHash = index.addClan(name);
 			ClanSettings settings = new ClanSettings(clanHash, 100, name);
 			settingsManager.addClan(settings);
-			owner.setMyClanHash(clanHash);
+			owner.setAffinedClanHash(clanHash);
 			settings.addMember(owner);
 			settings.registerOnlineMember(owner);
 			channelManager.joinMyChannel(owner);
 			for (SocialUser founder : founders) {
-				founder.setMyClanHash(clanHash);
+				founder.setAffinedClanHash(clanHash);
 				settings.addMember(founder);
 				settings.registerOnlineMember(founder);
 				channelManager.joinMyChannel(founder);
@@ -158,36 +159,36 @@ public class ClanManager {
 	}
 	
 	public boolean leaveClan (SocialUser player) {
-		long clanHash = player.getMyClanHash();
+		long clanHash = player.getAffinedClanHash();
 		if (clanHash == 0L) {
-			channelManager.leaveChannel(player, false, false);
+			channelManager.leaveChannel(player, true, false);
 			return true;//Player is not in a clan
 		}
 		ClanSettings clan = getClanData(clanHash);
 		if (clan == null) {
-			player.setMyClanHash(0L);
-			channelManager.leaveChannel(player, false, false);
+			player.setAffinedClanHash(0L);
+			channelManager.leaveChannel(player, true, false);
 			return true;//Clan does not exist anyway. Set clan hash to zero
 		}
 		if (!clan.inClan(player.getHash())) {
-			player.setMyClanHash(0L);
-			channelManager.leaveChannel(player, false, false);
+			player.setAffinedClanHash(0L);
+			channelManager.leaveChannel(player, true, false);
 			return true;//Player isn't in the clan. Set clan hash to zero
 		}
 		if (clan.getMemberCount() == 1) {//This is the last clan member. The clan needs to be disbanded
-			channelManager.leaveChannel(player, false, false);
+			channelManager.leaveChannel(player, true, false);
 			index.removeAllWithHash(clanHash);
-			player.setMyClanHash(0L);
+			player.setAffinedClanHash(0L);
 			player.clanDataUpdated();
 			return true;
 		} else {
 			if (clan.getOwner().getUserHash() == player.getHash() && clan.getReplacementOwnerSlot() < 0) {
 				return false;//Clan does not have any deputy owners
 			}
-			channelManager.leaveChannel(player, false, false);
+			channelManager.leaveChannel(player, true, false);
 			clan.removeMember(player.getHash());
 			clan.deregisterOnlineMember(player);
-			player.setMyClanHash(0L);
+			player.setAffinedClanHash(0L);
 			player.clanDataUpdated();
 			settingsManager.sendBroadcast(clanHash, 19, new String[] { "[Player A]" }, new String[] { player.getName() });
 			return true;
@@ -202,7 +203,7 @@ public class ClanManager {
 		if (clan.isBanned(player.getHash())) {
 			return false;
 		}
-		player.setMyClanHash(clanHash);
+		player.setAffinedClanHash(clanHash);
 		clan.addMember(player);
 		if (player.getGuestClanHash(true) == clanHash) {
 			settingsManager.deregisterPlayer(player, true);
@@ -211,7 +212,7 @@ public class ClanManager {
 		clan.registerOnlineMember(player);
 		channelManager.joinMyChannel(player);
 		if (player.getGuestClanHash(false) == clanHash) {
-			channelManager.leaveChannel(player, true, false);
+			channelManager.leaveChannel(player, false, false);
 			player.sendMessage("You are now part of the clan you were visiting.", ChannelType.CLANCHANNEL_GUEST_SYSTEM);
 		}
 		player.sendMessage("You have joined the clan, and so are now a part of "+clan.getClanName(), ChannelType.GAME);

@@ -115,13 +115,13 @@ public interface SocialUser {
 	 * Returns the hash for the clan the player belongs to
 	 * @return	The clan hash, or 0L if the player isn't in any clan
 	 */
-	public long getMyClanHash ();
+	public long getAffinedClanHash ();
 	
 	/**
 	 * Sets the hash for the clan the player belongs to
 	 * @param clanHash The hash to set to, or 0L if the player isn't in any clan
 	 */
-	public void setMyClanHash (long clanHash);
+	public void setAffinedClanHash (long clanHash);
 	
 	/**
 	 * Returns the hash for the clan the player is currently a guest in
@@ -150,9 +150,9 @@ public interface SocialUser {
 	
 	/**
 	 * Informs the player that they have left the clan chat channel they are currently in
-	 * @param isGuest	True if the player left their guest cc, false if they left their main cc
+	 * @param isAffined True if the player left their affined cc, false if they left their guest cc
 	 */
-	public void sendLeaveClanChannel (boolean isGuest);
+	public void sendLeaveClanChannel (boolean isAffined);
 	
 	/**
 	 * Sends a full packet representing the settings for a clan

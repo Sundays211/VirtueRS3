@@ -19,55 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.ccdelta;
+package org.virtue.game.content.social.clans.csdelta;
 
-import org.virtue.game.content.social.clan.ClanRank;
 import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
- * An update which which changes the details of a user in the clan channel
- * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 21/12/2014
+ * @since 28/12/2014
  */
-public class UpdateMember implements ClanChannelDelta {
+public class AddBan implements ClanSettingsDelta {
 	
-	private final int slot;
 	private final String displayName;
-	private final int nodeID;
-	private final ClanRank rank;
 	
-	/**
-	 * Constructs a new {@code UpdateMember} delta object
-	 * @param slot The index of the member to update within the clan channel
-	 * @param displayName The display name to change to
-	 * @param rank The rank to change to
-	 * @param nodeID The world node ID to change to
-	 */
-	public UpdateMember (int slot, String displayName, ClanRank rank, int nodeID) {
-		this.slot = slot;
+	public AddBan (String displayName) {
 		this.displayName = displayName;
-		this.rank = rank;
-		this.nodeID = nodeID;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#packDelta(org.virtue.network.event.buffer.OutboundBuffer)
+	 */
 	@Override
 	public void packDelta(OutboundBuffer buffer) {
-		buffer.putByte(0);//Unused
-		buffer.putShort(slot);
-		buffer.putByte(rank.getID());
-		buffer.putShort(nodeID);
-		buffer.putLong(0L);//Unused
+		buffer.putByte(255);//Do not include user hash
 		buffer.putString(displayName);
-		buffer.putByte(0);//Unused
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#getTypeID()
+	 */
 	@Override
 	public int getTypeID() {
-		return 5;
+		return 3;
 	}
 
 }

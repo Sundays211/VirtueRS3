@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,15 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan;
+package org.virtue.game.content.social.clans;
+
+import org.virtue.game.content.social.SocialUser;
 
 /**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
+ * Represents a user within a clan channel
+ *
  * @author Sundays211
- * @since 21/12/2014
+ * @since 04/03/2016
  */
-public class ClanData {
+public class ClanChannelUser {	
+	protected long userHash;
+	protected byte rank;
+	protected String displayName;
+	protected int nodeID;
+	
+	protected boolean isAffined;
+	protected SocialUser player;
 
+	public ClanChannelUser(SocialUser user) {
+		this.userHash = user.getHash();
+		this.displayName = user.getName();
+		this.nodeID = user.getNodeID();
+		
+		this.player = user;
+	}
 }

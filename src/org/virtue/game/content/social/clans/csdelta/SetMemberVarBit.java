@@ -19,36 +19,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.csdelta;
+package org.virtue.game.content.social.clans.csdelta;
 
 import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
- * An update which adds the specified member to the clan list
- * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 21/12/2014
+ * @since 28/12/2014
  */
-public class AddMember implements ClanSettingsDelta {
+public class SetMemberVarBit implements ClanSettingsDelta {
 	
-	private final String displayName;
+	private final int slot;
+	private final int value;
+	private final int start;
+	private final int end;
 	
-	public AddMember (String displayName) {
-		this.displayName = displayName;
+	public SetMemberVarBit (int slot, int value, int start, int end) {
+		this.slot = slot;
+		this.value	= value;
+		this.start = start;
+		this.end = end;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#packDelta(org.virtue.network.event.buffer.OutboundBuffer)
+	 */
 	@Override
 	public void packDelta(OutboundBuffer buffer) {
-		buffer.putByte(255);//Do not include user hash
-		buffer.putString(displayName);
+		buffer.putShort(slot);
+		buffer.putInt(value);
+		buffer.putByte(start);
+		buffer.putByte(end);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#getTypeID()
+	 */
 	@Override
 	public int getTypeID() {
-		return 1;
+		return 7;
 	}
 
 }

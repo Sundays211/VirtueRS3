@@ -490,7 +490,7 @@ public class ChatManager implements SocialUser {
 			}
 			friends.sendFriendsMyStatus(true);
 			if (player.getClanHash() != 0L) {
-				Virtue.getInstance().getClans().getChannels().leaveChannel(this, false, true);
+				Virtue.getInstance().getClans().getChannels().leaveChannel(this, true, true);
 				Virtue.getInstance().getClans().getSettings().deregisterPlayer(this, true);//Deregister for main clan settings
 				Virtue.getInstance().getClans().getSettings().deregisterPlayer(this, false);//Deregister for guest clan settings
 			}
@@ -502,7 +502,7 @@ public class ChatManager implements SocialUser {
 	 * @see org.virtue.game.content.social.SocialUser#getMyClanHash()
 	 */
 	@Override
-	public long getMyClanHash() {
+	public long getAffinedClanHash() {
 		return player.getClanHash();
 	}
 
@@ -510,7 +510,7 @@ public class ChatManager implements SocialUser {
 	 * @see org.virtue.game.content.social.SocialUser#setMyClanHash(long)
 	 */
 	@Override
-	public void setMyClanHash(long clanHash) {
+	public void setAffinedClanHash(long clanHash) {
 		player.setClanHash(clanHash);
 	}
 
@@ -534,16 +534,16 @@ public class ChatManager implements SocialUser {
 	 * @see org.virtue.game.content.social.SocialUser#sendLeaveClanChannel(boolean)
 	 */
 	@Override
-	public void sendLeaveClanChannel(boolean isGuest) {
-		if (isGuest) {
+	public void sendLeaveClanChannel(boolean isAffined) {
+		if (isAffined) {
+			//setInClanChannel(false);
+		} else {			
 			player.getDispatcher().sendCS2Script(4438, 72744972);
 			setGuestClanHash(0L, false);
-		} else {
-			//setInClanChannel(false);
 		}
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarShort(ServerProtocol.CLANCHANNEL_FULL, player);
-		buffer.putByte(isGuest ? 0 : 1);
+		buffer.putByte(isAffined ? 1 : 0);
 		buffer.finishVarShort();
 		player.getDispatcher().sendBuffer(buffer);
 	}

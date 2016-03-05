@@ -19,12 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.csdelta;
+package org.virtue.game.content.social.clans.csdelta;
 
 import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
- * Updates a clan setting variable on the client side to match the server-side value
+ * An update which removes the specified member from the clan list
  * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -32,61 +32,26 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Sundays211
  * @since 21/12/2014
  */
-public class SetVarValue implements ClanSettingsDelta {
-	
-	private enum Type {INTEGER, STRING, LONG, INVALID};
-	
-	private final int key;
-	private final Object value;
-	private final Type type;
-	
-	public SetVarValue (int key, Object value) {
-		this.key = key;
-		Type type = Type.INVALID;
-		if (value instanceof Integer) {
-			type = Type.INTEGER;
-		} else if (value instanceof String) {
-			type = Type.STRING;
-		} else if (value instanceof Long) {
-			type = Type.LONG;
-		} else if (value instanceof Double) {
-			type = Type.INTEGER;
-			value = ((Double) value).intValue();
-		}
-		this.value = value;
-		this.type = type;
-	}
+public class DeleteMember implements ClanSettingsDelta {
 
+	private final int slot;
+	
+	/**
+	 * Creates a new {@code DeleteMember} delta object
+	 * @param slot	The slot of the member to remove from the clan list
+	 */
+	public DeleteMember (int slot) {
+		this.slot = slot;
+	}
+	
 	@Override
 	public void packDelta(OutboundBuffer buffer) {
-		buffer.putInt(key);
-		switch (type) {
-		case INTEGER:
-			buffer.putInt((Integer) value);
-			break;
-		case STRING:
-			buffer.putString((String) value);
-			break;
-		case LONG:
-			buffer.putLong((Long) value);
-			break;
-		case INVALID:
-			throw new RuntimeException("Attempted to pack invalid VarClanSettings");
-		}
+		buffer.putShort(slot);
 	}
 
 	@Override
 	public int getTypeID() {
-		switch (type) {
-		case INTEGER:
-			return 8;
-		case STRING:
-			return 10;
-		case LONG:
-			return 9;
-		default:
-			return -1;
-		}
+		return 5;
 	}
 
 }

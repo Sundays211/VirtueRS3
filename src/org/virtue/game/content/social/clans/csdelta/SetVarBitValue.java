@@ -19,37 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan;
+package org.virtue.game.content.social.clans.csdelta;
+
+import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
- * Represents the data for a clan ban list entry
+ * Sets a part of a clan setting variable
  * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 22/12/2014
+ * @since 21/12/2014
  */
-public class ClanBan {
+public class SetVarBitValue implements ClanSettingsDelta {
 	
-	private final long userhash;
-	
-	private String displayName;
-	
-	public ClanBan (Long userhash) {
-		this.userhash = userhash;
+	private final int key;
+	private final int value;
+	private final int start;
+	private final int end;
+
+	public SetVarBitValue (int key, int value, int start, int end) {
+		this.key = key;
+		this.value	= value;
+		this.start = start;
+		this.end = end;
 	}
 	
-	protected void setDisplayName (String name) {
-		this.displayName = name;
+	@Override
+	public void packDelta(OutboundBuffer buffer) {
+		buffer.putInt(key);
+		buffer.putInt(value);
+		buffer.putByte(start);
+		buffer.putByte(end);
 	}
-	
-	public long getUserHash () {
-		return userhash;
-	}
-	
-	public String getDisplayName () {
-		return displayName;
+
+	@Override
+	public int getTypeID() {
+		return 11;
 	}
 
 }

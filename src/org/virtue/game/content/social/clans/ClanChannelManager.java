@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan;
+package org.virtue.game.content.social.clans;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -77,10 +77,10 @@ public class ClanChannelManager implements ClanChannelAPI {
 	 * This is used when the user changes their display name or world ID
 	 * @param userHash The hash of the user to update
 	 */
-	protected void notifyUserUpdated (long userHash) {
+	protected void updateUserName (long userHash, String displayName) {
 		synchronized (clanCache) {
 			for (ClanChannel channel : clanCache.values()) {
-				channel.updateUser(userHash);
+				channel.updateUserName(userHash, displayName);
 			}
 		}
 	}
@@ -90,7 +90,7 @@ public class ClanChannelManager implements ClanChannelAPI {
 	 */
 	@Override
 	public void joinMyChannel(SocialUser player) {
-		long clanHash = player.getMyClanHash();
+		long clanHash = player.getAffinedClanHash();
 		//System.out.println("Joining channel "+clanHash);
 		if (clanHash == 0L) {
 			return;//Not in a clan
@@ -102,10 +102,10 @@ public class ClanChannelManager implements ClanChannelAPI {
 		}
 		if (!channel.getSettings().inClan(player.getHash())) {
 			player.sendMessage("You're no longer a part of a clan.", ChannelType.CLANCHANNEL_SYSTEM);
-			player.setMyClanHash(0L);
+			player.setAffinedClanHash(0L);
 			return;
 		}
-		channel.join(player, false);
+		channel.join(player, true);
 	}
 
 	/* (non-Javadoc)
@@ -127,7 +127,7 @@ public class ClanChannelManager implements ClanChannelAPI {
 			player.sendMessage("You cannot join your clan's chat channel as a guest.", ChannelType.CLANCHANNEL_SYSTEM);
 			return;
 		}
-		if (!channel.getSettings().allowNonMembers()) {
+		if (!channel.allowUnaffined()) {
 			player.sendMessage("That clan only allows clanmates to join their clan channel.", ChannelType.CLANCHANNEL_SYSTEM);
 			return;
 		}
@@ -137,7 +137,7 @@ public class ClanChannelManager implements ClanChannelAPI {
 		}
 		//TODO: Check whether the channel is full or the player is temp-banned
 		//System.out.println("Joining clan "+clanName+" of hash "+clanHash+" as a guest.");
-		channel.join(player, true);
+		channel.join(player, false);
 		player.setGuestClanHash(clanHash, false);
 	}
 
@@ -145,21 +145,21 @@ public class ClanChannelManager implements ClanChannelAPI {
 	 * @see org.virtue.game.content.social.clan.ClanChannelAPI#leaveChannel(org.virtue.game.content.social.SocialUser, boolean, boolean)
 	 */
 	@Override
-	public void leaveChannel(SocialUser player, boolean isGuest, boolean isLogout) {
-		long clanHash = isGuest ? player.getGuestClanHash(false) : player.getMyClanHash();
+	public void leaveChannel(SocialUser player, boolean isAffined, boolean isLogout) {
+		long clanHash = isAffined ? player.getAffinedClanHash() : player.getGuestClanHash(false);
 		if (clanHash == 0L) {
 			return;
 		}
 		ClanChannel channel = getClanChannel(clanHash);
 		if (channel == null) {
 			if (!isLogout) {
-				player.sendLeaveClanChannel(isGuest);
+				player.sendLeaveClanChannel(isAffined);
 			}
 			return;
 		}
-		channel.leave(player, isGuest);
+		channel.leave(player, isAffined);
 		if (!isLogout) {
-			player.sendLeaveClanChannel(isGuest);
+			player.sendLeaveClanChannel(isAffined);
 		}
 	}
 
@@ -167,45 +167,45 @@ public class ClanChannelManager implements ClanChannelAPI {
 	 * @see org.virtue.game.content.social.clan.ClanChannelAPI#sendMessage(org.virtue.game.content.social.SocialUser, java.lang.String, boolean)
 	 */
 	@Override
-	public void sendMessage(SocialUser player, String message, boolean isGuest) {
+	public void sendMessage(SocialUser player, String message, boolean isAffined) {
 		if (player.isMuted()) {
 			player.sendMessage("You are currently muted and unable to use the chat system.", ChannelType.GAME);
 			return;
 		}
-		long clanHash = isGuest ? player.getGuestClanHash(false) : player.getMyClanHash();
+		long clanHash = isAffined ? player.getAffinedClanHash() : player.getGuestClanHash(false);
 		message = StringUtility.formatChatMessage(message);
 		ClanChannel channel = getClanChannel(clanHash);
 		if (channel == null) {
-			player.sendMessage("You aren't"+(isGuest?" a guest":"")+" in a"+(isGuest?" visited":"")+" Clan Chat channel.", ChannelType.GAME);
+			player.sendMessage("You aren't"+(isAffined?"":" a guest")+" in a"+(isAffined?"":" visited")+" Clan Chat channel.", ChannelType.GAME);
 			return;
 		}
 		if (!channel.canTalk(player.getHash())) {
 			player.sendMessage("Cannot talk.", ChannelType.GAME);//TODO: Fix message
 			return;
 		}
-		MessageEventContext mainMessage = new MessageEventContext(ChannelType.CLANCHANNEL, message, player.getName(), player.getName(), player.getType());
+		MessageEventContext affinedMessage = new MessageEventContext(ChannelType.CLANCHANNEL, message, player.getName(), player.getName(), player.getType());
 		MessageEventContext guestMessage = new MessageEventContext(ChannelType.CLANCHANNEL_GUEST, message, player.getName(), player.getName(), player.getType());
-		channel.sendMessage(mainMessage, guestMessage);
+		channel.sendMessage(affinedMessage, guestMessage);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.content.social.clan.ClanChannelAPI#sendQuickMessage(org.virtue.game.content.social.SocialUser, org.virtue.utility.QuickChatMessage, boolean)
 	 */
 	@Override
-	public void sendQuickMessage(SocialUser player, QuickChatMessage message, boolean isGuest) {
-		long clanHash = isGuest ? player.getGuestClanHash(false) : player.getMyClanHash();
+	public void sendQuickMessage(SocialUser player, QuickChatMessage message, boolean isAffined) {
+		long clanHash = isAffined ? player.getAffinedClanHash() : player.getGuestClanHash(false);
 		ClanChannel channel = getClanChannel(clanHash);
 		if (channel == null) {
-			player.sendMessage("You aren't"+(isGuest?" a guest":"")+" in a"+(isGuest?" visited":"")+" Clan Chat channel.", ChannelType.GAME);
+			player.sendMessage("You aren't"+(isAffined?"":" a guest")+" in a"+(isAffined?"":" visited")+" Clan Chat channel.", ChannelType.GAME);
 			return;
 		}
 		if (!channel.canTalk(player.getHash())) {
 			player.sendMessage("Cannot talk.", ChannelType.GAME);//TODO: Fix message
 			return;
 		}
-		MessageEventContext mainMessage = new QuickMessageEventContext(ChannelType.CLANCHANNEL_QUICKCHAT, message, player.getName(), player.getName(), player.getType());
+		MessageEventContext affinedMessage = new QuickMessageEventContext(ChannelType.CLANCHANNEL_QUICKCHAT, message, player.getName(), player.getName(), player.getType());
 		MessageEventContext guestMessage = new QuickMessageEventContext(ChannelType.CLANCHANNEL_GUEST_QUICKCHAT, message, player.getName(), player.getName(), player.getType());
-		channel.sendMessage(mainMessage, guestMessage);
+		channel.sendMessage(affinedMessage, guestMessage);
 	}
 
 	/* (non-Javadoc)

@@ -19,12 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.ccdelta;
+package org.virtue.game.content.social.clans.csdelta;
 
+import org.virtue.game.content.social.clans.ClanRank;
 import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
- * An interface for defining a clan channel update
+ * An update which changes the rank of a member on the clan list
  * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -32,9 +33,30 @@ import org.virtue.network.event.buffer.OutboundBuffer;
  * @author Sundays211
  * @since 21/12/2014
  */
-public interface ClanChannelDelta {
+public class UpdateRank implements ClanSettingsDelta {
 	
-	public void packDelta (OutboundBuffer buffer);
+	private final int slot;
+	private final ClanRank rank;
 	
-	public int getTypeID ();
+	/**
+	 * Creates a new {@code UpdateRank} delta object
+	 * @param slot	The slot of the member on the clan list
+	 * @param rank	The rank to change to
+	 */
+	public UpdateRank (int slot, ClanRank rank) {
+		this.slot = slot;
+		this.rank = rank;
+	}
+
+	@Override
+	public void packDelta(OutboundBuffer buffer) {
+		buffer.putShort(slot);
+		buffer.putByte(rank.getID());
+	}
+
+	@Override
+	public int getTypeID() {
+		return 2;
+	}
+
 }

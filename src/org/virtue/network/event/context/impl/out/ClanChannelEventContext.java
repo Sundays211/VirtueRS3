@@ -21,7 +21,6 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.content.social.clan.ClanRank;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -35,7 +34,7 @@ public class ClanChannelEventContext implements GameEventContext {
 	
 	public static class User {
 		private final String displayName;
-		private final ClanRank rank;
+		private final byte rank;
 		private final int nodeID;
 		
 		/**
@@ -44,7 +43,7 @@ public class ClanChannelEventContext implements GameEventContext {
 		 * @param rank			The player's rank within the clan
 		 * @param nodeID		The node ID of the world the player is in
 		 */
-		public User (String displayName, ClanRank rank, int nodeID) {
+		public User (String displayName, byte rank, int nodeID) {
 			this.displayName = displayName;
 			this.rank = rank;
 			this.nodeID = nodeID;
@@ -62,7 +61,7 @@ public class ClanChannelEventContext implements GameEventContext {
 		 * Gets the rank of the player within the clan
 		 * @return	The rank
 		 */
-		public ClanRank getRank () {
+		public byte getRank () {
 			return rank;
 		}
 		
@@ -81,13 +80,15 @@ public class ClanChannelEventContext implements GameEventContext {
 	
 	private final String clanName;
 	
-	private final ClanRank minTalkRank;
+	private final boolean allowUnaffined;
 	
-	private final ClanRank minKickRank;
+	private final byte minTalkRank;
+	
+	private final byte minKickRank;
 	
 	private final User[] users;
 	
-	private final boolean isGuestCc;
+	private final boolean isAffined;
 	
 	/**
 	 * Constructs a new {@code ClanChannelEventContext} representing a full update to the clan chat channel
@@ -96,25 +97,27 @@ public class ClanChannelEventContext implements GameEventContext {
 	 * @param clanHash		The unique hash for the clan
 	 * @param updateNum		The current clan channel update number
 	 * @param clanName		The name of the clan
+	 * @param allowUnaffined True if guests are allowed in the clan, false otherwise
 	 * @param minTalk		The minimum rank required to talk in the channel
 	 * @param minKick		The minimum rank required to kick guests from the channel
 	 */
-	public ClanChannelEventContext (boolean guestCc, User[] users, long clanHash, long updateNum, String clanName, ClanRank minTalk, ClanRank minKick) {
-		this.isGuestCc = guestCc;
+	public ClanChannelEventContext (boolean isAffined, User[] users, long clanHash, long updateNum, String clanName, boolean allowUnaffined, byte minTalk, byte minKick) {
+		this.isAffined = isAffined;
 		this.users = users;
 		this.clanHash = clanHash;
 		this.updateNumber = updateNum;
 		this.clanName = clanName;
+		this.allowUnaffined = allowUnaffined;
 		this.minTalkRank = minTalk;
 		this.minKickRank = minKick;
 	}
 	
 	/**
-	 * Returns whether or not this is an update for a guest clan chat
-	 * @return	True if this is a guest cc update, false if it's a main cc update
+	 * Returns whether or not this is an update for an affined clan channel
+	 * @return	True if this is an affined clan channel update, false if it's a guest cc update
 	 */
-	public boolean isGuestUpdate () {
-		return isGuestCc;
+	public boolean isAffined () {
+		return isAffined;
 	}
 	
 	/**
@@ -142,10 +145,18 @@ public class ClanChannelEventContext implements GameEventContext {
 	}
 	
 	/**
+	 * Returns whether guests are allowed to join the channel
+	 * @return True if guests can join, false otherwise
+	 */
+	public boolean allowUnaffined () {
+		return allowUnaffined;
+	}
+	
+	/**
 	 * Returns the minimum rank needed to talk in the channel
 	 * @return	The minimum talk rank
 	 */
-	public ClanRank getMinTalk () {
+	public byte getMinTalk () {
 		return minTalkRank;
 	}
 	
@@ -153,7 +164,7 @@ public class ClanChannelEventContext implements GameEventContext {
 	 * Returns the minimum rank needed to kick guests from the channel
 	 * @return	The minimum kick rank
 	 */
-	public ClanRank getMinKick () {
+	public byte getMinKick () {
 		return minKickRank;
 	}
 	

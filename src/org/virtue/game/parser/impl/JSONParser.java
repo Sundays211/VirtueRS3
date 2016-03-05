@@ -29,8 +29,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.game.content.social.clan.ClanMember;
-import org.virtue.game.content.social.clan.ClanSettings;
+import org.virtue.game.content.social.clans.ClanMember;
+import org.virtue.game.content.social.clans.ClanSettings;
 import org.virtue.game.content.social.friend.Friend;
 import org.virtue.game.content.social.friend.FriendsList;
 import org.virtue.game.content.social.ignore.Ignore;

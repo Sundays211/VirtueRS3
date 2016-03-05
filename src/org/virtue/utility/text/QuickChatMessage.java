@@ -42,13 +42,13 @@ public class QuickChatMessage {
 		if (message.type == null) {
 			return null;
 		}
-		message.params = message.type.unpack(buffer);
+		message.commands = message.type.unpack(buffer);
 		return message;
 	}
 	
 	private QuickChatPhraseType type;
 	
-	private int[] params;
+	private int[] commands;
 	
 	private QuickChatMessage () {
 		
@@ -58,36 +58,36 @@ public class QuickChatMessage {
 		return type;
 	}
 	
-	public int[] getParams () {
-		return params;
+	public int[] getCommands () {
+		return commands;
 	}
 	
 	public void setParams (Player player) {
 		for (int param=0;param<type.getParamCount();param++) {
 			switch (type.getDynamicCommand(param)) {
 			case ENUM_STRING_STATBASE://Enum value related to base skill level
-				params[param] = player.getSkills().getBaseLevel(Stat.getById(type.getParamKey(param, 1)));
+				commands[param] = player.getSkills().getBaseLevel(Stat.getById(type.getParamKey(param, 1)));
 				break;
 			case STAT_BASE://Base skill level
-				params[param] = player.getSkills().getBaseLevel(Stat.getById(type.getParamKey(param, 0)));
+				commands[param] = player.getSkills().getBaseLevel(Stat.getById(type.getParamKey(param, 0)));
 				break;
 			case TOSTRING_VARBIT://Var bit value
-				params[param] = player.getVars().getVarBitValue(type.getParamKey(param, 0));
+				commands[param] = player.getVars().getVarBitValue(type.getParamKey(param, 0));
 				break;
 			case TOSTRING_VARP://Var player value
-				params[param] = player.getVars().getVarValueInt(type.getParamKey(param, 0));
+				commands[param] = player.getVars().getVarValueInt(type.getParamKey(param, 0));
 				break;
 			case ACTIVECOMBATLEVEL://Combat level
-				params[param] = player.getSkills().getCombatLevel();
+				commands[param] = player.getSkills().getCombatLevel();
 				break;
 			case ACC_GETCOUNT_WORLD://Friend chat user count
-				params[param] = player.getChat().getFriendChatWorldCount();
+				commands[param] = player.getChat().getFriendChatWorldCount();
 				break;
 			case ACC_GETMEANCOMBATLEVEL://Friend chat average combat level
-				params[param] = player.getChat().getFriendChatMeanCombatLevel();
+				commands[param] = player.getChat().getFriendChatMeanCombatLevel();
 				break;
 			case ENUM_STRING://Currently only used for slayer assignment
-				params[param] = player.getVars().getVarValueInt(type.getParamKey(param, 1));
+				commands[param] = player.getVars().getVarValueInt(type.getParamKey(param, 1));
 				break;
 			case ENUM_STRING_CLAN://Friend chat rank
 				break;

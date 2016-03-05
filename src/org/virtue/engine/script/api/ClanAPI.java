@@ -21,8 +21,8 @@
  */
 package org.virtue.engine.script.api;
 
-import org.virtue.game.content.social.clan.ClanChannelAPI;
-import org.virtue.game.content.social.clan.ClanSettingsAPI;
+import org.virtue.game.content.social.clans.ClanChannelAPI;
+import org.virtue.game.content.social.clans.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
 
 /**

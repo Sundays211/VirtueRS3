@@ -45,7 +45,7 @@ public class ClanChannelEventEncoder implements EventEncoder<ClanChannelEventCon
 	public OutboundBuffer encode(Player player, ClanChannelEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarShort(ServerProtocol.CLANCHANNEL_FULL, player);
-		buffer.putByte(context.isGuestUpdate() ? 0 : 1);
+		buffer.putByte(context.isAffined() ? 1 : 0);
 		
 		int flags = 0;
 		flags |= 0x2;//Use display names
@@ -55,9 +55,9 @@ public class ClanChannelEventEncoder implements EventEncoder<ClanChannelEventCon
 		buffer.putLong(context.getClanHash());
 		buffer.putLong(context.getUpdateNumber());
 		buffer.putString(context.getClanName());
-		buffer.putByte(0);//Not used
-		buffer.putByte(context.getMinKick().getID());
-		buffer.putByte(context.getMinTalk().getID());
+		buffer.putByte(context.allowUnaffined() ? 1 : 0);//Not used
+		buffer.putByte(context.getMinKick());
+		buffer.putByte(context.getMinTalk());
 		
 		buffer.putShort(context.getUsers().length);		
 		for (ClanChannelEventContext.User user : context.getUsers()) {
@@ -69,7 +69,7 @@ public class ClanChannelEventEncoder implements EventEncoder<ClanChannelEventCon
 	
 	private void packUser (OutboundBuffer buffer, ClanChannelEventContext.User user) {
 		buffer.putString(user.getDisplayName());
-		buffer.putByte(user.getRank().getID());
+		buffer.putByte(user.getRank());
 		buffer.putShort(user.getWorldNodeID());
 	}
 

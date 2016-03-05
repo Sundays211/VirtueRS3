@@ -19,48 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.social.clan.csdelta;
-
-import org.virtue.network.event.buffer.OutboundBuffer;
+package org.virtue.game.content.social.clans;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 28/12/2014
+ * @since 23/12/2014
  */
-public class SetMemberVarBit implements ClanSettingsDelta {
+public interface ClanIndex {
+
+	public long resolveClan (String name);
 	
-	private final int slot;
-	private final int value;
-	private final int start;
-	private final int end;
+	public boolean clanExists (String name);
 	
-	public SetMemberVarBit (int slot, int value, int start, int end) {
-		this.slot = slot;
-		this.value	= value;
-		this.start = start;
-		this.end = end;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#packDelta(org.virtue.network.event.buffer.OutboundBuffer)
+	/**
+	 * Adds a clan to the index. Note that this will add the clan regardless of whether it is already in the index, so this should be checked beforehand
+	 * @param name	The name of the clan
+	 * @return		The unique hash code for the clan
 	 */
-	@Override
-	public void packDelta(OutboundBuffer buffer) {
-		buffer.putShort(slot);
-		buffer.putInt(value);
-		buffer.putByte(start);
-		buffer.putByte(end);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.content.social.clan.csdelta.ClanSettingsDelta#getTypeID()
-	 */
-	@Override
-	public int getTypeID() {
-		return 7;
-	}
-
+	long addClan(String name);
+	
+	void renameClan (long hash, String oldName, String newName);
+	
+	void removeAllWithHash (long hash);
+	
+	public boolean needsUpdate ();
+	
+	public void saveIndex ();
 }
