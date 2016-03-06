@@ -19,32 +19,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.world;
-
-import java.util.LinkedList;
-import java.util.List;
-
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
- * @since Sep 5, 2014
+ * @author Frosty Teh Snowman <skype:travis.mccorkle>
+ * @author Kayla
+ * @author Sundays211
+ * @since 3/5/2016
  */
-public class WorldList {
-
-	/**
-	 * The {@link WorldEntry} List
-	 */
-	private static final List<WorldEntry> entries = new LinkedList<>();
-	
-	static {
-		entries.add(new WorldEntry(1, "-", "127.0.0.1", "World 1", 255, WorldFlag.MEMBERS, WorldFlag.LOOTSHARE));
+ 
+var Dismantle = {//This just here to test the animations at the moment.
+	testInvent : {
+		itemID : 2428,
+		xp : 200
 	}
-	
-	/**
-	 * Returns the {@link List} of world entries
-	 */
-	public static List<WorldEntry> entries() {
-		return entries;
+};
+ 
+var InventionListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, objTypeId, args) {
+		api.runAnimation(args.player, 27997);
+		api.setSpotAnim(args.player, 1, 6003);
 	}
-	
+});
+ 
+ /* Listen to the item ids specified */
+var listen = function(scriptManager) {
+	var ids = [];
+	for (var i in Dismantle) {
+		ids.push(Dismantle[i].itemID);
+	}
+	var listener = new InventionListener();
+	for (var i in ids) {
+		scriptManager.registerListener(EventType.OPHELD1, ids[i], listener);
+	}	
+}
+ 
+var Invention = {
+	startInventProcess : function (player, objTypeId, slot) { 
+		if (api.isPaused(player)) {
+			return false;
+		}
+		api.runAnimation(player, 27997);
+		api.setSpotAnim(player, 1, 6003);
+	}
 }

@@ -60,7 +60,7 @@ public class WorldListEventEncoder implements EventEncoder<WorldListEventContext
 			for (WorldEntry world : WorldList.entries()) {
 				buffer.putSmart(world.getId());
 				buffer.putByte(0);
-				buffer.putInt(world.isMembers() ? world.isLootshare() ? 0x1 | 0x8 : 0x1 : 0x8);
+				buffer.putInt(world.getFlags());
 				if (world.getActivity().equals("-")) {
 					buffer.putSmart(1);
 					buffer.putJagString(world.getRegion());

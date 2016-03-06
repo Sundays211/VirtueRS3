@@ -31,7 +31,6 @@ var ConfirmWidgetListener = Java.extend(Java.type('org.virtue.engine.script.list
 		if (event == EventType.IF_OPEN) {
 			api.setWidgetEvents(player, 26, 22, -1, -1, 2);
 		} else {
-			api.sendMessage(player, "Clicked confirm widget: comp="+args.component);
 			switch (args.component) {
 			case 11:
 				switch (api.getVarp(player, 3813)) {
@@ -44,7 +43,7 @@ var ConfirmWidgetListener = Java.extend(Java.type('org.virtue.engine.script.list
 					} else {//EoC Mode
 						ConfirmWidget.setLegacyCombatMode(player);
 					}
-					api.closeWidget(player, 1477, 787);
+					api.closeWidget(player, 1477, 871);
 					return;
 				case 10://Switch between eoc and legacy interface mode
 					if (api.getVarBit(player, 27169) == 1) {//Legacy mode
@@ -52,7 +51,7 @@ var ConfirmWidgetListener = Java.extend(Java.type('org.virtue.engine.script.list
 					} else {//EoC Mode
 						ConfirmWidget.setLegacyInterfaceMode(player);
 					}
-					api.closeWidget(player, 1477, 787);
+					api.closeWidget(player, 1477, 871);
 					return;
 				case 7://Reset keybinds
 				case 8://Delete friend

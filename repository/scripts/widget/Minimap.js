@@ -33,7 +33,7 @@ var MinimapListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 		switch (args.component) {
 		case 9://Logout
 			api.setVarp(player, 3813, 6);
-			api.openWidget(player, 1477, 787, 26, true);
+			api.openWidget(player, 1477, 871, 26, true);
 			return;
 		case 22://Money pouch options
 			switch (args.button) {

@@ -21,6 +21,10 @@
  */
 package org.virtue.game.world;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Aug 8, 2014
@@ -52,15 +56,7 @@ public class WorldEntry {
 	 */
 	private int country;
 	
-	/**
-	 * This is a members only world
-	 */
-	private boolean members;
-	
-	/**
-	 * Lootshare is enabled in the world
-	 */
-	private boolean lootshare;
+	private Set<WorldFlag> flags;
 
 	/**
 	 * Creates a new World Entry
@@ -69,17 +65,15 @@ public class WorldEntry {
 	 * @param ip - world ip
 	 * @param region - world region
 	 * @param country - world country id
-	 * @param members- world members only
-	 * @param lootshare - lootshare enabled world
+	 * @param flags- Flags for the world
 	 */
-	public WorldEntry(int id, String activity, String ip, String region, int country, boolean members, boolean lootshare) {
+	public WorldEntry(int id, String activity, String ip, String region, int country, WorldFlag... flags) {
 		this.id = id;
 		this.activity = activity;
 		this.ip = ip;
 		this.region = region;
 		this.country = country;
-		this.members = members;
-		this.lootshare = lootshare;
+		this.flags = new HashSet<>(Arrays.asList(flags));
 	}
 
 	/**
@@ -117,18 +111,15 @@ public class WorldEntry {
 		return country;
 	}
 	
-	/**
-	 * Returns if members only world
-	 */
-	public boolean isMembers() {
-		return members;
+	public int getFlags () {
+		int flags = 0;
+		for (WorldFlag flag : this.flags) {
+			flags |= flag.getMask();
+		}
+		return flags;
 	}
 	
-	/**
-	 * Returns if lootshare is enabled on this world
-	 */
-	public boolean isLootshare() {
-		return lootshare;
+	public boolean hasFlag (WorldFlag flag) {
+		return flags.contains(flag);
 	}
-	
 }
