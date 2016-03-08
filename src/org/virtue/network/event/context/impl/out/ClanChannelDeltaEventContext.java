@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.content.social.clans.ClanChannelDelta;
+import org.virtue.game.content.clans.ClanChannelDelta;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

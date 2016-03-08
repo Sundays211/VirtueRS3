@@ -27,9 +27,9 @@ import java.util.TimerTask;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.cache.utility.crypto.BKDR;
-import org.virtue.game.content.social.ChannelType;
-import org.virtue.game.content.social.OnlineStatus;
-import org.virtue.game.content.social.ignore.Ignore;
+import org.virtue.game.content.chat.ChannelType;
+import org.virtue.game.content.chat.OnlineStatus;
+import org.virtue.game.content.ignores.Ignore;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.Player;
@@ -48,14 +48,12 @@ import org.virtue.network.event.context.impl.out.ClientScriptEventContext;
 import org.virtue.network.event.context.impl.out.CutsceneEventContext;
 import org.virtue.network.event.context.impl.out.EnumEventContext;
 import org.virtue.network.event.context.impl.out.FriendListEventContext;
-import org.virtue.network.event.context.impl.out.HideWidgetEventContext;
 import org.virtue.network.event.context.impl.out.IgnoreListEventContext;
 import org.virtue.network.event.context.impl.out.InvEventContext;
 import org.virtue.network.event.context.impl.out.LogoutEventContext;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.MusicEventContext;
 import org.virtue.network.event.context.impl.out.PlayerOptionEventContext;
-import org.virtue.network.event.context.impl.out.RootWidgetEventContext;
 import org.virtue.network.event.context.impl.out.RunEnergyEventContext;
 import org.virtue.network.event.context.impl.out.RunWeightEventContext;
 import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
@@ -63,12 +61,14 @@ import org.virtue.network.event.context.impl.out.SystemUpdateEventContext;
 import org.virtue.network.event.context.impl.out.MapFlagEventContext;
 import org.virtue.network.event.context.impl.out.VarcEventContext;
 import org.virtue.network.event.context.impl.out.VarcStringEventContext;
-import org.virtue.network.event.context.impl.out.WidgetExternalSpriteEventContext;
-import org.virtue.network.event.context.impl.out.WidgetModelEventContext;
-import org.virtue.network.event.context.impl.out.WidgetModelEventContext.ModelType;
-import org.virtue.network.event.context.impl.out.WidgetSettingsEventContext;
-import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
-import org.virtue.network.event.context.impl.out.WidgetTextEventContext;
+import org.virtue.network.event.context.impl.out.widget.HideWidgetEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetHttpSpriteEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetSettingsEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetSubEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetTextEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetTopEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext.ModelType;
 import org.virtue.network.event.context.impl.out.WorldListEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.ServerProtocol;
@@ -76,7 +76,6 @@ import org.virtue.network.event.encoder.impl.ClientScriptEventEncoder;
 import org.virtue.network.event.encoder.impl.CutsceneEventEncoder;
 import org.virtue.network.event.encoder.impl.EnumEventEncoder;
 import org.virtue.network.event.encoder.impl.FriendListEventEncoder;
-import org.virtue.network.event.encoder.impl.HideWidgetEventEncoder;
 import org.virtue.network.event.encoder.impl.IgnoreListEventEncoder;
 import org.virtue.network.event.encoder.impl.InvEventEncoder;
 import org.virtue.network.event.encoder.impl.KeepAliveEventEncoder;
@@ -87,7 +86,6 @@ import org.virtue.network.event.encoder.impl.NpcUpdateEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerUpdateEventEncoder;
 import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
-import org.virtue.network.event.encoder.impl.RootWidgetEventEncoder;
 import org.virtue.network.event.encoder.impl.RunEnergyEventEncoder;
 import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
 import org.virtue.network.event.encoder.impl.SceneGraphEventEncoder;
@@ -97,12 +95,14 @@ import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.UnlockFriendsEventEncoder;
 import org.virtue.network.event.encoder.impl.VarcEventEncoder;
 import org.virtue.network.event.encoder.impl.VarcStringEventEncoder;
-import org.virtue.network.event.encoder.impl.WidgetExternalSpriteEventEncoder;
-import org.virtue.network.event.encoder.impl.WidgetModelEventEncoder;
-import org.virtue.network.event.encoder.impl.WidgetSettingsEventEncoder;
-import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
-import org.virtue.network.event.encoder.impl.WidgetTextEventEncoder;
 import org.virtue.network.event.encoder.impl.WorldListEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetTopEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetHideEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetHttpSpriteEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetModelEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetEventsEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetSubEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetTextEventEncoder;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
 import org.virtue.utility.SerialisableEnum;
 
@@ -229,7 +229,7 @@ public class GameEventDispatcher {
 	}
 
 	public void sendRootWidget(int widget) {
-		sendEvent(RootWidgetEventEncoder.class, new RootWidgetEventContext(
+		sendEvent(WidgetTopEventEncoder.class, new WidgetTopEventContext(
 				widget));
 	}
 
@@ -246,7 +246,7 @@ public class GameEventDispatcher {
 	}
 
 	public void sendHideWidget(int widget, int component, boolean hidden) {
-		sendEvent(HideWidgetEventEncoder.class, new HideWidgetEventContext(
+		sendEvent(WidgetHideEventEncoder.class, new HideWidgetEventContext(
 				widget, component, hidden));
 	}
 
@@ -275,14 +275,14 @@ public class GameEventDispatcher {
 
 	public void sendWidgetEvents(int root, int component, int from, int to,
 			int settings) {
-		sendEvent(WidgetSettingsEventEncoder.class,
+		sendEvent(WidgetEventsEventEncoder.class,
 				new WidgetSettingsEventContext(root, component, from, to,
 						settings));
 	}
 
 	public void sendWidgetExtarnalSprite(int widget, int component, int i) {
-		sendEvent(WidgetExternalSpriteEventEncoder.class,
-				new WidgetExternalSpriteEventContext(widget, component, i));
+		sendEvent(WidgetHttpSpriteEventEncoder.class,
+				new WidgetHttpSpriteEventContext(widget, component, i));
 	}
 
 	public void sendKeepAlive(EmptyEventContext context) {

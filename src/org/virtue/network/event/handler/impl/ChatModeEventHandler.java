@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.game.content.social.ChatMode;
+import org.virtue.game.content.chat.ChatMode;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.handler.GameEventHandler;
 

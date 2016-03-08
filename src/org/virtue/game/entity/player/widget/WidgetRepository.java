@@ -38,8 +38,8 @@ import org.virtue.game.entity.player.widget.impl.TreasureHunterWidget;
 import org.virtue.game.entity.player.widget.impl.WornEquipmentWidget;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
-import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
-import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
+import org.virtue.network.event.context.impl.out.widget.WidgetSubEventContext;
+import org.virtue.network.event.encoder.impl.widget.WidgetSubEventEncoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

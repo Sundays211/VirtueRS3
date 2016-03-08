@@ -27,8 +27,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.virtue.game.content.social.clans.ClanInviteResponse;
-import org.virtue.game.content.social.clans.ClanRecruitAction;
+import org.virtue.game.content.clans.ClanInviteResponse;
+import org.virtue.game.content.clans.ClanRecruitAction;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.OptionButton;

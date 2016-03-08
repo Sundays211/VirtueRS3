@@ -22,7 +22,7 @@
 package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.content.Commands;
-import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.network.event.context.impl.in.CommandEventContext;

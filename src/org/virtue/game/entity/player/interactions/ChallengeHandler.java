@@ -1,6 +1,6 @@
 package org.virtue.game.entity.player.interactions;
 
-import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.context.impl.out.MessageEventContext;

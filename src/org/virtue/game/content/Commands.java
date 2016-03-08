@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
+import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
-import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
 
 public class Commands {

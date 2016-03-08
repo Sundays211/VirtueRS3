@@ -6,7 +6,7 @@ import org.virtue.config.objtype.ItemType;
 import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
-import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.inv.ContainerState;

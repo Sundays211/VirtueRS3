@@ -21,7 +21,7 @@
  */
 package org.virtue.game.world;
 
-import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.chat.ChannelType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

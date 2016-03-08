@@ -23,8 +23,8 @@ package org.virtue.game.content;
 
 import java.text.NumberFormat;
 
+import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
-import org.virtue.game.content.social.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;

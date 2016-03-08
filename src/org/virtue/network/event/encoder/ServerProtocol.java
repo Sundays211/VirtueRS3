@@ -422,7 +422,12 @@ public enum ServerProtocol {
 	 */
 	CUTSCENE(92, -2),
 
-	PLAY_MUSIC(-1, 3);
+	PLAY_MUSIC(-1, 3),
+	
+	/**
+	 * Sends the full data contained within the player's telemetry (RuneMetrics) grid
+	 */
+	TELEMETRY_GRID_FULL(52, -2);
 	
 	private int opcode;
 

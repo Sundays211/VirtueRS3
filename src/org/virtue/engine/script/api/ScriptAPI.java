@@ -313,7 +313,7 @@ public interface ScriptAPI {
 	/**
 	 * Gets the specified friends chat data for the player
 	 * @param player The player
-	 * @param dataType The data type, as specified in {@link org.virtue.game.content.social.friendchat.FriendChatDataType}
+	 * @param dataType The data type, as specified in {@link org.virtue.game.content.friendchats.FriendChatDataType}
 	 * @return The value
 	 */
 	public Object getFriendChatData(Player player, int dataType);
@@ -321,7 +321,7 @@ public interface ScriptAPI {
 	/**
 	 * Sets the specified friends chat data for the player to the specified value
 	 * @param player The player
-	 * @param dataType The data type, as specified in {@link org.virtue.game.content.social.friendchat.FriendChatDataType}
+	 * @param dataType The data type, as specified in {@link org.virtue.game.content.friendchats.FriendChatDataType}
 	 * @param value The data value.
 	 */
 	public void setFriendChatData(Player player, int dataType, Object value);

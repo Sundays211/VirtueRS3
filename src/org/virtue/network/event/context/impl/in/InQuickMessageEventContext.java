@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.in;
 
-import org.virtue.game.content.social.ChatMode;
+import org.virtue.game.content.chat.ChatMode;
 import org.virtue.utility.text.QuickChatMessage;
 
 /**

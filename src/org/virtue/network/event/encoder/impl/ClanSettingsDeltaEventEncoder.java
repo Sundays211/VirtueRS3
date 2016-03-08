@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.game.content.social.clans.csdelta.ClanSettingsDelta;
+import org.virtue.game.content.clans.csdelta.ClanSettingsDelta;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ClanSettingsDeltaEventContext;

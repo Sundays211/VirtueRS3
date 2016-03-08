@@ -21,8 +21,8 @@
  */
 package org.virtue.network.event.decoder.impl;
 
-import org.virtue.game.content.social.ChannelRank;
-import org.virtue.game.content.social.SocialType;
+import org.virtue.game.content.chat.SocialType;
+import org.virtue.game.content.friendchats.ChannelRank;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.SocialEventContext;

@@ -35,9 +35,9 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.out.CloseWidgetEventContext;
-import org.virtue.network.event.context.impl.out.WidgetSubEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetSubEventContext;
 import org.virtue.network.event.encoder.impl.CloseWidgetEventEncoder;
-import org.virtue.network.event.encoder.impl.WidgetSubEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetSubEventEncoder;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

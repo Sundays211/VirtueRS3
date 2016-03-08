@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.decoder.impl;
 
-import org.virtue.game.content.social.OnlineStatus;
+import org.virtue.game.content.chat.OnlineStatus;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.context.impl.in.ChatFilterEventContext;

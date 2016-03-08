@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.content.social.friend.Friend;
+import org.virtue.game.content.friends.Friend;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

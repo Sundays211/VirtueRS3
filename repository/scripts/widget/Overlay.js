@@ -75,10 +75,23 @@ var OverlayListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 	}
 });
 
+var OverlayDragListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		
+	}
+});
+
+
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
 	var listener = new OverlayListener();
 	scriptManager.registerListener(EventType.IF_BUTTON, 1477, listener);
+	
+	listener = new OverlayDragListener();
+	for (var comp=0;comp<1000;comp++) {//Suppress all drag actions for the top-level overlay
+		scriptManager.registerCompListener(EventType.IF_DRAG, 1477, comp, listener);
+	}
+	
 };
 
 var Overlay = {

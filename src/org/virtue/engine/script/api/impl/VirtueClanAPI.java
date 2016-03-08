@@ -23,12 +23,12 @@ package org.virtue.engine.script.api.impl;
 
 import org.virtue.Virtue;
 import org.virtue.engine.script.api.ClanAPI;
-import org.virtue.game.content.social.SocialUser;
-import org.virtue.game.content.social.clans.ClanChannelAPI;
-import org.virtue.game.content.social.clans.ClanManager;
-import org.virtue.game.content.social.clans.ClanMember;
-import org.virtue.game.content.social.clans.ClanRank;
-import org.virtue.game.content.social.clans.ClanSettingsAPI;
+import org.virtue.game.content.chat.SocialUser;
+import org.virtue.game.content.clans.ClanChannelAPI;
+import org.virtue.game.content.clans.ClanManager;
+import org.virtue.game.content.clans.ClanMember;
+import org.virtue.game.content.clans.ClanRank;
+import org.virtue.game.content.clans.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
 
 /**

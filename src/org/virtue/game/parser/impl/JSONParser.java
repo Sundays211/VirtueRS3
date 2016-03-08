@@ -29,12 +29,12 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.game.content.social.clans.ClanMember;
-import org.virtue.game.content.social.clans.ClanSettings;
-import org.virtue.game.content.social.friend.Friend;
-import org.virtue.game.content.social.friend.FriendsList;
-import org.virtue.game.content.social.ignore.Ignore;
-import org.virtue.game.content.social.ignore.IgnoreList;
+import org.virtue.game.content.clans.ClanMember;
+import org.virtue.game.content.clans.ClanSettings;
+import org.virtue.game.content.friends.Friend;
+import org.virtue.game.content.friends.FriendsList;
+import org.virtue.game.content.ignores.Ignore;
+import org.virtue.game.content.ignores.IgnoreList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.InvRepository;

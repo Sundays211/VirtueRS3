@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.in;
 
-import org.virtue.game.content.social.ChatOptionType;
+import org.virtue.game.content.chat.ChatOptionType;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

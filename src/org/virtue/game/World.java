@@ -23,7 +23,7 @@ package org.virtue.game;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.EntityList;
 import org.virtue.game.entity.npc.NPC;

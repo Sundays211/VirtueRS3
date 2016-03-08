@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.game.content.social.friend.Friend;
+import org.virtue.game.content.friends.Friend;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.FriendListEventContext;

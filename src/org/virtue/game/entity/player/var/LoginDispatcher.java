@@ -1776,10 +1776,12 @@ public class LoginDispatcher {
 		player.getDispatcher().sendCS2Script2(8862, 27, 1);
 		
 		//Metrics
-		player.getDispatcher().sendCS2Script2(8862, 29, 0);
+		player.getWidgets().openOverlaySub(28, 1588, true);//IF_OPENSUB: parent=1477, 357 sub=1588, mode=1
+		player.getDispatcher().sendCS2Script2(8862, 29, 1);
 		
 		//Drops
-		player.getDispatcher().sendCS2Script2(8862, 30, 0);
+		player.getWidgets().openOverlaySub(29, 1678, true);//IF_OPENSUB: parent=1477, 368 sub=1678, mode=1
+		player.getDispatcher().sendCS2Script2(8862, 30, 1);
 		
 		//Buttons
 		player.getWidgets().openOverlaySub(1002, 1431, true);
@@ -1955,12 +1957,15 @@ public class LoginDispatcher {
 		player.getDispatcher().sendVarc(3715,1);
 		player.getDispatcher().sendCS2Script2(8862, 29, 0);
 		player.getDispatcher().sendCS2Script2(8862, 30, 0);
+		
+		//Experience counter
+		player.getWidgets().openOverlaySub(1015, 1215, true);
+		//IF_SETHIDE: if=1477,395, hide=0
 	}
 
 	public static void onEoCLogin(Player player) {
 		onLoginGeneral(player);
 		
-		player.getWidgets().openWidgetCustom(96797053,1215,1,new int[]{0,0,0,0});
 		player.getDispatcher().sendCS2Script2(5559, new Object[]{0,});
 		player.getDispatcher().sendCS2Script2(5559, new Object[]{0,});
 		player.getDispatcher().sendCS2Script2(5557, new Object[]{1,});
@@ -2604,7 +2609,9 @@ public class LoginDispatcher {
 		player.getDispatcher().sendVarc(3715,1);
 		player.getDispatcher().sendCS2Script2(8862, new Object[]{29,0,});
 		player.getDispatcher().sendCS2Script2(8862, new Object[]{30,0,});
+		
 		player.getWidgets().openWidgetCustom(96797053,1215,1,new int[]{0,0,0,0});
+		
 		player.getDispatcher().sendCS2Script2(5559, new Object[]{0,});
 		player.getDispatcher().sendCS2Script2(5559, new Object[]{0,});
 		player.getDispatcher().sendCS2Script2(5557, new Object[]{1,});

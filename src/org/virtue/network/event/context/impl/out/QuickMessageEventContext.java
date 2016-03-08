@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.content.social.ChannelType;
+import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.utility.text.QuickChatMessage;
 

@@ -28,7 +28,7 @@ import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.network.event.context.impl.in.InputEventContext.InputType;
 import org.virtue.network.event.context.impl.in.OptionButton;
-import org.virtue.network.event.context.impl.out.WidgetModelEventContext.ModelType;
+import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext.ModelType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

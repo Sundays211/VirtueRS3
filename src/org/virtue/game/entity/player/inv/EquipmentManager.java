@@ -30,7 +30,7 @@ import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
-import org.virtue.game.content.social.clans.ClanSettingsAPI;
+import org.virtue.game.content.clans.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarKey;
