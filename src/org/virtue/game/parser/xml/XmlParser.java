@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.parser.impl;
+package org.virtue.game.parser.xml;
 
 import java.io.File;
 import java.util.ArrayList;

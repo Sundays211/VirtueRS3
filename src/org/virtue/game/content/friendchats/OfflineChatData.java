@@ -30,7 +30,7 @@ import java.util.Set;
 import org.virtue.game.content.friends.Friend;
 import org.virtue.game.content.friends.FriendsList;
 import org.virtue.game.content.ignores.Ignore;
-import org.virtue.game.entity.player.AccountInfo;
+import org.virtue.game.parser.AccountInfo;
 
 /**
  * Represents friend chat data for an offline player

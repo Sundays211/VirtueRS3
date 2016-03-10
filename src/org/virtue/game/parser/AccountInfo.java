@@ -19,8 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player;
+package org.virtue.game.parser;
 
+import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.utility.text.Base37Utility;
 
 public class AccountInfo {

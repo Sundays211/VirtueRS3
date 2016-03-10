@@ -51,7 +51,7 @@ import org.virtue.game.content.clans.csdelta.SetMemberVarBit;
 import org.virtue.game.content.clans.csdelta.SetVarBitValue;
 import org.virtue.game.content.clans.csdelta.SetVarValue;
 import org.virtue.game.content.clans.csdelta.UpdateRank;
-import org.virtue.game.entity.player.AccountInfo;
+import org.virtue.game.parser.AccountInfo;
 import org.virtue.network.event.context.impl.out.ClanSettingsDeltaEventContext;
 import org.virtue.network.event.context.impl.out.ClanSettingsEventContext;
 

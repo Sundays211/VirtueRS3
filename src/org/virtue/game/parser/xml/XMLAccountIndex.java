@@ -19,11 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player;
+package org.virtue.game.parser.xml;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,7 +36,11 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.Virtue;
+import org.virtue.game.entity.player.PrivilegeLevel;
+import org.virtue.game.parser.AccountIndex;
+import org.virtue.game.parser.AccountInfo;
+import org.virtue.game.parser.CachingParser;
+import org.virtue.utility.FileUtility;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
 import org.w3c.dom.Attr;
@@ -52,12 +57,12 @@ import org.w3c.dom.NodeList;
  * @author Sundays211
  * @since 26/10/2014
  */
-public class AccountIndex {
+public class XMLAccountIndex extends AccountIndex implements CachingParser {
 	
 	/**
 	 * The {@link Logger} Instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(AccountIndex.class);
+	private static Logger logger = LoggerFactory.getLogger(XMLAccountIndex.class);
 	
 	private static final int VERSION = 3;
 	
@@ -79,10 +84,12 @@ public class AccountIndex {
 	
 	private boolean needsSave;
 	
-	public AccountIndex() {
+	public XMLAccountIndex(Properties properties) throws Exception {
 		hashLookup = new HashMap<Long, AccountInfo>();
 		emailLookup = new HashMap<String, AccountInfo>();
 		displayLookup = new HashMap<Long, AccountInfo>();
+		String indexFileLocation = properties.getProperty("character.index.file", "./repository/character/index.xml");
+		load(FileUtility.parseFilePath(indexFileLocation));
 	}
 	
 	public boolean needsSave () {
@@ -93,7 +100,7 @@ public class AccountIndex {
 	 * Loads the accounts into the index
 	 * @throws Exception
 	 */
-	public void load(File indexFile) throws Exception {
+	private final void load(File indexFile) throws Exception {
 		clearIndex();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -141,12 +148,15 @@ public class AccountIndex {
 			needsSave = true;
 		}
 	}
-	
-	/**
-	 * Saves all the accounts in the index
-	 * @throws Exception
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.parser.CachingParser#flush()
 	 */
-	public void save() {
+	@Override
+	public void flush() {
+		if (!needsSave) {
+			return;
+		}
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -214,54 +224,26 @@ public class AccountIndex {
 		needsSave = false;
 	}
 	
-	/**
-	 * Adds a new account to the index
-	 * @param email The email address for the account
-	 * @param name The name for the account (this is used as both the username and display name).
+	/* (non-Javadoc)
+	 * @see org.virtue.game.parser.AccountIndex#addAccount(org.virtue.game.parser.impl.AccountInfo)
 	 */
-	public void addAccount (String email, String name) {
-		addAccount(new AccountInfo(email, Base37Utility.encodeBase37(name), name));
-	}
-	
-	/**
-	 * Adds an account to the index
-	 * @param email The email address of the account
-	 * @param userhash The user hash of the account
-	 * @param name The current display name of the account
-	 * @param prev The last display name held by the account
-	 */
-	public void addAccount (String email, long userhash, String name, String prev, boolean locked, PrivilegeLevel rights) {
-		addAccount(new AccountInfo(email, userhash, name, prev, locked, rights));
-	}
-	
-	/**
-	 * Adds a new account to the index
-	 * @param info The account info of the account being added
-	 */
-	public void addAccount (AccountInfo info) {
+	@Override
+	protected void addAccount (AccountInfo info) {
 		hashLookup.put(info.getUserHash(), info);
 		emailLookup.put(formatEmail(info.getEmail()), info);
 		displayLookup.put(Base37Utility.encodeBase37(info.getDisplayName()), info);
 		needsSave = true;
 	}
-	
-	public void lockAccount (long userHash) {
-		lookupByHash(userHash).setLocked(true);
+
+	/* (non-Javadoc)
+	 * @see org.virtue.game.parser.AccountIndex#updateAccount(org.virtue.game.parser.impl.AccountInfo)
+	 */
+	@Override
+	protected void updateAccount(AccountInfo info) {
+		//TODO: Make sure the info is in the index
 		needsSave = true;
-	}
+	}	
 	
-	public void setDisplayName (long userHash, String displayName) {
-		AccountInfo info = lookupByHash(userHash);
-		info.setDisplayName(displayName);
-		needsSave = true;
-		Virtue.getInstance().getClans().updateUserName(userHash, displayName);
-	}
-	
-	public void setAccountType (long userHash, PrivilegeLevel type) {
-		AccountInfo info = lookupByHash(userHash);
-		info.setType(type);
-		needsSave = true;
-	}
 	
 	/**
 	 * Removes all information currently in the index
@@ -272,11 +254,7 @@ public class AccountIndex {
 		displayLookup.clear();
 	}
 	
-	/**
-	 * Looks up the account information, based on a display name. The search is case-insensitive and strips symbols.
-	 * @param display The display name to check
-	 * @return The {@link AccountInfo} for the account, or null if the account does not exist.
-	 */
+	@Override
 	public AccountInfo lookupByDisplay (String display) {
 		if (display == null || display.length() > 12) {
 			return null;
@@ -284,11 +262,7 @@ public class AccountIndex {
 		return displayLookup.get(Base37Utility.encodeBase37(display));
 	}
 	
-	/**
-	 * Looks up the account information, based on a username. The search is case-insensitive and strips symbols.
-	 * @param name The username to check
-	 * @return The {@link AccountInfo} for the account, or null if the account does not exist.
-	 */
+	@Override
 	public AccountInfo lookupByUsername (String name) {
 		if (name == null || name.length() > 12) {
 			return null;
@@ -296,21 +270,12 @@ public class AccountIndex {
 		return lookupByHash(Base37Utility.encodeBase37(name));
 	}
 	
-	/**
-	 * Looks up the account information, based on a userhash.
-	 * Note that a "userhash" is simply a hashed version of a username
-	 * @param hash The userhash to check
-	 * @return The {@link AccountInfo} for the account, or null if the account does not exist.
-	 */
+	@Override
 	public AccountInfo lookupByHash (long hash) {
 		return hashLookup.get(hash);
 	}
 	
-	/**
-	 * Looks up the account information, based on an email address. The search is case-insensitive and trims all white space.
-	 * @param email The email address to check
-	 * @return The {@link AccountInfo} for the account, or null if the account does not exist.
-	 */
+	@Override
 	public AccountInfo lookupByEmail (String email) {
 		return emailLookup.get(formatEmail(email));
 	}
@@ -322,5 +287,13 @@ public class AccountIndex {
 	 */
 	private String formatEmail (String email) {
 		return email == null ? null : UsernameUtility.formatForProtocol(email);//email.replaceAll("\\s+", "").toLowerCase()
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.AutoCloseable#close()
+	 */
+	@Override
+	public void close() throws Exception {
+		flush();
 	}
 }

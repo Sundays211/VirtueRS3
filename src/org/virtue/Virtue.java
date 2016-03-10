@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -72,17 +74,19 @@ import org.virtue.game.content.minigame.MinigameProcessor;
 import org.virtue.game.entity.combat.impl.SpecialAttackHandler;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.AbstractNPC;
-import org.virtue.game.entity.player.AccountIndex;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetRepository;
+import org.virtue.game.parser.AccountIndex;
+import org.virtue.game.parser.CachingParser;
 import org.virtue.game.parser.ParserRepository;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.parser.impl.NpcDataParser;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.game.parser.impl.NpcSpawnParser;
+import org.virtue.game.parser.xml.XMLAccountIndex;
 import org.virtue.game.world.region.RegionManager;
 import org.virtue.network.Network;
 import org.virtue.network.event.EventRepository;
@@ -139,6 +143,8 @@ public class Virtue {
 	 * The {@link Network} Instance
 	 */
 	private Network network;
+	
+	private List<CachingParser> cachingParsers = new ArrayList<>();
 	
 	/**
 	 * The {@link AccountIndex} Instance
@@ -295,9 +301,11 @@ public class Virtue {
 	 * @throws Exception 
 	 */
 	private void loadGame() throws Exception {
-		accountIndex = new AccountIndex();		
-		String indexFileLocation = getProperty("character.index.file", "./repository/character/index.xml");
-		accountIndex.load(FileUtility.parseFilePath(indexFileLocation));
+		accountIndex = new XMLAccountIndex(properties);
+		
+		if (accountIndex instanceof CachingParser){
+			cachingParsers.add((CachingParser) accountIndex);
+		}
 		
 		event = new EventRepository();
 		event.load();
@@ -532,10 +540,8 @@ public class Virtue {
 	
 	public void saveAll () {
 		//Saves the account index, if it needs saving
-		if (accountIndex != null) {
-			if (accountIndex.needsSave()) {
-				accountIndex.save();
-			}
+		for (CachingParser parser : cachingParsers) {
+			parser.flush();
 		}
 		
 		//Saves the clan data				

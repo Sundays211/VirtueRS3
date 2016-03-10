@@ -58,8 +58,6 @@ import org.virtue.game.content.friendchats.ChannelRank;
 import org.virtue.game.content.friendchats.FriendChatDataType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.entity.player.AccountIndex;
-import org.virtue.game.entity.player.AccountInfo;
 import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
@@ -72,6 +70,8 @@ import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
+import org.virtue.game.parser.AccountIndex;
+import org.virtue.game.parser.AccountInfo;
 import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
@@ -195,6 +195,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			}
 		}
 		index.setDisplayName(userHash, desiredName);
+		Virtue.getInstance().getClans().updateUserName(userHash, desiredName);
 		return true;
 	}
 
