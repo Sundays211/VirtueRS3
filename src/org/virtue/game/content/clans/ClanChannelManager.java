@@ -183,8 +183,8 @@ public class ClanChannelManager implements ClanChannelAPI {
 			player.sendMessage("Cannot talk.", ChannelType.GAME);//TODO: Fix message
 			return;
 		}
-		MessageEventContext affinedMessage = new MessageEventContext(ChannelType.CLANCHANNEL, message, player.getName(), player.getName(), player.getType());
-		MessageEventContext guestMessage = new MessageEventContext(ChannelType.CLANCHANNEL_GUEST, message, player.getName(), player.getName(), player.getType());
+		MessageEventContext affinedMessage = new MessageEventContext(ChannelType.CLANCHANNEL, message, player.getName(), player.getName(), player.getChatCrown());
+		MessageEventContext guestMessage = new MessageEventContext(ChannelType.CLANCHANNEL_GUEST, message, player.getName(), player.getName(), player.getChatCrown());
 		channel.sendMessage(affinedMessage, guestMessage);
 	}
 
@@ -203,8 +203,8 @@ public class ClanChannelManager implements ClanChannelAPI {
 			player.sendMessage("Cannot talk.", ChannelType.GAME);//TODO: Fix message
 			return;
 		}
-		MessageEventContext affinedMessage = new QuickMessageEventContext(ChannelType.CLANCHANNEL_QUICKCHAT, message, player.getName(), player.getName(), player.getType());
-		MessageEventContext guestMessage = new QuickMessageEventContext(ChannelType.CLANCHANNEL_GUEST_QUICKCHAT, message, player.getName(), player.getName(), player.getType());
+		MessageEventContext affinedMessage = new QuickMessageEventContext(ChannelType.CLANCHANNEL_QUICKCHAT, message, player.getName(), player.getName(), player.getChatCrown());
+		MessageEventContext guestMessage = new QuickMessageEventContext(ChannelType.CLANCHANNEL_GUEST_QUICKCHAT, message, player.getName(), player.getName(), player.getChatCrown());
 		channel.sendMessage(affinedMessage, guestMessage);
 	}
 

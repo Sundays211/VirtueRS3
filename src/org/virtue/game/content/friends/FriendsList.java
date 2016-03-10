@@ -33,7 +33,6 @@ import org.virtue.game.World;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.OnlineStatus;
 import org.virtue.game.content.friendchats.ChannelRank;
-import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.AccountInfo;
 import org.virtue.game.parser.ParserDataType;
@@ -367,7 +366,7 @@ public class FriendsList {
 	 * Gets the {@link Player} to use.
 	 * @return the player
 	 */
-	public Entity getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
@@ -527,10 +526,10 @@ public class FriendsList {
 			return;//Recipient is offline
 		}
 		message = StringUtility.formatChatMessage(message);
-		MessageEventContext msgContext = new MessageEventContext(ChannelType.PRIVATE, message, player.getName(), null, player.getPrivilegeLevel());
+		MessageEventContext msgContext = new MessageEventContext(ChannelType.PRIVATE, message, player.getName(), null, player.getPrivilegeLevel().getCrown());
 		recipient.getDispatcher().sendMessage(msgContext);
 		
-		msgContext = new MessageEventContext(ChannelType.PRIVATE_ECHO, message, recipient.getName(), null, player.getPrivilegeLevel());
+		msgContext = new MessageEventContext(ChannelType.PRIVATE_ECHO, message, recipient.getName(), null, player.getPrivilegeLevel().getCrown());
 		player.getDispatcher().sendMessage(msgContext);
 	}
 	
@@ -564,10 +563,10 @@ public class FriendsList {
 			player.getDispatcher().sendMessage("Unable to send message - player unavailable.", ChannelType.PRIVATE_SYSTEM);
 			return;//Recipient is offline
 		}
-		MessageEventContext msgContext = new QuickMessageEventContext(ChannelType.PRIVATE_QUICKCHAT, message, player.getName(), null, player.getPrivilegeLevel());
+		MessageEventContext msgContext = new QuickMessageEventContext(ChannelType.PRIVATE_QUICKCHAT, message, player.getName(), null, player.getPrivilegeLevel().getCrown());
 		recipient.getDispatcher().sendMessage(msgContext);
 		
-		msgContext = new QuickMessageEventContext(ChannelType.PRIVATE_ECHO_QUICKCHAT, message, recipient.getName(), null, player.getPrivilegeLevel());
+		msgContext = new QuickMessageEventContext(ChannelType.PRIVATE_ECHO_QUICKCHAT, message, recipient.getName(), null, player.getPrivilegeLevel().getCrown());
 		player.getDispatcher().sendMessage(msgContext);
 	}
 	

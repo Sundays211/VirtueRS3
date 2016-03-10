@@ -56,6 +56,8 @@ public interface SocialUser {
 	 */
 	public PrivilegeLevel getType();
 	
+	public ChatCrownType getChatCrown();
+	
 	/**
 	 * Gets the nodeID of the world the player is currently on
 	 * @return The nodeID

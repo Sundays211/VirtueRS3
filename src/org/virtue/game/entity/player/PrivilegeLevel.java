@@ -21,20 +21,22 @@
  */
 package org.virtue.game.entity.player;
 
+import org.virtue.game.content.chat.ChatCrownType;
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Sep 30, 2014
  */
 public enum PrivilegeLevel {		
-		PLAYER(0, 0), 
-		MODERATOR(1, 1), 
-		ADMINISTRATOR(2, 2), 
-		LOCAL_MODERATOR(3, 1), 
-		DONATOR(4), 
-		PREMIER_CLUB_PLAYER_MOD(5, 1),
-		IRONMAN(6), 
-		HARDCORE(7), 
-		HARDCORE_IRONMAN(8);
+		PLAYER(0, ChatCrownType.NONE, 0), 
+		MODERATOR(1, ChatCrownType.PLAYER_MOD, 1), 
+		ADMINISTRATOR(2, ChatCrownType.STAFF_MOD, 2), 
+		LOCAL_MODERATOR(3, ChatCrownType.LOCAL_MOD, 1), 
+		DONATOR(4, ChatCrownType.PREMIER_CLUB), 
+		PREMIER_CLUB_PLAYER_MOD(5, ChatCrownType.PREMIER_CLUB_PLAYER_MOD, 1),
+		IRONMAN(6, ChatCrownType.IRONMAN), 
+		HARDCORE(7, ChatCrownType.HARDCORE), 
+		HARDCORE_IRONMAN(8, ChatCrownType.HARDCORE_IRONMAN);
 		
 		private int id;
 		
@@ -43,13 +45,16 @@ public enum PrivilegeLevel {
 		 */
 		private int rights;
 		
-		PrivilegeLevel(int id) {
-			this(id, 0);
+		private ChatCrownType crown;
+		
+		PrivilegeLevel(int id, ChatCrownType crown) {
+			this(id, crown, 0);
 		}
 		
-		PrivilegeLevel(int id, int rights) {
+		PrivilegeLevel(int id, ChatCrownType crown, int rights) {
 			this.id = id;
 			this.rights = rights;
+			this.crown = crown;
 		}
 		
 		/**
@@ -65,6 +70,10 @@ public enum PrivilegeLevel {
 		 */
 		public int getId () {
 			return id;
+		}
+		
+		public ChatCrownType getCrown () {
+			return crown;
 		}
 	
 

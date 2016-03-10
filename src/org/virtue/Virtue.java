@@ -81,12 +81,14 @@ import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetRepository;
 import org.virtue.game.parser.AccountIndex;
 import org.virtue.game.parser.CachingParser;
+import org.virtue.game.parser.ClanIndex;
 import org.virtue.game.parser.ParserRepository;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.parser.impl.NpcDataParser;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.game.parser.impl.NpcSpawnParser;
 import org.virtue.game.parser.xml.XMLAccountIndex;
+import org.virtue.game.parser.xml.XMLClanIndex;
 import org.virtue.game.world.region.RegionManager;
 import org.virtue.network.Network;
 import org.virtue.network.event.EventRepository;
@@ -318,12 +320,16 @@ public class Virtue {
 		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir));
 		scripts.load();
 		
+		ClanIndex clanIndex = new XMLClanIndex(properties);
+		if (clanIndex instanceof CachingParser){
+			cachingParsers.add((CachingParser) clanIndex);
+		}
 		clans = new ClanManager();
-		String clanIndexFile = getProperty("clan.index.file", "./repository/clan/index.xml");
-		clans.load(FileUtility.parseFilePath(clanIndexFile));
+		clans.load(clanIndex);
 		
 		exchange = new GrandExchange();
 		exchange.load();
+		
 		controller = new MinigameProcessor();
 		controller.start();
 

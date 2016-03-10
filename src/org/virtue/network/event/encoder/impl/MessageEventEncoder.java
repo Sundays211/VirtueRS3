@@ -133,7 +133,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 			flags |= 0x8000;
 		}
 		buffer.putShort(flags);
-		buffer.putByte(context.getRights().getId());
+		buffer.putByte(context.getCrown().getId());
 		if (context instanceof QuickMessageEventContext) {
 			QuickChatMessage message = ((QuickMessageEventContext) context).getQuickMessage();
 			buffer.putShort(message.getType().getId());
@@ -154,7 +154,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 			buffer.putString(context.getNameUnfiltered());
 		}
 		buffer.putBytes(context.getHash());
-		buffer.putByte(context.getRights().getId());
+		buffer.putByte(context.getCrown().getId());
 		Huffman.compress(buffer, context.getMessage());
 		buffer.finishVarShort();
 		return buffer;
@@ -169,7 +169,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 			buffer.putString(context.getNameUnfiltered());
 		}
 		buffer.putBytes(context.getHash());
-		buffer.putByte(context.getRights().getId());
+		buffer.putByte(context.getCrown().getId());
 		buffer.putShort(context.getQuickMessage().getType().getId());
 		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getCommands());
 		buffer.finishVarByte();
@@ -205,7 +205,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		}
 		buffer.putString(context.getClan());
 		buffer.putBytes(context.getHash());
-		buffer.putByte(context.getRights().getId());
+		buffer.putByte(context.getCrown().getId());
 		Huffman.compress(buffer, context.getMessage());
 		buffer.finishVarByte();
 		return buffer;
@@ -221,7 +221,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		}
 		buffer.putString(context.getClan());
 		buffer.putBytes(context.getHash());
-		buffer.putByte(context.getRights().getId());
+		buffer.putByte(context.getCrown().getId());
 		buffer.putShort(context.getQuickMessage().getType().getId());
 		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getCommands());
 		buffer.finishVarByte();
@@ -234,7 +234,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		buffer.putByte(isAffined ? 1 : 0);
 		buffer.putString(context.getName());
 		buffer.putBytes(context.getHash());
-		buffer.putByte(context.getRights().getId());
+		buffer.putByte(context.getCrown().getId());
 		Huffman.compress(buffer, context.getMessage());
 		buffer.finishVarByte();
 		return buffer;
@@ -246,7 +246,7 @@ public class MessageEventEncoder implements EventEncoder<MessageEventContext> {
 		buffer.putByte(isAffined ? 1 : 0);
 		buffer.putString(context.getName());
 		buffer.putBytes(context.getHash());
-		buffer.putByte(context.getRights().getId());
+		buffer.putByte(context.getCrown().getId());
 		buffer.putShort(context.getQuickMessage().getType().getId());
 		context.getQuickMessage().getType().pack(buffer, context.getQuickMessage().getCommands());
 		buffer.finishVarByte();

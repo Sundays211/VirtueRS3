@@ -24,7 +24,7 @@ package org.virtue.network.event.context.impl.out;
 import java.util.Random;
 
 import org.virtue.game.content.chat.ChannelType;
-import org.virtue.game.entity.player.PrivilegeLevel;
+import org.virtue.game.content.chat.ChatCrownType;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -35,7 +35,7 @@ public class MessageEventContext implements GameEventContext {
 
 	private int playerIndex;
 	private String message;
-	private PrivilegeLevel rights;
+	private ChatCrownType crown;
 	private int effects;
 	private String name;
 	private String nameUnfiltered;
@@ -43,24 +43,24 @@ public class MessageEventContext implements GameEventContext {
 	private String clan;
 	private byte[] messageHash = generateMessageHash();
 	
-	public MessageEventContext (int playerIndex, String message, int effects, PrivilegeLevel rights) {
+	public MessageEventContext (int playerIndex, String message, int effects, ChatCrownType crown) {
 		this.playerIndex = playerIndex;
 		this.message = message;
-		this.rights = rights;
+		this.crown = crown;
 		this.effects = effects;
 		this.type = ChannelType.PUBLIC;
 	}
 	
-	public MessageEventContext (ChannelType type, String message, String name, String nameUnfiltered, PrivilegeLevel rights) {
-		this(type, message, name, nameUnfiltered, rights, null);
+	public MessageEventContext (ChannelType type, String message, String name, String nameUnfiltered, ChatCrownType crown) {
+		this(type, message, name, nameUnfiltered, crown, null);
 	}
 	
-	public MessageEventContext (ChannelType type, String message, String name, String nameUnfiltered, PrivilegeLevel rights, String clan) {
+	public MessageEventContext (ChannelType type, String message, String name, String nameUnfiltered, ChatCrownType crown, String clan) {
 		this.type = type;
 		this.message = message;
 		this.name = name;
 		this.nameUnfiltered = nameUnfiltered;
-		this.rights = rights;
+		this.crown = crown;
 		this.clan = clan;
 	}
 	
@@ -84,8 +84,8 @@ public class MessageEventContext implements GameEventContext {
 		return effects;
 	}
 	
-	public PrivilegeLevel getRights () {
-		return rights;
+	public ChatCrownType getCrown () {
+		return crown;
 	}
 	
 	public String getMessage() {

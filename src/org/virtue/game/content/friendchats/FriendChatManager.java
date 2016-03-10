@@ -195,7 +195,7 @@ public class FriendChatManager implements FriendChatAPI {
 			user.sendMessage("You are not allowed to talk in this friends chat channel.", ChannelType.FRIENDCHANNEL_SYSTEM);
 			return;
 		}
-		MessageEventContext messageObject = new MessageEventContext(ChannelType.FRIENDCHANNEL, message, user.getName(), user.getName(), user.getType(), channel.getName());
+		MessageEventContext messageObject = new MessageEventContext(ChannelType.FRIENDCHANNEL, message, user.getName(), user.getName(), user.getChatCrown(), channel.getName());
 		channel.sendMessage(messageObject);
 	}
 
@@ -216,7 +216,7 @@ public class FriendChatManager implements FriendChatAPI {
 			user.sendMessage("You are not allowed to talk in this friends chat channel.", ChannelType.FRIENDCHANNEL_SYSTEM);
 			return;
 		}
-		MessageEventContext messageObject = new QuickMessageEventContext(ChannelType.FRIENDCHANNEL_QUICKCHAT, message, user.getName(), user.getName(), user.getType(), channel.getName());
+		MessageEventContext messageObject = new QuickMessageEventContext(ChannelType.FRIENDCHANNEL_QUICKCHAT, message, user.getName(), user.getName(), user.getChatCrown(), channel.getName());
 		channel.sendMessage(messageObject);
 	}
 

@@ -21,14 +21,13 @@
  */
 package org.virtue.game.content.clans;
 
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.engine.cycle.Tick;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.SocialUser;
+import org.virtue.game.parser.ClanIndex;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -50,8 +49,8 @@ public class ClanManager {
 	
 	private ClanChannelManager channelManager;
 	
-	public void load (File indexFile) {
-		index = new XMLClanIndex(indexFile);
+	public void load (ClanIndex index) {
+		this.index = index;
 		settingsManager = new ClanSettingsManager(this);
 		channelManager = new ClanChannelManager(this);
 		Virtue.getInstance().getEngine().invoke(new Tick () {
@@ -74,9 +73,6 @@ public class ClanManager {
 	 * Runs tasks related to saving clan data. This should be run less frequently than runUpdateTasks, but should be run fairly regularly to avoid clan data being lost due to a server crash.
 	 */
 	public void runSaveTasks () {
-		if (index.needsUpdate()) {
-			index.saveIndex();
-		}
 		settingsManager.runSaveTasks();
 	}
 	

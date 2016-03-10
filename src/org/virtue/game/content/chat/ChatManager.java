@@ -263,6 +263,14 @@ public class ChatManager implements SocialUser {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.game.content.chat.SocialUser#getChatCrown()
+	 */
+	@Override
+	public ChatCrownType getChatCrown() {
+		return getType().getCrown();
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.game.content.social.SocialUser#getNodeID()
 	 */
 	@Override
@@ -299,7 +307,7 @@ public class ChatManager implements SocialUser {
 	 * @param message The message to send
 	 */
 	public void sendPublicQuickMessage (QuickChatMessage message) {
-		MessageEventContext msgContext = new QuickMessageEventContext(player.getIndex(), message, 0, player.getPrivilegeLevel());
+		MessageEventContext msgContext = new QuickMessageEventContext(player.getIndex(), message, 0, getChatCrown());
 		for (Player p : player.getViewport().getLocalPlayers()) {
 			if (p != null) {
 				p.getDispatcher().sendMessage(msgContext);
@@ -320,7 +328,7 @@ public class ChatManager implements SocialUser {
 		}
 		message = StringUtility.formatChatMessage(message);
 		int effects = (colourEffect << 8) | (moveEffect & 0xff);
-		MessageEventContext msgContext = new MessageEventContext(player.getIndex(), message, effects, player.getPrivilegeLevel());
+		MessageEventContext msgContext = new MessageEventContext(player.getIndex(), message, effects, getChatCrown());
 		for (Player p : player.getViewport().getLocalPlayers()) {
 			if (p != null) {
 				p.getDispatcher().sendMessage(msgContext);

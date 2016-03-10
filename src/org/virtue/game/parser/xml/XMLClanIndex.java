@@ -19,11 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.clans;
+package org.virtue.game.parser.xml;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,6 +36,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.game.parser.CachingParser;
+import org.virtue.game.parser.ClanIndex;
+import org.virtue.utility.FileUtility;
 import org.virtue.utility.text.Base37Utility;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -49,7 +53,7 @@ import org.w3c.dom.NodeList;
  * @author Sundays211
  * @since 23/12/2014
  */
-public class XMLClanIndex implements ClanIndex {
+public class XMLClanIndex implements ClanIndex, CachingParser {
 	
 	/**
 	 * The {@link Logger} Instance
@@ -74,9 +78,11 @@ public class XMLClanIndex implements ClanIndex {
 	
 	private boolean indexNeedsUpdate = false;
 	
-	public XMLClanIndex (File indexFile) {
+	public XMLClanIndex (Properties properties) {
 		clanIndex = new HashMap<Long, Entry>();
-		this.indexFile = indexFile;
+		
+		String clanIndexFile = properties.getProperty("clan.index.file", "./repository/clan/index.xml");
+		this.indexFile = FileUtility.parseFilePath(clanIndexFile);
 		try {
 			load();
 		} catch (Exception ex) {
@@ -178,20 +184,8 @@ public class XMLClanIndex implements ClanIndex {
 			}
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.content.social.clan.ClanIndex#needsUpdate()
-	 */
-	@Override
-	public boolean needsUpdate() {
-		return indexNeedsUpdate;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.content.social.clan.ClanIndex#saveIndex()
-	 */
-	@Override
-	public void saveIndex() {
+	
+	private void saveIndex () {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -232,4 +226,23 @@ public class XMLClanIndex implements ClanIndex {
 		indexNeedsUpdate = false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.game.parser.CachingParser#flush()
+	 */
+	@Override
+	public void flush() {
+		if (indexNeedsUpdate) {
+			saveIndex();
+		}		
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.AutoCloseable#close()
+	 */
+	@Override
+	public void close() throws Exception {
+		if (indexNeedsUpdate) {
+			saveIndex();
+		}	
+	}
 }

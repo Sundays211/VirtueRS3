@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,11 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.context.impl.out;
-
-import org.virtue.game.content.chat.ChannelType;
-import org.virtue.game.content.chat.ChatCrownType;
-import org.virtue.utility.text.QuickChatMessage;
+package org.virtue.game.content.chat;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -31,33 +27,26 @@ import org.virtue.utility.text.QuickChatMessage;
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 2/07/2015
+ * @since 9/03/2016
  */
-public class QuickMessageEventContext extends MessageEventContext {
+public enum ChatCrownType {
+	NONE(0, -1, true, false, true),
+	PLAYER_MOD(1, 0, true, true, true),
+	STAFF_MOD(2, 1, true, true, false),
+	LOCAL_MOD(3, 8, false, true, true),
+	PREMIER_CLUB(4, 9, false, false, true),
+	PREMIER_CLUB_PLAYER_MOD(5, 10, false, true, true),
+	IRONMAN(6, 11, false, false, true),
+	HARDCORE(7, 12, false, false, true),
+	HARDCORE_IRONMAN(8, 13, false, false, true);
 	
-	private QuickChatMessage message;
+	private int id;
 
-	/**
-	 * @param type
-	 * @param message
-	 */
-	public QuickMessageEventContext(int playerIndex, QuickChatMessage message, int effects, ChatCrownType crown) {
-		super(playerIndex, null, effects, crown);
-		this.message = message;
+	ChatCrownType(int id, int icon, boolean bool, boolean bool_1_, boolean bool_2_) {
+		this.id = id;
 	}
 	
-	public QuickMessageEventContext (ChannelType type, QuickChatMessage message, String name, String nameUnfiltered, ChatCrownType crown) {
-		this(type, null, name, nameUnfiltered, crown, null);
-		this.message = message;
+	public int getId () {
+		return id;
 	}
-	
-	public QuickMessageEventContext (ChannelType type, QuickChatMessage message, String name, String nameUnfiltered, ChatCrownType crown, String clan) {
-		super(type, null, name, nameUnfiltered, crown, clan);
-		this.message = message;
-	}
-	
-	public QuickChatMessage getQuickMessage () {
-		return message;
-	}
-
 }

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.clans;
+package org.virtue.game.parser;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,13 +39,9 @@ public interface ClanIndex {
 	 * @param name	The name of the clan
 	 * @return		The unique hash code for the clan
 	 */
-	long addClan(String name);
+	public long addClan(String name);
 	
-	void renameClan (long hash, String oldName, String newName);
+	public void renameClan (long hash, String oldName, String newName);
 	
-	void removeAllWithHash (long hash);
-	
-	public boolean needsUpdate ();
-	
-	public void saveIndex ();
+	public void removeAllWithHash (long hash);
 }
