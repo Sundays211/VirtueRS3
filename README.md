@@ -43,6 +43,7 @@ One of the most common requests in any RSPS is granting an account administrativ
 
 ### Manual method
 This method is required for the first account you set as administrator (and to revoke admin rights).
+
 1. Create the account you wish to give admin rights to, using the account creation process in-game
 2. *Shut down the server* (if the server is running, changes will be overwritten). 
 3. Open the character index file (located in /repository/character/index.xml).
@@ -52,6 +53,7 @@ This method is required for the first account you set as administrator (and to r
 
 ### Command method
 This method should be used for all other accounts, beyond the first admin, since it's a lot easier to do.
+
 1. Log into the game with an Administrative account.
 2. Either type the command "playertype" into the developer console or type "::playertype" into the chatbox
 3. Type the display name of the account you wish to change the type of
