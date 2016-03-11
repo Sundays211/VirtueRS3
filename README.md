@@ -37,3 +37,23 @@ VirtueRS3 generally uses the actual names for variables, where known. Some of th
 + Varps - Short for "Player Variables", and often called "configs" within RSPS. They store information about the current player, such as their chat filter settings, farming patch status, quest progress, etc
 + Varcs - Short for "Client Variables", sometimes called "global configs" by RSPS. These store information used only by the client where the server does not need to know the information. Usage includes favourite worlds, interface layouts, text entered by the user before they submit it, etc.
 + Varbits - Variable bits, or parts of a larger integer variable. Sometimes called "configsByFile". These are used to pack multiple data variables into a single 32-bit variable to save space. For example, rather than using a single int varp for each farming patch status, a single varp holds 4 different patches by using bits 0-7 for patch one, 8-15 for patch two, 16-23 for patch three, and 24-31 for patch four.
+
+### Changing player rights
+One of the most common requests in any RSPS is granting an account administrative rights. There are two ways of doing this in VirtueRS3: the manual method, and the command method.
+
+### Manual method
+This method is required for the first account you set as administrator (and to revoke admin rights).
+1. Create the account you wish to give admin rights to, using the account creation process in-game
+2. *Shut down the server* (if the server is running, changes will be overwritten). 
+3. Open the character index file (located in /repository/character/index.xml).
+4. Look for the XML "account" element containing the "display" for your desired account
+5. Change the "type" element from 0 to 2 (2 being ADMINISTRATOR)
+6. Save the index and restart the server
+
+### Command method
+This method should be used for all other accounts, beyond the first admin, since it's a lot easier to do.
+1. Log into the game with an Administrative account.
+2. Either type the command "playertype" into the developer console or type "::playertype" into the chatbox
+3. Type the display name of the account you wish to change the type of
+4. Select the desired account type
+
