@@ -38,7 +38,7 @@ VirtueRS3 generally uses the actual names for variables, where known. Some of th
 + Varcs - Short for "Client Variables", sometimes called "global configs" by RSPS. These store information used only by the client where the server does not need to know the information. Usage includes favourite worlds, interface layouts, text entered by the user before they submit it, etc.
 + Varbits - Variable bits, or parts of a larger integer variable. Sometimes called "configsByFile". These are used to pack multiple data variables into a single 32-bit variable to save space. For example, rather than using a single int varp for each farming patch status, a single varp holds 4 different patches by using bits 0-7 for patch one, 8-15 for patch two, 16-23 for patch three, and 24-31 for patch four.
 
-### Changing player rights
+## Changing player rights
 One of the most common requests in any RSPS is granting an account administrative rights. There are two ways of doing this in VirtueRS3: the manual method, and the command method.
 
 ### Manual method
