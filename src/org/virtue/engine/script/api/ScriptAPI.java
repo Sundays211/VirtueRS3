@@ -445,6 +445,8 @@ public interface ScriptAPI {
 	public int delCarriedItem (Player player, int itemID, int amount, int slot);
 	
 	public int carriedItemTotal (Player player, int itemID);
+
+	public boolean wearingItem(Player player, int itemID);
 	
 	/**
 	 * Gets the item in the specified slot in the player's inventory

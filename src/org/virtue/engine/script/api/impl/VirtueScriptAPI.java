@@ -21,10 +21,6 @@
  */
 package org.virtue.engine.script.api.impl;
 
-import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.Iterator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
@@ -77,15 +73,14 @@ import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
 import org.virtue.game.world.region.movement.Direction;
-import org.virtue.network.protocol.update.block.FaceDirectionBlock;
-import org.virtue.network.protocol.update.block.FaceEntityBlock;
-import org.virtue.network.protocol.update.block.ForceMovementBlock;
-import org.virtue.network.protocol.update.block.ForceTalkBlock;
-import org.virtue.network.protocol.update.block.SpotAnimationBlock;
-import org.virtue.network.protocol.update.block.TalkBlock;
+import org.virtue.network.protocol.update.block.*;
 import org.virtue.utility.TimeUtility;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
+
+import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -704,6 +699,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public int carriedItemTotal(Player player, int itemID) {
 		return player.getInvs().getAmountCarried(itemID);
+	}
+
+	@Override
+	public boolean wearingItem(Player player, int itemID) {
+		return player.getEquipment().isWearing(itemID);
 	}
 
 	/* (non-Javadoc)
