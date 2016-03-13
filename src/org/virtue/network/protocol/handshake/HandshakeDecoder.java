@@ -38,7 +38,7 @@ import org.virtue.network.protocol.message.HandshakeMessage;
 import org.virtue.network.protocol.ondemand.OnDemandDecoder;
 import org.virtue.network.protocol.ondemand.OnDemandEncoder;
 import org.virtue.network.protocol.ondemand.OnDemandXorEncoder;
-import org.virtue.network.protocol.social.SocialDecoder;
+import org.virtue.network.protocol.social.SocialNetworkDecoder;
 import org.virtue.utility.BufferUtility;
 
 /**
@@ -80,7 +80,7 @@ public class HandshakeDecoder extends ByteToMessageDecoder {
 				break;
 			case HANDSHAKE_SOCIAL_LOGIN:
 				ensureResponse(ctx);
-				ctx.pipeline().replace("decoder", "decoder", new SocialDecoder());
+				ctx.pipeline().replace("decoder", "decoder", new SocialNetworkDecoder());
 				break;
 			default:
 				break;

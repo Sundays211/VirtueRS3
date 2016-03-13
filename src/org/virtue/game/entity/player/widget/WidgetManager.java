@@ -271,7 +271,6 @@ public class WidgetManager {
 			}
 		}
 		closableWidgets.clear();
-		player.getDialogs().closeDialog();
 	}
 	
 	public Map<Integer, Integer> getLayoutVars () {
