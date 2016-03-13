@@ -126,7 +126,7 @@ var HousePortalListener = Java.extend(Java.type('org.virtue.engine.script.listen
 
 /* Listen to the locations specified */
 var listen = function(scriptManager) {
-	var ids = [ 15478, 15482, 15361 ];
+	var ids = [ 15478, 15482, 15361, 15477, 15479, 15480, 15481];
 	var listener = new HousePortalListener();
 	for (var i in ids) {
 		//Bind all options on house portals
