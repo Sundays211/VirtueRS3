@@ -92,8 +92,28 @@ var MysteriousRunes = {
 			talisman : 1462,
 			tiara : 5541,
 			staff : 13638
+		},
+		LAW : {
+            locTypeId : 2459,
+            destination : api.getCoords(2464, 4818, 0),
+            talisman : 1458,
+            tiara : 5545,
+            staff : 13639
+		},
+		DEATH : {
+		    locTypeId : 2462,
+		    destination : api.getCoords(2208, 4830, 0),
+		    talisman : 1456,
+		    tiara : 5547,
+		    staff : 13640
+		},
+		BLOOD : {
+		    locTypeId : 2464,
+		    destination : api.getCoords(2468, 4889, 1),
+		    talisman : 1450,
+		    tiara : 5549,
+		    staff : 13641
 		}
-		//TODO: Law, Death, & Blood
 };
 
 var Alter = {
@@ -271,10 +291,21 @@ var RunesListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;		
 		var runes = Runecrafting.forRunes(locTypeId);
-		if (runes !== null && Runecrafting.canEnter(player, runes)) {
+		if (runes !== null && Runecrafting.canEnter(player, runes, false)) {
+		    api.sendMessage(player, "You feel a powerful force take hold of you.");
 			api.teleportEntity(player, runes.destination);
 		}
 	}
+});
+var TalismanListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+    invoke : function (event, locTypeId, args) {
+        var player = args.player;
+        var runes = Runecrafting.forRunes(locTypeId);
+        if (runes !== null && Runecrafting.canEnter(player, runes, true)) {
+            api.sendMessage(player, "You feel a powerful force take hold of you.");
+            api.teleportEntity(player, runes.destination);
+        }
+    }
 });
 
 var PortalListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
@@ -282,6 +313,7 @@ var PortalListener = Java.extend(Java.type('org.virtue.engine.script.listeners.E
 		var portal = Runecrafting.forPortal(locTypeId);
 		if (portal !== null) {
 			api.teleportEntity(args.player, portal.destination);
+			api.sendMessage(args.player, "You step through the portal.");
 		}
 	}
 });
@@ -305,6 +337,12 @@ var listen = function(scriptManager) {
 	for (var i in locs) {
 		//Bind option one on all mysterious runes to this listener
 		scriptManager.registerListener(EventType.OPLOC1, locs[i], runesListener);
+	}
+
+	var talismanListener = new TalismanListener();
+	for (var i in locs) {
+	    //Bind use inventory item on all mysterious ruins to this listener
+	    scriptManager.registerListener(EventType.OPLOCU, locs[i], talismanListener);
 	}
 	
 	var locs = [];
@@ -389,7 +427,19 @@ var Runecrafting = {
 			}
 			return multiple;
 		},
-		canEnter : function (player, runes) {
-			return true;//TODO: Check for talisman/tiara
+		canEnter : function (player, runes, use) {
+		    if(use){
+		        if(api.carriedItemTotal(player, runes.tiara) > 0 || api.carriedItemTotal(player, runes.staff) > 0 || api.carriedItemTotal(player, runes.talisman) > 0){
+		            return true;
+		        }else{
+		            api.sendMessage(player, "You need a " + api.getItemName(runes.talisman) + " talisman to be able to access the " + api.getItemName(runes.talisman).split(" ")[0] + " Altar.")
+		            return false;
+		        }
+		    }else{
+		        if(api.wearingItem(player, runes.tiara) || api.wearingItem(player, runes.staff))
+		            return true;
+		        else
+		            return false;
+		    }
 		}
 }
