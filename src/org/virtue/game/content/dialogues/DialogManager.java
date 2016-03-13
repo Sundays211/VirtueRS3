@@ -25,7 +25,6 @@ import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.WidgetManager;
-import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.network.event.context.impl.in.InputEventContext.InputType;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext.ModelType;
@@ -49,18 +48,18 @@ public class DialogManager {
 	 */
 	private InputEnteredHandler onInputEntered;
 	
-	private WidgetState topInterface;
-	
 	private int dialogStep;
 
 	public DialogManager (Player player) {
 		this.player = player;
 	}
 	
+	@Deprecated
 	public int getStep () {
 		return dialogStep;
 	}
 	
+	@Deprecated
 	public void setStep (int step) {
 		this.dialogStep = step;
 	}
@@ -190,14 +189,7 @@ public class DialogManager {
 	/*player.getActionSender().sendWidget(1477, 315, 1215, true);//Interface_sub: parent:1477, slot:333, id=1215, clipped=1
 	player.getActionSender().sendHideWidget(1477, 315, false);//IF_Sethide: id=1477, comp=333, hidden=0
 	player.getActionSender().sendHideWidget(745, 2, true);//IF_Sethide: id=745, comp=2, hidden=1*/
-	
-	/**
-	 * Closes the dialog(s) which are currently open
-	 */
-	public void closeDialog () {
-		this.topInterface = null;
-	}
-	
+		
 	/**
 	 * Processes the entered input. This method should be called only by the input handler
 	 * @param input An {@link Object} containing the input data
@@ -281,13 +273,5 @@ public class DialogManager {
 	 */
 	public void setInputHandler (InputEnteredHandler handler) {
 		this.onInputEntered = handler;
-	}
-	
-	public WidgetState getTopWidget () {
-		return topInterface;
-	}
-	
-	public void setTopWidget (WidgetState widget) {
-		this.topInterface = widget;
 	}
 }

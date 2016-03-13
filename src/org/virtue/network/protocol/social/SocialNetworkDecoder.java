@@ -38,7 +38,7 @@ import org.virtue.Constants;
  * @author Sundays211
  * @since Dec 22, 2014
  */
-public class SocialDecoder extends ByteToMessageDecoder {
+public class SocialNetworkDecoder extends ByteToMessageDecoder {
 
 	/* (non-Javadoc)
 	 * @see io.netty.handler.codec.ByteToMessageDecoder#decode(io.netty.channel.ChannelHandlerContext, io.netty.buffer.ByteBuf, java.util.List)

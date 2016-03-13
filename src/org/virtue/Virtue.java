@@ -204,10 +204,11 @@ public class Virtue {
 		long start = System.currentTimeMillis();
 		instance = getInstance();
 		File propertiesFile = new File("repository/default.properties");
+		instance.loadProperties(propertiesFile);
 		if (args.length >= 1) {
 			propertiesFile = new File(args[0]);
+			instance.loadProperties(propertiesFile);
 		}
-		instance.loadProperties(propertiesFile);
 		try {
 			instance.initLogging();
 			instance.loadEngine();
@@ -238,7 +239,7 @@ public class Virtue {
 	}
 	
 	private void loadProperties (File filePath) {
-		properties = new Properties();
+		properties = new Properties(properties);
 		try {
 			properties.load(new FileReader(filePath));
 		} catch (IOException ex) {

@@ -242,7 +242,10 @@ function mesbox (player, message, callback) {
 			}
 		}
 	});
-	player.getDialogs().sendMessageBox(message);
+	api.setWidgetText(player, 1186, 2, message);
+	api.hideWidget(player, 1186, 3, false);
+	api.openOverlaySub(player, 1006, 1186, false);
+	api.runClientScript(player, 8178, []);
 	api.setInputHandler(player, new Handler());
 }
 

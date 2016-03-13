@@ -32,7 +32,13 @@ import org.virtue.network.event.context.GameEventContext;
  */
 public class WidgetModelEventContext implements GameEventContext {
 	
-	public static enum ModelType { NPC_HEAD, PLAYER_HEAD_OTHER, PLAYER_HEAD_SELF, ANIMATION, PLAYER_MODEL_OTHER, PLAYER_MODEL_SELF };
+	public static enum ModelType { 
+		NPC_HEAD, 
+		PLAYER_HEAD_OTHER, 
+		PLAYER_HEAD_SELF, 
+		ANIMATION, 
+		PLAYER_MODEL_OTHER, 
+		PLAYER_MODEL_SELF };
 	
 	private ModelType type;
 	
