@@ -117,7 +117,7 @@ var Log = {
 		itemID : 29556,
 		level : 90,
 		xp : 450,
-		fireID : -1,//TODO: Find this
+		fireID : 87548,
 		duration : 600,//6 minutes 00 seconds
 		bonfirexp : 449,
 		bonfireGfx : -1//3116 is close but not quite...
@@ -171,6 +171,8 @@ var listen = function(scriptManager) {
 		//Bind option one and five on all fires to this listener (option 1=Add Logs on bonfire, option 5=Use on normal fire)
 		scriptManager.registerListener(EventType.OPLOC1, FIRE_IDS[i], fireListener);
 		scriptManager.registerListener(EventType.OPLOC5, FIRE_IDS[i], fireListener);
+		//Bind use logs on a fire
+		scriptManager.registerListener(EventType.OPLOCU, FIRE_IDS[i], fireListener);
 	}
 	
 	for (var log in Log) {
@@ -326,7 +328,8 @@ var Firemaking = {
 					return false;
 				},
 				stop : function (player) {//Clear the current animation block
-					api.setRenderAnim(player, -1);
+				    api.setRenderAnim(player, -1);
+					api.stopAnimation(player);
 				}
 
 			});
