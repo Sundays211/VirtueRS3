@@ -12,67 +12,94 @@ var RoomTypes = {
         level : 1,
         tile : api.getCoords(1859, 5066, 0),
     },
-    THRONE : {
-        level : 1,
-        tile : api.getCoords(1904, 5096, 0),
-    },
-    GAME : {
-        level : 1,
-        tile : api.getCoords(1864, 5104, 0),
-    },
-    FLOOR_2 : {
-        level : 1,
-        tile : api.getCoords(1903, 5095, 0),
-    },
     PARLOUR : {
         level : 1,
         tile : api.getCoords(1856, 5112, 0),
     },
     KITCEN : {
-        level : 1,
+        level : 5,
         tile : api.getCoords(1872, 5112, 0),
     },
     DINING : {
-        level : 1,
+        level : 10,
         tile : api.getCoords(1890, 5112, 0),
     },
     WORK_SHOP : {
-        level : 1,
+        level : 15,
         tile : api.getCoords(1856, 5096, 0),
     },
-    BED_ROOM : {
-        level : 1,
+    BEDROOM : {
+        level : 20,
         tile : api.getCoords(1904, 5112, 0),
     },
     SKILL_HALL : {
-        level : 1,
+        level : 25,
         tile : api.getCoords(1880, 5104, 0),
     },
+    GAME : {
+        level : 30,
+        tile : api.getCoords(1864, 5104, 0),
+    },
     COMBAT : {
-        level : 1,
+        level : 32,
         tile : api.getCoords(1880, 5088, 0),
     },
     QUEST_HALL : {
-        level : 1,
+        level : 35,
         tile : api.getCoords(1912, 5104, 0),
     },
+    MENAGERIE : {
+        level : 37,
+        tile : api.getCoords(1912, 5072, 0),
+    },
     STUDY : {
-        level : 1,
+        level : 40,
         tile : api.getCoords(1888, 5096, 0),
     },
     COSTUME_ROOM : {
-        level : 1,
+        level : 42,
         tile : api.getCoords(1904, 5064, 0),
     },
     CHAPEL : {
-        level : 1,
+        level : 45,
         tile : api.getCoords(1872, 5096, 0),
     },
     PORTAL_CHAMBER : {
-        level : 1,
+        level : 50,
         tile : api.getCoords(1864, 5088, 0),
-    }
-    //TODO REST
+    },
+    FORMAL_GARDEN : {
+        level : 55,
+        tile : api.getCoords(1920, 5064, 0),
+    },
+    THRONE : {
+        level : 60,
+        tile : api.getCoords(1904, 5096, 0),
+    },
+    AQUARIUM : {
+        level : 63,
+        tile : api.getCoords(1912, 5058, 0),
+    },
+    OUBLIETTE : {
+        level : 65,
+        tile : api.getCoords(1904, 5080, 0),
+    },
+    DUNGEON : {
+        level : 70,
+        tile : api.getCoords(1873, 5081, 0),
+    },
+    PIT_DUNGEON : {
+        level : 70,
+        tile : api.getCoords(1897, 5073, 0),
+    },
+    TREASURE_ROOM : {
+        level : 75,
+        tile : api.getCoords(1913, 5089, 0),
+    },
+    FLOOR_2 : {
+        level : 1,
+        tile : api.getCoords(1903, 5095, 0),
+    },
 };
 
 
@@ -99,7 +126,7 @@ var HousePortalListener = Java.extend(Java.type('org.virtue.engine.script.listen
 
 /* Listen to the locations specified */
 var listen = function(scriptManager) {
-	var ids = [ 15478, 15482, 15361 ];
+	var ids = [ 15478, 15482, 15361, 15477, 15479, 15480, 15481];
 	var listener = new HousePortalListener();
 	for (var i in ids) {
 		//Bind all options on house portals
