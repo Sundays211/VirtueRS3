@@ -21,7 +21,6 @@
  */
 package org.virtue.network.event.encoder.impl;
 
-import org.virtue.game.content.clans.csdelta.ClanSettingsDelta;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ClanSettingsDeltaEventContext;
@@ -44,17 +43,8 @@ public class ClanSettingsDeltaEventEncoder implements EventEncoder<ClanSettingsD
 	public OutboundBuffer encode(Player player, ClanSettingsDeltaEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarShort(ServerProtocol.CLANSETTINGS_DELTA, player);
-		buffer.putByte(context.isGuestUpdate() ? 0 : 1);
-		buffer.putLong(0L);//owner (doesn't seem to be used)
-		buffer.putInt(context.getUpdateNumber());
-		for (ClanSettingsDelta delta : context.getDeltaNodes()) {
-			if (delta.getTypeID() <= 0) {
-				continue;
-			}
-			buffer.putByte(delta.getTypeID());
-			delta.packDelta(buffer);
-		}
-		buffer.putByte(0);//End delta
+		buffer.putByte(context.isAffinedUpdate() ? 1 : 0);
+		context.getDelta().encode(buffer);
 		buffer.finishVarShort();
 		return buffer;
 	}

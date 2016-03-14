@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.content.clans.csdelta.ClanSettingsDelta;
+import org.virtue.game.content.clans.ClanSettingsDelta;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -32,40 +32,29 @@ import org.virtue.network.event.context.GameEventContext;
  * @since 27/12/2014
  */
 public class ClanSettingsDeltaEventContext implements GameEventContext {
-
-private final int updateNum;
 	
-	private final boolean isGuestCs;
+	private final boolean isAffined;
 	
-	private final ClanSettingsDelta[] deltaNodes;
+	private final ClanSettingsDelta delta;
 	
-	public ClanSettingsDeltaEventContext (boolean guestCs, int updateNum, ClanSettingsDelta... deltaNodes) {
-		this.isGuestCs = guestCs;
-		this.updateNum = updateNum;
-		this.deltaNodes = deltaNodes;
+	public ClanSettingsDeltaEventContext (boolean isAffined, ClanSettingsDelta delta) {
+		this.isAffined = isAffined;
+		this.delta = delta;
 	}
 	
 	/**
-	 * Returns whether or not this is an update for a guest clan settings
-	 * @return	True if this is a guest clan settings update, false if it's a main clan settings update
+	 * Returns whether or not this is an update for an affined settings
+	 * @return	False if this is a guest clan settings update, true if it's an affined settings update
 	 */
-	public boolean isGuestUpdate () {
-		return isGuestCs;
+	public boolean isAffinedUpdate () {
+		return isAffined;
 	}
 	
 	/**
-	 * Returns the current settings update number
-	 * @return	The update number
+	 * Returns the delta for this update
+	 * @return The {@link ClanSettingDelta}
 	 */
-	public int getUpdateNumber () {
-		return updateNum;
-	}
-	
-	/**
-	 * Returns the nodes for this delta update
-	 * @return	The delta nodes
-	 */
-	public ClanSettingsDelta[] getDeltaNodes () {
-		return deltaNodes;
+	public ClanSettingsDelta getDelta () {
+		return delta;
 	}
 }

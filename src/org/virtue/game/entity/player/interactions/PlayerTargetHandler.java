@@ -19,39 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.clans.csdelta;
+package org.virtue.game.entity.player.interactions;
 
-import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.game.entity.Entity;
+import org.virtue.game.entity.player.Player;
 
 /**
- * An update which removes the specified member from the clan list
- * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
+ * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 21/12/2014
+ * @since 20/01/2015
  */
-public class DeleteMember implements ClanSettingsDelta {
-
-	private final int slot;
+public interface PlayerTargetHandler {
 	
-	/**
-	 * Creates a new {@code DeleteMember} delta object
-	 * @param slot	The slot of the member to remove from the clan list
-	 */
-	public DeleteMember (int slot) {
-		this.slot = slot;
-	}
+	public int[] getInterfaceIDs ();
 	
-	@Override
-	public void packDelta(OutboundBuffer buffer) {
-		buffer.putShort(slot);
-	}
-
-	@Override
-	public int getTypeID() {
-		return 5;
-	}
+	public boolean handle (Player player, int interfaceID, int component, int slot, int itemID, Player target);
+	
+	public int getRange (Entity player, int interfaceID, int component, int slot, int itemID);
 
 }

@@ -27,8 +27,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.virtue.game.content.clans.ClanInviteResponse;
-import org.virtue.game.content.clans.ClanRecruitAction;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -71,7 +69,7 @@ public class PlayerInteractions {
 	
 	private EnumMap<OptionButton, PlayerOptionHandler> handlers = new EnumMap<OptionButton, PlayerOptionHandler>(OptionButton.class);
 	
-	private Map<Integer, WidgetOnPlayerHandler> widgetHandlers = new HashMap<Integer, WidgetOnPlayerHandler>();
+	private Map<Integer, PlayerTargetHandler> widgetHandlers = new HashMap<Integer, PlayerTargetHandler>();
 	
 	private EnumMap<OptionButton, Set<Player>> availablePlayers = new EnumMap<OptionButton, Set<Player>>(OptionButton.class);
 	
@@ -109,7 +107,7 @@ public class PlayerInteractions {
 		handlers.put(option, handler);
 	}
 	
-	public void bindWidgetHandler (WidgetOnPlayerHandler handler) {
+	public void bindWidgetHandler (PlayerTargetHandler handler) {
 		for (int id : handler.getInterfaceIDs()) {
 			widgetHandlers.put(id, handler);
 		}

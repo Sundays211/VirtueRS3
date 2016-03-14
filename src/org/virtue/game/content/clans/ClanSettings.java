@@ -42,15 +42,6 @@ import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.game.content.chat.SocialUser;
-import org.virtue.game.content.clans.csdelta.AddBan;
-import org.virtue.game.content.clans.csdelta.AddMember;
-import org.virtue.game.content.clans.csdelta.ClanSettingsDelta;
-import org.virtue.game.content.clans.csdelta.DeleteBan;
-import org.virtue.game.content.clans.csdelta.DeleteMember;
-import org.virtue.game.content.clans.csdelta.SetMemberVarBit;
-import org.virtue.game.content.clans.csdelta.SetVarBitValue;
-import org.virtue.game.content.clans.csdelta.SetVarValue;
-import org.virtue.game.content.clans.csdelta.UpdateRank;
 import org.virtue.game.parser.AccountInfo;
 import org.virtue.network.event.context.impl.out.ClanSettingsDeltaEventContext;
 import org.virtue.network.event.context.impl.out.ClanSettingsEventContext;
@@ -100,6 +91,8 @@ public class ClanSettings {
 	
 	private final long clanHash;
 	
+	private ClanSettingsDelta delta;
+	
 	private String clanName;
 	
 	private ClanRank minTalkRank = ClanRank.RECRUIT;
@@ -126,8 +119,6 @@ public class ClanSettings {
 	private transient final List<SocialUser> onlineGuests = Collections.synchronizedList(new ArrayList<SocialUser>());
 	
 	private transient final Queue<SocialUser> initQueue = new LinkedList<SocialUser>();
-	
-	private transient final Queue<ClanSettingsDelta> updateQueue = new LinkedList<ClanSettingsDelta>();
 	
 	private final Map<Integer, Object> varValues = Collections.synchronizedMap(new HashMap<Integer, Object>());
 	
@@ -174,14 +165,16 @@ public class ClanSettings {
 	}
 	
 	/**
-	 * Queues an update to the clan settings which will be sent on the next tick
-	 * @param node	The update node to queue
+	 * Gets the current {@link ClanSettingsDelta} update set, used for updating the channel
+	 * @return
 	 */
-	protected void queueUpdate (ClanSettingsDelta node) {
-		synchronized (updateQueue) {
-			updateQueue.offer(node);
-		}
-		needsSave = true;
+	private ClanSettingsDelta getDelta() {
+		synchronized (this) {
+			if (delta == null) {
+				delta = new ClanSettingsDelta(clanHash, updateNumber, false);
+			}
+			return delta;
+		}	
 	}
 	
 	public boolean needsSave () {
@@ -196,27 +189,26 @@ public class ClanSettings {
 	 * Sends the clan settings delta updates to every clan member who is currently logged in
 	 */
 	protected void dispatchUpdates () {
-		if (updateQueue.isEmpty()) {
+		if (delta == null) {
 			sendInitPackets(updateNumber);
 			return;
 		}
-		ClanSettingsDelta[] deltaNodes;
-		int thisUpdate = updateNumber;
-		synchronized (updateQueue) {
-			deltaNodes = new ClanSettingsDelta[updateQueue.size()];
-			updateQueue.toArray(deltaNodes);
-			updateQueue.clear();
+		ClanSettingsDelta updateDelta;
+		synchronized (this) {
+			updateDelta = delta;
+			delta = null;
 			updateNumber++;
 		}
-		ClanSettingsDeltaEventContext memberPacket = new ClanSettingsDeltaEventContext(false, thisUpdate, deltaNodes);
-		ClanSettingsDeltaEventContext guestPacket = new ClanSettingsDeltaEventContext(true, thisUpdate, deltaNodes);
+		
+		ClanSettingsDeltaEventContext affinedPacket = new ClanSettingsDeltaEventContext(true, updateDelta);
+		ClanSettingsDeltaEventContext listedPacket = new ClanSettingsDeltaEventContext(false, updateDelta);
 		synchronized (onlineMembers) {
 			for (SocialUser u : onlineMembers) {
-				u.sendClanSettingsDelta(memberPacket);
+				u.sendClanSettingsDelta(affinedPacket);
 				u.clanDataUpdated();
 			}
 			for (SocialUser u : onlineGuests) {
-				u.sendClanSettingsDelta(guestPacket);
+				u.sendClanSettingsDelta(listedPacket);
 			}
 		}
 		sendInitPackets(updateNumber);
@@ -500,19 +492,20 @@ public class ClanSettings {
 		ban.setDisplayName(info.getDisplayName());
 		synchronized (bans) {
 			bans.add(ban);
-			queueUpdate(new AddBan(info.getDisplayName()));
+			getDelta().addBanned(userhash, info.getDisplayName());
 		}
 	}
 	
 	protected void removeBan (long userhash) {
-		ClanBan ban = getBan(userhash);
-		if (ban == null) {
-			throw new NullPointerException(userhash+" is not banned in "+clanName);
-		}
 		synchronized (bans) {
-			int slot = bans.indexOf(ban);
-			bans.remove(slot);
-			queueUpdate(new DeleteBan(slot));
+			for (int slot=0;slot<bans.size();slot++) {
+				if (bans.get(slot).getUserHash() == userhash) {
+					bans.remove(slot);
+					getDelta().deleteBanned(slot);
+					return;
+				}
+			}
+			throw new IllegalArgumentException(userhash+" is not banned in "+clanName);
 		}
 	}
 	
@@ -605,7 +598,8 @@ public class ClanSettings {
 			members.add(newMember);
 			findClanOwner();
 		}
-		queueUpdate(new AddMember(newMember.getDisplayName()));
+		
+		getDelta().addMember(player.getHash(), newMember.getDisplayName(), newMember.getJoinDay());
 		if (linkedChannel != null) {
 			linkedChannel.updateUserRank(player.getHash(), getRank(player.getHash()).getID());
 		}
@@ -617,14 +611,19 @@ public class ClanSettings {
 	 * @throws NullPointerException	 if the player is not in the clan.
 	 */
 	protected void removeMember (long userhash) throws NullPointerException {
-		ClanMember member = getMember(userhash);
-		if (member == null) {
-			throw new NullPointerException(userhash+" is not in "+clanName);
-		}
 		synchronized (members) {
-			int slot = members.indexOf(member);
-			members.remove(slot);
-			queueUpdate(new DeleteMember(slot));
+			boolean found = false;
+			for (int slot=0;slot<members.size();slot++) {
+				if (members.get(slot).getUserHash() == userhash) {
+					members.remove(slot);
+					getDelta().deleteMember(slot);
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				throw new NullPointerException(userhash+" is not in "+clanName);
+			}
 			findClanOwner();
 		}
 		if (linkedChannel != null) {
@@ -648,9 +647,9 @@ public class ClanSettings {
 	
 	private void setRank (ClanMember member, ClanRank rank) {
 		member.setRank(rank);
-		synchronized (updateQueue) {
+		synchronized (members) {
 			int slot = members.indexOf(member);
-			queueUpdate(new UpdateRank(slot, rank));
+			getDelta().setMemberRank(slot, rank.getID());
 		}
 		if (linkedChannel != null) {
 			linkedChannel.updateUserRank(member.getUserHash(), rank.getID());
@@ -666,11 +665,11 @@ public class ClanSettings {
 		setMemberVarBit(member, value, start, end);
 	}
 	
-	private void setMemberVarBit (ClanMember member, int value, int start, int end) throws VarBitOverflowException {
-		member.setVarMemberBit(value, start, end);
-		synchronized (updateQueue) {
+	private void setMemberVarBit (ClanMember member, int value, int startBit, int endBit) throws VarBitOverflowException {
+		member.setVarMemberBit(value, startBit, endBit);
+		synchronized (members) {
 			int slot = members.indexOf(member);
-			queueUpdate(new SetMemberVarBit(slot, value, start, end));
+			getDelta().setMemberExtraInfo(slot, value, startBit, endBit);
 		}
 	}
 	
@@ -704,14 +703,18 @@ public class ClanSettings {
 				return;
 			}
 		}
-		synchronized (updateQueue) {
-			queueUpdate(new SetVarBitValue(varBit.baseVarKey, value, varBit.getStartBit(), varBit.getEndBit()));
-		}
+		getDelta().setExtraSettingVarbit(varBit, value);
 	}
 	
 	protected void setVarValue (int key, Object value) {
-		SetVarValue deltaNode = new SetVarValue(key, value);
-		if (deltaNode.getTypeID() == -1) {
+		
+		if (value instanceof Integer) {
+			getDelta().setExtraSettingInt(key, ((Integer) value).intValue());
+		} else if (value instanceof Long) {
+			getDelta().setExtraSettingLong(key, ((Long) value).longValue());
+		} else if (value instanceof String) {
+			getDelta().setExtraSettingString(key, (String) value);
+		} else {
 			throw new RuntimeException("Invalid value type");
 		}
 		synchronized (varValues) {
@@ -723,9 +726,6 @@ public class ClanSettings {
 				varValues.remove(key);
 			}
 			varValues.put(key, value);
-		}
-		synchronized (updateQueue) {
-			queueUpdate(deltaNode);
 		}
 	}
 	
@@ -754,50 +754,6 @@ public class ClanSettings {
 	public Map<Integer, Object> getPermanantVars () {
 		return varValues;		
 	}
-	
-	/*protected boolean addPermission (ClanRank group, ClanPermission permission) {
-		if (!permissions.containsKey(group)) {
-			return false;
-		}
-		if (permissions.get(group).contains(permission)) {
-			return false;
-		} else {
-			VarBitType varBit = permission.getVarBit(group);
-			if (varBit == null) {
-				return false;
-			}
-			try {
-				setClanSettingsVarBit(varBit, 1);
-			} catch (VarBitOverflowException e) {
-				e.printStackTrace();
-				return false;
-			}
-			permissions.get(group).add(permission);
-			return true;
-		}
-	}
-	
-	protected boolean removePermission (ClanRank group, ClanPermission permission) {
-		if (!permissions.containsKey(group)) {
-			return false;
-		}
-		if (!permissions.get(group).contains(permission)) {
-			return false;
-		} else {
-			VarBitType varBit = permission.getVarBit(group);
-			if (varBit == null) {
-				return false;
-			}
-			try {
-				setClanSettingsVarBit(varBit, 0);
-			} catch (VarBitOverflowException e) {
-				e.printStackTrace();
-				return false;
-			}
-			permissions.get(group).remove(permission);
-			return true;
-		}
-	}*/
 	
 	@Override
 	public boolean equals (Object anObject) {

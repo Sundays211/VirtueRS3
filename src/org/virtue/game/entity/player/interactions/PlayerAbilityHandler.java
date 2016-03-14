@@ -34,7 +34,7 @@ import org.virtue.game.entity.player.Player;
  * @author Sundays211
  * @since 31/01/2015
  */
-public class PlayerAbilityHandler implements WidgetOnPlayerHandler {
+public class PlayerAbilityHandler implements PlayerTargetHandler {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler#getInterfaceIDs()

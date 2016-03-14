@@ -19,12 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.clans;
+package org.virtue.game.entity.player.interactions;
 
 import org.virtue.Virtue;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.interactions.PlayerOptionHandler;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**

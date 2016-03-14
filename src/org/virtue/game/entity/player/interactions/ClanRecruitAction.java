@@ -19,15 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.content.clans;
+package org.virtue.game.entity.player.interactions;
 
 import org.virtue.Virtue;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.chat.ChannelType;
+import org.virtue.game.content.clans.ClanRank;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 
@@ -39,7 +39,7 @@ import org.virtue.network.event.context.impl.out.MessageEventContext;
  * @author Sundays211
  * @since 19/01/2015
  */
-public class ClanRecruitAction implements WidgetOnPlayerHandler {
+public class ClanRecruitAction implements PlayerTargetHandler {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.player.interactions.WidgetOnPlayerHandler#getInterfaceIDs()
