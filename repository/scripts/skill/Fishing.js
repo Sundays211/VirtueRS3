@@ -117,7 +117,7 @@ function startFish (player, npc) {
 	}
 	api.runAnimation(player, tool.anim);
 	api.sendFilterMessage(player, "You cast out your " + api.getItemName(tool.itemID) +"...");
-	api.pausePlayer(player, delay+10);
+	api.freezeEntity(player, delay+10);
 	var delay = getDelay(player, spots, tool);//Calculates the time taken to catch a fish
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 			process : function (player) {

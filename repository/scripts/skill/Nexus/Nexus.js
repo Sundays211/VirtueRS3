@@ -47,7 +47,7 @@ function startNexusCollection(player, object, option) {
 		return false;//Cannot charm as an action is already in process
 	}
 	var delay = 10;
-	api.pausePlayer(player, delay+1);
+	api.freezeEntity(player, delay+1);
 	api.sendFilterMessage(player, "You collect from the Nexus and receive prayer experience as a reward...");
 	api.runAnimation(player, 20174);
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
@@ -73,7 +73,7 @@ function startNexusPurification(player, object, option) {
 		return false;//Cannot charm as an action is already in process
 	}
 	var delay = 5;
-	api.pausePlayer(player, delay+1);
+	api.freezeEntity(player, delay+1);
 	api.sendFilterMessage(player, "You purify the bowls and receive prayer experience...");
 	api.runAnimation(player, 20174);
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	

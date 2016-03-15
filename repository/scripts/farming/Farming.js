@@ -297,7 +297,7 @@ FarmingPatch.prototype = {
 		prune : function (player, newStatus) {
 			var delay = 2;
 			api.runAnimation(player, 11088);
-			api.pausePlayer(player, 3);
+			api.freezeEntity(player, 3);
 			var that = this;
 			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
@@ -840,7 +840,7 @@ var Farming = {
 		prune : function (player, patchID, patchType, newStatus) {
 			var delay = 2;
 			api.runAnimation(player, 11088);
-			api.pausePlayer(player, 3);
+			api.freezeEntity(player, 3);
 			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 				process : function (player) {
 					if (delay <= 0) {
@@ -870,7 +870,7 @@ var Farming = {
 					api.delCarriedItem(player, item.getID(), 1);
 					var delay = 2;
 					//api.runAnimation(player, 6584);
-					api.pausePlayer(player, 3);
+					api.freezeEntity(player, 3);
 					var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 						process : function (player) {
 							if (delay <= 0) {
@@ -892,7 +892,7 @@ var Farming = {
 					api.delCarriedItem(player, item.getID(), patchType.seedCount);
 					var delay = 2;
 					api.runAnimation(player, 24926);
-					api.pausePlayer(player, 3);
+					api.freezeEntity(player, 3);
 					var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
 						process : function (player) {
 							if (delay <= 0) {

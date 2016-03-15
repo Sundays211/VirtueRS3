@@ -331,7 +331,7 @@ function startFood (player, item, slot) {
 		return;
 	}
 	var delay = 2;
-	api.pausePlayer(player, delay+1);
+	api.freezeEntity(player, delay+1);
 	if (food.healText != null) {
 		api.sendFilterMessage(player, food.healText);		
 	} else {

@@ -41,7 +41,7 @@ function startPotion (player, item, slot) {
 		return;
 	}
 	var delay = 2;
-	api.pausePlayer(player, delay+1);
+	api.freezeEntity(player, delay+1);
 	if (potion.potionText != null) {
 		api.sendFilterMessage(player, potion.potionText);		
 	} else {

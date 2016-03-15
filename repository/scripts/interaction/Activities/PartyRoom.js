@@ -69,7 +69,7 @@ function startParty (player, npc) {
 	npc.setCanRespawn(false);
 	npc.setExists(false);
 	giveRandomItem(player, npc);
-	api.pausePlayer(player, 2);
+	api.freezeEntity(player, 2);
 }
 
 function giveRandomItem (player, npc) {
@@ -85,11 +85,11 @@ function giveRandomItem (player, npc) {
 		api.runAnimation(player, 862);
 		api.setSpotAnim(player, 1, 199);
 		api.addCarriedItem(player, 1050, 1);
-		api.pausePlayer(player, 2);
+		api.freezeEntity(player, 2);
 	} else {
 		api.sendMessage(player, "<col=0099CC>You didn't get the big prize, but you get 1k Coins!</col>");
 		api.addCarriedItem(player, 995, 1000);
-		api.pausePlayer(player, 2);
+		api.freezeEntity(player, 2);
 	}
 }
 

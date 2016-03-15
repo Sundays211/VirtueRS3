@@ -1251,10 +1251,10 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#pausePlayer(org.virtue.game.entity.player.Player, int)
+	 * @see org.virtue.engine.script.ScriptAPI#pausePlayer(org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public void pausePlayer(Player player, int duration) {
+	public void pausePlayer(Player player) {
 		player.setPaused(true);
 	}
 	

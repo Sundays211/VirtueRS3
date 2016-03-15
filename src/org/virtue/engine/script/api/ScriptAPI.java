@@ -712,11 +712,11 @@ public interface ScriptAPI {
 	public void setAction (Player player, PlayerActionHandler action);
 	
 	/**
-	 * Prevents the player from moving for a number of ticks
+	 * Stops the current movement for the player until unpaused. 
+	 * The player will automatically unpause once they proceed in any open dialogs.
 	 * @param player The player
-	 * @param duration The number of ticks to pause for
 	 */
-	public void pausePlayer (Player player, int duration);
+	public void pausePlayer (Player player);
 	
 	/**
 	 * Prevents the entity from moving for a number of ticks

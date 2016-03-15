@@ -197,7 +197,7 @@ var Thieving = {
 			}
 			api.runAnimation(player, 881);
 			var delay = this.getStallDelay(player, stall);
-			api.pausePlayer(player, delay + 1);
+			api.freezeEntity(player, delay + 1);
 			var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 				process : function(player) {
 					api.runAnimation(player, 881);
@@ -258,11 +258,11 @@ var Thieving = {
 				api.faceEntity(npc, player);
 				api.runAnimation(player, 834);
 				api.setSpotAnim(player, 1, 80);
-				api.pausePlayer(player, 5);//TODO: What is the correct stun time?
+				api.freezeEntity(player, 5);//TODO: What is the correct stun time?
 			} else {
 				api.runAnimation(player, 881);
 				var delay = this.getThievingDelay(player, thieving);
-				api.pausePlayer(player, delay + 1);
+				api.freezeEntity(player, delay + 1);
 				var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 					process : function(player) {
 						api.runAnimation(player, 881);

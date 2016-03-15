@@ -51,7 +51,7 @@ function runVarrockTele (player) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
-				api.pausePlayer(player, 7);
+				api.freezeEntity(player, 7);
 				api.runAnimation(player, 9597);
 				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
@@ -77,7 +77,7 @@ function runFallyTele (player) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
-				api.pausePlayer(player, 7);
+				api.freezeEntity(player, 7);
 				api.runAnimation(player, 9597);
 				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
@@ -103,7 +103,7 @@ function runCammyTele (player) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
-				api.pausePlayer(player, 7);
+				api.freezeEntity(player, 7);
 				api.runAnimation(player, 9597);
 				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
@@ -129,7 +129,7 @@ function runLummyTele (player) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
-				api.pausePlayer(player, 7);
+				api.freezeEntity(player, 7);
 				api.runAnimation(player, 9597);
 				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
@@ -155,7 +155,7 @@ function runWatchTowerTele (player) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
-				api.pausePlayer(player, 7);
+				api.freezeEntity(player, 7);
 				api.runAnimation(player, 9597);
 				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player
@@ -181,7 +181,7 @@ function runGodwarsTele (player) {
 	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 		process : function (player) {
 			if (frame === 0) {
-				api.pausePlayer(player, 7);
+				api.freezeEntity(player, 7);
 				api.runAnimation(player, 9597);
 				api.setSpotAnim(player, 1, 1680);
 			} else if (frame == 1) {//Actually moving the player

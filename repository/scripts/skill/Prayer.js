@@ -145,7 +145,7 @@ var Prayer = {
 				return true;
 			}
 			var delay = 3;
-			api.pausePlayer(player, delay+1);
+			api.freezeEntity(player, delay+1);
 			api.sendMessage(player, "You dig a hole in the ground...", MesType.GAME_SPAM);
 			api.runAnimation(player, 827);
 			api.delCarriedItem(player, objTypeId, 1, slot);
