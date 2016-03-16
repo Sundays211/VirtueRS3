@@ -66,6 +66,7 @@ var QuestListListener = Java.extend(Java.type('org.virtue.engine.script.listener
 					return;
 				}
 				return;
+				//3936
 			default:
 				api.sendMessage(player, "Unhandled quest list button: comp="+args.component+", slot="+args.slot+", button="+args.button)
 				return;

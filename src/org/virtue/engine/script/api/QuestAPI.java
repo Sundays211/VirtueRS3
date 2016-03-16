@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,15 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.config.questtype;
+package org.virtue.engine.script.api;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.virtue.cache.Archive;
-import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.def.ConfigDecoder;
-import org.virtue.config.Js5ConfigGroup;
-import org.virtue.game.entity.player.var.VarDomain;
+import org.virtue.config.questtype.QuestType;
+import org.virtue.game.entity.player.Player;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,39 +30,36 @@ import org.virtue.game.entity.player.var.VarDomain;
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 21/11/2015
+ * @since 16/03/2016
  */
-public class QuestTypeList extends ConfigDecoder<QuestType> {
+public interface QuestAPI {
 
+	public boolean isStarted (Player player, int questId);
+	
+	public boolean isFinished (Player player, int questId);
+	
+	public boolean meetsAllRequirements (Player player, int questId);
+	
 	/**
-	 * The {@link Logger} instance
+	 * Gets the paramater of the specified {@link QuestType}
+	 * @param questId The ID of the quest to lookup
+	 * @param paramType The param to get
+	 * @return The quest param value or default value if the quest does not contain the given param
+	 * @throws IllegalArgumentException If an invalid questId or paramType is specified
 	 */
-	private static Logger logger = LoggerFactory.getLogger(QuestTypeList.class);
+	public Object getParam(int questId, int paramType) throws IllegalArgumentException;
 	
-	private static QuestTypeList instance;
+	/**
+	 * Gets the number of quest points awarded on completion of the specified quest
+	 * @param questId The quest ID
+	 * @return The number of reward points
+	 */
+	public int getPoints (int questId);
 	
-	public static void init (Archive archive, ReferenceTable configTable) {
-		instance = new QuestTypeList(configTable, archive);
-		logger.info("Found "+instance.getCount()+" quest definitions.");
-	}
-	
-	public static QuestTypeList getInstance () {
-		return instance;
-	}
-
-	private QuestTypeList(ReferenceTable configTable, Archive archive) {
-		super(configTable, archive, Js5ConfigGroup.QUESTTYPE, QuestType.class);
-	}
-
-    public int getTotalQuestPoints(VarDomain varDomain) {
-        int points = 0;
-        for (int id = 0; id < getCount(); id++) {
-            QuestType quest = list(id);
-            if (quest.isFinished(varDomain)) {
-            	points += quest.questPoints;
-            }
-        }
-        return points;
-    }
-
+	/**
+	 * Gets the number of quest points held by the specified player
+	 * @param player The player
+	 * @return The number of quest points
+	 */
+	public int getTotalPoints (Player player);
 }

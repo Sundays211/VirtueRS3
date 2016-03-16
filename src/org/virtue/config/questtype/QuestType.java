@@ -107,7 +107,7 @@ public class QuestType implements ConfigType {
         return value.intValue();
     }
 
-    public boolean isCompleted(VarDomain varDomain) {
+    public boolean isFinished(VarDomain varDomain) {
         if (null != progressVarps) {
             for (int slot = 0; slot < progressVarps.length; slot++) {
                 if (varDomain.getVarValueInt(progressVarps[slot][0]) >= progressVarps[slot][2]) {
@@ -126,7 +126,7 @@ public class QuestType implements ConfigType {
         return false;
     }
 
-    public boolean meetsRequirements(VarDomain varDomain, int[] is) {
+    public boolean meetsAllRequirements(VarDomain varDomain, int[] is) {
         if (myList.getTotalQuestPoints(varDomain) < questPointRequirement) {
             return false;
         }
@@ -140,7 +140,7 @@ public class QuestType implements ConfigType {
         }*/
         if (questRequirements != null) {
             for (int slot = 0; slot < questRequirements.length; slot++) {
-                if (!myList.list(questRequirements[slot]).isCompleted(varDomain)) {
+                if (!myList.list(questRequirements[slot]).isFinished(varDomain)) {
                     return false;
                 }
             }
@@ -210,7 +210,7 @@ public class QuestType implements ConfigType {
         if (questRequirements == null || slot < 0 || slot >= questRequirements.length) {
             return false;
         }
-        if (!myList.list(questRequirements[slot]).isCompleted(varDomain)) {
+        if (!myList.list(questRequirements[slot]).isFinished(varDomain)) {
             return false;
         }
         return true;
