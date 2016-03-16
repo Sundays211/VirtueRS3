@@ -138,7 +138,7 @@ public class ClanManager {
 			return false;
 		} else {
 			long clanHash = index.addClan(name);
-			ClanSettings settings = new ClanSettings(clanHash, 100, name);
+			ClanSettings settings = new ClanSettings(clanHash, name);
 			settingsManager.addClan(settings);
 			owner.setAffinedClanHash(clanHash);
 			settings.addMember(owner);

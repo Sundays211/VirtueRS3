@@ -85,6 +85,7 @@ public class ClanSettings {
 		public String clanName = "";
 		public long clanHash = 0L;
 		public int updateNumber = 0;
+		public int creationTime = 0;
 		public boolean allowNonMembers = true;
 		public Map<Integer, Object> varValues = new HashMap<Integer, Object>();
 	}
@@ -93,15 +94,17 @@ public class ClanSettings {
 	
 	private ClanSettingsDelta delta;
 	
+	private int creationTimeMins;
+	
 	private String clanName;
 	
-	private ClanRank minTalkRank = ClanRank.RECRUIT;
+	private ClanRank rankTalk = ClanRank.RECRUIT;
 	
-	private ClanRank minKickRank = ClanRank.RECRUIT;
+	private ClanRank rankKick = ClanRank.RECRUIT;
 	
 	//private ClanRank minLootShareRank = ClanRank.RECRUIT;
 	
-	private boolean allowNonMembers = true;
+	private boolean allowUnaffined = true;
 	
 	private transient ClanChannel linkedChannel;
 	
@@ -126,18 +129,21 @@ public class ClanSettings {
 	
 	private boolean needsSave;
 	
-	public ClanSettings (long clanHash, int updateNumber, String clanName) {
+	public ClanSettings (long clanHash, String clanName) {
 		this.clanHash = clanHash;
-		this.updateNumber = updateNumber;
+		this.creationTimeMins = (int) System.currentTimeMillis() / (1000*60);
+		this.updateNumber = 0;
 		this.clanName = clanName;
 		this.needsSave = true;
 	}
 	
 	public ClanSettings (Data data) {
-		this(data.clanHash, data.updateNumber, data.clanName);
-		this.allowNonMembers = data.allowNonMembers;
-		this.minTalkRank = data.minTalkRank;
-		this.minKickRank = data.minKickRank;
+		this(data.clanHash, data.clanName);
+		this.updateNumber = data.updateNumber;
+		this.creationTimeMins = data.creationTime;
+		this.allowUnaffined = data.allowNonMembers;
+		this.rankTalk = data.minTalkRank;
+		this.rankKick = data.minKickRank;
 		
 		for (ClanMember member : data.members) {
 			AccountInfo info = Virtue.getInstance().getAccountIndex().lookupByHash(member.getUserHash());
@@ -202,7 +208,7 @@ public class ClanSettings {
 		
 		ClanSettingsDeltaEventContext affinedPacket = new ClanSettingsDeltaEventContext(true, updateDelta);
 		ClanSettingsDeltaEventContext listedPacket = new ClanSettingsDeltaEventContext(false, updateDelta);
-		synchronized (onlineMembers) {
+		synchronized (this) {
 			for (SocialUser u : onlineMembers) {
 				u.sendClanSettingsDelta(affinedPacket);
 				u.clanDataUpdated();
@@ -224,7 +230,7 @@ public class ClanSettings {
 		ClanSettingsEventContext.Member[] entries;
 		String[] banEntries;
 		ClanSettingsEventContext.Variable[] varEntries;
-		synchronized (onlineMembers) {			
+		synchronized (this) {			
 			for (SocialUser u : initQueue) {
 				if (u.getAffinedClanHash() == clanHash) {
 					onlineMembers.add(u);
@@ -233,20 +239,20 @@ public class ClanSettings {
 				}
 			}
 		}
-		synchronized (members) {
+		synchronized (this) {
 			entries = new ClanSettingsEventContext.Member[members.size()];
 			for (int i=0;i<members.size();i++) {
 				ClanMember u = members.get(i);
 				entries[i] = new ClanSettingsEventContext.Member(u.getDisplayName(), u.getRank(), 0, u.getJoinDay());
 			}
 		}
-		synchronized (bans) {
+		synchronized (this) {
 			banEntries = new String[bans.size()];
 			for (int i=0;i<bans.size();i++) {
 				banEntries[i] = bans.get(i).getDisplayName();
 			}
 		}
-		synchronized (varValues) {
+		synchronized (this) {
 			varEntries = new ClanSettingsEventContext.Variable[varValues.size()];
 			int i=0;
 			for (Map.Entry<Integer, Object> setting : varValues.entrySet()) {
@@ -254,9 +260,9 @@ public class ClanSettings {
 			}
 		}
 		ClanSettingsEventContext memberPacket = new ClanSettingsEventContext(false, clanName, entries, banEntries,
-				updateNum, allowNonMembers, minTalkRank, minKickRank, varEntries);
+				updateNum, allowUnaffined, rankTalk, rankKick, varEntries);
 		ClanSettingsEventContext guestPacket = new ClanSettingsEventContext(true, clanName, entries, banEntries,
-				updateNum, allowNonMembers, minTalkRank, minKickRank, varEntries);
+				updateNum, allowUnaffined, rankTalk, rankKick, varEntries);
 		SocialUser user;
 		while ((user = initQueue.poll()) != null) {
 			if (user.getAffinedClanHash() == clanHash) {
@@ -268,7 +274,7 @@ public class ClanSettings {
 	}
 	
 	protected void registerOnlineMember (SocialUser user) {
-		synchronized(initQueue) {
+		synchronized(this) {
 			if (!initQueue.contains(user)) {
 				initQueue.offer(user);
 			}
@@ -276,7 +282,7 @@ public class ClanSettings {
 	}
 	
 	protected void deregisterOnlineMember (SocialUser user) {
-		synchronized(initQueue) {
+		synchronized(this) {
 			if (initQueue.contains(user)) {
 				initQueue.remove(user);
 			} else if (onlineGuests.contains(user)) {
@@ -369,27 +375,33 @@ public class ClanSettings {
 	
 	protected void setName (String name) {
 		this.clanName = name;
-		updateChannelDetails();
+		getDelta().setClanName(name, 0);
+		if (linkedChannel != null) {
+			linkedChannel.updateBaseSettings(clanName, allowUnaffined, rankTalk.getID(), rankKick.getID());
+		}
 	}
 	
 	protected void setAllowNonMembers (boolean allowNonMembers) {
-		this.allowNonMembers = allowNonMembers;
+		this.allowUnaffined = allowNonMembers;
 		updateChannelDetails();
 	}
 	
 	protected void setMinTalkRank (ClanRank minTalkRank) {
-		this.minTalkRank = minTalkRank;
+		this.rankTalk = minTalkRank;
 		updateChannelDetails();
 	}
 	
 	protected void setMinKickRank (ClanRank minKickRank) {
-		this.minKickRank = minKickRank;
+		this.rankKick = minKickRank;
 		updateChannelDetails();
 	}
 	
 	private void updateChannelDetails () {
+		synchronized (this) {
+			getDelta().updateBaseSettings(allowUnaffined, rankTalk.getID(), rankKick.getID(), (byte) 0, (byte) 0);
+		}
 		if (linkedChannel != null) {
-			linkedChannel.updateBaseSettings(clanName, allowNonMembers, minTalkRank.getID(), minKickRank.getID());
+			linkedChannel.updateBaseSettings(clanName, allowUnaffined, rankTalk.getID(), rankKick.getID());
 		}
 	}
 	
@@ -410,6 +422,14 @@ public class ClanSettings {
 	}
 	
 	/**
+	 * Returns the time at which the clan was created, in minutes since the unix epoch
+	 * @return The creation time, in minutes since the unix epoch
+	 */
+	public int getCreationTimeMinutes () {
+		return creationTimeMins;
+	}
+	
+	/**
 	 * Returns the name of the clan
 	 * @return	The clan name
 	 */
@@ -422,7 +442,7 @@ public class ClanSettings {
 	 * @return	The minimum talk rank
 	 */
 	public ClanRank getMinTalk () {
-		return minTalkRank;
+		return rankTalk;
 	}
 	
 	/**
@@ -430,7 +450,7 @@ public class ClanSettings {
 	 * @return	The minimum kick rank
 	 */
 	public ClanRank getMinKick () {
-		return minKickRank;
+		return rankKick;
 	}
 	
 	/**
@@ -438,7 +458,7 @@ public class ClanSettings {
 	 * @return	True if guests are allowed to join, false otherwise
 	 */
 	public boolean allowNonMembers () {
-		return allowNonMembers;
+		return allowUnaffined;
 	}
 	
 	/**
@@ -490,14 +510,14 @@ public class ClanSettings {
 		ClanBan ban = new ClanBan(userhash);
 		AccountInfo info = Virtue.getInstance().getAccountIndex().lookupByHash(userhash);
 		ban.setDisplayName(info.getDisplayName());
-		synchronized (bans) {
+		synchronized (this) {
 			bans.add(ban);
 			getDelta().addBanned(userhash, info.getDisplayName());
 		}
 	}
 	
 	protected void removeBan (long userhash) {
-		synchronized (bans) {
+		synchronized (this) {
 			for (int slot=0;slot<bans.size();slot++) {
 				if (bans.get(slot).getUserHash() == userhash) {
 					bans.remove(slot);
@@ -561,23 +581,6 @@ public class ClanSettings {
 		return replacementOwnerSlot;
 	}
 	
-	/*public void sendPermissionInfo (SocialUserAPI user, ClanRank group) {
-		EnumSet<ClanPermission> groupPermissions = permissions.get(group);
-		if (groupPermissions == null) {
-			loadPermissions();
-		} 
-		if (groupPermissions != null) {
-			//System.out.println("Permissions for group "+group+": "+groupPermissions);
-			user.sendPermissionGroup(group, groupPermissions);
-		} else {
-			System.err.println("Permissions not found for group "+group);
-		}
-	}
-	
-	public void sendMemberInfo (SocialUserAPI user, int index) {
-		user.sendClanMemberInfo(members.get(index));
-	}*/
-	
 	/**
 	 * Adds the provided player to the clan. 
 	 * Note that setting the player's clan within the player data and sending the clan channel must be handled separately
@@ -594,12 +597,12 @@ public class ClanSettings {
 		} else {
 			newMember.setDisplayName(info.getDisplayName());
 		}
-		synchronized (members) {
+		synchronized (this) {
 			members.add(newMember);
 			findClanOwner();
+			getDelta().addMember(player.getHash(), newMember.getDisplayName(), newMember.getJoinDay());
 		}
 		
-		getDelta().addMember(player.getHash(), newMember.getDisplayName(), newMember.getJoinDay());
 		if (linkedChannel != null) {
 			linkedChannel.updateUserRank(player.getHash(), getRank(player.getHash()).getID());
 		}
@@ -611,7 +614,7 @@ public class ClanSettings {
 	 * @throws NullPointerException	 if the player is not in the clan.
 	 */
 	protected void removeMember (long userhash) throws NullPointerException {
-		synchronized (members) {
+		synchronized (this) {
 			boolean found = false;
 			for (int slot=0;slot<members.size();slot++) {
 				if (members.get(slot).getUserHash() == userhash) {
@@ -647,7 +650,7 @@ public class ClanSettings {
 	
 	private void setRank (ClanMember member, ClanRank rank) {
 		member.setRank(rank);
-		synchronized (members) {
+		synchronized (this) {
 			int slot = members.indexOf(member);
 			getDelta().setMemberRank(slot, rank.getID());
 		}
@@ -667,33 +670,17 @@ public class ClanSettings {
 	
 	private void setMemberVarBit (ClanMember member, int value, int startBit, int endBit) throws VarBitOverflowException {
 		member.setVarMemberBit(value, startBit, endBit);
-		synchronized (members) {
+		synchronized (this) {
 			int slot = members.indexOf(member);
 			getDelta().setMemberExtraInfo(slot, value, startBit, endBit);
 		}
 	}
 	
-	/*protected void setOwnerRank (ClanRank rank) throws NullPointerException {
-		ClanMember member = getOwner();
-		setRank(member, rank);
-		ClanMember newOwner;
-		synchronized (members) {
-			newOwner = getOwner();
-			synchronized (updateQueue) {
-				queueUpdate(new UpdateRank(ownerSlot, rank));
-			}
-		}
-		if (linkedChannel != null && newOwner != null) {
-			linkedChannel.updateUser(newOwner.getProtocolName());
-		}
-		
-	}*/
-	
 	protected void setVarBitValue (VarBitType varBit, int value) throws VarBitOverflowException {
 		if (!varBit.getBaseVarDomain().equals(VarDomainType.CLAN_SETTING)) {
 			throw new IllegalArgumentException("Invalid domain: "+varBit.getBaseVarDomain());
 		}
-		synchronized (varValues) {
+		synchronized (this) {
 			Object prevValue = varValues.get(varBit.baseVarKey);		
 			if (prevValue == null) {
 				varValues.put(varBit.baseVarKey, varBit.setVarbitValue(0, value));
@@ -702,22 +689,22 @@ public class ClanSettings {
 			} else {
 				return;
 			}
+			getDelta().setExtraSettingVarbit(varBit, value);
 		}
-		getDelta().setExtraSettingVarbit(varBit, value);
 	}
 	
-	protected void setVarValue (int key, Object value) {
-		
-		if (value instanceof Integer) {
-			getDelta().setExtraSettingInt(key, ((Integer) value).intValue());
-		} else if (value instanceof Long) {
-			getDelta().setExtraSettingLong(key, ((Long) value).longValue());
-		} else if (value instanceof String) {
-			getDelta().setExtraSettingString(key, (String) value);
-		} else {
-			throw new RuntimeException("Invalid value type");
-		}
-		synchronized (varValues) {
+	protected void setVarValue (int key, Object value) {		
+		synchronized (this) {
+			if (value instanceof Integer) {
+				getDelta().setExtraSettingInt(key, ((Integer) value).intValue());
+			} else if (value instanceof Long) {
+				getDelta().setExtraSettingLong(key, ((Long) value).longValue());
+			} else if (value instanceof String) {
+				getDelta().setExtraSettingString(key, (String) value);
+			} else {
+				throw new RuntimeException("Invalid value type");
+			}
+			
 			if (varValues.containsKey(key)) {
 				Object oldValue = varValues.get(key);
 				if (oldValue.equals(value)) {

@@ -387,6 +387,13 @@ public class ClanSettingsDelta {
 		addDelta(entry);
 	}
 	
+	protected void setClanName (String name, int dateChanged) {
+		SetClanName entry = new SetClanName();
+		entry.name = name;
+		entry.changeDate = dateChanged;
+		addDelta(entry);		
+	}
+	
 	private void addDelta (DeltaEntry entry) {
 		synchronized (updates) {
 			updates.offer(entry);
