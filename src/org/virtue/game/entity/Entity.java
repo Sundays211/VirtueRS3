@@ -21,10 +21,6 @@
  */
 package org.virtue.game.entity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
@@ -47,6 +43,10 @@ import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.UpdateBlockQueue;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.ref.HeadIcons;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -464,6 +464,14 @@ public abstract class Entity extends Node {
 	 */
 	public void setFreezeDuration(int freezeDuration) {
 		this.freezeDuration = freezeDuration;
+	}
+
+	/**
+	 *
+	 * @return the number of game cycles remaining of the entity's freeze
+     */
+	public int getFreezeDuration() {
+		return freezeDuration;
 	}
 	
 	/**

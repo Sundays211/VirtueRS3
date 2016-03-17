@@ -1263,6 +1263,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 		entity.setFreezeDuration(duration);
 	}
 
+	@Override
+	public boolean isFrozen(Entity entity){
+		return entity.getFreezeDuration() > 0;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#isPaused(org.virtue.game.entity.player.Player)
 	 */
