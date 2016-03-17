@@ -23,119 +23,43 @@
 /**
  * @author Kayla
  * @since 01/16/2015
+ * @author rsJuuuuu
  */
 var BACKPACK = 93;
 
-var Thieving = {
+var PickpocketNPCs = {
 	MAN : {
 		level : 1,
-		npcID : 1,
 		xp : 8,
-		itemID : 995,
-		itemAmount : 20,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
+		items : [[995,3]],
+		stunTime : 5, //in seconds
+		stunDamage : 10, //in lp (990 max)
+		multiples: [[11,1],[21,11],[31,21]] //double,triple,quadruple (thief,agility)
 	},
 	WOMEN : {
 		level : 1,
-		npcID : 4,
-		xp : 8,
-		itemID : 995,
-		itemAmount : 20,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
+        xp : 8,
+        items : [995,3],
+        stunTime : 5, //in seconds
+        stunDamage : 10,
+        multiples: [[11,1],[21,11],[31,21]] //double,triple,quadruple (thief,agility)
 	},
 	FARMER : {
 		level : 10,
-		npcID : 1757,
 		xp : 14.5,
-		itemID : 995,
-		itemAmount : 9,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
+		items : [[995,9],[5318]],
+		stunTime : 5,
+		stunDamage : 10,
+		multiples : [[20,10],[30,20],[40,30]]
 	},
-	HAM_MEMBER_FEMALE : {
-		level : 15,
-		npcID : 1715,
-		xp : 18.5,
-		itemID : 995,
-		itemAmount : 250,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
-	},
-	HAM_MEMBER_MALE : {
-		level : 20,
-		npcID : 1714,
-		xp : 22.5,
-		itemID : 995,
-		itemAmount : 100,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
-	},
-	WARRIOR : {
-		level : 25,
-		npcID : 15,
-		xp : 18.5,
-		itemID : 995,
-		itemAmount : 250,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
-	},
-	ROGUE : {
-		level : 32,
-		npcID : 187,
-		xp : 35.5,
-		itemID : 995,
-		itemAmount : 400,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
-	},
-	CAVE_GOBLIN : {
-		level : 36,
-		npcID : 5752,
-		xp : 40,
-		itemID : 995,
-		itemAmount : 250,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
-	},
-	MASTER_FARMER : {
-		level : 38,
-		npcID : 2234,
-		xp : 40,
-		itemID : 995,
-		itemAmount : 250,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
-	},
+	//TODO add rest
 	GUARD : {
 		level : 40,
-		npcID : 9,
 		xp : 46.5,
-		itemID : 995,
-		itemAmount : 250,
-		baseTime : 3,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
+		items : [[995,30]],
+		stunTime : 5,
+		stunDamage : 20,
+		multiples : [[50,40],[60,50],[70,60]]
 	}
 
 };
@@ -148,14 +72,15 @@ var Stall = {
 		itemID : 995,
 		itemAmount : 20,
 		baseTime : 4,
-		randomTime : 0.2,
-		respawnDelay : 8,
-		randomLife : 0
 	}
 };
 
 var PickpocketListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function(event, npcTypeId, args) {
+	    if (api.isPaused(args.player) || api.isFrozen(args.player)) {
+	        api.sendMessage(args.player, "You can't do that while stunned.");
+	        return false;
+        }
 		Thieving.startPickpocket(args.player, args.npc);
 	}
 });
@@ -234,11 +159,7 @@ var Thieving = {
 		},
 		
 		startPickpocket : function (player, npc) {
-			print(api.getNpcType(npc.getID()).name + "\n");
 			var thieving = this.forNPC(npc.getID());
-			if (api.isPaused(player)) {
-				return false;
-			}
 			if (npc == null) {
 				return;
 			}
@@ -246,22 +167,24 @@ var Thieving = {
 			if (api.getStatLevel(player, Stat.THIEVING) < thieving.level) {
 				api.sendMessage(player, "You need a thieving level of "
 						+ thieving.level + " to steal from this "
-						+ api.getNpcType(thieving.npcID).name + ".");
+						+ npc.name + ".");
 				return;
 			}
 			if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 				api.sendMessage(player, "Not enough space in your inventory.");
 				return;
 			}
-			if (Math.random() <= thieving.randomTime) {
-				player.lock(5);
-				api.faceEntity(npc, player);
-				api.runAnimation(player, 834);
+			if (Math.random() <= Thieving.getThievingChance(thieving)) {
+			    api.sendMessage(player, "You fail to pick the " + npc.name.toLowerCase() + "'s pocket.")
+				api.freezeEntity(player, thieving.stunTime/0.6);
+				api.sendMessage(player, "You've been stunned.");
 				api.setSpotAnim(player, 1, 80);
-				api.freezeEntity(player, 5);//TODO: What is the correct stun time?
+				api.runAnimation(player, 834);
+				//TODO add damage
+				api.entitySay(npc, "What do you think you're doing?")
 			} else {
 				api.runAnimation(player, 881);
-				var delay = this.getThievingDelay(player, thieving);
+				var delay = 3
 				api.freezeEntity(player, delay + 1);
 				var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 					process : function(player) {
@@ -281,42 +204,49 @@ var Thieving = {
 				player.setAction(new Action());
 			}
 		},
-		
+
 		forThievingItem : function (player, thieving, npc) {
+		//TODO implement multiples
 			api.addExperience(player, Stat.THIEVING, thieving.xp, true);
-			api.addCarriedItem(player, thieving.itemID, thieving.itemAmount);
-			api.sendFilterMessage(player, "You successfully stole from the "
-					+ api.getNpcType(thieving.npcID).name + ".");
+			var rand = Math.round(Math.random()*(thieving.items.length-1));
+			print(thieving.items[0]);
+			print(rand);
+			if(thieving.items[rand][1] === null)
+			    api.addCarriedItem(player, thieving.items[rand][0], 1);
+			else
+			    api.addCarriedItem(player, thieving.items[rand][0], thieving.items[rand][1]);
+			api.sendFilterMessage(player, "You pick the "
+					+ npc.name.toLowerCase() + "'s pocket.");
 		},
-		
-		getThievingDelay : function (player, thieving) {
-			return thieving.baseTime;
+
+		getThievingChance : function (player, thieving) {
+		    return 0.5; //TODO Figure out this
 		},
 		
 		forNPC : function (id) {
 			switch (id) {
 			case 1:
-				return Thieving.MAN;
+				return PickpocketNPCs.MAN;
 			case 4:
-				return Thieving.WOMEN;
+				return PickpocketNPCs.WOMEN;
 			case 1757:
-				return Thieving.FARMER;
+				return PickpocketNPCs.FARMER;
 			case 1715:
-				return Thieving.HAM_MEMBER_FEMALE;
+				return PickpocketNPCs.HAM_MEMBER_FEMALE;
 			case 1714:
-				return Thieving.HAM_MEMBER_MALE;
+				return PickpocketNPCs.HAM_MEMBER_MALE;
 			case 15:
-				return Thieving.WARRIOR;
+				return PickpocketNPCs.WARRIOR;
 			case 187:
-				return Thieving.ROGUE;
+				return PickpocketNPCs.ROGUE;
 			case 5752:
-				return Thieving.CAVE_GOBLIN;
+				return PickpocketNPCs.CAVE_GOBLIN;
 			case 2234:
-				return Thieving.MASTER_FARMER;
+				return PickpocketNPCs.MASTER_FARMER;
 			case 5919:
 			case 5920:
 			case 9:
-				return Thieving.GUARD;
+				return PickpocketNPCs.GUARD;
 			}
 		}
 }

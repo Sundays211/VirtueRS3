@@ -720,11 +720,17 @@ public interface ScriptAPI {
 	
 	/**
 	 * Prevents the entity from moving for a number of ticks
-	 * @param player The entity
+	 * @param entity The entity
 	 * @param duration The number of game cycles to freeze the entity for
 	 */
 	public void freezeEntity (Entity entity, int duration);
-	
+
+	/**
+	 * Check wether the specified entity is currently frozen
+	 * @param entity the entity
+     */
+	public boolean isFrozen (Entity entity);
+
 	/**
 	 * Checks whether the player is currently unable to move
 	 * @param player The player
