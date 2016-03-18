@@ -166,7 +166,7 @@ public class Player extends Entity {
 	/**
 	 * Game event sender for the player
 	 */
-	private GameEventDispatcher sendOpcode;
+	private GameEventDispatcher eventDispatcher;
 
 	/**
 	 * Represents the players amount of treasure hunter keys
@@ -204,9 +204,9 @@ public class Player extends Entity {
 	private EquipmentManager equipment;
 
 	/**
-	 * The player's skills
+	 * The player's stats
 	 */
-	private StatManager skills;
+	private StatManager stats;
 
 	/**
 	 * The players viewport
@@ -306,8 +306,6 @@ public class Player extends Entity {
 
 	private int inactivityTimer = 0;
 
-	private transient long lockDelay;
-
 	/**
 	 * The treasure hunter activity.
 	 */
@@ -356,7 +354,7 @@ public class Player extends Entity {
 	 * Initializes all the variables
 	 */
 	public void initialize(boolean isWorld) {
-		this.sendOpcode = new GameEventDispatcher(this);
+		this.eventDispatcher = new GameEventDispatcher(this);
 		
 		@SuppressWarnings("unchecked")
 		Map<Integer, Object> varValues = (Map<Integer, Object>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(getUsername(), ParserDataType.VAR);
@@ -366,7 +364,7 @@ public class Player extends Entity {
 		this.widgets = new WidgetManager(this);
 		this.appearance = new Appearance(this);
 		this.viewport = new Viewport(this);
-		this.skills = new StatManager(this);
+		this.stats = new StatManager(this);
 		this.inv = new InvRepository(this);
 		this.equipment = new EquipmentManager(this);
 		this.interactions = new PlayerInteractions(this);
@@ -408,12 +406,6 @@ public class Player extends Entity {
 	 * disconnected, the "finish" method should be used instead
 	 */
 	public void kick(boolean state) {
-		long currentTime = System.currentTimeMillis();
-		if (lockDelay >= currentTime) {
-			getDispatcher().sendGameMessage(
-					"You can't log out while performing an action.");
-			return;
-		}
 		if (this.getImpactHandler().inCombat()) {//We'll try this.
 			this.getDispatcher().sendGameMessage(
 					"You cannot logout during combat.");
@@ -757,7 +749,7 @@ public class Player extends Entity {
 	 * Returns the players game event sender
 	 */
 	public GameEventDispatcher getDispatcher() {
-		return sendOpcode;
+		return eventDispatcher;
 	}
 
 	/**
@@ -888,33 +880,13 @@ public class Player extends Entity {
 		return equipment;
 	}
 
-	public long getLockDelay() {
-		return lockDelay;
-	}
-
-	public boolean isLocked() {
-		return lockDelay >= System.currentTimeMillis();
-	}
-
-	public void lock() {
-		lockDelay = Long.MAX_VALUE;
-	}
-
-	public void lock(long time) {
-		lockDelay = System.currentTimeMillis() + (time * 600);
-	}
-
-	public void unlock() {
-		lockDelay = 0;
-	}
-
 	/**
 	 * Gets the player's skills
 	 * 
 	 * @return skills
 	 */
 	public StatManager getSkills() {
-		return skills;
+		return stats;
 	}
 
 	/**
@@ -1009,23 +981,23 @@ public class Player extends Entity {
 			this.getMovement().setRunning(false);
 			var.setVarValueInt(VarKey.Player.RUN_STATUS, 0);
 			setRunEnergy(0);
-			sendOpcode.sendRunEnergy(0);
+			eventDispatcher.sendRunEnergy(0);
 			return false;
 		} else {
-			sendOpcode.sendRunEnergy((int) runEnergy);
+			eventDispatcher.sendRunEnergy((int) runEnergy);
 			return true;
 		}
 	}
 
 	private void restoreRunEnergy() {
 		if (runEnergy < 100) {
-			float increase = 0.20f + skills.getBaseLevel(Stat.AGILITY) * 0.20f;
+			float increase = 0.20f + stats.getBaseLevel(Stat.AGILITY) * 0.20f;
 			// 99 agility should be about twice as fast as 1 agility
 			runEnergy += increase;
 			if (runEnergy > 100) {
 				runEnergy = 100;
 			}
-			sendOpcode.sendRunEnergy((int) runEnergy);
+			eventDispatcher.sendRunEnergy((int) runEnergy);
 		}
 	}
 	
@@ -1076,7 +1048,7 @@ public class Player extends Entity {
 				weight += item.getType().weight;
 			}
 		}
-		sendOpcode.sendRunWeight(weight / 1000);
+		eventDispatcher.sendRunWeight(weight / 1000);
 	}
 
 	/*
@@ -1092,6 +1064,7 @@ public class Player extends Entity {
 			currentAction = null;
 		}
 		widgets.closeWidgets(true);
+		setPaused(false);
 		appearance.clearTemp();
 	}
 
@@ -1259,7 +1232,7 @@ public class Player extends Entity {
 		if (this.getImpactHandler().isDead()) {
 			return;// No need to process death twice...
 		}
-		this.lock(3);
+		this.setFreezeDuration(3);
 		this.pvpDrops(this);
 		this.getMovement().teleportTo(Constants.START_TILE);
 		getImpactHandler().restoreLifepoints();

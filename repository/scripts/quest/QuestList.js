@@ -33,6 +33,10 @@ var QuestListListener = Java.extend(Java.type('org.virtue.engine.script.listener
 		if (event == EventType.IF_OPEN) {
 			api.setWidgetEvents(player, 190, 17, 0, 300, 14);
 			api.setWidgetEvents(player, 190, 40, 0, 11, 2);
+			api.hideWidget(player, 1500, 325, false);
+			api.hideWidget(player, 1500, 4, false);
+			api.hideWidget(player, 1500, 5, true);
+			api.runClientScript(player, 4021, ["Cook's Assistant"]);
 		} else {		
 			switch (args.component) {
 			case 3://Filter 1
@@ -74,6 +78,33 @@ var QuestListListener = Java.extend(Java.type('org.virtue.engine.script.listener
 		}
 	}
 });
+
+/*
+ * player.getDispatcher().sendHideWidget(1500, 325, false);
+	player.getDispatcher().sendVarc(695, 0);
+	player.getWidgets().sendOverlay(3, -1);
+	player.getDispatcher().sendHideWidget(1448, 3, false);
+	player.getWidgets().closeWidget(1448, 3);
+	player.getWidgets().openWidget(1448, 3, 190, true);
+	player.getDispatcher().sendHideWidget(1448, 3, false);
+	player.getDispatcher().sendHideWidget(1448, 4, true);
+	player.getDispatcher().sendWidgetSettings(190, 17, 0, 300, 14);
+	player.getDispatcher().sendWidgetSettings(190, 40, 0, 11, 2);
+	player.getDispatcher().sendHideWidget(1448, 5, false);
+	player.getWidgets().openWidget(1448, 5, 1500, true);
+	player.getDispatcher().sendHideWidget(1448, 5, false);
+	player.getDispatcher().sendHideWidget(1448, 6, true);
+	player.getDispatcher().sendHideWidget(1448, 7, true);
+	player.getDispatcher().sendHideWidget(1448, 8, true);
+	player.getDispatcher().sendHideWidget(1448, 9, true);
+	player.getDispatcher().sendHideWidget(1448, 10, true);
+	player.getDispatcher().sendHideWidget(1448, 11, true);
+	player.getDispatcher().sendHideWidget(1448, 12, true);
+	player.getDispatcher().sendHideWidget(1448, 1, true);
+	player.getDispatcher().sendHideWidget(1500, 4, false);
+	player.getDispatcher().sendHideWidget(1500, 5, true);
+	player.getDispatcher().sendRunScript(4021, new Object[] { "Cook's Assistant" });
+ */
 
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {

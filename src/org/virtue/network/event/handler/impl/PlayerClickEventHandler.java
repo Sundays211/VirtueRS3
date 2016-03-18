@@ -50,6 +50,7 @@ public class PlayerClickEventHandler implements GameEventHandler<PlayerClickEven
 					selfPlayer.getMovement().stop();
 				}
 			} else if (selfPlayer.getMovement().setTarget(new PlayerTarget(selfPlayer, context.getButton(), otherPlayer))) {
+				selfPlayer.setPaused(false);
 				/*selfPlayer.getMovement().setOnTarget(new Runnable() {
 					@Override
 					public void run() {

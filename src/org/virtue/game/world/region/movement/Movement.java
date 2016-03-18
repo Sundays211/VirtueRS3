@@ -524,7 +524,7 @@ public class Movement {
 	 * @return True if the target setting was successful, false otherwise
 	 */
 	public synchronized boolean setTarget (EntityTarget target) {
-		if (entity.isPaused()) {
+		if (!entity.canMove()) {
 			return false;//Unable to move
 		}
 		entity.stopAll();

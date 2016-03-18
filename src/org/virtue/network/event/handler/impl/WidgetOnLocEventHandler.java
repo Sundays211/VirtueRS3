@@ -29,7 +29,6 @@ import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.in.LocTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
-import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -52,7 +51,7 @@ public class WidgetOnLocEventHandler implements GameEventHandler<LocTargetEventC
 			if (location == null) {
 				player.getDispatcher().sendGameMessage("<col=ff0000>Location "+context.getLocTypeID()+" clicked at "+tile+" does not exist!");
 			} else {
-				player.queueUpdateBlock(new FaceDirectionBlock(location.getTile()));
+				player.setPaused(false);
 				if (!player.getMovement().moveTo(location, context.getBaseX(), context.getBaseY())) {
 					return;//TODO: Add handing if the player cannot reach the object
 				}

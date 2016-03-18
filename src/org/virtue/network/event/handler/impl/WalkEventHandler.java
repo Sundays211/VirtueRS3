@@ -42,10 +42,7 @@ public class WalkEventHandler implements GameEventHandler<MoveEventContext> {
 			player.getMovement().forceRunToggle();
 		}
 		if (success) {
-			long currentTime = System.currentTimeMillis();
-			if (player.getLockDelay() > currentTime) {
-				return;
-			}
+			player.setPaused(false);
 			Tile target = player.getMovement().getDestination();
 			if (target != null) {
 				player.getDispatcher().sendMapFlag(target.getLocalX(player.getViewport().getBaseTile()), target.getLocalY(player.getViewport().getBaseTile()));

@@ -45,6 +45,7 @@ public class WidgetOnPlayerEventHandler implements GameEventHandler<PlayerTarget
 	public void handle(Player player, PlayerTargetEventContext context) {
 		Entity target = World.getInstance().getPlayers().get(context.getPlayerIndex());
 		if (target != null) {
+			player.setPaused(false);
 			player.getMovement().setTarget(new WidgetOnEntityTarget(player, target, 
 					context.getIfHash(),
 					context.getIfSlot(), context.getIfItem()));		

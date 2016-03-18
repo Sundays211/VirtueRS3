@@ -66,6 +66,7 @@ public class WidgetOnNPCHandler implements GameEventHandler<WidgetOnNPCContext> 
 			return;
 		}
 		if (target != null) {
+			player.setPaused(false);
 			player.getMovement().setTarget(new WidgetOnEntityTarget(player, target, 
 					context.getIfHash(),
 					context.getIfSlot(), context.getIfItem()));

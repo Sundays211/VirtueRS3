@@ -68,6 +68,7 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 			} else if (location.distanceOption(context.getButton())) {
 				handleInteraction(player, location, context);				
 			} else {
+				player.setPaused(false);
 				if (!player.getMovement().moveTo(location, context.getBaseX(), context.getBaseY())) {
 					player.getDispatcher().sendGameMessage("You can't reach that.");
 					return;

@@ -55,11 +55,11 @@ public class NpcClickEventHandler implements GameEventHandler<NpcClickEventConte
 					player.getMovement().stop();
 				}
 			} else {
+				player.setPaused(false);
 				if (!player.getMovement().setTarget(new NpcTarget(player, context.getButton(), npc))) {
 					player.getDispatcher().sendGameMessage("You can't reach that.");
 				}
 			}
-
 		}
 	}
 
