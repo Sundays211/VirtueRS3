@@ -33,10 +33,6 @@ var QuestListListener = Java.extend(Java.type('org.virtue.engine.script.listener
 		if (event == EventType.IF_OPEN) {
 			api.setWidgetEvents(player, 190, 17, 0, 300, 14);
 			api.setWidgetEvents(player, 190, 40, 0, 11, 2);
-			api.hideWidget(player, 1500, 325, false);
-			api.hideWidget(player, 1500, 4, false);
-			api.hideWidget(player, 1500, 5, true);
-			api.runClientScript(player, 4021, ["Cook's Assistant"]);
 		} else {		
 			switch (args.component) {
 			case 3://Filter 1
@@ -62,6 +58,8 @@ var QuestListListener = Java.extend(Java.type('org.virtue.engine.script.listener
 			case 17:
 				switch (args.button) {
 				case 1:
+					QuestList.selectQuest(player, args.slot);
+					return;
 				case 2:
 					api.sendMessage(player, "Quest not added Overview/journal slot=" + args.slot);
 					return;
@@ -112,3 +110,46 @@ var listen = function(scriptManager) {
 	scriptManager.registerListener(EventType.IF_OPEN, 190, listener);
 	scriptManager.registerListener(EventType.IF_BUTTON, 190, listener);
 };
+
+var QuestList = {
+		selectQuest : function (player, slot) {
+			var questId = api.getEnumValue(812, slot);
+			var questStructId = api.getEnumValue(2252, slot);
+			api.setVarp(player, 3936, slot);
+			if (api.getStructParam(questStructId, 694) == 1) {
+				this.showQuestOverview(player, questStructId);
+			} else {
+				api.setVarp(player, 3936, slot);
+				this.showQuestJournal(player, slot);
+			}			
+			api.sendMessage(player, "Selected quest: id="+questId+", slot="+slot+", name="+questApi.getName(questId));
+		},
+		showQuestOverview : function (player, questStructId) {
+			api.hideWidget(player, 1500, 4, true);
+			api.hideWidget(player, 1500, 5, false);
+			api.setVarc(player, 699, questStructId);
+		},
+		showQuestJournal : function (player, questId) {
+			/*var text;
+			switch (questId) {
+			case 6://Cook's Assistant
+				text = "Some quest text...";
+				break;
+			default:
+				text = "Quest not implemented.";
+				break;
+			}*/
+			api.hideWidget(player, 1500, 4, false);
+			api.hideWidget(player, 1500, 5, true);
+			api.runClientScript(player, 4021, [questApi.getName(questId)]);
+			api.setWidgetText(player, 1500, 20, "Line 1");
+			api.setWidgetText(player, 1500, 21, "Line 2");
+			api.setWidgetText(player, 1500, 22, "Line 3");
+			api.setWidgetText(player, 1500, 23, "<s>Line 4</s>");
+			api.setWidgetText(player, 1500, 24, "Line 5");
+			api.setWidgetText(player, 1500, 25, "Line 6");
+			api.setWidgetText(player, 1500, 31, "Line 7");
+			api.setWidgetText(player, 1500, 40, "Line 8");
+			api.setWidgetText(player, 1500, 319, "Line 9");
+		}
+}

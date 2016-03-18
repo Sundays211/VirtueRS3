@@ -45,6 +45,18 @@ public class VirtueQuestAPI implements QuestAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.QuestAPI#getName(int)
+	 */
+	@Override
+	public String getName(int questId) {
+		QuestType quest = questTypeList.list(questId);
+		if (quest == null) {
+			throw new IllegalArgumentException("Quest not found: "+questId);
+		}
+		return quest.name;
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.QuestAPI#isStarted(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
@@ -54,6 +66,20 @@ public class VirtueQuestAPI implements QuestAPI {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
 		return quest.isStarted(player.getVars());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.QuestAPI#startQuest(org.virtue.game.entity.player.Player, int)
+	 */
+	@Override
+	public void startQuest(Player player, int questId) {
+		QuestType quest = questTypeList.list(questId);
+		if (quest == null) {
+			throw new IllegalArgumentException("Quest not found: "+questId);
+		}
+		if (quest.isStarted(player.getVars())) {
+			throw new IllegalStateException("Quest already started!");
+		}
 	}
 
 	/* (non-Javadoc)

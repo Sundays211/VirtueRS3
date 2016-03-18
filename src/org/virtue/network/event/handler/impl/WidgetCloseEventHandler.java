@@ -40,6 +40,7 @@ public class WidgetCloseEventHandler implements GameEventHandler<EmptyEventConte
 	 */
 	@Override
 	public void handle(Player player, EmptyEventContext context) {
+		player.setPaused(false);
 		player.getWidgets().closeWidgets(false);
 	}
 

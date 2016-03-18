@@ -33,8 +33,12 @@ import org.virtue.game.entity.player.Player;
  * @since 16/03/2016
  */
 public interface QuestAPI {
+	
+	public String getName (int questId);
 
 	public boolean isStarted (Player player, int questId);
+	
+	public void startQuest(Player player, int questId);
 	
 	public boolean isFinished (Player player, int questId);
 	

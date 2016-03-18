@@ -95,7 +95,7 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 		this.referenceTable = configTable;
 		this.dataArchive = archive;
 		this.configGroup = group;
-		this.num = configTable.capacity();
+		this.num = configTable.getEntry(group.id).capacity();
 		this.configClass = configClass;
 	}
 	
@@ -133,7 +133,7 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 		if (data == null) {
 			return null;
 		}
-		ConfigType type = configClass.getDeclaredConstructor(Integer.TYPE, ConfigDecoder.class).newInstance(id, this);
+		ConfigType type = configClass.getDeclaredConstructor(Integer.TYPE, getClass()).newInstance(id, this);
 		type.decode(data);
 		type.postDecode();
 		return (T) type;

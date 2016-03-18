@@ -46,7 +46,7 @@ public class QuestType implements ConfigType {
     public int category = 0;
     public int[] questRequirements;
     QuestTypeList myList;
-    public String aString4091;
+    public String sortName;
     int[] anIntArray4092;
     public int[] varBitRequirements;
     public int[][] statRequirements;
@@ -62,7 +62,7 @@ public class QuestType implements ConfigType {
     int[] minVarpValue;
     public int graphicId = -1;
 
-    QuestType(int id, QuestTypeList list) {
+    public QuestType(int id, QuestTypeList list) {
         this.myList = list;
     }
 
@@ -232,7 +232,7 @@ public class QuestType implements ConfigType {
             name =  ByteBufferUtils.getString(packet).intern();
         } else if (opcode == 2) {
         	packet.get();
-            aString4091 = ByteBufferUtils.getString(packet).intern();
+        	sortName = ByteBufferUtils.getString(packet).intern();
         } else if (3 == opcode) {
             int count = packet.get() & 0xff;
             progressVarps = new int[count][3];
@@ -329,8 +329,8 @@ public class QuestType implements ConfigType {
 
     @Override
     public void postDecode() {
-        if (aString4091 == null) {
-            aString4091 = name;
+        if (sortName == null) {
+        	sortName = name;
         }
     }
 
