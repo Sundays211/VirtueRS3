@@ -672,6 +672,21 @@ public interface ScriptAPI {
 	public void restoreLifePoints (Entity entity);
 	
 	/**
+	 * Hits the entitiy for the specified number of lifepoints
+	 * @param entity The entity to hit
+	 * @param hitAmount The number of lifepoints to decrease their helth by
+	 */
+	public void hitEntity (Entity entity, int hitAmount);
+	
+	/**
+	 * Restores the entities lifepoints by the specified amount. Displays a "heal" hitsplat.
+	 * NOTE: This will only heal the entity up to its maximum lifepoints
+	 * @param entity The entity to heal
+	 * @param healAmount The number of lifepoints to heal by
+	 */
+	public void healEntity (Entity entity, int healAmount);
+	
+	/**
 	 * Sends an unfiltered game message to the player
 	 * @param player The player
 	 * @param message The message to send

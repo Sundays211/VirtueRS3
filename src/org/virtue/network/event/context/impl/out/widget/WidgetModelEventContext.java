@@ -38,7 +38,8 @@ public class WidgetModelEventContext implements GameEventContext {
 		PLAYER_HEAD_SELF, 
 		ANIMATION, 
 		PLAYER_MODEL_OTHER, 
-		PLAYER_MODEL_SELF };
+		PLAYER_MODEL_SELF,
+		OBJECT};
 	
 	private ModelType type;
 	

@@ -272,6 +272,18 @@ public class GameEventDispatcher {
 		sendEvent(WidgetModelEventEncoder.class, new WidgetModelEventContext(
 				type, widget, component, modelID));
 	}
+	
+	/**
+	 * Adds an object (item) to the specified widget component
+	 * @param widget The widget/interface ID
+	 * @param component The component ID
+	 * @param objectId The object type ID
+	 * @param count The number of objects to appear in the count
+	 */
+	public void sendWidgetObject (int widget, int component, int objectId, int count) {
+		sendEvent(WidgetModelEventEncoder.class, new WidgetModelEventContext(
+				ModelType.PLAYER_MODEL_OTHER, widget, component, objectId, count));
+	}
 
 	public void sendWidgetEvents(int root, int component, int from, int to,
 			int settings) {

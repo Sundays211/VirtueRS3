@@ -68,6 +68,12 @@ public class WidgetModelEventEncoder implements EventEncoder<WidgetModelEventCon
 				buffer.putLEShortA(context.getMediaID());
 				buffer.putInt((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
 				break;
+			case OBJECT:
+				buffer.putPacket(ServerProtocol.IF_SETOBJECT, player);
+				buffer.putIntAlt3((context.getWidgetID() << 16) | (context.getComponentID() & 0xffff));
+				buffer.putShortA(context.getMediaID());//ObjectID
+				buffer.putInt(context.getSettings());//Object count
+				break;
 			case ANIMATION:
 				buffer.putPacket(ServerProtocol.IF_SETANIM, player);
 				buffer.putInt(context.getMediaID());

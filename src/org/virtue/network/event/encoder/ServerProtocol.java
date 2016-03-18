@@ -389,6 +389,11 @@ public enum ServerProtocol {
 	 * Sets the model on an interface component to another player's chathead
 	 */
 	IF_SETPLAYERHEAD_OTHER(106, 10),
+	
+	/**
+	 * Sets the model on an interface component to an object (item)
+	 */
+	IF_SETOBJECT(127, 10),
 
 	/**
 	 * Animates a model on an interface component
@@ -400,6 +405,9 @@ public enum ServerProtocol {
 	 */
 	IF_SETEVENTS(166, 12),
 	
+	/**
+	 * Sets an external (HTTP) image ID for an interface
+	 */
 	IF_SET_HTTP_IMAGE(146, 8),
 
 	/**

@@ -100,6 +100,17 @@ public class ImpactHandler {
 		}
 	}
 	
+	public void hit(int hitAmount) {
+		int last = this.lifepoints;
+		if (hitAmount > lifepoints) {
+			hitAmount = lifepoints;
+		}
+		queuedHits.add(new Hit(hitAmount, 0, HitType.REGULAR_DAMAGE));
+		decrementLifepoints(hitAmount);
+		queuedBars.add(new Bar(Bar.HITPOINTS, last, lifepoints, 0));
+		scheduleBlock();
+	}
+	
 	/**
 	 * Handles a hit.
 	 * @param impact The impact information.
