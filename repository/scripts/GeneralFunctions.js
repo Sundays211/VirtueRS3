@@ -335,7 +335,7 @@ function multi5 (player, message, op1, op1callback, op2, op2callback, op3, op3ca
 				op3callback();
 			} else if (value == 4 && op4callback !== undefined) {
 				op4callback();
-			} else if (value == 4 && op5callback !== undefined) {
+			} else if (value == 5 && op5callback !== undefined) {
 				op5callback();
 			}
 		}
