@@ -307,6 +307,9 @@ public class JSListeners implements ScriptManager {
 		if (eventType == null) {
 			throw new IllegalArgumentException("Invalid event type ID: "+eventTypeId);
 		}
+		if (eventType.getTriggerType() != Integer.TYPE) {
+			throw new IllegalArgumentException("Invalid event binding: expected "+eventType.getTriggerType()+", found int");
+		}
 		EventBind bind = new EventBind(eventType, binding);
 		listeners.put(bind, listener);
 	}
@@ -321,6 +324,9 @@ public class JSListeners implements ScriptManager {
 		ScriptEventType eventType = ScriptEventType.getById(eventTypeId);
 		if (eventType == null) {
 			throw new IllegalArgumentException("Invalid event type ID: "+eventTypeId);
+		}
+		if (eventType.getTriggerType() != String.class) {
+			throw new IllegalArgumentException("Invalid event binding: expected "+eventType.getTriggerType()+", found java.lang.String");
 		}
 		EventBind bind = new EventBind(eventType, binding);
 		listeners.put(bind, listener);

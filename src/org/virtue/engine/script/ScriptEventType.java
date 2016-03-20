@@ -291,17 +291,17 @@ public enum ScriptEventType {
 	/**
 	 * Called when the specified command is entered
 	 */
-	COMMAND(101),
+	COMMAND(101, String.class),
 	
 	/**
 	 * Called when the specified administrator-only command is entered
 	 */
-	COMMAND_ADMIN(102),
+	COMMAND_ADMIN(102, String.class),
 	
 	/**
 	 * Called when the specified moderator-only command is entered
 	 */
-	COMMAND_MOD(103),
+	COMMAND_MOD(103, String.class),
 	
 	/**
 	 * Called when an option is selected on a chat line or chat list (eg friends list, friends chat list, group chat, etc)
@@ -314,13 +314,23 @@ public enum ScriptEventType {
 	OPPLAYERU(106);
 	
 	private int id;
+	private Class<?> triggerType;
 	
 	private ScriptEventType (int id) {
+		this(id, Integer.TYPE);
+	}
+	
+	private ScriptEventType (int id, Class<?> triggerType) {
 		this.id = id;
+		this.triggerType = triggerType;
 	}
 	
 	public int getId () {
 		return id;
+	}
+	
+	public Class<?> getTriggerType() {
+		return triggerType;
 	}
 	
 	private static Map<Integer, ScriptEventType> lookupMap;

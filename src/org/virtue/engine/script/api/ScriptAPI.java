@@ -22,6 +22,7 @@
 package org.virtue.engine.script.api;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.virtue.Constants;
 import org.virtue.config.enumtype.EnumType;
@@ -1229,5 +1230,13 @@ public interface ScriptAPI {
 	 * @param message The desired error message
 	 */
 	public void logError (String message);
+	
+	/**
+	 * Invokes another script event on the same thread as the current event
+	 * @param eventType The {@link ScriptEventType} ID of the event
+	 * @param trigger
+	 * @param args
+	 */
+	public void invokeEvent (int eventType, Object trigger, Map<String, Object> args);
 
 }

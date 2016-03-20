@@ -24,6 +24,7 @@ package org.virtue.engine.script.api.impl;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.config.vartype.constants.BaseVarType;
+import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
@@ -2031,5 +2033,20 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void logError(String message) {
 		logger.error(message);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#invokeEvent(int, java.lang.Object, java.util.Map)
+	 */
+	@Override
+	public void invokeEvent(int eventTypeId, Object trigger, Map<String, Object> args) {
+		ScriptEventType type = ScriptEventType.getById(eventTypeId);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid event type: "+eventTypeId);
+		}
+		if (type.getTriggerType() != trigger.getClass()) {
+			throw new IllegalArgumentException("Invalid event binding: expected "+type.getTriggerType()+", found "+trigger.getClass());
+		}
+		Virtue.getInstance().getScripts().invokeScriptChecked(type, trigger, args);
 	}
 }
