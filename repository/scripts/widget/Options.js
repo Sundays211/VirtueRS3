@@ -89,9 +89,6 @@ var OptionsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			api.setVarp(player, 2250, 1073741824);
 			api.setVarc(player, 2771, 53038235);
 			api.openCentralWidget(player, 1587, false);
-			api.setWidgetEvents(player, 1587, 26, 0, 200, 6);
-			api.setWidgetEvents(player, 1587, 47, 0, 1, 2);
-			api.hideWidget(player, 1587, 29, true);
 			break;
 		default:
 			api.sendMessage(player, "Unhandled options button: comp="+args.component+", slot="+args.slot+", button="+args.button);
