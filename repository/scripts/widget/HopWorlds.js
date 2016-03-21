@@ -37,6 +37,8 @@ var FriendChatListener = Java.extend(Java.type('org.virtue.engine.script.listene
 			api.hideWidget(player, 1587, 29, true);			
 		} else {
 			switch (args.component) {
+			case 42://Close button
+				return;
 			case 26:
 				api.hideWidget(player, 1587, 29, false);
 				api.setWidgetText(player, 1587, 98, "Are you sure you want to switch to world " + args.slot + "?");

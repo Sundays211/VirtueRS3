@@ -30,7 +30,7 @@ import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.world.region.movement.WidgetOnEntityTarget;
-import org.virtue.network.event.context.impl.in.WidgetOnNPCContext;
+import org.virtue.network.event.context.impl.in.NpcTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -40,10 +40,10 @@ import org.virtue.network.event.handler.GameEventHandler;
  * @author Sundays211
  * @since Jan 23, 2015
  */
-public class WidgetOnNPCHandler implements GameEventHandler<WidgetOnNPCContext> {
+public class NpcTargetEventHandler implements GameEventHandler<NpcTargetEventContext> {
 
 	@Override
-	public void handle(Player player, WidgetOnNPCContext context) {
+	public void handle(Player player, NpcTargetEventContext context) {
 		NPC target = World.getInstance().getNPCs().get(context.getNpcIndex());
 		if (context.getIfInterface() == 1461) {
 			Item mainHand = player.getEquipment().getWorn(3);

@@ -23,7 +23,7 @@ package org.virtue.network.event.decoder.impl;
 
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.buffer.InboundBuffer;
-import org.virtue.network.event.context.impl.in.WidgetOnNPCContext;
+import org.virtue.network.event.context.impl.in.NpcTargetEventContext;
 import org.virtue.network.event.decoder.ClientProtocol;
 import org.virtue.network.event.decoder.EventDecoder;
 
@@ -35,25 +35,25 @@ import org.virtue.network.event.decoder.EventDecoder;
  * @author Sundays211
  * @since 18/01/2015
  */
-public class WidgetOnNPCDecoder implements EventDecoder<WidgetOnNPCContext> {
+public class NpcTargetEventDecoder implements EventDecoder<NpcTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.decoder.EventDecoder#createContext(org.virtue.game.entity.player.Player, int, org.virtue.network.event.buffer.InboundBuffer)
 	 */
 	@Override
-	public WidgetOnNPCContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int hash = buffer.getInt();
-		int slot = buffer.getLEShortA() & 0xffff;
+	public NpcTargetEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
+		boolean forceRun = buffer.getByteC() == 1;
+		int slot = buffer.getLEShort() & 0xffff;
 		if (slot == 65535) {
 			slot = -1;
 		}
-		boolean forceRun = buffer.getByteS() == 1;
-		int npcIndex = buffer.getShortA() & 0xffff;
-		int itemID = buffer.getShortA() & 0xffff;
+		int hash = buffer.getInt();
+		int npcIndex = buffer.getLEShort() & 0xffff;
+		int itemID = buffer.getLEShort() & 0xffff;
 		if (itemID == 65535) {
 			itemID = -1;
 		}
-		return new WidgetOnNPCContext(hash, slot, itemID, npcIndex, forceRun);
+		return new NpcTargetEventContext(hash, slot, itemID, npcIndex, forceRun);
 	}
 
 	/* (non-Javadoc)
@@ -61,7 +61,7 @@ public class WidgetOnNPCDecoder implements EventDecoder<WidgetOnNPCContext> {
 	 */
 	@Override
 	public ClientProtocol[] getTypes() {
-		return new ClientProtocol[] { ClientProtocol.IF_ON_NPC };
+		return new ClientProtocol[] { ClientProtocol.OPNPCT };
 	}
 
 }

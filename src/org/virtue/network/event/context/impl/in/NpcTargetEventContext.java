@@ -30,7 +30,7 @@ import org.virtue.network.event.context.GameEventContext;
  * @author Sundays211
  * @since Jan 23, 2015
  */
-public class WidgetOnNPCContext implements GameEventContext {
+public class NpcTargetEventContext implements GameEventContext {
 
 	private int hash;
 	private int slot;
@@ -38,7 +38,7 @@ public class WidgetOnNPCContext implements GameEventContext {
 	private int npcIndex;
 	private boolean forceRun;
 	
-	public WidgetOnNPCContext(int hash, int slot, int itemID, int npc, boolean force) {
+	public NpcTargetEventContext(int hash, int slot, int itemID, int npc, boolean force) {
 		this.hash = hash;
 		this.slot = slot;
 		this.itemID = itemID;

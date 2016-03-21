@@ -269,7 +269,7 @@ public enum ClientProtocol {
 	/**
 	 * Called when an interface is used on an npc
 	 */
-	IF_ON_NPC(-1, 11),
+	OPNPCT(110, 11),
 
 	/**
 	 * The first context-menu option selected on another player
