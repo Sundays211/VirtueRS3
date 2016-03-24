@@ -282,7 +282,7 @@ public class Virtue {
 	private void loadCache() throws IOException {
 		File cachePath = new File(getProperty("cache.dir", Constants.CACHE_REPOSITORY));
 		if (!cachePath.exists()) {
-			cachePath = new File("C:\\rscd\\data");
+			cachePath = new File(Constants.CACHE_REPOSITORY);
 		}
 		cache = new Cache(FileStore.open(cachePath));
 		BigInteger js5Mod = new BigInteger(getProperty("js5.modulus", Constants.ONDEMAND_MODULUS));
