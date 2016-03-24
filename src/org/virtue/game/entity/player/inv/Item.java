@@ -73,6 +73,13 @@ public class Item extends Node {
 		this.amount = count;
 	}
 	
+	public void addCount (int count) {
+		if (Integer.MAX_VALUE-this.amount<count) {
+			throw new IllegalArgumentException("Adding "+count+" to this item's would cause it to overflow.");
+		}
+		this.amount += count;
+	}
+	
 	/**
 	 * Finds whether the item should stack or not when added to a non-stacking container
 	 * @return True if the item should always stack, false otherwise
@@ -139,7 +146,7 @@ public class Item extends Node {
 	
 	public boolean isFaceMask() {
 		String name = getType().name.toLowerCase();
-		return getType().getParam(625, 0) == 1 || name.contains("sunglasses");
+		return getType().getParam(625, 0) == 1 || name.contains("sunglasses")  || name.contains("halo");
 	}
 
 	public boolean showBeard() {

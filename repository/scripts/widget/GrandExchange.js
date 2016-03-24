@@ -246,7 +246,7 @@ var ExchangeCloseListener = Java.extend(Java.type('org.virtue.engine.script.list
 		switch (args["interface"]) {
 		case 105:
 			Exchange.clearOffer(player);
-			api.setVarBit(player, 29044, 1);//Lock exchange tab
+			api.setVarBit(player, 29044, 0);//0 - Unlock : 1 - Lock Exchange Tab
 			return;
 		case 107:
 			api.runClientScript(player, 8862, [1, 2]);
@@ -280,7 +280,7 @@ var Exchange = {
 				return;
 			}
 			api.setVarBit(player, 444, 1);//Pin entered successfully
-			api.setVarBit(player, 29044, 0);//Unlock exchange tab
+			api.setVarBit(player, 29044, 0);//0 - Unlock : 1 - Lock Exchange Tab
 			Overlay.openOverlay(player, 5);
 			//api.openCentralWidget(player, 105, false);
 		},

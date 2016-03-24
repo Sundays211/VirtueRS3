@@ -757,6 +757,29 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#insertItem(org.virtue.game.entity.player.Player, int, int, int, int)
+	 */
+	@Override
+	public void insertItem(Player player, int invId, int slot, int itemID, int count) {
+		ContainerState state = ContainerState.getById(invId);
+		if (state == null) {
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
+		}
+		ItemContainer inv = player.getInvs().getContainer(state);
+		if (inv == null) {
+			throw new IllegalStateException("The inventory "+state+" has not been loaded yet!");
+		}
+		int oldSlot = inv.lookupSlot(itemID);
+		if (oldSlot != -1) {
+			inv.get(oldSlot).addCount(count);
+			player.getInvs().updateContainer(state, oldSlot);
+		} else {
+			inv.insert(Item.create(itemID, count), slot);
+			player.getInvs().updateContainer(state);
+		}
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#delItem(int, int, int)
 	 */
 	@Override

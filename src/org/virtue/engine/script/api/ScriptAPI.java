@@ -468,6 +468,17 @@ public interface ScriptAPI {
 	public void addItem (Player player, int invId, int itemID, int count);
 	
 	/**
+	 * Inserts an item in the given slot within a player's inventory.
+	 * All items in later slots will be shifted by one
+	 * @param player The player
+	 * @param invId The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid inventories
+	 * @param slot The slot to insert the item into
+	 * @param itemID The id of the item to insert
+	 * @param count The amount of the item to insert
+	 */
+	public void insertItem (Player player, int invId, int slot, int itemID, int count);
+	
+	/**
 	 * Replaces an item in the player's inventory with a new item.
 	 * This should be used with care, as it deletes the old item without warning and can cause issues in some inventories (such as shops and banks).
 	 * @param player The player

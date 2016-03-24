@@ -30,6 +30,8 @@
  * @since 29/11/2015
  */
 
+var INTEGER_MAX = 2147483647;
+
 function runAnimation (entity, animId, callback) {
 	if (callback == undefined) {
 		return api.runAnimation(entity, animId);

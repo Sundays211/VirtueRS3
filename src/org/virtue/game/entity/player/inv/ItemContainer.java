@@ -417,12 +417,12 @@ public final class ItemContainer {
 	}
 
 	public int lookupSlot(int id) {
-		for (int i = 0; i < data.length; i++) {
-			if (data[i] == null) {
+		for (int slot = 0; slot < data.length; slot++) {
+			if (data[slot] == null) {
 				continue;
 			}
-			if (data[i].getId() == id) {
-				return i;
+			if (data[slot].getId() == id) {
+				return slot;
 			}
 		}
 		return -1;
