@@ -34,7 +34,6 @@ import org.virtue.game.entity.player.widget.impl.BackpackWidget;
 import org.virtue.game.entity.player.widget.impl.BankWidget;
 import org.virtue.game.entity.player.widget.impl.CombatSettingsWidget;
 import org.virtue.game.entity.player.widget.impl.TreasureHunterWidget;
-import org.virtue.game.entity.player.widget.impl.WornEquipmentWidget;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.context.impl.out.widget.WidgetSubEventContext;
@@ -301,7 +300,6 @@ public final class WidgetRepository {
 		registerWidget(TreasureHunterWidget.class);
 		registerWidget(BankWidget.class);
 		registerWidget(BackpackWidget.class);
-		registerWidget(WornEquipmentWidget.class);
 		registerWidget(AccountCreationWidget.class);
 		registerWidget(CombatSettingsWidget.class);
 		logger.info("Registered " + WIDGETS.size() + " Game Widget(s).");

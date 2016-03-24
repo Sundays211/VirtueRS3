@@ -1249,5 +1249,7 @@ public interface ScriptAPI {
 	 * @param args
 	 */
 	public void invokeEvent (int eventType, Object trigger, Map<String, Object> args);
+	
+	public boolean hasEvent (int eventType, Object trigger);
 
 }

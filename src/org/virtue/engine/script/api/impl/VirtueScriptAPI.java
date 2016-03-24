@@ -49,6 +49,7 @@ import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
@@ -2070,6 +2071,26 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (type.getTriggerType() != trigger.getClass()) {
 			throw new IllegalArgumentException("Invalid event binding: expected "+type.getTriggerType()+", found "+trigger.getClass());
 		}
-		Virtue.getInstance().getScripts().invokeScriptChecked(type, trigger, args);
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(type, trigger)) {
+			scripts.invokeScriptChecked(type, trigger, args);
+		} else {
+			
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#hasEvent(int, java.lang.Object)
+	 */
+	@Override
+	public boolean hasEvent(int eventTypeId, Object trigger) {
+		ScriptEventType type = ScriptEventType.getById(eventTypeId);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid event type: "+eventTypeId);
+		}
+		if (type.getTriggerType() != trigger.getClass()) {
+			throw new IllegalArgumentException("Invalid event binding: expected "+type.getTriggerType()+", found "+trigger.getClass());
+		}
+		return Virtue.getInstance().getScripts().hasBinding(type, trigger);
 	}
 }

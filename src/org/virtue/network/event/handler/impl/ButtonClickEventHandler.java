@@ -99,6 +99,7 @@ public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEven
 			args.put("component", context.getComponentId());
 			args.put("slot", context.getSlot());
 			args.put("button", context.getButton().getId());
+			args.put("itemId", context.getItemID());
 			scripts.invokeScriptChecked(ScriptEventType.IF_BUTTON, context.getInterfaceId(), args);
 		} else {
 			String message = "Nothing interesting happens.";
