@@ -249,6 +249,11 @@ FarmingPatch.prototype = {
 		 * @param player The player
 		 */
 		rake : function (player) {
+			if (api.itemTotal(player, Inv.BACKPACK, 5341) < 1 && !Toolbelt.hasTool(player, 5341)) {
+				api.sendMessage(player, "You need a rake to clear this patch.");
+				return;
+			}
+			
 			var that = this;
 			runAnimation(player, 10574, function () {
 				var currentStatus = that.getStatus(player);

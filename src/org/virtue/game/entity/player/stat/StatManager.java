@@ -28,8 +28,6 @@ import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
-import org.virtue.config.objtype.ItemType;
-import org.virtue.config.objtype.ItemTypeList;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
@@ -192,77 +190,6 @@ public class StatManager {
 		for (PlayerStat skill : stats.values()) {
 			player.getDispatcher().sendStat(skill);
 		}
-	}
-	
-	/**
-	 * Returns whether the player has the requirements to craft the product of the specified ID
-	 * @param productID The itemType ID of the product to check
-	 * @return True if the player meets all the requirements, false otherwise
-	 */
-	public boolean canCraft (int productID) {
-		ItemType itemType = ItemTypeList.getInstance().list(productID);
-		if (itemType == null) {
-			return false;
-		}
-		int key = itemType.getParam(2640, 0);
-		int value = itemType.getParam(2645, 0);
-		int reqID = 1;
-		while (key > 0) {
-			if (!checkRequirement(key, value, itemType.getParam(317, 0), itemType.getParam(3649, 1) == 1, reqID)) {
-				return false;
-			}
-			reqID++;
-			switch (reqID) {
-				case 2:
-					key = itemType.getParam(2641, 0);
-					value = itemType.getParam(2646, 0);
-					break;
-				case 3:
-					key = itemType.getParam(2642, 0);
-					value = itemType.getParam(2647, 0);
-					break;
-				case 4:
-					key = itemType.getParam(2643, 0);
-					value = itemType.getParam(2648, 0);
-					break;
-				case 5:
-					key = itemType.getParam(2644, 0);
-					value = itemType.getParam(2649, 0);
-					break;
-				default:
-					key = 0;
-			}
-		}
-		return true;
-	}
-	
-	private boolean checkRequirement (int key, int value, int unk1, boolean boostable, int reqID) {
-		EnumType levelEnum = EnumTypeList.list(681);
-		if (levelEnum == null) {
-			throw new RuntimeException("Level enum is null!");
-		}
-		if (key > 0 && key < 61) {
-			if (boostable) {
-				if (getCurrentLevel(Stat.getById(levelEnum.getValueInt(key))) >= value) {
-					// || reqID == 0 && script_7107(unk1) >= value
-					return true;
-				}
-			} else if (getBaseLevel(Stat.getById(levelEnum.getValueInt(key))) >= value) {
-				return true;
-			}
-			return false;
-		}
-		if (key == 61) {
-			return false;
-			//int v0 = getEnum('i', ':', 812, value);
-			//cs2method_10545();
-			//return v0;
-		}
-		if (key == 62) {
-			return false;
-			//return script_7163(value);//TODO: Implement misc requirements
-		}
-		return true;
 	}
 	
 	public int getCombatLevel() {

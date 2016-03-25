@@ -242,9 +242,13 @@ var Firemaking = {
 			}
 		},
 		runFiremakingAction : function (player, item, slot) {
-			var log = this.forItem(item.getID());//Find the log type
+			var log = this.forItem(api.getId(item));//Find the log type
 			if (api.getStatLevel(player, Stat.FIREMAKING) < log.level) {
 				api.sendMessage(player, "You need a firemaking level of "+log.level+" to light these logs.");
+				return;
+			}
+			if (api.itemTotal(player, Inv.BACKPACK, 590) < 1 && !Toolbelt.hasTool(player, 590)) {
+				api.sendMessage(player, "You need a tinderbox to light these logs.");
 				return;
 			}
 			var delay = this.getDelay(player, log);//Calculates the time taken to light this log

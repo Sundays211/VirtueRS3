@@ -283,7 +283,7 @@ var Woodcutting = {
 		loadTrees : function () {
 			//Add new trees here. Try to find their stump ID if possible..
 			this.registerTree(TreeType.NORMAL, 38760, 40350);
-                        this.registerTree(TreeType.NORMAL, 38785, 40354);
+            this.registerTree(TreeType.NORMAL, 38785, 40354);
 			this.registerTree(TreeType.NORMAL, 38787, 40356);
 			this.registerTree(TreeType.NORMAL, 38786, 40355);
 			this.registerTree(TreeType.NORMAL, 38782, 40351);
@@ -292,9 +292,7 @@ var Woodcutting = {
 			this.registerTree(TreeType.NORMAL, 38788, 40357);
 			this.registerTree(TreeType.NORMAL, 1276, 1342);
 			this.registerTree(TreeType.NORMAL, 93384, 40352);
-			this.registerTree(TreeType.NORMAL, 79813, 79814);
-			
-			
+			this.registerTree(TreeType.NORMAL, 79813, 79814);			
 			
 			this.registerTree(TreeType.SWAMP, 9387, 10951);
 			this.registerTree(TreeType.SWAMP, 2409, 0);//members?
@@ -302,7 +300,6 @@ var Woodcutting = {
 			this.registerTree(TreeType.SWAMP, 9366, 11864);
 			this.registerTree(TreeType.SWAMP, 9355, 11862);
 			this.registerTree(TreeType.SWAMP, 3300, 11865);
-			
 			
 			this.registerTree(TreeType.DEAD, 68903, 68906 );
 			this.registerTree(TreeType.DEAD, 68901, 68904);
@@ -320,27 +317,20 @@ var Woodcutting = {
 			this.registerTree(TreeType.DEAD, 69144, 69146);
 			this.registerTree(TreeType.DEAD, 24168, 24169);//dying tree
 			
-			
-			
 			this.registerTree(TreeType.DEAD, 4820, 4821);//Jungle tree
 			this.registerTree(TreeType.DEAD, 4818, 4819);//Jungle tree
-			
-			
 			
 			this.registerTree(TreeType.ACHEY, 69554, 69555);//achey tree
 			
 			this.registerTree(TreeType.EUCALYPTUS, 70071, 70073);//EUCALYPTUS tree needs fix
 			this.registerTree(TreeType.EUCALYPTUS, 70068, 70070);//EUCALYPTUS tree needs fix
 			
-			
 			this.registerTree(TreeType.OAK, 38732, 38754);
 			this.registerTree(TreeType.OAK, 38731, 38741);
-			
 			
 			this.registerTree(TreeType.WILLOW, 38616, 38725);
             this.registerTree(TreeType.WILLOW, 38627, 38725);
 			this.registerTree(TreeType.WILLOW, 58006, 38725);
-			
 			
 			this.registerTree(TreeType.MAPLE, 51843, 54766);
 			
@@ -473,6 +463,11 @@ var Woodcutting = {
 					return hatchet;
 				}
 			}
+
+            if (Toolbelt.hasTool(player, 1351)) {
+            	bestHatchet = this.hatchetsById[api.getEnumValue(7503, api.getVarBit(player, 18522))];
+            }
+			
 			for (var slot=0;slot<28;slot++) {
 				item = api.getItem(player, Inv.BACKPACK, slot);
 				if (item == null) {

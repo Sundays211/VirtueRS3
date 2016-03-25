@@ -298,17 +298,21 @@ var Mining = {
             var item = api.getItem(player, Inv.EQUIPMENT, WearPos.WEAPON);
             var pick;
             if (item != null ) {
-                pick = this.picksById[item.getId()];
+                pick = this.picksById[api.getId(item)];
                 if (pick !== undefined) {
                     return pick;
                 }
             }
+            if (Toolbelt.hasTool(player, 1265)) {
+            	bestPick = this.picksById[api.getEnumValue(7501, api.getVarBit(player, 18521))];
+            }
+            
             for (var slot=0;slot<28;slot++) {
                 item = api.getItem(player, Inv.BACKPACK, slot);
                 if (item == null) {
                     continue;
                 }
-                pick = this.picksById[item.getId()];
+                pick = this.picksById[api.getId(item)];
                 if (pick !== undefined) {
                     if (bestPick === null || pick.time > bestPick.time) {
                         bestPick = pick;

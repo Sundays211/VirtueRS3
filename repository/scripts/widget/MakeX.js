@@ -154,20 +154,126 @@ var CraftDialog = {
 				var itemID = api.getEnumValue(subCategory, slot);
 				api.setVarp(player, 1170, itemID);
 				api.setVarp(player, 1174, 0);
-				var invCount = player.getSkills().canCraft(itemID) ? this.getMaxAmount(player, itemID) : 0;
+				var invCount = this.canCraft(player, itemID) ? this.getMaxAmount(player, itemID) : 0;
 				api.setVarBit(player, 1002, invCount);//The maximum amount of the item the player can produce
 				api.setVarBit(player, 1003, invCount);//The selected amount of the product to produce
-				api.setWidgetEvents(player, 1371, 36, 0, invCount, 2359296);//Activates the amount selection dragger
-				api.setWidgetEvents(player, 1371, 143, 0, invCount, 2);//Clicks on the amount selection dragger
+				api.setWidgetEvents(player, 1371, 36, 0, invCount, 2359296);//Activates the count selection dragger
+				api.setWidgetEvents(player, 1371, 143, 0, invCount, 2);//Clicks on the count selection dragger
 				
 				api.setVarc(player, 2391, api.getItemDesc(itemID));//Examine text
 				api.setVarc(player, 2223, 1);//
-				api.setVarc(player, 2224, api.getExchangeCost(itemID));//Exchange guide price (Disabled as the exchange does not exist)
+				api.setVarc(player, 2224, api.getExchangeCost(itemID));//Exchange guide price
 				
 				return true;
 			} else {
 				return false;
 			}
+		},
+		
+		/**
+		 * Returns whether the player has the requirements to craft the product of the specified ID
+		 * @param productId The itemType ID of the product to check
+		 * @return True if the player meets all the requirements, false otherwise
+		 */
+		canCraft : function (player, productId) {
+			var key = api.getItemParam(productId, 2640);
+			var value = api.getItemParam(productId, 2645);
+			var reqID = 1;
+			while (key > 0) {
+				if (!this.checkRequirement(player, key, value, api.getItemParam(productId, 317), api.getItemParam(productId, 3649) == 1, reqID)) {
+					return false;
+				} else if (!this.checkTools(player, productId)) {
+					return false;
+				}
+				reqID++;
+				switch (reqID) {
+					case 2:
+						key = api.getItemParam(productId, 2641);
+						value = api.getItemParam(productId, 2646);
+						break;
+					case 3:
+						key = api.getItemParam(productId, 2642);
+						value = api.getItemParam(productId, 2647);
+						break;
+					case 4:
+						key = api.getItemParam(productId, 2643);
+						value = api.getItemParam(productId, 2648);
+						break;
+					case 5:
+						key = api.getItemParam(productId, 2644);
+						value = api.getItemParam(productId, 2649);
+						break;
+					default:
+						key = 0;
+				}
+			}
+			return true;
+		},
+		
+		checkRequirement : function (player, key, value, unk1, boostable, reqID) {
+			if (key > 0 && key < 61) {//Stat
+				if (boostable) {
+					if (api.getStatLevel(player, api.getEnumValue(681, key)) >= value) {
+						// || reqID == 0 && script_7107(unk1) >= value
+						return true;
+					}
+				} else if (api.getBaseLevel(player, api.getEnumValue(681, key)) >= value) {
+					return true;
+				}
+				return false;
+			}
+			if (key == 61) {//Quest
+				var questId = api.getEnumValue(812, value);
+				return questApi.isFinished(player, questId);
+			}
+			if (key == 62) {
+				return false;
+				//return script_7163(value);//TODO: Implement misc requirements
+			}
+			return true;
+		},
+		
+		checkTools : function (player, productId) {
+			var toolId = api.getItemParam(productId, 2655);
+			var structId = api.getItemParam(productId, 2675);
+			var param = 1;
+			while (toolId != -1 || structId != -1) {
+				if (structId != -1) {
+					if (this.getStructInvAmount(player, structID, 1) == 0) {
+						return false;
+					}
+				} else {
+					if (!this.hasTool(player, toolId)) {
+						return false;
+					}
+				}
+				param++;
+				switch (param) {
+				case 2:
+					toolId = api.getItemParam(productId, 2651);
+					structId = api.getItemParam(productId, 2991);
+					break;
+				case 3:
+					toolId = api.getItemParam(productId, 2652);
+					structId = api.getItemParam(productId, 2992);
+					break;
+				default:
+					toolId = -1;
+					structId = -1;
+					break;
+				}
+			}
+			return true;
+		},
+		
+		hasTool : function (player, toolId) {
+			if (api.itemTotal(player, Inv.BACKPACK, toolId) > 0) {
+				return true;
+			}
+			if (api.itemTotal(player, Inv.EQUIPMENT, toolId) > 0) {
+				return true;
+			}
+			return Toolbelt.hasTool(player, toolId);
 		},
 		
 		getMaxAmount : function (player, productId) {
@@ -206,6 +312,12 @@ var CraftDialog = {
 					separateAmount = api.getItemParam(productId, 2687) == 1;
 					structID = api.getItemParam(productId, 2676);
 					break;
+				case 3:
+					materialID = api.getItemParam(productId, 2657);
+					matCountReq = api.getItemParam(productId, 2667);
+					separateAmount = api.getItemParam(productId, 2688) == 1;
+					structID = api.getItemParam(productId, 2677);
+					break;
 				default:
 					materialID = -1;
 					structID = -1;
@@ -220,6 +332,7 @@ var CraftDialog = {
 			}
 			return Math.min(maxAmount, 60);
 		},
+		
 		getStructInvAmount : function (player, structId, productAmount) {
 			var id = api.getStructParam(structId, 2655);
 			var matCountReq = api.getStructParam(structId, 2665);
