@@ -82,6 +82,7 @@ public enum ContainerState {
 	 */
 	LOAN_RETURN(540, false, true),
 	LOAN_OFFER(541, false, false),
+	
 	LUMBRIDGE_GEN_STORE_FREE_STOCK(553, true, false),
 	BOBS_AXES_FREE_STOCK(554, true, false),
 	VARROCK_SWORD_FREE_STOCK(555, true, false),
@@ -94,6 +95,9 @@ public enum ContainerState {
 	 * The player's money pouch. Only has one slot, which contains the coins held by the player.
 	 */
 	MONEY_POUCH(623, false, true),
+	
+	SUMMONING_SHOP_1(628, true, false),
+	SUMMONING_SHOP_FREE(629, true, false),
 	
 	/**
 	 * Contains the items worn by the player being inspected
