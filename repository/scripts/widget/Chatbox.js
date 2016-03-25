@@ -271,7 +271,7 @@ var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 				return;
 			case 130://Clicked chat box
 				return;
-			case 254://Legacy switch to "All"
+			case 255://Legacy switch to "All"
 				return;
 			case 259://Legacy "Game"
 				if (option == 2) {
@@ -300,7 +300,7 @@ var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 					LegacyFilters.setPrivate(player, 18, 2);
 				}
 				return;
-			case 273://Legacy "Friends"
+			case 274://Legacy "Friends"
 				if (option == 2) {
 					LegacyFilters.setFriendChat(player, 18, 0);
 				} else if (option == 3) {
@@ -309,7 +309,7 @@ var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 					LegacyFilters.setFriendChat(player, 18, 2);
 				}
 				return;
-			case 278://Legacy "Clan"
+			case 279://Legacy "Clan"
 				if (option == 2) {
 					LegacyFilters.setClan(player, 18, 0);
 				} else if (option == 3) {
@@ -318,7 +318,7 @@ var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 					LegacyFilters.setClan(player, 18, 2);
 				}
 				return;
-			case 283://Legacy "Guest"
+			case 284://Legacy "Guest"
 				if (option == 2) {
 					LegacyFilters.setGuestClan(player, 18, 0);
 				} else if (option == 3) {
@@ -327,7 +327,7 @@ var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 					LegacyFilters.setGuestClan(player, 18, 2);
 				}
 				return;
-			case 288://Legacy "Trade"
+			case 289://Legacy "Trade"
 				if (option == 2) {
 					LegacyFilters.setTrade(player, 18, 0);
 				} else if (option == 3) {
@@ -347,7 +347,7 @@ var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 					GlobalActions.assistTime(player);
 				}
 				return;
-			case 294://Legacy "Group"
+			case 295://Legacy "Group"
 				if (option == 2) {
 					LegacyFilters.setGroup(player, 18, 0);
 				} else if (option == 3) {
@@ -356,7 +356,7 @@ var ChatboxListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 					LegacyFilters.setGroup(player, 18, 2);
 				}
 				return;
-			case 297://Legacy "Report"
+			case 298://Legacy "Report"
 				ChatboxActions.report(player);
 				return;
 			default:
