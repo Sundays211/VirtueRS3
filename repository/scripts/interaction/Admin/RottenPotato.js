@@ -31,6 +31,7 @@
 var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, objTypeId, args) {
 		var player = args.player;
+		var target = args.target;
 		var item = args.item;
 		var slot = args.slot;
 		
@@ -49,6 +50,67 @@ var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Eve
 			RottenPotato.handleCmOption(player);	
 		} else if (event == EventType.OPHELD4) {//Commands list
 			RottenPotato.handleCommandListOption(player);
+		} else if (event == EventType.OPPLAYERU) {//use on player
+			multi4(player, "OPTIONS"
+			, "Player Info", function () {
+				api.sendMessage(player, "Not yet implemented.");
+			}, "Bank Stats", function () {
+			api.openCentralWidget(player, 1691, false);
+			api.setWidgetText(player, 1691, 7, "115");
+			api.setWidgetText(player, 1691, 11, "item1");
+			api.setWidgetText(player, 1691, 12, "item2");
+			api.setWidgetText(player, 1691, 13, "item3");
+			api.setWidgetText(player, 1691, 14, "item4");
+			api.setWidgetText(player, 1691, 15, "item5");
+			api.setWidgetText(player, 1691, 16, "item1 amount");
+			api.setWidgetText(player, 1691, 17, "item2 amount");
+	     	api.setWidgetText(player, 1691, 18, "item3 amount");
+			api.setWidgetText(player, 1691, 19, "item4 amount");
+			api.setWidgetText(player, 1691, 20, "item5 amount");
+			api.setWidgetText(player, 1691, 21, "21");
+			api.setWidgetText(player, 1691, 22, "22");
+			api.setWidgetText(player, 1691, 23, "23");
+			api.setWidgetText(player, 1691, 24, "24");
+			api.setWidgetText(player, 1691, 25, "25");
+			
+			
+			
+			
+			}, "Send "+ target.getUsername() + " to Botany Bay", function () {
+				multi2(player, "DEFINITELY SEND "+ target.getUsername() + " TO BOTANY BAY?", 
+			   "yes", function () {
+				var frame = 0;
+			   var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
+				   process : function (player) {
+					if (frame === 0) {
+						api.setSpotAnim(target, 1, 3402);
+			        	api.runAnimation(target, 17542);
+					} else if (frame == 2) {
+				target.getAppearance().setRender(Render.NPC);
+			    target.getAppearance().setNPCId(15782);
+				target.getAppearance().refresh();
+					} else if (frame == 3) {
+						target.getAppearance().setRender(Render.PLAYER);
+						target.getAppearance().refresh();
+					}
+					frame++;
+					return false;
+				},
+				stop : function (player) {
+					api.stopAnimation(player);
+					api.clearSpotAnim(player, 1);
+				}
+			});
+			player.setAction(new Action());
+
+
+			}, "no", function () {
+				api.sendMessage(player, "Not yet implemented.");
+			});
+			}, "Cancel", function () {
+			}
+			);
+
 		}
 	}
 });
@@ -60,6 +122,7 @@ var listen = function(scriptManager) {
 	scriptManager.registerListener(EventType.OPHELD2, 5733, itemListener);
 	scriptManager.registerListener(EventType.OPHELD3, 5733, itemListener);
 	scriptManager.registerListener(EventType.OPHELD4, 5733, itemListener);
+	scriptManager.registerListener(EventType.OPPLAYERU, 5733, itemListener);
 }
 
 var RottenPotato = {
@@ -73,6 +136,7 @@ var RottenPotato = {
 				player.getAppearance().refresh();
 			}, "Wipe inventory", function () {
 				api.emptyInv(player, Inv.BACKPACK);
+				api.addCarriedItem(player, 5733, 1);
 			}, "Invisible mode", function () {
 				player.getAppearance().setRender(Render.INVISIBLE);
 				player.getAppearance().refresh();
@@ -86,19 +150,24 @@ var RottenPotato = {
 				api.closeCentralWidgets(player);
 				api.openOverlaySub(player, 1017, 762, false);
 			}, "Max Stats", function () {
-				for (var skill=0; skill < 26; skill++) {
-					api.addExperience(player, skill, 13034431, false);
+				for (var skill=0; skill < 27; skill++) {
+					api.addExperience(player, skill, 140344310, false);
 				}
-			}, "Set Display", function () {
-				api.sendMessage(player, "Not yet implemented.");
+			}, "test quest completed", function () {
+				api.openCentralWidget(player, 1244, false);
+				api.setWidgetText(player, 1244, 25, "You have completed Cook's Assistant!");	
+				api.setWidgetText(player, 1244, 26, "<br>1 Quest point<br>300 Cooking XP<br>500 coins<br>20 sardines<br>Access to the cook's range<br>Tow Treasure Hunter keys");
+				api.setWidgetText(player, 1244, 27, "Quest points:<col=ee1111> 12");
+	
+				
 			}, "Clear Title", function () {
 				player.getAppearance().setPrefixTitle("");
 				player.getAppearance().refresh();
 			}, "Log Out", function () {
-				RottenPotato.handleLogOutOption(player);
+
 			});
 		},
-		handleLogOutOption : function (player) {
+		handleCommandListOption : function (player) {
 			multi5(player, "How would you like to be logged?", "Keep me logged in.", function () {
 				api.sendMessage(player, "Idle is now disabled.");
 			}, "Kick me out.", function () {
@@ -120,71 +189,4 @@ var RottenPotato = {
 				api.addCarriedItem(player, 9814, 1);
 			});
 		},
-		handleCommandListOption : function (player) {
-			multi3(player, "What would you like to do?", "Spawn Fake Rare", function () {
-				var npc = api.createNpc(20588, api.getCoords(player));
-				if(npc.getOwner() != null) {
-					api.sendMessage(player, "You already have a rare item out.");
-				} else {
-					npc.setOwner(player);
-					api.spawnNpc(npc);
-					api.runAnimation(player, 827);
-					api.moveAdjacent(player);
-				}
-			}, "Balloon Animals Event", function () {
-				World.getInstance().sendAdminBroadcast("The balloon animal event has started. Start popping your balloons for a chance of the big prize!");
-				RottenPotato.spawnBalloonEvent(player);
-			}, "Nothing", function () {
-				//Do nothing, like they told you to!
-			});
-		},
-		spawnBalloonEvent : function (player) {
-			var npc = api.createNpc(2276, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2277, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2278, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2276, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2277, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2278, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2275, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2276, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2277, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2278, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2277, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2278, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2275, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2276, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2277, api.getCoords(player));
-			api.spawnNpc(npc);
-			
-			npc = api.createNpc(2278, api.getCoords(player));
-			api.spawnNpc(npc);
-		}
 }
