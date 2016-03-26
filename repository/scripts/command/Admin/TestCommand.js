@@ -94,7 +94,8 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.sendMessage(player, "Opened interface on location...");
 			return;
 		case 7:
-			api.openWidget(player, 1477, 503, 1418, true)
+			api.openCentralWidget(player, 1709, false);
+			return;
 		}
 	}
 });
