@@ -1,0 +1,30 @@
+>Deob Issues:
+- First Time Automatic Graphic Setup : This need's fixing, 
+since the accept/decline button doesn't register.
+
+>Known Bugs:
+- Fix NPC Moving Interacting : Can't 1 Square any NPC that's moving.
+- Fix Animations : They don't reset after animation is over.
+- The attack tab doesn't update properly when switching from legacy -> eoc.
+- NPC on death teleportation? : I saw this on Rune-Server. 
+There may be a bug when a npc die after combat they teleport closer to you or something.
+- Combat Level doesn't set properly sometimes : Just shows Level 0 + 3.
+- Ability bar missing in Legacy Interfaces with EOC Combat.
+- NPCS no clip through buildings while randomly walking.
+- Still possible to walk through bank booths.
+- Banking is 100% messed up.
+
+>TODO:
+- Convert 835/861 Widgets to 865.
+  - Customisations Tab includes (Wardrobe, Animations, Appearance, Titles, Pets)
+- Legacy Interfaces needs all ability books in the magic tab.
+- Convert Price Checker to 865.
+- Eventually re-dump all prices from Grand Exchange : Since including
+new items.
+- Grand Exchange History & Sets Tab.
+- Rebuild up minigames from the new minigame handler.
+- Finish atleast one fully working quest.
+
+>Unfinished:
+- Combat need's finishing : Mainly just Combat Following at the moment.
+- Treasure Hunter : Most works, just need's to select random prize.
