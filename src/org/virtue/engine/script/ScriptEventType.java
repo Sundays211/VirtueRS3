@@ -64,6 +64,11 @@ public enum ScriptEventType {
 	OPLOCU(6),
 	
 	/**
+	 * Called when an interface component is targeted on a location
+	 */
+	OPLOCT(7),
+	
+	/**
 	 * The first option on an NPC
 	 */
 	OPNPC1(21),
@@ -92,6 +97,11 @@ public enum ScriptEventType {
 	 * Called when an inventory item is used on an NPC
 	 */
 	OPNPCU(26),
+	
+	/**
+	 * Called when an interface component is targeted on an NPC
+	 */
+	OPNPCT(27),
 	
 	/**
 	 * The first option on an item held in the player's inventory
@@ -242,16 +252,6 @@ public enum ScriptEventType {
 	 * Called when an interface component is targeted on another interface component
 	 */
 	IF_BUTTONT(91),
-	
-	/**
-	 * Called when an interface component is targeted on a location
-	 */
-	OPLOCT(92),
-	
-	/**
-	 * Called when an interface component is targeted on an NPC
-	 */
-	OPNPCT(93),
 	
 	/**
 	 * Called when an interface component is targeted on a ground item

@@ -5,6 +5,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.ability.Ability;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.magic.CombatSpell;
+import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
@@ -55,11 +56,6 @@ public final class CombatSchedule {
 	 * The combat schedule state.
 	 */
 	private CombatState state;
-	
-	/**
-	 * If the entity is retaliating.
-	 */
-	private boolean retaliating;
 	
 	/**
 	 * The adrenaline.
@@ -289,17 +285,6 @@ public final class CombatSchedule {
 	}
 
 	/**
-	 * Sets the retaliating value.
-	 * @param retaliating The retaliating to set.
-	 */
-	public void setRetaliating(boolean retaliating) {
-		this.retaliating = retaliating;
-		if (entity instanceof Player) {
-			((Player) entity).getVars().setVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED, retaliating ? 0 : 1);
-		}
-	}
-
-	/**
 	 * Sets the specialEnabled value.
 	 * @param specialEnabled The specialEnabled to set.
 	 */
@@ -477,7 +462,14 @@ public final class CombatSchedule {
 	 * @return The retaliating.
 	 */
 	public boolean isRetaliating() {
-		return retaliating;
+		if (entity instanceof Player) {
+			return ((Player) entity).getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) == 0;
+		} else if (entity instanceof NPC) {//NPCs always retaliate
+			NPC npc = (NPC) entity;
+			return npc.getType().getCombatLevel() > 0 && npc.getType().hasAction("attack");
+		} else {
+			throw new RuntimeException("Invalid entity: "+entity.getClass());
+		}
 	}
 
 	/**

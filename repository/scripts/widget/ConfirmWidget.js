@@ -133,6 +133,7 @@ var ConfirmWidget = {
 			api.setVarp(player, 4012, 528982);
 			api.setVarp(player, 260, 0);
 			api.setVarc(player, 779, 124);
+			api.openOverlaySub(player, 6, 1503, true);
 		},
 		setEocInterfaceMode : function (player) {
 			api.setVarBit(player, 27169, 0);//Legacy mode disabled
@@ -166,6 +167,11 @@ var ConfirmWidget = {
 			api.setVarp(player, 4012, 528832);
 			api.setVarp(player, 260, 0);
 			api.setVarc(player, 779, 2704);
+			
+			api.openOverlaySub(player, 6, 1460, true);
+			api.openOverlaySub(player, 7, 1452, true);
+			api.openOverlaySub(player, 8, 1449, true);
+			api.runClientScript(player, 8862, [5, 1]);
 		},
 		setLegacyCombatMode : function (player) {
 			//TODO: Figure out what needs to be sent here

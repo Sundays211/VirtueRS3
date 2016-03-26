@@ -25,6 +25,7 @@ import org.virtue.game.entity.combat.impl.ability.Ability;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.ability.keybind.Keybind;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -71,7 +72,8 @@ public class ActionBarWidget extends Widget {
 	public boolean click(int widgetId, int buttonId, int slotId, int itemId, Player player, OptionButton option) {
 		switch (buttonId) {
 		case 49://Toggle auto-retaliate
-			player.getCombatSchedule().setRetaliating(!player.getCombatSchedule().isRetaliating());			
+			boolean wasRetaliating = player.getCombatSchedule().isRetaliating();
+			player.getVars().setVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED, wasRetaliating ? 1 : 0);	
 			return true;
 		case 248:
 			player.getCombatSchedule().getActionBar().switchLocked();

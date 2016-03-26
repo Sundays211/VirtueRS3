@@ -19,12 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.var;
+package org.virtue.game.entity.player;
 
 import java.util.Map;
 
 import org.virtue.game.entity.combat.CombatMode;
-import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.world.NewsItem;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -1692,7 +1692,7 @@ public class LoginDispatcher {
 		player.getDispatcher().sendWidgetEvents(1458, 33, 0, 35, 8388610);
 		player.getDispatcher().sendCS2Script2(8862, 4, 1);
 		
-		if (player.getMode() == CombatMode.LEGACY) {
+		if (player.getVars().getVarBitValue(VarKey.Bit.LEGACY_INTERFACE_MODE) == 1) {
 			//Magic Abilities
 			player.getWidgets().openOverlaySub(5, 1461, true);
 			

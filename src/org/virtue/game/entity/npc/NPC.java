@@ -131,7 +131,6 @@ public class NPC extends Entity {
 		this.getMovement().setTraversalMap(new NpcTraversalMap(this, tile));
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
-		getCombatSchedule().setRetaliating(type.getCombatLevel() > 0 && type.hasAction("attack"));
 		CustomNpcData customData = NpcTypeList.getCustomData(this.getID());
 		if (customData != null) {
 			this.walkRange = customData.getWalkRange();

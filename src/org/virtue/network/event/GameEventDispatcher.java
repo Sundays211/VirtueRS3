@@ -33,11 +33,11 @@ import org.virtue.game.content.ignores.Ignore;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.player.GameState;
+import org.virtue.game.entity.player.LoginDispatcher;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.Stat;
-import org.virtue.game.entity.player.var.LoginDispatcher;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.world.region.MapSize;
 import org.virtue.game.world.region.Tile;
@@ -173,8 +173,6 @@ public class GameEventDispatcher {
 				player.getCombatSchedule().increaseAdrenaline(0);
 				player.getCombatSchedule().getActionBar().refresh();
 			}
-			player.getCombatSchedule()
-					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
 			player.getImpactHandler()
 					.setMaximumLifepoints(player.getSkills().getBaseLevel(Stat.CONSTITUTION) * 100);
 			player.getImpactHandler().restoreLifepoints();

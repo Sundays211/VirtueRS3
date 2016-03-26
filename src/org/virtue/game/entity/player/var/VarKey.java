@@ -102,6 +102,9 @@ public class VarKey {
 		public static final int TRADE_LOAN_TO_OFFER = 1046;
 		public static final int TRADE_LOAN_FROM_OFFER = 1047;
 		
+		public static final int LEGACY_COMBAT_MODE = 27168;
+		public static final int LEGACY_INTERFACE_MODE = 27169;
+		
 		/**
 		 * Represents the minimum value of an item required to trigger the lootbeam
 		 */
