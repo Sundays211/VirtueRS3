@@ -35,6 +35,7 @@ var EquipmentOpenListener = Java.extend(Java.type('org.virtue.engine.script.list
 		api.setWidgetEvents(player, 1464, 15, 0, 18, 15302654);
 		api.setWidgetEvents(player, 1464, 13, 2, 12, 2);
 		api.sendInv(player, Inv.EQUIPMENT);		
+		api.setVarc(player, 181, 0);
 	}
 });
 

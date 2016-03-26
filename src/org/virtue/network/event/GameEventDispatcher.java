@@ -31,6 +31,7 @@ import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.OnlineStatus;
 import org.virtue.game.content.ignores.Ignore;
 import org.virtue.game.entity.Entity;
+import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
@@ -165,19 +166,13 @@ public class GameEventDispatcher {
 			if (player.getClanHash() != 0L) {
 				Virtue.getInstance().getClans().getSettings().registerPlayer(player.getChat(), false);
 			}
-			switch (player.getMode()) {
-			case EOC:
-			case REVOLUTION:
-				LoginDispatcher.onEoCLogin(player);
-				player.getCombatSchedule().getActionBar().refresh();
-				break;
-			case LEGACY:
-				LoginDispatcher.onLegacyLogin(player);
-				break;
-			}
+			LoginDispatcher.onGameLogin(player);
 			player.getInteractions().initialise();
 			player.getExchangeOffers().init();
-			player.getCombatSchedule().increaseAdrenaline(0);
+			if (player.getMode() != CombatMode.LEGACY) {
+				player.getCombatSchedule().increaseAdrenaline(0);
+				player.getCombatSchedule().getActionBar().refresh();
+			}
 			player.getCombatSchedule()
 					.setRetaliating(player.getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) != 1);
 			player.getImpactHandler()
