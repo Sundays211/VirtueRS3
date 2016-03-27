@@ -279,8 +279,10 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.setVarc(player, 1800, player.getKeys() - 1);
 			api.sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
 			return;
-		case "xTest":
-			player.getWidgets().openWidget(1477, 503, 1418, true);
+		case "xtest":
+			api.openCentralWidget(player, 1691, false);
+			api.setWidgetText(player, 1691, 7, "1,333,333,700"); //Total Bank Value
+			//player.getWidgets().openWidget(1477, 503, 1418, true);
 		}
 	}
 });

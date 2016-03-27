@@ -210,7 +210,7 @@ public final class WidgetRepository {
 	 * @param player The player
 	 * @return True if the use was handled successfully, false otherwise
 	 */
-	public boolean handleUse(int widget1, int component1, int slot1,
+	public boolean handleTarget(int widget1, int component1, int slot1,
 			int item1, int widget2, int component2, int slot2, int item2,
 			Player player) {
 		Widget widget = getInterface(widget1);

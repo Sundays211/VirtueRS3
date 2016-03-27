@@ -44,29 +44,33 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public void handle(Player player, WidgetDragEventContext context) {
-		if (Virtue.getInstance().getWidgetRepository().handleDrag(
-				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
-				context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item(), player)) {
-			return;
-		}
+	public void handle(Player player, WidgetDragEventContext context) {		
 		ScriptManager scripts = Virtue.getInstance().getScripts();
-		if (scripts.hasBinding(ScriptEventType.IF_DRAG, context.getIf1Hash())) {
+		if (scripts.hasBinding(ScriptEventType.IF_DRAG, context.getSrcHash())) {
 			Map<String, Object> args = new HashMap<>();
 			args.put("player", player);
-			args.put("frominterface", context.getIf1Interface());
-			args.put("fromcomponent", context.getIf1Component());
-			args.put("fromslot", context.getIf1Slot());
-			args.put("tointerface", context.getIf2Interface());
-			args.put("tocomponent", context.getIf2Component());
-			args.put("toslot", context.getIf2Slot());
-			scripts.invokeScriptChecked(ScriptEventType.IF_DRAG, context.getIf1Hash(), args);
+			args.put("frominterface", context.getSrcInterface());
+			args.put("fromcomponent", context.getSrcComponent());
+			args.put("fromslot", context.getSrcSlot());
+			args.put("fromitem", context.getSrcItem());
+			args.put("tointerface", context.getDestInterface());
+			args.put("tocomponent", context.getDestComponent());
+			args.put("toslot", context.getDestSlot());
+			args.put("toitem", context.getDestItem());
+			scripts.invokeScriptChecked(ScriptEventType.IF_DRAG, context.getSrcHash(), args);
 			return;
 		}
-		String message = "Interface1: id="+context.getIf1Interface()+", comp="+context.getIf1Component()
-				+", slot="+context.getIf1Slot()+", itemID="+context.getIf1Item()
-				+" Interface2: id="+context.getIf2Interface()+", comp="+context.getIf2Component()
-				+", slot="+context.getIf2Slot()+", itemID="+context.getIf2Item();
+		
+		if (Virtue.getInstance().getWidgetRepository().handleDrag(
+				context.getSrcInterface(), context.getSrcComponent(), context.getSrcSlot(), context.getSrcItem(), 
+				context.getDestInterface(), context.getDestComponent(), context.getDestSlot(), context.getDestItem(), player)) {
+			return;
+		}
+		
+		String message = "Source: id="+context.getSrcInterface()+", comp="+context.getSrcComponent()
+				+", slot="+context.getSrcSlot()+", itemID="+context.getSrcItem()
+				+" Destination: id="+context.getDestInterface()+", comp="+context.getDestComponent()
+				+", slot="+context.getDestSlot()+", itemID="+context.getDestItem();
 		if (player.getPrivilegeLevel().getRights() >= 2) {
 			player.getDispatcher().sendGameMessage("Unhanded interface drag: "+message);
 		}

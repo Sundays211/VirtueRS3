@@ -429,17 +429,13 @@ public class NPC extends Entity {
 	public void sendDrop(Entity killer) {
 		Region region = World.getInstance().getRegions().getRegionByID(this.getCurrentTile().getRegionID());
 		if (region != null && region.isLoaded()) {
-			Entity player = null;
-			if (killer instanceof Player) {
-				player = (Entity) killer;
-			}
 			for (NpcDrops loot : NpcDropParser.forID(this.getID()).getLootChance(0)) {
 				if (itemDropCalls.contains(loot.getItemID())) {
 					World.getInstance().sendBroadcast(
-							"Name has received " + api.getItemType(loot.getItemID()).name.toString() + " drop!");
+						api.getName(killer) + " has received " + api.getItemType(loot.getItemID()).name.toString() + " drop!");
 				}
 				region.dropItem(loot.getItemID(), loot.getRandomNumberFrom(loot.getMinAmount(), loot.getMaxAmount()),
-						player, this.getCurrentTile());
+						killer, this.getCurrentTile());
 			}
 		}
 	}

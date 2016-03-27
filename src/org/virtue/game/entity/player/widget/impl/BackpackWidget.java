@@ -58,22 +58,6 @@ public class BackpackWidget extends Widget {
 	 * The {@link Logger} instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(BackpackWidget.class);
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.virtue.game.entity.player.widget.Widget#open(int, int, int, boolean, org.virtue.game.entity.player.Player)
-	 */
-	@Override
-	public void open (int parentId, int parentSlot, int widgetId, boolean clickThrough, Player player) {
-		super.open(parentId, parentSlot, widgetId, clickThrough, player);
-		player.getWidgets().openWidget(762, 112, 1463, true);
-		player.getDispatcher().sendWidgetEvents(1473, 34, -1, -1, 2097152);
-		player.getDispatcher().sendWidgetEvents(1473, 34, 0, 27, 15302030);
-		player.getInvs().loadContainer(ContainerState.BACKPACK);
-		player.getInvs().sendContainer(ContainerState.BACKPACK);
-		player.getInvs().loadContainer(ContainerState.MONEY_POUCH);
-		player.getInvs().sendContainer(ContainerState.MONEY_POUCH);
-	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.player.widget.Widget#click(int, int, int, int, org.virtue.game.entity.player.Player)
@@ -107,35 +91,6 @@ public class BackpackWidget extends Widget {
 		default:
 			return false;
 		}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.virtue.game.entity.player.widget.Widget#drag(int, int, int, int, int, int, int, int, org.virtue.game.entity.player.Player)
-	 */
-	@Override
-	public boolean drag (int widget1, int component1, int slot1, int itemID1, int widget2, int component2, int slot2, int itemID2, Player player) {
-		if (widget1 == widget2 && widget1 == WidgetState.BACKPACK_WIDGET.getID()
-				&& component1 == component2 && component1 == 34) {
-			if (slot2 == -1) {
-				return true;//This means the item wasn't dragged onto another slot. We'll just suppress the debug message...
-			}
-			if (slot1 >= 0 && slot1 < 28 && slot2 >= 0 && slot2 < 28) {
-				Item item = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot1);
-				Item item2 = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot2);
-				int actualID1 = (item == null) ? -1 : item.getId();
-				int actualID2 = (item2 == null) ? -1 : item2.getId();
-				if (actualID1 != itemID2 || actualID2 != itemID1) {//Since the client version has already changed, the order is reversed
-					player.getInvs().sendContainer(ContainerState.BACKPACK);//Client backpack is out of sync; re-synchronise it
-				} else {
-					player.getInvs().getContainer(ContainerState.BACKPACK).set(slot2, item);
-					player.getInvs().getContainer(ContainerState.BACKPACK).set(slot1, item2);			
-					player.getInvs().updateContainer(ContainerState.BACKPACK, slot1, slot2);
-				}
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/* (non-Javadoc)

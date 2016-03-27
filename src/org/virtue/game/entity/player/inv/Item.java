@@ -17,8 +17,8 @@ import org.virtue.utility.text.StringUtility;
  */
 public class Item extends Node {
 		
-	public static Item create(int id, int amount) {
-		return new Item(id, amount);
+	public static Item create(int id, int count) {
+		return new Item(id, count);
 	}
 	/**
 	 * Represents the amount.
@@ -30,7 +30,7 @@ public class Item extends Node {
 	 */
 	private ItemType type;
 	
-	public String examine;
+	public String desc;
 
 	/**
 	 * Constructs a new {@code Item.java}.
@@ -104,20 +104,20 @@ public class Item extends Node {
 	 * @return The examine.
 	 */
 	public String getExamine() {
-		if (examine == null) {
-			examine = getType().getDescription()+" (id="+id+", amount="+amount+")";
+		if (desc == null) {
+			desc = getType().getDescription()+" (id="+id+", amount="+amount+")";
 		}
-		return examine;
+		return desc;
 	}
 	
 	/**
 	 * Handles an "examine" interaction with the item
 	 */
 	public void examine (Player player) {
-		if (examine == null) {
-			examine = getType().getDescription()+" (id="+id+", amount="+amount+")";
+		if (desc == null) {
+			desc = getType().getDescription()+" (id="+id+", amount="+amount+")";
 		}
-		player.getDispatcher().sendGameMessage(examine);
+		player.getDispatcher().sendGameMessage(desc);
 		int value = getType().getExchangeValue();
 		if (value != -1) {
 			player.getDispatcher().sendGameMessage("This item is worth: "+StringUtility.formatNumber(value)

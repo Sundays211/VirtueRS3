@@ -73,7 +73,7 @@ public class ClipMap implements TraversalMap {
 					clipTile(tileX, tileY, location.getTile().getPlane(), mask);
 					if (location.getLocType().clipType != 0) {
 						Item marker = Item.create(1040, 1);
-						marker.examine = "Marker for location id="+location.getID()+", clipType="+location.getLocType().clipType+", nodeType="+location.getNodeType()+", "+location.getLocType().allowInteract;
+						marker.desc = "Marker for location id="+location.getID()+", clipType="+location.getLocType().clipType+", nodeType="+location.getNodeType()+", "+location.getLocType().allowInteract;
 						//region.addItem(new GroundItem(marker, new Tile(tileX, tileY, location.getTile().getPlane(), region.getID())));
 					}
 				}
@@ -81,7 +81,7 @@ public class ClipMap implements TraversalMap {
 		} else if (location.getNodeType() == 22) {
 			if (location.getLocType().clipType == 1) {
 				Item marker = Item.create(1042, 1);
-				marker.examine = "Marker for location id="+location.getID()+", clipType="+location.getLocType().clipType+", nodeType="+location.getNodeType();
+				marker.desc = "Marker for location id="+location.getID()+", clipType="+location.getLocType().clipType+", nodeType="+location.getNodeType();
 				//region.addItem(new GroundItem(marker, new Tile(location.getTile())));
 				clipFloorDeco(location.getTile().getXInRegion(), location.getTile().getYInRegion(), location.getTile().getPlane());
 			}

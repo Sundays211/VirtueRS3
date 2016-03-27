@@ -33,16 +33,16 @@ import org.virtue.network.event.handler.GameEventHandler;
  * @author Sundays211
  * @since 6/11/2014
  */
-public class WidgetOnWidgetEventHandler implements GameEventHandler<WidgetTargetEventContext> {
+public class WidgetTargetEventHandler implements GameEventHandler<WidgetTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
 	public void handle(Player player, WidgetTargetEventContext context) {
-		if (!Virtue.getInstance().getWidgetRepository().handleUse(
+		if (!Virtue.getInstance().getWidgetRepository().handleTarget(
 				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
-				context.getIf2Interface(), context.getIf2Component(), context.getIf2Slot(), context.getIf2Item(), player)) {
+				context.getTargetInterface(), context.getTargetComponent(), context.getTargetSlot(), context.getTargetItem(), player)) {
 			defaultHandler(player, context);
 		}
 	}
@@ -52,8 +52,8 @@ public class WidgetOnWidgetEventHandler implements GameEventHandler<WidgetTarget
 		if (player.getPrivilegeLevel().getRights() >= 2) {
 			message = "Unhanded interface-on-interface: Interface1: id="+context.getIf1Interface()+", comp="+context.getIf1Component()
 					+", slot="+context.getIf1Slot()+", itemID="+context.getIf1Item()
-					+" Interface2: id="+context.getIf2Interface()+", comp="+context.getIf2Component()
-					+", slot="+context.getIf2Slot()+", itemID="+context.getIf2Item();
+					+" Interface2: id="+context.getTargetInterface()+", comp="+context.getTargetComponent()
+					+", slot="+context.getTargetSlot()+", itemID="+context.getTargetItem();
 		}		
 		player.getDispatcher().sendGameMessage(message);
 	}

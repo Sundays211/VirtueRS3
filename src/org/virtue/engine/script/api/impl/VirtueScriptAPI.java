@@ -328,7 +328,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getId(Node node) {
-		return node.getId();
+		return node == null ? -1 : node.getId();
 	}
 
 	/* (non-Javadoc)
@@ -813,7 +813,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#setInvSlot(org.virtue.game.entity.player.Player, int, int, int, int)
 	 */
 	@Override
-	public void setInvSlot(Player player, int invId, int slot, int itemId, int amount) {
+	public void setInvSlot(Player player, int invId, int slot, int itemId, int count) {
+		this.setInvSlot(player, invId, slot, Item.create(itemId, count));
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#setInvSlot(org.virtue.game.entity.player.Player, int, int, org.virtue.game.entity.player.inv.Item)
+	 */
+	@Override
+	public void setInvSlot(Player player, int invId, int slot, Item item) {
 		ContainerState state = ContainerState.getById(invId);
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
@@ -822,7 +830,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (container == null) {
 			throw new IllegalStateException("Container "+state+" has not yet been loaded.");
 		}
-		container.set(slot, Item.create(itemId, amount));
+		container.set(slot, item);
 		player.getInvs().updateContainer(state, slot);
 	}
 

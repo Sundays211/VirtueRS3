@@ -69,19 +69,19 @@ public class WidgetTargetEventContext implements GameEventContext {
 		return if2_hash;
 	}
 	
-	public int getIf2Component () {
+	public int getTargetComponent () {
 		return if2_hash & 0xffff;
 	}
 	
-	public int getIf2Interface () {
+	public int getTargetInterface () {
 		return if2_hash >> 16;
 	}
 	
-	public int getIf2Slot () {
+	public int getTargetSlot () {
 		return if2_slot;
 	}
 	
-	public int getIf2Item () {
+	public int getTargetItem () {
 		return if2_item;
 	}
 }

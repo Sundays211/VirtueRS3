@@ -103,7 +103,7 @@ import org.virtue.network.event.handler.impl.WidgetDragEventHandler;
 import org.virtue.network.event.handler.impl.WidgetOnLocEventHandler;
 import org.virtue.network.event.handler.impl.NpcTargetEventHandler;
 import org.virtue.network.event.handler.impl.WidgetOnPlayerEventHandler;
-import org.virtue.network.event.handler.impl.WidgetOnWidgetEventHandler;
+import org.virtue.network.event.handler.impl.WidgetTargetEventHandler;
 import org.virtue.network.event.handler.impl.WorldListEventHandler;
 
 /**
@@ -123,7 +123,7 @@ public class EventRepository {
 		registerReadEvent(new UrlRequestEventDecoder(), new UrlRequestEventHandler());
 		registerReadEvent(new ButtonClickEventDecoder(), new ButtonClickEventHandler());
 		registerReadEvent(new PlayerClickEventDecoder(), new PlayerClickEventHandler());
-		registerReadEvent(new WidgetTargetEventDecoder(), new WidgetOnWidgetEventHandler());
+		registerReadEvent(new WidgetTargetEventDecoder(), new WidgetTargetEventHandler());
 		registerReadEvent(new WidgetDragEventDecoder(), new WidgetDragEventHandler());
 		registerReadEvent(new LocTargetEventDecoder(), new WidgetOnLocEventHandler());
 		registerReadEvent(new PlayerTargetEventDecoder(), new WidgetOnPlayerEventHandler());

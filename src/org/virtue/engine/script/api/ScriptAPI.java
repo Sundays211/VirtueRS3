@@ -485,9 +485,19 @@ public interface ScriptAPI {
 	 * @param invId The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid containers
 	 * @param slot The slot to set
 	 * @param itemID The id of the new item to add
-	 * @param amount The number of items to add
+	 * @param count The number of items to add
 	 */
 	public void setInvSlot (Player player, int invId, int slot, int itemId, int count);
+	
+	/**
+	 * Replaces an item in the player's inventory with a new item.
+	 * This should be used with care, as it deletes the old item without warning and can cause issues in some inventories (such as shops and banks).
+	 * @param player The player
+	 * @param invId The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid containers
+	 * @param slot The slot to set
+	 * @param item The new item to add
+	 */
+	public void setInvSlot (Player player, int invId, int slot, Item item);
 		
 	public int delItem (Player player, int invId, int itemID, int count);
 

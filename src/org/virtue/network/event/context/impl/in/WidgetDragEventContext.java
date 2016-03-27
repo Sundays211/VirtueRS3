@@ -32,56 +32,56 @@ import org.virtue.network.event.context.GameEventContext;
  */
 public class WidgetDragEventContext implements GameEventContext {
 
-	private int if1_hash, if1_slot, if1_item;
-	private int if2_hash, if2_slot, if2_item;
+	private int src_hash, src_slot, src_item;
+	private int dest_hash, dest_slot, dest_item;
 
-	public WidgetDragEventContext (int if1_hash, int if1_slot1, int if1_slot2, 
-			int if2_hash, int if2_slot1, int if2_slot2) {
-		this.if1_hash = if1_hash;
-		this.if1_slot = if1_slot1;
-		this.if1_item = if1_slot2;
-		this.if2_hash = if2_hash;
-		this.if2_slot = if2_slot1;
-		this.if2_item = if2_slot2;
+	public WidgetDragEventContext (int src_hash, int src_slot, int src_item, 
+			int dest_hash, int dest_slot, int dest_item) {
+		this.src_hash = src_hash;
+		this.src_slot = src_slot;
+		this.src_item = src_item;
+		this.dest_hash = dest_hash;
+		this.dest_slot = dest_slot;
+		this.dest_item = dest_item;
 	}
 	
-	public int getIf1Hash () {
-		return if1_hash;
+	public int getSrcHash () {
+		return src_hash;
 	}
 	
-	public int getIf1Component () {
-		return if1_hash & 0xffff;
+	public int getSrcComponent () {
+		return src_hash & 0xffff;
 	}
 	
-	public int getIf1Interface () {
-		return if1_hash >> 16;
+	public int getSrcInterface () {
+		return src_hash >> 16;
 	}
 	
-	public int getIf1Slot () {
-		return if1_slot;
+	public int getSrcSlot () {
+		return src_slot;
 	}
 	
-	public int getIf1Item () {
-		return if1_item;
+	public int getSrcItem () {
+		return src_item;
 	}
 	
-	public int getIf2Hash () {
-		return if2_hash;
+	public int getDestHash () {
+		return dest_hash;
 	}
 	
-	public int getIf2Component () {
-		return if2_hash & 0xffff;
+	public int getDestComponent () {
+		return dest_hash & 0xffff;
 	}
 	
-	public int getIf2Interface () {
-		return if2_hash >> 16;
+	public int getDestInterface () {
+		return dest_hash >> 16;
 	}
 	
-	public int getIf2Slot () {
-		return if2_slot;
+	public int getDestSlot () {
+		return dest_slot;
 	}
 	
-	public int getIf2Item () {
-		return if2_item;
+	public int getDestItem () {
+		return dest_item;
 	}
 }
