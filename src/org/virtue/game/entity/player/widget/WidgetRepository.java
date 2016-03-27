@@ -238,7 +238,7 @@ public final class WidgetRepository {
 	 * @param player The player
 	 * @return True if the use was handled successfully, false otherwise
 	 */
-	public boolean handleUse(int widgetId, int component, int slot,
+	public boolean handleTarget(int widgetId, int component, int slot,
 			int item, SceneLocation location, Player player) {
 		Widget widget = getInterface(widgetId);
 		if (widget == null) {

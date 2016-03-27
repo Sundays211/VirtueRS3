@@ -36,7 +36,7 @@ import org.virtue.network.event.handler.GameEventHandler;
  * @author Sundays211
  * @since 18/01/2015
  */
-public class WidgetOnPlayerEventHandler implements GameEventHandler<PlayerTargetEventContext> {
+public class PlayerTargetEventHandler implements GameEventHandler<PlayerTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)

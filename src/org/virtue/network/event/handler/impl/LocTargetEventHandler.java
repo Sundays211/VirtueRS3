@@ -27,8 +27,12 @@ import java.util.Map;
 import org.virtue.Virtue;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
+import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.network.event.context.impl.in.WidgetTargetEventContext;
+import org.virtue.game.world.region.Region;
+import org.virtue.game.world.region.SceneLocation;
+import org.virtue.game.world.region.Tile;
+import org.virtue.network.event.context.impl.in.LocTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
 /**
@@ -36,44 +40,63 @@ import org.virtue.network.event.handler.GameEventHandler;
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 6/11/2014
+ * @since 7/11/2014
  */
-public class WidgetTargetEventHandler implements GameEventHandler<WidgetTargetEventContext> {
+public class LocTargetEventHandler implements GameEventHandler<LocTargetEventContext> {
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public void handle(Player player, WidgetTargetEventContext context) {
+	public void handle(final Player player, final LocTargetEventContext context) {
+		Tile coord = new Tile(context.getTargetCoordX(), context.getTargetCoordY(), player.getCurrentTile().getPlane());
+		Region region = World.getInstance().getRegions().getRegionByID(coord.getRegionID());
+		if (region != null) {
+			final SceneLocation location = region.getLocation(coord.getXInRegion(), coord.getYInRegion(), coord.getPlane(), context.getTargetTypeID());
+			if (location == null) {
+				player.getDispatcher().sendGameMessage("<col=ff0000>Location "+context.getTargetTypeID()+" clicked at "+coord+" does not exist!");
+			} else {
+				player.setPaused(false);
+				if (!player.getMovement().moveTo(location, context.getTargetCoordX(), context.getTargetCoordY())) {
+					return;//TODO: Add handing if the player cannot reach the location
+				}
+				player.getMovement().setOnTarget(() -> handle(player, context, location));
+			}
+		}		
+	}
+	
+	private void handle(Player player, LocTargetEventContext context, SceneLocation location) {	
 		ScriptManager scripts = Virtue.getInstance().getScripts();
-		if (scripts.hasBinding(ScriptEventType.IF_BUTTONT, context.getHash())) {
+		
+		int level = location.getCurrentTile().getPlane();
+		Tile clickCoords = new Tile(context.getTargetCoordX(), context.getTargetCoordY(), level);
+		
+		if (scripts.hasBinding(ScriptEventType.OPLOCT, context.getHash())) {
 			Map<String, Object> args = new HashMap<>();
 			args.put("player", player);
 			args.put("interface", context.getInterface());
 			args.put("component", context.getComponent());
 			args.put("slot", context.getSlot());
 			args.put("itemId", context.getItem());
-			args.put("targetInterface", context.getTargetInterface());
-			args.put("targetComponent", context.getTargetComponent());
-			args.put("targetSlot", context.getTargetSlot());
-			args.put("targetItemId", context.getTargetItem());
-			scripts.invokeScriptChecked(ScriptEventType.IF_BUTTONT, context.getHash(), args);
+			args.put("targetLoc", location);
+			args.put("targetCoords", clickCoords);
+			scripts.invokeScriptChecked(ScriptEventType.OPLOCT, context.getHash(), args);
 			return;
 		}
 		
 		if (Virtue.getInstance().getWidgetRepository().handleTarget(
 				context.getInterface(), context.getComponent(), context.getSlot(), context.getItem(), 
-				context.getTargetInterface(), context.getTargetComponent(), context.getTargetSlot(), context.getTargetItem(), player)) {
+				location, player)) {
 			return;
 		}
 		
-		String message = "Nothing interesting happens.";
+		String message = "Nothing interesting happens.";		
 		if (player.getPrivilegeLevel().getRights() >= 2) {
-			message = "Unhanded interface-target: Interface: id="+context.getInterface()+", comp="+context.getComponent()
-					+", slot="+context.getSlot()+", itemID="+context.getItem()
-					+" Target: id="+context.getTargetInterface()+", comp="+context.getTargetComponent()
-					+", slot="+context.getTargetSlot()+", itemID="+context.getTargetItem();
-		}		
+			message = "Unhanded location target: Interface: id="+context.getInterface()+", comp="+context.getComponent()
+					+", slot="+context.getSlot()+", item="+context.getItem()
+					+", location="+location;
+		}
 		player.getDispatcher().sendGameMessage(message);
 	}
+
 }

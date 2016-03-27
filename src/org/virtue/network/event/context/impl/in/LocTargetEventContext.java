@@ -32,7 +32,7 @@ import org.virtue.network.event.context.GameEventContext;
  */
 public class LocTargetEventContext implements GameEventContext {
 	
-	private int if_hash, if_slot, if_item;
+	private int hash, slot, item;
 	
 	private boolean forceRun;
 	
@@ -40,46 +40,46 @@ public class LocTargetEventContext implements GameEventContext {
 	
 	private int locID;
 	
-	public LocTargetEventContext(int if_hash, int if_slot, int if_item, 
+	public LocTargetEventContext(int hash, int slot, int item, 
 			int locID, int baseX, int baseY, boolean forceRun) {
-		this.if_hash = if_hash;
-		this.if_slot = if_slot;
-		this.if_item = if_item;
+		this.hash = hash;
+		this.slot = slot;
+		this.item = item;
 		this.locID = locID;
 		this.baseX = baseX;
 		this.baseY = baseY;
 		this.forceRun = forceRun;
 	}
 	
-	public int getIfHash () {
-		return if_hash;
+	public int getHash () {
+		return hash;
 	}
 	
-	public int getIfComponent () {
-		return if_hash & 0xffff;
+	public int getComponent () {
+		return hash & 0xffff;
 	}
 	
-	public int getIfInterface () {
-		return if_hash >> 16;
+	public int getInterface () {
+		return hash >> 16;
 	}
 	
-	public int getIfSlot () {
-		return if_slot;
+	public int getSlot () {
+		return slot;
 	}
 	
-	public int getIfItem () {
-		return if_item;
+	public int getItem () {
+		return item;
 	}
 	
-	public int getLocTypeID () {
+	public int getTargetTypeID () {
 		return locID;
 	}
 	
-	public int getBaseX () {
+	public int getTargetCoordX () {
 		return baseX;
 	}
 	
-	public int getBaseY () {
+	public int getTargetCoordY () {
 		return baseY;
 	}
 	

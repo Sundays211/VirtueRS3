@@ -100,9 +100,9 @@ import org.virtue.network.event.handler.impl.VarcTransmitEventHandler;
 import org.virtue.network.event.handler.impl.WalkEventHandler;
 import org.virtue.network.event.handler.impl.WidgetCloseEventHandler;
 import org.virtue.network.event.handler.impl.WidgetDragEventHandler;
-import org.virtue.network.event.handler.impl.WidgetOnLocEventHandler;
+import org.virtue.network.event.handler.impl.LocTargetEventHandler;
 import org.virtue.network.event.handler.impl.NpcTargetEventHandler;
-import org.virtue.network.event.handler.impl.WidgetOnPlayerEventHandler;
+import org.virtue.network.event.handler.impl.PlayerTargetEventHandler;
 import org.virtue.network.event.handler.impl.WidgetTargetEventHandler;
 import org.virtue.network.event.handler.impl.WorldListEventHandler;
 
@@ -125,8 +125,8 @@ public class EventRepository {
 		registerReadEvent(new PlayerClickEventDecoder(), new PlayerClickEventHandler());
 		registerReadEvent(new WidgetTargetEventDecoder(), new WidgetTargetEventHandler());
 		registerReadEvent(new WidgetDragEventDecoder(), new WidgetDragEventHandler());
-		registerReadEvent(new LocTargetEventDecoder(), new WidgetOnLocEventHandler());
-		registerReadEvent(new PlayerTargetEventDecoder(), new WidgetOnPlayerEventHandler());
+		registerReadEvent(new LocTargetEventDecoder(), new LocTargetEventHandler());
+		registerReadEvent(new PlayerTargetEventDecoder(), new PlayerTargetEventHandler());
 		registerReadEvent(new NpcTargetEventDecoder(), new NpcTargetEventHandler());
 		registerReadEvent(new CommandEventDecoder(), new CommandEventHandler());
 		registerReadEvent(new SocialEventDecoder(), new SocialEventHandler());

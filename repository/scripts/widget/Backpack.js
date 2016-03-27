@@ -94,45 +94,17 @@ var BackpackUseListener = Java.extend(Java.type('org.virtue.engine.script.listen
 			api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 			return;
 		}
-		if (args.tinterface != 1473) {//Item used on something other than backpack
-			api.sendMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+args.tinterface+", targetComp="+args.tcomponent);
-			return;
-		}
-		switch (args.tcomponent) {
-		case 34://Used an item on another item in the player's backpack
-			var slot = args.tslot;
-			var item = api.getItem(player, Inv.BACKPACK, slot);
-			if (item == null) {
-				return;//This means the item wasn't used onto another item. We'll just suppress the debug message...
-			}
-			if (api.getId(item) != args.titemId) {
-				api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
-				return;
-			}
-			if (slot == useslot) {
-				return;//Item used on itself
-			}
-			if (api.hasEvent(EventType.OPHELDU, api.getId(item))) {
-				var args = {
-						"player" : player,
-						"useitem" : useitem,
-						"useslot" : useslot,
-						"item" : item,
-						"slot" : slot
-				};
-				api.invokeEvent(EventType.OPHELDU, api.getId(item), args);
-			} else {
-				var message = "Nothing interesting happens.";
-				if (api.isAdmin(player)) {
-					message = "Unhandled item use: item="+item+", slot="+args.tslot+", useitem="+useitem+", useslot="+args.slot;
-				}
-				api.sendMessage(player, message);
-			}
-			return;
-		default:
-			api.sendMessage(player, "Unhandled backpack item use: srcItem="+useitem+", destComp="+args.tcomponent);
-			return;
-		}
+		if (event == EventType.IF_BUTTONT) {
+			Backpack.handleUseOnInterface(player, useitem, useslot, args);
+		} else if (event == EventType.OPLOCT) {
+			Backpack.handleUseOnLoc(player, useitem, useslot, args);
+		} else if (event == EventType.OPNPCT) {
+			Backpack.handleUseOnNpc(player, useitem, useslot, args);
+		} else if (event == EventType.OPPLAYERT) {
+			Backpack.handleUseOnPlayer(player, useitem, useslot, args);
+		} else {
+			throw "Invalid event type: "+event;
+		}		
 	}
 });
 
@@ -146,8 +118,106 @@ var listen = function(scriptManager) {
 	
 	listener = new BackpackUseListener();	
 	scriptManager.registerCompListener(EventType.IF_BUTTONT, 1473, 34, listener);
+	scriptManager.registerCompListener(EventType.OPLOCT, 1473, 34, listener);
+	scriptManager.registerCompListener(EventType.OPNPCT, 1473, 34, listener);
+	scriptManager.registerCompListener(EventType.OPPLAYERT, 1473, 34, listener);
 };
 
 var Backpack = {
-		
+		handleUseOnInterface : function (player, useitem, useslot, eventArgs) {
+			if (args.targetInterface != 1473) {//Item used on something other than backpack
+				api.sendMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+eventArgs.targetInterface+", targetComp="+eventArgs.targetComponent);
+				return;
+			}
+			switch (eventArgs.targetComponent) {
+			case 34://Used an item on another item in the player's backpack
+				var slot = eventArgs.targetSlot;
+				var item = api.getItem(player, Inv.BACKPACK, slot);
+				if (item == null) {
+					return;//This means the item wasn't used onto another item. We'll just suppress the debug message...
+				}
+				if (api.getId(item) != eventArgs.targetItemId) {
+					api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
+					return;
+				}
+				if (slot == useslot) {
+					return;//Item used on itself
+				}
+				if (api.hasEvent(EventType.OPHELDU, api.getId(item))) {
+					var args = {
+							"player" : player,
+							"useitem" : useitem,
+							"useslot" : useslot,
+							"item" : item,
+							"slot" : slot
+					};
+					api.invokeEvent(EventType.OPHELDU, api.getId(item), args);
+				} else {
+					var message = "Nothing interesting happens.";
+					if (api.isAdmin(player)) {
+						message = "Unhandled item use: item="+item+", slot="+slot+", useitem="+useitem+", useslot="+useslot;
+					}
+					api.sendMessage(player, message);
+				}
+				return;
+			default:
+				api.sendMessage(player, "Unhandled backpack item use: srcItem="+useitem+", destComp="+eventArgs.targetComponent);
+				return;
+			}
+		},
+		handleUseOnLoc : function (player, useitem, useslot, eventArgs) {
+			var location = eventArgs.targetLoc;
+			if (api.hasEvent(EventType.OPLOCU, api.getId(location))) {
+				var args = {
+						"player" : player,
+						"useitem" : useitem,
+						"useslot" : useslot,
+						"location" : eventArgs.targetLoc,
+						"coords" : eventArgs.targetCoords
+				};
+				api.invokeEvent(EventType.OPLOCU, api.getId(location), args);
+			} else {
+				var message = "Nothing interesting happens.";
+				if (api.isAdmin(player)) {
+					message = "Unhandled location use: location="+location+", useitem="+useitem+", useslot="+useslot;
+				}
+				api.sendMessage(player, message);
+			}
+		},
+		handleUseOnNpc : function (player, useitem, useslot, eventArgs) {
+			var npc = eventArgs.npc;
+			if (api.hasEvent(EventType.OPNPCU, api.getId(npc))) {
+				var args = {
+						"player" : player,
+						"useitem" : useitem,
+						"useslot" : useslot,
+						"npc" : npc
+				};
+				api.invokeEvent(EventType.OPNPCU, api.getId(npc), args);
+			} else {
+				var message = "Nothing interesting happens.";
+				if (api.isAdmin(player)) {
+					message = "Unhandled NPC use: npc="+npc+", useitem="+useitem+", useslot="+useslot;
+				}
+				api.sendMessage(player, message);
+			}
+		},
+		handleUseOnPlayer : function (player, useitem, useslot, eventArgs) {
+			var targetPlayer = eventArgs.target;
+			if (api.hasEvent(EventType.OPPLAYERU, api.getId(useitem))) {
+				var args = {
+						"player" : player,
+						"useitem" : useitem,
+						"useslot" : useslot,
+						"target" : targetPlayer
+				};
+				api.invokeEvent(EventType.OPPLAYERU, api.getId(useitem), args);
+			} else {
+				var message = "Nothing interesting happens.";
+				if (api.isAdmin(player)) {
+					message = "Unhandled player use: player="+targetPlayer+", useitem="+useitem+", useslot="+useslot;
+				}
+				api.sendMessage(player, message);
+			}
+		}
 }

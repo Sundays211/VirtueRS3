@@ -96,6 +96,7 @@ public class WidgetOnEntityTarget implements EntityTarget {
 			args.put("component", component);
 			args.put("interface", widgetID);
 			args.put("slot", slot);
+			args.put("itemId", itemID);
 			scripts.invokeScriptChecked(eventType, compHash, args);
 			return true;
 		}
@@ -106,7 +107,7 @@ public class WidgetOnEntityTarget implements EntityTarget {
 		if (!handled) {
 			String message = "Nothing interesting happens.";
 			if (player.getPrivilegeLevel().getRights() >= 2) {
-				message = "Unhanded interface-on-entity: Interface: id="+widgetID+", comp="+component
+				message = "Unhanded entity target: Interface: id="+widgetID+", comp="+component
 						+", slot="+slot+", item="+itemID
 						+", entity="+target;
 			}

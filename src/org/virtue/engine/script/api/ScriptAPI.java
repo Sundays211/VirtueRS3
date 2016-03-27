@@ -1229,6 +1229,11 @@ public interface ScriptAPI {
 	 */
 	public String getFormattedTime (int ticks);
 	
+	/**
+	 * Formats the specified number as a readable string (separated by commas)
+	 * @param num The number to format
+	 * @return The formatted string
+	 */
 	public String getFormattedNumber (int num);
 	
 	/**
