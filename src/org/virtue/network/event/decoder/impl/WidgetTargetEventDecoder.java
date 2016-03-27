@@ -41,23 +41,23 @@ public class WidgetTargetEventDecoder implements EventDecoder<WidgetTargetEventC
 	 */
 	@Override
 	public WidgetTargetEventContext createContext(Player player, int opcode, InboundBuffer buffer) {
-		int useslot = buffer.getShort() & 0xffff;
-		useslot = useslot == 65535 ? -1 : useslot;
+		int targetSlot = buffer.getShort() & 0xffff;
+		targetSlot = targetSlot == 65535 ? -1 : targetSlot;
 		
-		int objectId = buffer.getShortA() & 0xffff;
-		objectId = objectId == 65535 ? -1 : objectId;
+		int item = buffer.getShortA() & 0xffff;
+		item = item == 65535 ? -1 : item;
 		
-		int useObject = buffer.getShortA() & 0xffff;
-		useObject = useObject == 65535 ? -1 : useObject;
+		int targetItem = buffer.getShortA() & 0xffff;
+		targetItem = targetItem == 65535 ? -1 : targetItem;
 		
 		int hash = buffer.getInt();
 		
 		int slot = buffer.getLEShortA() & 0xffff;
 		slot = slot == 65535 ? -1 : slot;
 
-		int useHash = buffer.getInt();
+		int targetHash = buffer.getInt();
 		
-		return new WidgetTargetEventContext(useHash, useslot, useObject, hash, slot, objectId);
+		return new WidgetTargetEventContext(hash, slot, item, targetHash, targetSlot, targetItem);
 	}
 
 	/* (non-Javadoc)

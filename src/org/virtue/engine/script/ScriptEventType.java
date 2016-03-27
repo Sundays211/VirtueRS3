@@ -104,99 +104,104 @@ public enum ScriptEventType {
 	OPNPCT(27),
 	
 	/**
+	 * The first option on a ground object
+	 */
+	OPOBJ1(41),
+	
+	/**
+	 * The second option on a ground object
+	 */
+	OPOBJ2(42),
+	
+	/**
+	 * The third option on a ground object
+	 */
+	OPOBJ3(43),
+	
+	/**
+	 * The fourth option on a ground object
+	 */
+	OPOBJ4(44),
+	
+	/**
+	 * The fifth option on a ground object
+	 */
+	OPOBJ5(45),
+	
+	/**
+	 * Called when an inventory item is used on a ground object
+	 */
+	OPOBJU(46),
+	
+	/**
+	 * Called when an interface component is targeted on a ground object
+	 */
+	OPOBJT(47),
+	
+	/**
 	 * The first option on an item held in the player's inventory
 	 */
-	OPHELD1(41),
+	OPHELD1(61),
 	
 	/**
 	 * The second option on an item held in the player's inventory
 	 */
-	OPHELD2(42),
+	OPHELD2(62),
 	
 	/**
 	 * The third option on an item held in the player's inventory
 	 */
-	OPHELD3(43),
+	OPHELD3(63),
 	
 	/**
 	 * The fourth option on an item held in the player's inventory
 	 */
-	OPHELD4(44),
+	OPHELD4(64),
 	
 	/**
 	 * The fifth option on an item held in the player's inventory
 	 */
-	OPHELD5(45),
+	OPHELD5(65),
 	
 	/**
 	 * Called when an inventory item is used on another inventory item
 	 */
-	OPHELDU(46),
+	OPHELDU(66),
 	
 	/**
 	 * The first custom option on an item the player is currently wearing
 	 */
-	OPWORN1(47),
+	OPWORN1(67),
 	
 	/**
 	 * The second custom option on an item the player is currently wearing
 	 */
-	OPWORN2(48),
+	OPWORN2(68),
 	
 	/**
 	 * The third custom option on an item the player is currently wearing
 	 */
-	OPWORN3(49),
+	OPWORN3(69),
 	
 	/**
 	 * The fourth custom option on an item the player is currently wearing
 	 */
-	OPWORN4(50),
-	
-	/**
-	 * The first option on a ground item
-	 */
-	OPGROUND1(51),
-	
-	/**
-	 * The second option on a ground item
-	 */
-	OPGROUND2(52),
-	
-	/**
-	 * The third option on a ground item
-	 */
-	OPGROUND3(53),
-	
-	/**
-	 * The fourth option on a ground item
-	 */
-	OPGROUND4(54),
-	
-	/**
-	 * The fifth option on a ground item
-	 */
-	OPGROUND5(55),
-	
-	/**
-	 * Called when an inventory item is used on a ground item
-	 */
-	OPGROUNDU(56),
+	OPWORN4(70),
 	
 	/**
 	 * The fifth custom option on an item the player is currently wearing
 	 */
-	OPWORN5(57),
+	OPWORN5(71),
 	
 	/**
 	 * The first custom option on an item in the player's bank (in both the withdraw and deposit screen)
 	 */
-	OPBANK1(58),
+	OPBANK1(72),
 	
 	/**
 	 * The second custom option on an item in the player's bank (deposit screen only)
 	 */
-	OPBANK2(59),	
+	OPBANK2(73),	
 	
 	/**
 	 * The first option on an interface component
@@ -254,34 +259,39 @@ public enum ScriptEventType {
 	IF_BUTTONT(91),
 	
 	/**
-	 * Called when an interface component is targeted on a ground item
-	 */
-	OPOBJT(94),
-	
-	/**
-	 * Called when an interface component is targeted on a player
-	 */
-	OPPLAYERT(95),
-	
-	/**
 	 * Called when an interface component is dragged onto another interface component
 	 */
-	IF_DRAG(96),
+	IF_DRAG(92),
+	
+	/**
+	 * Called when an option is selected on a chat line or chat list (eg friends list, friends chat list, group chat, etc)
+	 */
+	IF_PLAYER(93),
 	
 	/**
 	 * Called when an interface is opened
 	 */
-	IF_OPEN(97),
+	IF_OPEN(94),
 	
 	/**
 	 * Called when an interface is closed
 	 */
-	IF_CLOSE(98),
+	IF_CLOSE(95),
 	
 	/**
 	 * A catch-all event for any button on any component within the specified interface
 	 */
-	IF_BUTTON(99),
+	IF_BUTTON(96),
+	
+	/**
+	 * Called when an interface component is targeted on a player
+	 */
+	OPPLAYERT(98),
+	
+	/**
+	 * Called when an inventory item is used on a player. Note: In this case, the objType ID is used as the binding
+	 */
+	OPPLAYERU(99),
 	
 	/**
 	 * Called once every server cycle (600ms)
@@ -301,23 +311,13 @@ public enum ScriptEventType {
 	/**
 	 * Called when the specified moderator-only command is entered
 	 */
-	COMMAND_MOD(103, String.class),
-	
-	/**
-	 * Called when an option is selected on a chat line or chat list (eg friends list, friends chat list, group chat, etc)
-	 */
-	IF_PLAYER(105),
-	
-	/**
-	 * Called when an inventory item is used on a player. Note: In this case, the objType ID is used as the binding
-	 */
-	OPPLAYERU(106);
+	COMMAND_MOD(103, String.class);
 	
 	private int id;
 	private Class<?> triggerType;
 	
 	private ScriptEventType (int id) {
-		this(id, Integer.TYPE);
+		this(id, Integer.class);
 	}
 	
 	private ScriptEventType (int id, Class<?> triggerType) {
@@ -344,6 +344,9 @@ public enum ScriptEventType {
 		if (lookupMap == null) {
 			lookupMap = new HashMap<>();
 			for (ScriptEventType type : values()) {
+				if (lookupMap.containsKey(type.getId())) {
+					throw new RuntimeException("Duplicate IDs for ScriptEventTypes "+type+" and "+lookupMap.get(type.getId()));
+				}
 				lookupMap.put(type.getId(), type);
 			}
 		}

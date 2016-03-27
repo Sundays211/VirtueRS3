@@ -302,13 +302,13 @@ public class JSListeners implements ScriptManager {
 	 * @param binding The item to bind to. The use of this paramater depends on the event type specified.
 	 * @param listener The listener to bind
 	 */
-	public void registerListener (int eventTypeId, int binding, EventListener listener) {
+	public void registerListener (int eventTypeId, Integer binding, EventListener listener) {
 		ScriptEventType eventType = ScriptEventType.getById(eventTypeId);
 		if (eventType == null) {
 			throw new IllegalArgumentException("Invalid event type ID: "+eventTypeId);
 		}
-		if (eventType.getTriggerType() != Integer.TYPE) {
-			throw new IllegalArgumentException("Invalid event binding: expected "+eventType.getTriggerType()+", found int");
+		if (eventType.getTriggerType() != Integer.class) {
+			throw new IllegalArgumentException("Invalid event binding: expected "+eventType.getTriggerType()+", found java.lang.Integer");
 		}
 		EventBind bind = new EventBind(eventType, binding);
 		listeners.put(bind, listener);

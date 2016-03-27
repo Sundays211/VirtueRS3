@@ -32,56 +32,56 @@ import org.virtue.network.event.context.GameEventContext;
  */
 public class WidgetTargetEventContext implements GameEventContext {
 	
-	private int if1_hash, if1_slot, if1_item;
-	private int if2_hash, if2_slot, if2_item;
+	private int hash, slot, item;
+	private int targetHash, targetSlot, targetItem;
 
-	public WidgetTargetEventContext (int if1_hash, int if1_slot, int if1_item, 
-			int if2_hash, int if2_slot, int if2_item) {
-		this.if1_hash = if1_hash;
-		this.if1_slot = if1_slot;
-		this.if1_item = if1_item;
-		this.if2_hash = if2_hash;
-		this.if2_slot = if2_slot;
-		this.if2_item = if2_item;
+	public WidgetTargetEventContext (int hash, int slot, int item, 
+			int targetHash, int targetSlot, int targetItem) {
+		this.hash = hash;
+		this.slot = slot;
+		this.item = item;
+		this.targetHash = targetHash;
+		this.targetSlot = targetSlot;
+		this.targetItem = targetItem;
 	}
 	
-	public int getIf1Hash () {
-		return if1_hash;
+	public int getHash () {
+		return hash;
 	}
 	
-	public int getIf1Component () {
-		return if1_hash & 0xffff;
+	public int getInterface () {
+		return hash >> 16;
 	}
 	
-	public int getIf1Interface () {
-		return if1_hash >> 16;
+	public int getComponent () {
+		return hash & 0xffff;
 	}
 	
-	public int getIf1Slot () {
-		return if1_slot;
+	public int getSlot () {
+		return slot;
 	}
 	
-	public int getIf1Item () {
-		return if1_item;
+	public int getItem () {
+		return item;
 	}
 	
-	public int getIf2Hash () {
-		return if2_hash;
-	}
-	
-	public int getTargetComponent () {
-		return if2_hash & 0xffff;
+	public int getTargetHash () {
+		return targetHash;
 	}
 	
 	public int getTargetInterface () {
-		return if2_hash >> 16;
+		return targetHash >> 16;
+	}
+	
+	public int getTargetComponent () {
+		return targetHash & 0xffff;
 	}
 	
 	public int getTargetSlot () {
-		return if2_slot;
+		return targetSlot;
 	}
 	
 	public int getTargetItem () {
-		return if2_item;
+		return targetItem;
 	}
 }

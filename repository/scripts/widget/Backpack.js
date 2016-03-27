@@ -85,6 +85,57 @@ var BackpackDragListener = Java.extend(Java.type('org.virtue.engine.script.liste
 	}
 });
 
+var BackpackUseListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, trigger, args) {
+		var player = args.player;
+		var useslot = args.slot;
+		var useitem = api.getItem(player, Inv.BACKPACK, useslot);
+		if (useitem == null || api.getId(useitem) != args.itemId) {
+			api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
+			return;
+		}
+		if (args.tinterface != 1473) {//Item used on something other than backpack
+			api.sendMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+args.tinterface+", targetComp="+args.tcomponent);
+			return;
+		}
+		switch (args.tcomponent) {
+		case 34://Used an item on another item in the player's backpack
+			var slot = args.tslot;
+			var item = api.getItem(player, Inv.BACKPACK, slot);
+			if (item == null) {
+				return;//This means the item wasn't used onto another item. We'll just suppress the debug message...
+			}
+			if (api.getId(item) != args.titemId) {
+				api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
+				return;
+			}
+			if (slot == useslot) {
+				return;//Item used on itself
+			}
+			if (api.hasEvent(EventType.OPHELDU, api.getId(item))) {
+				var args = {
+						"player" : player,
+						"useitem" : useitem,
+						"useslot" : useslot,
+						"item" : item,
+						"slot" : slot
+				};
+				api.invokeEvent(EventType.OPHELDU, api.getId(item), args);
+			} else {
+				var message = "Nothing interesting happens.";
+				if (api.isAdmin(player)) {
+					message = "Unhandled item use: item="+item+", slot="+args.tslot+", useitem="+useitem+", useslot="+args.slot;
+				}
+				api.sendMessage(player, message);
+			}
+			return;
+		default:
+			api.sendMessage(player, "Unhandled backpack item use: srcItem="+useitem+", destComp="+args.tcomponent);
+			return;
+		}
+	}
+});
+
 /* Listen to the interface ids specified */
 var listen = function(scriptManager) {
 	var listener = new BackpackOpenListener();
@@ -92,6 +143,9 @@ var listen = function(scriptManager) {
 	
 	listener = new BackpackDragListener();	
 	scriptManager.registerCompListener(EventType.IF_DRAG, 1473, 34, listener);
+	
+	listener = new BackpackUseListener();	
+	scriptManager.registerCompListener(EventType.IF_BUTTONT, 1473, 34, listener);
 };
 
 var Backpack = {

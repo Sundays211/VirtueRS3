@@ -239,7 +239,7 @@ var CraftDialog = {
 			var param = 1;
 			while (toolId != -1 || structId != -1) {
 				if (structId != -1) {
-					if (this.getStructInvAmount(player, structID, 1) == 0) {
+					if (this.getStructInvAmount(player, structId, 1) == 0) {
 						return false;
 					}
 				} else {

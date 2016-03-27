@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,12 @@
  */
 package org.virtue.network.event.handler.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.virtue.Virtue;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.WidgetTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
@@ -40,19 +45,33 @@ public class WidgetTargetEventHandler implements GameEventHandler<WidgetTargetEv
 	 */
 	@Override
 	public void handle(Player player, WidgetTargetEventContext context) {
-		if (!Virtue.getInstance().getWidgetRepository().handleTarget(
-				context.getIf1Interface(), context.getIf1Component(), context.getIf1Slot(), context.getIf1Item(), 
-				context.getTargetInterface(), context.getTargetComponent(), context.getTargetSlot(), context.getTargetItem(), player)) {
-			defaultHandler(player, context);
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(ScriptEventType.IF_BUTTONT, context.getHash())) {
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("interface", context.getInterface());
+			args.put("component", context.getComponent());
+			args.put("slot", context.getSlot());
+			args.put("itemId", context.getItem());
+			args.put("tinterface", context.getTargetInterface());
+			args.put("tcomponent", context.getTargetComponent());
+			args.put("tslot", context.getTargetSlot());
+			args.put("titemId", context.getTargetItem());
+			scripts.invokeScriptChecked(ScriptEventType.IF_BUTTONT, context.getHash(), args);
+			return;
 		}
-	}
-	
-	private void defaultHandler(Player player, WidgetTargetEventContext context) {
+		
+		if (Virtue.getInstance().getWidgetRepository().handleTarget(
+				context.getInterface(), context.getComponent(), context.getSlot(), context.getItem(), 
+				context.getTargetInterface(), context.getTargetComponent(), context.getTargetSlot(), context.getTargetItem(), player)) {
+			return;
+		}
+		
 		String message = "Nothing interesting happens.";
 		if (player.getPrivilegeLevel().getRights() >= 2) {
-			message = "Unhanded interface-on-interface: Interface1: id="+context.getIf1Interface()+", comp="+context.getIf1Component()
-					+", slot="+context.getIf1Slot()+", itemID="+context.getIf1Item()
-					+" Interface2: id="+context.getTargetInterface()+", comp="+context.getTargetComponent()
+			message = "Unhanded interface-target: Interface: id="+context.getInterface()+", comp="+context.getComponent()
+					+", slot="+context.getSlot()+", itemID="+context.getItem()
+					+" Target: id="+context.getTargetInterface()+", comp="+context.getTargetComponent()
 					+", slot="+context.getTargetSlot()+", itemID="+context.getTargetItem();
 		}		
 		player.getDispatcher().sendGameMessage(message);

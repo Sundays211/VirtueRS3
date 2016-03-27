@@ -177,19 +177,19 @@ public class GroundItem extends Item {
 		ScriptEventType eventType;
 		switch (option) {
 		case ONE:
-			eventType = ScriptEventType.OPGROUND1;
+			eventType = ScriptEventType.OPOBJ1;
 			break;
 		case TWO:
-			eventType = ScriptEventType.OPGROUND2;
+			eventType = ScriptEventType.OPOBJ2;
 			break;
 		case THREE:
-			eventType = ScriptEventType.OPGROUND3;
+			eventType = ScriptEventType.OPOBJ3;
 			break;
 		case FOUR:
-			eventType = ScriptEventType.OPGROUND4;
+			eventType = ScriptEventType.OPOBJ4;
 			break;
 		case FIVE:
-			eventType = ScriptEventType.OPGROUND5;
+			eventType = ScriptEventType.OPOBJ5;
 			break;
 		default:
 			eventType = null;

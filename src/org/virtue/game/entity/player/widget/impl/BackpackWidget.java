@@ -97,47 +97,6 @@ public class BackpackWidget extends Widget {
 	 * @see org.virtue.game.entity.player.widget.Widget#use(int, int, int, int, int, int, int, int, org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public boolean use(int widget1, int component1, int slot1, int itemId1,
-			int widget2, int component2, int slot2, int itemId2, Player player) {
-		if (widget2 != WidgetState.BACKPACK_WIDGET.getID() || component1 != 34 || component2 != 34) {
-			//Not item-on-item event
-			return false;
-		}
-		Item item1 = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot1);
-		Item item2 = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot2);
-		if (item1 == null || item1.getId() != itemId1 || item2 == null 
-				|| item2.getId() != itemId2) {
-			//Client backpack is out of sync; re-synchronise it
-			player.getInvs().sendContainer(ContainerState.BACKPACK);
-			return false;
-		}
-		if (slot1 == slot2) {
-			return true;//Item used on itself
-		}
-		ScriptManager scripts = Virtue.getInstance().getScripts();
-		if (scripts.hasBinding(ScriptEventType.OPHELDU, itemId2)) {
-			Map<String, Object> args = new HashMap<>();
-			args.put("player", player);
-			args.put("useitem", item1);
-			args.put("useslot", slot1);
-			args.put("item", item2);
-			args.put("slot", slot2);
-			scripts.invokeScriptChecked(ScriptEventType.OPHELDU, itemId2, args);
-			return true;
-		}
-		
-		String message = "Nothing interesting happens.";
-		if (player.getPrivilegeLevel().getRights() >= 2) {
-			message = "Unhandled item use: item="+item2+", slot="+slot2+", useitem="+item1+", useslot="+slot1;
-		}		
-		player.getDispatcher().sendGameMessage(message);
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.player.widget.Widget#use(int, int, int, int, int, int, int, int, org.virtue.game.entity.player.Player)
-	 */
-	@Override
 	public boolean use(int widget, int component, int slot, int itemId,
 			SceneLocation location, Player player) {
 		if (component != 34) {//Not item-on-location event
