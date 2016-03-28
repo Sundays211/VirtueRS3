@@ -50,7 +50,7 @@ import com.google.common.cache.LoadingCache;
  * @author Sundays211
  * @since 22/10/2014
  */
-public class ItemTypeList implements Iterable<ItemType> {
+public class ObjTypeList implements Iterable<ItemType> {
 	
 	private class ItemIterator implements Iterator<ItemType> {
 		
@@ -77,15 +77,15 @@ public class ItemTypeList implements Iterable<ItemType> {
 	/**
 	 * The {@link Logger} instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(ItemTypeList.class);
+	private static Logger logger = LoggerFactory.getLogger(ObjTypeList.class);
 
 	/**
-	 * The {@link ItemTypeList} Instance
+	 * The {@link ObjTypeList} Instance
 	 */
-	private static ItemTypeList instance;
+	private static ObjTypeList instance;
 	
 	public static void init (Cache cache, File customDataFile) {
-		instance = new ItemTypeList();
+		instance = new ObjTypeList();
 		instance.cache = cache;
 		try {
 			Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG_ITEM.getArchiveId()));
@@ -109,11 +109,11 @@ public class ItemTypeList implements Iterable<ItemType> {
 	}
 	
 	/**
-	 * Returns The {@link ItemTypeList} Instance
+	 * Returns The {@link ObjTypeList} Instance
 	 */
-	public static ItemTypeList getInstance() {
+	public static ObjTypeList getInstance() {
 		if (instance == null) {
-			throw new IllegalStateException("ItemTypeList not yet initialised. init() must be called before this method.");
+			throw new IllegalStateException("ObjTypeList not yet initialised. init() must be called before this method.");
 		}
 		return instance;
 	}
@@ -159,7 +159,7 @@ public class ItemTypeList implements Iterable<ItemType> {
 	private Archive objDataArchive;
 	private int[] objDataIndicies;
 	
-	private ItemTypeList () {
+	private ObjTypeList () {
 		//Prevent direct instantiation
 	}
 	

@@ -136,18 +136,12 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 				return true;
 			case 68223:
 				api.teleportEntity(player, 4585, 5076, 0);
-				minigame = Java.type('org.virtue.Virtue').getInstance().getController().createPits(1, 25);
-				minigame.getPlayers().add(player);
 				return true;
 			case 38698:
 				api.teleportEntity(player, 2815, 5511, 0);
-				minigame = Java.type('org.virtue.Virtue').getInstance().getController().createCWFFA(1, 1);
-				minigame.getPlayers().add(player);
 				return true;
 			case 9356:
 				api.teleportEntity(player, 4585, 5076, 0);
-				minigame = Java.type('org.virtue.Virtue').getInstance().getController().createFightCaves(1, 1);
-				minigame.getPlayers().add(player);
 				return true;
 			case 65084://Wildy Ditch
 			case 65086:
@@ -155,8 +149,6 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 			case 65079:
 			case 65077:
 				if(api.getCoordY(player) == 3520) {
-					minigame = Java.type('org.virtue.Virtue').getInstance().getController().createWildy(1, 1);
-					minigame.getPlayers().add(player);
 					api.runAnimation(player, 6132);
 					api.teleportEntityBy(player, 0, 3, 0);
 				}

@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
@@ -36,7 +37,7 @@ import org.virtue.config.loctype.LocTypeList;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ItemType;
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.paramtype.ParamTypeList;
 import org.virtue.config.seqtype.SeqType;
@@ -551,7 +552,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean itemExists(int itemID) {
-		return ItemTypeList.getInstance().exists(itemID);
+		return ObjTypeList.getInstance().exists(itemID);
 	}
 
 	/* (non-Javadoc)
@@ -559,7 +560,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public ItemType getItemType(int itemID) {
-		return ItemTypeList.getInstance().list(itemID);
+		return ObjTypeList.getInstance().list(itemID);
 	}
 
 	/* (non-Javadoc)
@@ -612,7 +613,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean itemStacks(int objTypeId) {
-		ItemType itemType = ItemTypeList.getInstance().list(objTypeId);
+		ItemType itemType = ObjTypeList.getInstance().list(objTypeId);
 		if (itemType == null) {
 			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
 		}
@@ -624,7 +625,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public Object getItemParam(int objTypeId, int paramTypeId) {
-		ItemType itemType = ItemTypeList.getInstance().list(objTypeId);
+		ItemType itemType = ObjTypeList.getInstance().list(objTypeId);
 		if (itemType == null) {
 			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
 		}
@@ -644,7 +645,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getExchangeCost(int itemId) {
-		return ItemTypeList.getInstance().list(itemId).getExchangeValue();
+		return ObjTypeList.getInstance().list(itemId).getExchangeValue();
 	}
 
 	@Override
@@ -725,6 +726,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 		}
 		return player.getInvs().getContainer(state).get(slot);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#getCount(org.virtue.game.entity.player.inv.Item)
+	 */
+	@Override
+	public int getCount(Item item) {
+		return item.getAmount();
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#addItem(int, int, int)
@@ -740,7 +749,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			throw new IllegalStateException("The inventory "+state+" has not been loaded yet!");
 		}
 		int freeSpace = inv.getFreeSlots();
-		if (ItemTypeList.getInstance().list(itemID).isStackable()) {
+		if (ObjTypeList.getInstance().list(itemID).isStackable()) {
 			int numOf = inv.getNumberOf(itemID);
 			if (numOf != 0 || freeSpace != 0) {
 				freeSpace = Integer.MAX_VALUE - numOf;
@@ -1834,15 +1843,39 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#dropItem(org.virtue.game.world.region.Tile, int, int)
+	 */
+	@Override
+	public void dropItem(Tile coords, int itemId, int amount) {
+		this.dropItem(coords, itemId, amount, null, Constants.ITEM_REMOVAL_DELAY);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#dropItem(org.virtue.game.world.region.Tile, int, int, org.virtue.game.entity.player.Player)
+	 */
+	@Override
+	public void dropItem(Tile coords, int itemId, int amount, Player owner) {
+		this.dropItem(coords, itemId, amount, owner, Constants.ITEM_REMOVAL_DELAY);
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#dropItem(org.virtue.game.entity.region.Tile, int, int, int)
 	 */
 	@Override
 	public void dropItem(Tile coords, int itemId, int amount, int removalDelay) {
+		this.dropItem(coords, itemId, amount, null, removalDelay);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#dropItem(org.virtue.game.world.region.Tile, int, int, org.virtue.game.entity.player.Player, int)
+	 */
+	@Override
+	public void dropItem(Tile coords, int itemId, int amount, Player owner, int removalDelay) {
 		Region region = getRegion(coords);
 		if (region == null) {
 			throw new IllegalArgumentException("Invalid coords: "+coords);
 		}
-		GroundItem item = new GroundItem(itemId, amount, coords);
+		GroundItem item = new GroundItem(itemId, amount, coords, owner);
 		item.setSpawnTime(removalDelay);
 		region.addItem(item);
 	}

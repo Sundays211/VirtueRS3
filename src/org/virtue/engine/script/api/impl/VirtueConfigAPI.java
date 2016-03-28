@@ -31,6 +31,8 @@ import org.virtue.config.db.dbrowtype.DBRowType;
 import org.virtue.config.db.dbrowtype.DBRowTypeList;
 import org.virtue.config.db.dbtabletype.DBTableType;
 import org.virtue.config.db.dbtabletype.DBTableTypeList;
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.engine.script.api.ConfigAPI;
 
@@ -40,6 +42,9 @@ import org.virtue.engine.script.api.ConfigAPI;
  */
 public class VirtueConfigAPI implements ConfigAPI {
 
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#lookupDbRowId(int, int)
+	 */
 	@Override
 	public int lookupDbRowId(int dbTableId, int rowPos) throws Exception {
 		return lookupDbRowIds(dbTableId, 1, rowPos).get(0);
@@ -51,6 +56,9 @@ public class VirtueConfigAPI implements ConfigAPI {
 		return dbIndex.getDBRowsForValue(key);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#getDbFieldValues(int, int, int)
+	 */
 	@Override
 	public List<Object> getDbFieldValues(int dbTableId, int dbRowId, int columnId) {
 		DBRowType dbRow = DBRowTypeList.list(dbRowId);
@@ -71,6 +79,76 @@ public class VirtueConfigAPI implements ConfigAPI {
 			response = Arrays.asList(values);
 		}
 		return response;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objGetIOption(int, int)
+	 */
+	@Override
+	public String objIop(int objTypeId, int slot) {
+		ItemType type = ObjTypeList.getInstance().list(objTypeId);
+		return type.iop[slot-1];
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objWearpos(int)
+	 */
+	@Override
+	public int objWearpos(int objTypeId) {
+		ItemType type = ObjTypeList.getInstance().list(objTypeId);
+		return type.wearpos;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objToCert(int)
+	 */
+	@Override
+	public int objCert(int objTypeId) {
+		ItemType type = ObjTypeList.getInstance().list(objTypeId);
+		if (type.certtemplate == -1 && type.certlink >= 0) {
+			return type.certlink;
+		} else {
+			return -1;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objUncert(int)
+	 */
+	@Override
+	public int objUncert(int objTypeId) {
+		ItemType type = ObjTypeList.getInstance().list(objTypeId);
+		if (type.certtemplate >= 0 && type.certlink >= 0) {
+			return type.certlink;
+		} else {
+			return -1;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objToLent(int)
+	 */
+	@Override
+	public int objLent(int objTypeId) {
+		ItemType type = ObjTypeList.getInstance().list(objTypeId);
+		if (type.lenttemplate == -1 && type.lentlink >= 0) {
+			return type.lentlink;
+		} else {
+			return -1;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objUnlent(int)
+	 */
+	@Override
+	public int objUnlent(int objTypeId) {
+		ItemType type = ObjTypeList.getInstance().list(objTypeId);
+		if (type.lenttemplate >= 0 && type.lentlink >= 0) {
+			return type.lentlink;
+		} else {
+			return -1;
+		}
 	}
 
 }

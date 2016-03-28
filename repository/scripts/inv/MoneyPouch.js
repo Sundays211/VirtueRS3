@@ -26,26 +26,5 @@
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 22/03/2016
+ * @since 27/03/2016
  */
-
-
-
-var Bank = {
-		/**
-		 * Checks whether the player has enough space to fit the specified item in their bank
-		 */
-		canDeposit : function (itemId, count) {
-			var storedCount = api.itemTotal(player, Inv.BANK, itemId);
-			if (storeCount == 0) {//This means we don't have any of the item in the bank now, so we'll need one more slot
-				var emptySlots = api.freeSpaceTotal(player, Inv.BANK);
-				return emptySlots > 0;//TODO: Also count the bank boosters.
-			} else {//Check whether we would excede the max count (2^31-1)
-				return (INTEGER_MAX-storedCount)<count;
-			}
-		},
-		depositItem : function (itemId, count) {
-			var selectedTab = api.getVarBit(player, 288);
-			
-		}
-}

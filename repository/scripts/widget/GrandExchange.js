@@ -28,6 +28,12 @@
  * @author Sundays211
  * @since 17/02/2015
  */
+var ExchangeClerkListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+	invoke : function (event, npcTypeId, args) {
+		Exchange.open(args.player);	
+	}
+});
+
 var ExchangeOpenListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, binding, args) {
 		var player = args.player;
@@ -270,6 +276,13 @@ var listen = function(scriptManager) {
 	listener = new ExchangeCloseListener();
 	scriptManager.registerListener(EventType.IF_CLOSE, 105, listener);
 	scriptManager.registerListener(EventType.IF_CLOSE, 107, listener);
+	
+	var npcs = [ 1419, 2593, 2240 ];
+	listener = new ExchangeClerkListener();
+	for (var i in npcs) {
+		//Binds option one on all exchange clerks to this listener
+		scriptManager.registerListener(EventType.OPNPC1, npcs[i], listener);
+	}
 };
 
 var Exchange = {

@@ -55,7 +55,7 @@ import org.virtue.config.defaults.StatDefaults;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.loctype.LocTypeList;
 import org.virtue.config.npctype.NpcTypeList;
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamTypeList;
 import org.virtue.config.questtype.QuestTypeList;
 import org.virtue.config.seqtype.SeqTypeList;
@@ -379,7 +379,7 @@ public class Virtue {
 		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));
 		VarBitTypeList.init(varbits, configTable.getEntry(Js5ConfigGroup.VAR_BIT.id));
 		ClanSettings.init(varclans, configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id));
-		ItemTypeList.init(cache, Constants.ITEM_DATA);
+		ObjTypeList.init(cache, Constants.ITEM_DATA);
 		LocTypeList.init(cache);
 		NpcTypeList.init(cache, Constants.NPC_DATA);
 		SeqTypeList.init(cache);

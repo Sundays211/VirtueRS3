@@ -49,4 +49,27 @@ public interface ConfigAPI {
 	public List<Integer> lookupDbRowIds (int dbTableId, int indexId, Object key) throws Exception;
 	
 	public List<Object> getDbFieldValues (int dbTableId, int dbRowId, int column) throws Exception;
+	
+	/**
+	 * Gets the inventory option string for the given object (item) type at the given slot
+	 * @param objTypeId The object type ID
+	 * @param slot The slot
+	 * @return The option string
+	 */
+	public String objIop(int objTypeId, int slot);
+	
+	public int objWearpos(int objTypeId);
+	
+	/**
+	 * Gets the certificate (note) ID for the given object. If no certificate exists, returns the original ID
+	 * @param objTypeId The object type ID
+	 * @return The certificate ID, or the object type ID if it doesn't have a certificate
+	 */
+	public int objCert(int objTypeId);
+	
+	public int objUncert(int objTypeId);
+	
+	public int objLent(int objTypeId);
+	
+	public int objUnlent(int objTypeId);
 }

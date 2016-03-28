@@ -42,66 +42,70 @@ var InterfaceSettingsListener = Java.extend(Java.type('org.virtue.engine.script.
 			var slim = api.getVarBit(player, 19924) == 1;
 			api.setVarBit(player, 19924, slim ? 0 : 1);
 			return;
-		case 21://Hide title bars when locked
+		case 15://Hide title bars when locked
 			var hide = api.getVarBit(player, 19928) == 1;
 			api.setVarBit(player, 19928, hide ? 0 : 1);
 			return;
-		case 27://Lock interfaces
+		case 21://Lock interfaces
 			var locked = api.getVarBit(player, 19925) == 1;
 			api.setVarBit(player, 19925, locked ? 0 : 1);
 			return;
-		case 67://Show target information
+		case 61://Show target information
 			var enabled = api.getVarBit(player, 19927) == 1;
 			api.setVarBit(player, 19927, enabled ? 0 : 1);
 			return;
-		case 84://Task complete pop-ups
-			//possibly varc 1429?
-			api.sendMessage(player, "Unhandled task complete pop-ups toggle");
-			return;
-		case 86://Task information windows
-			var enabled = api.getVarBit(player, 3568) == 1;
-			api.setVarBit(player, 3568, enabled ? 0 : 1);
-			return;
-		case 91://Xp popups
-			var enabled = api.getVarBit(player, 228) == 1;
-			api.setVarBit(player, 228, enabled ? 0 : 1);
-			return;
-		case 97://Make-x progress window
-			var enabled = api.getVarBit(player, 3034) == 1;
-			api.setVarBit(player, 3034, enabled ? 0 : 1);
-			return;
-		case 73://Show target reticules
+		case 67://Show target reticules
 			var enabled = api.getVarBit(player, 19929) == 1;
 			api.setVarBit(player, 19929, enabled ? 0 : 1);
 			return;
-		case 116://Ability cooldown timer
+		case 73://Task complete pop-ups
+			//possibly varc 1429?
+			api.sendMessage(player, "Unhandled task complete pop-ups toggle");
+			return;
+		case 79://Task information windows
+			var enabled = api.getVarBit(player, 3568) == 1;
+			api.setVarBit(player, 3568, enabled ? 0 : 1);
+			return;
+		case 84://Xp popups
+			var enabled = api.getVarBit(player, 228) == 1;
+			api.setVarBit(player, 228, enabled ? 0 : 1);
+			return;
+		case 90://Make-x progress window
+			var enabled = api.getVarBit(player, 3034) == 1;
+			api.setVarBit(player, 3034, enabled ? 0 : 1);
+			return;
+		case 97://Ability cooldown timer
 			var enabled = api.getVarBit(player, 25401) == 1;
 			api.setVarBit(player, 25401, enabled ? 0 : 1);
 			return;
-		case 129://Skill target based xp pop-ups
+		case 110://Skill target based xp pop-ups
 			var enabled = api.getVarBit(player, 26632) == 1;
 			api.setVarBit(player, 26632, enabled ? 0 : 1);
 			return;
-		case 139://Reset timers on game clock
+		case 122://Reset timers on game clock
 			var enabled = api.getVarBit(player, 27160) == 1;
 			api.setVarBit(player, 27160, enabled ? 0 : 1);
 			return;
-		case 163://Favourites clock alarm
-			var enabled = api.getVarBit(player, 27171) == 1;
-			api.setVarBit(player, 27171, enabled ? 0 : 1);
-			return;
-		case 177://Slayer counter
-			var enabled = api.getVarBit(player, 28385) == 1;
-			api.setVarBit(player, 28385, enabled ? 0 : 1);
-			return;
-		case 150://Open edit mode
+		case 133://Open edit mode
 			api.setVarc(player, 2911, -1);
 			//api.runClientScript(player, 187, [5, 1]);
 			api.setVarp(player, 659, 65537790);
 			api.openWidget(player, 1477, 506, 1475, false);
 			api.setWidgetEvents(player, 1475, 68, 2, 7, 2);
 			return;
-		case 133://Utc clock settings
+		case 146://Favourites clock alarm
+			var enabled = api.getVarBit(player, 27171) == 1;
+			api.setVarBit(player, 27171, enabled ? 0 : 1);
+			return;
+		case 155://Slayer counter
+			var enabled = api.getVarBit(player, 28385) == 1;
+			api.setVarBit(player, 28385, enabled ? 0 : 1);
+			return;
+		case 30://Reduce transparency
+		case 46://Increase transparency
+		case 114://Utc clock settings
+		case 160://Upper-left mouseover text
+		case 165://Mouseover text
 		default:
 			api.sendMessage(player, "Unhandled Interface Settings button: comp="+args.component+", button="+args.button+", slot="+args.slot);
 			return;

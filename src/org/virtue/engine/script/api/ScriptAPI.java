@@ -459,6 +459,13 @@ public interface ScriptAPI {
 	public Item getItem (Player player, int invId, int slot);
 	
 	/**
+	 * Gets the number of items in the specified item stack
+	 * @param item The item to count
+	 * @return The number of items
+	 */
+	public int getCount (Item item);
+	
+	/**
 	 * Adds an item to the player's inventory
 	 * @param player The player
 	 * @param invId The inventory to add the item into. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid inventories
@@ -1094,12 +1101,41 @@ public interface ScriptAPI {
 	
 	/**
 	 * Drops an item on the ground at the specified coordinates.
+	 * Uses the default removalDelay specified in the server properties
+	 * @param coords The coords to drop the item at
+	 * @param itemId The ID of the item to drop
+	 * @param amount The number of items to add to the drop pile
+	 */
+	public void dropItem (Tile coords, int itemId, int amount);
+	
+	/**
+	 * Drops an item on the ground at the specified coordinates.
+	 * Uses the default removalDelay specified in the server properties
+	 * @param coords The coords to drop the item at
+	 * @param itemId The ID of the item to drop
+	 * @param amount The number of items to add to the drop pile
+	 * @param owner The player who can see the dropped item initially
+	 */
+	public void dropItem (Tile coords, int itemId, int amount, Player owner);
+	
+	/**
+	 * Drops an item on the ground at the specified coordinates.
 	 * @param coords The coords to drop the item at
 	 * @param itemId The ID of the item to drop
 	 * @param amount The number of items to add to the drop pile
 	 * @param removalDelay The number of game ticks before the item is removed.
 	 */
 	public void dropItem (Tile coords, int itemId, int amount, int removalDelay);
+	
+	/**
+	 * Drops an item on the ground at the specified coordinates.
+	 * @param coords The coords to drop the item at
+	 * @param itemId The ID of the item to drop
+	 * @param amount The number of items to add to the drop pile
+	 * @param owner The player who can see the dropped item initially
+	 * @param removalDelay The number of game ticks before the item is removed.
+	 */
+	public void dropItem (Tile coords, int itemId, int amount, Player owner, int removalDelay);
 	
 	/**
 	 * Removes an item which was dropped on the ground

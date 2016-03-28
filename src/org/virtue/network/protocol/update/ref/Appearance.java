@@ -7,7 +7,7 @@ import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ItemType;
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
@@ -85,8 +85,8 @@ public class Appearance {
 		this.set();
 
 		this.capeColors = new short[2][];
-		this.capeColors[0] = Arrays.copyOf(ItemTypeList.getInstance().list(20767).recol_s, 4);
-		this.capeColors[1] = Arrays.copyOf(ItemTypeList.getInstance().list(20769).recol_s, 4);
+		this.capeColors[0] = Arrays.copyOf(ObjTypeList.getInstance().list(20767).recol_s, 4);
+		this.capeColors[1] = Arrays.copyOf(ObjTypeList.getInstance().list(20769).recol_s, 4);
 
 	}
 

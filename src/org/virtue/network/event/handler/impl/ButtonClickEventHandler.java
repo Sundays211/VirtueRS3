@@ -91,6 +91,7 @@ public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEven
 			args.put("interface", context.getInterfaceId());
 			args.put("component", context.getComponentId());
 			args.put("slot", context.getSlot());
+			args.put("itemId", context.getItemID());
 			scripts.invokeScriptChecked(type, context.getHash(), args);
 		} else if (scripts.hasBinding(ScriptEventType.IF_BUTTON, context.getInterfaceId())) {
 			Map<String, Object> args = new HashMap<>();

@@ -30,7 +30,6 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.impl.AccountCreationWidget;
 import org.virtue.game.entity.player.widget.impl.ActionBarWidget;
-import org.virtue.game.entity.player.widget.impl.BackpackWidget;
 import org.virtue.game.entity.player.widget.impl.BankWidget;
 import org.virtue.game.entity.player.widget.impl.TreasureHunterWidget;
 import org.virtue.game.world.region.SceneLocation;
@@ -298,7 +297,6 @@ public final class WidgetRepository {
 		registerWidget(ActionBarWidget.class);
 		registerWidget(TreasureHunterWidget.class);
 		registerWidget(BankWidget.class);
-		registerWidget(BackpackWidget.class);
 		registerWidget(AccountCreationWidget.class);
 		logger.info("Registered " + WIDGETS.size() + " Game Widget(s).");
 	}

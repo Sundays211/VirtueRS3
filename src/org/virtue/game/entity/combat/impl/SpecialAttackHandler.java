@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackInfo;
 import org.virtue.game.entity.combat.CombatStyle;
@@ -171,7 +171,7 @@ public class SpecialAttackHandler extends AttackHandler {
 	 */
 	public int getSpecialAmount() {
 		for (int id : itemIds) {
-			return ItemTypeList.getInstance().list(id).getWeaponSpecial();
+			return ObjTypeList.getInstance().list(id).getWeaponSpecial();
 		}
 		return 0;
 	}

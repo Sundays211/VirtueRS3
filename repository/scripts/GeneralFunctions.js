@@ -32,6 +32,8 @@
 
 var INTEGER_MAX = 2147483647;
 
+var COINS = 995;
+
 function runAnimation (entity, animId, callback) {
 	if (callback == undefined) {
 		return api.runAnimation(entity, animId);

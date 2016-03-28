@@ -34,7 +34,7 @@ import org.virtue.Constants;
 import org.virtue.cache.Cache;
 import org.virtue.cache.FileStore;
 import org.virtue.config.objtype.ItemType;
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -51,7 +51,7 @@ public class GrandExchangeDumper {
 
 	public static void main(String[] args) throws IOException {
 		Cache cache = new Cache(FileStore.open(Constants.CACHE_REPOSITORY));
-		ItemTypeList.init(cache, Constants.ITEM_DATA);
+		ObjTypeList.init(cache, Constants.ITEM_DATA);
 		JsonObject obj = new JsonObject();
 		JsonArray arr = new JsonArray();
 		DecimalFormat format = new DecimalFormat("###");
@@ -75,8 +75,8 @@ public class GrandExchangeDumper {
 		double amount = 0;
 		double index = arr.size();
 
-		for (int id = 0; id < ItemTypeList.getInstance().getSize(); id++) {
-			ItemType type = ItemTypeList.getInstance().list(id);
+		for (int id = 0; id < ObjTypeList.getInstance().getSize(); id++) {
+			ItemType type = ObjTypeList.getInstance().list(id);
 			if (type != null && type.stockmarket) {
 				amount++;
 			}
@@ -85,8 +85,8 @@ public class GrandExchangeDumper {
 		System.out.println("Total Items: " + amount + ", Starting ID: "
 				+ itemID);
 
-		for (int id = itemID; id < ItemTypeList.getInstance().getSize(); id++) {
-			ItemType type = ItemTypeList.getInstance().list(id);
+		for (int id = itemID; id < ObjTypeList.getInstance().getSize(); id++) {
+			ItemType type = ObjTypeList.getInstance().list(id);
 			if (type != null && type.stockmarket) {
 				try {
 					URL link = new URL("http://api.rsapi.net/ge/item/" + id

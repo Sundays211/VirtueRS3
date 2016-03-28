@@ -50,7 +50,7 @@ var EquipmentButtonListener = Java.extend(Java.type('org.virtue.engine.script.li
 				api.sentInv(player, Inv.EQUIPMENT);
 				return;
 			}
-			WornEquipment.handleInteraction(player, args.slot, item, args.button);
+			WornEquipment.handleInteraction(player, item, args.slot, args.button);
 			return;
 		case 13:
 			switch (args.slot) {
@@ -115,12 +115,24 @@ var listen = function(scriptManager) {
 };
 
 var WornEquipment = {
-		handleInteraction : function (player, slot, item, button) {
+		wearItem : function (player, item, slot) {
+			if (!player.getEquipment().meetsEquipRequirements(item)) {
+				return;
+			}
+			if (!player.getEquipment().wearItem(slot)) {
+				api.sendMessage(player, "You do not have enough space in your backpack to equip that item.");
+			}
+		},
+		removeItem : function (player, item, slot) {
+			player.getEquipment().removeItem(slot, api.getId(item));
+		},
+		
+		handleInteraction : function (player, item, slot, button) {
 			var itemId = api.getId(item);
 			var eventType = null;
 			switch (button) {
 			case 1://Remove
-				player.getEquipment().removeItem(slot, itemId);
+				this.removeItem(player, item, slot);
 				return;
 			case 2://Equipment op 1
 				eventType = EventType.OPWORN1;
@@ -138,8 +150,8 @@ var WornEquipment = {
 				eventType = EventType.OPWORN5;
 				break;
 			case 10://Examine
-				var desc = api.getItemDesc(item);
-				api.sendMessage(player, desc);
+				api.sendMessage(player, ""+item);
+				api.sendMessage(player, api.getItemDesc(item));
 				return;
 			default:
 				break;

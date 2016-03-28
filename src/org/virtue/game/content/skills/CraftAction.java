@@ -3,7 +3,7 @@ package org.virtue.game.content.skills;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.objtype.ItemType;
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.game.content.chat.ChannelType;
@@ -29,7 +29,7 @@ public class CraftAction implements PlayerActionHandler {
 	private String successText;
 	
 	public CraftAction (int productID, int animation, int craftTime, String successText) {
-		ItemType productType = ItemTypeList.getInstance().list(productID);
+		ItemType productType = ObjTypeList.getInstance().list(productID);
 		EnumType levelEnum = EnumTypeList.list(681);
 		amountPerBatch = productType.getParam(2653, 1);
 		
@@ -103,7 +103,7 @@ public class CraftAction implements PlayerActionHandler {
 	}
 	
 	private void removeMaterials (Player player) {
-		ItemType productType = ItemTypeList.getInstance().list(productID);
+		ItemType productType = ObjTypeList.getInstance().list(productID);
 		int materialID = productType.getParam(2655, -1);
 		int matCountReq = productType.getParam(2665, 0);
 		boolean separateAmount = productType.getParam(2686, 1) == 1;

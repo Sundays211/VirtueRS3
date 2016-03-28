@@ -44,9 +44,29 @@ var BackpackButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 	invoke : function (event, trigger, args) {
 		var player = args.player;
 		switch (args.component) {
-		
+		case 34://Backpack item
+			var item = api.getItem(player, Inv.BACKPACK, args.slot);
+			if (item == null || api.getId(item) != args.itemId) {
+				api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
+				return;
+			}
+			Backpack.handleItemInteraction(player, item, args.slot, args.button);
+			return;
+		case 58://Money pouch option
+			switch (args.button) {
+			case 2://Open price checker
+				api.openCentralWidget(player, 206, false);
+				return;
+			case 3://Examine
+				var count = api.itemTotal(player, Inv.MONEY_POUCH, COINS);
+				api.sendMessage(player, "Your money pouch contains "+api.getFormattedNumber(count) +" coins.");
+				return
+			case 4://Withdraw
+				player.getMoneyPouch().removeMoneyPouchCoins();//TODO: Convert this to a Javascript method
+				return;
+			}
 		default:
-			api.sendMessage(player, "Unhandled backpack component: "+args.component);
+			api.sendMessage(player, "Unhandled backpack component: comp="+args.component+", slot="+args.slot+", button="+args.button);
 			return;
 		}
 	}
@@ -113,6 +133,9 @@ var listen = function(scriptManager) {
 	var listener = new BackpackOpenListener();
 	scriptManager.registerListener(EventType.IF_OPEN, 1473, listener);
 	
+	listener = new BackpackButtonListener();	
+	scriptManager.registerListener(EventType.IF_BUTTON, 1473, listener);
+	
 	listener = new BackpackDragListener();	
 	scriptManager.registerCompListener(EventType.IF_DRAG, 1473, 34, listener);
 	
@@ -124,6 +147,116 @@ var listen = function(scriptManager) {
 };
 
 var Backpack = {
+		dropItem : function (player, item, slot) {
+			//The item you are about to drop has high value.
+			//I wish to drop it.
+			//I wish to keep it.
+			if (item != null) {
+				api.dropItem(api.getCoords(player), api.getId(item), api.getCount(item), player);
+				api.setInvSlot(player, Inv.BACKPACK, slot, null);
+			}
+		},
+		
+		destroyItem : function (player, item, slot) {
+			//Are you sure you want to destroy this object?
+			//You can get a new one from....
+			api.sendMessage(player, "Destroyed item: "+api.getId(item));
+			api.setInvSlot(player, Inv.BACKPACK, slot, null);
+		},
+		
+		discardItem : function (player, item, slot) {
+			var discard = function () {
+				api.delItem(player, Inv.BACKPACK, api.getId(item), 1, slot);
+				player.getEquipment().returnBorrowedItem();
+				api.setVarp(player, 428, -1);	
+				api.setVarp(player, 430, 0);
+			}
+			
+			var timeRemaining = api.getVarp(player, 430);
+			var loanFrom = api.getVarp(player, 428);
+			if (timeRemaining > 0) {
+				var message = "<center>~Loan expires in "+api.getFormattedTime(timeRemaining)+"~</center><br>";
+				message += "If you discard this item, it will disappear. You won't be able to pick it up again.";
+				mesbox(player, message, function () {
+					requestConfirm(player, "Discard the item?", discard);
+				});
+			} else if (loanFrom != null && loanFrom != -1) {
+				var message = "<center>~Session-based loan~</center><br>";
+				message += "If you discard this item, it will return to its owner, "+api.getName(loanFrom);
+				message += ". You won't be able to pick it up again.";
+				mesbox(player, message, function () {
+					requestConfirm(player, "Discard the item?", discard);
+				});
+			} else {
+				discard();//Destroy immediately, as the player should not still have the item.
+			}
+		},
+		
+		handleItemInteraction : function (player, item, slot, button) {
+			var event;
+			var itemId = api.getId(item);
+			var opString;
+			switch (button) {
+			case 1://Iop1
+				eventType = EventType.OPHELD1;
+				opString = configApi.objIop(itemId, 1);
+				break;
+			case 2://Iop2
+				eventType = EventType.OPHELD2;
+				opString = configApi.objIop(itemId, 2);
+				break;
+			case 3://Iop3
+				eventType = EventType.OPHELD3;
+				opString = configApi.objIop(itemId, 3);
+				break;
+			case 7://Iop4
+				eventType = EventType.OPHELD4;
+				opString = configApi.objIop(itemId, 4);
+				break;
+			case 8://Iop5
+				eventType = EventType.OPHELD5;
+				opString = configApi.objIop(itemId, 5);
+				break;
+			case 10://Examine
+				api.sendMessage(player, ""+item);
+				api.sendMessage(player, api.getItemDesc(item));
+				return;
+			default:
+				api.sendMessage(player, "Unhandled backpack item option: item="+item+", slot="+slot+", button="+button);
+				return;
+			}
+			if (api.hasEvent(eventType, itemId)) {
+				var args = {
+						"player" : player,
+						"item" : item,
+						"slot" : slot
+				};
+				api.invokeEvent(eventType, itemId, args);
+			} else if (eventType == EventType.OPHELD2 && (opString == "Wear" || opString == "Wield")
+					&& configApi.objWearpos(itemId) != -1) {
+				WornEquipment.wearItem(player, item, slot);
+			} else if (eventType == EventType.OPHELD4 && itemId == COINS) {
+				//TODO: Shift this to an opheld handler as part of the money pouch script
+				if (player.getMoneyPouch().addCoins(api.getCount(item))) {
+					api.delItem(player, Inv.BACKPACK, COINS, api.getCount(item), slot);
+				} else {
+					api.sendMessage(player, "You do not have enough space in your money pouch.");
+				}
+				return;
+			} else if (eventType == EventType.OPHELD5 
+					&& (opString == "Drop" || opString == "Destroy" || opString == "Discard")) {
+				if (opString == "Drop") {
+					this.dropItem(player, item, slot);
+				} else if ("Destroy".equalsIgnoreCase(text)) {
+					this.destroyItem(player, item, slot);
+				} else if (opString == "Discard") {
+					this.discardItem(player, item, slot);
+				}
+			} else {
+				api.sendMessage(player, "Unhanded inventory item option: item="+item+", slot="+slot+", option="+opString+" ("+button+")");
+			}
+		},
+		
 		handleUseOnInterface : function (player, useitem, useslot, eventArgs) {
 			if (args.targetInterface != 1473) {//Item used on something other than backpack
 				api.sendMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+eventArgs.targetInterface+", targetComp="+eventArgs.targetComponent);

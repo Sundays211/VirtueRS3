@@ -23,7 +23,7 @@ package org.virtue.game.entity.player;
 
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumTypeList;
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
@@ -113,7 +113,7 @@ public class ExchangeOffers {
 			if (offer.isSell()) {
 				offeredItems.remove(Item.create(offer.getOfferItem(), processed));
 				returnedItems.add(Item.create(995, coins));
-				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished selling " + offer.getCompletedCount() + " x " + ItemTypeList.getInstance().list(offer.getOfferItem()).name + "");
+				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished selling " + offer.getCompletedCount() + " x " + ObjTypeList.getInstance().list(offer.getOfferItem()).name + "");
 			} else {
 				int extraCoins = (coins - offer.getOfferPrice()*processed);
 				offeredItems.remove(Item.create(995, coins));
@@ -121,7 +121,7 @@ public class ExchangeOffers {
 				if (extraCoins > 0) {
 					returnedItems.add(Item.create(995, extraCoins));
 				}
-				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished buying " + offer.getCompletedCount() + " x " + ItemTypeList.getInstance().list(offer.getOfferItem()).name + "");
+				player.getDispatcher().sendGameMessage("<col=66ffff>Grand Exchange: Finished buying " + offer.getCompletedCount() + " x " + ObjTypeList.getInstance().list(offer.getOfferItem()).name + "");
 			}
 		}
 		

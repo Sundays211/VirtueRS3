@@ -782,7 +782,7 @@ public class ItemType implements ConfigType {
 			return true;
 		}
 		if (certtemplate != -1) {
-			return ItemTypeList.getInstance().list(certlink).isTradable();
+			return ObjTypeList.getInstance().list(certlink).isTradable();
 		}
 		if (myid == 995) {
 			return true;//Coins should be tradable
@@ -822,7 +822,7 @@ public class ItemType implements ConfigType {
 			if (price != -1) {
 				return price;
 			} else if (certtemplate != -1) {
-				return ItemTypeList.getInstance().list(certlink).getExchangeValue();
+				return ObjTypeList.getInstance().list(certlink).getExchangeValue();
 			} else {
 				return cost;
 			}

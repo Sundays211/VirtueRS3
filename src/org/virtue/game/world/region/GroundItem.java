@@ -78,6 +78,10 @@ public class GroundItem extends Item {
 	public GroundItem (int id, int amount, Tile tile) {
 		this(Item.create(id, amount), tile, null);
 	}
+
+	public GroundItem (int id, int amount, Tile tile, Player owner) {
+		this(Item.create(id, amount), tile, owner);
+	}
 	
 	public GroundItem (Item item, Tile tile) {
 		this(item, tile, null);

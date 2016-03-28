@@ -27,7 +27,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.config.objtype.ItemTypeList;
+import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
@@ -560,7 +560,7 @@ public class BankWidget extends Widget {
 			}
 		}
 		int requiredSlots = amount;
-		if (ItemTypeList.getInstance().list(newItemID).isStackable()) {
+		if (ObjTypeList.getInstance().list(newItemID).isStackable()) {
 			requiredSlots = backpack.containsOne(item.getId()) ? 0 : 1;
 		}
 		if (backpack.getFreeSlots() < requiredSlots) {
