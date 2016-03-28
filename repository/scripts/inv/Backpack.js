@@ -37,6 +37,7 @@ var BackpackOpenListener = Java.extend(Java.type('org.virtue.engine.script.liste
 		api.setWidgetEvents(player, 1473, 34, 0, 27, 15302030);
 		api.sendInv(player, Inv.BACKPACK);
 		api.sendInv(player, Inv.MONEY_POUCH);
+		MoneyPouch.updateCoins(player);
 	}
 });
 
@@ -62,7 +63,7 @@ var BackpackButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 				api.sendMessage(player, "Your money pouch contains "+api.getFormattedNumber(count) +" coins.");
 				return
 			case 4://Withdraw
-				player.getMoneyPouch().removeMoneyPouchCoins();//TODO: Convert this to a Javascript method
+				MoneyPouch.requestWithdrawCoins(player);
 				return;
 			}
 		default:
@@ -147,6 +148,39 @@ var listen = function(scriptManager) {
 };
 
 var Backpack = {
+		getHeldCount : function (player, itemId) {
+			var held = api.itemTotal(player, Inv.BACKPACK, itemId);
+			if (itemId == COINS) {
+				var moneyHeld = MoneyPouch.getCoinCount(player);
+				held = checkOverflow(held, moneyHeld) ? INTEGER_MAX : held + moneyHeld;
+			}
+			if (Toolbelt.hasTool(player, itemId) && held < INTEGER_MAX) {
+				held++;
+			}
+			return held;
+		},
+		
+		removeHeld : function (player, itemId, amount) {
+			if (itemId == COINS) {
+				var coinsToRemove = Math.min(amount, MoneyPouch.getCoinCount(player));
+				MoneyPouch.removeCoins(player, coinsToRemove);
+				amount -= coinsToRemove;
+			}
+			api.delItem(player, Inv.BACKPACK, itemId, amount);
+			api.sendMessage(player, "Removed held item: "+itemId);
+		},
+		
+		addHeld : function (player, itemId, amount) {
+			if (itemId == COINS) {
+				var coinsToAdd = Math.min(amount, INTEGER_MAX-MoneyPouch.getCoinCount(player));
+				MoneyPouch.addCoins(player, coinsToAdd);
+				amount -= coinsToAdd;
+			}
+			if (amount > 0) {
+				api.addItem(player, Inv.BACKPACK, itemId, amount);
+			}			
+		},
+		
 		dropItem : function (player, item, slot) {
 			//The item you are about to drop has high value.
 			//I wish to drop it.
@@ -235,14 +269,6 @@ var Backpack = {
 			} else if (eventType == EventType.OPHELD2 && (opString == "Wear" || opString == "Wield")
 					&& configApi.objWearpos(itemId) != -1) {
 				WornEquipment.wearItem(player, item, slot);
-			} else if (eventType == EventType.OPHELD4 && itemId == COINS) {
-				//TODO: Shift this to an opheld handler as part of the money pouch script
-				if (player.getMoneyPouch().addCoins(api.getCount(item))) {
-					api.delItem(player, Inv.BACKPACK, COINS, api.getCount(item), slot);
-				} else {
-					api.sendMessage(player, "You do not have enough space in your money pouch.");
-				}
-				return;
 			} else if (eventType == EventType.OPHELD5 
 					&& (opString == "Drop" || opString == "Destroy" || opString == "Discard")) {
 				if (opString == "Drop") {

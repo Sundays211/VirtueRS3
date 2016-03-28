@@ -47,17 +47,6 @@ public class MoneyPouch {
 	public MoneyPouch(Player player) {
 		this.player = player;
 	}
-
-	/**
-	 * refreshes the pouch
-	 * @param swap
-	 */
-	public void refresh(boolean swap) {
-		if (swap) {
-			player.getDispatcher().sendCS2Script(5557, new Object[] { 1 });
-		}
-		player.getDispatcher().sendCS2Script(5560, new Object[] { getCoins() });
-	}
 	
 	/**
 	 * Adds the specified number of coins to the player's money pouch

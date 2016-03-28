@@ -23,7 +23,6 @@ package org.virtue.game.entity.player;
 
 import java.util.Map;
 
-import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.world.NewsItem;

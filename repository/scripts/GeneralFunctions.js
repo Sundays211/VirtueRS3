@@ -376,6 +376,16 @@ function unsetBit (value, bit) {
 	return value & -1 - (1 << bit);
 }
 
+/**
+ * Checks whether the addedValue would cause a Java integer overflow if added to currentValue
+ * @param currentValue The currently held value
+ * @param addedValue The value to add
+ * @returns True if an overflow would occur, false otherwise
+ */
+function checkOverflow (currentValue, addedValue) {
+	return (INTEGER_MAX-currentValue)<addedValue;
+}
+
 function addBonusExperience (player, skill, xpToAdd) {
 	xpToAdd *= 10;//Make the decimal fit
 	switch (skill) {

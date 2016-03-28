@@ -432,8 +432,8 @@ var Trade = {
 			//api.sendMessage(player, "Offering item: "+item+", slot="+slot+", amount="+amount);
 		},
 		offerCoins : function (player, amount) {
-			amount = Math.min(amount, api.carriedItemTotal(player, 995));
-			amount = api.delCarriedItem(player, 995, amount);
+			amount = Math.min(amount, MoneyPouch.getCoinCount(player));
+			MoneyPouch.removeCoins(player, amount);
 			api.addItem(player, Inv.TRADE, 995, amount);
 		},
 		offerLoanItem : function (player, item, slot) {

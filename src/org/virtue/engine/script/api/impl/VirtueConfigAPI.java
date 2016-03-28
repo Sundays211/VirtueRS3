@@ -108,7 +108,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 		if (type.certtemplate == -1 && type.certlink >= 0) {
 			return type.certlink;
 		} else {
-			return -1;
+			return objTypeId;
 		}
 	}
 
@@ -121,7 +121,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 		if (type.certtemplate >= 0 && type.certlink >= 0) {
 			return type.certlink;
 		} else {
-			return -1;
+			return objTypeId;
 		}
 	}
 
@@ -134,7 +134,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 		if (type.lenttemplate == -1 && type.lentlink >= 0) {
 			return type.lentlink;
 		} else {
-			return -1;
+			return objTypeId;
 		}
 	}
 
@@ -147,7 +147,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 		if (type.lenttemplate >= 0 && type.lentlink >= 0) {
 			return type.lentlink;
 		} else {
-			return -1;
+			return objTypeId;
 		}
 	}
 

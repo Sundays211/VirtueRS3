@@ -21,6 +21,10 @@
  */
 package org.virtue.network.event;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,7 +42,6 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.Stat;
-import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.world.region.MapSize;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -52,6 +55,7 @@ import org.virtue.network.event.context.impl.out.FriendListEventContext;
 import org.virtue.network.event.context.impl.out.IgnoreListEventContext;
 import org.virtue.network.event.context.impl.out.InvEventContext;
 import org.virtue.network.event.context.impl.out.LogoutEventContext;
+import org.virtue.network.event.context.impl.out.MapFlagEventContext;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.MusicEventContext;
 import org.virtue.network.event.context.impl.out.PlayerOptionEventContext;
@@ -59,18 +63,17 @@ import org.virtue.network.event.context.impl.out.RunEnergyEventContext;
 import org.virtue.network.event.context.impl.out.RunWeightEventContext;
 import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
 import org.virtue.network.event.context.impl.out.SystemUpdateEventContext;
-import org.virtue.network.event.context.impl.out.MapFlagEventContext;
 import org.virtue.network.event.context.impl.out.VarcEventContext;
 import org.virtue.network.event.context.impl.out.VarcStringEventContext;
+import org.virtue.network.event.context.impl.out.WorldListEventContext;
 import org.virtue.network.event.context.impl.out.widget.HideWidgetEventContext;
 import org.virtue.network.event.context.impl.out.widget.WidgetHttpSpriteEventContext;
 import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext;
+import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext.ModelType;
 import org.virtue.network.event.context.impl.out.widget.WidgetSettingsEventContext;
 import org.virtue.network.event.context.impl.out.widget.WidgetSubEventContext;
 import org.virtue.network.event.context.impl.out.widget.WidgetTextEventContext;
 import org.virtue.network.event.context.impl.out.widget.WidgetTopEventContext;
-import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext.ModelType;
-import org.virtue.network.event.context.impl.out.WorldListEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.event.encoder.impl.ClientScriptEventEncoder;
@@ -81,6 +84,7 @@ import org.virtue.network.event.encoder.impl.IgnoreListEventEncoder;
 import org.virtue.network.event.encoder.impl.InvEventEncoder;
 import org.virtue.network.event.encoder.impl.KeepAliveEventEncoder;
 import org.virtue.network.event.encoder.impl.LogoutEventEncoder;
+import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.MessageEventEncoder;
 import org.virtue.network.event.encoder.impl.MusicEventEncoder;
 import org.virtue.network.event.encoder.impl.NpcUpdateEventEncoder;
@@ -92,24 +96,19 @@ import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
 import org.virtue.network.event.encoder.impl.SceneGraphEventEncoder;
 import org.virtue.network.event.encoder.impl.SkillEventEncoder;
 import org.virtue.network.event.encoder.impl.SystemUpdateEventEncoder;
-import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.UnlockFriendsEventEncoder;
 import org.virtue.network.event.encoder.impl.VarcEventEncoder;
 import org.virtue.network.event.encoder.impl.VarcStringEventEncoder;
 import org.virtue.network.event.encoder.impl.WorldListEventEncoder;
-import org.virtue.network.event.encoder.impl.widget.WidgetTopEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetEventsEventEncoder;
 import org.virtue.network.event.encoder.impl.widget.WidgetHideEventEncoder;
 import org.virtue.network.event.encoder.impl.widget.WidgetHttpSpriteEventEncoder;
 import org.virtue.network.event.encoder.impl.widget.WidgetModelEventEncoder;
-import org.virtue.network.event.encoder.impl.widget.WidgetEventsEventEncoder;
 import org.virtue.network.event.encoder.impl.widget.WidgetSubEventEncoder;
 import org.virtue.network.event.encoder.impl.widget.WidgetTextEventEncoder;
+import org.virtue.network.event.encoder.impl.widget.WidgetTopEventEncoder;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
 import org.virtue.utility.SerialisableEnum;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -176,7 +175,6 @@ public class GameEventDispatcher {
 			player.getImpactHandler()
 					.setMaximumLifepoints(player.getSkills().getBaseLevel(Stat.CONSTITUTION) * 100);
 			player.getImpactHandler().restoreLifepoints();
-			player.getMoneyPouch().refresh(false);
 			player.getVars().processLogin(player.getLastLogin());
 			//sendMusic(36067, 100);
 			break;

@@ -310,7 +310,7 @@ var Shop = {
 				return;//Full backpack
 			}
 			var cost = Shop.getBuyCost(player, itemID);
-			var currentMoneyAmount = api.carriedItemTotal(player, api.getVarp(player, 306));
+			var currentMoneyAmount = Backpack.getHeldCount(player, api.getVarp(player, 306));
 			if (amount > (currentMoneyAmount/cost)) {				
 				Shop.showMessage(player, "You don't have enough coins to buy "+amount+".");
 				amount = (currentMoneyAmount/cost);
@@ -324,9 +324,9 @@ var Shop = {
 				api.hideWidget(player, 1265, 62, false);
 				return;
 			}
-			api.delCarriedItem(player, api.getVarp(player, 306), amount*cost);
+			Backpack.removeHeld(player, api.getVarp(player, 306), amount*cost);
 			api.delItem(player, invID, itemID, amount);
-			api.addCarriedItem(player, itemID, amount);
+			Backpack.addHeld(player, itemID, amount);
 			Shop.sendBackpackCanSell(player, invID);
 		},
 		sellItem : function (player, itemID, amount, confirmed) {
@@ -348,11 +348,10 @@ var Shop = {
 				return;
 			}
 			api.delItem(player, Inv.BACKPACK, itemID, amount);
-			if (api.getItemType(itemID).certtemplate != -1) {
-				itemID = api.getItemType(itemID).certlink;
-			}
+			api.sendMessage(player, "Old: "+itemID+", new: "+configApi.objUncert(itemID));
+			itemID = configApi.objUncert(itemID);
 			api.addItem(player, shopInv, itemID, amount);
-			api.addCarriedItem(player, api.getVarp(player, 306), amount*value);
+			Backpack.addHeld(player, api.getVarp(player, 306), amount*value);
 			Shop.sendBackpackCanSell(player, shopInv);
 			//api.sendMessage(player, "Selling item "+itemID+", amount="+amount+", value="+value);
 		},
