@@ -502,6 +502,28 @@ public class Virtue {
 	}
 	
 	/**
+	 * Returns the value of the specified server property or the specified default if no property was defined
+	 * @param name The property name (key)
+	 * @param defaultValue The value to return if the property was not defined
+	 * @return The property value.
+	 */
+	public int getProperty (String name, int defaultValue) {
+		String strPropery = properties.getProperty(name);
+		return strPropery == null ? defaultValue : Integer.parseInt(strPropery);
+	}
+	
+	/**
+	 * Returns the value of the specified server property or the specified default if no property was defined
+	 * @param name The property name (key)
+	 * @param defaultValue The value to return if the property was not defined
+	 * @return The property value.
+	 */
+	public boolean getProperty (String name, boolean defaultValue) {
+		String strPropery = properties.getProperty(name);
+		return strPropery == null ? defaultValue : Boolean.parseBoolean(strPropery);
+	}
+	
+	/**
 	 * Gets the current number of days since SERVER_DAY_0
 	 * @return The number of days
 	 */

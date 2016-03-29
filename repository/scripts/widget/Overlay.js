@@ -117,6 +117,7 @@ var Overlay = {
 			this.openOverlayTab(player, tabStruct);
 		},
 		getSelectedTab : function (player) {
+			//See clientscript 441 for tab varbits
 			switch (api.getVarBit(player, 18994)) {
 			case 0://Hero
 				return api.getVarBit(player, 18995);
@@ -135,10 +136,11 @@ var Overlay = {
 			case 7://Upgrades & Extras
 				return api.getVarBit(player, 19003);
 			case 8://RuneMetrics
-				//return api.getVarBit(player, 29931);
-				break;
+				return api.getVarBit(player, 30609);
 			case 9://Settings
 				return api.getVarBit(player, 19001);
+			case 10:
+				return api.getVarBit(player, 29931);
 			case 1001://Lobby
 				break;
 			}
@@ -171,7 +173,7 @@ var Overlay = {
 				api.setVarBit(player, 19003, tab);
 				break;
 			case 8://RuneMetrics
-				//api.setVarBit(player, 29931, tab);
+				api.setVarBit(player, 30609, tab);
 				break;
 			case 9://Settings
 				api.setVarBit(player, 19001, tab);
@@ -184,6 +186,7 @@ var Overlay = {
 			this.openOverlayTab(player, tabStruct);
 		},
 		tabLocked : function (player, overlay, tab) {
+			//See clientscript 8284 for varbits
 			switch (overlay) {
 			case 0://Hero
 				switch (tab) {
@@ -271,15 +274,28 @@ var Overlay = {
 					return api.getVarBit(player, 14173) == 1 || api.getVarBit(player, 29044) == 1 || api.getVarBit(player, 444) == 0;
 				case 2://Sale History
 					return api.getVarBit(player, 29045) == 1;
+				case 3://
+					return api.getVarBit(player, 30493) == 1;
 				default:
 					return true;
 				}
 			case 7://Upgrades & Extras
 				switch (tab) {
-				case 1://Grand Exchange
-					return api.getVarBit(player, 27402) == 1;
-				case 2://Sale History
-					return api.getVarBit(player, 29508) == 1;
+				case 1://Overview
+					return api.getVarBit(player, 30610) == 1;
+				default:
+					return true;
+				}
+			case 8://
+				switch (tab) {
+				case 1:
+					return api.getVarBit(player, 30611) == 1;
+				case 2:
+					return api.getVarBit(player, 30612) == 1;
+				case 3:
+					return api.getVarBit(player, 30613) == 1;
+				case 4:
+					return api.getVarBit(player, 30614) == 1;
 				default:
 					return true;
 				}

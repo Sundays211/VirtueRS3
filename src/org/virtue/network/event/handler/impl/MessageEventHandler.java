@@ -24,7 +24,7 @@ package org.virtue.network.event.handler.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.game.content.Commands;
+import org.virtue.game.content.CommandManager;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.InMessageEventContext;
 import org.virtue.network.event.context.impl.in.InQuickMessageEventContext;
@@ -148,7 +148,7 @@ public class MessageEventHandler implements GameEventHandler<InMessageEventConte
 			command = message.replaceFirst(";;", "");
 		}
 		
-		Commands.processCommand(player, command, false, false);
+		CommandManager.processCommand(player, command, false, false);
 	}
 
 }

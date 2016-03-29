@@ -21,7 +21,7 @@
  */
 package org.virtue.network.event.handler.impl;
 
-import org.virtue.game.content.Commands;
+import org.virtue.game.content.CommandManager;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
@@ -39,7 +39,7 @@ public class CommandEventHandler implements GameEventHandler<CommandEventContext
 	 */
 	@Override
 	public void handle(Player player, CommandEventContext context) {
-		if (Commands.processCommand(player, context.getSyntax(), context.getArgs(), true, context.isClientCommand())) {
+		if (CommandManager.processCommand(player, context.getSyntax(), context.getArgs(), true, context.isClientCommand())) {
 			return;
 		}
 		if (context.getSyntax().equalsIgnoreCase("scripts")
@@ -55,7 +55,7 @@ public class CommandEventHandler implements GameEventHandler<CommandEventContext
 					category = null;
 				}
 			}
-			Commands.reloadScripts(player, category, true);
+			CommandManager.reloadScripts(player, category, true);
 		}
 	}
 

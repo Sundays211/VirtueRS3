@@ -12,12 +12,12 @@ import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.entity.player.Player;
 
-public class Commands {
+public class CommandManager {
 
 	/**
 	 * The {@link Logger} Instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(Commands.class);
+	private static Logger logger = LoggerFactory.getLogger(CommandManager.class);
 	
 	/**
 	 * Runs the specified command.
