@@ -32,7 +32,9 @@ var UpgradesExtrasListener = Java.extend(Java.type('org.virtue.engine.script.lis
 		var player = args.player;
 		switch (args.component) {
 		case 34://Treasure Hunter
-			api.openWidget(player, 1477, 380, 1253, false);
+			Overlay.closeOverlay(player);
+			api.openWidget(player, 1477, 749, 1252, true);
+			api.openWidget(player, 1477, 561, 1253, false);
 			return;
 		case 9://Membership
 		case 59://Bonds
