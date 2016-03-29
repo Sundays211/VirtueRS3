@@ -29,6 +29,7 @@ import org.virtue.game.world.region.Tile;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
+ * @author Kayla
  * @since Aug 8, 2014
  */
 public class Constants {
@@ -81,6 +82,11 @@ public class Constants {
 	public static final float GLOBAL_XP_MULTIPLYER = 1;
 	
 	/**
+	 * This option will disable off-hand weapons to make pre-eoc more reallistic.
+	 */
+	public static final boolean legacyOnly = false;
+	
+	/**
 	 * Whether or not to lead GE Prices from a JSON File
 	 */
 	public static final boolean CUSTOM_GE_PRICES = true;
@@ -108,7 +114,7 @@ public class Constants {
 	/**
 	 * The packed item extra data, which includes descriptions and weights
 	 */
-	public static final File ITEM_DATA = new File("./repository/item_data_861.dat");
+	public static final File ITEM_DATA = new File("./repository/item_data_863.dat");
 	
 	/**
 	 * The OnDemand Delta Keys

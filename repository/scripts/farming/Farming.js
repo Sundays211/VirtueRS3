@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var CraftAction = Java.type('org.virtue.game.content.skills.CraftAction');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

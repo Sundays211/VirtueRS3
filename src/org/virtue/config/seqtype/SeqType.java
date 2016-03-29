@@ -1,5 +1,23 @@
-/* Class180 - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
+/**
+ * Copyright (c) 2016 Virtue Studios
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions\:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package org.virtue.config.seqtype;
 
@@ -10,36 +28,27 @@ import java.util.Map;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
 
-public class SeqType implements ConfigType {
-	
-    /**
-     * Retrieves the specified sequence type definition from the cache
-     * @param id The sequence type ID
-     * @param buffer The buffer containing the data
-     * @return The SeqType definition
-     */
-	public static SeqType load (int id, ByteBuffer buffer) {
-		SeqType npcType = new SeqType(id);
-		npcType.decode(buffer);
-		return npcType;
-	}
-	
+/**
+ * @author Sundays211
+ * @since 21/11/2015
+ */
+public class SeqType implements ConfigType {	
 	public int[] anIntArray2085;
 	public int walkingMode;
 	public int id;
 	public int[] frames;
 	public int[] interfaceFrames;
 	public int[] delays;
-	public int time;
-	//public Class186 aClass186_2092;
-	int anInt2093;
+	public int length;
+	public SeqGroupType seqGroupType;
+	int seqGroupTypeId;
 	public int replayMode;
 	public int loop;
 	public int priority;
 	public int leftObj;
 	public int rightObj;
 	public int cycles;
-	//Class189 aClass189_2100;
+	SeqTypeList myList;
 	public int[][] soundSettings;
 	public boolean aBool2103;
 	public boolean tweened;
@@ -49,9 +58,9 @@ public class SeqType implements ConfigType {
 	Map<Integer, Object> params;
 	public int soundRepeats;
 
-	SeqType(int id) {
-		time = 0;
-		anInt2093 = -1;
+	SeqType(int id, SeqTypeList myList) {
+		length = 0;
+		seqGroupTypeId = -1;
 		loop = -1;
 		priority = 5;
 		leftObj = -1;
@@ -64,7 +73,7 @@ public class SeqType implements ConfigType {
 		tweened = false;
 		soundRepeats = -1;
 		this.id = id;
-		//aClass189_2100 = class189;
+		this.myList = myList;
 	}
 
 	@Override
@@ -172,12 +181,10 @@ public class SeqType implements ConfigType {
 			} else if (code == 23) {
 				buffer.getShort();// & 0xffff;
 			} else if (24 == code) {
-				anInt2093 = buffer.getShort() & 0xffff;
-				/*if (aClass189_2100 != null) {
-					aClass186_2092 = ((Class186) (((Class189) aClass189_2100).anInterface10_2131
-							.list(anInt2093 * -1586196821,
-									1832428497)));
-				}*/
+				seqGroupTypeId = buffer.getShort() & 0xffff;
+				if (myList != null) {
+					seqGroupType = myList.seqGroupTypeList.list(seqGroupTypeId);
+				}
 			} else if (249 == code) {
 				int count = buffer.get() & 0xff;
 			    if (null == params) {
@@ -203,35 +210,24 @@ public class SeqType implements ConfigType {
 	@Override
 	public void postDecode() {
 		if (-1 == animatingMode) {
-			//if (aClass186_2092 != null && null != aClass186_2092.aBoolArray2116) {
-			//	animatingMode = 31479926;
-			//} else {
+			if (seqGroupType != null && null != seqGroupType.aBoolArray2144) {
+				animatingMode = 2;
+			} else {
 				animatingMode = 0;
-			//}
+			}
 		}
 		if (walkingMode == -1) {
-			//if (null != aClass186_2092 && aClass186_2092.aBoolArray2116 != null) {
-			//	walkingMode = 1411562586;
-			//} else {
+			if (null != seqGroupType && seqGroupType.aBoolArray2144 != null) {
+				walkingMode = 2;
+			} else {
 				walkingMode = 0;
-			//}
+			}
 		}
 		if (delays != null) {
-			time = 0;
-			for (int i_21_ = 0; i_21_ < delays.length; i_21_++) {
-				time += delays[i_21_];
+			length = 0;
+			for (int index = 0; index < delays.length; index++) {
+				length += delays[index];
 			}
-
-			/*if (loop == -1) {
-				for (int i_21_ = 0; i_21_ < delays.length; i_21_++) {
-					time += delays[i_21_];
-				}
-			} else {
-				for (int i=delays.length-loop;i<delays.length;i++) {
-					time += delays[i];
-				}
-				time *= cycles;
-			}*/
 		}
 	}
     

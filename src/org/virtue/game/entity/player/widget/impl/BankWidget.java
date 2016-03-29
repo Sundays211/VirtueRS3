@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.engine.script.ScriptEventType;
@@ -507,11 +508,20 @@ public class BankWidget extends Widget {
 			args.put("isBank", bank);
 			scripts.invokeScriptChecked(eventType, item.getId(), args);
 		} else if (player.getEquipment().isEquipable(item)) {
+			
+			if(Constants.legacyOnly) {
+				if(item.getName().contains("Off-hand")) {
+					player.getDispatcher().sendGameMessage("You cannot equip this item. Pre-EOC style is enabled.");
+					return false;
+				}
+			}
+			
 			if (player.getEquipment().meetsEquipRequirements(item)) {
 				return player.getEquipment().wearItem(slot);
 			} else {
 				return true;//Prevent the debug message from showing anyways
 			}
+			
 		} else {
 			player.getDispatcher().sendGameMessage("Unhanded bank item option: item="+item+", slot="+slot+", option="+option);
 		}		

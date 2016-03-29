@@ -40,8 +40,6 @@ import org.virtue.config.objtype.ItemType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.paramtype.ParamTypeList;
-import org.virtue.config.seqtype.SeqType;
-import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.VarType;
@@ -669,15 +667,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 		return npc.getType();
 	}
 
-	@Override
-	public int getSeqTime(int seqTypeId) {
-		SeqType seqType = SeqTypeList.list(seqTypeId);
-		if (seqType == null) {
-			throw new IllegalArgumentException("Invalid sequence: "+seqTypeId);
-		}
-		return seqType.time;
-	}
-
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#addBackpackItem(int, int)
 	 */
@@ -808,10 +797,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 		}
 		ItemContainer container = player.getInvs().getContainer(state);
 		if (container == null) {
-			return 0;
+			throw new IllegalStateException("Inventory not loaded: "+state);
 		}
-		if (container.getNumberOf(itemID) < amount) {
-			return 0;
+		int currentlyHeld = container.getNumberOf(itemID);
+		if (currentlyHeld < amount) {
+			throw new IllegalStateException("Inventory does not contain enough items to fufil the request: required="+amount+", has="+currentlyHeld);
 		}
 		container.remove(slot, Item.create(itemID, amount));
 		player.getInvs().sendContainer(state);
@@ -1357,6 +1347,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#delay(org.virtue.game.entity.Entity, java.lang.Runnable, int)
+	 */
+	@Override
+	public void delay(Entity entity, Runnable task, int ticks) {
+		entity.setDelayTask(task, ticks);
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#isFemale(org.virtue.game.entity.player.Player)
 	 */
 	@Override
@@ -1514,7 +1512,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setRenderAnim(Player player, int renderId) {
-		player.getAppearance().setRenderAnimation(renderId);
+		player.getAppearance().setBAS(renderId);
 		player.getAppearance().refresh();
 	}
 
@@ -1523,7 +1521,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void resetRenderAnim(Player player) {
-		player.getAppearance().setRenderAnimation(-1);
+		player.getAppearance().setBAS(-1);
 		player.getAppearance().refresh();
 	}
 
@@ -2098,6 +2096,30 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void logError(String message) {
 		logger.error(message);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#getProperty(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String getProperty(String property, String defaultValue) {
+		return Virtue.getInstance().getProperty(property, defaultValue);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#getProperty(java.lang.String, int)
+	 */
+	@Override
+	public int getProperty(String property, int defaultValue) {
+		return Virtue.getInstance().getProperty(property, defaultValue);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#getProperty(java.lang.String, boolean)
+	 */
+	@Override
+	public boolean getProperty(String property, boolean defaultValue) {
+		return Virtue.getInstance().getProperty(property, defaultValue);
 	}
 
 	/* (non-Javadoc)

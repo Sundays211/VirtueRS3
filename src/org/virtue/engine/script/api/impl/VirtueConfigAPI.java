@@ -33,6 +33,12 @@ import org.virtue.config.db.dbtabletype.DBTableType;
 import org.virtue.config.db.dbtabletype.DBTableTypeList;
 import org.virtue.config.objtype.ItemType;
 import org.virtue.config.objtype.ObjTypeList;
+import org.virtue.config.paramtype.ParamType;
+import org.virtue.config.paramtype.ParamTypeList;
+import org.virtue.config.seqtype.SeqType;
+import org.virtue.config.seqtype.SeqTypeList;
+import org.virtue.config.structtype.StructType;
+import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.engine.script.api.ConfigAPI;
 
@@ -149,6 +155,55 @@ public class VirtueConfigAPI implements ConfigAPI {
 		} else {
 			return objTypeId;
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objParam(int, int)
+	 */
+	@Override
+	public Object objParam(int objTypeId, int paramTypeId) {
+		ItemType type = ObjTypeList.getInstance().list(objTypeId);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
+		}
+		ParamType paramType = ParamTypeList.list(paramTypeId);
+		if (paramType == null) {
+			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
+		}
+		if (paramType.stringBase()) {
+			return type.getParam(paramTypeId, paramType.defaultstr);
+		} else {
+			return type.getParam(paramTypeId, paramType.defaultint);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#structParam(int, int)
+	 */
+	@Override
+	public Object structParam(int structTypeId, int paramTypeId) {
+		StructType structType = StructTypeList.list(structTypeId);
+		if (structType == null) {
+			throw new IllegalArgumentException("Invalid struct: "+structTypeId);
+		}
+		ParamType paramType = ParamTypeList.list(paramTypeId);
+		if (paramType == null) {
+			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
+		}
+		if (paramType.stringBase()) {
+			return structType.getParam(paramTypeId, paramType.defaultstr);
+		} else {
+			return structType.getParam(paramTypeId, paramType.defaultint);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#seqLength(int)
+	 */
+	@Override
+	public int seqLength(int seqTypeId) {
+		SeqType type = SeqTypeList.list(seqTypeId);
+		return type.length;
 	}
 
 }

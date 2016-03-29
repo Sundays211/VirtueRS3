@@ -58,6 +58,7 @@ import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamTypeList;
 import org.virtue.config.questtype.QuestTypeList;
+import org.virtue.config.seqtype.SeqGroupTypeList;
 import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
@@ -337,7 +338,7 @@ public class Virtue {
 		String newsDataFile = getProperty("news.file", "repository/news.json");
 		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile));
 		
-		String npcDataFile = getProperty("npc.data.file", "./repository/npc/NPCData.json");
+		String npcDataFile = getProperty("npc.data.file", "repository/npc/NPCData.json");
 		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile));
 		
 		SpecialAttackHandler.init();
@@ -371,6 +372,8 @@ public class Virtue {
 				configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id).size());
 		Archive varclans = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_CLAN_SETTING.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id).size());
+		Archive seqgroups = Archive.decode(cache.read(2, Js5ConfigGroup.SEQGROUPTYPE.id).getData(), 
+				configTable.getEntry(Js5ConfigGroup.SEQGROUPTYPE.id).size());
 		InvRepository.init(invs, configTable.getEntry(Js5ConfigGroup.INVTYPE.id));
 		ParamTypeList.init(params, configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id));
 		DBTableTypeList.init(dbtables, configTable.getEntry(Js5ConfigGroup.DBTABLETYPE.id));
@@ -379,10 +382,11 @@ public class Virtue {
 		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));
 		VarBitTypeList.init(varbits, configTable.getEntry(Js5ConfigGroup.VAR_BIT.id));
 		ClanSettings.init(varclans, configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id));
+		SeqGroupTypeList.init(seqgroups, configTable);
 		ObjTypeList.init(cache, Constants.ITEM_DATA);
 		LocTypeList.init(cache);
 		NpcTypeList.init(cache, Constants.NPC_DATA);
-		SeqTypeList.init(cache);
+		SeqTypeList.init(cache, SeqGroupTypeList.getInstance());
 		EnumTypeList.init(cache);
 		StructTypeList.init(cache);
 		RenderTypeList.init(Archive.decode(cache.read(2, Js5ConfigGroup.BASTYPE.id).getData(), 

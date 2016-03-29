@@ -94,6 +94,7 @@ public class EquipmentManager {
 			player.getDispatcher().sendGameMessage("You cannot wear that item.");
 			return false;
 		}
+		
 		int invFreeSpace = backpack.freeSlots();
 		if (slot2 != -1 && equipment.get(slot2) != null) {
 			if (invFreeSpace < 1) {

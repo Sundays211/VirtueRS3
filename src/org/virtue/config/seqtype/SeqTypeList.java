@@ -57,9 +57,10 @@ public class SeqTypeList extends CacheLoader<Integer, SeqType> {
 	 */
 	private static SeqTypeList instance;
 	
-	public static void init (Cache cache) {
+	public static void init (Cache cache, SeqGroupTypeList seqGroupTypeList) {
 		instance = new SeqTypeList();
 		instance.cache = cache;
+		instance.seqGroupTypeList = seqGroupTypeList;
 		try {
 			Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG_SEQ.getArchiveId()));
 			instance.referenceTable = ReferenceTable.decode(container.getData());
@@ -98,6 +99,8 @@ public class SeqTypeList extends CacheLoader<Integer, SeqType> {
 	private ReferenceTable referenceTable;	
 	private Cache cache;
 	
+	protected SeqGroupTypeList seqGroupTypeList;
+	
 	private SeqTypeList () {
 		//Prevent direct instantiation
 	}
@@ -111,7 +114,8 @@ public class SeqTypeList extends CacheLoader<Integer, SeqType> {
 		if (data == null) {
 			return null;
 		}
-		SeqType seqType = SeqType.load(id, data);
+		SeqType seqType = new SeqType(id, this);
+		seqType.decode(data);
 		seqType.postDecode();
 		return seqType;
 	}

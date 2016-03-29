@@ -71,14 +71,6 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 			pointer++;
 			return list(pointer-1);
 		}
-
-		/* (non-Javadoc)
-		 * @see java.util.Iterator#remove()
-		 */
-		@Override
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
 	}
 	
 	private LoadingCache<Integer, T> configCache = CacheBuilder.newBuilder().softValues().build(this);

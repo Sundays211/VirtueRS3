@@ -139,8 +139,6 @@ public class Player extends Entity {
 	 */
 	private PrivilegeLevel level = PrivilegeLevel.PLAYER;
 
-	private AdvancedMode type;
-
 	private Direction direction;
 
 	/**
@@ -588,17 +586,6 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * Returns the players privilege level
-	 */
-	public AdvancedMode getAdvancedMode() {
-		return type;
-	}
-
-	public void setAdvancedMode(AdvancedMode type) {
-		this.type = type;
-	}
-
-	/**
 	 * Set the pet owner
 	 */
 	public void setPet(Entity pet) {
@@ -665,7 +652,7 @@ public class Player extends Entity {
 	 * @see org.virtue.game.entity.Entity#getRenderAnimation()
 	 */
 	@Override
-	public int getRenderAnimation() {
+	public int getBASId() {
 		if (GameState.CREATION.equals(gameState)) {
 			return 65535;
 		}

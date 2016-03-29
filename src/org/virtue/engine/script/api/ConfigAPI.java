@@ -23,6 +23,9 @@ package org.virtue.engine.script.api;
 
 import java.util.List;
 
+import org.virtue.config.objtype.ItemType;
+import org.virtue.config.structtype.StructType;
+
 /**
  * @author Sundays211
  * @since 01/03/2016
@@ -72,4 +75,30 @@ public interface ConfigAPI {
 	public int objLent(int objTypeId);
 	
 	public int objUnlent(int objTypeId);
+	
+	/**
+	 * Gets the paramater of the specified {@link ItemType}
+	 * @param objTypeId The object type ID
+	 * @param paramType The param to get
+	 * @return The object param value or default value if the object config does not contain the given parameter
+	 * @throws IllegalArgumentException If an invalid objTypeId or paramType is specified
+	 */
+	public Object objParam(int objTypeId, int paramTypeId);
+	
+	/**
+	 * Gets the paramater of the specified {@link StructType}
+	 * Note that structTypes are referred to as "general maps" in some servers
+	 * @param structTypeId The ID of the struct to lookup
+	 * @param paramTypeId The param to get
+	 * @return The struct param value or default value if the struct does not contain the given param
+	 * @throws IllegalArgumentException If an invalid structTypeId or paramType is specified
+	 */
+	public Object structParam(int structTypeId, int paramTypeId);
+	
+	/**
+	 * Gets the length (in client cycles) required for the given sequence to complete.
+	 * @param seqTypeId The sequence (animation) ID
+	 * @return The number of client cycles required
+	 */
+	public int seqLength (int seqTypeId);
 }

@@ -277,6 +277,7 @@ var CraftDialog = {
 		},
 		
 		getMaxAmount : function (player, productId) {
+			//See clientscript 7108
 			var materialID = api.getItemParam(productId, 2655);
 			var structID = api.getItemParam(productId, 2675);
 			var separateAmount = api.getItemParam(productId, 2686) == 1;

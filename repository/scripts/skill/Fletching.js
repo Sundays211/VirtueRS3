@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var CraftAction = Java.type('org.virtue.game.content.skills.CraftAction');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -322,10 +321,10 @@ function showFletchingDialog (player, item, slots) {
 		
 		handle: function(value) {
 			api.closeCentralWidgets(player);
-			var productID = api.getVarp(player, 1170);
+			var productId = api.getVarp(player, 1170);
 			var amount = api.getVarBit(player, 1003);
 			if (amount > 0) {
-				fletchProduct(player, materialType, slots, productID, amount);
+				fletchProduct(player, materialType, slots, productId, amount);
 			}			
 		}
 	
@@ -341,14 +340,15 @@ function fletchForItem (itemID) {
 	}
 }
 
-function fletchProduct (player, materialType, slots, productID, amount) {
-	api.setVarp(player, 1175, productID);
-	api.sendMessage(player, "Selected product "+productID+", amount="+amount);	
+function fletchProduct (player, materialType, slots, productId, amount) {
+	api.setVarp(player, 1175, productId);
+	api.sendMessage(player, "Selected product "+productId+", amount="+amount);	
 	var animation = typeof(materialType.animation) == "number" ? materialType.animation : materialType.type.animation;
 	var delay = typeof(materialType.delay) == "number" ? materialType.delay : materialType.type.delay;
 	var text = materialType.type.successText;
-	var action = new CraftAction(productID, animation, delay, text);
+	CraftProcess.startCrafting(player, amount, animation, text);
+	/*var action = new CraftAction(productID, animation, delay, text);
 	action.setPreferedSlots(slots[0], slots.length > 1 ? slots[1] : -1);
 	action.start(player, amount);
-	player.setAction(action);
+	player.setAction(action);*/
 }

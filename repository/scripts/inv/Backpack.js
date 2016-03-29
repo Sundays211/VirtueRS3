@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+var Constants = Java.type('org.virtue.Constants');
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -50,6 +50,12 @@ var BackpackButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 			if (item == null || api.getId(item) != args.itemId) {
 				api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 				return;
+			}
+			if(Constants.legacyOnly) {//Checks if pre-eoc style is enabled.
+				if(item.getName().contains("Off-hand")) {
+					api.sendMessage(player, "You can't equip this item. Pre-Eoc Style is enabled.");
+					return;
+				}
 			}
 			Backpack.handleItemInteraction(player, item, args.slot, args.button);
 			return;
@@ -160,6 +166,11 @@ var Backpack = {
 			return held;
 		},
 		
+		/**
+		 * Removes items held by the player. 
+		 * WARNING: This method assumes the number of the item currently held is greater than or equal to the amount specified.
+		 * If amount is more than the amount held, and exception will be thrown
+		 */
 		removeHeld : function (player, itemId, amount) {
 			if (itemId == COINS) {
 				var coinsToRemove = Math.min(amount, MoneyPouch.getCoinCount(player));
@@ -167,7 +178,6 @@ var Backpack = {
 				amount -= coinsToRemove;
 			}
 			api.delItem(player, Inv.BACKPACK, itemId, amount);
-			api.sendMessage(player, "Removed held item: "+itemId);
 		},
 		
 		addHeld : function (player, itemId, amount) {

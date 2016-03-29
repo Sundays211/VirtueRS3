@@ -235,9 +235,10 @@ var PlantPots = {
 					var amount = api.getVarBit(player, 1003);					
 					//api.sendMessage(player, "Selected product "+productID+", amount="+amount);
 					api.setVarp(player, 1175, productID);
-					var action = new CraftAction(productID, -1, 2, null);
+					CraftProcess.startCrafting(player, amount);
+					/*var action = new CraftAction(productID, -1, 2, null);
 					action.start(player, amount);
-					player.setAction(action);
+					player.setAction(action);*/
 				}
 			
 			});

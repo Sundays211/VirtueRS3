@@ -121,6 +121,10 @@ public abstract class Entity extends Node {
 	 */
 	private Runnable animCompleteEvent;
 	
+	private int delayTime;
+	
+	private Runnable delayTask;
+	
 	/**
 	 * Called on creation of this {@link Entity}
 	 */
@@ -299,6 +303,13 @@ public abstract class Entity extends Node {
 		if (freezeDuration > 0) {
 			freezeDuration--;
 		}	
+		if (delayTask != null && delayTime > 0) {
+			delayTime--;
+			if (delayTime == 0) {
+				delayTask.run();
+				delayTask = null;
+			}
+		}
 		if (animTimeRemaining > 0) {
 			animTimeRemaining -= 30;
 			if (animTimeRemaining <= 0) {
@@ -315,6 +326,7 @@ public abstract class Entity extends Node {
 		if (animCompleteEvent != null) {
 			Runnable event = animCompleteEvent;
 			animCompleteEvent = null;
+			currentAnim = null;
 			try {
 				event.run();
 			} catch (RuntimeException ex) {
@@ -390,7 +402,11 @@ public abstract class Entity extends Node {
 		return headIcons;
 	}
 	
-	public abstract int getRenderAnimation ();
+	/**
+	 * Gets the Base Animation Set (BAS) for this entity
+	 * @return The BAS type ID
+	 */
+	public abstract int getBASId ();
 
 	/**
 	 * @return the minigame
@@ -511,7 +527,7 @@ public abstract class Entity extends Node {
 		if (currentAnim == null) {
 			throw new IllegalArgumentException("Invalid animation: "+animId);
 		}
-		this.animTimeRemaining = currentAnim.time + 30;//Add one extra tick as this will be processed once before sent to the client
+		this.animTimeRemaining = currentAnim.length + 30;//Add one extra tick as this will be processed once before sent to the client
 		this.animCompleteEvent = completeEvent;
 		this.queueUpdateBlock(new AnimationBlock(animId));
 		return true;
@@ -520,13 +536,18 @@ public abstract class Entity extends Node {
 	public int getAnimationId () {
 		return this.currentAnim == null ? -1 : this.currentAnim.id;
 	}
+	
+	public void setDelayTask (Runnable task, int delay) {
+		this.delayTask = task;
+		this.delayTime = delay;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Entity [index=" + index + ", name=" + getName() + ", coords=" + getCurrentTile() + "]";
+		return "PathingEntity [UID=" + index + ", name=" + getName() + ", coords=" + getCurrentTile() + "]";
 	}
 	
 		

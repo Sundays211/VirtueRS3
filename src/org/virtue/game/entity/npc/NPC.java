@@ -529,7 +529,7 @@ public class NPC extends Entity {
 	 * @see org.virtue.game.entity.Entity#getRenderAnimation()
 	 */
 	@Override
-	public int getRenderAnimation() {
+	public int getBASId() {
 		return getType().renderTypeID;
 	}
 }

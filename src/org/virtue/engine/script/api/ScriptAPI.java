@@ -432,13 +432,6 @@ public interface ScriptAPI {
 	
 	public NpcType getNpcType (NPC npc);
 	
-	/**
-	 * Gets the time (in server cycles) required for the given sequence to complete.
-	 * @param seqTypeId The sequence (animation) ID
-	 * @return The number of server cycles required, rounded up
-	 */
-	public int getSeqTime (int seqTypeId);
-	
 	public boolean addCarriedItem (Player player, int itemID, int amount);
 	
 	public int delCarriedItem (Player player, int itemID, int amount);
@@ -787,6 +780,15 @@ public interface ScriptAPI {
 	 * @param task The task to run
 	 */
 	public void executeTask (Runnable task);
+	
+	/**
+	 * Delays the execution of a task by the given number of server cycles.
+	 * Additional calls to this function with the same entity will replace the current task.
+	 * @param entity The entity to delay on
+	 * @param task The task to run after the delay
+	 * @param ticks The number of server cycles to delay by
+	 */
+	public void delay (Entity entity, Runnable task, int ticks);
 	
 	/**
 	 * Checks whether the player's gender is female or male
@@ -1292,6 +1294,30 @@ public interface ScriptAPI {
 	 * @param message The desired error message
 	 */
 	public void logError (String message);
+	
+	/**
+	 * Gets the string server property of the provided name. Returns the default value if no property exists with that name
+	 * @param property The property name
+	 * @param defaultValue The value to use if no property is found
+	 * @return The server property, or the default value if none is found
+	 */
+	public String getProperty (String property, String defaultValue);
+	
+	/**
+	 * Gets the integer server property of the provided name. Returns the default value if no property exists with that name
+	 * @param property The property name
+	 * @param defaultValue The value to use if no property is found
+	 * @return The server property, or the default value if none is found
+	 */
+	public int getProperty (String property, int defaultValue);
+	
+	/**
+	 * Gets the boolean server property of the provided name. Returns the default value if no property exists with that name
+	 * @param property The property name
+	 * @param defaultValue The value to use if no property is found
+	 * @return The server property, or the default value if none is found
+	 */
+	public boolean getProperty (String property, boolean defaultValue);
 	
 	/**
 	 * Invokes another script event on the same thread as the current event

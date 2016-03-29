@@ -24,7 +24,6 @@
  * Handles the Invention CraftAction
  *  @author Alex
  */
-var CraftAction = Java.type('org.virtue.game.content.skills.CraftAction');
 
 var Inventions = {//
 		Inventions : {
@@ -157,10 +156,11 @@ var Invention = {
 			var animation = typeof(materialType.animation) == "number" ? materialType.animation : materialType.type.animation;
 			var delay = typeof(materialType.delay) == "number" ? materialType.delay : materialType.type.delay;
 			var text = materialType.type.successText;
-			var action = new CraftAction(productID, animation, delay, text);
+			CraftProcess.startCrafting(player, amount, animation, text);
+			/*var action = new CraftAction(productID, animation, delay, text);
 			action.setPreferedSlots(slots[0], slots.length > 1 ? slots[1] : -1);
 			action.start(player, amount);
-			player.setAction(action);
+			player.setAction(action);*/
 		}
 
 }

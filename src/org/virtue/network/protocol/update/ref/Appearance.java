@@ -68,7 +68,7 @@ public class Appearance {
 	/**
 	 * Custom render animation
 	 */
-	private int renderAnimation = -1;
+	private int basTypeId = -1;
 
 	public Appearance(Player player) {
 		this.player = player;
@@ -206,7 +206,7 @@ public class Appearance {
 
 
 		// Render animation
-		update.putShort(renderAnimation == -1 ? player.getRenderAnimation() : renderAnimation);
+		update.putShort(basTypeId == -1 ? player.getBASId() : basTypeId);
 
 		update.putString(player.getName());
 		update.putByte((byte) player.getSkills().getCombatLevel());
@@ -256,7 +256,7 @@ public class Appearance {
 			update.putByte((byte) -1);
 		}
 
-		update.putShort(renderAnimation == -1 ? player.getRenderAnimation() : renderAnimation);
+		update.putShort(basTypeId == -1 ? player.getBASId() : basTypeId);
 
 		update.finishVarShort();
 		player.getDispatcher().sendBuffer(update);
@@ -634,15 +634,15 @@ public class Appearance {
 		this.showSkill = showSkill;
 	}
 
-	public int getRenderAnimation() {
-		if (renderAnimation == -1) {
-			return player.getRenderAnimation();
+	public int getBASId() {
+		if (basTypeId == -1) {
+			return player.getBASId();
 		}
-		return renderAnimation;
+		return basTypeId;
 	}
 
-	public void setRenderAnimation (int renderID) {
-		this.renderAnimation = renderID;
+	public void setBAS (int renderID) {
+		this.basTypeId = renderID;
 	}
 
 	public Render getRender() {
@@ -651,7 +651,7 @@ public class Appearance {
 
 	public void setRender(Render render) {
 		this.render = render;
-		this.renderAnimation = -1;
+		this.basTypeId = -1;
 	}
 	//Select skin colour and gender.
 	public Gender getGender() {
@@ -665,7 +665,7 @@ public class Appearance {
 
 	public void setNPCId(int id) {
 		this.npcId = id;
-		setRenderAnimation(NpcTypeList.list(id).renderTypeID);
+		setBAS(NpcTypeList.list(id).renderTypeID);
 	}
 
 	public int getRenderNpc() {
