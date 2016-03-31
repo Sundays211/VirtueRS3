@@ -50,9 +50,9 @@ import com.google.common.cache.LoadingCache;
  * @author Sundays211
  * @since 22/10/2014
  */
-public class ObjTypeList implements Iterable<ItemType> {
+public class ObjTypeList implements Iterable<ObjType> {
 	
-	private class ItemIterator implements Iterator<ItemType> {
+	private class ItemIterator implements Iterator<ObjType> {
 		
 		private int pointer = 0;
 
@@ -68,7 +68,7 @@ public class ObjTypeList implements Iterable<ItemType> {
 		 * @see java.util.Iterator#next()
 		 */
 		@Override
-		public ItemType next() {
+		public ObjType next() {
 			pointer++;
 			return list(pointer-1);
 		}
@@ -130,24 +130,24 @@ public class ObjTypeList implements Iterable<ItemType> {
 	               }
 	             });
 	
-	private LoadingCache<Integer, ItemType> cachedItems = CacheBuilder.newBuilder().softValues().build(new CacheLoader<Integer, ItemType>() {
-		public ItemType load(Integer id) throws IOException {
+	private LoadingCache<Integer, ObjType> cachedItems = CacheBuilder.newBuilder().softValues().build(new CacheLoader<Integer, ObjType>() {
+		public ObjType load(Integer id) throws IOException {
 			ByteBuffer data = getData(id);
 			if (data == null) {
 				return null;
 			}
-			ItemType type;
+			ObjType type;
 
 			if (objDataIndicies != null && objDataArchive != null) {
 				int index = objDataIndicies[id];
 				if (index != -1) {
 					ByteBuffer extraData = objDataArchive.getEntry(index);
-					type = ItemType.load(id, data, extraData);
+					type = ObjType.load(id, data, extraData);
 				} else {
-					type = ItemType.load(id, data);
+					type = ObjType.load(id, data);
 				}
 			} else {
-				type = ItemType.load(id, data);
+				type = ObjType.load(id, data);
 			}
 			runPostDecode(type, id);
 			return type;
@@ -163,7 +163,7 @@ public class ObjTypeList implements Iterable<ItemType> {
 		//Prevent direct instantiation
 	}
 	
-	public ItemType list (int id) {
+	public ObjType list (int id) {
 		synchronized (this) {
 			if (!exists(id)) {
 				logger.warn("Tried to load objtype "+id+" which does not exist!");
@@ -219,7 +219,7 @@ public class ObjTypeList implements Iterable<ItemType> {
 	 * @see java.lang.Iterable#iterator()
 	 */
 	@Override
-	public Iterator<ItemType> iterator() {
+	public Iterator<ObjType> iterator() {
 		return new ItemIterator();
 	}
 	
@@ -238,7 +238,7 @@ public class ObjTypeList implements Iterable<ItemType> {
 		}
 	}
 	
-	private void runPostDecode (ItemType itemType, int id) {
+	private void runPostDecode (ObjType itemType, int id) {
 		if (itemType.certtemplate != -1 && itemType.certlink != id) {
 			itemType.genCert(list(itemType.certtemplate), list(itemType.certlink));
 		} else if (itemType.lenttemplate != -1) {

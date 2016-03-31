@@ -36,7 +36,7 @@ import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
-import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ObjType;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.MoneyPouch;
@@ -103,9 +103,9 @@ public class Player extends Entity {
 	 */
 	public int newPlayer;
 	
-	private ItemType itemType;
+	private ObjType itemType;
 	
-	public ItemType getItemType() {
+	public ObjType getItemType() {
 		return itemType;
 	}
 
@@ -660,7 +660,7 @@ public class Player extends Entity {
 		if (inv.getContainer(ContainerState.EQUIPMENT) != null) {
 			Item weapon = this.getEquipment().getWorn(3);
 			if (weapon != null) {
-				ItemType type = weapon.getType();
+				ObjType type = weapon.getType();
 				if (this.getImpactHandler().inCombat()) {
 					id = type.getAggressiveRender();
 				} else {

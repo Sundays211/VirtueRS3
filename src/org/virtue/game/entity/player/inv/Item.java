@@ -1,6 +1,6 @@
 package org.virtue.game.entity.player.inv;
 
-import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.node.Node;
@@ -28,7 +28,7 @@ public class Item extends Node {
 	/**
 	 * The cache definition for the item
 	 */
-	private ItemType type;
+	private ObjType type;
 	
 	public String desc;
 
@@ -41,6 +41,12 @@ public class Item extends Node {
 		super(id);
 		if (amount < 0) {
 			throw new IllegalArgumentException("Item count must be a positive integer. Count supplied: "+amount);
+		}
+		if (!ObjTypeList.getInstance().exists(id)) {
+			throw new IllegalArgumentException("Invalid item ID: "+id);
+		}
+		if (getType().dummyitem != 0) {
+			throw new IllegalArgumentException("Can't instantiate a dummy item! Item ID: "+id);
 		}
 		this.id = id;
 		this.amount = amount;
@@ -92,7 +98,7 @@ public class Item extends Node {
 	 * Gets the cache definition for the item
 	 * @return	The definition
 	 */
-	public ItemType getType () {
+	public ObjType getType () {
 		if (type == null) {
 			type = ObjTypeList.getInstance().list(id);
 		}

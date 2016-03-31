@@ -31,7 +31,9 @@ import org.virtue.config.db.dbrowtype.DBRowType;
 import org.virtue.config.db.dbrowtype.DBRowTypeList;
 import org.virtue.config.db.dbtabletype.DBTableType;
 import org.virtue.config.db.dbtabletype.DBTableTypeList;
-import org.virtue.config.objtype.ItemType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.enumtype.EnumTypeList;
+import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.paramtype.ParamTypeList;
@@ -39,6 +41,7 @@ import org.virtue.config.seqtype.SeqType;
 import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
+import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.engine.script.api.ConfigAPI;
 
@@ -88,12 +91,94 @@ public class VirtueConfigAPI implements ConfigAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#enumValue(int, int)
+	 */
+	@Override
+	public Object enumValue(int enumTypeId, int key) {
+		EnumType enumType = EnumTypeList.list(enumTypeId);
+		if (enumType == null) {
+			throw new IllegalArgumentException("Invalid enumTypeId: "+enumTypeId);
+		}
+		Object value;
+		if (enumType.valueType.getVarBaseType() == BaseVarType.STRING) {
+			value = enumType.getValueString(key);
+		} else {
+			value = enumType.getValueInt(key);
+		}
+		return value;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#enumHasValue(int, java.lang.Object)
+	 */
+	@Override
+	public boolean enumHasValue(int enumTypeId, Object value) {
+		EnumType enumType = EnumTypeList.list(enumTypeId);
+		if (enumType == null) {
+			throw new IllegalArgumentException("Invalid enumTypeId: "+enumTypeId);
+		}
+		return enumType.containsValue(value);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#enumSize(int)
+	 */
+	@Override
+	public int enumSize(int enumTypeId) {
+		EnumType enumType = EnumTypeList.list(enumTypeId);
+		if (enumType == null) {
+			throw new IllegalArgumentException("Invalid enumTypeId: "+enumTypeId);
+		}
+		return enumType.getSize();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objName(int)
+	 */
+	@Override
+	public String objName(int objTypeId) {
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		return objType.name;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objDesc(int)
+	 */
+	@Override
+	public String objDesc(int objTypeId) {
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		return objType.getDescription();
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ConfigAPI#objGetIOption(int, int)
 	 */
 	@Override
 	public String objIop(int objTypeId, int slot) {
-		ItemType type = ObjTypeList.getInstance().list(objTypeId);
-		return type.iop[slot-1];
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		return objType.iop[slot-1];
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objCategory(int)
+	 */
+	@Override
+	public int objCategory(int objTypeId) {
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		return objType.category;
 	}
 
 	/* (non-Javadoc)
@@ -101,8 +186,11 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objWearpos(int objTypeId) {
-		ItemType type = ObjTypeList.getInstance().list(objTypeId);
-		return type.wearpos;
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		return objType.wearpos;
 	}
 
 	/* (non-Javadoc)
@@ -110,9 +198,12 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objCert(int objTypeId) {
-		ItemType type = ObjTypeList.getInstance().list(objTypeId);
-		if (type.certtemplate == -1 && type.certlink >= 0) {
-			return type.certlink;
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		if (objType.certtemplate == -1 && objType.certlink >= 0) {
+			return objType.certlink;
 		} else {
 			return objTypeId;
 		}
@@ -123,9 +214,12 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objUncert(int objTypeId) {
-		ItemType type = ObjTypeList.getInstance().list(objTypeId);
-		if (type.certtemplate >= 0 && type.certlink >= 0) {
-			return type.certlink;
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		if (objType.certtemplate >= 0 && objType.certlink >= 0) {
+			return objType.certlink;
 		} else {
 			return objTypeId;
 		}
@@ -136,9 +230,12 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objLent(int objTypeId) {
-		ItemType type = ObjTypeList.getInstance().list(objTypeId);
-		if (type.lenttemplate == -1 && type.lentlink >= 0) {
-			return type.lentlink;
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		if (objType.lenttemplate == -1 && objType.lentlink >= 0) {
+			return objType.lentlink;
 		} else {
 			return objTypeId;
 		}
@@ -149,9 +246,12 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objUnlent(int objTypeId) {
-		ItemType type = ObjTypeList.getInstance().list(objTypeId);
-		if (type.lenttemplate >= 0 && type.lentlink >= 0) {
-			return type.lentlink;
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		if (objType.lenttemplate >= 0 && objType.lentlink >= 0) {
+			return objType.lentlink;
 		} else {
 			return objTypeId;
 		}
@@ -162,18 +262,18 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public Object objParam(int objTypeId, int paramTypeId) {
-		ItemType type = ObjTypeList.getInstance().list(objTypeId);
-		if (type == null) {
-			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
 		ParamType paramType = ParamTypeList.list(paramTypeId);
 		if (paramType == null) {
 			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
 		}
 		if (paramType.stringBase()) {
-			return type.getParam(paramTypeId, paramType.defaultstr);
+			return objType.getParam(paramTypeId, paramType.defaultstr);
 		} else {
-			return type.getParam(paramTypeId, paramType.defaultint);
+			return objType.getParam(paramTypeId, paramType.defaultint);
 		}
 	}
 
@@ -202,8 +302,10 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int seqLength(int seqTypeId) {
-		SeqType type = SeqTypeList.list(seqTypeId);
-		return type.length;
+		SeqType seqType = SeqTypeList.list(seqTypeId);
+		if (seqType == null) {
+			throw new IllegalArgumentException("Invalid seqTypeId: "+seqTypeId);
+		}
+		return seqType.length;
 	}
-
 }

@@ -6,7 +6,7 @@ import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
-import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.game.entity.Entity;
@@ -448,7 +448,7 @@ public class Appearance {
 					if (item == null) {
 						continue;
 					}
-					ItemType def = item.getType();
+					ObjType def = item.getType();
 					if (def == null) {
 						continue;
 					}

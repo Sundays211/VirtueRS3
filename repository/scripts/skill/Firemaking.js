@@ -29,8 +29,6 @@ var GroundItem = Java.type('org.virtue.game.world.region.GroundItem');
  * @since 19/11/2014
  */
 
-var FIREMAKING_SKILL = 11;
-
 var Log = {
 	NORMAL : {
 		itemID : 1511,
@@ -191,7 +189,7 @@ var listen = function(scriptManager) {
 var Firemaking = {
 		openToolDialog : function (player, item, slot) {
 			var tools = [590, 946, 24291];
-			if (item.getID() == Log.EUCALYPTUS.itemID) {
+			if (api.getId(item) == Log.EUCALYPTUS.itemID) {
 				tools = [590, 24291];
 			}
 			requestTool(player, "What do you want to use on the logs?", tools, function (toolId) {
@@ -200,11 +198,11 @@ var Firemaking = {
 					Firemaking.runFiremakingAction(player, item, slot);
 					break;
 				case 946://Craft
-					showFletchingDialog(player, item, [slot])
+					Fletching.handleCraft(player, api.getId(item), slot);
 					//item.handleItemOnItem(player, slot, Item.create(946, 1), -1);//A hacky solution, but it should work
 					break;
 				case 24291://Add logs to a nearby bonfire
-					Firemaking.findBonfire(player, item.getId(), slot);
+					Firemaking.findBonfire(player, api.getId(item), slot);
 					break;
 				default:
 					api.sendMessage(player, "Unhandled log tool: logs="+item+", toolID="+toolId);

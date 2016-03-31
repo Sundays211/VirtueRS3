@@ -294,7 +294,7 @@ var Backpack = {
 		},
 		
 		handleUseOnInterface : function (player, useitem, useslot, eventArgs) {
-			if (args.targetInterface != 1473) {//Item used on something other than backpack
+			if (eventArgs.targetInterface != 1473) {//Item used on something other than backpack
 				api.sendMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+eventArgs.targetInterface+", targetComp="+eventArgs.targetComponent);
 				return;
 			}

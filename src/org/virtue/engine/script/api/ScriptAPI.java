@@ -28,7 +28,7 @@ import org.virtue.Constants;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
-import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ObjType;
 import org.virtue.config.structtype.StructType;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
@@ -369,9 +369,9 @@ public interface ScriptAPI {
 	
 	public boolean itemExists (int itemID);
 	
-	public ItemType getItemType (int itemID);
+	public ObjType getItemType (int itemID);
 	
-	public ItemType getItemType (Item item);
+	public ObjType getItemType (Item item);
 	
 	/**
 	 * Gets the name of the given item
@@ -399,7 +399,7 @@ public interface ScriptAPI {
 	 * @param itemType The ItemType of the item to lookup
 	 * @return The description
 	 */
-	public String getItemDesc(ItemType itemType);
+	public String getItemDesc(ObjType itemType);
 	
 	public String getItemDesc(Item item);
 	
@@ -411,7 +411,7 @@ public interface ScriptAPI {
 	public boolean itemStacks(int itemId);
 	
 	/**
-	 * Gets the paramater of the specified {@link ItemType}
+	 * Gets the paramater of the specified {@link ObjType}
 	 * @param itemId The ID of the item to lookup
 	 * @param paramType The param to get
 	 * @return The item param value or default value if the item does not contain the given parameter

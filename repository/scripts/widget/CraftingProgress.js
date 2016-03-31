@@ -63,7 +63,7 @@ var CraftProcess = {
 		startCrafting : function (player, amount, animation, successText) {
 			var productId = api.getVarp(player, 1175);
 			//api.setVarp(player, 1169, category);
-			api.openOverlaySub(player, 1018, 1251, false);
+			api.openOverlaySub(player, 1018, 1251, true);
 			var length = animation === undefined ? 1 : Math.ceil(configApi.seqLength(animation) / 30);//Round up
 			api.sendMessage(player, "Total time: "+length);
 			api.setVarc(player, 2227, length);//Time per item
@@ -71,7 +71,7 @@ var CraftProcess = {
 			api.setVarc(player, 2229, amount);//Remaining products
 			
 			api.setVarp(player, 1176, 0);//Xp received
-			api.setVarp(player, 1177, 0);//Bonus xp received?
+			api.setVarp(player, 1177, 0);//Secondary skill xp received
 			var that = this;
 			delay = length-1;
 			if (animation !== undefined) {
@@ -104,6 +104,7 @@ var CraftProcess = {
 					api.setVarp(player, 1175, -1);//Clear product
 					api.closeOverlaySub(player, 1018, true);//Close interface
 					api.setVarp(player, 1176, 0);//Clear experience gained counter
+					api.setVarp(player, 1177, 0);
 					api.runClientScript(player, 3373, 1018);
 					api.setVarc(player, 2227, 0);//Clear time
 					api.setVarc(player, 2228, 0);//Clear total
@@ -143,7 +144,21 @@ var CraftProcess = {
 				api.incrementVarp(player, 1177, xp);
 			}
 			this.removeMaterials(player, productId);
-			Backpack.addHeld(player, productId, amountPerBatch);
+			this.addProduct(player, productId, amountPerBatch)
+		},
+		addProduct : function (player, productId, amount) {
+			switch (productId) {
+			case 34672://Arrow shafts
+			case 34673:
+			case 34674:
+			case 34675:
+			case 34676:
+			case 34677:
+				Backpack.addHeld(player, 52, amount);
+				return;
+			default:
+				Backpack.addHeld(player, productId, amount);
+			}
 		},
 		removeMaterials : function (player, productId) {
 			//See clientscript 7108
@@ -244,17 +259,29 @@ var CraftProcess = {
 				}
 			}
 		},
-		removeStructMaterials : function (player, structId, amountPerBatch) {
+		removeStructMaterials : function (player, structId, amount) {
 			var id = configApi.structParam(structId, 2655);
 			var matCountReq = configApi.structParam(structId, 2665);
 			var separateAmount = configApi.structParam(structId, 2686) == 1;
 			var loop = 1;
 			while (id != -1) {
-				if (separateAmount) {
-					Backpack.removeHeld(player, id, matCountReq);
-				} else {
-					Backpack.removeHeld(player, id, matCountReq * amountPerBatch);
+				var required = separateAmount ? matCountReq : matCountReq * amount;
+				var has = Backpack.getHeldCount(player, id);
+				if (matCountReq <= has) {//The player has enough of the material for at least one item
+					if (separateAmount) {
+						Backpack.removeHeld(player, id, matCountReq);
+						amount = 0;
+					} else {
+						has /= matCountReq;//Break down availability to per-item
+						var toRemove = Math.min(has, amount)//Figure out how many items we *can* make with this material
+						Backpack.removeHeld(player, id, matCountReq * toRemove);
+						amount -= toRemove;//Decrease the remaining number of items
+					}
 				}
+				if (amount <= 0) {
+					return;
+				}
+				
 				loop++;
 				switch (loop) {
 				case 2:

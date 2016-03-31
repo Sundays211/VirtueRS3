@@ -23,7 +23,8 @@ package org.virtue.engine.script.api;
 
 import java.util.List;
 
-import org.virtue.config.objtype.ItemType;
+import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.objtype.ObjType;
 import org.virtue.config.structtype.StructType;
 
 /**
@@ -54,12 +55,52 @@ public interface ConfigAPI {
 	public List<Object> getDbFieldValues (int dbTableId, int dbRowId, int column) throws Exception;
 	
 	/**
+	 * Returns the value of the {@link EnumType} with the specified key
+	 * Note that enumTypes are referred to as "cs2 maps" in some servers
+	 * @param enumId The id of the enum to lookup
+	 * @param key The key to lookup
+	 * @return The value linked to the specified key or the default value if no key was found
+	 */
+	public Object enumValue (int enumTypeId, int key);
+	
+	/**
+	 * Checks whether the specified enum type has the specified value
+	 * @param enumTypeId The enum type ID
+	 * @param value The value to check
+	 * @return True if the enum contains the specified value, false otherwise
+	 */
+	public boolean enumHasValue (int enumTypeId, Object value);
+	
+	/**
+	 * Gets the number of elements in an enum
+	 * @param enumTypeId The enum type ID
+	 * @return The number of elements
+	 */
+	public int enumSize (int enumTypeId);
+	
+	/**
+	 * Gets the name of an object type
+	 * @param objTypeId The object type ID
+	 * @return The object's name
+	 */
+	public String objName(int objTypeId);
+	
+	/**
+	 * Gets the description (examine text) of an object type
+	 * @param objTypeId The object type ID
+	 * @return The object's description
+	 */
+	public String objDesc(int objTypeId);
+	
+	/**
 	 * Gets the inventory option string for the given object (item) type at the given slot
 	 * @param objTypeId The object type ID
 	 * @param slot The slot
 	 * @return The option string
 	 */
 	public String objIop(int objTypeId, int slot);
+	
+	public int objCategory(int objTypeId);
 	
 	public int objWearpos(int objTypeId);
 	
@@ -77,7 +118,7 @@ public interface ConfigAPI {
 	public int objUnlent(int objTypeId);
 	
 	/**
-	 * Gets the paramater of the specified {@link ItemType}
+	 * Gets the paramater of the specified {@link ObjType}
 	 * @param objTypeId The object type ID
 	 * @param paramType The param to get
 	 * @return The object param value or default value if the object config does not contain the given parameter

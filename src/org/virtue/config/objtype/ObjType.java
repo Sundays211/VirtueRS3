@@ -38,12 +38,12 @@ import org.virtue.utility.text.StringUtility;
  * @author Sundays211
  * @since 22/10/2014
  */
-public class ItemType implements ConfigType {
+public class ObjType implements ConfigType {
 
 	/**
 	 * The {@link Logger} instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(ItemType.class);
+	private static Logger logger = LoggerFactory.getLogger(ObjType.class);
 	
 	private static enum ItemTransform { SHARD, CERT, LENT, BOUGHT; }
 
@@ -55,8 +55,8 @@ public class ItemType implements ConfigType {
 	public static short[] aShortArray8082 = new short[256];
 	static String aString8101 = "</col>";
 	
-	public static ItemType load (int id, ByteBuffer buffer) {
-		ItemType objType = new ItemType(id);
+	public static ObjType load (int id, ByteBuffer buffer) {
+		ObjType objType = new ObjType(id);
 		try {
 			objType.decode(buffer);
 		} catch (RuntimeException ex) {
@@ -72,8 +72,8 @@ public class ItemType implements ConfigType {
 	 * @param extraData The buffer containing extra data (such as descriptions and weights)
 	 * @return the ItemType config
 	 */
-	public static ItemType load (int id, ByteBuffer cacheData, ByteBuffer extraData) {
-		ItemType objType = load(id, extraData);
+	public static ObjType load (int id, ByteBuffer cacheData, ByteBuffer extraData) {
+		ObjType objType = load(id, extraData);
 		try {
 			objType.decode(cacheData);
 		} catch (RuntimeException ex) {
@@ -141,7 +141,7 @@ public class ItemType implements ConfigType {
 	//ItemTypeList myList;
 	public String[] op;
 	public String[] iop;
-	public int contentType = -1;
+	public int category = -1;
 	
 	public short[] recol_s;
 	short[] recol_d;
@@ -158,7 +158,7 @@ public class ItemType implements ConfigType {
 	HashMap<Integer, Object> params;
 	public int[] quests;
 	
-	public ItemType(int id) {
+	public ObjType(int id) {
 		myid = id;
 		/*myList = list;
 		op = (String[]) myList.defaultOps.clone();
@@ -299,7 +299,7 @@ public class ItemType implements ConfigType {
 		} else if (code == 93) {
 			womanhead2 = ByteBufferUtils.getSmartInt(buffer);
 		} else if (code == 94) {
-			contentType = buffer.getShort() & 0xffff;
+			category = buffer.getShort() & 0xffff;
 		} else if (code == 95) {
 			zan2d = buffer.getShort() & 0xffff;
 		} else if (96 == code) {
@@ -407,23 +407,23 @@ public class ItemType implements ConfigType {
 		
 	}
 
-	public void genCert(ItemType template, ItemType item) {
+	public void genCert(ObjType template, ObjType item) {
 		transform(ItemTransform.CERT, template, item, null);
 	}
 
-	public void genLent(ItemType template, ItemType item) {
+	public void genLent(ObjType template, ObjType item) {
 		transform(ItemTransform.LENT, template, item, "Discard");
 	}
 
-	public void genBought(ItemType template, ItemType item) {
+	public void genBought(ObjType template, ObjType item) {
 		transform(ItemTransform.BOUGHT, template, item, "Discard");
 	}
 
-	public void genShard(ItemType template, ItemType item) {
+	public void genShard(ObjType template, ObjType item) {
 		transform(ItemTransform.SHARD, template, item, "Drop");
 	}
 
-	void transform(ItemTransform type, ItemType template, ItemType item, String option) {
+	void transform(ItemTransform type, ObjType template, ObjType item, String option) {
 		mesh = template.mesh * 1;
 		zoom2d = template.zoom2d * 1;
 		xan2d = 1 * template.xan2d;
@@ -431,12 +431,12 @@ public class ItemType implements ConfigType {
 		zan2d = template.zan2d * 1;
 		xof2d = 1 * template.xof2d;
 		yof2d = template.yof2d * 1;
-		ItemType class631_25_ = (ItemTransform.CERT == type ? template : item);
-		recol_s = ((ItemType) class631_25_).recol_s;
-		recol_d = ((ItemType) class631_25_).recol_d;
-		recol_d_palette = ((ItemType) class631_25_).recol_d_palette;
-		retex_s = ((ItemType) class631_25_).retex_s;
-		retex_d = ((ItemType) class631_25_).retex_d;
+		ObjType class631_25_ = (ItemTransform.CERT == type ? template : item);
+		recol_s = ((ObjType) class631_25_).recol_s;
+		recol_d = ((ObjType) class631_25_).recol_d;
+		recol_d_palette = ((ObjType) class631_25_).recol_d_palette;
+		retex_s = ((ObjType) class631_25_).retex_s;
+		retex_d = ((ObjType) class631_25_).retex_d;
 		name = item.name;
 		members = item.members;
 		if (type == ItemTransform.CERT) {
@@ -447,7 +447,7 @@ public class ItemType implements ConfigType {
 			cost = ((int) Math.floor((double) (item.cost / item.shardcount)));
 			stackable = 1;
 			stockmarket = item.stockmarket;
-			contentType = 1 * template.contentType;
+			category = 1 * template.category;
 			cursorOps = template.cursorOps;
 			cursorIOps = template.cursorIOps;
 			iop = new String[5];
@@ -475,7 +475,7 @@ public class ItemType implements ConfigType {
 			manhead2 = 1 * item.manhead2;
 			womanhead = 1 * item.womanhead;
 			womanhead2 = 1 * item.womanhead2;
-			contentType = 1 * item.contentType;
+			category = 1 * item.category;
 			team = item.team * 1;
 			op = item.op;
 			params = item.params;

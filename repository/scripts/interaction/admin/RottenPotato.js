@@ -21,12 +21,10 @@
  */
 
 /**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
+ * Rotten Potato Rework
+ * @author Kayla
  * @author Sundays21
- * @since 24/01/2015
+ * @since 3/29/2016
  */
 var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, objTypeId, args) {
@@ -110,43 +108,7 @@ var RottenPotato = {
 			});
 		},
 		handleJmodOption : function (player) {
-			multi5(player, "Jmod-Tools", "Open Bank", function () {
-				api.closeCentralWidgets(player);
-				api.openOverlaySub(player, 1017, 762, false);
-			}, "Max Stats", function () {
-				for (var skill=0; skill < 27; skill++) {
-					api.addExperience(player, skill, 14034431, false);
-				}
-			}, "Set Display", function () {
-				api.sendMessage(player, "Not yet implemented.");
-			}, "Clear Title", function () {
-				player.getAppearance().setPrefixTitle("");
-				player.getAppearance().refresh();
-			}, "Log Out", function () {
-				RottenPotato.handleLogOutOption(player);
-			});
-		},
-		handleLogOutOption : function (player) {
-			multi5(player, "How would you like to be logged?", "Keep me logged in.", function () {
-				api.sendMessage(player, "Idle is now disabled.");
-			}, "Kick me out.", function () {
-				api.kickPlayer(player, true);
-			}, "Never mind logging, just wipe my bank.", function () {
-				api.emptyInv(player, Inv.BANK);
-				api.sendMessage(player, "Bank is now clear!");
-			}, "QP Cape please!", function () {
-				if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-					api.sendMessage(player, "Not enough space in your inventory space.");
-					return;
-				}
-				api.addCarriedItem(player, 9813, 1);
-			}, "QP Hood Please!", function () {
-				if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-					api.sendMessage(player, "Not enough space in your inventory space.");
-					return;
-				}
-				api.addCarriedItem(player, 9814, 1);
-			});
+			api.openCentralWidget(player, 1610, false);
 		},
 		handleCommandListOption : function (player) {
 			multi3(player, "What would you like to do?", "Spawn Fake Rare", function () {

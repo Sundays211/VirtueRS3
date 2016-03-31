@@ -84,4 +84,5 @@ var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 var listen = function(scriptManager) {
 	var listener = new CommandListener();
 	scriptManager.registerListener(EventType.COMMAND, "item", listener);
+	scriptManager.registerListener(EventType.COMMAND, "give", listener);
 };

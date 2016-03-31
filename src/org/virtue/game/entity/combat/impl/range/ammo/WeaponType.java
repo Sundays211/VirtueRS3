@@ -50,7 +50,7 @@ public enum WeaponType {
 	/**
 	 * The item type.
 	 */
-	private final int id;
+	private final int category;
 	
 	/**
 	 * The combat style.
@@ -59,11 +59,11 @@ public enum WeaponType {
 	
 	/**
 	 * Constructs a new {@code WeaponType} {@code Object}.
-	 * @param id The item type.
+	 * @param category The item type.
 	 * @param style The combat style.
 	 */
-	private WeaponType(int id, CombatStyle style) {
-		this.id = id;
+	private WeaponType(int category, CombatStyle style) {
+		this.category = category;
 		this.style = style;
 	}
 
@@ -74,11 +74,11 @@ public enum WeaponType {
 	 */
 	public static WeaponType get(Item item) {
 		for (WeaponType type : values()) {
-			if (item.getType().contentType == type.id) {
+			if (item.getType().category == type.category) {
 				return type;
 			}
 		}
-		System.err.println("Unhandled weapon type -[id=" + item.getType().contentType + ", item=" + item.getName() + "].");
+		System.err.println("Unhandled weapon type -[id=" + item.getType().category + ", item=" + item.getName() + "].");
 		return null;
 	}
 
@@ -87,7 +87,7 @@ public enum WeaponType {
 	 * @return The id.
 	 */
 	public int getId() {
-		return id;
+		return category;
 	}
 
 	/**

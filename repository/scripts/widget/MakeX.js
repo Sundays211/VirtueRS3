@@ -36,37 +36,44 @@ var CraftDialogOpenListener = Java.extend(Java.type('org.virtue.engine.script.li
 		api.setVarc(player, 2225, 0);
 		api.setVarc(player, 2689, 0);
 		api.setVarc(player, 2690, 0);
-		
+
+		var categoryId = api.getVarp(player, 1169);		
 		var selectedItemId = api.getVarp(player, 1170);
+		
+		if (!configApi.enumHasValue(categoryId, selectedItemId)) {
+			selectedItemId = -1;//Only select items actually in the category
+		}
+		
 		if (selectedItemId == -1) {//Auto-select item
-			var category = api.getVarp(player, 1169);
-			var objTypeId;
-			for (var slot = 0; slot < api.getEnumSize(category); slot++) {
-				objTypeId = api.getEnumValue(category, slot);
-				if (api.itemTotal(player, Inv.BACKPACK, objTypeId) > 1) {
-					api.setVarp(player, 1170, objTypeId);
+			var productId;
+			for (var slot = 0; slot < configApi.enumSize(categoryId); slot++) {
+				productId = configApi.enumValue(categoryId, slot);
+				if (CraftDialog.getMaxAmount(player, productId) > 1) {
+					api.setVarp(player, 1170, productId);
+					selectedItemId = productId;
 					break;
 				}
 			}
+		}
+		if (selectedItemId == -1) {
+			selectedItemId = configApi.enumValue(categoryId, 0);
+			api.setVarp(player, 1170, selectedItemId);
 		}
 		var invCount = CraftDialog.getMaxAmount(player, selectedItemId);//The maximum amount of the item the player can produce
 		api.setVarBit(player, 1002, invCount);//Product select max amount
 		api.setVarBit(player, 1003, invCount);//The amount currently selected
 		
 		//Information about the selected item
-		api.setVarc(player, 2391, api.getItemDesc(selectedItemId));//Examine text
+		api.setVarc(player, 2391, configApi.objDesc(selectedItemId));//Description
 		api.setVarc(player, 2223, 1);
 		api.setVarc(player, 2224, api.getExchangeCost(selectedItemId));//Exchange guide price
-		api.setVarc(player, 199, -1);//Varc: key=199, value=-1
-		api.setVarc(player, 3678, -1);//Varc: key=3678, value=-1
-		api.runClientScript(player, 8178, []);
 		
 		api.openWidget(player, 1370, 62, 1371, true);//The inner interface
 		
 		api.setWidgetEvents(player, 1371, 62, 0, 12, 2);//Allows an option to be selected in the category drop-down menu
 		api.setWidgetEvents(player, 1371, 36, 0, invCount, 2359296);//Activates the amount selection dragger
 		api.setWidgetEvents(player, 1371, 143, 0, invCount, 2);//Clicks on the amount selection dragger
-		var slotCount = api.getEnumSize(api.getVarp(player, 1169)) * 4;
+		var slotCount = configApi.enumSize(categoryId) * 4;
 		api.setWidgetEvents(player, 1371, 44, 0, slotCount, 2);//Allows the items to be clicked
 	}
 });
@@ -160,7 +167,7 @@ var CraftDialog = {
 				api.setWidgetEvents(player, 1371, 36, 0, invCount, 2359296);//Activates the count selection dragger
 				api.setWidgetEvents(player, 1371, 143, 0, invCount, 2);//Clicks on the count selection dragger
 				
-				api.setVarc(player, 2391, api.getItemDesc(itemID));//Examine text
+				api.setVarc(player, 2391, configApi.objDesc(itemID));//Examine text
 				api.setVarc(player, 2223, 1);//
 				api.setVarc(player, 2224, api.getExchangeCost(itemID));//Exchange guide price
 				
@@ -176,38 +183,40 @@ var CraftDialog = {
 		 * @return True if the player meets all the requirements, false otherwise
 		 */
 		canCraft : function (player, productId) {
-			var key = api.getItemParam(productId, 2640);
-			var value = api.getItemParam(productId, 2645);
-			var reqID = 1;
-			while (key > 0) {
-				if (!this.checkRequirement(player, key, value, api.getItemParam(productId, 317), api.getItemParam(productId, 3649) == 1, reqID)) {
-					return false;
-				} else if (!this.checkTools(player, productId)) {
+			 if (!this.checkTools(player, productId)) {
+				 return false;
+			 }
+			 
+			 var key = configApi.objParam(productId, 2640);
+			 var value = configApi.objParam(productId, 2645);
+			 var reqID = 1;
+			 while (key > 0) {
+				if (!this.checkRequirement(player, key, value, configApi.objParam(productId, 317), configApi.objParam(productId, 3649) == 1, reqID)) {
 					return false;
 				}
 				reqID++;
 				switch (reqID) {
 					case 2:
-						key = api.getItemParam(productId, 2641);
-						value = api.getItemParam(productId, 2646);
+						key = configApi.objParam(productId, 2641);
+						value = configApi.objParam(productId, 2646);
 						break;
 					case 3:
-						key = api.getItemParam(productId, 2642);
-						value = api.getItemParam(productId, 2647);
+						key = configApi.objParam(productId, 2642);
+						value = configApi.objParam(productId, 2647);
 						break;
 					case 4:
-						key = api.getItemParam(productId, 2643);
-						value = api.getItemParam(productId, 2648);
+						key = configApi.objParam(productId, 2643);
+						value = configApi.objParam(productId, 2648);
 						break;
 					case 5:
-						key = api.getItemParam(productId, 2644);
-						value = api.getItemParam(productId, 2649);
+						key = configApi.objParam(productId, 2644);
+						value = configApi.objParam(productId, 2649);
 						break;
 					default:
 						key = 0;
 				}
-			}
-			return true;
+			 }
+			 return true;
 		},
 		
 		checkRequirement : function (player, key, value, unk1, boostable, reqID) {
@@ -234,8 +243,8 @@ var CraftDialog = {
 		},
 		
 		checkTools : function (player, productId) {
-			var toolId = api.getItemParam(productId, 2655);
-			var structId = api.getItemParam(productId, 2675);
+			var toolId = configApi.objParam(productId, 2655);
+			var structId = configApi.objParam(productId, 2675);
 			var param = 1;
 			while (toolId != -1 || structId != -1) {
 				if (structId != -1) {
@@ -250,12 +259,12 @@ var CraftDialog = {
 				param++;
 				switch (param) {
 				case 2:
-					toolId = api.getItemParam(productId, 2651);
-					structId = api.getItemParam(productId, 2991);
+					toolId = configApi.objParam(productId, 2651);
+					structId = configApi.objParam(productId, 2991);
 					break;
 				case 3:
-					toolId = api.getItemParam(productId, 2652);
-					structId = api.getItemParam(productId, 2992);
+					toolId = configApi.objParam(productId, 2652);
+					structId = configApi.objParam(productId, 2992);
 					break;
 				default:
 					toolId = -1;
@@ -276,26 +285,98 @@ var CraftDialog = {
 			return Toolbelt.hasTool(player, toolId);
 		},
 		
+		isTool : function (productId, itemId) {
+			var toolId = configApi.objParam(productId, 2655);
+			var structId = configApi.objParam(productId, 2675);
+			var param = 1;
+			while (toolId != -1 || structId != -1) {
+				if (structId != -1 && this.structContainsItem(structId, itemId)) {
+					return true;
+				} else if (toolId == itemId) {
+					return true;
+				}
+				param++;
+				switch (param) {
+				case 2:
+					toolId = configApi.objParam(productId, 2651);
+					structId = configApi.objParam(productId, 2991);
+					break;
+				case 3:
+					toolId = configApi.objParam(productId, 2652);
+					structId = configApi.objParam(productId, 2992);
+					break;
+				default:
+					toolId = -1;
+					structId = -1;
+					break;
+				}
+			}
+			return false;
+		},
+		
+		structContainsItem : function (structId, itemId) {
+			var id = configApi.structParam(structId, 2655);
+			var loop = 1;
+			while (id != -1) {
+				if (id == itemId) {
+					return true;
+				}
+				loop++;
+				switch (loop) {
+				case 2:
+					id = configApi.structParam(structId, 2656);
+					break;
+				case 3:
+					id = configApi.structParam(structId, 2657);
+					break;
+				case 4:
+					id = configApi.structParam(structId, 2658);
+					break;
+				case 5:
+					id = configApi.structParam(structId, 2659);
+					break;
+				case 6:
+					id = configApi.structParam(structId, 2660);
+					break;
+				case 7:
+					id = configApi.structParam(structId, 2661);
+					break;
+				case 8:
+					id = configApi.structParam(structId, 2662);
+					break;
+				case 9:
+					id = configApi.structParam(structId, 2663);
+					break;
+				case 10:
+					id = configApi.structParam(structId, 2664);
+					break;
+				default:
+					id = -1;
+				}
+			}
+			return false;
+		},
+		
 		getMaxAmount : function (player, productId) {
 			//See clientscript 7108
-			var materialID = api.getItemParam(productId, 2655);
-			var structID = api.getItemParam(productId, 2675);
-			var separateAmount = api.getItemParam(productId, 2686) == 1;
-			var matCountReq = api.getItemParam(productId, 2665);
+			var materialId = configApi.objParam(productId, 2655);
+			var structId = configApi.objParam(productId, 2675);
+			var separateAmount = configApi.objParam(productId, 2686) == 1;
+			var matCountReq = configApi.objParam(productId, 2665);
 			var maxAmount = 2147483647;
 			var materialCount;
-			var createPerCycle = api.getItemParam(productId, 2653);
-			var maxMakeSets = api.getItemParam(productId, 2995);
+			var createPerCycle = configApi.objParam(productId, 2653);
+			var maxMakeSets = configApi.objParam(productId, 2995);
 			var param = 1;
-			while ((materialID != -1 || structID != -1) && maxAmount > 0) {
-				if (structID != -1) {
-					materialCount = this.getStructInvAmount(player, structID, createPerCycle);
+			while ((materialId != -1 || structId != -1) && maxAmount > 0) {
+				if (structId != -1) {
+					materialCount = this.getStructInvAmount(player, structId, createPerCycle);
 					if (materialCount < maxAmount) {
 						maxAmount = materialCount;
 					}
 				} else {
 					if (matCountReq != 0) {
-						materialCount = api.carriedItemTotal(player, materialID);
+						materialCount = Backpack.getHeldCount(player, materialId);
 						if (materialCount != -1) {
 							if (separateAmount) {
 								maxAmount = Math.min(maxAmount, materialCount / matCountReq);
@@ -308,20 +389,80 @@ var CraftDialog = {
 				param++;
 				switch(param) {
 				case 2:
-					materialID = api.getItemParam(productId, 2656);
-					matCountReq = api.getItemParam(productId, 2666);
-					separateAmount = api.getItemParam(productId, 2687) == 1;
-					structID = api.getItemParam(productId, 2676);
+					materialId = configApi.objParam(productId, 2656);
+					matCountReq = configApi.objParam(productId, 2666);
+					//v11 = configApi.objParam(productId, 4135);
+					separateAmount = configApi.objParam(productId, 2687) == 1;
+					structId = configApi.objParam(productId, 2676);
+					//v1 = configApi.objParam(productId, 5457);
 					break;
 				case 3:
-					materialID = api.getItemParam(productId, 2657);
-					matCountReq = api.getItemParam(productId, 2667);
-					separateAmount = api.getItemParam(productId, 2688) == 1;
-					structID = api.getItemParam(productId, 2677);
+					materialId = configApi.objParam(productId, 2657);
+					matCountReq = configApi.objParam(productId, 2667);
+					//v11 = configApi.objParam(productId, 4136);
+					separateAmount = configApi.objParam(productId, 2688) == 1;
+					structId = configApi.objParam(productId, 2677);
+					//v1 = configApi.objParam(productId, 5458);
+					break;
+				case 4:
+					materialId = configApi.objParam(productId, 2658);
+					matCountReq = configApi.objParam(productId, 2668);
+					//v11 = configApi.objParam(productId, 4137);
+					separateAmount = configApi.objParam(productId, 2689);
+					structId = configApi.objParam(productId, 2678);
+					//v1 = configApi.objParam(productId, 5459);
+					break;
+				case 5:
+					materialId = configApi.objParam(productId, 2659);
+					matCountReq = configApi.objParam(productId, 2669);
+					//v11 = configApi.objParam(productId, 4138);
+					separateAmount = configApi.objParam(productId, 2690);
+					structId = configApi.objParam(productId, 2679);
+					//v1 = configApi.objParam(productId, 5460);
+					break;
+				case 6:
+					materialId = configApi.objParam(productId, 2660);
+					matCountReq = configApi.objParam(productId, 2670);
+					//v11 = configApi.objParam(productId, 4139);
+					separateAmount = configApi.objParam(productId, 2691);
+					structId = configApi.objParam(productId, 2680);
+					//v1 = configApi.objParam(productId, 5461);
+					break;
+				case 7:
+					materialId = configApi.objParam(productId, 2661);
+					matCountReq = configApi.objParam(productId, 2671);
+					//v11 = configApi.objParam(productId, 4140);
+					separateAmount = configApi.objParam(productId, 2692);
+					structId = configApi.objParam(productId, 2681);
+					//v1 = configApi.objParam(productId, 5462);
+					break;
+				case 8:
+					materialId = configApi.objParam(productId, 2662);
+					matCountReq = configApi.objParam(productId, 2672);
+					//v11 = configApi.objParam(productId, 4141);
+					separateAmount = configApi.objParam(productId, 2693);
+					structId = configApi.objParam(productId, 2682);
+					//v1 = configApi.objParam(productId, 5463);
+					break;
+				case 9:
+					materialId = configApi.objParam(productId, 2663);
+					matCountReq = configApi.objParam(productId, 2673);
+					//v11 = configApi.objParam(productId, 4142);
+					separateAmount = configApi.objParam(productId, 2694);
+					structId = configApi.objParam(productId, 2683);
+					//v1 = configApi.objParam(productId, 5464);
+					break;
+				case 10:
+					materialId = configApi.objParam(productId, 2664);
+					matCountReq = configApi.objParam(productId, 2674);
+					//v11 = configApi.objParam(productId, 4143);
+					separateAmount = configApi.objParam(productId, 2695);
+					structId = configApi.objParam(productId, 2684);
+					//v1 = configApi.objParam(productId, 5465);
 					break;
 				default:
-					materialID = -1;
-					structID = -1;
+					materialId = -1;
+					structId = -1;
 					break;
 				}
 			}
@@ -335,16 +476,16 @@ var CraftDialog = {
 		},
 		
 		getStructInvAmount : function (player, structId, productAmount) {
-			var id = api.getStructParam(structId, 2655);
-			var matCountReq = api.getStructParam(structId, 2665);
-			var separateAmount = api.getStructParam(structId, 2686) == 1;
+			var id = configApi.structParam(structId, 2655);
+			var matCountReq = configApi.structParam(structId, 2665);
+			var separateAmount = configApi.structParam(structId, 2686) == 1;
 			var total = 0;
 			var v1 = 0;
 			var v9 = 0;
 			var loop = 1;
 			var numberOf;
 			while (id != -1) {
-				numberOf = api.carriedItemTotal(player, id);
+				numberOf = Backpack.getHeldCount(player, id);
 				if (numberOf == -1) {
 					total = 2147483647;
 					loop = 2147483647;
@@ -358,49 +499,49 @@ var CraftDialog = {
 				loop++;
 				switch (loop) {
 				case 2:
-					id = api.getStructParam(structId, 2656);
-					matCountReq = api.getStructParam(structId, 2666);
-					separateAmount = api.getStructParam(structId, 2687) == 1;
+					id = configApi.structParam(structId, 2656);
+					matCountReq = configApi.structParam(structId, 2666);
+					separateAmount = configApi.structParam(structId, 2687) == 1;
 					break;
 				case 3:
-					id = api.getStructParam(structId, 2657);
-					matCountReq = api.getStructParam(structId, 2667);
-					separateAmount = api.getStructParam(structId, 2688) == 1;
+					id = configApi.structParam(structId, 2657);
+					matCountReq = configApi.structParam(structId, 2667);
+					separateAmount = configApi.structParam(structId, 2688) == 1;
 					break;
 				case 4:
-					id = api.getStructParam(structId, 2658);
-					matCountReq = api.getStructParam(structId, 2668);
-					separateAmount = api.getStructParam(structId, 2689) == 1;
+					id = configApi.structParam(structId, 2658);
+					matCountReq = configApi.structParam(structId, 2668);
+					separateAmount = configApi.structParam(structId, 2689) == 1;
 					break;
 				case 5:
-					id = api.getStructParam(structId, 2659);
-					matCountReq = api.getStructParam(structId, 2669);
-					separateAmount = api.getStructParam(structId, 2690) == 1;
+					id = configApi.structParam(structId, 2659);
+					matCountReq = configApi.structParam(structId, 2669);
+					separateAmount = configApi.structParam(structId, 2690) == 1;
 					break;
 				case 6:
-					id = api.getStructParam(structId, 2660);
-					matCountReq = api.getStructParam(structId, 2670);
-					separateAmount = api.getStructParam(structId, 2691) == 1;
+					id = configApi.structParam(structId, 2660);
+					matCountReq = configApi.structParam(structId, 2670);
+					separateAmount = configApi.structParam(structId, 2691) == 1;
 					break;
 				case 7:
-					id = api.getStructParam(structId, 2661);
-					matCountReq = api.getStructParam(structId, 2671);
-					separateAmount = api.getStructParam(structId, 2692) == 1;
+					id = configApi.structParam(structId, 2661);
+					matCountReq = configApi.structParam(structId, 2671);
+					separateAmount = configApi.structParam(structId, 2692) == 1;
 					break;
 				case 8:
-					id = api.getStructParam(structId, 2662);
-					matCountReq = api.getStructParam(structId, 2672);
-					separateAmount = api.getStructParam(structId, 2693) == 1;
+					id = configApi.structParam(structId, 2662);
+					matCountReq = configApi.structParam(structId, 2672);
+					separateAmount = configApi.structParam(structId, 2693) == 1;
 					break;
 				case 9:
-					id = api.getStructParam(structId, 2663);
-					matCountReq = api.getStructParam(structId, 2673);
-					separateAmount = api.getStructParam(structId, 2694) == 1;
+					id = configApi.structParam(structId, 2663);
+					matCountReq = configApi.structParam(structId, 2673);
+					separateAmount = configApi.structParam(structId, 2694) == 1;
 					break;
 				case 10:
-					id = api.getStructParam(structId, 2664);
-					matCountReq = api.getStructParam(structId, 2674);
-					separateAmount = api.getStructParam(structId, 2695) == 1;
+					id = configApi.structParam(structId, 2664);
+					matCountReq = configApi.structParam(structId, 2674);
+					separateAmount = configApi.structParam(structId, 2695) == 1;
 					break;
 				default:
 					id = -1;

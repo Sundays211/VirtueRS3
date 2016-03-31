@@ -241,44 +241,68 @@ var FletchMaterial = {
 		}
 }
 
-var ToolListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+var OpHeldUseListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, objTypeId, args) {
 		var player = args.player;		
-		var item = args.item;
+		var itemId = api.getId(args.item);
+		var useitemId = api.getId(args.useitem);
 		var slot = args.slot;
 		
-		var material = fletchForItem(objTypeId);
-		
-		if (material === null || material.defaultProduct == -1) {
-			//Item1 is the tool/minor material
-			item = args.useitem;
-			slot = args.useslot;
+		var validUse = false;
+		var product = null;
+		switch (itemId) {
+		case 12539://Grenwall spikes
+		case 52://Arrow shaft
+			if (CraftDialog.structContainsItem(14981, useitemId)) {
+				validUse = true;
+				itemId = 52;
+				product = 53;
+			}
+			break;
+		case 314://Feather
+		case 10087://Stripy feather
+		case 10088://Red feather
+		case 10089://Blue feather
+		case 10090://Yellow feather
+		case 10091://Orange feather
+		case 11525://Wimpy feather
+			if (CraftDialog.structContainsItem(14983, useitemId)) {
+				validUse = true;
+				itemId = 314;
+				product = 53;
+			}
+			break;
 		}
-		if (material !== null || fletchForItem(api.getId(args.useitem)) !== null) {
-			showFletchingDialog(player, item, [args.slot, args.useslot]);
+		
+		if (validUse) {
+			Fletching.handleCraft(player, itemId, slot, product);
 		} else {
 			defaultOpHeldUseHandler(player, args);
 		}
-		return;
 	}
 });
 
-var MaterialListner = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+var OpHeldListner = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;
-		var item = args.item;
-		var slot = args.slot;
-
-		showFletchingDialog(player, item, [slot, -1]);
+		
+		Fletching.handleCraft(player, api.getId(args.item), args.slot);
 	}
 });
 
 /* Listen to the item ids specified */
 var listen = function(scriptManager) {
-	var materialListener = new MaterialListner();
-	var toolListener = new ToolListener();
+	Fletching.initMaterialLookup();
+	Fletching.initProductLookup();
 	
-	for (var i in FletchMaterial) {
+	var opHeldListener = new OpHeldListner();
+	var opHeldUseListener = new OpHeldUseListener();
+	
+	scriptManager.registerListener(EventType.OPHELD1, 52, opHeldListener);//Arrow shaft
+	scriptManager.registerListener(EventType.OPHELDU, 52, opHeldUseListener);//Arrow shaft
+	scriptManager.registerListener(EventType.OPHELDU, 314, opHeldUseListener);//Feather
+	
+	/*for (var i in FletchMaterial) {
 		var material = FletchMaterial[i];
 		scriptManager.registerListener(EventType.OPHELDU, material.itemId, toolListener);
 		
@@ -286,69 +310,91 @@ var listen = function(scriptManager) {
 		case FletchType.FLETCH_WOOD:
 			break;
 		case FletchType.STRING_BOW:
-			scriptManager.registerListener(EventType.OPHELD1, material.itemId, materialListener);
+			scriptManager.registerListener(EventType.OPHELD1, material.itemId, opHeldListener);
 			break;
 		case FletchType.FEATHER_ARROW:
 		case FletchType.TIP_ARROW:
 			break;
 		}
-	}
+	}*/
 };
 
-/**
- * Shows the dialog for the player to select the product and amount to fletch
- * @param player The player
- * @param item The currently selected item
- * @param slot The backpack slot of the selected item
- */
-function showFletchingDialog (player, item, slots) {
-	var materialType = fletchForItem(item.getID());
-	if (materialType == null) {
-		print("ERROR: No material found for item "+item);
-		return;
-	}
-	//player.getVars().setVarp(1106, 77266977);
-	api.setVarp(player, 1168, materialType.type.category);//Main category (6939 = fletching)
-	api.setVarc(player, 2222, 6940);//Category text key
-	if (typeof materialType.category == "number") {
-		api.setVarp(player, 1169, materialType.category);//Sub category (6947 = normal logs)
-	} else {
-		api.setVarp(player, 1169, materialType.type.subCategory);//Sub category (6947 = normal logs)
-	}	
-	api.setVarp(player, 1170, materialType.defaultProduct);//Item ID
-	api.openCentralWidget(player, 1370, false);
-	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-		
-		handle: function(value) {
-			api.closeCentralWidgets(player);
-			var productId = api.getVarp(player, 1170);
-			var amount = api.getVarBit(player, 1003);
-			if (amount > 0) {
-				fletchProduct(player, materialType, slots, productId, amount);
-			}			
+var Fletching = {
+		MaterialType : {
+			LOGS : {
+				category : 6939,
+				categoryNames : 6940,
+				text : "You carefully cut the wood into: ",
+				animation : 6702
+			},
+			ARROWS : {
+				category : 6943,
+				categoryNames : 6944
+				//TODO: What's the animation ID for tipping arrows?
+			}
+		},
+		materialLookup : {},
+		initMaterialLookup : function () {
+			this.materialLookup = {};
+			var that = this;
+			function addMaterial (id, category, type) {
+				that.materialLookup[id] = {
+						"id" : id, 
+						"category" : category,
+						"type" : type
+						};
+			}
+			addMaterial(1511, 6947, this.MaterialType.LOGS);//Normal logs
+			addMaterial(1521, 6949, this.MaterialType.LOGS);//Oak logs
+			addMaterial(1519, 6950, this.MaterialType.LOGS);//Willow logs
+			addMaterial(6333, 6951, this.MaterialType.LOGS);//Teak logs
+			addMaterial(1517, 6952, this.MaterialType.LOGS);//Maple logs
+			addMaterial(6332, 6953, this.MaterialType.LOGS);//Mahogany logs
+			addMaterial(1515, 6954, this.MaterialType.LOGS);//Yew logs
+			addMaterial(1513, 6955, this.MaterialType.LOGS);//Magic logs
+			addMaterial(52, 6966, this.MaterialType.ARROWS);//Arrow shafts
+			addMaterial(314, 6966, this.MaterialType.ARROWS);//Feathers
+		},
+		productLookup : {},
+		initProductLookup : function () {
+			this.productLookup = {};
+			var that = this;
+			function addProduct (id, animation, text) {
+				that.productLookup[id] = {"id":id, "animation":animation, "text":text};
+			}
+
+			//Used when the standard animation, specified in MaterialType, isn't appropriate for this product
+			addProduct(70, 7211);//Magic shieldbow (u)
+			addProduct(72, 7211);//Magic shortbow (u)
+			addProduct(53, undefined, "You attach feathers to 15 arrow shafts.");//Headless arrows
+		},
+		handleCraft : function (player, itemId, slot, productId) {
+			var material = this.materialLookup[itemId];
+			if (material === undefined) {
+				throw "Unsupported material: "+itemId;
+			}
+			api.setVarp(player, 1168, material.type.category);//Main category (6939 = fletching)
+			api.setVarc(player, 2222, material.type.categoryNames);//Category text key (6940 = fletching)
+			api.setVarp(player, 1169, material.category);//Sub category (6947 = normal logs)
+			if (typeof(productId) === "number") {
+				api.setVarp(player, 1170, productId);
+			}
+			api.openCentralWidget(player, 1370, false);
+			var that = this;
+			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {				
+				handle: function(value) {
+					api.closeCentralWidgets(player);
+					productId = api.getVarp(player, 1170);
+					var amount = api.getVarBit(player, 1003);
+					var productData = that.productLookup[productId];
+					if (amount > 0) {
+						api.setVarp(player, 1175, productId);
+						var animation = productData !== undefined ? productData.animation : material.type.animation;
+						var text = productData !== undefined && productData.text !== undefined ? productData.text : material.type.text+configApi.objName(productId);
+						CraftProcess.startCrafting(player, amount, animation, text);
+					}			
+				}			
+			});
+			api.setInputHandler(player, new Handler());
 		}
-	
-	});
-	api.setInputHandler(player, new Handler());
-}
-
-function fletchForItem (itemID) {
-	if (typeof FletchMaterial[itemID] == "object") {
-		return FletchMaterial[itemID];
-	} else {
-		return null;
-	}
-}
-
-function fletchProduct (player, materialType, slots, productId, amount) {
-	api.setVarp(player, 1175, productId);
-	api.sendMessage(player, "Selected product "+productId+", amount="+amount);	
-	var animation = typeof(materialType.animation) == "number" ? materialType.animation : materialType.type.animation;
-	var delay = typeof(materialType.delay) == "number" ? materialType.delay : materialType.type.delay;
-	var text = materialType.type.successText;
-	CraftProcess.startCrafting(player, amount, animation, text);
-	/*var action = new CraftAction(productID, animation, delay, text);
-	action.setPreferedSlots(slots[0], slots.length > 1 ? slots[1] : -1);
-	action.start(player, amount);
-	player.setAction(action);*/
 }

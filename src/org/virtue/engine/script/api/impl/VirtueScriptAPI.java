@@ -36,7 +36,7 @@ import org.virtue.config.loctype.LocType;
 import org.virtue.config.loctype.LocTypeList;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
-import org.virtue.config.objtype.ItemType;
+import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.paramtype.ParamTypeList;
@@ -557,7 +557,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getItemType(int)
 	 */
 	@Override
-	public ItemType getItemType(int itemID) {
+	public ObjType getItemType(int itemID) {
 		return ObjTypeList.getInstance().list(itemID);
 	}
 
@@ -565,7 +565,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getItemType(org.virtue.game.entity.player.container.Item)
 	 */
 	@Override
-	public ItemType getItemType(Item item) {
+	public ObjType getItemType(Item item) {
 		return item.getType();
 	}
 
@@ -597,7 +597,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#getDesc(org.virtue.cache.def.impl.ItemType)
 	 */
 	@Override
-	public String getItemDesc(ItemType itemType) {
+	public String getItemDesc(ObjType itemType) {
 		return itemType.getDescription();
 	}
 
@@ -611,7 +611,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean itemStacks(int objTypeId) {
-		ItemType itemType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType itemType = ObjTypeList.getInstance().list(objTypeId);
 		if (itemType == null) {
 			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
 		}
@@ -623,7 +623,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public Object getItemParam(int objTypeId, int paramTypeId) {
-		ItemType itemType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType itemType = ObjTypeList.getInstance().list(objTypeId);
 		if (itemType == null) {
 			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
 		}
@@ -801,7 +801,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		}
 		int currentlyHeld = container.getNumberOf(itemID);
 		if (currentlyHeld < amount) {
-			throw new IllegalStateException("Inventory does not contain enough items to fufil the request: required="+amount+", has="+currentlyHeld);
+			throw new IllegalStateException("Inventory does not contain enough items to fulfil the request: item="+itemID+", required="+amount+", has="+currentlyHeld);
 		}
 		container.remove(slot, Item.create(itemID, amount));
 		player.getInvs().sendContainer(state);

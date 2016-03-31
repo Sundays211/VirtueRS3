@@ -47,6 +47,15 @@ function runAnimation (entity, animId, callback) {
 	}
 }
 
+function delay (entity, cycles, callback) {
+	var Handler = Java.extend(Java.type('java.lang.Runnable'), {
+		run : function () {
+			callback();
+		}
+	});	
+	api.delay(entity, cycles, new Handler());
+}
+
 function inframeInput(player, ifaceId, comp, callback, type, maxlen) {
 	api.setVarc(player, 2235, getCompHash(ifaceId, comp));
 	api.setVarc(player, 2236, type);
