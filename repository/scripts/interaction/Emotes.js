@@ -78,7 +78,12 @@ var Emotes = {
 				api.runAnimation(player, 21982);
 				return;
 			case 3://Angry
-				api.runAnimation(player, 21984);
+			if(api.wearingItem(player, 10392) ) {
+				api.runAnimation(player, 5315);
+				}
+			else {
+				api.runAnimation(player, 21984);//old one 859
+			}
 				return;
 			case 4://Think
 				api.runAnimation(player, 21983);
@@ -93,7 +98,15 @@ var Emotes = {
 				api.runAnimation(player, 21987);
 				return;
 			case 8://Beckon
-				api.runAnimation(player, 21988);
+			if(api.wearingItem(player, 10862)&& api.wearingItem(player, 10863)&& api.wearingItem(player, 10864)&& 
+			api.wearingItem(player, 10865) || api.wearingItem(player, 10877)|| 
+			api.wearingItem(player, 10878)|| api.wearingItem(player, 10879)|| 
+			api.wearingItem(player, 10880)|| api.wearingItem(player, 10881)|| api.wearingItem(player, 10882) ) {
+				api.runAnimation(player, 5845);
+				}
+			else {
+				api.runAnimation(player, 21988);//old 864
+			}
 				return;
 			case 9://Laugh
 				api.runAnimation(player, 21989);
@@ -102,10 +115,21 @@ var Emotes = {
 				api.runAnimation(player, 21990);
 				return;
 			case 11://Yawn
-				api.runAnimation(player, 21987);
+			if(api.wearingItem(player, 10398) ) {
+				api.setSpotAnim(player, 1, 967);
+				api.runAnimation(player, 5313);
+			}
+			else {
+				api.runAnimation(player, 2111);
+			}
 				return;
 			case 12://Dance
+			if(api.wearingItem(player, 10394) ) {
+				api.runAnimation(player, 5316)
+			}
+			else {
 				api.runAnimation(player, 866);
+			}
 				return;
 			case 13://Jig
 				api.runAnimation(player, 2106);
@@ -162,7 +186,14 @@ var Emotes = {
 				api.setSpotAnim(player, 1, 713);
 				return;
 			case 30://Flap
+
+				if(api.wearingItem(player, 11021) && api.wearingItem(player, 11019) 
+				&& api.wearingItem(player, 11020) && api.wearingItem(player, 11022)) {
+				api.runAnimation(player, 3859);
+			}
+			else {
 				api.runAnimation(player, 4280);
+			}
 				return;
 			case 31://Slap Head
 				api.runAnimation(player, 4275);
