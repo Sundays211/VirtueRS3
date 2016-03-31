@@ -162,9 +162,9 @@ var WornEquipment = {
 						"item" : item,
 						"slot" : slot
 				};
-				scripts.invokeScriptChecked(eventType, itemId, args);
+				api.invokeEvent(eventType, itemId, args);
 			} else {
-				player.getDispatcher().sendGameMessage("Unhanded equipment item button: item="+item+", slot="+slot+", button="+option);
+				player.getDispatcher().sendGameMessage("Unhanded equipment item button: item="+item+", slot="+slot+", button="+button);
 			}
 		}
 }
