@@ -144,6 +144,7 @@ public class Movement {
 	 * @return true if the movement was successful, false otherwise
 	 */
 	public synchronized boolean moveTo (int destX, int destY) {
+		entity.interuptAction();
 		if (!entity.canMove()) {
 			return false;
 		}
@@ -171,6 +172,7 @@ public class Movement {
 	 * @return True if the step was successfully queued for the entity, false if they were blocked.
 	 */
 	public synchronized boolean move (Direction direction) {
+		entity.interuptAction();
 		if (!entity.canMove()) {
 			return false;
 		}
@@ -191,6 +193,7 @@ public class Movement {
 	 * @return true if the movement was successful, false otherwise
 	 */
 	public synchronized boolean moveTo (Entity target) {
+		entity.interuptAction();
 		if (!entity.canMove()) {
 			return false;
 		}
@@ -214,6 +217,7 @@ public class Movement {
 	 * @return true if the movement was successful, false otherwise
 	 */
 	public synchronized boolean moveTo (SceneLocation location, int x, int y) {
+		entity.interuptAction();
 		if (!entity.canMove()) {
 			return false;
 		}
@@ -524,6 +528,7 @@ public class Movement {
 	 * @return True if the target setting was successful, false otherwise
 	 */
 	public synchronized boolean setTarget (EntityTarget target) {
+		entity.interuptAction();
 		if (!entity.canMove()) {
 			return false;//Unable to move
 		}

@@ -51,15 +51,12 @@ public class GroundItem extends Item {
 	private static Logger logger = LoggerFactory.getLogger(GroundItem.class);
 	
 	public static GroundItem create (int id, int amount, Tile tile) {
-		GroundItem item = new GroundItem(id, amount);
-		item.tile = tile;
+		GroundItem item = new GroundItem(id, amount, tile);
 		return item;
 	}
 	
-	public static GroundItem create (int id, int amount, Tile tile, Entity owner) {
-		GroundItem item = new GroundItem(id, amount);
-		item.tile = tile;
-		//item.owner = owner;
+	public static GroundItem create (int id, int amount, Tile tile, Player owner) {
+		GroundItem item = new GroundItem(id, amount, tile, owner);
 		return item;
 	}
 	

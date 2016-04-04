@@ -34,8 +34,12 @@ var CraftProgressButtonListener = Java.extend(Java.type('org.virtue.engine.scrip
 		var player = args.player;
 		switch (args.component) {
 		case 2://Close
-		case 47://Cancel
 		case 53://Done
+			api.closeOverlaySub(player, 1018, true);
+			return;
+		case 47://Cancel
+			api.stop(player);
+			return;
 		default:
 			api.sendMessage(player, "Unhandled craft progress button: comp="+args.component+", button="+args.button);
 			return;
@@ -46,7 +50,13 @@ var CraftProgressButtonListener = Java.extend(Java.type('org.virtue.engine.scrip
 var CraftProgressCloseListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, trigger, args) {
 		var player = args.player;
-		
+		api.setVarp(player, 1175, -1);//Clear product
+		api.setVarp(player, 1176, 0);//Clear experience gained counter
+		api.setVarp(player, 1177, 0);
+		api.runClientScript(player, 3373, 1018);
+		api.setVarc(player, 2227, 0);//Clear time
+		api.setVarc(player, 2228, 0);//Clear total
+		api.setVarc(player, 2229, 0);//Clear remaining
 	}
 });
 
@@ -60,10 +70,21 @@ var listen = function(scriptManager) {
 };
 
 var CraftProcess = {
+		openInterface : function (player, productId, category, amount, delayPerItem) {
+			api.setVarp(player, 1175, productId);
+			api.setVarp(player, 1169, category);//enum 6816 maps categories -> names
+			api.openOverlaySub(player, 1018, 1251, false);
+			api.setVarc(player, 2227, delayPerItem);//Time per item
+			api.setVarc(player, 2228, amount);//Total products
+			api.setVarc(player, 2229, amount);//Remaining products
+			
+			api.setVarp(player, 1176, 0);//Xp received
+			api.setVarp(player, 1177, 0);//Secondary skill xp received
+		},
 		startCrafting : function (player, amount, animation, successText) {
 			var productId = api.getVarp(player, 1175);
 			//api.setVarp(player, 1169, category);
-			api.openOverlaySub(player, 1018, 1251, true);
+			api.openOverlaySub(player, 1018, 1251, false);
 			var length = animation === undefined ? 1 : Math.ceil(configApi.seqLength(animation) / 30);//Round up
 			api.sendMessage(player, "Total time: "+length);
 			api.setVarc(player, 2227, length);//Time per item
@@ -101,14 +122,7 @@ var CraftProcess = {
 				
 				stop : function (player) {
 					api.stopAnimation(player);//Clear animation
-					api.setVarp(player, 1175, -1);//Clear product
 					api.closeOverlaySub(player, 1018, true);//Close interface
-					api.setVarp(player, 1176, 0);//Clear experience gained counter
-					api.setVarp(player, 1177, 0);
-					api.runClientScript(player, 3373, 1018);
-					api.setVarc(player, 2227, 0);//Clear time
-					api.setVarc(player, 2228, 0);//Clear total
-					api.setVarc(player, 2229, 0);//Clear remaining
 				}
 			});
 			player.setAction(new CraftAction());
@@ -127,6 +141,15 @@ var CraftProcess = {
 				}
 			}
 			runAnimation(player, animation, procItem);*/
+		},
+		setRemaining : function (player, remaining) {
+			api.setVarc(player, 2229, remaining);
+			if (remaining == 0) {
+				var closeInterface = function () {
+					api.closeOverlaySub(player, 1018, true);
+				}
+				delay(player, 5, closeInterface, true, closeInterface);
+			}
 		},
 		makeItem : function (player, productId) {
 			var amountPerBatch = configApi.objParam(productId, 2653);	

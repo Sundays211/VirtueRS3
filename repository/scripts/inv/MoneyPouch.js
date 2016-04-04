@@ -49,18 +49,23 @@ var listen = function(scriptManager) {
 
 var MoneyPouch = {
 		removeCoins : function (player, amount) {
-			api.delItem(player, Inv.MONEY_POUCH, COINS, amount);
-			api.sendMessage(player, api.getFormattedNumber(amount) +" coins have been removed from your money pouch.", MesType.GAME_SPAM);
-			api.runClientScript(player, 5561, [0, amount]);
-			this.updateCoins(player);
+			if (amount > 0) {
+				api.delItem(player, Inv.MONEY_POUCH, COINS, amount);
+				api.sendMessage(player, api.getFormattedNumber(amount) +" coins have been removed from your money pouch.", MesType.GAME_SPAM);
+				api.runClientScript(player, 5561, [0, amount]);
+				this.updateCoins(player);
+			}
 		},
 		addCoins : function (player, amount) {
-			api.addItem(player, Inv.MONEY_POUCH, COINS, amount);
-			api.sendMessage(player, api.getFormattedNumber(amount) +" coins have been added to your money pouch.", MesType.GAME_SPAM);
-			api.runClientScript(player, 5561 , [1, amount]);
-			this.updateCoins(player);
+			if (amount > 0) {
+				api.addItem(player, Inv.MONEY_POUCH, COINS, amount);
+				api.sendMessage(player, api.getFormattedNumber(amount) +" coins have been added to your money pouch.", MesType.GAME_SPAM);
+				api.runClientScript(player, 5561 , [1, amount]);
+				this.updateCoins(player);
+			}			
 		},
 		updateCoins : function (player) {
+			//api.sendMessage(player, "Updating coins... ("+this.getCoinCount(player)+" total)");
 			api.runClientScript(player, 5560,[ this.getCoinCount(player) ]);			
 		},
 		getCoinCount : function (player) {
@@ -78,6 +83,9 @@ var MoneyPouch = {
 			
 			requestCount(player, message, function (value) {
 				var amount = Math.min(value, that.getCoinCount(player));
+				if (amount < 1) {
+					return;
+				}
 				if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
 					api.sendMessage(player, "You don't have space in your inventory to do that.");
 					return;

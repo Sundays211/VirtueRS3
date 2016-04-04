@@ -1870,6 +1870,12 @@ public class LoginDispatcher {
 
 		//XP Popups
 		player.getWidgets().openOverlaySub(1026, 1213, true);
+		
+		if (player.getPrivilegeLevel().getRights() >= 2) {
+			//Jmod toolbox
+			//TODO: Use the collapsed version of the interface here
+			//player.getWidgets().openOverlaySub(1027, 1610, true);
+		}
 
 		//
 		player.getWidgets().openOverlaySub(1001, 1448, true);

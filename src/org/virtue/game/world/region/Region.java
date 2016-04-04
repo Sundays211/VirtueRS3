@@ -366,7 +366,7 @@ public class Region {
 		}
 	}
 	
-	public void dropItem (int itemID, int amount, Entity owner) {
+	public void dropItem (int itemID, int amount, Player owner) {
 		dropItem(itemID, amount, owner, owner.getCurrentTile());
 	}
 	
@@ -377,7 +377,7 @@ public class Region {
 	 * @param owner The player who can pick up the item by default
 	 * @param dropper The entity which dropped the item
 	 */
-	public void dropItem (int itemID, int amount, Entity owner, Tile tile) {
+	public void dropItem (int itemID, int amount, Player owner, Tile tile) {
 		GroundItem groundItem = GroundItem.create(itemID, amount, tile, owner);
 		groundItem.setSpawnTime(Constants.ITEM_REMOVAL_DELAY);
 		addItem(groundItem);
@@ -390,7 +390,7 @@ public class Region {
 	 * @param owner The player who can pick up the item by default
 	 * @param dropper The entity which dropped the item
 	 */
-	public void dropItem (int npcId, int itemID, int amount, Entity owner, Tile tile) {
+	public void dropItem (int npcId, int itemID, int amount, Player owner, Tile tile) {
 		GroundItem groundItem = GroundItem.create(itemID, amount, tile, owner);
 		groundItem.setSpawnTime(Constants.ITEM_REMOVAL_DELAY);
 		addItem(groundItem);

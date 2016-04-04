@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var Constants = Java.type('org.virtue.Constants');
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -38,6 +38,12 @@ var BackpackOpenListener = Java.extend(Java.type('org.virtue.engine.script.liste
 		api.sendInv(player, Inv.BACKPACK);
 		api.sendInv(player, Inv.MONEY_POUCH);
 		MoneyPouch.updateCoins(player);
+		if (api.getVarBit(player, 30224) != 1 
+				&& api.getBaseLevel(player, Stat.SMITHING) > 80 
+				&& api.getBaseLevel(player, Stat.CRAFTING) > 80
+				&& api.getBaseLevel(player, Stat.DIVINATION) > 80) {
+			api.setVarBit(player, 30224, 1);
+		}
 	}
 });
 
@@ -51,14 +57,10 @@ var BackpackButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 				api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 				return;
 			}
-			if(Constants.legacyOnly) {//Checks if pre-eoc style is enabled.
-				if(item.getName().contains("Off-hand")) {
-					api.sendMessage(player, "You can't equip this item. Pre-Eoc Style is enabled.");
-					return;
-				}
-			}
 			Backpack.handleItemInteraction(player, item, args.slot, args.button);
 			return;
+		case 52://Bond pouch
+			return;//This is handled on the client side
 		case 58://Money pouch option
 			switch (args.button) {
 			case 2://Open price checker
@@ -71,7 +73,17 @@ var BackpackButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 			case 4://Withdraw
 				MoneyPouch.requestWithdrawCoins(player);
 				return;
+			default:
+				api.sendMessage(player, "Unhandled money pouch button: "+args.button);
+				return;
 			}
+		case 53://Invention pouch
+			switch (args.button) {
+			case 1:
+				api.openCentralWidget(player, 1709, false);
+				return;
+			}
+		case 47://Wealth evaluator
 		default:
 			api.sendMessage(player, "Unhandled backpack component: comp="+args.component+", slot="+args.slot+", button="+args.button);
 			return;
@@ -82,7 +94,8 @@ var BackpackButtonListener = Java.extend(Java.type('org.virtue.engine.script.lis
 var BackpackDragListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, trigger, args) {
 		var player = args.player;
-		var item = api.getItem(player, Inv.BACKPACK, args.fromslot);
+		var slot = args.fromslot;
+		var item = api.getItem(player, Inv.BACKPACK, slot);
 		if (item == null) {
 			api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 			return;
@@ -103,7 +116,14 @@ var BackpackDragListener = Java.extend(Java.type('org.virtue.engine.script.liste
 				return;
 			}
 			api.setInvSlot(player, Inv.BACKPACK, args.toslot, item);
-			api.setInvSlot(player, Inv.BACKPACK, args.fromslot, destItem);
+			api.setInvSlot(player, Inv.BACKPACK, slot, destItem);
+			return;
+		case 53:
+			if (api.getId(item) != args.fromitem) {
+				api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
+				return;
+			}
+			Invention.startDisassembly(player, item, slot);
 			return;
 		default:
 			api.sendMessage(player, "Unhandled backpack item drag: srcItem="+item+", destComp="+args.tocomponent);

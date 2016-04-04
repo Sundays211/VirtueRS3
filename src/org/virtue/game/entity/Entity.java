@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,12 @@
  * SOFTWARE.
  */
 package org.virtue.game.entity;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,15 +50,18 @@ import org.virtue.network.protocol.update.UpdateBlockQueue;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.ref.HeadIcons;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Aug 8, 2014
  */
 public abstract class Entity extends Node {
+	
+	private static class DelayTask {
+		private int delayTime;
+		private boolean interruptable;
+		private Runnable onFinish;
+		private Runnable onInterrupt;		
+	}
 
 	/**
 	 * The {@link Logger} Instance
@@ -121,9 +130,7 @@ public abstract class Entity extends Node {
 	 */
 	private Runnable animCompleteEvent;
 	
-	private int delayTime;
-	
-	private Runnable delayTask;
+	private Set<DelayTask> delayTasks = new HashSet<>();
 	
 	/**
 	 * Called on creation of this {@link Entity}
@@ -272,10 +279,25 @@ public abstract class Entity extends Node {
 	 * Stops all actions currently being performed by the entity and closes all dialogs
 	 * This method is called every time the entity tries to move
 	 */
-	public void stopAll () {
+	public synchronized void stopAll () {
 		movement.stop();
 		combatSchedule.terminate();
 		clearAnimation();
+		interuptAction();
+	}
+	
+	public synchronized void interuptAction () {
+		Set<DelayTask> tasks = delayTasks;
+		delayTasks = new HashSet<>();
+		for (DelayTask task : tasks) {
+			if (task.interruptable) {
+				if (task.onInterrupt != null) {
+					task.onInterrupt.run();
+				}				
+			} else {
+				delayTasks.add(task);
+			}
+		}
 	}
 	
 	/**
@@ -299,18 +321,24 @@ public abstract class Entity extends Node {
 	/**
 	 * Called when processing an action
 	 */
-	public void process () {
+	public synchronized void process () {
 		if (freezeDuration > 0) {
 			freezeDuration--;
-		}	
-		if (delayTask != null && delayTime > 0) {
-			delayTime--;
-			if (delayTime == 0) {
-				delayTask.run();
-				delayTask = null;
+		}
+		Set<DelayTask> tasks = delayTasks;
+		delayTasks = new HashSet<>();
+		for (DelayTask task : tasks) {
+			task.delayTime--;
+			if (task.delayTime > 0) {
+				delayTasks.add(task);
+			} else {
+				if (task.onFinish != null) {
+					task.onFinish.run();
+				}
+				delayTasks.remove(task);
 			}
 		}
-		if (animTimeRemaining > 0) {
+		if (currentAnim != null) {			
 			animTimeRemaining -= 30;
 			if (animTimeRemaining <= 0) {
 				onAnimCompleted();
@@ -323,10 +351,10 @@ public abstract class Entity extends Node {
 	
 	private void onAnimCompleted () {
 		animTimeRemaining = 0;
+		currentAnim = null;
 		if (animCompleteEvent != null) {
 			Runnable event = animCompleteEvent;
 			animCompleteEvent = null;
-			currentAnim = null;
 			try {
 				event.run();
 			} catch (RuntimeException ex) {
@@ -537,9 +565,17 @@ public abstract class Entity extends Node {
 		return this.currentAnim == null ? -1 : this.currentAnim.id;
 	}
 	
-	public void setDelayTask (Runnable task, int delay) {
-		this.delayTask = task;
-		this.delayTime = delay;
+	public void addDelayTask (Runnable task, int delay) {
+		this.addDelayTask(task, delay, true, null);
+	}
+	
+	public synchronized void addDelayTask (Runnable onFinish, int delay, boolean interruptable, Runnable onInterrupt) {
+		DelayTask task = new DelayTask();
+		task.onFinish = onFinish;
+		task.delayTime = delay;
+		task.interruptable = interruptable;
+		task.onInterrupt = onInterrupt;
+		delayTasks.add(task);
 	}
 
 	/* (non-Javadoc)

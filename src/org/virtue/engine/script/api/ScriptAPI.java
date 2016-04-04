@@ -767,6 +767,12 @@ public interface ScriptAPI {
 	 * @param entity the entity
      */
 	public boolean isFrozen (Entity entity);
+	
+	/**
+	 * Stops the entity, clearing all queued move steps & stopping any running animations
+	 * @param entity
+	 */
+	public void stop (Entity entity);
 
 	/**
 	 * Checks whether the player is currently unable to move
@@ -783,12 +789,22 @@ public interface ScriptAPI {
 	
 	/**
 	 * Delays the execution of a task by the given number of server cycles.
-	 * Additional calls to this function with the same entity will replace the current task.
+	 * The task will be cancelled if interrupted (such as if the player moves) and task.run() will never be called.
 	 * @param entity The entity to delay on
 	 * @param task The task to run after the delay
 	 * @param ticks The number of server cycles to delay by
 	 */
 	public void delay (Entity entity, Runnable task, int ticks);
+	
+	/**
+	 * Delays the execution of a task by the given number of server cycles.
+	 * @param entity The entity to delay on
+	 * @param task The task to run after the delay
+	 * @param ticks The number of server cycles to delay by
+	 * @param interruptable If true, the task will be cancelled if interrupted (such as if the player moves)
+	 * @param onInterrupt The function to run if the task is interrupted
+	 */
+	public void delay (Entity entity, Runnable task, int ticks, boolean interruptable, Runnable onInterrupt);
 	
 	/**
 	 * Checks whether the player's gender is female or male

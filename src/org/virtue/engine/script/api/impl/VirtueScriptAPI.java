@@ -1331,6 +1331,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#stop(org.virtue.game.entity.Entity)
+	 */
+	@Override
+	public void stop(Entity entity) {
+		entity.stopAll();
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#kickPlayer(org.virtue.game.entity.player.Player)
 	 */
 	@Override
@@ -1351,7 +1359,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void delay(Entity entity, Runnable task, int ticks) {
-		entity.setDelayTask(task, ticks);
+		this.delay(entity, task, ticks, true, null);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#delay(org.virtue.game.entity.Entity, java.lang.Runnable, int, java.lang.Runnable)
+	 */
+	@Override
+	public void delay(Entity entity, Runnable task, int ticks, boolean interruptable, Runnable onInterrupt) {
+		entity.addDelayTask(task, ticks);
 	}
 
 	/* (non-Javadoc)

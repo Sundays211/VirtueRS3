@@ -47,13 +47,33 @@ function runAnimation (entity, animId, callback) {
 	}
 }
 
-function delay (entity, cycles, callback) {
+/**
+ * Runs a function after a delay. This delay is attached to the entity and is interrupted if the entity is stopped
+ * @param entity The entity to link the task to
+ * @param cycles The number of server cycles before the task is run
+ * @param callback The function to run when the specified number of cycles passes
+ * @param interruptable True if the task can be interrupted before it's run (such as if the player moves). Defaults to true if not specified
+ * @param onInterrupt The function to run if the task is interrupted
+ */
+function delay (entity, cycles, callback, interruptable, onInterrupt) {
 	var Handler = Java.extend(Java.type('java.lang.Runnable'), {
 		run : function () {
 			callback();
 		}
 	});	
-	api.delay(entity, cycles, new Handler());
+	if (interruptable === undefined) {
+		api.delay(entity, new Handler(), cycles);
+	} else {
+		var InterruptHandler = null;
+		if (onInterrupt !== undefined) {
+			InterruptHandler = Java.extend(Java.type('java.lang.Runnable'), {
+				run : function () {
+					onInterrupt();
+				}
+			});
+		}			
+		api.delay(entity, new Handler(), cycles, interruptable, InterruptHandler == null ? null : new InterruptHandler());
+	}
 }
 
 function inframeInput(player, ifaceId, comp, callback, type, maxlen) {

@@ -435,7 +435,7 @@ public class NPC extends Entity {
 						api.getName(killer) + " has received " + api.getItemType(loot.getItemID()).name.toString() + " drop!");
 				}
 				region.dropItem(loot.getItemID(), loot.getRandomNumberFrom(loot.getMinAmount(), loot.getMaxAmount()),
-						killer, this.getCurrentTile());
+						null, this.getCurrentTile());
 			}
 		}
 	}
