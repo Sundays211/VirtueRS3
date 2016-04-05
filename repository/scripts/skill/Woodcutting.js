@@ -347,6 +347,24 @@ var Woodcutting = {
 		getByLocType : function (locTypeId) {
 			return this.treeRegistry[locTypeId];
 		},
+		getLevelToChop : function (itemId) {
+			switch (itemId) {
+			case 1511://Normal
+				return 1;
+			case 1513://Magic
+				return 75;
+			case 1515://Yew
+				return 60;
+			case 1517://Maple
+				return 45;
+			case 1519://Willow
+				return 30;
+			case 1521://Oak
+				return 15;
+			default:
+				return 1;
+			}
+		},
 		chopTree : function (player, location, tree, fellTree) {
 			var hatchet = this.forHatchet(player);
 			if (hatchet == null) {

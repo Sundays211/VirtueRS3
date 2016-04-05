@@ -60,9 +60,23 @@ public class VirtueConfigAPI implements ConfigAPI {
 	}
 
 	@Override
-	public List<Integer> lookupDbRowIds(int dbTableId, int indexId, Object key) throws Exception {
+	public List<Integer> lookupDbRowIds(int dbTableId, int indexId, int key) throws Exception {
 		DBTableIndex dbIndex = DBIndexProvider.getInstance().getIndex(dbTableId, indexId);
-		return dbIndex.getDBRowsForValue(key);
+		List<Integer> ids = dbIndex.getDBRowsForValue(key);
+		if (ids == null) {
+			throw new RuntimeException("No values found for key "+key+" on index "+dbTableId+", "+indexId);
+		}
+		return ids;
+	}
+
+	@Override
+	public List<Integer> lookupDbRowIds(int dbTableId, int indexId, String key) throws Exception {
+		DBTableIndex dbIndex = DBIndexProvider.getInstance().getIndex(dbTableId, indexId);
+		List<Integer> ids = dbIndex.getDBRowsForValue(key);
+		if (ids == null) {
+			throw new RuntimeException("No values found for key "+key+" on index "+dbTableId+", "+indexId);
+		}
+		return ids;
 	}
 
 	/* (non-Javadoc)
@@ -71,7 +85,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	@Override
 	public List<Object> getDbFieldValues(int dbTableId, int dbRowId, int columnId) {
 		DBRowType dbRow = DBRowTypeList.list(dbRowId);
-		DBTableType dbTable = DBTableTypeList.list(dbRowId);
+		DBTableType dbTable = DBTableTypeList.list(dbTableId);
 		Object[] values = dbRow.getFieldValues(columnId);
 		if (values == null && dbTable.defaultValues[columnId] != null) {
 			values = dbTable.defaultValues[columnId];

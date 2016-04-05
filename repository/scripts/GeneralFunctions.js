@@ -55,7 +55,7 @@ function runAnimation (entity, animId, callback) {
  * @param interruptable True if the task can be interrupted before it's run (such as if the player moves). Defaults to true if not specified
  * @param onInterrupt The function to run if the task is interrupted
  */
-function delay (entity, cycles, callback, interruptable, onInterrupt) {
+function delayFunction (entity, cycles, callback, interruptable, onInterrupt) {
 	var Handler = Java.extend(Java.type('java.lang.Runnable'), {
 		run : function () {
 			callback();

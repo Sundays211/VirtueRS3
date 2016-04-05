@@ -123,7 +123,7 @@ var BackpackDragListener = Java.extend(Java.type('org.virtue.engine.script.liste
 				api.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 				return;
 			}
-			Invention.startDisassembly(player, item, slot);
+			Disassembly.startDisassembly(player, item, slot);
 			return;
 		default:
 			api.sendMessage(player, "Unhandled backpack item drag: srcItem="+item+", destComp="+args.tocomponent);

@@ -50,7 +50,17 @@ public interface ConfigAPI {
 	 * @return A list of values matching the key
 	 * @throws Exception
 	 */
-	public List<Integer> lookupDbRowIds (int dbTableId, int indexId, Object key) throws Exception;
+	public List<Integer> lookupDbRowIds (int dbTableId, int indexId, int key) throws Exception;
+	
+	/**
+	 * Looks up all rows in the specified DB table index which match the given key
+	 * @param dbTableId The ID of the DB table
+	 * @param indexId The ID of the table index to use
+	 * @param key The key used in the lookup procedure
+	 * @return A list of values matching the key
+	 * @throws Exception
+	 */
+	public List<Integer> lookupDbRowIds (int dbTableId, int indexId, String key) throws Exception;
 	
 	public List<Object> getDbFieldValues (int dbTableId, int dbRowId, int column) throws Exception;
 	

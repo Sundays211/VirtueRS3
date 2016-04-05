@@ -87,6 +87,10 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.sendMessage(player, "<col=#333333>Welcome to vorago.</col>");
 			api.teleportEntity(player, 3106, 6112, 0);			
 			return;
+		case "analyse":
+			var itemId = parseInt(args[0]);
+			Disassembly.analyseItem(player, itemId);
+			return;
 		}
 	}
 });
@@ -94,7 +98,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 /* Listen to the commands specified */
 var listen = function(scriptManager) {
 	var commands = [ "removetitle", "cleartitle", "finishtut", "yell", "duel", "challenge", "spellbook", "prayer",
-	                 "coords", "pos", "mypos", "edge", "godwars", "home", "meeting", "vorago" ];
+	                 "coords", "pos", "mypos", "edge", "godwars", "home", "meeting", "vorago", "analyse" ];
 	var listener = new EventListener();
 	for (var i in commands) {
 		scriptManager.registerListener(EventType.COMMAND, commands[i], listener);

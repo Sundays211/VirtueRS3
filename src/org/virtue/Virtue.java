@@ -48,6 +48,7 @@ import org.virtue.cache.FileStore;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.Js5ConfigGroup;
+import org.virtue.config.db.DBIndexProvider;
 import org.virtue.config.db.dbrowtype.DBRowTypeList;
 import org.virtue.config.db.dbtabletype.DBTableTypeList;
 import org.virtue.config.defaults.DefaultsGroup;
@@ -397,6 +398,7 @@ public class Virtue {
 		Stat.setDefaults(statDefaults);		
 		//Appearance.init(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.APPEARANCE.js5Id).getData());
 		Huffman.setHuffman(new Huffman(cache.read(10, cache.getFileId(Js5Archive.BINARY.getArchiveId(), "huffman")).getData()));
+		DBIndexProvider.init(cache);
 	}
 	
 	/**

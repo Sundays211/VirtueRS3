@@ -58,16 +58,6 @@ var AbilitiesButtonListener = Java.extend(Java.type('org.virtue.engine.script.li
 				player.getCombat().getPrayer().deactivate(args.slot);
 			}
 			return false;
-		case 1461://Mage
-			var spell = org.virtue.game.content.skills.magic.Spellbook.MODERN.get(args.slot);
-			if (player.getCombatSchedule().getAutocastSpell() != null) {
-				player.getCombatSchedule().setAutocastSpell(null);
-				api.sendMessage(player, "Auto-cast spell cleared.");
-			} else {
-				player.getCombatSchedule().setAutocastSpell(spell);
-				api.sendMessage(player, "Main-hand spell set to: spell");
-			}
-			return false;
 		case 1452://Ranged
 		case 1449://Defence
 		default:

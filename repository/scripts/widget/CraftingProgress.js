@@ -148,7 +148,7 @@ var CraftProcess = {
 				var closeInterface = function () {
 					api.closeOverlaySub(player, 1018, true);
 				}
-				delay(player, 5, closeInterface, true, closeInterface);
+				delayFunction(player, 5, closeInterface, true, closeInterface);
 			}
 		},
 		makeItem : function (player, productId) {

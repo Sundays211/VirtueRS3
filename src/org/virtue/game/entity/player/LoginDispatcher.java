@@ -1698,8 +1698,6 @@ public class LoginDispatcher {
 			//Combat Settings
 			player.getWidgets().openOverlaySub(6, 1503, true);
 			
-			player.getDispatcher().sendWidgetEvents(1461, 1, 0, 187, 97350);
-			player.getDispatcher().sendWidgetEvents(1461, 7, 7, 16, 2);
 		} else {
 			//Magic Abilities
 			player.getWidgets().openOverlaySub(5, 1461, true);
@@ -1713,8 +1711,6 @@ public class LoginDispatcher {
 			//Defence Abilities
 			player.getWidgets().openOverlaySub(8, 1449, true);
 			
-			player.getDispatcher().sendWidgetEvents(1461, 1, 0, 187, 10320966);
-			player.getDispatcher().sendWidgetEvents(1461, 7, 7, 16, 2);
 			player.getDispatcher().sendWidgetEvents(1460, 1, 0, 187, 10320902);
 			player.getDispatcher().sendWidgetEvents(1452, 1, 0, 187, 10320902);
 			player.getDispatcher().sendWidgetEvents(1449, 1, 0, 187, 10320902);
