@@ -34,7 +34,6 @@ import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.loctype.LocType;
-import org.virtue.config.loctype.LocTypeList;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjType;
@@ -531,7 +530,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public LocType getLocType(int locTypeID) {
-		return LocTypeList.getInstance().list(locTypeID);
+		return configProvider.getLocTypes().list(locTypeID);
 	}
 
 	/* (non-Javadoc)
@@ -547,7 +546,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public LocType getLocType(Player player, int baseID) {
-		return LocTypeList.getInstance().getTransformed(player, baseID);
+		return configProvider.getLocTypes().getTransformed(player, baseID);
 	}
 
 	/* (non-Javadoc)
@@ -1027,7 +1026,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		case CLAN:
 		case DOMAIN10:
 		case DOMAIN8:
-		case GROUP:
+		case PLAYER_GROUP:
 		case NPC:
 		case OBJECT:
 		case REGION:
@@ -1059,7 +1058,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			case CLAN:
 			case DOMAIN10:
 			case DOMAIN8:
-			case GROUP:
+			case PLAYER_GROUP:
 			case NPC:
 			case OBJECT:
 			case REGION:
@@ -1097,7 +1096,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		case CLAN:
 		case DOMAIN10:
 		case DOMAIN8:
-		case GROUP:
+		case PLAYER_GROUP:
 		case NPC:
 		case OBJECT:
 		case REGION:

@@ -44,6 +44,6 @@ public class ParamTypeList extends ConfigDecoder<ParamType> {
 
 	public ParamTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.PARAMTYPE, ParamType.class);
-		logger.info("Found "+getCount()+" paramtype definitions.");
+		logger.info("Found "+getCapacity()+" paramtype definitions.");
 	}
 }

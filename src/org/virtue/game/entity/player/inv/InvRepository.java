@@ -49,7 +49,7 @@ public class InvRepository {
 			throw new IllegalStateException("invTypeList not loaded.");
 		}
 		this.player = player;
-		this.containers = new Inventory[invTypeList.getCount()];
+		this.containers = new Inventory[invTypeList.getCapacity()];
 		
 		@SuppressWarnings("unchecked")
 		EnumMap<ContainerState, Item[]> saved = (EnumMap<ContainerState, Item[]>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.INV);

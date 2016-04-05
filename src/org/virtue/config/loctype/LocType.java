@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
 import org.virtue.utility.text.StringUtility;
@@ -37,32 +35,9 @@ import org.virtue.utility.text.StringUtility;
  * @since 29/10/2014
  */
 public class LocType implements ConfigType {
-
-	/**
-	 * The {@link Logger} instance
-	 */
-	private static Logger logger = LoggerFactory.getLogger(LocType.class);
-
     public static short[] aShortArray7351 = new short[256];
     static final int MAX_OP_COUNT = 6;
-    static final int anInt7353 = 127007;
-	
-    /**
-     * Retrieves the specified location type definition from the cache
-     * @param id The location type ID
-     * @param buffer The buffer containing the data
-     * @return The LocType definition
-     */
-	public static LocType load (int id, ByteBuffer buffer) {
-		LocType locType = new LocType(id);
-		try {
-			locType.decode(buffer);
-		} catch (RuntimeException ex) {
-			logger.error("Failed to load locationType "+id, ex);
-		}
-		return locType;
-	}
-	
+    static final int anInt7353 = 127007;	
     byte aByte7346;
     public byte[] nodeTypes;
     int[][] models;
@@ -140,15 +115,15 @@ public class LocType implements ConfigType {
     public boolean aBool7393 = false;
     //public Class535 aClass535_7347 = Class535.aClass535_7304;
     public int myid;
-    //Class537 myList;
+    LocTypeList myList;
     //Interface8 anInterface8_7349;
     public String[] op;
 
 	public int walkingFlag;
     
-    LocType(int id) {
-		myid = id;
-		//myList = class537;
+    public LocType(int id, LocTypeList list) {
+		this.myid = id;
+		this.myList = list;
 		//anInterface8_7349 = interface8;
 		op = new String[] { null, null, null, null, null, "Examine" };
     }

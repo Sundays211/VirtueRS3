@@ -16,6 +16,6 @@ public class DBRowTypeList extends ConfigDecoder<DBRowType>{
 
 	public DBRowTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.DBROWTYPE, DBRowType.class);
-		logger.info("Found "+getCount()+" DBRowType definitions.");
+		logger.info("Found "+getCapacity()+" DBRowType definitions.");
 	}
 }

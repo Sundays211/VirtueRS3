@@ -45,7 +45,7 @@ public class InvTypeList extends ConfigDecoder<InvType> {
 	
 	public InvTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.INVTYPE, InvType.class);
-		logger.info("Found "+getCount()+" invtype definitions.");
+		logger.info("Found "+getCapacity()+" invtype definitions.");
 	}
 
 }

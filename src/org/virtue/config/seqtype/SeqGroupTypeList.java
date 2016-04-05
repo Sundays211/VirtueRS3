@@ -41,7 +41,7 @@ public class SeqGroupTypeList extends ConfigDecoder<SeqGroupType> {
 
 	public SeqGroupTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.SEQGROUPTYPE, SeqGroupType.class);
-		logger.info("Found "+getCount()+" seqgrouptype definitions.");
+		logger.info("Found "+getCapacity()+" seqgrouptype definitions.");
 	}
 
 }

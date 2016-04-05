@@ -46,6 +46,6 @@ public class BASTypeList extends ConfigDecoder<BASType> {
 	
 	public BASTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.BASTYPE, BASType.class);
-		logger.info("Found "+getCount()+" bastype definitions.");
+		logger.info("Found "+getCapacity()+" bastype definitions.");
 	}
 }

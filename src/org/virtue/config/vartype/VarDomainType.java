@@ -38,7 +38,7 @@ public enum VarDomainType {
 	CLAN(Js5ConfigGroup.VAR_CLAN, 6),
 	CLAN_SETTING(Js5ConfigGroup.VAR_CLAN_SETTING, 7),
 	DOMAIN8(Js5ConfigGroup.GROUP_68, 8),
-	GROUP(Js5ConfigGroup.VAR_PLAYER_GROUP, 9),
+	PLAYER_GROUP(Js5ConfigGroup.VAR_PLAYER_GROUP, 9),
 	DOMAIN10(Js5ConfigGroup.GROUP_75, 10);
 	
 	int serialID;
@@ -53,7 +53,7 @@ public enum VarDomainType {
     	return js5GroupID;
     }
     
-	public static VarDomainType forID (int id) {
+	public static VarDomainType getByID (int id) {
 		switch (id) {
 		case 0:
 			return PLAYER;
@@ -74,7 +74,7 @@ public enum VarDomainType {
 		case 8:
 			return DOMAIN8;
 		case 9:
-			return GROUP;
+			return PLAYER_GROUP;
 		case 10:
 			return DOMAIN10;
 		default:

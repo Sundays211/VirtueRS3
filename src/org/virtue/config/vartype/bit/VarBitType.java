@@ -85,18 +85,6 @@ public class VarBitType implements ConfigType {
         }
     }
     
-    /**
-	 * Decodes the {@link VarBitType} from the specified {@link ByteBuffer}.
-	 * @param buffer The buffer.
-	 * @param id The id of the varbit.
-	 * @return The varBitType.
-	 */
-    public static VarBitType decode(ByteBuffer buffer, int id) {
-    	VarBitType varBitType = new VarBitType(id);
-    	varBitType.decode(buffer);
-    	return varBitType;
-    }
-    
     public int id;
     int startBit;
     int endBit;
@@ -104,7 +92,7 @@ public class VarBitType implements ConfigType {
     public int baseVarKey;
     String debugName;
     
-    public VarBitType (int id) {
+    public VarBitType (int id, VarBitTypeList myList) {
     	this.id = id;
     }
     
@@ -119,7 +107,7 @@ public class VarBitType implements ConfigType {
 		switch (key){
 		case BASEVAR:
 			int domainID = buffer.get() & 0xff;
-			baseVarType = VarDomainType.forID(domainID);
+			baseVarType = VarDomainType.getByID(domainID);
 			if (baseVarType == null) {
 		    	throw new IllegalStateException("Unknown domain ID loading VarType definition: "+domainID);
 		    }

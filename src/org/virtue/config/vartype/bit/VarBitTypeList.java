@@ -44,6 +44,6 @@ public class VarBitTypeList extends ConfigDecoder<VarBitType> {
 	
 	public VarBitTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.VAR_BIT, VarBitType.class);
-		logger.info("Found "+getCount()+" varBitType definitions.");
+		logger.info("Found "+getCapacity()+" varBitType definitions.");
 	}
 }

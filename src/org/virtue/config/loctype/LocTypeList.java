@@ -149,7 +149,8 @@ public class LocTypeList extends CacheLoader<Integer, LocType> {
 		if (data == null) {
 			return null;
 		}
-		LocType locType = LocType.load(id, data);
+		LocType locType = new LocType(id, this);
+		locType.decode(data);
 		runPostDecode(locType);
 		return locType;
 	}

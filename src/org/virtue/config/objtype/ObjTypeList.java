@@ -88,7 +88,7 @@ public class ObjTypeList implements Iterable<ObjType> {
 		instance = new ObjTypeList();
 		instance.cache = cache;
 		try {
-			Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG_ITEM.getArchiveId()));
+			Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG_OBJ.getArchiveId()));
 			instance.referenceTable = ReferenceTable.decode(container.getData());
 			int groupCount = instance.referenceTable.size() - 1;
 			instance.num = (groupCount * Js5ConfigGroup.OBJTYPE.getGroupSize()) + instance.referenceTable.getEntry(groupCount).size();
@@ -125,7 +125,7 @@ public class ObjTypeList implements Iterable<ObjType> {
 			.softValues().build(new CacheLoader<Integer, Archive>() {
 	             public Archive load(Integer groupId) throws IOException {
 	                 return Archive.decode(
-	 						cache.read(Js5Archive.CONFIG_ITEM.getArchiveId(), groupId).getData(), 
+	 						cache.read(Js5Archive.CONFIG_OBJ.getArchiveId(), groupId).getData(), 
 							referenceTable.getEntry(groupId).size());
 	               }
 	             });

@@ -41,7 +41,7 @@ public enum Js5Archive {
 	CONFIG_LOC(16, "client.loc.config", true, false, false),
 	CONFIG_ENUM(17, "client.enum.config", true, false, false),
 	CONFIG_NPC(18, "client.npc.config", true, false, false),
-	CONFIG_ITEM(19, "client.obj.config", true, false, false),
+	CONFIG_OBJ(19, "client.obj.config", true, false, false),
 	CONFIG_SEQ(20, "client.seq.config", true, false, false),
 	CONFIG_SPOT(21, "client.spot.config", true, false, false),
 	CONFIG_STRUCT(22, "client.struct.config", true, false, false),

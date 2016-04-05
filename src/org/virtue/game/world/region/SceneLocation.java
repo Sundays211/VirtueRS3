@@ -21,8 +21,8 @@
  */
 package org.virtue.game.world.region;
 
+import org.virtue.Virtue;
 import org.virtue.config.loctype.LocType;
-import org.virtue.config.loctype.LocTypeList;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
@@ -160,7 +160,8 @@ public class SceneLocation extends Node {
 	 */
 	public LocType getLocType () {
 		if (locType == null) {
-			locType = LocTypeList.getInstance().list(id);
+			//TODO: Simplify this line (by giving the config provider or something)
+			locType = Virtue.getInstance().getConfigProvider().getLocTypes().list(id);
 		}
 		return locType;
 	}
@@ -191,7 +192,7 @@ public class SceneLocation extends Node {
 	}
 	
 	public void examine (Player player) {
-		LocType locType = LocTypeList.getInstance().getTransformed(player, getID());
+		LocType locType = Virtue.getInstance().getConfigProvider().getLocTypes().getTransformed(player, getID());
 		player.getDispatcher().sendGameMessage(locType.getDescription());
 		if (PrivilegeLevel.ADMINISTRATOR.equals(player.getPrivilegeLevel())) {
 			player.getDispatcher().sendGameMessage(this.toString());

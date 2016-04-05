@@ -81,7 +81,7 @@ public class VarPlayerTypeList implements Iterable<VarType> {
 		if (type == null) {
 			return null;
 		}
-		return null;
+		return type.dataType.getDefaultValue();
 	}
 
 	public int capacity () {

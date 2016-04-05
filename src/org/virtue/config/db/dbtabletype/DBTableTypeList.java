@@ -16,6 +16,6 @@ public class DBTableTypeList extends ConfigDecoder<DBTableType> {
 
 	public DBTableTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.DBTABLETYPE, DBTableType.class);
-		logger.info("Found "+getCount()+" DBTableType definitions.");
+		logger.info("Found "+getCapacity()+" DBTableType definitions.");
 	}
 }

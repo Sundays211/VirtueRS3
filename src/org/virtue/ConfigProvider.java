@@ -128,7 +128,6 @@ public class ConfigProvider {
 				configTable.getEntry(Js5ConfigGroup.VAR_BIT.id).size());
 		varBitTypeList = new VarBitTypeList(configTable, varbits);
 		
-		
 		Archive seqgroups = Archive.decode(cache.read(2, Js5ConfigGroup.SEQGROUPTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.SEQGROUPTYPE.id).size());
 		seqGroupTypeList = new SeqGroupTypeList(configTable, seqgroups);

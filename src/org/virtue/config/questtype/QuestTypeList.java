@@ -47,12 +47,12 @@ public class QuestTypeList extends ConfigDecoder<QuestType> {
 
 	public QuestTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.QUESTTYPE, QuestType.class);
-		logger.info("Found "+getCount()+" questtype definitions.");
+		logger.info("Found "+getCapacity()+" questtype definitions.");
 	}
 
     public int getTotalQuestPoints(VarDomain varDomain, ConfigProvider configProvider) {
         int points = 0;
-        for (int id = 0; id < getCount(); id++) {
+        for (int id = 0; id < getCapacity(); id++) {
             QuestType quest = list(id);
             if (quest.isFinished(varDomain, configProvider)) {
             	points += quest.questPoints;
