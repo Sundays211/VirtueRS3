@@ -249,7 +249,7 @@ var Firemaking = {
 				api.sendMessage(player, "You need a tinderbox to light these logs.");
 				return;
 			}
-			var delay = this.getDelay(player);//Calculates the time taken to light this log
+			var delay = 4;//Calculates the time taken to light this log
 			var region = api.getRegion(api.getCoords(player));
 			if (region != null) {
 				if (!this.tileEmpty(api.getCoords(player), region)) {
@@ -264,8 +264,13 @@ var Firemaking = {
 					process : function (player) {
 						api.runAnimation(player, 16700);
 						if (delay <= 0) {
-							Firemaking.firemakingSuccess(player, log);
-							return true;
+						    if(Math.random() < Firemaking.getFireSuccessRate(player)){
+							    Firemaking.firemakingSuccess(player, log);
+							    return true;
+							}else{
+							    delay = 4;
+							    return false;
+							}
 						}
 						if (!Firemaking.tileEmpty(player.getCurrentTile(), region) || !item.exists()) {
 							return true;//Could not complete as tile is in use
@@ -368,11 +373,10 @@ var Firemaking = {
 			}
 			return null;
 		},
-		getDelay : function (player) {
+		getFireSuccessRate : function (player) {
 		    //A veteran player came up with this for me based on his experience. It starts to succeed always at first try
 		    //at level 41. Apparently it's the same regardless of the logs level requirement.
-		    // 3.66 is on average the length of the animation in game ticks
-        	return Math.ceil(3.66*Math.random() * (1 / (0.02*(api.getStatLevel(player,Stat.FIREMAKING)-1)+0.2)));
+        	return (0.02*(api.getStatLevel(player,Stat.FIREMAKING)-1)+0.2);
 		}
 }
 
