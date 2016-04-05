@@ -11,10 +11,11 @@ public class DBTableType implements ConfigType {
 	public Object[][] defaultValues;
 	public ScriptVarType[][] columnTypes;
 	
-	public DBTableType (int id) {
+	public DBTableType (int id, DBTableTypeList list) {
 		
 	}
 
+	@Override
 	public void decode(ByteBuffer buffer) {
 		for (;;) {
 			int i_0_ = buffer.get() & 0xff;

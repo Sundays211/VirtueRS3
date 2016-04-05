@@ -160,7 +160,7 @@ public class SceneLocation extends Node {
 	 */
 	public LocType getLocType () {
 		if (locType == null) {
-			locType = LocTypeList.list(id);
+			locType = LocTypeList.getInstance().list(id);
 		}
 		return locType;
 	}
@@ -191,7 +191,7 @@ public class SceneLocation extends Node {
 	}
 	
 	public void examine (Player player) {
-		LocType locType = LocTypeList.getTransformed(player, getID());
+		LocType locType = LocTypeList.getInstance().getTransformed(player, getID());
 		player.getDispatcher().sendGameMessage(locType.getDescription());
 		if (PrivilegeLevel.ADMINISTRATOR.equals(player.getPrivilegeLevel())) {
 			player.getDispatcher().sendGameMessage(this.toString());

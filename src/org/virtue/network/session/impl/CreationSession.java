@@ -26,6 +26,7 @@ import io.netty.channel.Channel;
 
 import java.io.IOException;
 
+import org.virtue.Virtue;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.LoginDispatcher;
 import org.virtue.game.entity.player.Player;
@@ -61,7 +62,7 @@ public class CreationSession extends Session {
 			CreationRequestMessage request = (CreationRequestMessage) message;
 			player = new Player(request.getChannel(), request.getEncodingCipher(), request.getDecodingCipher());
 			player.setGameState(GameState.CREATION);
-			player.initialize(false);
+			player.initialize(false, Virtue.getInstance().getConfigProvider());
 			channel.writeAndFlush(Unpooled.buffer(1).writeByte(2));
 			channel.pipeline().remove(CreationDecoder.class);
 			channel.pipeline().addFirst(new ProtocolDecoder(request.getDecodingCipher()));

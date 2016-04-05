@@ -280,13 +280,16 @@ public abstract class Entity extends Node {
 	 * This method is called every time the entity tries to move
 	 */
 	public synchronized void stopAll () {
+		interuptAction();
 		movement.stop();
 		combatSchedule.terminate();
 		clearAnimation();
-		interuptAction();
 	}
 	
 	public synchronized void interuptAction () {
+		if (delayTasks.size() == 0) {
+			return;
+		}
 		Set<DelayTask> tasks = delayTasks;
 		delayTasks = new HashSet<>();
 		for (DelayTask task : tasks) {
@@ -551,7 +554,7 @@ public abstract class Entity extends Node {
 		if (animTimeRemaining > 0) {
 			return false;
 		}
-		currentAnim = SeqTypeList.list(animId);
+		currentAnim = SeqTypeList.getInstance().list(animId);
 		if (currentAnim == null) {
 			throw new IllegalArgumentException("Invalid animation: "+animId);
 		}

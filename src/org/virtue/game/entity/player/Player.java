@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcType;
@@ -351,19 +352,19 @@ public class Player extends Entity {
 	/**
 	 * Initializes all the variables
 	 */
-	public void initialize(boolean isWorld) {
+	public void initialize(boolean isWorld, ConfigProvider configProvider) {
 		this.eventDispatcher = new GameEventDispatcher(this);
 		
 		@SuppressWarnings("unchecked")
 		Map<Integer, Object> varValues = (Map<Integer, Object>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(getUsername(), ParserDataType.VAR);
-		this.var = new VarRepository(this, varValues);
+		this.var = new VarRepository(this, varValues, configProvider.getVarBitTypes());
 		this.chat = new ChatManager(this);
 		this.dialogs = new DialogManager(this);
 		this.widgets = new WidgetManager(this);
 		this.appearance = new Appearance(this);
 		this.viewport = new Viewport(this);
 		this.stats = new StatManager(this);
-		this.inv = new InvRepository(this);
+		this.inv = new InvRepository(this, configProvider.getInvTypes());
 		this.equipment = new EquipmentManager(this);
 		this.interactions = new PlayerInteractions(this);
 		this.moneyPouch = new MoneyPouch(this);
@@ -1073,7 +1074,7 @@ public class Player extends Entity {
 	@Override
 	public int getSize() {
 		if (Render.NPC.equals(appearance.getRender())) {
-			NpcType npcType = NpcTypeList.list(appearance.getRenderNpc());
+			NpcType npcType = NpcTypeList.getInstance().list(appearance.getRenderNpc());
 			return npcType != null ? npcType.size : 1;
 		}
 		return 1;

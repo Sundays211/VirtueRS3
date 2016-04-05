@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.config.vartype.bit;
+package org.virtue.config.bastype;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,21 +29,23 @@ import org.virtue.config.ConfigDecoder;
 import org.virtue.config.Js5ConfigGroup;
 
 /**
+ * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
+ * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 25/12/2014
+ * @since 2/02/2015
  */
-public class VarBitTypeList extends ConfigDecoder<VarBitType> {
+public class BASTypeList extends ConfigDecoder<BASType> {
 
 	/**
 	 * The {@link Logger} instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(VarBitTypeList.class);
+	private static Logger logger = LoggerFactory.getLogger(BASTypeList.class);
 	
-	public VarBitTypeList(ReferenceTable configTable, Archive archive) {
-		super(configTable, archive, Js5ConfigGroup.VAR_BIT, VarBitType.class);
-		logger.info("Found "+getCount()+" varBitType definitions.");
+	public BASTypeList(ReferenceTable configTable, Archive archive) {
+		super(configTable, archive, Js5ConfigGroup.BASTYPE, BASType.class);
+		logger.info("Found "+getCount()+" bastype definitions.");
 	}
 }

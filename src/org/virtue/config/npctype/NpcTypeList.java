@@ -103,10 +103,10 @@ public class NpcTypeList {
 	 *            The ID of the NpcType to look up
 	 * @return The NpcType config, or null if the config could not be found
 	 */
-	public static NpcType list(int id) {
-		synchronized (instance) {
+	public NpcType list(int id) {
+		synchronized (this) {
 			try {
-				return instance.cachedNpcs.get(id);
+				return cachedNpcs.get(id);
 			} catch (ExecutionException ex) {
 				logger.error("Error loading npctype definition " + id, ex);
 				return null;
@@ -186,7 +186,7 @@ public class NpcTypeList {
 	 *            The ID of the base object
 	 * @return The transformed object
 	 */
-	public static NpcType getTransformed(Player player, int baseID) {
+	public NpcType getTransformed(Player player, int baseID) {
 		int newID = -1;
 		int slot = -1;
 		NpcType base = list(baseID);

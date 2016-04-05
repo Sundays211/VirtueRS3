@@ -21,16 +21,12 @@
  */
 package org.virtue.game.entity.player.inv;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 
 import org.virtue.Virtue;
-import org.virtue.cache.Archive;
-import org.virtue.cache.ReferenceTable;
-import org.virtue.config.invtype.InvType;
+import org.virtue.config.invtype.InvTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.network.event.context.impl.out.InvEventContext;
@@ -43,48 +39,23 @@ import org.virtue.network.event.encoder.impl.InvEventEncoder;
 public class InvRepository {
 	
 	private static final List<Integer> WATERING_CANS = Arrays.asList(new Integer[]{ 5331, 5333, 5334, 5335, 5336, 5337, 5338, 5339, 5340 });
-	
-	private static InvType[] invTypes;
-	
-	public static void init (Archive archive, ReferenceTable.Entry invTypeEntry) throws IOException {
-		invTypes = new InvType[invTypeEntry.capacity()];
-		for (int id=0;id<archive.size();id++) {
-			if (invTypeEntry.getEntry(id) == null) {
-				continue;
-			}
-			ByteBuffer entry = archive.getEntry(invTypeEntry.getEntry(id).index());
-			if (entry == null) {
-				continue;
-			}
-			invTypes[id] = InvType.load(entry, id);
-		}
-	}
-	
-	public static int getInvCapacity (int invID) {
-		if (invID < 0 || invID >= invTypes.length) {
-			return 0;
-		} else if (invTypes[invID] == null) {
-			return 0;
-		} else {
-			return invTypes[invID].getCapacity();
-		}
-	}
 
 	private Player player;
-	private ItemContainer[] containers;
+	private Inventory[] containers;
+	private InvTypeList invTypeList;
 
-	public InvRepository(Player player) {
-		if (invTypes == null) {
-			throw new IllegalStateException("InvType definitions not loaded.");
+	public InvRepository(Player player, InvTypeList invTypeList) {
+		if (invTypeList == null) {
+			throw new IllegalStateException("invTypeList not loaded.");
 		}
 		this.player = player;
-		this.containers = new ItemContainer[invTypes.length];
+		this.containers = new Inventory[invTypeList.getCount()];
 		
 		@SuppressWarnings("unchecked")
 		EnumMap<ContainerState, Item[]> saved = (EnumMap<ContainerState, Item[]>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.INV);
 		for (ContainerState key : saved.keySet()) {
 			try {
-				containers[key.getID()] = new ItemContainer(invTypes[key.getID()], key.alwaysStack());
+				containers[key.getID()] = new Inventory(invTypeList.list(key.getID()), key.alwaysStack());
 				containers[key.getID()].addItemsAtSlots(saved.get(key));
 			} catch (Exception ex) {
 				throw new RuntimeException("Error loading item container "+key+": ", ex);
@@ -125,11 +96,11 @@ public class InvRepository {
 	 * @param state The type of the container to load
 	 * @return The item container.
 	 */
-	public ItemContainer loadContainer (ContainerState state) {
+	public Inventory loadContainer (ContainerState state) {
 		int invId = state.getID();
 		boolean alwaysStack = state.alwaysStack();
 		if (containers[invId] == null) {
-			containers[invId] = new ItemContainer(invTypes[invId], alwaysStack);
+			containers[invId] = new Inventory(invTypeList.list(invId), alwaysStack);
 		}
 		return containers[invId];
 	}
@@ -140,7 +111,7 @@ public class InvRepository {
 	 * @param alwaysStack Whether items in the container always stack
 	 * @return The item container.
 	 */
-	public ItemContainer loadContainer (int containerID) {
+	public Inventory loadContainer (int containerID) {
 		ContainerState state = ContainerState.getById(containerID);
 		if (state == null)
 			throw new IllegalStateException("Could not find container: ["+containerID+"].");
@@ -152,7 +123,7 @@ public class InvRepository {
 	 * @param state The type of the container
 	 * @return The container
 	 */
-	public ItemContainer getContainer (ContainerState state) {
+	public Inventory getContainer (ContainerState state) {
 		return getContainer(state.getID());
 	}
 	
@@ -161,7 +132,7 @@ public class InvRepository {
 	 * @param invId The ID of the container inventory
 	 * @return The container
 	 */
-	private ItemContainer getContainer (int invId) {
+	private Inventory getContainer (int invId) {
 		if (invId < 0 || invId >= containers.length) {
 			return null;
 		}
@@ -219,7 +190,7 @@ public class InvRepository {
 	 * @return The number carried, or -1 if an infinite amount is carried.
 	 */
 	public int getAmountCarried (int itemID) {
-		ItemContainer backpack = getContainer(ContainerState.BACKPACK);
+		Inventory backpack = getContainer(ContainerState.BACKPACK);
 		switch (itemID) {
 		case 5333:
 		case 5335:
@@ -251,7 +222,7 @@ public class InvRepository {
 	}
 	
 	public int removeCarriedItems (int itemID, int amount, int... preferedSlots) {
-		ItemContainer backpack = getContainer(ContainerState.BACKPACK);
+		Inventory backpack = getContainer(ContainerState.BACKPACK);
 		int totalRemoved = 0;
 		switch (itemID) {
 		case 5333:

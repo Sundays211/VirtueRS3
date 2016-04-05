@@ -36,7 +36,7 @@ public enum Js5ConfigGroup {
 	GROUP_7(7),
 	ENUMTYPE(8, 8),
 	NPCTYPE(9, 7),
-	ITEMTYPE(10, 8),
+	OBJTYPE(10, 8),
 	PARAMTYPE(11),
 	SEQTYPE(12, 7),
 	SPOTTYPE(13, 8),

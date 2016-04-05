@@ -35,6 +35,7 @@ import javax.script.ScriptEngineManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.ConfigProvider;
 import org.virtue.Virtue;
 import org.virtue.engine.script.api.ClanAPI;
 import org.virtue.engine.script.api.ConfigAPI;
@@ -148,17 +149,17 @@ public class JSListeners implements ScriptManager {
 	
 	private File scriptDir;
 
-	public JSListeners(File scriptDir) {
+	public JSListeners(File scriptDir, ConfigProvider configProvider) {
 		this.listeners = new HashMap<>();
 		this.abstractNPCMap = new HashMap<Integer, AbstractNPC>();
 		this.combatScriptMap = new HashMap<Integer, CombatHandler>();
 		this.varMap = new HashMap<Integer, VarListener>();
 		this.vars = new HashMap<Integer, VarListener>();
-		this.scriptAPI = new VirtueScriptAPI();
+		this.scriptAPI = new VirtueScriptAPI(configProvider);
 		this.clanApi = new VirtueClanAPI(Virtue.getInstance().getClans());
 		this.mapApi = new VirtueMapAPI();
-		this.configApi = new VirtueConfigAPI();
-		this.questApi = new VirtueQuestAPI();
+		this.configApi = new VirtueConfigAPI(configProvider);
+		this.questApi = new VirtueQuestAPI(configProvider);
 		this.scriptDir = scriptDir;
 	}
 	

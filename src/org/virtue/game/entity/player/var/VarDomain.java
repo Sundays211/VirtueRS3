@@ -36,9 +36,9 @@ public interface VarDomain {
 	
 	public Object getVarValue (VarType varType);
 	
-	public long getVarValueLong (int key);
+	public long getVarValueLong (VarType varType);
 	
-	public int getVarValueInt (int key);
+	public int getVarValueInt (VarType varType);
 	
 	/**
 	 * Gets the vale of the specified var bit
@@ -54,6 +54,6 @@ public interface VarDomain {
 	 */
 	public void setVarValue (VarType varType, Object value);
 	
-	public void setVarValueInt (int key, int value);
+	public void setVarValueInt (VarType varType, int value);
 
 }

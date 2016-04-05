@@ -71,11 +71,21 @@ public class SeqTypeList extends CacheLoader<Integer, SeqType> {
 			logger.error("Failed to load seqtype definitions", ex);
 		}
 	}
+	
+	/**
+	 * Returns The {@link SeqTypeList} Instance
+	 */
+	public static SeqTypeList getInstance() {
+		if (instance == null) {
+			throw new IllegalStateException("SeqTypeList not yet initialised. init() must be called before this method.");
+		}
+		return instance;
+	}
 
-	public static SeqType list (int id) {
-		synchronized (instance) {
+	public SeqType list (int id) {
+		synchronized (this) {
 			try {
-				return instance.cachedLocs.get(id);
+				return cachedLocs.get(id);
 			} catch (ExecutionException ex) {
 				logger.error("Error loading seqtype definition "+id, ex);
 				return null;

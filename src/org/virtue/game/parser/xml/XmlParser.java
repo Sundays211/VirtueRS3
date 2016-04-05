@@ -39,6 +39,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Virtue;
 import org.virtue.game.content.chat.OnlineStatus;
 import org.virtue.game.content.clans.ClanBan;
 import org.virtue.game.content.clans.ClanMember;
@@ -56,7 +57,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.stat.Stat;
@@ -408,7 +409,7 @@ public class XmlParser implements Parser {
 					Element root = document.createElement("containers");
 					document.appendChild(root);
 					for (ContainerState state : ContainerState.values()) {
-						ItemContainer backpack = invStore.getContainer(state);
+						Inventory backpack = invStore.getContainer(state);
 						if (backpack != null && state.rememberState()) {
 							Element container = document.createElement(state.getSerialName());
 							Attr attr = document.createAttribute("size");
@@ -809,7 +810,7 @@ public class XmlParser implements Parser {
 						
 						Player player =  new Player(request.getChannel(), request.getUsername(), password, CombatMode.forOpcode(mode), request.getEncodingCipher(), request.getDecodingCipher());
 						
-						player.initialize(LoginTypeMessage.LOGIN_WORLD.equals(request.getLoginType()));
+						player.initialize(LoginTypeMessage.LOGIN_WORLD.equals(request.getLoginType()), Virtue.getInstance().getConfigProvider());
 						
 						if (idk != null && recol != null) {
 							player.getAppearance().setGender(gender == 0 ? Gender.MALE : Gender.FEMALE);

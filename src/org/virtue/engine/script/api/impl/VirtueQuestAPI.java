@@ -21,10 +21,9 @@
  */
 package org.virtue.engine.script.api.impl;
 
+import org.virtue.ConfigProvider;
 import org.virtue.config.paramtype.ParamType;
-import org.virtue.config.paramtype.ParamTypeList;
 import org.virtue.config.questtype.QuestType;
-import org.virtue.config.questtype.QuestTypeList;
 import org.virtue.engine.script.api.QuestAPI;
 import org.virtue.game.entity.player.Player;
 
@@ -38,10 +37,10 @@ import org.virtue.game.entity.player.Player;
  */
 public class VirtueQuestAPI implements QuestAPI {
 	
-	private QuestTypeList questTypeList;
-
-	public VirtueQuestAPI() {
-		questTypeList = QuestTypeList.getInstance();
+	private ConfigProvider configProvider;
+	
+	public VirtueQuestAPI (ConfigProvider configProvider) {
+		this.configProvider = configProvider;
 	}
 
 	/* (non-Javadoc)
@@ -49,7 +48,7 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public String getName(int questId) {
-		QuestType quest = questTypeList.list(questId);
+		QuestType quest = configProvider.getQuestTypes().list(questId);
 		if (quest == null) {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
@@ -61,11 +60,11 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public boolean isStarted(Player player, int questId) {
-		QuestType quest = questTypeList.list(questId);
+		QuestType quest = configProvider.getQuestTypes().list(questId);
 		if (quest == null) {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
-		return quest.isStarted(player.getVars());
+		return quest.isStarted(player.getVars(), configProvider);
 	}
 
 	/* (non-Javadoc)
@@ -73,11 +72,11 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public void startQuest(Player player, int questId) {
-		QuestType quest = questTypeList.list(questId);
+		QuestType quest = configProvider.getQuestTypes().list(questId);
 		if (quest == null) {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
-		if (quest.isStarted(player.getVars())) {
+		if (quest.isStarted(player.getVars(), configProvider)) {
 			throw new IllegalStateException("Quest already started!");
 		}
 	}
@@ -87,11 +86,11 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public boolean isFinished(Player player, int questId) {
-		QuestType quest = questTypeList.list(questId);
+		QuestType quest = configProvider.getQuestTypes().list(questId);
 		if (quest == null) {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
-		return quest.isFinished(player.getVars());
+		return quest.isFinished(player.getVars(), configProvider);
 	}
 
 	/* (non-Javadoc)
@@ -99,11 +98,11 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public boolean meetsAllRequirements(Player player, int questId) {
-		QuestType quest = questTypeList.list(questId);
+		QuestType quest = configProvider.getQuestTypes().list(questId);
 		if (quest == null) {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
-		return quest.meetsAllRequirements(player.getVars(), null);
+		return quest.meetsAllRequirements(player.getVars(), configProvider, null);
 	}
 
 	/* (non-Javadoc)
@@ -111,11 +110,11 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public Object getParam(int questId, int paramTypeId) throws IllegalArgumentException {
-		QuestType quest = questTypeList.list(questId);
+		QuestType quest = configProvider.getQuestTypes().list(questId);
 		if (quest == null) {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
-		ParamType paramType = ParamTypeList.list(paramTypeId);
+		ParamType paramType = configProvider.getParamTypes().list(paramTypeId);
 		if (paramType == null) {
 			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
 		}
@@ -131,7 +130,7 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public int getPoints(int questId) {
-		QuestType quest = questTypeList.list(questId);
+		QuestType quest = configProvider.getQuestTypes().list(questId);
 		if (quest == null) {
 			throw new IllegalArgumentException("Quest not found: "+questId);
 		}
@@ -143,7 +142,7 @@ public class VirtueQuestAPI implements QuestAPI {
 	 */
 	@Override
 	public int getTotalPoints(Player player) {
-		return questTypeList.getTotalQuestPoints(player.getVars());
+		return configProvider.getQuestTypes().getTotalQuestPoints(player.getVars(), configProvider);
 	}
 
 }

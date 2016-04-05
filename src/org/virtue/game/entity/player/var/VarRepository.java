@@ -65,10 +65,13 @@ public class VarRepository implements VarDomain {
 	private Set<VarListener> tickTasks = new HashSet<VarListener>();
 	
 	private VarPlayerTypeList varTypes = VarPlayerTypeList.getInstance();
+	
+	private VarBitTypeList varBitTypeList;
 
-	public VarRepository(Player player, Map<Integer, Object> values) {
+	public VarRepository(Player player, Map<Integer, Object> values, VarBitTypeList varBitTypeList) {
 		this.player = player;
 		this.varValues = values;
+		this.varBitTypeList = varBitTypeList;
 		if (defaultVarps == null) {
 			defaultVarps = new int[varTypes.capacity()];
 			DefaultVars.setDefaultVarps(defaultVarps);			
@@ -86,8 +89,8 @@ public class VarRepository implements VarDomain {
 	 * @param key The varp key
 	 * @param value The amount to increment by
 	 */
-	public void incrementVarp (int key, int value) {
-		setVarValueInt(key, getVarValueInt(key)+value);
+	public void incrementVarp (VarType varType, int value) {
+		setVarValueInt(varType, getVarValueInt(varType)+value);
 	}
 	
 	/**
@@ -100,10 +103,18 @@ public class VarRepository implements VarDomain {
 		setVarBitValue(key, this.getVarBitValue(key)+value);
 	}
 	
+	public void setVarValueInt (int id, int value) {
+		VarType varType = VarPlayerTypeList.getInstance().list(id);
+		if (varType == null) {
+			throw new IllegalArgumentException("Invalid varp id: "+id);
+		}
+		setVarValueInt(varType, value);
+	}
+	
 	@Override
-	public void setVarValueInt (int key, int value) {
-		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(key, value));
-		setVarValue(key, Integer.valueOf(value));
+	public void setVarValueInt (VarType varType, int value) {
+		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(varType.id, value));
+		setVarValue(varType.id, Integer.valueOf(value));
 	}
 
 	/* (non-Javadoc)
@@ -141,6 +152,7 @@ public class VarRepository implements VarDomain {
 		setVarValue(varType.id, value);
 	}
 	
+	
 	private void setVarValue(int key, Object value) {
 		Object oldValue = varValues.get(key);
 		if (value == null) {
@@ -158,7 +170,7 @@ public class VarRepository implements VarDomain {
 	
 	public void setVarBitValue (int key, int value)  {
 		try {
-			setVarpBit(VarBitTypeList.list(key), value);
+			setVarpBit(varBitTypeList.list(key), value);
 		} catch (VarBitOverflowException ex) {
 			logger.error("Failed to set varbit "+key, ex);
 		}
@@ -171,10 +183,6 @@ public class VarRepository implements VarDomain {
 		int baseKey = type.baseVarKey;
 		setVarValue(baseKey, Integer.valueOf(type.setVarbitValue(getVarValueInt(baseKey), value)));
 		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(type.id, value, true));
-	}
-	
-	public boolean isValidBitKey (int key) {
-		return key >= 0 && key < VarBitTypeList.capacity();
 	}
 
 	/* (non-Javadoc)
@@ -198,9 +206,17 @@ public class VarRepository implements VarDomain {
 		return varValues.get(key);
 	}
 	
+	public int getVarValueInt (int id) {
+		VarType varType = VarPlayerTypeList.getInstance().list(id);
+		if (varType == null) {
+			throw new IllegalArgumentException("Invalid varp id: "+id);
+		}
+		return getVarValueInt(varType);
+	}
+	
 	@Override
-	public int getVarValueInt (int key) {
-		Object value = getVarValue(key);
+	public int getVarValueInt (VarType varType) {
+		Object value = getVarValue(varType.id);
 		if (value == null) {
 			return 0;
 		}
@@ -208,20 +224,20 @@ public class VarRepository implements VarDomain {
 	}
 	
 	public int getVarBitValue (int key) {
-		return getVarBitValue(VarBitTypeList.list(key));
+		return getVarBitValue(varBitTypeList.list(key));
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.player.widget.var.VarDomain#getVarValueLong(int)
 	 */
 	@Override
-	public long getVarValueLong(int key) {
-		Object value = getVarValue(key);
+	public long getVarValueLong(VarType varType) {
+		Object value = getVarValue(varType.id);
 		if (value == null) {
 			return 0;
 		}
 		if (!(value instanceof Long)) {
-			throw new RuntimeException("Variable "+key+" is not of type Long");
+			throw new RuntimeException("Variable "+varType.id+" is not of type Long");
 		}
 		return ((Long) value);
 	}
@@ -334,7 +350,7 @@ public class VarRepository implements VarDomain {
 				//().getEquipment().returnBorrowedItem();
 				player.getDispatcher().sendGameMessage(p2.getName()+" has returned the item "+(Gender.MALE.equals(p2.getAppearance().getGender()) ? "he" : "she")+" borrowed from you.");
 				player.getDispatcher().sendGameMessage("You may retrieve it from your Returned Items box by speaking to a banker.");
-				setVarValueInt(VarKey.Player.LOAN_TO_PLAYER, -1);
+				setVarValue(VarKey.Player.LOAN_TO_PLAYER, -1);
 			}
 		}
 		//Checks the player that the current item is loaned from
@@ -342,7 +358,7 @@ public class VarRepository implements VarDomain {
 		if (value != null && value instanceof Player) {
 			if (!((Entity) value).exists()) {
 				player.getDispatcher().sendGameMessage("Your item has been returned.");
-				setVarValueInt(VarKey.Player.LOAN_FROM_PLAYER, -1);
+				setVarValue(VarKey.Player.LOAN_FROM_PLAYER, -1);
 				player.getEquipment().destroyBorrowedItems();
 			}
 		}

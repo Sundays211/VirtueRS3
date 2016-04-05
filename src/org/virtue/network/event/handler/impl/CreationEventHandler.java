@@ -106,7 +106,7 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 		//System.out.println("Name:"+context.getName());
 		player.getAppearance().applyTemp();
 		Player newPlayer = new Player(player.getChannel(), context.getName(), context.getPassword(), player.getEncodingCipher(), player.getEncodingCipher());
-		newPlayer.initialize(false);
+		newPlayer.initialize(false, Virtue.getInstance().getConfigProvider());
 		newPlayer.setNames(context.getName(), null);
 		newPlayer.getAppearance().setGender(player.getAppearance().getGender());
 		newPlayer.getAppearance().setStyles(player.getAppearance().getStyles());

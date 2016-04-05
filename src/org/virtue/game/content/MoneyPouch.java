@@ -28,7 +28,7 @@ import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.Inventory;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -102,7 +102,7 @@ public class MoneyPouch {
 				int amount = (Integer) value;				
 				if (amount > 0) {
 					amount = Math.min(amount, currentCoins);
-					ItemContainer backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
+					Inventory backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
 					if (backpack.freeSlots() < 1) {
 						player.getDispatcher().sendGameMessage("You don't have space in your inventory to do that.");
 						return;

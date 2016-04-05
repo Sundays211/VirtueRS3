@@ -23,9 +23,10 @@ package org.virtue.config.questtype;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.ConfigProvider;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.def.ConfigDecoder;
+import org.virtue.config.ConfigDecoder;
 import org.virtue.config.Js5ConfigGroup;
 import org.virtue.game.entity.player.var.VarDomain;
 
@@ -43,27 +44,17 @@ public class QuestTypeList extends ConfigDecoder<QuestType> {
 	 * The {@link Logger} instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(QuestTypeList.class);
-	
-	private static QuestTypeList instance;
-	
-	public static void init (Archive archive, ReferenceTable configTable) {
-		instance = new QuestTypeList(configTable, archive);
-		logger.info("Found "+instance.getCount()+" questtype definitions.");
-	}
-	
-	public static QuestTypeList getInstance () {
-		return instance;
-	}
 
-	private QuestTypeList(ReferenceTable configTable, Archive archive) {
+	public QuestTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.QUESTTYPE, QuestType.class);
+		logger.info("Found "+getCount()+" questtype definitions.");
 	}
 
-    public int getTotalQuestPoints(VarDomain varDomain) {
+    public int getTotalQuestPoints(VarDomain varDomain, ConfigProvider configProvider) {
         int points = 0;
         for (int id = 0; id < getCount(); id++) {
             QuestType quest = list(id);
-            if (quest.isFinished(varDomain)) {
+            if (quest.isFinished(varDomain, configProvider)) {
             	points += quest.questPoints;
             }
         }

@@ -64,15 +64,16 @@ function delayFunction (entity, cycles, callback, interruptable, onInterrupt) {
 	if (interruptable === undefined) {
 		api.delay(entity, new Handler(), cycles);
 	} else {
-		var InterruptHandler = null;
+		var handler = null;
 		if (onInterrupt !== undefined) {
-			InterruptHandler = Java.extend(Java.type('java.lang.Runnable'), {
+			var InterruptHandler = Java.extend(Java.type('java.lang.Runnable'), {
 				run : function () {
 					onInterrupt();
 				}
 			});
-		}			
-		api.delay(entity, new Handler(), cycles, interruptable, InterruptHandler == null ? null : new InterruptHandler());
+			handler = new InterruptHandler();
+		}		
+		api.delay(entity, new Handler(), cycles, interruptable, handler);
 	}
 }
 

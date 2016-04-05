@@ -40,36 +40,20 @@ import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
 import org.virtue.cache.ChecksumTable;
 import org.virtue.cache.Container;
 import org.virtue.cache.FileStore;
-import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
-import org.virtue.config.Js5ConfigGroup;
 import org.virtue.config.db.DBIndexProvider;
-import org.virtue.config.db.dbrowtype.DBRowTypeList;
-import org.virtue.config.db.dbtabletype.DBTableTypeList;
 import org.virtue.config.defaults.DefaultsGroup;
 import org.virtue.config.defaults.StatDefaults;
-import org.virtue.config.enumtype.EnumTypeList;
-import org.virtue.config.loctype.LocTypeList;
-import org.virtue.config.npctype.NpcTypeList;
-import org.virtue.config.objtype.ObjTypeList;
-import org.virtue.config.paramtype.ParamTypeList;
-import org.virtue.config.questtype.QuestTypeList;
-import org.virtue.config.seqtype.SeqGroupTypeList;
-import org.virtue.config.seqtype.SeqTypeList;
-import org.virtue.config.structtype.StructTypeList;
-import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.engine.GameEngine;
 import org.virtue.engine.cycle.ticks.SystemUpdateTick;
 import org.virtue.engine.script.JSListeners;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.clans.ClanManager;
-import org.virtue.game.content.clans.ClanSettings;
 import org.virtue.game.content.dialogues.DialogueHandler;
 import org.virtue.game.content.exchange.GrandExchange;
 import org.virtue.game.content.minigame.MinigameProcessor;
@@ -77,9 +61,7 @@ import org.virtue.game.entity.combat.impl.SpecialAttackHandler;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.stat.Stat;
-import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetRepository;
 import org.virtue.game.parser.AccountIndex;
 import org.virtue.game.parser.CachingParser;
@@ -95,12 +77,8 @@ import org.virtue.game.world.region.RegionManager;
 import org.virtue.network.Network;
 import org.virtue.network.event.EventRepository;
 import org.virtue.utility.FileUtility;
-import org.virtue.utility.RenderTypeList;
 import org.virtue.utility.text.Huffman;
 import org.virtue.utility.text.QuickChatPhraseTypeList;
-
-import com.google.common.collect.Maps;
-
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -191,6 +169,8 @@ public class Virtue {
 	private MinigameProcessor controller;
 	
 	private Properties properties;
+	
+	private ConfigProvider configProvider;
 	
 	private int updateTimer = -1;
 	
@@ -302,7 +282,7 @@ public class Virtue {
 	}
 	
 	/**
-	 * Loads the packets and stores them in {@link Maps}
+	 * Loads the packets and stores them in maps
 	 * @throws Exception 
 	 */
 	private void loadGame() throws Exception {
@@ -320,7 +300,7 @@ public class Virtue {
 		widget.load();
 		
 		String scriptsFileDir = getProperty("scripts.dir", "./repository/scripts/");
-		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir));
+		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir), configProvider);
 		scripts.load();
 		
 		ClanIndex clanIndex = new XMLClanIndex(properties);
@@ -355,43 +335,9 @@ public class Virtue {
 	 * @throws IOException If the decoders could not be loaded due to a cache read error
 	 */
 	private void loadConfig () throws IOException {
-		Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG.getArchiveId()));
-		ReferenceTable configTable = ReferenceTable.decode(container.getData());
-		Archive invs = Archive.decode(cache.read(2, Js5ConfigGroup.INVTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.INVTYPE.id).size());
-		Archive params = Archive.decode(cache.read(2, Js5ConfigGroup.PARAMTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id).size());
-		Archive quests = Archive.decode(cache.read(2, Js5ConfigGroup.QUESTTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.QUESTTYPE.id).size());
-		Archive dbtables = Archive.decode(cache.read(2, Js5ConfigGroup.DBTABLETYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.DBTABLETYPE.id).size());
-		Archive dbrows = Archive.decode(cache.read(2, Js5ConfigGroup.DBROWTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.DBROWTYPE.id).size());
-		Archive varbits = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_BIT.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.VAR_BIT.id).size());
-		Archive varps = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_PLAYER.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id).size());
-		Archive varclans = Archive.decode(cache.read(2, Js5ConfigGroup.VAR_CLAN_SETTING.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id).size());
-		Archive seqgroups = Archive.decode(cache.read(2, Js5ConfigGroup.SEQGROUPTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.SEQGROUPTYPE.id).size());
-		InvRepository.init(invs, configTable.getEntry(Js5ConfigGroup.INVTYPE.id));
-		ParamTypeList.init(params, configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id));
-		DBTableTypeList.init(dbtables, configTable.getEntry(Js5ConfigGroup.DBTABLETYPE.id));
-		DBRowTypeList.init(dbrows, configTable.getEntry(Js5ConfigGroup.DBROWTYPE.id));
-		QuestTypeList.init(quests, configTable);
-		VarPlayerTypeList.init(varps, configTable.getEntry(Js5ConfigGroup.VAR_PLAYER.id));
-		VarBitTypeList.init(varbits, configTable.getEntry(Js5ConfigGroup.VAR_BIT.id));
-		ClanSettings.init(varclans, configTable.getEntry(Js5ConfigGroup.VAR_CLAN_SETTING.id));
-		SeqGroupTypeList.init(seqgroups, configTable);
-		ObjTypeList.init(cache, Constants.ITEM_DATA);
-		LocTypeList.init(cache);
-		NpcTypeList.init(cache, Constants.NPC_DATA);
-		SeqTypeList.init(cache, SeqGroupTypeList.getInstance());
-		EnumTypeList.init(cache);
-		StructTypeList.init(cache);
-		RenderTypeList.init(Archive.decode(cache.read(2, Js5ConfigGroup.BASTYPE.id).getData(), 
-				configTable.getEntry(Js5ConfigGroup.BASTYPE.id).size()));
+		configProvider = new ConfigProvider(cache);
+		configProvider.init(properties);
+		
 		QuickChatPhraseTypeList.init(cache);
 		RegionManager.init(cache);
 		StatDefaults statDefaults = new StatDefaults(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.STAT.js5Id).getData());
@@ -435,8 +381,15 @@ public class Virtue {
 	 */
 	public ByteBuffer getChecksumTable() {
 		return checksum;
-	}
+	}	
 	
+	/**
+	 * Returns the provided of cache configuration (objtypes, npctypes, enumtypes, vartypes, etc)
+	 */
+	public ConfigProvider getConfigProvider() {
+		return configProvider;
+	}
+
 	/**
 	 * Return the repo of accounts
 	 */

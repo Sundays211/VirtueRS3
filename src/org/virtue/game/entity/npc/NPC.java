@@ -51,7 +51,6 @@ import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.NpcTypeBlock;
-import org.virtue.utility.RenderTypeList;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -122,7 +121,7 @@ public class NPC extends Entity {
 		super(typeID);
 		this.spawnTile = tile;
 		this.typeId = typeID;
-		this.type = NpcTypeList.list(typeID);
+		this.type = NpcTypeList.getInstance().list(typeID);
 		super.setCurrentTile(tile);
 		super.setLastTile(tile);
 		super.name = type.name;
@@ -136,7 +135,7 @@ public class NPC extends Entity {
 			this.walkRange = customData.getWalkRange();
 			this.interactRange = customData.getInteractRange();
 		} else if (type.renderTypeID == -1 
-				|| !RenderTypeList.list(type.renderTypeID).hasWalkAnimation()) {
+				|| !Virtue.getInstance().getConfigProvider().getBASTypes().list(type.renderTypeID).hasWalkAnimation()) {
 			this.walkRange = 0;
 		}
 		CombatHandler script = Virtue.getInstance().getScripts().getCombatScript(typeID);
@@ -169,7 +168,7 @@ public class NPC extends Entity {
 	}
 	
 	public NpcType getType (Player player) {
-		return NpcTypeList.getTransformed(player, typeId);
+		return NpcTypeList.getInstance().getTransformed(player, typeId);
 	}
 	
 	public Direction getDirection () {
@@ -400,7 +399,7 @@ public class NPC extends Entity {
 		this.typeId = typeID;
 		this.queueUpdateBlock(new NpcTypeBlock());
 		if (typeID != -1) {
-			this.type = NpcTypeList.list(typeID);
+			this.type = NpcTypeList.getInstance().list(typeID);
 		} else {
 			this.exists = false;
 		}

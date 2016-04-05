@@ -24,7 +24,7 @@ package org.virtue.game.entity.player.interactions;
 import org.virtue.Virtue;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
-import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarKey;
 
@@ -52,8 +52,8 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 	@Override
 	public boolean interact(Player player, Player target) {
 		player.getDispatcher().sendVarcString(VarKey.Client.PLAYER_INSPECT_NAME, target.getName());
-		ItemContainer inspectEquipment = player.getInvs().loadContainer(ContainerState.PLAYER_INSPECT_EQUIPMENT);
-		ItemContainer targetEquipment = target.getInvs().getContainer(ContainerState.EQUIPMENT);
+		Inventory inspectEquipment = player.getInvs().loadContainer(ContainerState.PLAYER_INSPECT_EQUIPMENT);
+		Inventory targetEquipment = target.getInvs().getContainer(ContainerState.EQUIPMENT);
 		inspectEquipment.clear();
 		for (int slot=0;slot<inspectEquipment.getSize();slot++) {
 			inspectEquipment.set(slot, targetEquipment.get(slot));

@@ -30,21 +30,14 @@ import org.virtue.config.ConfigType;
  * @author Sundays211
  * @since Oct 18, 2014
  */
-public class InvType implements ConfigType {
-	
-	public static InvType load (ByteBuffer buffer, int id) {
-		InvType invType = new InvType(id);
-		invType.decode(buffer);
-		return invType;
-	}
-	
+public class InvType implements ConfigType {	
 	public int[] stockCounts;
     public int[] stockObjects;
     private int capacity = 0;
     public int stockCount = 0;
     private int id;
     
-    public InvType (int id) {
+    public InvType (int id, InvTypeList list) {
     	this.id = id;
     }
 	

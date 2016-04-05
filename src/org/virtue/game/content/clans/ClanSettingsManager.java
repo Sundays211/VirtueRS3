@@ -472,97 +472,98 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 	}
 	
 	private boolean broadcastEnabled (ClanSettings settings, int type) {
+		VarBitTypeList varBitTypeList = Virtue.getInstance().getConfigProvider().getVarBitTypes();
 		VarBitType varBit;
 		switch (type) {
 		case 0:
-			varBit = VarBitTypeList.list(22032);
+			varBit = varBitTypeList.list(22032);
 			break;
 		case 1:
-			varBit = VarBitTypeList.list(22033);
+			varBit = varBitTypeList.list(22033);
 			break;
 		case 2:
-			varBit = VarBitTypeList.list(22034);
+			varBit = varBitTypeList.list(22034);
 			break;
 		case 3:
-			varBit = VarBitTypeList.list(22035);
+			varBit = varBitTypeList.list(22035);
 			break;
 		case 4:
-			varBit = VarBitTypeList.list(22036);
+			varBit = varBitTypeList.list(22036);
 			break;
 		case 5:
-			varBit = VarBitTypeList.list(22037);
+			varBit = varBitTypeList.list(22037);
 			break;
 		case 6:
-			varBit = VarBitTypeList.list(22038);
+			varBit = varBitTypeList.list(22038);
 			break;
 		case 7:
-			varBit = VarBitTypeList.list(22039);
+			varBit = varBitTypeList.list(22039);
 			break;
 		case 8:
-			varBit = VarBitTypeList.list(22040);
+			varBit = varBitTypeList.list(22040);
 			break;
 		case 9:
-			varBit = VarBitTypeList.list(22041);
+			varBit = varBitTypeList.list(22041);
 			break;
 		case 10:
-			varBit = VarBitTypeList.list(22042);
+			varBit = varBitTypeList.list(22042);
 			break;
 		case 11:
-			varBit = VarBitTypeList.list(22043);
+			varBit = varBitTypeList.list(22043);
 			break;
 		case 12:
-			varBit = VarBitTypeList.list(22044);
+			varBit = varBitTypeList.list(22044);
 			break;
 		case 13:
-			varBit = VarBitTypeList.list(22045);
+			varBit = varBitTypeList.list(22045);
 			break;
 		case 14:
-			varBit = VarBitTypeList.list(22046);
+			varBit = varBitTypeList.list(22046);
 			break;
 		case 15:
-			varBit = VarBitTypeList.list(22047);
+			varBit = varBitTypeList.list(22047);
 			break;
 		case 16:
-			varBit = VarBitTypeList.list(22048);
+			varBit = varBitTypeList.list(22048);
 			break;
 		case 17:
-			varBit = VarBitTypeList.list(22049);
+			varBit = varBitTypeList.list(22049);
 			break;
 		case 18:
-			varBit = VarBitTypeList.list(22050);
+			varBit = varBitTypeList.list(22050);
 			break;
 		case 19:
-			varBit = VarBitTypeList.list(22051);
+			varBit = varBitTypeList.list(22051);
 			break;
 		case 20:
-			varBit = VarBitTypeList.list(22052);
+			varBit = varBitTypeList.list(22052);
 			break;
 		case 21:
-			varBit = VarBitTypeList.list(22053);
+			varBit = varBitTypeList.list(22053);
 			break;
 		case 22:
-			varBit = VarBitTypeList.list(22054);
+			varBit = varBitTypeList.list(22054);
 			break;
 		case 23:
-			varBit = VarBitTypeList.list(22055);
+			varBit = varBitTypeList.list(22055);
 			break;
 		case 24:
-			varBit = VarBitTypeList.list(22056);
+			varBit = varBitTypeList.list(22056);
 			break;
 		case 25:
-			varBit = VarBitTypeList.list(22057);
+			varBit = varBitTypeList.list(22057);
 			break;
 		case 26:
-			varBit = VarBitTypeList.list(22058);
+			varBit = varBitTypeList.list(22058);
 			break;
 		case 27:
-			varBit = VarBitTypeList.list(22059);
+			varBit = varBitTypeList.list(22059);
 			break;
 		case 28:
-			varBit = VarBitTypeList.list(22060);
+			varBit = varBitTypeList.list(22060);
 			break;
 		case 29:
-			varBit = VarBitTypeList.list(22061);
+			varBit = varBitTypeList.list(22061);
 			break;
 		default:
 			return false;
@@ -571,97 +572,98 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 	}
 	
 	private ClanRank minBroadcastRank (ClanSettings settings, int type) {
+		VarBitTypeList varBitTypeList = Virtue.getInstance().getConfigProvider().getVarBitTypes();
 		VarBitType varBit;
 		switch (type) {
 		case 0:
-			varBit = VarBitTypeList.list(22068);
+			varBit = varBitTypeList.list(22068);
 			break;
 		case 1:
-			varBit = VarBitTypeList.list(22069);
+			varBit = varBitTypeList.list(22069);
 			break;
 		case 2:
-			varBit = VarBitTypeList.list(22070);
+			varBit = varBitTypeList.list(22070);
 			break;
 		case 3:
-			varBit = VarBitTypeList.list(22071);
+			varBit = varBitTypeList.list(22071);
 			break;
 		case 4:
-			varBit = VarBitTypeList.list(22072);
+			varBit = varBitTypeList.list(22072);
 			break;
 		case 5:
-			varBit = VarBitTypeList.list(22073);
+			varBit = varBitTypeList.list(22073);
 			break;
 		case 6:
-			varBit = VarBitTypeList.list(22074);
+			varBit = varBitTypeList.list(22074);
 			break;
 		case 7:
-			varBit = VarBitTypeList.list(22075);
+			varBit = varBitTypeList.list(22075);
 			break;
 		case 8:
-			varBit = VarBitTypeList.list(22076);
+			varBit = varBitTypeList.list(22076);
 			break;
 		case 9:
-			varBit = VarBitTypeList.list(22077);
+			varBit = varBitTypeList.list(22077);
 			break;
 		case 10:
-			varBit = VarBitTypeList.list(22078);
+			varBit = varBitTypeList.list(22078);
 			break;
 		case 11:
-			varBit = VarBitTypeList.list(22079);
+			varBit = varBitTypeList.list(22079);
 			break;
 		case 12:
-			varBit = VarBitTypeList.list(22080);
+			varBit = varBitTypeList.list(22080);
 			break;
 		case 13:
-			varBit = VarBitTypeList.list(22081);
+			varBit = varBitTypeList.list(22081);
 			break;
 		case 14:
-			varBit = VarBitTypeList.list(22082);
+			varBit = varBitTypeList.list(22082);
 			break;
 		case 15:
-			varBit = VarBitTypeList.list(22083);
+			varBit = varBitTypeList.list(22083);
 			break;
 		case 16:
-			varBit = VarBitTypeList.list(22084);
+			varBit = varBitTypeList.list(22084);
 			break;
 		case 17:
-			varBit = VarBitTypeList.list(22085);
+			varBit = varBitTypeList.list(22085);
 			break;
 		case 18:
-			varBit = VarBitTypeList.list(22086);
+			varBit = varBitTypeList.list(22086);
 			break;
 		case 19:
-			varBit = VarBitTypeList.list(22087);
+			varBit = varBitTypeList.list(22087);
 			break;
 		case 20:
-			varBit = VarBitTypeList.list(22088);
+			varBit = varBitTypeList.list(22088);
 			break;
 		case 21:
-			varBit = VarBitTypeList.list(22089);
+			varBit = varBitTypeList.list(22089);
 			break;
 		case 22:
-			varBit = VarBitTypeList.list(22090);
+			varBit = varBitTypeList.list(22090);
 			break;
 		case 23:
-			varBit = VarBitTypeList.list(22091);
+			varBit = varBitTypeList.list(22091);
 			break;
 		case 24:
-			varBit = VarBitTypeList.list(22092);
+			varBit = varBitTypeList.list(22092);
 			break;
 		case 25:
-			varBit = VarBitTypeList.list(22093);
+			varBit = varBitTypeList.list(22093);
 			break;
 		case 26:
-			varBit = VarBitTypeList.list(22094);
+			varBit = varBitTypeList.list(22094);
 			break;
 		case 27:
-			varBit = VarBitTypeList.list(22095);
+			varBit = varBitTypeList.list(22095);
 			break;
 		case 28:
-			varBit = VarBitTypeList.list(22096);
+			varBit = varBitTypeList.list(22096);
 			break;
 		case 29:
-			varBit = VarBitTypeList.list(22097);
+			varBit = varBitTypeList.list(22097);
 			break;
 		default:
 			return ClanRank.RECRUIT;

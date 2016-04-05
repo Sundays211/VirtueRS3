@@ -28,14 +28,7 @@ import org.virtue.config.ConfigType;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.utility.text.StringUtility;
 
-public class ParamType implements ConfigType {
-	
-	public static ParamType decode (ByteBuffer buffer, int id) {
-		ParamType paramType = new ParamType(id);
-		paramType.decode(buffer);
-		return paramType;
-	}
-	
+public class ParamType implements ConfigType {	
 	public int defaultint;
 	public boolean autodisable = true;
 	public String defaultstr;
@@ -43,7 +36,7 @@ public class ParamType implements ConfigType {
 	
 	private int id;
 
-	private ParamType(int id) {
+	public ParamType(int id, ParamTypeList list) {
 		this.id = id;
 	}
 	
@@ -51,6 +44,7 @@ public class ParamType implements ConfigType {
 		return id;
 	}
 	
+	@Override
 	public void decode(ByteBuffer buffer) {
 		for (int code = buffer.get() & 0xff; code != 0; code = buffer.get() & 0xff) {
 			decodeLine(buffer, code);

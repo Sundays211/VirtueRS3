@@ -26,11 +26,13 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.virtue.ConfigProvider;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
+import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitType;
-import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.entity.player.var.VarDomain;
+import org.virtue.game.entity.player.var.VarPlayerTypeList;
 
 /**
  * @author Sundays211
@@ -66,17 +68,18 @@ public class QuestType implements ConfigType {
         this.myList = list;
     }
 
-    public boolean isStarted(VarDomain varDomain) {
+    public boolean isStarted(VarDomain varDomain, ConfigProvider configProvider) {
         if (null != progressVarps) {
             for (int slot = 0; slot < progressVarps.length; slot++) {
-                if (varDomain.getVarValueInt(progressVarps[slot][0]) >= progressVarps[slot][1]) {
+            	VarType varType = VarPlayerTypeList.getInstance().list(progressVarps[slot][0]);
+                if (varDomain.getVarValueInt(varType) >= progressVarps[slot][1]) {
                     return true;
                 }
             }
         }
         if (null != progressVarBits) {
             for (int slot = 0; slot < progressVarBits.length; slot++) {
-            	VarBitType varBitType = VarBitTypeList.list(progressVarBits[slot][0]);
+            	VarBitType varBitType = configProvider.getVarBitTypes().list(progressVarBits[slot][0]);
                 if (varDomain.getVarBitValue(varBitType) >= progressVarBits[slot][1]) {
                     return true;
                 }
@@ -107,17 +110,18 @@ public class QuestType implements ConfigType {
         return value.intValue();
     }
 
-    public boolean isFinished(VarDomain varDomain) {
+    public boolean isFinished(VarDomain varDomain, ConfigProvider configProvider) {
         if (null != progressVarps) {
             for (int slot = 0; slot < progressVarps.length; slot++) {
-                if (varDomain.getVarValueInt(progressVarps[slot][0]) >= progressVarps[slot][2]) {
+            	VarType varType = VarPlayerTypeList.getInstance().list(progressVarps[slot][0]);
+                if (varDomain.getVarValueInt(varType) >= progressVarps[slot][2]) {
                     return true;
                 }
             }
         }
         if (progressVarBits != null) {
             for (int slot = 0; slot < progressVarBits.length; slot++) {
-            	VarBitType varBitType = VarBitTypeList.list(progressVarBits[slot][0]);
+            	VarBitType varBitType = configProvider.getVarBitTypes().list(progressVarBits[slot][0]);
                 if (varDomain.getVarBitValue(varBitType) >= progressVarBits[slot][2]) {
                     return true;
                 }
@@ -126,8 +130,8 @@ public class QuestType implements ConfigType {
         return false;
     }
 
-    public boolean meetsAllRequirements(VarDomain varDomain, int[] is) {
-        if (myList.getTotalQuestPoints(varDomain) < questPointRequirement) {
+    public boolean meetsAllRequirements(VarDomain varDomain, ConfigProvider configProvider, int[] is) {
+        if (myList.getTotalQuestPoints(varDomain, configProvider) < questPointRequirement) {
             return false;
         }
         /*if (statRequirements != null) {
@@ -140,14 +144,15 @@ public class QuestType implements ConfigType {
         }*/
         if (questRequirements != null) {
             for (int slot = 0; slot < questRequirements.length; slot++) {
-                if (!myList.list(questRequirements[slot]).isFinished(varDomain)) {
+                if (!myList.list(questRequirements[slot]).isFinished(varDomain, configProvider)) {
                     return false;
                 }
             }
         }
         if (varpRequirements != null) {
             for (int slot = 0; slot < varpRequirements.length; slot++) {
-                int value = varDomain.getVarValueInt(varpRequirements[slot]);
+            	VarType varType = VarPlayerTypeList.getInstance().list(varpRequirements[slot]);
+                int value = varDomain.getVarValueInt(varType);
                 if (value < minVarpValue[slot]
                         || value > maxVarpValue[slot]) {
                     return false;
@@ -156,7 +161,7 @@ public class QuestType implements ConfigType {
         }
         if (varBitRequirements != null) {
             for (int slot = 0; slot < varBitRequirements.length; slot++) {
-            	VarBitType varBitType = VarBitTypeList.list(varBitRequirements[slot]);
+            	VarBitType varBitType = configProvider.getVarBitTypes().list(varBitRequirements[slot]);
                 int value = varDomain.getVarBitValue(varBitType);
                 if (value < minVarBitValue[slot] || value > maxVarBitValue[slot]) {
                     return false;
@@ -166,8 +171,8 @@ public class QuestType implements ConfigType {
         return true;
     }
 
-    public boolean meetsQuestPointRequirement(VarDomain varDomain, int i) {
-        if (myList.getTotalQuestPoints(varDomain) < questPointRequirement) {
+    public boolean meetsQuestPointRequirement(VarDomain varDomain, ConfigProvider configProvider) {
+        if (myList.getTotalQuestPoints(varDomain, configProvider) < questPointRequirement) {
             return false;
         }
         return true;
@@ -187,18 +192,19 @@ public class QuestType implements ConfigType {
         if (null == varpRequirements || slot < 0 || slot >= varpRequirements.length) {
             return false;
         }
-        int value = varDomain.getVarValueInt(varpRequirements[slot]);
+    	VarType varType = VarPlayerTypeList.getInstance().list(varpRequirements[slot]);
+        int value = varDomain.getVarValueInt(varType);
         if (value < minVarpValue[slot] || value > maxVarpValue[slot]) {
             return false;
         }
         return true;
     }
 
-    public boolean meetsVarBitRequirement(VarDomain varDomain, int slot) {
+    public boolean meetsVarBitRequirement(VarDomain varDomain, ConfigProvider configProvider, int slot) {
         if (varBitRequirements == null || slot < 0 || slot >= varBitRequirements.length) {
             return false;
         }
-    	VarBitType varBitType = VarBitTypeList.list(varBitRequirements[slot]);
+    	VarBitType varBitType = configProvider.getVarBitTypes().list(varBitRequirements[slot]);
         int value = varDomain.getVarBitValue(varBitType);
         if (value < minVarBitValue[slot] || value > maxVarBitValue[slot]) {
             return false;
@@ -206,11 +212,11 @@ public class QuestType implements ConfigType {
         return true;
     }
 
-    public boolean meetsQuestRequirement(VarDomain varDomain, int slot) {
+    public boolean meetsQuestRequirement(VarDomain varDomain, ConfigProvider configProvider, int slot) {
         if (questRequirements == null || slot < 0 || slot >= questRequirements.length) {
             return false;
         }
-        if (!myList.list(questRequirements[slot]).isFinished(varDomain)) {
+        if (!myList.list(questRequirements[slot]).isFinished(varDomain, configProvider)) {
             return false;
         }
         return true;

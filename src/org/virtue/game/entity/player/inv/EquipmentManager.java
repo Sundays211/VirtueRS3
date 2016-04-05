@@ -68,7 +68,7 @@ public class EquipmentManager {
 	
 	public EquipmentManager (Player player) {
 		this.player = player;
-		this.styleOverrides = new EquipmentStyleOverride[InvRepository.getInvCapacity(ContainerState.EQUIPMENT.getID())];
+		this.styleOverrides = new EquipmentStyleOverride[player.getInvs().getContainer(ContainerState.EQUIPMENT).getSize()];
 		this.slotOverrides = new int[this.styleOverrides.length];
 		Arrays.fill(this.slotOverrides, -1);
 	}
@@ -79,8 +79,8 @@ public class EquipmentManager {
 	 * @return True if the item was equip successfully, false otherwise
 	 */
 	public boolean wearItem (int invSlot) {
-		ItemContainer equipment = player.getInvs().getContainer(ContainerState.EQUIPMENT);
-		ItemContainer backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
+		Inventory equipment = player.getInvs().getContainer(ContainerState.EQUIPMENT);
+		Inventory backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
 		Item item = backpack.get(invSlot);
 		
 		if (item == null) {
@@ -187,7 +187,7 @@ public class EquipmentManager {
 	}
 	
 	public void refresh (boolean isLogin) {
-		ItemContainer equipment = player.getInvs().loadContainer(ContainerState.EQUIPMENT);
+		Inventory equipment = player.getInvs().loadContainer(ContainerState.EQUIPMENT);
 		for (int slot=0;slot<slotOverrides.length;slot++) {
 			Item item = equipment.get(slot);
 			if (item == null) {
@@ -321,7 +321,7 @@ public class EquipmentManager {
 	}
 	
 	public boolean destroyBorrowedItems () {
-		ItemContainer equipment = player.getInvs().getContainer(ContainerState.EQUIPMENT);
+		Inventory equipment = player.getInvs().getContainer(ContainerState.EQUIPMENT);
 		for (int slot=0; slot<equipment.getSize(); slot++) {
 			Item item = equipment.get(slot);
 			if (item != null && item.getType().lenttemplate != -1) {
@@ -331,7 +331,7 @@ public class EquipmentManager {
 				return true;
 			}
 		}
-		ItemContainer backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
+		Inventory backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
 		for (int slot=0; slot<backpack.getSize(); slot++) {
 			Item item = backpack.get(slot);
 			if (item != null && item.getType().lenttemplate != -1) {
@@ -341,7 +341,7 @@ public class EquipmentManager {
 			}
 		}
 		
-		ItemContainer bank = player.getInvs().getContainer(ContainerState.BANK);
+		Inventory bank = player.getInvs().getContainer(ContainerState.BANK);
 		if (bank == null){
 			return false;
 		}
@@ -420,9 +420,10 @@ public class EquipmentManager {
 			if (updateVex) {
 				styleOverrides[SLOT_WEAPON].setRecol(clanColours, CLAN_RECOL_SLOTS);
 			}
+			VarBitTypeList varBitTypeList = Virtue.getInstance().getConfigProvider().getVarBitTypes();
 			short[] clanTextures = new short[2];
-			int logo1slot = clanSettings.getVarBitValue(player.getClanHash(), VarBitTypeList.list(VarKey.ClanSetting.LOGO_1_SLOT));
-			int logo2slot = clanSettings.getVarBitValue(player.getClanHash(), VarBitTypeList.list(VarKey.ClanSetting.LOGO_2_SLOT));
+			int logo1slot = clanSettings.getVarBitValue(player.getClanHash(), varBitTypeList.list(VarKey.ClanSetting.LOGO_1_SLOT));
+			int logo2slot = clanSettings.getVarBitValue(player.getClanHash(), varBitTypeList.list(VarKey.ClanSetting.LOGO_2_SLOT));
 			EnumType textures = EnumTypeList.list(3685);
 			int logo1 = textures.getValueInt(logo1slot);
 			int logo2 = textures.getValueInt(logo2slot);

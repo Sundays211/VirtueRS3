@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
@@ -39,13 +40,11 @@ import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
-import org.virtue.config.paramtype.ParamTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
-import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
@@ -65,8 +64,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.inv.ContainerState;
+import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemContainer;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetManager;
@@ -102,6 +101,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(VirtueScriptAPI.class);
+	
+	private ConfigProvider configProvider;
+	
+	public VirtueScriptAPI (ConfigProvider configProvider) {
+		this.configProvider = configProvider;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getHash(java.lang.String)
@@ -510,7 +515,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (structType == null) {
 			throw new IllegalArgumentException("Invalid struct: "+structId);
 		}
-		ParamType paramType = ParamTypeList.list(paramTypeId);
+		ParamType paramType = configProvider.getParamTypes().list(paramTypeId);
 		if (paramType == null) {
 			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
 		}
@@ -526,7 +531,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public LocType getLocType(int locTypeID) {
-		return LocTypeList.list(locTypeID);
+		return LocTypeList.getInstance().list(locTypeID);
 	}
 
 	/* (non-Javadoc)
@@ -542,7 +547,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public LocType getLocType(Player player, int baseID) {
-		return LocTypeList.getTransformed(player, baseID);
+		return LocTypeList.getInstance().getTransformed(player, baseID);
 	}
 
 	/* (non-Javadoc)
@@ -627,7 +632,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (itemType == null) {
 			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
 		}
-		ParamType paramType = ParamTypeList.list(paramTypeId);
+		ParamType paramType = configProvider.getParamTypes().list(paramTypeId);
 		if (paramType == null) {
 			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
 		}
@@ -656,7 +661,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public NpcType getNpcType(int npcID) {
-		return NpcTypeList.list(npcID);
+		return NpcTypeList.getInstance().list(npcID);
 	}
 
 	/* (non-Javadoc)
@@ -733,7 +738,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		ItemContainer inv = player.getInvs().getContainer(state);
+		Inventory inv = player.getInvs().getContainer(state);
 		if (inv == null) {
 			throw new IllegalStateException("The inventory "+state+" has not been loaded yet!");
 		}
@@ -764,7 +769,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		ItemContainer inv = player.getInvs().getContainer(state);
+		Inventory inv = player.getInvs().getContainer(state);
 		if (inv == null) {
 			throw new IllegalStateException("The inventory "+state+" has not been loaded yet!");
 		}
@@ -795,7 +800,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		ItemContainer container = player.getInvs().getContainer(state);
+		Inventory container = player.getInvs().getContainer(state);
 		if (container == null) {
 			throw new IllegalStateException("Inventory not loaded: "+state);
 		}
@@ -825,7 +830,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		ItemContainer container = player.getInvs().getContainer(state);
+		Inventory container = player.getInvs().getContainer(state);
 		if (container == null) {
 			throw new IllegalStateException("Container "+state+" has not yet been loaded.");
 		}
@@ -842,7 +847,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		ItemContainer container = player.getInvs().getContainer(state);
+		Inventory container = player.getInvs().getContainer(state);
 		if (container == null) {
 			return -1;
 		}
@@ -858,7 +863,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		ItemContainer container = player.getInvs().getContainer(state);
+		Inventory container = player.getInvs().getContainer(state);
 		if (container == null) {
 			return 0;
 		}
@@ -874,7 +879,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (state == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		ItemContainer container = player.getInvs().getContainer(state);
+		Inventory container = player.getInvs().getContainer(state);
 		if (container == null) {
 			return -1;
 		}
@@ -983,9 +988,9 @@ public class VirtueScriptAPI implements ScriptAPI {
 			throw new IllegalArgumentException("Invalid varp id: "+key);
 		}
 		if (value instanceof Double) {
-			player.getVars().setVarValueInt(varType.id, ((Double) value).intValue());
+			player.getVars().setVarValueInt(varType, ((Double) value).intValue());
 		} else if (value instanceof Integer) {
-			player.getVars().setVarValueInt(varType.id, ((Integer) value).intValue());
+			player.getVars().setVarValueInt(varType, ((Integer) value).intValue());
 		} else {
 			player.getVars().setVarValue(varType, value);
 		}		
@@ -996,7 +1001,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void incrementVarp(Player player, int key, int value) {
-		player.getVars().incrementVarp(key, value);
+		VarType varType = VarPlayerTypeList.getInstance().list(key);
+		if (varType == null) {
+			throw new IllegalArgumentException("Invalid varp id: "+key);
+		}
+		player.getVars().incrementVarp(varType, value);
 	}
 
 	/* (non-Javadoc)
@@ -1004,7 +1013,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getVarBit(Player player, int key) {
-		VarBitType type = VarBitTypeList.list(key);
+		VarBitType type = configProvider.getVarBitTypes().list(key);
 		if (type == null) {
 			throw new IllegalArgumentException("Invalid VarBit key: "+key);
 		}
@@ -1033,7 +1042,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean setVarBit(Player player, int key, int value) {
-		VarBitType type = VarBitTypeList.list(key);
+		VarBitType type = configProvider.getVarBitTypes().list(key);
 		if (type == null) {
 			throw new IllegalArgumentException("Invalid VarBit key: "+key);
 		}
@@ -1071,7 +1080,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void incrementVarBit(Player player, int key, int value) {
-		VarBitType type = VarBitTypeList.list(key);
+		VarBitType type = configProvider.getVarBitTypes().list(key);
 		if (type == null) {
 			throw new IllegalArgumentException("Invalid VarBit key: "+key);
 		}
@@ -1339,6 +1348,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#interupt(org.virtue.game.entity.Entity)
+	 */
+	@Override
+	public void interrupt(Entity entity) {
+		entity.interuptAction();
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#kickPlayer(org.virtue.game.entity.player.Player)
 	 */
 	@Override
@@ -1367,7 +1384,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void delay(Entity entity, Runnable task, int ticks, boolean interruptable, Runnable onInterrupt) {
-		entity.addDelayTask(task, ticks);
+		entity.addDelayTask(task, ticks, interruptable, onInterrupt);
 	}
 
 	/* (non-Javadoc)

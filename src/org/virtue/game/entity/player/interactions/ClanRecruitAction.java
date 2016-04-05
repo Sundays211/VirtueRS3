@@ -95,40 +95,41 @@ public class ClanRecruitAction implements PlayerTargetHandler {
 	}
 
 	private boolean canRecruit (long clanHash, ClanRank rank) {
+		VarBitTypeList varBitTypeList = Virtue.getInstance().getConfigProvider().getVarBitTypes();
 		VarBitType varBit;
 		switch (rank) {
 		case RECRUIT:
-			varBit = VarBitTypeList.list(6192);
+			varBit = varBitTypeList.list(6192);
 			break;
 		case CORPORAL:
-			varBit = VarBitTypeList.list(6193);
+			varBit = varBitTypeList.list(6193);
 			break;
 		case SERGEANT:
-			varBit = VarBitTypeList.list(6194);
+			varBit = varBitTypeList.list(6194);
 			break;
 		case LIEUTENANT:
-			varBit = VarBitTypeList.list(6195);
+			varBit = varBitTypeList.list(6195);
 			break;
 		case CAPTAIN:
-			varBit = VarBitTypeList.list(6196);
+			varBit = varBitTypeList.list(6196);
 			break;
 		case GENERAL:
-			varBit = VarBitTypeList.list(6197);
+			varBit = varBitTypeList.list(6197);
 			break;
 		case ADMIN:
-			varBit = VarBitTypeList.list(6198);
+			varBit = varBitTypeList.list(6198);
 			break;
 		case ORGANISER:
-			varBit = VarBitTypeList.list(6199);
+			varBit = varBitTypeList.list(6199);
 			break;
 		case COORDINATOR:
-			varBit = VarBitTypeList.list(6200);
+			varBit = varBitTypeList.list(6200);
 			break;
 		case OVERSEER:
-			varBit = VarBitTypeList.list(6201);
+			varBit = varBitTypeList.list(6201);
 			break;
 		case DEPUTY_OWNER:
-			varBit = VarBitTypeList.list(6202);
+			varBit = varBitTypeList.list(6202);
 			break;
 		case OWNER:
 		case JMOD:

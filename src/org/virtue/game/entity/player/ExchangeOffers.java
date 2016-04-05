@@ -27,7 +27,7 @@ import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.parser.ParserDataType;
 
 /**
@@ -106,8 +106,8 @@ public class ExchangeOffers {
 		if (offerContainer == null || returnContainer == null) {
 			return;
 		}
-		ItemContainer offeredItems = player.getInvs().loadContainer(offerContainer);
-		ItemContainer returnedItems = player.getInvs().loadContainer(returnContainer);
+		Inventory offeredItems = player.getInvs().loadContainer(offerContainer);
+		Inventory returnedItems = player.getInvs().loadContainer(returnContainer);
 		if (processed > 0) {
 			offer.processOffer(processed, coins);
 			if (offer.isSell()) {

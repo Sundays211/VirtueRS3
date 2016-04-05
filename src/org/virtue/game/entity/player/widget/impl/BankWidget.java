@@ -35,7 +35,7 @@ import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.game.entity.player.widget.WidgetState;
@@ -269,7 +269,7 @@ public class BankWidget extends Widget {
 			return false;
 		}
 		if (component1 == 243) {//Shifted item in the bank
-			ItemContainer bank = player.getInvs().getContainer(ContainerState.BANK);
+			Inventory bank = player.getInvs().getContainer(ContainerState.BANK);
 			Item item = bank.get(slot1);
 			int actualID1 = (item == null) ? -1 : item.getId();
 			if (itemID2 == -1) {
@@ -556,7 +556,7 @@ public class BankWidget extends Widget {
 	 */
 	private boolean withdrawItems (Player player, int slot, int itemID, int amount) {
 		//System.out.println("Withdrawing item: amount="+amount+", item="+itemID+", slot="+slot);
-		ItemContainer backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
+		Inventory backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
 		Item item = player.getInvs().getContainer(ContainerState.BANK).get(slot);
 		if (item == null) {
 			player.getInvs().sendContainer(ContainerState.BACKPACK);

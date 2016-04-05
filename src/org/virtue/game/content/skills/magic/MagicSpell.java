@@ -5,7 +5,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.node.Node;
 import org.virtue.network.protocol.update.block.AnimationBlock;
@@ -135,7 +135,7 @@ public abstract class MagicSpell {
 				player.getDispatcher().sendGameMessage("You need to be wearing a " + ObjTypeList.getInstance().list(staffId).name + " to cast this spell.");
 				return false;
 			}
-			ItemContainer inv = player.getInvs().getContainer(ContainerState.BACKPACK);	
+			Inventory inv = player.getInvs().getContainer(ContainerState.BACKPACK);	
 			for (Item rune : runes) {
 				if (!hasValidStaff(player, rune) && !inv.contains(rune)) {
 					player.getDispatcher().sendGameMessage("You don't have enough runes to cast this spell.");
@@ -153,7 +153,7 @@ public abstract class MagicSpell {
 	public void consumeRunes(Entity entity) {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
-			ItemContainer inv = player.getInvs().getContainer(ContainerState.BACKPACK);	
+			Inventory inv = player.getInvs().getContainer(ContainerState.BACKPACK);	
 			for (Item rune : runes) {
 				if (!hasValidStaff(player, rune)) {
 					inv.remove(rune);

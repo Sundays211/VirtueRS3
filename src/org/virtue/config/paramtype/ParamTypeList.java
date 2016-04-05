@@ -21,12 +21,12 @@
  */
 package org.virtue.config.paramtype;
 
-import java.nio.ByteBuffer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
+import org.virtue.config.ConfigDecoder;
+import org.virtue.config.Js5ConfigGroup;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,40 +35,15 @@ import org.virtue.cache.ReferenceTable;
  * @author Sundays211
  * @since 25/12/2014
  */
-public class ParamTypeList {
+public class ParamTypeList extends ConfigDecoder<ParamType> {
 
 	/**
 	 * The {@link Logger} instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(ParamTypeList.class);
-	
-	private static ParamType[] paramTypes;
-	
-	public static void init (Archive params, ReferenceTable.Entry tableEntry) {
-		paramTypes = new ParamType[tableEntry.capacity()];
-		for (int slot=0;slot<params.size();slot++) {
-			ReferenceTable.ChildEntry child = tableEntry.getEntry(slot);
-			if (child == null) {
-				continue;
-			}
-			int id = child.index();
-			ByteBuffer entry = params.getEntry(id);
-			if (entry == null) {
-				continue;
-			}
-			paramTypes[id] = ParamType.decode(entry, id);
-		}
-		logger.info("Found "+paramTypes.length+" paramType definitions.");
-	}
 
-	public static ParamType list (int id) {
-		if (id < 0 || id >= paramTypes.length) {
-			return null;
-		}
-		return paramTypes[id];
-	}
-
-	public static int capacity () {
-		return paramTypes.length;
+	public ParamTypeList(ReferenceTable configTable, Archive archive) {
+		super(configTable, archive, Js5ConfigGroup.PARAMTYPE, ParamType.class);
+		logger.info("Found "+getCount()+" paramtype definitions.");
 	}
 }

@@ -9,7 +9,7 @@ import org.virtue.config.invtype.InvType;
  * 
  * @author Graham / edited by Dragonkk(Alex)
  */
-public final class ItemContainer {
+public final class Inventory {
 
 	private Item[] data;
 	private boolean alwaysStackable = false;
@@ -17,19 +17,19 @@ public final class ItemContainer {
 	private InvType invType;
 	
 	/**
-	 * Constructs a new {@link ItemContainer}, based on a cache definition
+	 * Constructs a new {@link Inventory}, based on a cache definition
 	 * @param invType The cache definition for this container
 	 */
-	protected ItemContainer (InvType invType) {
+	protected Inventory (InvType invType) {
 		this(invType, true);
 	}
 	
 	/**
-	 * Constructs a new {@link ItemContainer}, based on a cache definition
+	 * Constructs a new {@link Inventory}, based on a cache definition
 	 * @param invType The cache definition for this container
 	 * @param alwaysStackable Whether items in this bank will always stack
 	 */
-	protected ItemContainer (InvType invType, boolean alwaysStackable) {
+	protected Inventory (InvType invType, boolean alwaysStackable) {
 		this.invType = invType;
 		
 		data = new Item[invType.getCapacity()];
@@ -377,8 +377,8 @@ public final class ItemContainer {
 		return newData;
 	}
 
-	public ItemContainer asItemContainer() {
-		ItemContainer c = new ItemContainer(invType,
+	public Inventory asItemContainer() {
+		Inventory c = new Inventory(invType,
 				this.alwaysStackable);
 		System.arraycopy(data, 0, c.data, 0, data.length);
 		return c;
@@ -471,7 +471,7 @@ public final class ItemContainer {
 		return removed;
 	}
 
-	public void addAll(ItemContainer container) {
+	public void addAll(Inventory container) {
 		for (int i = 0; i < container.getSize(); i++) {
 			Item item = container.get(i);
 			if (item != null) {
@@ -489,7 +489,7 @@ public final class ItemContainer {
 		}
 	}
 
-	public boolean hasSpaceFor(ItemContainer container) {
+	public boolean hasSpaceFor(Inventory container) {
 		for (int i = 0; i < container.getSize(); i++) {
 			Item item = container.get(i);
 			if (item != null) {

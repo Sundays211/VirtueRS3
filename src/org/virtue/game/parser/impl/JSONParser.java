@@ -39,7 +39,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.inv.ItemContainer;
+import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.parser.Parser;
@@ -160,7 +160,7 @@ public class JSONParser implements Parser {
 				JsonArray backpack = new JsonArray();
 				JsonObject bp = new JsonObject();
 				for (ContainerState state : ContainerState.values()) {
-					ItemContainer container = invStore.getContainer(state);
+					Inventory container = invStore.getContainer(state);
 					for (int slot = 0; slot <  container.getItems().length; slot++) {
 						Item item = container.getItems()[slot];
 						if (item == null) {

@@ -773,6 +773,12 @@ public interface ScriptAPI {
 	 * @param entity
 	 */
 	public void stop (Entity entity);
+	
+	/**
+	 * Interupts all currently running delayed tasks on the entity
+	 * @param entity
+	 */
+	public void interrupt (Entity entity);
 
 	/**
 	 * Checks whether the player is currently unable to move

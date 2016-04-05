@@ -91,7 +91,7 @@ public class ObjTypeList implements Iterable<ObjType> {
 			Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG_ITEM.getArchiveId()));
 			instance.referenceTable = ReferenceTable.decode(container.getData());
 			int groupCount = instance.referenceTable.size() - 1;
-			instance.num = (groupCount * Js5ConfigGroup.ITEMTYPE.getGroupSize()) + instance.referenceTable.getEntry(groupCount).size();
+			instance.num = (groupCount * Js5ConfigGroup.OBJTYPE.getGroupSize()) + instance.referenceTable.getEntry(groupCount).size();
 			logger.info("Found "+instance.num+" objtypes definitions.");
 		} catch (IOException ex) {
 			logger.error("Failed to load objtypes definitions", ex);
@@ -182,8 +182,8 @@ public class ObjTypeList implements Iterable<ObjType> {
 		if (id < 0 || id >= num) {
 			return false;
 		}
-		int groupId = Js5ConfigGroup.ITEMTYPE.getClientGroupId(id);
-		int fileId = Js5ConfigGroup.ITEMTYPE.getClientFileId(id);
+		int groupId = Js5ConfigGroup.OBJTYPE.getClientGroupId(id);
+		int fileId = Js5ConfigGroup.OBJTYPE.getClientFileId(id);
 		return referenceTable.getEntry(groupId, fileId) != null;
 	}
 	
@@ -224,8 +224,8 @@ public class ObjTypeList implements Iterable<ObjType> {
 	}
 	
 	private ByteBuffer getData (int id) {
-		int groupId = Js5ConfigGroup.ITEMTYPE.getClientGroupId(id);
-		int fileId = Js5ConfigGroup.ITEMTYPE.getClientFileId(id);
+		int groupId = Js5ConfigGroup.OBJTYPE.getClientGroupId(id);
+		int fileId = Js5ConfigGroup.OBJTYPE.getClientFileId(id);
 		try {
 			if (referenceTable.getEntry(groupId, fileId) == null) {
 				logger.warn("Tried to load objtype "+id+" which does not exist!");

@@ -219,7 +219,7 @@ public class Appearance {
 		}
 		update.putByte(render.equals(Render.NPC) && npcId >= 0 ? 1 : 0);
 		if (render.equals(Render.NPC) && npcId >= 0) {
-			NpcType npcType = NpcTypeList.list(npcId);
+			NpcType npcType = NpcTypeList.getInstance().list(npcId);
 			update.putShort(npcType.anInt8466);
 			update.putShort(npcType.anInt8483);
 			update.putShort(npcType.anInt8484);
@@ -665,7 +665,7 @@ public class Appearance {
 
 	public void setNPCId(int id) {
 		this.npcId = id;
-		setBAS(NpcTypeList.list(id).renderTypeID);
+		setBAS(NpcTypeList.getInstance().list(id).renderTypeID);
 	}
 
 	public int getRenderNpc() {

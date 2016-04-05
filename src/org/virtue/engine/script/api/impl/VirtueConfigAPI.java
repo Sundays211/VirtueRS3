@@ -25,18 +25,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.virtue.ConfigProvider;
 import org.virtue.config.db.DBIndexProvider;
 import org.virtue.config.db.DBTableIndex;
 import org.virtue.config.db.dbrowtype.DBRowType;
-import org.virtue.config.db.dbrowtype.DBRowTypeList;
 import org.virtue.config.db.dbtabletype.DBTableType;
-import org.virtue.config.db.dbtabletype.DBTableTypeList;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
-import org.virtue.config.paramtype.ParamTypeList;
 import org.virtue.config.seqtype.SeqType;
 import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructType;
@@ -50,6 +48,12 @@ import org.virtue.engine.script.api.ConfigAPI;
  * @since 01/03/2016
  */
 public class VirtueConfigAPI implements ConfigAPI {
+	
+	private ConfigProvider configProvider;
+	
+	public VirtueConfigAPI (ConfigProvider configProvider) {
+		this.configProvider = configProvider;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ConfigAPI#lookupDbRowId(int, int)
@@ -84,8 +88,8 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public List<Object> getDbFieldValues(int dbTableId, int dbRowId, int columnId) {
-		DBRowType dbRow = DBRowTypeList.list(dbRowId);
-		DBTableType dbTable = DBTableTypeList.list(dbTableId);
+		DBRowType dbRow = configProvider.getDBRowTypes().list(dbRowId);
+		DBTableType dbTable = configProvider.getDBTableTypes().list(dbTableId);
 		Object[] values = dbRow.getFieldValues(columnId);
 		if (values == null && dbTable.defaultValues[columnId] != null) {
 			values = dbTable.defaultValues[columnId];
@@ -280,7 +284,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
-		ParamType paramType = ParamTypeList.list(paramTypeId);
+		ParamType paramType = configProvider.getParamTypes().list(paramTypeId);
 		if (paramType == null) {
 			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
 		}
@@ -300,7 +304,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 		if (structType == null) {
 			throw new IllegalArgumentException("Invalid struct: "+structTypeId);
 		}
-		ParamType paramType = ParamTypeList.list(paramTypeId);
+		ParamType paramType = configProvider.getParamTypes().list(paramTypeId);
 		if (paramType == null) {
 			throw new IllegalArgumentException("Invalid param type: "+paramTypeId);
 		}
@@ -316,7 +320,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int seqLength(int seqTypeId) {
-		SeqType seqType = SeqTypeList.list(seqTypeId);
+		SeqType seqType = SeqTypeList.getInstance().list(seqTypeId);
 		if (seqType == null) {
 			throw new IllegalArgumentException("Invalid seqTypeId: "+seqTypeId);
 		}

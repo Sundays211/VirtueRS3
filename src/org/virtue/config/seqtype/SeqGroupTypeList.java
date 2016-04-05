@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.cache.def.ConfigDecoder;
+import org.virtue.config.ConfigDecoder;
 import org.virtue.config.Js5ConfigGroup;
 
 /**
@@ -38,20 +38,10 @@ public class SeqGroupTypeList extends ConfigDecoder<SeqGroupType> {
 	 * The {@link Logger} instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(SeqGroupTypeList.class);
-	
-	private static SeqGroupTypeList instance;
-	
-	public static void init (Archive archive, ReferenceTable configTable) {
-		instance = new SeqGroupTypeList(configTable, archive);
-		logger.info("Found "+instance.getCount()+" seqgrouptype definitions.");
-	}
-	
-	public static SeqGroupTypeList getInstance () {
-		return instance;
-	}
 
-	private SeqGroupTypeList(ReferenceTable configTable, Archive archive) {
+	public SeqGroupTypeList(ReferenceTable configTable, Archive archive) {
 		super(configTable, archive, Js5ConfigGroup.SEQGROUPTYPE, SeqGroupType.class);
+		logger.info("Found "+getCount()+" seqgrouptype definitions.");
 	}
 
 }

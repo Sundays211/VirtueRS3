@@ -71,15 +71,16 @@ var listen = function(scriptManager) {
 
 var CraftProcess = {
 		openInterface : function (player, productId, category, amount, delayPerItem) {
+			api.closeOverlaySub(player, 1018, false);
 			api.setVarp(player, 1175, productId);
 			api.setVarp(player, 1169, category);//enum 6816 maps categories -> names
-			api.openOverlaySub(player, 1018, 1251, false);
 			api.setVarc(player, 2227, delayPerItem);//Time per item
 			api.setVarc(player, 2228, amount);//Total products
 			api.setVarc(player, 2229, amount);//Remaining products
 			
 			api.setVarp(player, 1176, 0);//Xp received
 			api.setVarp(player, 1177, 0);//Secondary skill xp received
+			api.openOverlaySub(player, 1018, 1251, false);
 		},
 		startCrafting : function (player, amount, animation, successText) {
 			var productId = api.getVarp(player, 1175);

@@ -31,6 +31,7 @@ import java.net.ProtocolException;
 import java.util.List;
 
 import org.virtue.Constants;
+import org.virtue.Virtue;
 import org.virtue.game.entity.player.GameState;
 import org.virtue.game.entity.player.LoginDispatcher;
 import org.virtue.game.entity.player.Player;
@@ -156,7 +157,7 @@ public class CreationDecoder extends ByteToMessageDecoder {
 		Player player = new Player(ctx.channel(), new ISAACCipher(serverKeys), new ISAACCipher(xteaKey));
 		player.setGameState(GameState.CREATION);
 		player.setPrivilgeLevel(PrivilegeLevel.PLAYER);
-		player.initialize(false);
+		player.initialize(false, Virtue.getInstance().getConfigProvider());
 		ctx.channel().writeAndFlush(Unpooled.buffer(1).writeByte(2));
 		ctx.channel().pipeline().remove(this);
 		ctx.channel().pipeline().addFirst("decoder", new ProtocolDecoder(player.getDecodingCipher()));

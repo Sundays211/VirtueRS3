@@ -37,13 +37,13 @@ var BackpackOpenListener = Java.extend(Java.type('org.virtue.engine.script.liste
 		api.setWidgetEvents(player, 1473, 34, 0, 27, 15302030);
 		api.sendInv(player, Inv.BACKPACK);
 		api.sendInv(player, Inv.MONEY_POUCH);
-		MoneyPouch.updateCoins(player);
 		if (api.getVarBit(player, 30224) != 1 
 				&& api.getBaseLevel(player, Stat.SMITHING) > 80 
 				&& api.getBaseLevel(player, Stat.CRAFTING) > 80
 				&& api.getBaseLevel(player, Stat.DIVINATION) > 80) {
 			api.setVarBit(player, 30224, 1);
 		}
+		MoneyPouch.updateCoins(player);
 	}
 });
 

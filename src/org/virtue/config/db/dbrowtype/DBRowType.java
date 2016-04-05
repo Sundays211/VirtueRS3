@@ -12,7 +12,7 @@ public class DBRowType implements ConfigType {
 	ScriptVarType[][] dataTypes;
 	private int id;
 	
-	public DBRowType (int id) {
+	public DBRowType (int id, DBRowTypeList list) {
 		this.id = id;
 	}
 	
@@ -43,6 +43,7 @@ public class DBRowType implements ConfigType {
 		}
 	}
 
+	@Override
 	public void decode(ByteBuffer buffer) {
 		for (;;) {
 			int code = buffer.get() & 0xff;

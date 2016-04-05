@@ -55,33 +55,38 @@ var Disassembly = {
 			return this.lookupCategory(category) !== undefined;
 		},
 		startDisassembly : function (player, item, slot) {
+			api.interrupt(player);
 			if (!this.canDisassemble(item)) {
 				api.sendMessage(player, "You can't disassemble that item (not yet implemented)");
 				return;
 			}
 			var itemId = configApi.objUncert(api.getId(item));
 			var total = Math.min(60, api.itemTotal(player, Inv.BACKPACK, api.getId(item)));
-			CraftProcess.openInterface(player, itemId, 10740, total, 2);
+			api.setVarc(player, 5123, itemId);
+			api.setVarc(player, 5124, 1);
+			CraftProcess.openInterface(player, 36365, 10740, total, 2);
 			var remaining = total;
 			var that = this;
 			api.sendMessage(player, "Disassembling: "+configApi.objName(itemId));
+			api.setSpotAnim(player, 1, 6003);
+			api.runAnimation(player, 27997);
 			var xp = that.calculateExperience(itemId);
+			var onInterrupt = function () {
+				api.closeOverlaySub(player, 1018, true);
+			}
 			var disassembleItem = function () {
 				that.addMaterials(player, itemId);
 				api.delItem(player, Inv.BACKPACK, api.getId(item), 1);
 				remaining--;
 				CraftProcess.setRemaining(player, remaining);
-				api.addExperience(player, Stat.INVENTION, xp, true);
-				api.setSpotAnim(player, 1, 6003);
-				api.runAnimation(player, 27997);
+				api.addExperience(player, Stat.INVENTION, xp, true);				
 				if (remaining > 0) {
-					delayFunction(player, 2, disassembleItem);
+					api.setSpotAnim(player, 1, 6003);
+					api.runAnimation(player, 27997);
+					delayFunction(player, 2, disassembleItem, true, onInterrupt);
 				}
 			};
-			delayFunction(player, 2, disassembleItem, true, function () {
-				api.closeOverlaySub(player, 1018, true);
-			});
-			
+			delayFunction(player, 2, disassembleItem, true, onInterrupt);			
 		},
 		
 		/**

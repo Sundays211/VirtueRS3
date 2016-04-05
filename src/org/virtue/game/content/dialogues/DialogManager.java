@@ -161,7 +161,7 @@ public class DialogManager {
 		ModelType modelType = ModelType.PLAYER_HEAD_SELF;
 		switch (type) {
 		case NPC_L:
-			name = NpcTypeList.list(entityID).name;
+			name = NpcTypeList.getInstance().list(entityID).name;
 			modelType = ModelType.NPC_HEAD;
 		case PLAYER_L:
 			player.getDispatcher().sendWidgetText(1191, 2, name);
@@ -172,7 +172,7 @@ public class DialogManager {
 			player.getWidgets().openOverlaySub(WidgetManager.DIALOG_OVERLAY_SUB, 1191, false);//Send chat dialog
 			break;
 		case NPC_R:
-			name = NpcTypeList.list(entityID).name;
+			name = NpcTypeList.getInstance().list(entityID).name;
 			modelType = ModelType.NPC_HEAD;
 		case PLAYER_R://1184
 			player.getDispatcher().sendWidgetText(1184, 11, name);

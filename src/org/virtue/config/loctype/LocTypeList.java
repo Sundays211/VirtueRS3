@@ -72,11 +72,21 @@ public class LocTypeList extends CacheLoader<Integer, LocType> {
 			logger.error("Failed to load loctype definitions", ex);
 		}
 	}
+	
+	/**
+	 * Returns The {@link LocTypeList} Instance
+	 */
+	public static LocTypeList getInstance() {
+		if (instance == null) {
+			throw new IllegalStateException("LocTypeList not yet initialised. init() must be called before this method.");
+		}
+		return instance;
+	}
 
-	public static LocType list (int id) {
-		synchronized (instance) {
+	public LocType list (int id) {
+		synchronized (this) {
 			try {
-				return instance.cachedLocs.get(id);
+				return cachedLocs.get(id);
 			} catch (ExecutionException ex) {
 				logger.error("Error loading loctype definition "+id, ex);
 				return null;
@@ -90,7 +100,7 @@ public class LocTypeList extends CacheLoader<Integer, LocType> {
 	 * @param baseID The ID of the base location
 	 * @return The transformed object
 	 */
-	public static LocType getTransformed (Player player, int baseID) {
+	public LocType getTransformed (Player player, int baseID) {
 		int newID = -1;
 		int slot = -1;
 		LocType base = list(baseID);

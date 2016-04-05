@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.cache.def;
+package org.virtue.config;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -29,8 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.config.ConfigType;
-import org.virtue.config.Js5ConfigGroup;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -80,9 +78,6 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 	private Js5ConfigGroup configGroup;
 	private Class<? extends ConfigType> configClass;
 
-	/**
-	 * 
-	 */
 	public ConfigDecoder(ReferenceTable configTable, Archive archive, Js5ConfigGroup group, Class<? extends ConfigType> configClass) {
 		this.referenceTable = configTable;
 		this.dataArchive = archive;
