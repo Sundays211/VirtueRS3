@@ -6,13 +6,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.VarTypeList;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.dialogues.InputEnteredHandler;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.var.VarPlayerTypeList;
 
 public class CommandManager {
 
@@ -151,7 +152,8 @@ public class CommandManager {
 					sendCommandResponse(player, "Usage: setvarp {id} {value}", console);
 					return true;
 				}
-				VarType varType = VarPlayerTypeList.getInstance().list(Integer.parseInt(args[0]));
+				VarTypeList varTypeList = Virtue.getInstance().getConfigProvider().getVarTypes(VarDomainType.PLAYER);
+				VarType varType = varTypeList.list(Integer.parseInt(args[0]));
 				if (varType == null) {
 					throw new IllegalArgumentException("Invalid varp id: "+Integer.parseInt(args[0]));
 				}

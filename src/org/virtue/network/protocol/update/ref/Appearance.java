@@ -2,13 +2,12 @@ package org.virtue.network.protocol.update.ref;
 
 import java.util.Arrays;
 
+import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
-import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
-import org.virtue.config.structtype.StructTypeList;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
@@ -498,11 +497,11 @@ public class Appearance {
 	}
 
 	private int getHatHairStyle (int baseStyle, boolean isFaceMask) {
-		EnumType lookup = EnumTypeList.list(Gender.MALE.equals(gender) ? MALE_HAIR_SLOT_LOOKUP : FEMALE_HAIR_SLOT_LOOKUP);
+		EnumType lookup = Virtue.getInstance().getConfigProvider().getEnumTypes().list(Gender.MALE.equals(gender) ? MALE_HAIR_SLOT_LOOKUP : FEMALE_HAIR_SLOT_LOOKUP);
 		int slot = lookup.getValueInt(baseStyle);
-		EnumType structLookup = EnumTypeList.list(Gender.MALE.equals(gender)? MALE_HAIR_STRUCT_LOOKUP : FEMALE_HAIR_STRUCT_LOOKUP);
+		EnumType structLookup = Virtue.getInstance().getConfigProvider().getEnumTypes().list(Gender.MALE.equals(gender)? MALE_HAIR_STRUCT_LOOKUP : FEMALE_HAIR_STRUCT_LOOKUP);
 		int structID = structLookup.getValueInt(slot);
-		return StructTypeList.list(structID).getParam(isFaceMask ? HAIR_WITH_FACE_MASK_PARAM : HAIR_WITH_HAT_PARAM, -1);
+		return Virtue.getInstance().getConfigProvider().getStructTypes().list(structID).getParam(isFaceMask ? HAIR_WITH_FACE_MASK_PARAM : HAIR_WITH_HAT_PARAM, -1);
 	}
 
 	/**

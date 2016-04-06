@@ -21,12 +21,16 @@
  */
 package org.virtue.config.vartype.bit;
 
+import java.util.EnumMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.config.ConfigDecoder;
 import org.virtue.config.Js5ConfigGroup;
+import org.virtue.config.vartype.VarDomainType;
+import org.virtue.config.vartype.VarTypeList;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,8 +46,11 @@ public class VarBitTypeList extends ConfigDecoder<VarBitType> {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(VarBitTypeList.class);
 	
-	public VarBitTypeList(ReferenceTable configTable, Archive archive) {
+	protected EnumMap<VarDomainType, VarTypeList> listContainer;
+	
+	public VarBitTypeList(ReferenceTable configTable, Archive archive, EnumMap<VarDomainType, VarTypeList> listContainer) {
 		super(configTable, archive, Js5ConfigGroup.VAR_BIT, VarBitType.class);
+		this.listContainer = listContainer;
 		logger.info("Found "+getCapacity()+" varBitType definitions.");
 	}
 }

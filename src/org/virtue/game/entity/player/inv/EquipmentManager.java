@@ -27,7 +27,6 @@ import java.util.Set;
 
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
-import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.clans.ClanSettingsAPI;
@@ -424,7 +423,7 @@ public class EquipmentManager {
 			short[] clanTextures = new short[2];
 			int logo1slot = clanSettings.getVarBitValue(player.getClanHash(), varBitTypeList.list(VarKey.ClanSetting.LOGO_1_SLOT));
 			int logo2slot = clanSettings.getVarBitValue(player.getClanHash(), varBitTypeList.list(VarKey.ClanSetting.LOGO_2_SLOT));
-			EnumType textures = EnumTypeList.list(3685);
+			EnumType textures = Virtue.getInstance().getConfigProvider().getEnumTypes().list(3685);
 			int logo1 = textures.getValueInt(logo1slot);
 			int logo2 = textures.getValueInt(logo2slot);
 			clanTextures[0] = logo1 == -1 ? 735 : (short) logo1;

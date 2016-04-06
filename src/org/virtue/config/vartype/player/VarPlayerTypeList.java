@@ -19,34 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.config.enumtype;
-
-import java.io.IOException;
+package org.virtue.config.vartype.player;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.cache.Cache;
-import org.virtue.config.ExternalConfigDecoder;
-import org.virtue.config.Js5Archive;
-import org.virtue.config.Js5ConfigGroup;
+import org.virtue.cache.Archive;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.config.vartype.VarDomainType;
+import org.virtue.config.vartype.VarTypeList;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 19/11/2014
+ * @since 25/12/2014
  */
-public class EnumTypeList extends ExternalConfigDecoder<EnumType> {
+public class VarPlayerTypeList extends VarTypeList {
 
 	/**
 	 * The {@link Logger} instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(EnumTypeList.class);
-
-	public EnumTypeList(Cache cache) throws IOException {
-		super(cache, Js5Archive.CONFIG_ENUM, Js5ConfigGroup.ENUMTYPE, EnumType.class);
-		logger.info("Found "+getCapacity()+" enumtype definitions.");
+	private static Logger logger = LoggerFactory.getLogger(VarPlayerTypeList.class);
+	
+	public VarPlayerTypeList(ReferenceTable configTable, Archive archive, VarDomainType domain) {
+		super(configTable, archive, domain, VarPlayerType.class);
+		logger.info("Found "+getCapacity()+" "+domain.getJs5GroupID()+" definitions.");
 	}
-
 }

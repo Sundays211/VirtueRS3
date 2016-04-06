@@ -30,9 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
-import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.structtype.StructType;
-import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
@@ -450,12 +448,13 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 		if (settings == null) {
 			return;//Clan does not exist
 		}
-		EnumType allBroadcasts = EnumTypeList.list(8660);
+		
+		EnumType allBroadcasts = Virtue.getInstance().getConfigProvider().getEnumTypes().list(8660);
 		if (broadcastType < 0 || broadcastType >= allBroadcasts.getSize()) {
 			logger.warn("Invalid broadcast send. ClanHash="+clanHash+", type="+broadcastType+", find="+Arrays.toString(find)+", replace="+Arrays.toString(replace));
 			return;//Invalid broadcast
 		}
-		StructType broadcastData = StructTypeList.list(allBroadcasts.getValueInt(broadcastType));
+		StructType broadcastData = Virtue.getInstance().getConfigProvider().getStructTypes().list(allBroadcasts.getValueInt(broadcastType));
 		if (broadcastData == null) {
 			logger.warn("Invalid broadcast send. ClanHash="+clanHash+", type="+broadcastType+", find="+Arrays.toString(find)+", replace="+Arrays.toString(replace));
 			return;//Invalid broadcast

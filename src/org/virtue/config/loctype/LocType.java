@@ -95,9 +95,9 @@ public class LocType implements ConfigType {
     public boolean allowInteract = false;//aBool7399
     public int supportItems = -1;
     public int anInt7425 = 0;
-    public int transVarBit = -1;
-    public int transVar = -1;
-    public int[] transforms;
+    public int multiLocVarbit = -1;
+    public int multiLocVarp = -1;
+    public int[] multiLocs;
     public int ambientSoundId = -1;
     public int ambientSoundHearDistance = 0;
     public int anInt7374 = 0;
@@ -261,24 +261,24 @@ public class LocType implements ConfigType {
 		    } else if (opcode == 75) {
 		    	supportItems = buffer.get() & 0xff;
 		    } else if (77 == opcode || 92 == opcode) {
-		    	transVarBit = buffer.getShort() & 0xffff;
-				if (transVarBit == 65535) {
-				    transVarBit = -1;
+		    	multiLocVarbit = buffer.getShort() & 0xffff;
+				if (multiLocVarbit == 65535) {
+					multiLocVarbit = -1;
 				}
-				transVar = buffer.getShort() & 0xffff;
-				if (65535 == transVar) {
-				    transVar = -1;
+				multiLocVarp = buffer.getShort() & 0xffff;
+				if (65535 == multiLocVarp) {
+					multiLocVarp = -1;
 				}
 				int i_33_ = -1;
 				if (opcode == 92) {
 				    i_33_ = ByteBufferUtils.getSmartInt(buffer);
 				}
 				int count = buffer.get() & 0xff;
-				transforms = new int[count + 2];
+				multiLocs = new int[count + 2];
 				for (int i_35_ = 0; i_35_ <= count; i_35_++) {
-				    transforms[i_35_] = ByteBufferUtils.getSmartInt(buffer);
+					multiLocs[i_35_] = ByteBufferUtils.getSmartInt(buffer);
 				}
-				transforms[count + 1] = i_33_;
+				multiLocs[count + 1] = i_33_;
 		    } else if (78 == opcode) {
 				ambientSoundId = buffer.getShort() & 0xffff;
 				ambientSoundHearDistance = buffer.get() & 0xff;
@@ -436,8 +436,27 @@ public class LocType implements ConfigType {
 
 	@Override
 	public void postDecode() {
-		// TODO Auto-generated method stub
-		
+		if (interactable == -1) {
+			interactable = 0;
+		    if (nodeTypes != null && 1 == nodeTypes.length && (nodeTypes[0] == 10)) {
+		    	interactable = 1;
+		    }
+		    for (int slot = 0; slot < 5; slot++) {
+				if (null != op[slot]) {
+					interactable = 1;
+				    break;
+				}
+		    }
+		}
+		if (-1 == supportItems) {
+			supportItems = (clipType != 0 ? 1 : 0);
+		}
+		if (hasAnimation || multiLocs != null) {
+			aBool7421 = true;
+		}
+		if (allowInteract) {
+			clipType = 0;
+		}
 	}
     
     public boolean hasMesh (int mesh) {

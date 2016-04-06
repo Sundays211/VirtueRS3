@@ -38,6 +38,7 @@ import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjType;
+import org.virtue.config.vartype.VarDomainType;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.MoneyPouch;
@@ -357,7 +358,7 @@ public class Player extends Entity {
 		
 		@SuppressWarnings("unchecked")
 		Map<Integer, Object> varValues = (Map<Integer, Object>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(getUsername(), ParserDataType.VAR);
-		this.var = new VarRepository(this, varValues, configProvider.getVarBitTypes());
+		this.var = new VarRepository(this, varValues, configProvider.getVarTypes(VarDomainType.PLAYER), configProvider.getVarBitTypes());
 		this.chat = new ChatManager(this);
 		this.dialogs = new DialogManager(this);
 		this.widgets = new WidgetManager(this);

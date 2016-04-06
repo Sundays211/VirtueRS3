@@ -39,7 +39,6 @@ import org.virtue.network.event.buffer.OutboundBuffer;
 public class LoginDispatcher {
 
 	public static void onAccountCreation(Player player) {
-		player.getVars().setCreation();
 		player.getVars().sendAll();
 		player.getVars().setVarValueInt(27,-1);
 		player.getVars().setVarValueInt(85,-1);

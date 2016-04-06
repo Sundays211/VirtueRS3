@@ -32,7 +32,6 @@ import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
-import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.npctype.NpcTypeList;
@@ -40,7 +39,7 @@ import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.structtype.StructType;
-import org.virtue.config.structtype.StructTypeList;
+import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
@@ -66,7 +65,6 @@ import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.Stat;
-import org.virtue.game.entity.player.var.VarPlayerTypeList;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
@@ -489,7 +487,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 
 	@Override
 	public Object getEnumValue(int enumId, int key) {
-		EnumType enumType = EnumTypeList.list(enumId);
+		EnumType enumType = configProvider.getEnumTypes().list(enumId);
 		if (enumType == null) {
 			throw new IllegalArgumentException("Invalid enum: "+enumId);
 		}
@@ -504,13 +502,13 @@ public class VirtueScriptAPI implements ScriptAPI {
 
 	@Override
 	public int getEnumSize(int enumId) {
-		EnumType enumType = EnumTypeList.list(enumId);
+		EnumType enumType = configProvider.getEnumTypes().list(enumId);
 		return enumType == null ? 0 : enumType.getSize();
 	}
 
 	@Override
 	public Object getStructParam(int structId, int paramTypeId) throws IllegalArgumentException {
-		StructType structType = StructTypeList.list(structId);
+		StructType structType = configProvider.getStructTypes().list(structId);
 		if (structType == null) {
 			throw new IllegalArgumentException("Invalid struct: "+structId);
 		}
@@ -546,7 +544,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public LocType getLocType(Player player, int baseID) {
-		return configProvider.getLocTypes().getTransformed(player, baseID);
+		return configProvider.getLocTypes().getMultiLoc(player.getVars(), configProvider, baseID);
 	}
 
 	/* (non-Javadoc)
@@ -969,7 +967,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public Object getVarp(Player player, int key) {	
-		VarType varType = VarPlayerTypeList.getInstance().list(key);
+		VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(key);
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+key);
 		}
@@ -982,7 +980,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setVarp(Player player, int key, Object value) {
-		VarType varType = VarPlayerTypeList.getInstance().list(key);
+		VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(key);
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+key);
 		}
@@ -1000,7 +998,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void incrementVarp(Player player, int key, int value) {
-		VarType varType = VarPlayerTypeList.getInstance().list(key);
+		VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(key);
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+key);
 		}
@@ -1048,7 +1046,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		try {
 			switch (type.getBaseVarDomain()) {
 			case PLAYER:
-				player.getVars().setVarpBit(type, value);
+				player.getVars().setVarBitValue(type, value);
 				return true;
 			case CLIENT:
 				player.getDispatcher().sendVarcBit(key, value);
@@ -1083,26 +1081,32 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (type == null) {
 			throw new IllegalArgumentException("Invalid VarBit key: "+key);
 		}
-		switch (type.getBaseVarDomain()) {
-		case PLAYER:
-			player.getVars().incrementVarpBit(key, value);
-			return;
-		case CLAN_SETTING:
-			ClanSettingsAPI settings = Virtue.getInstance().getClans().getSettings();
-			settings.setVarBitValue(player.getClanHash(), player.getChat(), type, settings.getVarBitValue(player.getClanHash(), type)+value);
-			return;
-		case CLIENT:
-			throw new IllegalArgumentException("The value for Client Variables is not stored on the server end (varbit="+key+")");
-		case CLAN:
-		case DOMAIN10:
-		case DOMAIN8:
-		case PLAYER_GROUP:
-		case NPC:
-		case OBJECT:
-		case REGION:
-		case WORLD:
-		default:
-			throw new UnsupportedOperationException("Base type "+type.getBaseVarDomain()+" is not yet supported! (varbit="+key+")");
+		try {
+			switch (type.getBaseVarDomain()) {
+			case PLAYER:
+				player.getVars().incrementVarBit(type, value);
+				return;
+			case CLAN_SETTING:
+				ClanSettingsAPI settings = Virtue.getInstance().getClans().getSettings();
+				settings.setVarBitValue(player.getClanHash(), player.getChat(), type, settings.getVarBitValue(player.getClanHash(), type)+value);
+				return;
+			case CLIENT:
+				throw new IllegalArgumentException("The value for Client Variables is not stored on the server end (varbit="+key+")");
+			case CLAN:
+			case DOMAIN10:
+			case DOMAIN8:
+			case PLAYER_GROUP:
+			case NPC:
+			case OBJECT:
+			case REGION:
+			case WORLD:
+			default:
+				throw new UnsupportedOperationException("Base type "+type.getBaseVarDomain()+" is not yet supported! (varbit="+key+")");
+			}
+		} catch (VarBitOverflowException e) {
+			if (player.getPrivilegeLevel().getRights() >= 2) {
+				sendMessage(player, "Unable to set varbit "+key+": "+e.getMessage());
+			}
 		}
 	}
 

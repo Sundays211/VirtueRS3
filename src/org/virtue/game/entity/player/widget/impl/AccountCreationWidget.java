@@ -23,10 +23,10 @@ package org.virtue.game.entity.player.widget.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.structtype.StructType;
-import org.virtue.config.structtype.StructTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.widget.Widget;
@@ -189,28 +189,29 @@ public class AccountCreationWidget extends Widget {
 	}
 	
 	private void setColour (Player player, int slot) {
+		EnumTypeList enumTypeList = Virtue.getInstance().getConfigProvider().getEnumTypes();
 		switch (player.getDialogs().getStep()) {
 		case 0://Skin colour
-			setColour(player, SKIN_COLOURS, EnumTypeList.list(SKIN_COLOUR_SLOTS).getValueInt(slot), 0);
+			setColour(player, SKIN_COLOURS, enumTypeList.list(SKIN_COLOUR_SLOTS).getValueInt(slot), 0);
 			break;
 		case 1://Hair colour
 		case 5:
-			setColour(player, HAIR_COLOURS, EnumTypeList.list(HAIR_COLOUR_SLOTS).getValueInt(slot), 1);
+			setColour(player, HAIR_COLOURS, enumTypeList.list(HAIR_COLOUR_SLOTS).getValueInt(slot), 1);
 			break;
 		case 2://Torso
-			setColour(player, BODY_COLOURS, EnumTypeList.list(BODY_COLOUR_SLOTS).getValueInt(slot), 2);
+			setColour(player, BODY_COLOURS, enumTypeList.list(BODY_COLOUR_SLOTS).getValueInt(slot), 2);
 			break;
 		case 3://Legs
-			setColour(player, BODY_COLOURS, EnumTypeList.list(BODY_COLOUR_SLOTS).getValueInt(slot), 3);
+			setColour(player, BODY_COLOURS, enumTypeList.list(BODY_COLOUR_SLOTS).getValueInt(slot), 3);
 			break;
 		case 4://Footware
-			setColour(player, FOOTWARE_COLOURS, EnumTypeList.list(FOOTWARE_COLOUR_SLOTS).getValueInt(slot), 4);
+			setColour(player, FOOTWARE_COLOURS, enumTypeList.list(FOOTWARE_COLOUR_SLOTS).getValueInt(slot), 4);
 			break;
 		}
 	}
 	
 	private void setColour (Player player, int enumID, int slot, int type) {
-		EnumType enumType = EnumTypeList.list(enumID);
+		EnumType enumType = Virtue.getInstance().getConfigProvider().getEnumTypes().list(enumID);
 		int newColour = enumType.getValueInt(slot);
 		if (newColour != -1) {
 			switch (type) {
@@ -236,10 +237,10 @@ public class AccountCreationWidget extends Widget {
 	}
 	
 	private void setStyle (Player player, int enumID, int slot, int type) {
-		EnumType enumType = EnumTypeList.list(enumID);
+		EnumType enumType = Virtue.getInstance().getConfigProvider().getEnumTypes().list(enumID);
 		int newStyle;
 		if (type == 1) {
-			StructType struct = StructTypeList.list(enumType.getValueInt(slot));
+			StructType struct = Virtue.getInstance().getConfigProvider().getStructTypes().list(enumType.getValueInt(slot));
 			newStyle = (struct == null) ? -1 : struct.getParam(STYLE_PARAM, -1);
 		} else {
 			newStyle = enumType.getValueInt(slot);
@@ -252,7 +253,7 @@ public class AccountCreationWidget extends Widget {
 			case 2:
 				int setID = getSetByStyle(newStyle, 3, !player.getAppearance().isMale());
 				if (setID != -1) {
-					StructType set = StructTypeList.list(setID);
+					StructType set = Virtue.getInstance().getConfigProvider().getStructTypes().list(setID);
 					player.getAppearance().setTempStyle(2, set.getParam(1182, -1));
 					player.getAppearance().setTempStyle(3, set.getParam(1183, -1));
 					player.getAppearance().setTempStyle(4, set.getParam(1184, -1));
@@ -275,14 +276,14 @@ public class AccountCreationWidget extends Widget {
 	}
 	
 	private int getSetByStyle (int styleID, int styleSlot, boolean female) {
-		EnumType enumType = EnumTypeList.list(5735);
+		EnumType enumType = Virtue.getInstance().getConfigProvider().getEnumTypes().list(5735);
 		for (int slot = enumType.getSize() - 1; slot >= 0; slot--) {
 			int v6 = enumType.getValueInt(slot);
 			if (v6 != -1) {
-				StructType struct = StructTypeList.list(v6);
+				StructType struct = Virtue.getInstance().getConfigProvider().getStructTypes().list(v6);
 				int v7 = 0;
 				for (int setID = getSetStruct(struct, 0, female); setID != -1; setID = getSetStruct(struct, v7, female)) {
-					StructType setStyles = StructTypeList.list(setID);
+					StructType setStyles = Virtue.getInstance().getConfigProvider().getStructTypes().list(setID);
 					switch (styleSlot) {
 						case 3:
 							if (setStyles.getParam(1182, -1) == styleID) {

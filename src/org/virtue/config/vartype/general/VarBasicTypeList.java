@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,10 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.player.var;
+package org.virtue.config.vartype.general;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.virtue.cache.Archive;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
-import org.virtue.config.vartype.bit.VarBitType;
+import org.virtue.config.vartype.VarTypeList;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -30,30 +35,18 @@ import org.virtue.config.vartype.bit.VarBitType;
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 21/11/2015
+ * @since 6/04/2016
  */
-public interface VarDomain {
-	
-	public Object getVarValue (VarType varType);
-	
-	public long getVarValueLong (VarType varType);
-	
-	public int getVarValueInt (VarType varType);
-	
+public class VarBasicTypeList extends VarTypeList {
+
 	/**
-	 * Gets the vale of the specified var bit
-	 * @param type The var bit type
-	 * @return The value
+	 * The {@link Logger} instance
 	 */
-	public int getVarBitValue (VarBitType type);
-	
-	/**
-	 * Sets the value of the specified variable
-	 * @param varType The variable to set
-	 * @param value The value to set
-	 */
-	public void setVarValue (VarType varType, Object value);
-	
-	public void setVarValueInt (VarType varType, int value);
+	private static Logger logger = LoggerFactory.getLogger(VarBasicTypeList.class);
+
+	public VarBasicTypeList(ReferenceTable configTable, Archive archive, VarDomainType domain) {
+		super(configTable, archive, domain, VarType.class);		
+		logger.info("Found "+getCapacity()+" "+domain.getJs5GroupID()+" definitions.");
+	}
 
 }

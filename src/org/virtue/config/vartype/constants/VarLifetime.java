@@ -40,7 +40,7 @@ public enum VarLifetime {
     	return serialID;
     }
     
-	public static VarLifetime forSerialID (int id) {
+	public static VarLifetime getById (int id) {
 		for (VarLifetime key : values()) {
 			if (id == key.serialID) {
 				return key;

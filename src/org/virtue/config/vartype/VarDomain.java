@@ -19,34 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.config.enumtype;
+package org.virtue.config.vartype;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.virtue.cache.Cache;
-import org.virtue.config.ExternalConfigDecoder;
-import org.virtue.config.Js5Archive;
-import org.virtue.config.Js5ConfigGroup;
+import org.virtue.config.vartype.bit.VarBitOverflowException;
+import org.virtue.config.vartype.bit.VarBitType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
+ * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 19/11/2014
+ * @since 21/11/2015
  */
-public class EnumTypeList extends ExternalConfigDecoder<EnumType> {
-
+public interface VarDomain {
+	
+	public Object getVarValue (VarType varType);
+	
+	public long getVarValueLong (VarType varType);
+	
+	public int getVarValueInt (VarType varType);
+	
 	/**
-	 * The {@link Logger} instance
+	 * Gets the vale of the specified var bit
+	 * @param type The var bit type
+	 * @return The value
 	 */
-	private static Logger logger = LoggerFactory.getLogger(EnumTypeList.class);
-
-	public EnumTypeList(Cache cache) throws IOException {
-		super(cache, Js5Archive.CONFIG_ENUM, Js5ConfigGroup.ENUMTYPE, EnumType.class);
-		logger.info("Found "+getCapacity()+" enumtype definitions.");
-	}
+	public int getVarBitValue (VarBitType type);
+	
+	/**
+	 * Sets the value of the specified variable
+	 * @param varType The variable to set
+	 * @param value The value to set
+	 */
+	public void setVarValue (VarType varType, Object value);
+	
+	public void setVarValueInt (VarType varType, int value);
+	
+	public void setVarBitValue (VarBitType type, int value) throws VarBitOverflowException;
 
 }

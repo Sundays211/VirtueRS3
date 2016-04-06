@@ -24,7 +24,9 @@ package org.virtue.game.entity.player.var;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.virtue.config.vartype.VarDomain;
 import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
 
 /**
@@ -95,6 +97,15 @@ public class VarContainer implements VarDomain {
 	public void setVarValueInt(VarType varType, int value) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.config.vartype.VarDomain#setVarBitValue(org.virtue.config.vartype.bit.VarBitType, int)
+	 */
+	@Override
+	public void setVarBitValue(VarBitType type, int value) throws VarBitOverflowException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

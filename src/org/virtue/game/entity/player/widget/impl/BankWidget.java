@@ -462,28 +462,28 @@ public class BankWidget extends Widget {
 		}
 		switch (tab) {
 		case 2:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_2, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_2, amount);
 			return;
 		case 3:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_3, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_3, amount);
 			return;
 		case 4:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_4, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_4, amount);
 			return;
 		case 5:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_5, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_5, amount);
 			return;
 		case 6:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_6, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_6, amount);
 			return;
 		case 7:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_7, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_7, amount);
 			return;
 		case 8:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_8, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_8, amount);
 			return;
 		case 9:
-			player.getVars().incrementVarpBit(VarKey.Bit.BANK_TAB_9, amount);
+			player.getVars().incrementVarBit(VarKey.Bit.BANK_TAB_9, amount);
 			return;
 		}
 	}

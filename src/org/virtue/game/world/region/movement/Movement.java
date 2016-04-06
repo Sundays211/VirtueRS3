@@ -244,7 +244,11 @@ public class Movement {
 			//Bit of a hack, but it'll do until someone can figure out how to make the pathfinder stop at an adjacent tile.
 		}
 		addWalkSteps(path.getPoints());
-		destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
+		if (path.getPoints().isEmpty()) {
+			destination = entity.getCurrentTile();
+		} else {
+			destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
+		}
 		entity.queueUpdateBlock(new FaceDirectionBlock(location.getMiddleTile()));
 		return true;
 	}

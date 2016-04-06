@@ -24,8 +24,6 @@ package org.virtue.game.world.region;
 import org.virtue.Virtue;
 import org.virtue.config.loctype.LocType;
 import org.virtue.game.World;
-import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.node.Node;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
@@ -189,14 +187,6 @@ public class SceneLocation extends Node {
 	 */
 	public boolean distanceOption (OptionButton option) {
 		return OptionButton.SIX.equals(option);
-	}
-	
-	public void examine (Player player) {
-		LocType locType = Virtue.getInstance().getConfigProvider().getLocTypes().getTransformed(player, getID());
-		player.getDispatcher().sendGameMessage(locType.getDescription());
-		if (PrivilegeLevel.ADMINISTRATOR.equals(player.getPrivilegeLevel())) {
-			player.getDispatcher().sendGameMessage(this.toString());
-		}
 	}
 	
 	/**

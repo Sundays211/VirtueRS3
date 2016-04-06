@@ -168,7 +168,7 @@ public class NPC extends Entity {
 	}
 	
 	public NpcType getType (Player player) {
-		return NpcTypeList.getInstance().getTransformed(player, typeId);
+		return NpcTypeList.getInstance().getMultiNPC(player.getVars(), Virtue.getInstance().getConfigProvider(), typeId);
 	}
 	
 	public Direction getDirection () {

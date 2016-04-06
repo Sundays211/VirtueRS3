@@ -40,14 +40,7 @@ import org.virtue.utility.text.StringUtility;
  * @author Sundays211
  * @since 19/11/2014
  */
-public class EnumType implements ConfigType {
-	
-	public static EnumType load (ByteBuffer buffer, int id) {
-		EnumType enumType = new EnumType(id);		
-		enumType.decode(buffer);
-		return enumType;
-	}
-	
+public class EnumType implements ConfigType {	
 	private Map<Integer, Serializable> valueMap;
     HashMap<Object, int[]> reverseLookupMap;
     public ScriptVarType valueType;
@@ -58,7 +51,7 @@ public class EnumType implements ConfigType {
     int size = 0;
 	int id;
 	
-	public EnumType (int id) {
+	public EnumType (int id, EnumTypeList list) {
 		this.id = id;
 	}
 	

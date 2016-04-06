@@ -29,10 +29,10 @@ import java.util.Map;
 import org.virtue.ConfigProvider;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
+import org.virtue.config.vartype.VarDomain;
+import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitType;
-import org.virtue.game.entity.player.var.VarDomain;
-import org.virtue.game.entity.player.var.VarPlayerTypeList;
 
 /**
  * @author Sundays211
@@ -71,7 +71,7 @@ public class QuestType implements ConfigType {
     public boolean isStarted(VarDomain varDomain, ConfigProvider configProvider) {
         if (null != progressVarps) {
             for (int slot = 0; slot < progressVarps.length; slot++) {
-            	VarType varType = VarPlayerTypeList.getInstance().list(progressVarps[slot][0]);
+            	VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(progressVarps[slot][0]);
                 if (varDomain.getVarValueInt(varType) >= progressVarps[slot][1]) {
                     return true;
                 }
@@ -113,7 +113,7 @@ public class QuestType implements ConfigType {
     public boolean isFinished(VarDomain varDomain, ConfigProvider configProvider) {
         if (null != progressVarps) {
             for (int slot = 0; slot < progressVarps.length; slot++) {
-            	VarType varType = VarPlayerTypeList.getInstance().list(progressVarps[slot][0]);
+            	VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(progressVarps[slot][0]);
                 if (varDomain.getVarValueInt(varType) >= progressVarps[slot][2]) {
                     return true;
                 }
@@ -151,7 +151,7 @@ public class QuestType implements ConfigType {
         }
         if (varpRequirements != null) {
             for (int slot = 0; slot < varpRequirements.length; slot++) {
-            	VarType varType = VarPlayerTypeList.getInstance().list(varpRequirements[slot]);
+            	VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(varpRequirements[slot]);
                 int value = varDomain.getVarValueInt(varType);
                 if (value < minVarpValue[slot]
                         || value > maxVarpValue[slot]) {
@@ -188,11 +188,11 @@ public class QuestType implements ConfigType {
         return true;
     }
 
-    public boolean meetsVarpRequirement(VarDomain varDomain, int slot) {
+    public boolean meetsVarpRequirement(VarDomain varDomain, ConfigProvider configProvider, int slot) {
         if (null == varpRequirements || slot < 0 || slot >= varpRequirements.length) {
             return false;
         }
-    	VarType varType = VarPlayerTypeList.getInstance().list(varpRequirements[slot]);
+    	VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(varpRequirements[slot]);
         int value = varDomain.getVarValueInt(varType);
         if (value < minVarpValue[slot] || value > maxVarpValue[slot]) {
             return false;

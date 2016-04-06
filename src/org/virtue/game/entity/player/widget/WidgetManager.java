@@ -26,9 +26,7 @@ import java.util.Map;
 
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
-import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.structtype.StructType;
-import org.virtue.config.structtype.StructTypeList;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.entity.player.Player;
@@ -59,12 +57,12 @@ public class WidgetManager {
 	}
 	
 	public static int getOverlaySubHash (int hudSlot, int paramID) {
-		EnumType overlayEnum = EnumTypeList.list(OVERLAY_SUBS_ENUM);
+		EnumType overlayEnum = Virtue.getInstance().getConfigProvider().getEnumTypes().list(OVERLAY_SUBS_ENUM);
 		int structID = overlayEnum.getValueInt(hudSlot);
 		if (structID == -1) {
 			return -1;
 		}
-		StructType slotStruct = StructTypeList.list(structID);
+		StructType slotStruct = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		return slotStruct.getParam(paramID, -1);
 	}
 	
@@ -114,12 +112,12 @@ public class WidgetManager {
 	}
 	
 	public boolean openOverlaySub (int hudSlot, int widgetID, boolean alwaysOpen) {
-		EnumType overlayEnum = EnumTypeList.list(OVERLAY_SUBS_ENUM);
+		EnumType overlayEnum = Virtue.getInstance().getConfigProvider().getEnumTypes().list(OVERLAY_SUBS_ENUM);
 		int structID = overlayEnum.getValueInt(hudSlot);
 		if (structID == -1) {
 			return false;
 		}
-		StructType slotStruct = StructTypeList.list(structID);
+		StructType slotStruct = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		int hash = slotStruct.getParam(3505, -1);
 		if (hash == -1) {
 			return false;

@@ -380,7 +380,7 @@ public class ClanSettingsDelta {
 	
 	protected void setExtraSettingVarbit (VarBitType key, int value) {
 		SetExtraSettingVarbit entry = new SetExtraSettingVarbit();
-		entry.key = key.baseVarKey;
+		entry.key = key.baseVarId;
 		entry.value = value;
 		entry.startBit = key.getStartBit();
 		entry.endBit = key.getEndBit();

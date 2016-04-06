@@ -29,6 +29,7 @@ import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.event.BenchSitting;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
@@ -64,7 +65,11 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 				player.getDispatcher().sendConsoleMessage(
 						"<col=ff0000>Location " + context.getLocationID() + " clicked at " + tile + " does not exist!");
 			} else if (OptionButton.SIX.equals(context.getButton())) {
-				location.examine(player);
+				String desc = location.getLocType().getDescription();
+				player.getDispatcher().sendGameMessage(desc);
+				if (PrivilegeLevel.ADMINISTRATOR.equals(player.getPrivilegeLevel())) {
+					player.getDispatcher().sendGameMessage(location.toString());
+				}
 			} else if (location.distanceOption(context.getButton())) {
 				handleInteraction(player, location, context);				
 			} else {

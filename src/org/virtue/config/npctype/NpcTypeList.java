@@ -31,14 +31,18 @@ import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.ConfigProvider;
 import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.Js5ConfigGroup;
+import org.virtue.config.vartype.VarDomain;
+import org.virtue.config.vartype.VarDomainType;
+import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.game.entity.npc.CustomNpcData;
-import org.virtue.game.entity.player.Player;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -176,32 +180,26 @@ public class NpcTypeList {
 	private NpcTypeList() {
 		// Prevent direct instantiation
 	}
-
-	/**
-	 * Returns the npc type of a transformable npc
-	 * 
-	 * @param player
-	 *            The player to base the transformation off
-	 * @param baseID
-	 *            The ID of the base object
-	 * @return The transformed object
-	 */
-	public NpcType getTransformed(Player player, int baseID) {
+	
+	
+	public NpcType getMultiNPC(VarDomain domain, ConfigProvider configProvider, int baseID) {
 		int newID = -1;
 		int slot = -1;
 		NpcType base = list(baseID);
-		if (base == null || base.transforms == null) {
+		if (base == null || base.multiNPCs == null) {
 			return base;
 		}
-		if (base.transVar != -1) {
-			slot = player.getVars().getVarValueInt(base.transVar);
-		} else if (base.transVarBit != -1) {
-			slot = player.getVars().getVarBitValue(base.transVarBit);
+		if (base.multiNPCVarp != -1) {
+			VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(base.multiNPCVarp);
+			slot = domain.getVarValueInt(varType);
+		} else if (base.multiNPCVarbit != -1) {
+			VarBitType varBitType = configProvider.getVarBitTypes().list(base.multiNPCVarbit);
+			slot = domain.getVarBitValue(varBitType);
 		}
-		if (slot < 0 || slot >= base.transforms.length - 1) {
-			newID = base.transforms[base.transforms.length - 1];
+		if (slot < 0 || slot >= base.multiNPCs.length - 1) {
+			newID = base.multiNPCs[base.multiNPCs.length - 1];
 		} else {
-			newID = base.transforms[slot];
+			newID = base.multiNPCs[slot];
 		}
 		return newID == -1 ? null : list(newID);
 	}

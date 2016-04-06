@@ -23,6 +23,7 @@ package org.virtue.network.event.handler.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.ConfigProvider;
 import org.virtue.Virtue;
 import org.virtue.game.content.CommandManager;
 import org.virtue.game.entity.player.Player;
@@ -54,6 +55,7 @@ public class MessageEventHandler implements GameEventHandler<InMessageEventConte
 	 */
 	@Override
 	public void handle(Player player, InMessageEventContext context) {
+		ConfigProvider configProvider = Virtue.getInstance().getConfigProvider();
 		if (context.getRecipient() != null) {
 			if (context instanceof InQuickMessageEventContext) {
 				QuickChatMessage message = ((InQuickMessageEventContext) context)
@@ -61,7 +63,7 @@ public class MessageEventHandler implements GameEventHandler<InMessageEventConte
 				if (message == null) {
 					return;// There was a problem decoding the message
 				}
-				message.setParams(player);// Complete the message with player
+				message.setParams(player, configProvider);// Complete the message with player
 											// data
 				player.getChat().sendPrivateQuickMessage(message,
 						context.getRecipient());
@@ -75,7 +77,7 @@ public class MessageEventHandler implements GameEventHandler<InMessageEventConte
 			if (message == null) {
 				return;// There was a problem decoding the message
 			}
-			message.setParams(player);// Complete the message with player data
+			message.setParams(player, configProvider);// Complete the message with player data
 			switch (qcContext.getChatMode()) {
 			case PUBLIC:
 				player.getChat().sendPublicQuickMessage(message);

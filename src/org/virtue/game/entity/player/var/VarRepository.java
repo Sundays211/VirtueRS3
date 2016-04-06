@@ -30,8 +30,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.config.vartype.VarDomain;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.VarTypeList;
 import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
@@ -64,16 +66,17 @@ public class VarRepository implements VarDomain {
 	private int tick = -1;
 	private Set<VarListener> tickTasks = new HashSet<VarListener>();
 	
-	private VarPlayerTypeList varTypes = VarPlayerTypeList.getInstance();
+	private VarTypeList varTypes;
 	
 	private VarBitTypeList varBitTypeList;
 
-	public VarRepository(Player player, Map<Integer, Object> values, VarBitTypeList varBitTypeList) {
+	public VarRepository(Player player, Map<Integer, Object> values, VarTypeList varpTypes, VarBitTypeList varBitTypeList) {
 		this.player = player;
 		this.varValues = values;
+		this.varTypes = varpTypes;
 		this.varBitTypeList = varBitTypeList;
 		if (defaultVarps == null) {
-			defaultVarps = new int[varTypes.capacity()];
+			defaultVarps = new int[varTypes.getCapacity()];
 			DefaultVars.setDefaultVarps(defaultVarps);			
 		}
 		for (int key=0;key<defaultVarps.length;key++) {
@@ -93,18 +96,8 @@ public class VarRepository implements VarDomain {
 		setVarValueInt(varType, getVarValueInt(varType)+value);
 	}
 	
-	/**
-	 * Increases the value of a part of a player variable by the specified amount.
-	 * Providing a negative value will decrease the varpbit value
-	 * @param key The varp bit key
-	 * @param value The amount to increment by
-	 */
-	public void incrementVarpBit (int key, int value)  {
-		setVarBitValue(key, this.getVarBitValue(key)+value);
-	}
-	
 	public void setVarValueInt (int id, int value) {
-		VarType varType = VarPlayerTypeList.getInstance().list(id);
+		VarType varType = varTypes.list(id);
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+id);
 		}
@@ -115,6 +108,45 @@ public class VarRepository implements VarDomain {
 	public void setVarValueInt (VarType varType, int value) {
 		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(varType.id, value));
 		setVarValue(varType.id, Integer.valueOf(value));
+	}
+	
+	public void setVarBitValue (int key, int value)  {
+		try {
+			setVarBitValue(varBitTypeList.list(key), value);
+		} catch (VarBitOverflowException ex) {
+			logger.error("Failed to set varbit "+key, ex);
+		}
+	}
+	
+	public void incrementVarBit (int key, int value)  {
+		try {
+			incrementVarBit(varBitTypeList.list(key), value);
+		} catch (VarBitOverflowException ex) {
+			logger.error("Failed to set varbit "+key, ex);
+		}
+	}
+	
+	/**
+	 * Increases the value of a part of a player variable by the specified amount.
+	 * Providing a negative value will decrease the varpbit value
+	 * @param varBitType The var bit 
+	 * @param value The amount to increment by
+	 * @throws VarBitOverflowException 
+	 */
+	public void incrementVarBit (VarBitType varBitType, int value) throws VarBitOverflowException  {
+		setVarBitValue(varBitType, this.getVarBitValue(varBitType)+value);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.config.vartype.VarDomain#setVarBitValue(org.virtue.config.vartype.bit.VarBitType, int)
+	 */
+	@Override
+	public void setVarBitValue(VarBitType type, int value) throws VarBitOverflowException {
+		if (type == null || !VarDomainType.PLAYER.equals(type.getBaseVarDomain())) {
+			return;
+		}
+		setVarValue(type.baseVar, Integer.valueOf(type.setVarbitValue(getVarValueInt(type.baseVar), value)));
+		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(type.id, value, true));
 	}
 
 	/* (non-Javadoc)
@@ -167,23 +199,6 @@ public class VarRepository implements VarDomain {
 			}
 		}
 	}
-	
-	public void setVarBitValue (int key, int value)  {
-		try {
-			setVarpBit(varBitTypeList.list(key), value);
-		} catch (VarBitOverflowException ex) {
-			logger.error("Failed to set varbit "+key, ex);
-		}
-	}
-	
-	public void setVarpBit (VarBitType type, int value) throws VarBitOverflowException {
-		if (type == null || !VarDomainType.PLAYER.equals(type.getBaseVarDomain())) {
-			return;
-		}
-		int baseKey = type.baseVarKey;
-		setVarValue(baseKey, Integer.valueOf(type.setVarbitValue(getVarValueInt(baseKey), value)));
-		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(type.id, value, true));
-	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.entity.player.widget.var.VarDomain#getVarValue(int)
@@ -206,14 +221,24 @@ public class VarRepository implements VarDomain {
 		return varValues.get(key);
 	}
 	
+	@Deprecated
 	public int getVarValueInt (int id) {
-		VarType varType = VarPlayerTypeList.getInstance().list(id);
+		VarType varType = varTypes.list(id);
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+id);
 		}
 		return getVarValueInt(varType);
 	}
 	
+	@Deprecated
+	public int getVarBitValue (int key) {
+		return getVarBitValue(varBitTypeList.list(key));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.virtue.config.vartype.VarDomain#getVarValueInt(org.virtue.config.vartype.VarType)
+	 */
 	@Override
 	public int getVarValueInt (VarType varType) {
 		Object value = getVarValue(varType.id);
@@ -222,9 +247,17 @@ public class VarRepository implements VarDomain {
 		}
 		return ((Integer) value);
 	}
-	
-	public int getVarBitValue (int key) {
-		return getVarBitValue(varBitTypeList.list(key));
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.virtue.config.vartype.VarDomain#getVarBitValue(org.virtue.config.vartype.bit.VarBitType)
+	 */
+	@Override
+	public int getVarBitValue (VarBitType type) {
+		if (type == null || !VarDomainType.PLAYER.equals(type.getBaseVarDomain())) {
+			return 0;
+		}
+		return type.getVarbitValue(getVarValueInt(type.baseVar));
 	}
 
 	/* (non-Javadoc)
@@ -240,14 +273,6 @@ public class VarRepository implements VarDomain {
 			throw new RuntimeException("Variable "+varType.id+" is not of type Long");
 		}
 		return ((Long) value);
-	}
-
-	@Override
-	public int getVarBitValue (VarBitType type) {
-		if (type == null || !VarDomainType.PLAYER.equals(type.getBaseVarDomain())) {
-			return 0;
-		}
-		return type.getVarbitValue(getVarValueInt(type.baseVarKey));
 	}
 	
 	public Map<Integer, Object> getPermanantVarps () {
@@ -368,10 +393,4 @@ public class VarRepository implements VarDomain {
 	public int getTick () {
 		return tick;
 	}
-	
-	public void setCreation () {
-		//TODO: Do we really need different variables for creation & regular login?
-		//DefaultVars.setCreationVarps(varps);
-	}
-
 }

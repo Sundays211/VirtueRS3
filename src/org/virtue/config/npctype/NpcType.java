@@ -105,10 +105,10 @@ public class NpcType implements ConfigType {
     public int anInt8466;
     //public Direction respawnDirection;
     public int respawnDirection;
-    public int transVarBit;
+    public int multiNPCVarbit;
     public int anInt8469;
     public boolean visible;
-    public int transVar;
+    public int multiNPCVarp;
     public boolean aBool8472;
     public short aShort8473;
     public short aShort8474;
@@ -132,7 +132,7 @@ public class NpcType implements ConfigType {
     public int anInt8495;
     //public Class219 aClass219_8496;
     public int anInt8497;
-    public int[] transforms;
+    public int[] multiNPCs;
     public int mapIcon;
     public boolean aBool8500;
     byte[] recol_d_palette;
@@ -164,8 +164,8 @@ public class NpcType implements ConfigType {
 		headIconSubSprites = null;
 		anInt8465 = -1;
 		anInt8479 = 32;
-		transVarBit = -1;
-		transVar = -1;
+		multiNPCVarbit = -1;
+		multiNPCVarp = -1;
 		visible = true;
 		aBool8492 = true;
 		aBool8472 = true;
@@ -334,13 +334,13 @@ public class NpcType implements ConfigType {
 		} else if (103 == code) {
 		    anInt8479 = buffer.getShort() & 0xffff;
 		} else if (106 == code || code == 118) {
-		    transVarBit = buffer.getShort() & 0xffff;
-		    if (65535 == transVarBit) {
-		    	transVarBit = -1;
+		    multiNPCVarbit = buffer.getShort() & 0xffff;
+		    if (65535 == multiNPCVarbit) {
+		    	multiNPCVarbit = -1;
 		    }
-		    transVar = buffer.getShort() & 0xffff;
-		    if (65535 == transVar) {
-		    	transVar = -1;
+		    multiNPCVarp = buffer.getShort() & 0xffff;
+		    if (65535 == multiNPCVarp) {
+		    	multiNPCVarp = -1;
 		    }
 		    int defaultType = -1;
 		    if (code == 118) {
@@ -350,14 +350,14 @@ public class NpcType implements ConfigType {
 				}
 		    }
 		    int tCount = buffer.get() & 0xff;
-		    transforms = new int[2 + tCount];
+		    multiNPCs = new int[2 + tCount];
 		    for (int index = 0; index <= tCount; index++) {
-				transforms[index] = buffer.getShort() & 0xffff;
-				if (transforms[index] == 65535) {
-				    transforms[index] = -1;
+				multiNPCs[index] = buffer.getShort() & 0xffff;
+				if (multiNPCs[index] == 65535) {
+				    multiNPCs[index] = -1;
 				}
 		    }
-		    transforms[tCount + 1] = defaultType;
+		    multiNPCs[tCount + 1] = defaultType;
 		} else if (code == 107) {
 			visible = false;
 		} else if (code == 109) {

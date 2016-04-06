@@ -21,7 +21,11 @@
  */
 package org.virtue.utility.text;
 
+import org.virtue.ConfigProvider;
 import org.virtue.cache.def.impl.QuickChatPhraseType;
+import org.virtue.config.vartype.VarDomainType;
+import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.network.event.buffer.InboundBuffer;
@@ -62,7 +66,8 @@ public class QuickChatMessage {
 		return commands;
 	}
 	
-	public void setParams (Player player) {
+	public void setParams (Player player, ConfigProvider configProvider) {
+		VarType varType;
 		for (int param=0;param<type.getParamCount();param++) {
 			switch (type.getDynamicCommand(param)) {
 			case ENUM_STRING_STATBASE://Enum value related to base skill level
@@ -72,10 +77,12 @@ public class QuickChatMessage {
 				commands[param] = player.getSkills().getBaseLevel(Stat.getById(type.getParamKey(param, 0)));
 				break;
 			case TOSTRING_VARBIT://Var bit value
-				commands[param] = player.getVars().getVarBitValue(type.getParamKey(param, 0));
+				VarBitType varBitType = configProvider.getVarBitTypes().list(type.getParamKey(param, 0));
+				commands[param] = player.getVars().getVarBitValue(varBitType);
 				break;
 			case TOSTRING_VARP://Var player value
-				commands[param] = player.getVars().getVarValueInt(type.getParamKey(param, 0));
+				varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(type.getParamKey(param, 0));
+				commands[param] = player.getVars().getVarValueInt(varType);
 				break;
 			case ACTIVECOMBATLEVEL://Combat level
 				commands[param] = player.getSkills().getCombatLevel();
@@ -87,7 +94,8 @@ public class QuickChatMessage {
 				commands[param] = player.getChat().getFriendChatMeanCombatLevel();
 				break;
 			case ENUM_STRING://Currently only used for slayer assignment
-				commands[param] = player.getVars().getVarValueInt(type.getParamKey(param, 1));
+				varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(type.getParamKey(param, 1));
+				commands[param] = player.getVars().getVarValueInt(varType);
 				break;
 			case ENUM_STRING_CLAN://Friend chat rank
 				break;

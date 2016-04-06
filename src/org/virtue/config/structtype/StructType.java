@@ -35,12 +35,40 @@ import org.virtue.config.ConfigType;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class StructType implements ConfigType {
+public class StructType implements ConfigType {	
+	Map<Integer, Object> values;
+	int id;
 	
-	public static StructType decode (ByteBuffer buffer, int id) {
-		StructType struct = new StructType(id);
-		struct.decode(buffer);
-		return struct;
+	public StructType (int id, StructTypeList list) {
+		this.id = id;
+	}
+	
+	public void decode (ByteBuffer buffer) {
+		for (int code = buffer.get() & 0xff; code != 0; code = buffer.get() & 0xff) {
+			decode(buffer, code);
+		}
+	}
+	
+	private void decode(ByteBuffer buffer, int code) {
+		if (code == 249) {
+			int count = buffer.get() & 0xff;
+		    if (null == values) {				
+		    	values = new HashMap<Integer, Object>(count);
+		    }
+		    for (int i = 0; i < count; i++) {
+				boolean stringParam = (buffer.get() & 0xff) == 1;
+				int key = ByteBufferUtils.getTriByte(buffer);
+				Object value;
+				if (stringParam) {
+					value = ByteBufferUtils.getString(buffer);
+				} else {
+					value = new Integer(buffer.getInt());
+				}
+				values.put(key, value);
+		    }
+		} else {
+			throw new RuntimeException("Unknown config code: "+code);
+		}
 	}
 	
 	public ByteBuffer encode() {
@@ -63,42 +91,6 @@ public class StructType implements ConfigType {
 
 		return (ByteBuffer) buffer.flip();
 	}
-	
-	Map<Integer, Object> values;
-	int id;
-	
-	public StructType (int id) {
-		this.id = id;
-	}
-	
-	public void decode (ByteBuffer buffer) {
-		for (int code = buffer.get() & 0xff; code != 0; code = buffer.get() & 0xff) {
-			decodeLine(buffer, code);
-		}
-	}
-	
-	private void decodeLine(ByteBuffer buffer, int code) {
-		if (code == 249) {
-			int count = buffer.get() & 0xff;
-		    if (null == values) {				
-		    	values = new HashMap<Integer, Object>(count);
-		    }
-		    for (int i = 0; i < count; i++) {
-				boolean stringParam = (buffer.get() & 0xff) == 1;
-				int key = ByteBufferUtils.getTriByte(buffer);
-				Object value;
-				if (stringParam) {
-					value = ByteBufferUtils.getString(buffer);
-				} else {
-					value = new Integer(buffer.getInt());
-				}
-				values.put(key, value);
-		    }
-		} else {
-			throw new RuntimeException("Unknown config code: "+code);
-		}
-	}
-
 	
 	public int getId () {
 		return id;

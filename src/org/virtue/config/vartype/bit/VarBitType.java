@@ -26,6 +26,8 @@ import java.nio.ByteBuffer;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
 import org.virtue.config.vartype.VarDomainType;
+import org.virtue.config.vartype.VarType;
+import org.virtue.config.vartype.VarTypeList;
 
 /**
  * 
@@ -85,33 +87,44 @@ public class VarBitType implements ConfigType {
         }
     }
     
+    private VarBitTypeList myList;
     public int id;
     int startBit;
     int endBit;
-	VarDomainType baseVarType;
-    public int baseVarKey;
+	VarDomainType baseVarDomain;
+    public int baseVarId;
+    public VarType baseVar;
     String debugName;
     
     public VarBitType (int id, VarBitTypeList myList) {
     	this.id = id;
+    	this.myList = myList;
     }
     
     public void decode (ByteBuffer buffer) {
     	for (int code = buffer.get() & 0xff; code != 0; code = buffer.get() & 0xff) {
-    		decodeLine(buffer, code);
+    		decode(buffer, code);
     	}
     }
     
-    private void decodeLine (ByteBuffer buffer, int code) {
+    private void decode (ByteBuffer buffer, int code) {
     	VarBitTypeEncodingKey key = VarBitTypeEncodingKey.getById(code);
 		switch (key){
 		case BASEVAR:
 			int domainID = buffer.get() & 0xff;
-			baseVarType = VarDomainType.getByID(domainID);
-			if (baseVarType == null) {
+			baseVarDomain = VarDomainType.getByID(domainID);
+			if (baseVarDomain == null) {
 		    	throw new IllegalStateException("Unknown domain ID loading VarType definition: "+domainID);
 		    }
-			baseVarKey = ByteBufferUtils.getSmartInt(buffer);
+			baseVarId = ByteBufferUtils.getSmartInt(buffer);
+			if (myList != null) {
+				VarTypeList varTypeList = myList.listContainer.get(baseVarDomain);
+				if (null != varTypeList) {
+					baseVar = varTypeList.list(baseVarId);
+				} else {
+					//throw new IllegalStateException("Unlisted domain loading VarBitType definition: "+baseVarDomain);
+				}
+			}
 			break;
 		case BITS:
 			startBit = buffer.get() & 0xff;
@@ -125,9 +138,14 @@ public class VarBitType implements ConfigType {
 			break;
 		}
     }
+
+	@Override
+	public void postDecode() {
+		
+	}
     
     public VarDomainType getBaseVarDomain () {
-    	return baseVarType;
+    	return baseVarDomain;
     }
     
     /**
@@ -163,10 +181,5 @@ public class VarBitType implements ConfigType {
     public int getEndBit () {
     	return endBit;
     }
-
-	@Override
-	public void postDecode() {
-		
-	}
 	
 }

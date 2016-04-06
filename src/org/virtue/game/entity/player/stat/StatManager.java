@@ -234,14 +234,15 @@ public class StatManager {
 	 * @param advancement The number of levels advanced
 	 */
 	private void handleAdvancement (PlayerStat stat, int advancement) {
+		EnumTypeList enumTypeList = Virtue.getInstance().getConfigProvider().getEnumTypes();
 		String message;
-		int statPos = EnumTypeList.list(1482).getValueInt(stat.getType().getId());
+		int statPos = enumTypeList.list(1482).getValueInt(stat.getType().getId());
 		if (advancement == 1) {
-			EnumType levelUpEnum = EnumTypeList.list(1477);
+			EnumType levelUpEnum = enumTypeList.list(1477);
 			message = levelUpEnum.getValueString(statPos);
 		} else {
-			EnumType startEnum = EnumTypeList.list(3644);
-			EnumType endEnum = EnumTypeList.list(3645);
+			EnumType startEnum = enumTypeList.list(3644);
+			EnumType endEnum = enumTypeList.list(3645);
 			message = startEnum.getValueString(statPos)+advancement+endEnum.getValueString(statPos);
 		}
 		

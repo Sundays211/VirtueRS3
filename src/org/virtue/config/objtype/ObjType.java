@@ -31,7 +31,6 @@ import org.virtue.Virtue;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
 import org.virtue.config.structtype.StructType;
-import org.virtue.config.structtype.StructTypeList;
 import org.virtue.utility.text.StringUtility;
 
 /**
@@ -82,7 +81,7 @@ public class ObjType implements ConfigType {
 		return objType;
 	}
 	
-	int mesh;
+	int model;
 	public String name = "null";
 	private String desc = null;
 	public int zoom2d = 2000;
@@ -176,7 +175,7 @@ public class ObjType implements ConfigType {
 
 	void decode(ByteBuffer buffer, int code) {
 		if (code == 1) {
-			mesh = ByteBufferUtils.getSmartInt(buffer);
+			model = ByteBufferUtils.getSmartInt(buffer);
 		} else if (code == 2) {
 			name = ByteBufferUtils.getString(buffer);
 		} else if (code == 3) {
@@ -424,7 +423,7 @@ public class ObjType implements ConfigType {
 	}
 
 	void transform(ItemTransform type, ObjType template, ObjType item, String option) {
-		mesh = template.mesh * 1;
+		model = template.model * 1;
 		zoom2d = template.zoom2d * 1;
 		xan2d = 1 * template.xan2d;
 		yan2d = 1 * template.yan2d;
@@ -605,7 +604,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -621,7 +620,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -637,7 +636,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -649,7 +648,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -661,7 +660,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -673,7 +672,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -685,7 +684,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -697,7 +696,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -709,7 +708,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -721,7 +720,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -733,7 +732,7 @@ public class ObjType implements ConfigType {
 		if (structID == -1) {
 			return -1;
 		}
-		StructType type = StructTypeList.list(structID);
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
 		if (type == null) {
 			return -1;
 		}
@@ -741,12 +740,7 @@ public class ObjType implements ConfigType {
 	}
 	
 	public int getStageOnDeath() {
-		if (params == null)
-			return 0;
-		Object protectedOnDeath = params.get(1397);
-		if (protectedOnDeath != null && protectedOnDeath instanceof Integer)
-			return (Integer) protectedOnDeath;
-		return 0;
+		return getParam(1397, 0);
 	}
 	
 	/*public int getSheathingAnim() {

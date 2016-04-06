@@ -21,8 +21,6 @@
  */
 package org.virtue.game.content.clans;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,13 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.cache.Archive;
-import org.virtue.cache.ReferenceTable;
 import org.virtue.config.vartype.VarDomainType;
-import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitOverflowException;
 import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.game.content.chat.SocialUser;
@@ -56,26 +49,6 @@ import org.virtue.network.event.context.impl.out.ClanSettingsEventContext;
  * @since 20/12/2014
  */
 public class ClanSettings {
-	
-	/**
-	 * The {@link Logger} Instance
-	 */
-	private static Logger logger = LoggerFactory.getLogger(ClanSettings.class);
-	
-	private static VarType[] varClanSettingTypes;
-	
-	public static void init (Archive varClanSettings, ReferenceTable.Entry referenceEntry) throws IOException {
-		varClanSettingTypes = new VarType[referenceEntry.capacity()];
-		for (int key=0;key<referenceEntry.capacity();key++) {
-			ReferenceTable.ChildEntry entry = referenceEntry.getEntry(key);
-			if (entry == null) {
-				continue;
-			}
-			ByteBuffer data = varClanSettings.getEntry(entry.index());
-			varClanSettingTypes[key] = VarType.decode(data, key, VarDomainType.PLAYER);
-		}
-		logger.info("Found "+varClanSettings.size()+" varClanSettingType definitions.");
-	}
 	
 	public static class Data {
 		public List<ClanMember> members = new ArrayList<ClanMember>();
@@ -681,11 +654,11 @@ public class ClanSettings {
 			throw new IllegalArgumentException("Invalid domain: "+varBit.getBaseVarDomain());
 		}
 		synchronized (this) {
-			Object prevValue = varValues.get(varBit.baseVarKey);		
+			Object prevValue = varValues.get(varBit.baseVarId);		
 			if (prevValue == null) {
-				varValues.put(varBit.baseVarKey, varBit.setVarbitValue(0, value));
+				varValues.put(varBit.baseVarId, varBit.setVarbitValue(0, value));
 			} else if (prevValue instanceof Integer) {
-				varValues.put(varBit.baseVarKey, varBit.setVarbitValue((int) prevValue, value));
+				varValues.put(varBit.baseVarId, varBit.setVarbitValue((int) prevValue, value));
 			} else {
 				return;
 			}
@@ -735,7 +708,7 @@ public class ClanSettings {
 		if (!varBit.getBaseVarDomain().equals(VarDomainType.CLAN_SETTING)) {
 			return -1;
 		}
-		return varBit.getVarbitValue(getVarValueInt(varBit.baseVarKey));
+		return varBit.getVarbitValue(getVarValueInt(varBit.baseVarId));
 	}
 	
 	public Map<Integer, Object> getPermanantVars () {

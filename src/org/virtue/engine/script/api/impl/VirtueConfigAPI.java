@@ -31,14 +31,12 @@ import org.virtue.config.db.DBTableIndex;
 import org.virtue.config.db.dbrowtype.DBRowType;
 import org.virtue.config.db.dbtabletype.DBTableType;
 import org.virtue.config.enumtype.EnumType;
-import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.seqtype.SeqType;
 import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructType;
-import org.virtue.config.structtype.StructTypeList;
 import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.engine.script.api.ConfigAPI;
@@ -113,7 +111,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public Object enumValue(int enumTypeId, int key) {
-		EnumType enumType = EnumTypeList.list(enumTypeId);
+		EnumType enumType = configProvider.getEnumTypes().list(enumTypeId);
 		if (enumType == null) {
 			throw new IllegalArgumentException("Invalid enumTypeId: "+enumTypeId);
 		}
@@ -131,7 +129,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public boolean enumHasValue(int enumTypeId, Object value) {
-		EnumType enumType = EnumTypeList.list(enumTypeId);
+		EnumType enumType = configProvider.getEnumTypes().list(enumTypeId);
 		if (enumType == null) {
 			throw new IllegalArgumentException("Invalid enumTypeId: "+enumTypeId);
 		}
@@ -143,7 +141,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int enumSize(int enumTypeId) {
-		EnumType enumType = EnumTypeList.list(enumTypeId);
+		EnumType enumType = configProvider.getEnumTypes().list(enumTypeId);
 		if (enumType == null) {
 			throw new IllegalArgumentException("Invalid enumTypeId: "+enumTypeId);
 		}
@@ -300,7 +298,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public Object structParam(int structTypeId, int paramTypeId) {
-		StructType structType = StructTypeList.list(structTypeId);
+		StructType structType = configProvider.getStructTypes().list(structTypeId);
 		if (structType == null) {
 			throw new IllegalArgumentException("Invalid struct: "+structTypeId);
 		}
