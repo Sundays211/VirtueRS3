@@ -54,8 +54,8 @@ public class ObjType implements ConfigType {
 	public static short[] aShortArray8082 = new short[256];
 	static String aString8101 = "</col>";
 	
-	public static ObjType load (int id, ByteBuffer buffer) {
-		ObjType objType = new ObjType(id);
+	public static ObjType load (int id, ByteBuffer buffer, ObjTypeList list) {
+		ObjType objType = new ObjType(id, list);
 		try {
 			objType.decode(buffer);
 		} catch (RuntimeException ex) {
@@ -71,8 +71,8 @@ public class ObjType implements ConfigType {
 	 * @param extraData The buffer containing extra data (such as descriptions and weights)
 	 * @return the ItemType config
 	 */
-	public static ObjType load (int id, ByteBuffer cacheData, ByteBuffer extraData) {
-		ObjType objType = load(id, extraData);
+	public static ObjType load (int id, ByteBuffer cacheData, ByteBuffer extraData, ObjTypeList list) {
+		ObjType objType = load(id, extraData, list);
 		try {
 			objType.decode(cacheData);
 		} catch (RuntimeException ex) {
@@ -137,7 +137,7 @@ public class ObjType implements ConfigType {
 	public boolean hasTooltipColour = false;
 	public boolean aBool8154 = false;
 	int myid;
-	//ItemTypeList myList;
+	ObjTypeList myList;
 	public String[] op;
 	public String[] iop;
 	public int category = -1;
@@ -157,10 +157,10 @@ public class ObjType implements ConfigType {
 	HashMap<Integer, Object> params;
 	public int[] quests;
 	
-	public ObjType(int id) {
+	public ObjType(int id, ObjTypeList list) {
 		myid = id;
-		/*myList = list;
-		op = (String[]) myList.defaultOps.clone();
+		myList = list;
+		/*op = (String[]) myList.defaultOps.clone();
 		iop = (String[]) myList.defaultIOps.clone();*/
 		op = new String[] { null, null, "Take", null, null, "Examine" };
 		iop = new String[] { null, null, null, null, "Drop" };
@@ -402,8 +402,15 @@ public class ObjType implements ConfigType {
 
 	@Override
 	public void postDecode() {
-		// TODO Auto-generated method stub
-		
+		if (certtemplate != -1 && certlink != myid) {
+			genCert(myList.list(certtemplate), myList.list(certlink));
+		} else if (lenttemplate != -1 && lentlink != myid) {
+			genLent(myList.list(lenttemplate), myList.list(lentlink));
+		} else if (-1 != boughttemplate && boughtlink != myid) {
+			genBought(myList.list(boughttemplate), myList.list(boughtlink));
+		} else if (shardtemplate != -1 && shardlink != myid) {
+			genShard(myList.list(shardtemplate), myList.list(shardlink));
+		}
 	}
 
 	public void genCert(ObjType template, ObjType item) {
@@ -422,82 +429,73 @@ public class ObjType implements ConfigType {
 		transform(ItemTransform.SHARD, template, item, "Drop");
 	}
 
-	void transform(ItemTransform type, ObjType template, ObjType item, String option) {
-		model = template.model * 1;
-		zoom2d = template.zoom2d * 1;
-		xan2d = 1 * template.xan2d;
-		yan2d = 1 * template.yan2d;
-		zan2d = template.zan2d * 1;
-		xof2d = 1 * template.xof2d;
-		yof2d = template.yof2d * 1;
-		ObjType class631_25_ = (ItemTransform.CERT == type ? template : item);
+	void transform(ItemTransform type, ObjType template, ObjType link, String option) {
+		model = template.model;
+		zoom2d = template.zoom2d;
+		xan2d = template.xan2d;
+		yan2d = template.yan2d;
+		zan2d = template.zan2d;
+		xof2d = template.xof2d;
+		yof2d = template.yof2d;
+		ObjType class631_25_ = (ItemTransform.CERT == type ? template : link);
 		recol_s = ((ObjType) class631_25_).recol_s;
 		recol_d = ((ObjType) class631_25_).recol_d;
 		recol_d_palette = ((ObjType) class631_25_).recol_d_palette;
 		retex_s = ((ObjType) class631_25_).retex_s;
 		retex_d = ((ObjType) class631_25_).retex_d;
-		name = item.name;
-		members = item.members;
+		name = link.name;
+		members = link.members;
 		if (type == ItemTransform.CERT) {
-			cost = 1 * item.cost;
+			desc = "Swap this note at any bank for the equivalent item.";
+			cost = link.cost;
 			stackable = 1;
 		} else if (ItemTransform.SHARD == type) {
-			name = item.shardname;
-			cost = ((int) Math.floor((double) (item.cost / item.shardcount)));
+			name = link.shardname;
+			cost = ((int) Math.floor((double) (link.cost / link.shardcount)));
 			stackable = 1;
-			stockmarket = item.stockmarket;
-			category = 1 * template.category;
+			stockmarket = link.stockmarket;
+			category = template.category;
 			cursorOps = template.cursorOps;
 			cursorIOps = template.cursorIOps;
 			iop = new String[5];
 			iop[0] = "Combine";
 			iop[4] = option;
 		} else {
+			desc = link.desc;
 			cost = 0;
-			stackable = 1 * item.stackable;
-			wearpos = 1 * item.wearpos;
-			wearpos2 = 1 * item.wearpos2;
-			wearpos3 = 1 * item.wearpos3;
-			manwear = item.manwear * 1;
-			manwear2 = item.manwear2 * 1;
-			manwear3 = item.manwear3 * 1;
-			womanwear = 1 * item.womanwear;
-			womanwear2 = 1 * item.womanwear2;
-			womanwear3 = item.womanwear3 * 1;
-			manwearxoff = item.manwearxoff * 1;
-			womanwearxoff = item.womanwearxoff * 1;
-			manwearyoff = 1 * item.manwearyoff;
-			womanwearyoff = 1 * item.womanwearyoff;
-			manwearzoff = item.manwearzoff * 1;
-			womanwearzoff = item.womanwearzoff * 1;
-			manhead = 1 * item.manhead;
-			manhead2 = 1 * item.manhead2;
-			womanhead = 1 * item.womanhead;
-			womanhead2 = 1 * item.womanhead2;
-			category = 1 * item.category;
-			team = item.team * 1;
-			op = item.op;
-			params = item.params;
+			stackable = link.stackable;
+			wearpos = link.wearpos;
+			wearpos2 = link.wearpos2;
+			wearpos3 = link.wearpos3;
+			manwear = link.manwear;
+			manwear2 = link.manwear2;
+			manwear3 = link.manwear3;
+			womanwear = link.womanwear;
+			womanwear2 = link.womanwear2;
+			womanwear3 = link.womanwear3;
+			manwearxoff = link.manwearxoff;
+			womanwearxoff = link.womanwearxoff;
+			manwearyoff = link.manwearyoff;
+			womanwearyoff = link.womanwearyoff;
+			manwearzoff = link.manwearzoff;
+			womanwearzoff = link.womanwearzoff;
+			manhead = link.manhead;
+			manhead2 = link.manhead2;
+			womanhead = link.womanhead;
+			womanhead2 = link.womanhead2;
+			category = link.category;
+			team = link.team;
+			op = link.op;
+			params = link.params;
 			iop = new String[5];
-			if (item.iop != null) {
-				for (int i_26_ = 0; i_26_ < 4; i_26_++)
-					iop[i_26_] = item.iop[i_26_];
+			if (link.iop != null) {
+				for (int i_26_ = 0; i_26_ < 4; i_26_++) {
+					iop[i_26_] = link.iop[i_26_];
+				}
 			}
 			iop[4] = option;
 		}
 	}
-
-	/*public void postDecode() throws IOException {
-		if (certtemplate != -1) {
-			genCert(myList.list(certtemplate), myList.list(certlink));
-		} else if (lenttemplate != -1) {
-			genLent(myList.list(lenttemplate), myList.list(lentlink));
-		} else if (-1 != boughttemplate) {
-			genBought(myList.list(boughttemplate), myList.list(boughtlink));
-		} else if (shardtemplate != -1) {
-			genShard(myList.list(shardtemplate),  myList.list(shardlink));
-		}
-	}*/
     
     public int getParam(int key, int defaultInt) {
 		if (params == null) {
@@ -754,14 +752,15 @@ public class ObjType implements ConfigType {
 		return type.getParam(1100, -1);
 	}*/
 
+	/**
+	 * Finds whether the item should stack or not when added to a non-stacking container
+	 * @return True if the item should always stack, false otherwise
+	 */
 	public boolean isStackable() {
 		if (certtemplate != -1) {
 			return true;
 		}
 		if (stackable == 1) {
-			return true;
-		}
-		if (myid == 9075 || myid == 15243 || myid >= 554 && myid <= 566 || myid >= 863 && myid <= 869) {
 			return true;
 		}
 		return false;

@@ -605,6 +605,10 @@ public interface ScriptAPI {
 	
 	public void incrementVarBit (Player player, int key, int value);
 	
+	public int getVarBit (Item item, int key);
+	
+	public void setVarBit (Item item, int key, int value);
+	
 	/**
 	 * Sets the specified client variable for the player
 	 * @param player The player

@@ -186,6 +186,18 @@ public class VirtueConfigAPI implements ConfigAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objStackable(int)
+	 */
+	@Override
+	public boolean objStackable(int objTypeId) {
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		return objType.isStackable();
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ConfigAPI#objCategory(int)
 	 */
 	@Override
@@ -198,15 +210,15 @@ public class VirtueConfigAPI implements ConfigAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.api.ConfigAPI#objWearpos(int)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objHasVar(int)
 	 */
 	@Override
-	public int objWearpos(int objTypeId) {
+	public boolean objHasVar(int objTypeId) {
 		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
-		return objType.wearpos;
+		return objType.stackable == 2;
 	}
 
 	/* (non-Javadoc)
@@ -271,6 +283,18 @@ public class VirtueConfigAPI implements ConfigAPI {
 		} else {
 			return objTypeId;
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ConfigAPI#objWearpos(int)
+	 */
+	@Override
+	public int objWearpos(int objTypeId) {
+		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		if (objType == null) {
+			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
+		}
+		return objType.wearpos;
 	}
 
 	/* (non-Javadoc)

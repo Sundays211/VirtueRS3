@@ -110,9 +110,21 @@ public interface ConfigAPI {
 	 */
 	public String objIop(int objTypeId, int slot);
 	
+	/**
+	 * Checks whether the object can stack in an inventory that doesn't stack by default (such as the player's backpack)
+	 * @param objTypeId The object type ID
+	 * @return True if the object stacks, false otherwise
+	 */
+	public boolean objStackable(int objTypeId);
+	
 	public int objCategory(int objTypeId);
 	
-	public int objWearpos(int objTypeId);
+	/**
+	 * Checks whether the object has variable data, and thus cannot stack in an inventory that normally always stacks items
+	 * @param objTypeId The object type ID
+	 * @return True if the object has variable data, false otherwise
+	 */
+	public boolean objHasVar(int objTypeId);
 	
 	/**
 	 * Gets the certificate (note) ID for the given object. If no certificate exists, returns the original ID
@@ -126,6 +138,8 @@ public interface ConfigAPI {
 	public int objLent(int objTypeId);
 	
 	public int objUnlent(int objTypeId);
+	
+	public int objWearpos(int objTypeId);
 	
 	/**
 	 * Gets the paramater of the specified {@link ObjType}

@@ -40,6 +40,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.config.vartype.VarDomainType;
+import org.virtue.config.vartype.VarTypeList;
 import org.virtue.game.content.chat.OnlineStatus;
 import org.virtue.game.content.clans.ClanBan;
 import org.virtue.game.content.clans.ClanMember;
@@ -61,6 +63,7 @@ import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.stat.Stat;
+import org.virtue.game.entity.player.var.VarContainer;
 import org.virtue.game.parser.Parser;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.game.world.region.Tile;
@@ -409,15 +412,15 @@ public class XmlParser implements Parser {
 					Element root = document.createElement("containers");
 					document.appendChild(root);
 					for (ContainerState state : ContainerState.values()) {
-						Inventory backpack = invStore.getContainer(state);
-						if (backpack != null && state.rememberState()) {
+						Inventory inventory = invStore.getContainer(state);
+						if (inventory != null && state.rememberState()) {
 							Element container = document.createElement(state.getSerialName());
 							Attr attr = document.createAttribute("size");
-							attr.setValue(Integer.toString(backpack.getSize()));
+							attr.setValue(Integer.toString(inventory.getSize()));
 							container.setAttributeNode(attr);
 							root.appendChild(container);
-							for (int slot = 0; slot < backpack.getItems().length;slot++) {
-								Item item = backpack.getItems()[slot];
+							for (int slot = 0; slot < inventory.getItems().length;slot++) {
+								Item item = inventory.getItems()[slot];
 								if (item == null) {
 									continue;
 								}
@@ -434,6 +437,22 @@ public class XmlParser implements Parser {
 								attr.setValue(Integer.toString(item.getAmount()));
 								itemElement.setAttributeNode(attr);
 								container.appendChild(itemElement);
+								
+								if (item.getVarValues() != null) {
+									for (Map.Entry<Integer, Object> value : item.getVarValues().getValues().entrySet()) {
+										Element varElement = document.createElement("var");	
+										
+										attr = document.createAttribute("id");
+										attr.setValue(Integer.toString(value.getKey()));
+										varElement.setAttributeNode(attr);
+										
+										attr = document.createAttribute("value");
+										attr.setValue(value.getValue().toString());
+										varElement.setAttributeNode(attr);
+										
+										itemElement.appendChild(varElement);
+									}
+								}
 							}
 						}
 					}
@@ -1037,6 +1056,9 @@ public class XmlParser implements Parser {
 					Document doc = builder.parse(new File(type.getPath(), name + ".xml"));
 				
 					doc.getDocumentElement().normalize();
+					
+					VarTypeList varObjTypes = Virtue.getInstance().getConfigProvider().getVarTypes(VarDomainType.OBJECT);
+					
 					for (ContainerState state : ContainerState.values()) {						
 						NodeList containerList = doc.getElementsByTagName(state.getSerialName());
 						if (containerList != null && containerList.getLength() > 0 && state.rememberState()) {
@@ -1046,11 +1068,23 @@ public class XmlParser implements Parser {
 								Item[] items = new Item[size];
 								NodeList nodes = container.getElementsByTagName("item");
 								for (int i=0;i<nodes.getLength();i++) {
-									Node node = nodes.item(i);
+									Element node = (Element) nodes.item(i);
 									int slot = Integer.parseInt(node.getAttributes().getNamedItem("slot").getTextContent());
 									int itemID = Integer.parseInt(node.getAttributes().getNamedItem("id").getTextContent());
 									int amount = Integer.parseInt(node.getAttributes().getNamedItem("amount").getTextContent());
 									items[slot] = Item.create(itemID, amount);
+									
+									NodeList varList = node.getElementsByTagName("var");
+									if (varList.getLength() > 0) {
+										VarContainer varValues = new VarContainer();
+										for (int j=0;j<varList.getLength();j++) {
+											Element varNode = (Element) varList.item(i);
+											int id = Integer.parseInt(varNode.getAttribute("id"));
+											int value = Integer.parseInt(varNode.getAttribute("value"));
+											varValues.setVarValueInt(varObjTypes.list(id), value);
+										}
+										items[slot].setVarValues(varValues);
+									}
 								}
 								containers.put(state, items);
 							}

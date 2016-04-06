@@ -65,6 +65,7 @@ import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.Stat;
+import org.virtue.game.entity.player.var.VarContainer;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
@@ -1107,6 +1108,49 @@ public class VirtueScriptAPI implements ScriptAPI {
 			if (player.getPrivilegeLevel().getRights() >= 2) {
 				sendMessage(player, "Unable to set varbit "+key+": "+e.getMessage());
 			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#getVarBit(org.virtue.game.entity.player.inv.Item, int)
+	 */
+	@Override
+	public int getVarBit(Item item, int key) {
+		VarBitType type = configProvider.getVarBitTypes().list(key);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid VarBit key: "+key);
+		}
+		if (type.getBaseVarDomain() != VarDomainType.OBJECT) {
+			throw new IllegalArgumentException("Base type "+type.getBaseVarDomain()+" is not supported for this method (varbit="+key+")");
+		}
+		if (item.getVarValues() == null) {
+			return 0;
+		}		
+		return item.getVarValues().getVarBitValue(type);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#setVarBit(org.virtue.game.entity.player.inv.Item, int, int)
+	 */
+	@Override
+	public void setVarBit(Item item, int key, int value) {
+		VarBitType type = configProvider.getVarBitTypes().list(key);
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid VarBit key: "+key);
+		}
+		if (type.getBaseVarDomain() != VarDomainType.OBJECT) {
+			throw new IllegalArgumentException("Base type "+type.getBaseVarDomain()+" is not supported for this method (varbit="+key+")");
+		}
+		if (item.getType().stackable != 2) {
+			throw new IllegalArgumentException("Object "+item+" cannot have varobj values!");
+		}
+		if (item.getVarValues() == null) {
+			item.setVarValues(new VarContainer());
+		}
+		try {
+			item.getVarValues().setVarBitValue(type, value);
+		} catch (VarBitOverflowException e) {
+			throw new RuntimeException("Unable to set varbit "+key+": "+e.getMessage());
 		}
 	}
 

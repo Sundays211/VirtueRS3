@@ -24,7 +24,6 @@ package org.virtue.game.world.region;
 import java.util.Arrays;
 
 import org.virtue.game.World;
-import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.world.region.movement.routefinder.TraversalMap;
 
 /**
@@ -71,18 +70,10 @@ public class ClipMap implements TraversalMap {
 			for (int tileX = posX; tileX < posX + sizeX; tileX++) {
 				for (int tileY = posY; tileY < posY + sizeY; tileY++) {
 					clipTile(tileX, tileY, location.getTile().getPlane(), mask);
-					if (location.getLocType().clipType != 0) {
-						Item marker = Item.create(1040, 1);
-						marker.desc = "Marker for location id="+location.getID()+", clipType="+location.getLocType().clipType+", nodeType="+location.getNodeType()+", "+location.getLocType().allowInteract;
-						//region.addItem(new GroundItem(marker, new Tile(tileX, tileY, location.getTile().getPlane(), region.getID())));
-					}
 				}
 			}
 		} else if (location.getNodeType() == 22) {
 			if (location.getLocType().clipType == 1) {
-				Item marker = Item.create(1042, 1);
-				marker.desc = "Marker for location id="+location.getID()+", clipType="+location.getLocType().clipType+", nodeType="+location.getNodeType();
-				//region.addItem(new GroundItem(marker, new Tile(location.getTile())));
 				clipFloorDeco(location.getTile().getXInRegion(), location.getTile().getYInRegion(), location.getTile().getPlane());
 			}
 		}

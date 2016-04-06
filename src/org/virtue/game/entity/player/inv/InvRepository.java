@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -80,7 +80,7 @@ public class InvRepository {
 				return true;
 			}			
 		}
-		if (!item.isStackable() && getContainer(ContainerState.BACKPACK).freeSlots() < item.getAmount()) {
+		if (!item.getType().isStackable() && getContainer(ContainerState.BACKPACK).freeSlots() < item.getAmount()) {
 			return false;
 		}
 		int[] slots = getContainer(ContainerState.BACKPACK).add(item);

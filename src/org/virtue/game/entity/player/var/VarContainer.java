@@ -21,6 +21,7 @@
  */
 package org.virtue.game.entity.player.var;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +47,10 @@ public class VarContainer implements VarDomain {
 	 */
 	public VarContainer() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Map<Integer, Object> getValues () {
+		return Collections.unmodifiableMap(values);
 	}
 
 	/* (non-Javadoc)

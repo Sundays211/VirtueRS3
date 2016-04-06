@@ -1,8 +1,30 @@
+/**
+ * Copyright (c) 2016 Virtue Studios
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions\:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.virtue.game.entity.player.inv;
 
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.var.VarContainer;
 import org.virtue.game.node.Node;
 import org.virtue.utility.text.StringUtility;
 
@@ -30,14 +52,17 @@ public class Item extends Node {
 	 */
 	private ObjType type;
 	
-	public String desc;
+	/**
+	 * The object variable values
+	 */
+	private VarContainer varValues;
 
 	/**
 	 * Constructs a new {@code Item.java}.
 	 * @param id The id.
-	 * @param count The amount.
+	 * @param count The count.
 	 */
-	public Item(int id, int amount) {
+	public Item(int id, int count) {
 		super(id);
 		if (amount < 0) {
 			throw new IllegalArgumentException("Item count must be a positive integer. Count supplied: "+amount);
@@ -49,8 +74,7 @@ public class Item extends Node {
 			throw new IllegalArgumentException("Can't instantiate a dummy item! Item ID: "+id);
 		}
 		this.id = id;
-		this.amount = amount;
-		super.name = getType().name;
+		this.amount = count;
 	}
 	
 	public Item (Item item) {
@@ -58,7 +82,7 @@ public class Item extends Node {
 		this.id = item.id;
 		this.amount = item.amount;
 		this.type = item.type;
-		super.name = getType().name;
+		this.varValues = item.varValues;
 	}
 
 	/**
@@ -66,6 +90,24 @@ public class Item extends Node {
 	 */
 	public int getAmount() {
 		return amount;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.virtue.game.node.Node#getName()
+	 */
+	@Override
+	public String getName() {
+		return getType().name;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.virtue.game.node.Node#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) {
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -86,14 +128,14 @@ public class Item extends Node {
 		this.amount += count;
 	}
 	
-	/**
-	 * Finds whether the item should stack or not when added to a non-stacking container
-	 * @return True if the item should always stack, false otherwise
-	 */
-	public boolean isStackable () {
-		return getType().isStackable();
+	public VarContainer getVarValues() {
+		return varValues;
 	}
-	
+
+	public void setVarValues(VarContainer varValues) {
+		this.varValues = varValues;
+	}
+
 	/**
 	 * Gets the cache definition for the item
 	 * @return	The definition
@@ -106,23 +148,10 @@ public class Item extends Node {
 	}
 	
 	/**
-	 * Gets the examine info.
-	 * @return The examine.
-	 */
-	public String getExamine() {
-		if (desc == null) {
-			desc = getType().getDescription()+" (id="+id+", amount="+amount+")";
-		}
-		return desc;
-	}
-	
-	/**
 	 * Handles an "examine" interaction with the item
 	 */
 	public void examine (Player player) {
-		if (desc == null) {
-			desc = getType().getDescription()+" (id="+id+", amount="+amount+")";
-		}
+		String desc = getType().getDescription()+" (id="+id+", amount="+amount+")";
 		player.getDispatcher().sendGameMessage(desc);
 		int value = getType().getExchangeValue();
 		if (value != -1) {
@@ -131,18 +160,11 @@ public class Item extends Node {
 		}
 	}
 	
-	public boolean isOffhand() {
-		return getType().name.toLowerCase().contains("off-hand");
-	}
-	
 	public boolean is2H() {
 		return getType().wearpos2 == 5 || getType().wearpos3 == 5;
 	}
 	
 	public boolean hideArms() {
-		String name = getType().name.toLowerCase();
-		if (name.contains("d'hide body") || name.contains("dragonhide body") || name.equals("stripy pirate shirt") || (name.contains("chainbody") && (name.contains("iron") || name.contains("bronze") || name.contains("steel") || name.contains("black") || name.contains("mithril") || name.contains("adamant") || name.contains("rune") || name.contains("white"))) || name.equals("leather body") || name.equals("hardleather body") || name.contains("studded body"))
-			return false;
 		return getType().wearpos2 == 6 || getType().wearpos3 == 6;
 	}
 	
@@ -151,14 +173,12 @@ public class Item extends Node {
 	}
 	
 	public boolean isFaceMask() {
-		String name = getType().name.toLowerCase();
+		String name = getName().toLowerCase();
 		return getType().getParam(625, 0) == 1 || name.contains("sunglasses")  || name.contains("halo");
 	}
 
 	public boolean showBeard() {
 		return getType().wearpos3 != 11 && getType().wearpos2 != 11;
-		/*String name = getType().name.toLowerCase();
-		return !hideHair() || name.contains("horns") || name.contains("hat") || name.contains("afro") || name.contains("cowl") || name.contains("tattoo") || name.contains("headdress") || name.contains("hood") || (name.contains("mask") && !name.contains("h'ween")) || (name.contains("helm") && !name.contains("full"));*/
 	}
 	
 	@Override

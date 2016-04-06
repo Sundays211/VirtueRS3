@@ -117,7 +117,7 @@ public final class TreasureHunter {
 		int rarity = 1 + prize.getRarity().ordinal();
 		int bankButton = player.getInvs().loadContainer(ContainerState.BANK).hasSpaceForItem(prize.getItem()) ? 3 : 4; //bankable = 3, no bank room = 4, no prize to claim = default
 		int backpackButton = player.getInvs().getContainer(ContainerState.BACKPACK).hasSpaceForItem(prize.getItem()) ? 1 : 2; //available = 1, backpack full = 2, no prize = default
-		String description = prize.getItem().getExamine();
+		String description = prize.getItem().getType().getDescription();
 		player.getVars().setVarBitValue(20736, 1290);
 		player.getVars().setVarBitValue(20747, 0);
 		player.getVars().setVarBitValue(20742, 0);

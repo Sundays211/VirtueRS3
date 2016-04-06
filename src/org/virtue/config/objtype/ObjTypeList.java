@@ -142,14 +142,14 @@ public class ObjTypeList implements Iterable<ObjType> {
 				int index = objDataIndicies[id];
 				if (index != -1) {
 					ByteBuffer extraData = objDataArchive.getEntry(index);
-					type = ObjType.load(id, data, extraData);
+					type = ObjType.load(id, data, extraData, ObjTypeList.this);
 				} else {
-					type = ObjType.load(id, data);
+					type = ObjType.load(id, data, ObjTypeList.this);
 				}
 			} else {
-				type = ObjType.load(id, data);
+				type = ObjType.load(id, data, ObjTypeList.this);
 			}
-			runPostDecode(type, id);
+			type.postDecode();
 			return type;
           }
 	});
@@ -235,18 +235,6 @@ public class ObjTypeList implements Iterable<ObjType> {
 		} catch (RuntimeException | ExecutionException ex) {
 			logger.error("Error loading itemtype definition "+id+" [group="+groupId+" file="+fileId+']', ex);
 			return null;
-		}
-	}
-	
-	private void runPostDecode (ObjType itemType, int id) {
-		if (itemType.certtemplate != -1 && itemType.certlink != id) {
-			itemType.genCert(list(itemType.certtemplate), list(itemType.certlink));
-		} else if (itemType.lenttemplate != -1) {
-			itemType.genLent(list(itemType.lenttemplate), list(itemType.lentlink));
-		} else if (-1 != itemType.boughttemplate && itemType.boughtlink != id) {
-			itemType.genBought(list(itemType.boughttemplate), list(itemType.boughtlink));
-		} else if (itemType.shardtemplate != -1) {
-			itemType.genShard(list(itemType.shardtemplate), list(itemType.shardlink));
 		}
 	}
 }
