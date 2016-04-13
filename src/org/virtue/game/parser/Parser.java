@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,13 @@ package org.virtue.game.parser;
 
 
 /**
+ * 
  * @author Im Frizzy <skype:kfriz1998>
- * @since Sep 26, 2014
+ * @author Frosty Teh Snowman <skype:travis.mccorkle>
+ * @author Arthur <skype:arthur.behesnilian>
+ * @author Kayla <skype:ashbysmith1996>
+ * @author Sundays211
+ * @since 05/04/2016
  */
 public interface Parser {
 

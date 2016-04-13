@@ -58,13 +58,12 @@ import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.InvRepository;
-import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.inv.Inventory;
+import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.PlayerStat;
-import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.stat.Stat;
+import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.var.VarContainer;
-import org.virtue.game.parser.Parser;
 import org.virtue.game.parser.ParserDataType;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.protocol.message.ResponseTypeMessage;
@@ -82,7 +81,7 @@ import org.w3c.dom.NodeList;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Sep 26, 2014
  */
-public class XmlParser implements Parser {
+public class XmlParser {
 	
 	/**
 	 * The {@link Logger} instance
@@ -97,10 +96,6 @@ public class XmlParser implements Parser {
 	
 	private static final int EXCHANGE_VERSION = 2;
 
-	/* (non-Javadoc)
-	 * @see org.virtue.game.parser.Parser#saveObject(java.lang.String, java.lang.String)
-	 */
-	@Override
 	public void saveObjectDefinition(Object object, String file, ParserDataType type) {
 			DocumentBuilderFactory docFactory;
 			DocumentBuilder docBuilder;
@@ -673,10 +668,6 @@ public class XmlParser implements Parser {
 			}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.virtue.game.parser.Parser#loadObjectPlayerDefinition(org.virtue.network.protocol.message.LoginRequestMessage)
-	 */
-	@Override
 	public Object loadObjectDefinition(Object object, ParserDataType type) {
 			switch(type) {
 			case CHARACTER:
@@ -1352,10 +1343,6 @@ public class XmlParser implements Parser {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.virtue.game.parser.Parser#objectFileExists(java.lang.String, java.lang.String)
-	 */
-	@Override
 	public boolean objectFileExists(String name, ParserDataType type) {
 		return new File(type.getPath(), name + ".xml").exists();
 	}
