@@ -410,7 +410,7 @@ var Divination = {
 			}
 			api.faceEntity(player, npc);	
 			if (npc.getID() == harvest.wispID) {
-				openWisp(npc, harvest);
+			Divination.openWisp(npc, harvest);
 			}
 			
 			var stop = this.getHarvestDelay(player, harvest);
