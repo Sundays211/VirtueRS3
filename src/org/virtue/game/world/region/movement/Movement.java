@@ -159,7 +159,7 @@ public class Movement {
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
-		System.out.println("Path " + path.isSuccessful() + ", " + path.isMoveNear());
+		//System.out.println("Path " + path.isSuccessful() + ", " + path.isMoveNear());
 		addWalkSteps(path.getPoints());
 		destination = new Tile(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getPlane());
 		//entity.queueUpdateBlock(new FaceEntityBlock(null));
@@ -168,10 +168,10 @@ public class Movement {
 	
 	/**
 	 * Moves the entity one tile in the specified direction. The entity will move during the next game tick in which they are not paused.
-	 * @param direction The {@link Direction} to move in
+	 * @param direction The {@link CompassPoint} to move in
 	 * @return True if the step was successfully queued for the entity, false if they were blocked.
 	 */
-	public synchronized boolean move (Direction direction) {
+	public synchronized boolean move (CompassPoint direction) {
 		entity.interuptAction();
 		if (!entity.canMove()) {
 			return false;

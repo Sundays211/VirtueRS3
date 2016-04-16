@@ -3,7 +3,7 @@ package org.virtue.game.world.region.movement.routefinder;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.game.world.region.movement.path.Path;
 import org.virtue.game.world.region.movement.path.Pathfinder;
 
@@ -135,7 +135,7 @@ public abstract class AbstractPathFinder implements Pathfinder {
     	}
     }
     
-    public boolean checkDirection (Tile tile, Direction direction, int size) {
+    public boolean checkDirection (Tile tile, CompassPoint direction, int size) {
     	int plane = tile.getPlane();
     	int x = tile.getX();
     	int y = tile.getY();

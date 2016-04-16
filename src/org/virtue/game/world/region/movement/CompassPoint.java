@@ -32,7 +32,7 @@ import org.virtue.game.world.region.Tile;
  * @author Sundays211
  * @since 14/11/2014
  */
-public enum Direction {
+public enum CompassPoint {
 	NORTH(0, 0, 1, 0),
 	NORTHEAST(1, 1, 1, 4),
 	EAST(2, 1, 0, 1),
@@ -47,7 +47,7 @@ public enum Direction {
 	private int dy;
 	private int value;
 	
-	private Direction (int id, int dx, int dy, int value) {
+	private CompassPoint (int id, int dx, int dy, int value) {
 		this.serialID = id;
 		this.dx = dx;
 		this.dy = dy;
@@ -70,7 +70,7 @@ public enum Direction {
 		return ((int) (Math.atan2(dx, dy) * 2607.5945876176133)) & 0x3fff;
 	}
 	
-	public static Direction forID (int id) {
+	public static CompassPoint forID (int id) {
 		switch (id) {
 		case 0:
 			return NORTH;
@@ -93,7 +93,7 @@ public enum Direction {
 		}
 	}
 	
-	public static Direction forDelta (int dx, int dy) {
+	public static CompassPoint forDelta (int dx, int dy) {
 		if (dy >= 1 && dx >= 1) {
 			return NORTHEAST;
 		} else if (dy <= -1 && dx >= 1) {
@@ -124,8 +124,8 @@ public enum Direction {
 	 * @param rotation The int value.
 	 * @return The direction.
 	 */
-	public static Direction get(int rotation) {
-		for (Direction dir : Direction.values()) {
+	public static CompassPoint get(int rotation) {
+		for (CompassPoint dir : CompassPoint.values()) {
 			if (dir.value == rotation) {
 				return dir;
 			}
@@ -178,8 +178,8 @@ public enum Direction {
 	 * Gets the opposite dir.
 	 * @return the direction.
 	 */
-	public Direction getOpposite() {
-		return Direction.get(toInteger() + 2 & 3);
+	public CompassPoint getOpposite() {
+		return CompassPoint.get(toInteger() + 2 & 3);
 	}
 
 	/**
@@ -188,19 +188,19 @@ public enum Direction {
 	 * @param l The end location.
 	 * @return The most logical direction.
 	 */
-	public static Direction getLogicalDirection(Tile location, Tile l) {
+	public static CompassPoint getLogicalDirection(Tile location, Tile l) {
 		int offsetX = Math.abs(l.getX() - location.getX());
 		int offsetY = Math.abs(l.getY() - location.getY());
 		if (offsetX > offsetY) {
 			if (l.getX() > location.getX()) {
-				return Direction.EAST;
+				return CompassPoint.EAST;
 			} else {
-				return Direction.WEST;
+				return CompassPoint.WEST;
 			}
 		} else if (l.getY() < location.getY()) {
-			return Direction.SOUTH;
+			return CompassPoint.SOUTH;
 		}
-		return Direction.NORTH;
+		return CompassPoint.NORTH;
 	}
 
 }

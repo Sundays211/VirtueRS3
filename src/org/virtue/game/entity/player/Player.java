@@ -70,7 +70,7 @@ import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.game.world.region.zone.Projectile;
 import org.virtue.game.world.region.zone.ZoneUpdatePacket;
 import org.virtue.network.event.GameEventDispatcher;
@@ -141,7 +141,7 @@ public class Player extends Entity {
 	 */
 	private PrivilegeLevel level = PrivilegeLevel.PLAYER;
 
-	private Direction direction;
+	private CompassPoint direction;
 
 	/**
 	 * The players combat mode
@@ -483,11 +483,11 @@ public class Player extends Entity {
 		gameState = GameState.FINISHED;
 	}
 
-	public Direction getDirection() {
+	public CompassPoint getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Direction direction) {
+	public void setDirection(CompassPoint direction) {
 		this.direction = direction;
 	}
 

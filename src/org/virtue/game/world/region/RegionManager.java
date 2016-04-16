@@ -37,7 +37,7 @@ import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
 import org.virtue.game.World;
 import org.virtue.game.world.region.Region.LoadStage;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.game.world.region.movement.routefinder.TraversalMap;
 
 /**
@@ -429,11 +429,11 @@ public class RegionManager implements TraversalMap {
 		return getClippingFlag(z, x, y); //TODO:
 	}
 	
-	public static boolean checkDirection(int level, int x, int y, Direction direction) {
+	public static boolean checkDirection(int level, int x, int y, CompassPoint direction) {
 		return direction.canMove(new Tile(x, y, level), 1);
 	}
 
-	public static boolean checkDirection(Tile currentTile, Direction direction, int size) {
+	public static boolean checkDirection(Tile currentTile, CompassPoint direction, int size) {
 		
 		return direction.canMove(currentTile, size);
 	}

@@ -24,7 +24,7 @@ package org.virtue.network.protocol.update.block;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.BlockType;
@@ -40,16 +40,16 @@ public class ForceMovementBlock extends Block {
 	private Tile tile2;
 	private int delay2;
 
-	private Direction direction;
+	private CompassPoint direction;
 
-	public ForceMovementBlock(Tile tile1, int delay1, Direction direction) {
+	public ForceMovementBlock(Tile tile1, int delay1, CompassPoint direction) {
 		this(tile1, delay1, direction, tile1, delay1+1);
 	}
 
 	/**
 	 * The {@link ForceMovementBlock} constructor
 	 */
-	public ForceMovementBlock(Tile tile1, int delay1, Direction direction, Tile tile2, int delay2) {
+	public ForceMovementBlock(Tile tile1, int delay1, CompassPoint direction, Tile tile2, int delay2) {
 		super(BlockType.MOVE);
 		this.tile1 = tile1;
 		this.delay1 = delay1;

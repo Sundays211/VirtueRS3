@@ -664,7 +664,7 @@ public class Appearance {
 
 	public void setNPCId(int id) {
 		this.npcId = id;
-		setBAS(NpcTypeList.getInstance().list(id).renderTypeID);
+		setBAS(NpcTypeList.getInstance().list(id).basTypeID);
 	}
 
 	public int getRenderNpc() {

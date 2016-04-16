@@ -67,8 +67,8 @@ public class EquipmentManager {
 	
 	public EquipmentManager (Player player) {
 		this.player = player;
-		this.styleOverrides = new EquipmentStyleOverride[player.getInvs().loadContainer(ContainerState.EQUIPMENT).getSize()];
-		this.slotOverrides = new int[this.styleOverrides.length];
+		this.styleOverrides = new EquipmentStyleOverride[19];//TODO Find this out dynamically
+		this.slotOverrides = new int[19];
 		Arrays.fill(this.slotOverrides, -1);
 	}
 	

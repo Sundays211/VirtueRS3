@@ -75,7 +75,7 @@ import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
@@ -1695,7 +1695,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void forceMovement(Entity entity, Tile t1, int delay1, Tile t2, int delay2, int direction) {
-		entity.queueUpdateBlock(new ForceMovementBlock(t1, delay1, Direction.forID(direction), t2, delay2));
+		entity.queueUpdateBlock(new ForceMovementBlock(t1, delay1, CompassPoint.forID(direction), t2, delay2));
 	}
 
 	/* (non-Javadoc)

@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
+import org.virtue.network.protocol.update.ref.MoveSpeed;
 import org.virtue.utility.text.StringUtility;
 
 /**
@@ -105,6 +106,7 @@ public class NpcType implements ConfigType {
     public int anInt8466;
     //public Direction respawnDirection;
     public int respawnDirection;
+    public MoveSpeed speed;
     public int multiNPCVarbit;
     public int anInt8469;
     public boolean visible;
@@ -117,11 +119,11 @@ public class NpcType implements ConfigType {
     public byte aByte8477;
     int[][] modelTranslation;
     public int anInt8479;
-    public byte aByte8482;
+    public byte moveFlags;
     public int anInt8483;
     public int anInt8484;
     public boolean map_visible;
-    public int renderTypeID = -1;
+    public int basTypeID = -1;
     public int anInt8487;
     public int anInt8488;
     Map<Integer, Object> params;
@@ -175,7 +177,7 @@ public class NpcType implements ConfigType {
 		aByte8476 = (byte) -16;
 		shadowTexture = (short) -1;
 		shadowAlpha = (byte) 0;
-		aByte8482 = (byte) 0;
+		moveFlags = (byte) 0;
 		anInt8466 = -1;
 		anInt8483 = -1;
 		anInt8484 = -1;
@@ -371,7 +373,7 @@ public class NpcType implements ConfigType {
 		    aByte8477 = buffer.get();
 		    aByte8476 = buffer.get();
 		} else if (code == 119) {
-		    aByte8482 = buffer.get();
+			moveFlags = buffer.get();
 		} else if (code == 121) {
 			modelTranslation = new int[meshes.length][];
 		    int i_32_ = buffer.get() & 0xff;
@@ -388,11 +390,9 @@ public class NpcType implements ConfigType {
 		    //respawnDirection = Direction.forSerialID(buffer.get());
 			respawnDirection = buffer.get();
 		} else if (127 == code) {
-		    renderTypeID = buffer.getShort() & 0xffff;
+		    basTypeID = buffer.getShort() & 0xffff;
 		} else if (code == 128) {
-		    //Class439.method1154(Class291.method5649((byte) -57),
-		    		buffer.get();// & 0xff
-			//	       -827326215);
+			speed = MoveSpeed.getById(buffer.get() & 0xff);
 		} else if (code == 134) {
 		    anInt8466 = buffer.getShort() & 0xffff;
 		    if (65535 == anInt8466) {

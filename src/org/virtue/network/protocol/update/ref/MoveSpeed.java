@@ -16,4 +16,13 @@ public enum MoveSpeed {
 	public byte getId () {
 		return id;
 	}
+	
+	public static MoveSpeed getById (int id) {
+		for (MoveSpeed s : values()) {
+			if (s.id == id) {
+				return s;
+			}
+		}
+		return null;
+	}
 }

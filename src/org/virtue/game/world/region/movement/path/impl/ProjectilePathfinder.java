@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.virtue.game.world.region.RegionManager;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.game.world.region.movement.path.Path;
 import org.virtue.game.world.region.movement.path.Point;
 
@@ -44,7 +44,7 @@ public final class ProjectilePathfinder extends AbstractPathfinder {
 		List<Point> points = new ArrayList<>();
 		path.setSuccesful(true);
 		while (x != end.getX() || y != end.getY()) {
-			Direction[] directions = getDirection(x, y, end);
+			CompassPoint[] directions = getDirection(x, y, end);
 			found = true;
 			checkSingleTraversal(points, directions);
 			if (!found) {
@@ -54,7 +54,7 @@ public final class ProjectilePathfinder extends AbstractPathfinder {
 			}
 		}
 		if (!points.isEmpty()) {
-			Direction last = null;
+			CompassPoint last = null;
 			for (int i = 0; i < points.size() - 1; i++) {
 				Point p = points.get(i);
 				if (p.getDirection() != last) {
@@ -71,8 +71,8 @@ public final class ProjectilePathfinder extends AbstractPathfinder {
 	 * @param points The points list.
 	 * @param directions The directions.
 	 */
-	private void checkSingleTraversal(List<Point> points, Direction... directions) {
-		for (Direction dir : directions) {
+	private void checkSingleTraversal(List<Point> points, CompassPoint... directions) {
+		for (CompassPoint dir : directions) {
 			found = true;
 			switch (dir) {
 			case NORTH:
@@ -156,31 +156,31 @@ public final class ProjectilePathfinder extends AbstractPathfinder {
 	 * @param end The end direction.
 	 * @return The direction.
 	 */
-	private static Direction[] getDirection(int startX, int startY, Tile end) {
+	private static CompassPoint[] getDirection(int startX, int startY, Tile end) {
 		int endX = end.getX();
 		int endY = end.getY();
 		if (startX == endX) {
 			if (startY > endY) {
-				return new Direction[] { Direction.SOUTH };
+				return new CompassPoint[] { CompassPoint.SOUTH };
 			} else if (startY < endY) {
-				return new Direction[] { Direction.NORTH };
+				return new CompassPoint[] { CompassPoint.NORTH };
 			}
 		} else if (startY == endY) {
 			if (startX > endX) {
-				return new Direction[] { Direction.WEST };
+				return new CompassPoint[] { CompassPoint.WEST };
 			}
-			return new Direction[] { Direction.EAST };
+			return new CompassPoint[] { CompassPoint.EAST };
 		} else {
 			if (startX < endX && startY < endY) {
-				return new Direction[] { Direction.NORTHEAST, Direction.EAST, Direction.NORTH };
+				return new CompassPoint[] { CompassPoint.NORTHEAST, CompassPoint.EAST, CompassPoint.NORTH };
 			} else if (startX < endX && startY > endY) {
-				return new Direction[] { Direction.SOUTHEAST, Direction.EAST, Direction.SOUTH };
+				return new CompassPoint[] { CompassPoint.SOUTHEAST, CompassPoint.EAST, CompassPoint.SOUTH };
 			} else if (startX > endX && startY < endY) {
-				return new Direction[] { Direction.NORTHWEST, Direction.WEST, Direction.NORTH };
+				return new CompassPoint[] { CompassPoint.NORTHWEST, CompassPoint.WEST, CompassPoint.NORTH };
 			} else if (startX > endX && startY > endY) {
-				return new Direction[] { Direction.SOUTHWEST, Direction.WEST, Direction.SOUTH };
+				return new CompassPoint[] { CompassPoint.SOUTHWEST, CompassPoint.WEST, CompassPoint.SOUTH };
 			}
 		}
-		return new Direction[0];
+		return new CompassPoint[0];
 	}
 }

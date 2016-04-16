@@ -23,7 +23,7 @@ package org.virtue.game.world.region;
 
 import org.virtue.game.node.Node;
 import org.virtue.game.world.region.Region.Chunk;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -567,7 +567,7 @@ public class Tile extends Node {
 	 * @param steps The amount of steps to move in this direction.
 	 * @return The location.
 	 */
-	public Tile copyNew(Direction dir, int steps) {
+	public Tile copyNew(CompassPoint dir, int steps) {
 		return new Tile(x + (dir.getDeltaX() * steps), y + (dir.getDeltaY() * steps), this.plane);
 	}
 

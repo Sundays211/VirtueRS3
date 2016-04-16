@@ -1,6 +1,6 @@
 package org.virtue.game.world.region.movement.path;
 
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.utility.DirectionUtility;
 
 /**
@@ -32,7 +32,7 @@ public final class Point {
 	/**
 	 * The direction for the next point.
 	 */
-	private final Direction direction;
+	private final CompassPoint direction;
 
 	/**
 	 * If we can't run during this point.
@@ -54,7 +54,7 @@ public final class Point {
 	 * @param y The y-coordinate.
 	 * @param direction The direction.
 	 */
-	public Point(int x, int y, Direction direction) {
+	public Point(int x, int y, CompassPoint direction) {
 		this(x, y, direction, 0, 0);
 	}
 
@@ -66,7 +66,7 @@ public final class Point {
 	 * @param diffX The difference x between previous and current point.
 	 * @param diffY The difference y between previous and current point.
 	 */
-	public Point(int x, int y, Direction direction, int diffX, int diffY) {
+	public Point(int x, int y, CompassPoint direction, int diffX, int diffY) {
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
@@ -83,7 +83,7 @@ public final class Point {
 	 * @param diffY The difference y between previous and current point.
 	 * @param runDisabled If running is disabled for this walking point.
 	 */
-	public Point(int x, int y, Direction direction, int diffX, int diffY, boolean runDisabled) {
+	public Point(int x, int y, CompassPoint direction, int diffX, int diffY, boolean runDisabled) {
 		this(x, y, direction, diffX, diffY);
 		this.runDisabled = runDisabled;
 	}
@@ -118,7 +118,7 @@ public final class Point {
 	 * Gets the direction.
 	 * @return The direction.
 	 */
-	public Direction getDirection() {
+	public CompassPoint getDirection() {
 		return direction;
 	}
 

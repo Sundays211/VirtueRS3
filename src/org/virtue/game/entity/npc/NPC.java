@@ -45,7 +45,7 @@ import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.Direction;
+import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.game.world.region.movement.routefinder.NpcTraversalMap;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -67,7 +67,7 @@ public class NPC extends Entity {
 	
 	private int typeId;
 	
-	private Direction direction;
+	private CompassPoint direction;
 	
 	/**
 	 * Game event sender for the player
@@ -78,9 +78,9 @@ public class NPC extends Entity {
 	
 	private int respawnTime = -1;
 	
-	private Tile spawnTile;
+	private Tile spawnCoords;
 	
-	private int walkRange = 6;
+	private int walkRange = 5;
 	
 	private int interactRange = 1;
 	
@@ -119,14 +119,14 @@ public class NPC extends Entity {
 	 */
 	protected NPC (int typeID, Tile tile) {
 		super(typeID);
-		this.spawnTile = tile;
+		this.spawnCoords = tile;
 		this.typeId = typeID;
 		this.type = NpcTypeList.getInstance().list(typeID);
 		super.setCurrentTile(tile);
 		super.setLastTile(tile);
 		super.name = type.name;
 		super.setSize(type.size);
-		this.direction = Direction.forID(this.type.respawnDirection);
+		this.direction = CompassPoint.forID(this.type.respawnDirection);
 		this.getMovement().setTraversalMap(new NpcTraversalMap(this, tile));
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
@@ -134,8 +134,9 @@ public class NPC extends Entity {
 		if (customData != null) {
 			this.walkRange = customData.getWalkRange();
 			this.interactRange = customData.getInteractRange();
-		} else if (type.renderTypeID == -1 
-				|| !Virtue.getInstance().getConfigProvider().getBASTypes().list(type.renderTypeID).hasWalkAnimation()) {
+		}
+
+		if ((type.moveFlags & 0x2) == 0) {
 			this.walkRange = 0;
 		}
 		CombatHandler script = Virtue.getInstance().getScripts().getCombatScript(typeID);
@@ -171,11 +172,11 @@ public class NPC extends Entity {
 		return NpcTypeList.getInstance().getMultiNPC(player.getVars(), Virtue.getInstance().getConfigProvider(), typeId);
 	}
 	
-	public Direction getDirection () {
+	public CompassPoint getDirection () {
 		return direction;
 	}	
 	
-	public void setDirection (Direction direction) {
+	public void setDirection (CompassPoint direction) {
 		this.direction = direction;
 	}
 	
@@ -232,26 +233,45 @@ public class NPC extends Entity {
 	}
 	
 	private void processRandomWalk () {
-		if (Math.random() > 0.25) {
-			return;//Only process 1/4 of the time
-		}
 		if (!World.getInstance().getRegions().regionLoaded(this.getCurrentTile().getRegionID())) {
 			return;//Don't walk unless players are already in the region
 		}
-		Direction[] directions = Direction.values();
-		Direction direction = directions[(int) (Math.random()*directions.length)];
-		this.queueUpdateBlock(new FaceEntityBlock(null));
-		this.getMovement().move(direction);
+		if (Math.random() * 1000.0 > 10.0) {
+			return;//Only process 1/100 of the time
+		}
+		int stepsX = (int) Math.round(Math.random() * 10.0 - 5.0);
+		int stepsY = (int) Math.round(Math.random() * 10.0 - 5.0);
+		if (stepsX != 0 || stepsY != 0) {
+			int destX = getCurrentTile().getX() + stepsX;
+			int destY = getCurrentTile().getY() + stepsY;
+			int spawnX = spawnCoords.getX();
+			int spawnY = spawnCoords.getY();
+			if (destX > spawnX+walkRange) {
+				destX = spawnX+walkRange;
+			} else if (destX < spawnX-walkRange) {
+				destX = spawnX-walkRange;
+			}
+			if (destY > spawnY+walkRange) {
+				destY = spawnY+walkRange;
+			} else if (destY < spawnY-walkRange) {
+				destY = spawnY-walkRange;
+			}
+			this.queueUpdateBlock(new FaceEntityBlock(null));
+			this.getMovement().moveTo(destX, destY);
+		}
 	}
 	
 	private boolean canWalk () {
+		if (this.getMovement().hasSteps() || walkRange <= 0) {
+			return false;
+		}
 		if (!exists() || getImpactHandler().isDead()) {
 			return false;
 		}
 		if (getCombatSchedule().getState() == CombatState.ACTIVE) {
 			return false;
 		}
-		return currentAction == null && walkRange > 0;
+		return currentAction == null;
 	}
 	
 	/* (non-Javadoc)
@@ -442,7 +462,7 @@ public class NPC extends Entity {
 	public void setRespawnTask() {
 		if(this.exists) {
 			setExists(false);
-			setCurrentTile(spawnTile);
+			setCurrentTile(spawnCoords);
 			this.getMovement().clearTarget();
 			//System.out.println("Removed npc from game.");
 		}
@@ -529,6 +549,6 @@ public class NPC extends Entity {
 	 */
 	@Override
 	public int getBASId() {
-		return getType().renderTypeID;
+		return getType().basTypeID;
 	}
 }
