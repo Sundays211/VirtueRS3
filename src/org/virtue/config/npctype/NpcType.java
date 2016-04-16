@@ -41,33 +41,7 @@ public class NpcType implements ConfigType {
     static final int anInt8439 = 6;
     public static short[] aShortArray8448 = new short[256];
     public static final int anInt8480 = 1;
-    public static final int anInt8481 = 2;
-	
-    /**
-     * Retrieves the specified npc type definition from the cache
-     * @param id The npc type ID
-     * @param buffer The buffer containing the data
-     * @return The NpcType definition
-     */
-	public static NpcType load (int id, ByteBuffer buffer) {
-		NpcType npcType = new NpcType(id);
-		npcType.decode(buffer);
-		return npcType;
-	}
-	
-	/**
-	 * Retrieves the specified npc type definition from the cache, using custom data alongside cache data
-	 * @param id The npc type ID
-	 * @param cacheData The buffer containing data from the cache
-	 * @param extraData The buffer containing extra data (such as descriptions and animations)
-	 * @return the NpcType config
-	 */
-	public static NpcType load (int id, ByteBuffer cacheData, ByteBuffer extraData) {
-		NpcType npcType = load(id, extraData);
-		npcType.decode(cacheData);
-		return npcType;
-	}
-	
+    public static final int anInt8481 = 2;	
 	short[] retex_s;
     public int[] headMeshes;
     public int attackOpCursor;
@@ -77,7 +51,7 @@ public class NpcType implements ConfigType {
     public int size = 1;
     int resize_y;
     public boolean aBool8437;
-    public int[] meshes;
+    public int[] models;
     short[] recol_s;
     public short[] recol_d;
     public int anInt8442;
@@ -150,7 +124,9 @@ public class NpcType implements ConfigType {
     public int magic_lvl;
     public int range;
     
-    NpcType (int id) {
+    public Map<String, Object> extraParams;
+    
+    public NpcType (int id, NpcTypeList myList) {
 		aByte8450 = (byte) 0;
 		attackOpCursor = -1;
 		map_visible = true;
@@ -216,9 +192,9 @@ public class NpcType implements ConfigType {
     void decode(ByteBuffer buffer, int code) {
 		if (1 == code) {
 		    int count = buffer.get() & 0xff;
-		    meshes = new int[count];
+		    models = new int[count];
 		    for (int index = 0; index < count; index++) {
-		    	meshes[index] = ByteBufferUtils.getSmartInt(buffer);
+		    	models[index] = ByteBufferUtils.getSmartInt(buffer);
 		    }
 		} else if (2 == code) {
 		    name = ByteBufferUtils.getString(buffer).intern();
@@ -375,7 +351,7 @@ public class NpcType implements ConfigType {
 		} else if (code == 119) {
 			moveFlags = buffer.get();
 		} else if (code == 121) {
-			modelTranslation = new int[meshes.length][];
+			modelTranslation = new int[models.length][];
 		    int i_32_ = buffer.get() & 0xff;
 		    for (int i_33_ = 0; i_33_ < i_32_; i_33_++) {
 				int i_34_ = buffer.get() & 0xff;

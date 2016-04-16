@@ -58,7 +58,7 @@ public class SeqType implements ConfigType {
 	Map<Integer, Object> params;
 	public int soundRepeats;
 
-	SeqType(int id, SeqTypeList myList) {
+	public SeqType(int id, SeqTypeList myList) {
 		length = 0;
 		seqGroupTypeId = -1;
 		loop = -1;

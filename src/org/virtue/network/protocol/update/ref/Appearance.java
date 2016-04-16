@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.npctype.NpcType;
-import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.entity.Entity;
@@ -218,7 +217,7 @@ public class Appearance {
 		}
 		update.putByte(render.equals(Render.NPC) && npcId >= 0 ? 1 : 0);
 		if (render.equals(Render.NPC) && npcId >= 0) {
-			NpcType npcType = NpcTypeList.getInstance().list(npcId);
+			NpcType npcType = Virtue.getInstance().getConfigProvider().getNpcTypes().list(npcId);
 			update.putShort(npcType.anInt8466);
 			update.putShort(npcType.anInt8483);
 			update.putShort(npcType.anInt8484);
@@ -664,7 +663,7 @@ public class Appearance {
 
 	public void setNPCId(int id) {
 		this.npcId = id;
-		setBAS(NpcTypeList.getInstance().list(id).basTypeID);
+		setBAS(Virtue.getInstance().getConfigProvider().getNpcTypes().list(id).basTypeID);
 	}
 
 	public int getRenderNpc() {

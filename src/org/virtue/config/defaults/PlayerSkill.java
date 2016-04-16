@@ -25,21 +25,21 @@ package org.virtue.config.defaults;
  * @author Sundays211
  * @since 23/01/2016
  */
-public class StatType {
+public class PlayerSkill {
 	int nonMemberXpCap;
 	int levelCap;
 	boolean members;
 	int id;
 	int nonMemberLevelCap;
-	ExperienceCurve xpCurve;
+	PlayerSkillXPTable xpTable;
 	int initialLevel;
 	
-	StatType(int id, int maxLevel, boolean members, boolean bool_12_, int nonMemberCap,
-			ExperienceCurve xpCurve, int initialLevel) {
+	PlayerSkill(int id, int maxLevel, boolean members, boolean bool_12_, int nonMemberCap,
+			PlayerSkillXPTable xpCurve, int initialLevel) {
 		this.id = id;
 		this.levelCap = maxLevel;
 		this.members = members;
-		this.xpCurve = xpCurve;
+		this.xpTable = xpCurve;
 		this.initialLevel = initialLevel;
 		if (members) {
 			nonMemberLevelCap = nonMemberCap;
@@ -70,8 +70,8 @@ public class StatType {
 		return nonMemberLevelCap;
 	}
 
-	public ExperienceCurve getXpCurve() {
-		return xpCurve;
+	public PlayerSkillXPTable getXpTable() {
+		return xpTable;
 	}
 
 	public int getInitialLevel() {

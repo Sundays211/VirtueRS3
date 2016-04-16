@@ -150,7 +150,7 @@ public abstract class ExternalConfigDecoder<T extends ConfigType> extends CacheL
 		return (T) type;
 	}
 	
-	private ByteBuffer getData (int id) {
+	protected ByteBuffer getData (int id) {
 		int groupId = configGroup.getClientGroupId(id);
 		int fileId = configGroup.getClientFileId(id);
 		try {

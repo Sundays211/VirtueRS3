@@ -35,7 +35,6 @@ import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.seqtype.SeqType;
-import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.config.vartype.constants.ScriptVarType;
@@ -342,7 +341,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int seqLength(int seqTypeId) {
-		SeqType seqType = SeqTypeList.getInstance().list(seqTypeId);
+		SeqType seqType = configProvider.getSeqTypes().list(seqTypeId);
 		if (seqType == null) {
 			throw new IllegalArgumentException("Invalid seqTypeId: "+seqTypeId);
 		}

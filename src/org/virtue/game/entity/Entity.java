@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.config.seqtype.SeqType;
-import org.virtue.config.seqtype.SeqTypeList;
 import org.virtue.engine.cycle.GameTick;
 import org.virtue.game.World;
 import org.virtue.game.content.minigame.Controller;
@@ -554,7 +553,7 @@ public abstract class Entity extends Node {
 		if (animTimeRemaining > 0) {
 			return false;
 		}
-		currentAnim = SeqTypeList.getInstance().list(animId);
+		currentAnim = Virtue.getInstance().getConfigProvider().getSeqTypes().list(animId);
 		if (currentAnim == null) {
 			throw new IllegalArgumentException("Invalid animation: "+animId);
 		}

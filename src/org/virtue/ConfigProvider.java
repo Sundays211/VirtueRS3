@@ -22,6 +22,7 @@
 package org.virtue;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.EnumMap;
 import java.util.Properties;
 
@@ -34,6 +35,9 @@ import org.virtue.config.Js5ConfigGroup;
 import org.virtue.config.bastype.BASTypeList;
 import org.virtue.config.db.dbrowtype.DBRowTypeList;
 import org.virtue.config.db.dbtabletype.DBTableTypeList;
+import org.virtue.config.defaults.DefaultsGroup;
+import org.virtue.config.defaults.SkillDefaults;
+import org.virtue.config.defaults.WearposDefaults;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.invtype.InvTypeList;
 import org.virtue.config.loctype.LocTypeList;
@@ -49,6 +53,9 @@ import org.virtue.config.vartype.VarTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.config.vartype.general.VarBasicTypeList;
 import org.virtue.config.vartype.player.VarPlayerTypeList;
+import org.virtue.game.entity.player.stat.Stat;
+import org.virtue.game.parser.impl.NpcDataParser;
+import org.virtue.utility.FileUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -92,9 +99,14 @@ public class ConfigProvider {
 	private VarBitTypeList varBitTypeList;
 	
 	private SeqGroupTypeList seqGroupTypeList;
+	
+	private WearposDefaults wearposDefaults;
+	
+	private SkillDefaults skillDefaults;
 
 	protected ConfigProvider(Cache cache) throws IOException {
 		this.cache = cache;
+		
 		Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG.getArchiveId()));
 		this.configTable = ReferenceTable.decode(container.getData());
 	}
@@ -106,10 +118,12 @@ public class ConfigProvider {
 		
 		locTypeList = new LocTypeList(cache);
 		
-		enumTypeList = new EnumTypeList(cache);
+		enumTypeList = new EnumTypeList(cache);		
+
+		npcTypeList = new NpcTypeList(cache, Constants.NPC_DATA);
 		
-		NpcTypeList.init(cache, Constants.NPC_DATA);
-		npcTypeList = NpcTypeList.getInstance();
+		String npcDataFile = properties.getProperty("npc.data.file", "repository/npc/NPCData.json");
+		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile), npcTypeList);		
 		
 		ObjTypeList.init(cache, Constants.ITEM_DATA);
 		objTypeList = ObjTypeList.getInstance();
@@ -156,8 +170,14 @@ public class ConfigProvider {
 				configTable.getEntry(Js5ConfigGroup.SEQGROUPTYPE.id).size());
 		seqGroupTypeList = new SeqGroupTypeList(configTable, seqgroups);
 		
-		SeqTypeList.init(cache, seqGroupTypeList);
-		seqTypeList = SeqTypeList.getInstance();
+		seqTypeList = new SeqTypeList(cache, seqGroupTypeList);
+		
+		ByteBuffer skills = cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.SKILL.js5Id).getData();
+		skillDefaults = new SkillDefaults(skills);
+		Stat.setDefaults(skillDefaults);		
+		
+		ByteBuffer wearpos = cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.WEARPOS.js5Id).getData();
+		wearposDefaults = new WearposDefaults(wearpos);
 	}
 	
 	public InvTypeList getInvTypes () {
@@ -214,6 +234,14 @@ public class ConfigProvider {
 	
 	public VarBitTypeList getVarBitTypes () {
 		return varBitTypeList;
+	}
+	
+	public WearposDefaults getWearposDefaults () {
+		return wearposDefaults;
+	}
+	
+	public SkillDefaults getSkillDefaults () {
+		return skillDefaults;
 	}
 
 }

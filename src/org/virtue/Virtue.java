@@ -46,8 +46,6 @@ import org.virtue.cache.Container;
 import org.virtue.cache.FileStore;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.db.DBIndexProvider;
-import org.virtue.config.defaults.DefaultsGroup;
-import org.virtue.config.defaults.StatDefaults;
 import org.virtue.engine.GameEngine;
 import org.virtue.engine.cycle.ticks.SystemUpdateTick;
 import org.virtue.engine.script.JSListeners;
@@ -61,14 +59,12 @@ import org.virtue.game.entity.combat.impl.SpecialAttackHandler;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.widget.WidgetRepository;
 import org.virtue.game.parser.AccountIndex;
 import org.virtue.game.parser.CachingParser;
 import org.virtue.game.parser.ClanIndex;
 import org.virtue.game.parser.ParserRepository;
 import org.virtue.game.parser.impl.NewsDataParser;
-import org.virtue.game.parser.impl.NpcDataParser;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.game.parser.impl.NpcSpawnParser;
 import org.virtue.game.parser.xml.XMLAccountIndex;
@@ -319,9 +315,6 @@ public class Virtue {
 		String newsDataFile = getProperty("news.file", "repository/news.json");
 		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile));
 		
-		String npcDataFile = getProperty("npc.data.file", "repository/npc/NPCData.json");
-		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile));
-		
 		SpecialAttackHandler.init();
 		ActionBar.init();
 		AbstractNPC.init();
@@ -340,9 +333,7 @@ public class Virtue {
 		
 		QuickChatPhraseTypeList.init(cache);
 		RegionManager.init(cache);
-		StatDefaults statDefaults = new StatDefaults(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.STAT.js5Id).getData());
-		Stat.setDefaults(statDefaults);		
-		//Appearance.init(cache.read(Js5Archive.DEFAULTS.getArchiveId(), DefaultsGroup.APPEARANCE.js5Id).getData());
+		
 		Huffman.setHuffman(new Huffman(cache.read(10, cache.getFileId(Js5Archive.BINARY.getArchiveId(), "huffman")).getData()));
 		DBIndexProvider.init(cache);
 	}

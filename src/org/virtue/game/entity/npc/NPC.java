@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcType;
-import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.engine.script.api.ScriptAPI;
@@ -121,7 +120,7 @@ public class NPC extends Entity {
 		super(typeID);
 		this.spawnCoords = tile;
 		this.typeId = typeID;
-		this.type = NpcTypeList.getInstance().list(typeID);
+		this.type = Virtue.getInstance().getConfigProvider().getNpcTypes().list(typeID);
 		super.setCurrentTile(tile);
 		super.setLastTile(tile);
 		super.name = type.name;
@@ -130,7 +129,7 @@ public class NPC extends Entity {
 		this.getMovement().setTraversalMap(new NpcTraversalMap(this, tile));
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
-		CustomNpcData customData = NpcTypeList.getCustomData(this.getID());
+		CustomNpcData customData = Virtue.getInstance().getConfigProvider().getNpcTypes().getCustomData(this.getID());
 		if (customData != null) {
 			this.walkRange = customData.getWalkRange();
 			this.interactRange = customData.getInteractRange();
@@ -169,7 +168,7 @@ public class NPC extends Entity {
 	}
 	
 	public NpcType getType (Player player) {
-		return NpcTypeList.getInstance().getMultiNPC(player.getVars(), Virtue.getInstance().getConfigProvider(), typeId);
+		return Virtue.getInstance().getConfigProvider().getNpcTypes().getMultiNPC(player.getVars(), Virtue.getInstance().getConfigProvider(), typeId);
 	}
 	
 	public CompassPoint getDirection () {
@@ -419,7 +418,7 @@ public class NPC extends Entity {
 		this.typeId = typeID;
 		this.queueUpdateBlock(new NpcTypeBlock());
 		if (typeID != -1) {
-			this.type = NpcTypeList.getInstance().list(typeID);
+			this.type = Virtue.getInstance().getConfigProvider().getNpcTypes().list(typeID);
 		} else {
 			this.exists = false;
 		}
@@ -521,7 +520,7 @@ public class NPC extends Entity {
 
 	@Override
 	public int getImpactAnimation() {
-		CustomNpcData data = NpcTypeList.getCustomData(id);
+		CustomNpcData data = Virtue.getInstance().getConfigProvider().getNpcTypes().getCustomData(id);
 		if (data != null) {
 			return data.getDefendAnimation();
 		}

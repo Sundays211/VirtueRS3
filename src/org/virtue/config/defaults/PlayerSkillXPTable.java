@@ -26,12 +26,12 @@ package org.virtue.config.defaults;
  * @author Sundays211
  * @since 23/01/2016
  */
-public class ExperienceCurve {
-	public static final ExperienceCurve DEFAULT = new ExperienceCurve();
+public class PlayerSkillXPTable {
+	public static final PlayerSkillXPTable DEFAULT = new PlayerSkillXPTable();
 	
 	private int[] lookup;
 
-	private ExperienceCurve() {
+	private PlayerSkillXPTable() {
 		lookup = new int[120];
 		int xp = 0;
 		for (int level = 1; level <= 120; level++) {
@@ -42,7 +42,7 @@ public class ExperienceCurve {
 		validate();
 	}
 
-	ExperienceCurve(int[] lookup) {
+	PlayerSkillXPTable(int[] lookup) {
 		if (null == lookup) {
 			throw new NullPointerException();
 		}

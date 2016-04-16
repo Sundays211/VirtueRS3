@@ -32,10 +32,10 @@ public enum DefaultsGroup {
     GRAPHICS(3),
     AUDIO(4),
     MICROTRANSACTION(5),
-    APPEARANCE(6),
+    WEARPOS(6),
     KEYBOARD(7),
     GROUP_8(8),
-    STAT(9),
+    SKILL(9),
     ERROR(10);
 	
     public int js5Id;

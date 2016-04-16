@@ -22,7 +22,6 @@
 package org.virtue.game.content.dialogues;
 
 import org.virtue.Virtue;
-import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.network.event.context.impl.in.InputEventContext.InputType;
@@ -161,7 +160,7 @@ public class DialogManager {
 		ModelType modelType = ModelType.PLAYER_HEAD_SELF;
 		switch (type) {
 		case NPC_L:
-			name = NpcTypeList.getInstance().list(entityID).name;
+			name =Virtue.getInstance().getConfigProvider().getNpcTypes().list(entityID).name;
 			modelType = ModelType.NPC_HEAD;
 		case PLAYER_L:
 			player.getDispatcher().sendWidgetText(1191, 2, name);
@@ -172,7 +171,7 @@ public class DialogManager {
 			player.getWidgets().openOverlaySub(WidgetManager.DIALOG_OVERLAY_SUB, 1191, false);//Send chat dialog
 			break;
 		case NPC_R:
-			name = NpcTypeList.getInstance().list(entityID).name;
+			name = Virtue.getInstance().getConfigProvider().getNpcTypes().list(entityID).name;
 			modelType = ModelType.NPC_HEAD;
 		case PLAYER_R://1184
 			player.getDispatcher().sendWidgetText(1184, 11, name);

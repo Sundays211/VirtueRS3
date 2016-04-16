@@ -34,7 +34,6 @@ import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
-import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
@@ -659,7 +658,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public NpcType getNpcType(int npcID) {
-		return NpcTypeList.getInstance().list(npcID);
+		return configProvider.getNpcTypes().list(npcID);
 	}
 
 	/* (non-Javadoc)

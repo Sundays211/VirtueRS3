@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,37 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.config.seqtype;
+package org.virtue.game.entity.player.inv;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.virtue.cache.Cache;
-import org.virtue.config.ExternalConfigDecoder;
-import org.virtue.config.Js5Archive;
-import org.virtue.config.Js5ConfigGroup;
+import org.virtue.config.objtype.ObjType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
+ * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 29/10/2014
+ * @since 16/04/2016
  */
-public class SeqTypeList extends ExternalConfigDecoder<SeqType> {
-
-	/**
-	 * The {@link Logger} instance
-	 */
-	private static Logger logger = LoggerFactory.getLogger(SeqTypeList.class);
+public class ObjTypeCustomisation {
 	
-	protected SeqGroupTypeList seqGroupTypeList;
 	
-	public SeqTypeList(Cache cache, SeqGroupTypeList seqGroupTypeList) throws IOException {
-		super(cache, Js5Archive.CONFIG_SEQ, Js5ConfigGroup.SEQTYPE, SeqType.class);
-		this.seqGroupTypeList = seqGroupTypeList;
-		
-		logger.info("Found "+getCapacity()+" seqtype definitions.");
+	public ObjTypeCustomisation(ObjType objType) {
+		// TODO Auto-generated constructor stub
 	}
+
 }

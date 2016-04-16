@@ -28,14 +28,14 @@ import java.nio.ByteBuffer;
  * @author Sundays211
  * @since Oct 18, 2014
  */
-public class EquipmentDefaults {
-	public int mainhandSlot = -1;
-    public int[] disabledSlots;
-    public int offhandSlot = -1;
+public class WearposDefaults {
+	public int righthand = -1;
+    public int[] slots;
+    public int lefthand = -1;
     public int[] anIntArray7634;
     public int[] anIntArray7629;
     
-    public EquipmentDefaults(ByteBuffer buffer) {
+    public WearposDefaults(ByteBuffer buffer) {
 		for (;;) {
 		    int opcode = buffer.get() & 0xff;
 		    if (opcode == 0) {
@@ -43,17 +43,17 @@ public class EquipmentDefaults {
 		    }
 		    if (opcode == 1) {
 				int slotCount = buffer.get() & 0xff;
-				disabledSlots = new int[slotCount];
-				for (int slot = 0; slot < disabledSlots.length; slot++) {
-				    disabledSlots[slot] = buffer.get() & 0xff;
-				    if (0 != disabledSlots[slot] && 2 != disabledSlots[slot]) {
+				slots = new int[slotCount];
+				for (int slot = 0; slot < slots.length; slot++) {
+					slots[slot] = buffer.get() & 0xff;
+				    if (0 != slots[slot] && 2 != slots[slot]) {
 				    	/* empty */
 				    }
 				}
 		    } else if (opcode == 3) {
-		    	offhandSlot = buffer.get() & 0xff;
+		    	lefthand = buffer.get() & 0xff;
 		    } else if (4 == opcode) {
-		    	mainhandSlot = buffer.get() & 0xff;
+		    	righthand = buffer.get() & 0xff;
 		    } else if (opcode == 5) {
 		    	anIntArray7634 = new int[buffer.get() & 0xff];
 		    	for (int slot = 0; slot < anIntArray7634.length; slot++)
@@ -65,7 +65,7 @@ public class EquipmentDefaults {
 		    	}
 		    }
 		}
-		if (disabledSlots == null) {
+		if (slots == null) {
 		    throw new RuntimeException("");
 		}
     }

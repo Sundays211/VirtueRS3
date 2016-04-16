@@ -36,7 +36,6 @@ import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcType;
-import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.game.Lobby;
@@ -60,8 +59,8 @@ import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.EquipmentManager;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.stat.Stat;
+import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.var.VarRepository;
 import org.virtue.game.entity.player.widget.WidgetManager;
@@ -1075,7 +1074,7 @@ public class Player extends Entity {
 	@Override
 	public int getSize() {
 		if (Render.NPC.equals(appearance.getRender())) {
-			NpcType npcType = NpcTypeList.getInstance().list(appearance.getRenderNpc());
+			NpcType npcType = Virtue.getInstance().getConfigProvider().getNpcTypes().list(appearance.getRenderNpc());
 			return npcType != null ? npcType.size : 1;
 		}
 		return 1;

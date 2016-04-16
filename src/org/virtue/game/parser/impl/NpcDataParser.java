@@ -50,7 +50,7 @@ public class NpcDataParser {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(NpcDataParser.class);
 	
-	public static void loadJsonNpcData (File path) {
+	public static void loadJsonNpcData (File path, NpcTypeList npcTypeList) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
 			JsonParser parser = new JsonParser();
 			JsonArray array = parser.parse(reader).getAsJsonArray();
@@ -73,7 +73,7 @@ public class NpcDataParser {
 				if (obj.has("interactRange")) {
 					interact = obj.get("interactRange").getAsInt();
 				}
-				NpcTypeList.registerCustomData(new CustomNpcData(attAnim, defAnim, range, interact), npcID);
+				npcTypeList.registerCustomData(new CustomNpcData(attAnim, defAnim, range, interact), npcID);
 			}
 		} catch (IOException ex) {
 			logger.error("Error loading NPC custom data", ex);

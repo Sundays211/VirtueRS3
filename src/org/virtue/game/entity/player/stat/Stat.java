@@ -21,9 +21,9 @@
  */
 package org.virtue.game.entity.player.stat;
 
-import org.virtue.config.defaults.ExperienceCurve;
-import org.virtue.config.defaults.StatDefaults;
-import org.virtue.config.defaults.StatType;
+import org.virtue.config.defaults.PlayerSkillXPTable;
+import org.virtue.config.defaults.SkillDefaults;
+import org.virtue.config.defaults.PlayerSkill;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -65,13 +65,13 @@ public enum Stat {
 	private final int id;
 	private int levelCap;
 	private int initialLevel;
-	private ExperienceCurve xpCurve;
+	private PlayerSkillXPTable xpCurve;
 
 	Stat (int id, String name) {
 		this.id = id;
 		this.name = name;
 		this.levelCap = 99;
-		this.xpCurve = ExperienceCurve.DEFAULT;
+		this.xpCurve = PlayerSkillXPTable.DEFAULT;
 		this.initialLevel = 1;
 	}
 	
@@ -114,11 +114,11 @@ public enum Stat {
 		return name;
 	}
 	
-	public static void setDefaults (StatDefaults defaults) {
+	public static void setDefaults (SkillDefaults defaults) {
 		for (Stat s : values()) {
-			StatType type = defaults.getStat(s.id);
+			PlayerSkill type = defaults.getSkill(s.id);
 			s.levelCap = type.getLevelCap();
-			s.xpCurve = type.getXpCurve();
+			s.xpCurve = type.getXpTable();
 			s.initialLevel = type.getInitialLevel();
 		}
 	}
