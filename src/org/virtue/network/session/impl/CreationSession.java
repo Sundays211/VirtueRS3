@@ -67,8 +67,8 @@ public class CreationSession extends Session {
 			channel.pipeline().remove(CreationDecoder.class);
 			channel.pipeline().addFirst(new ProtocolDecoder(request.getDecodingCipher()));
 			channel.attr(NetworkHandler.attachment).set(new GameSession(channel, player));
-			player.getAppearance().setTemp();
-			player.getAppearance().sendBlock(true);
+			player.getModel().setTemp();
+			player.getModel().sendBlock(true);
 			LoginDispatcher.onAccountCreation(player);
 		}
 	}

@@ -27,13 +27,15 @@ import java.util.Set;
 
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.objtype.ObjTypeCustomisation;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.clans.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.PlayerModel;
+import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarKey;
-import org.virtue.network.protocol.update.ref.Appearance.Gender;
 import org.virtue.utility.text.StringUtility;
 
 /**
@@ -49,9 +51,9 @@ public class EquipmentManager {
 	
 	public static final int CLAN_VEX = 20709;
 	
-	private static final byte[] CLAN_RECOL_SLOTS = { 0, 1, 2, 3 };
+	private static final int[] CLAN_RECOL_SLOTS = { 0, 1, 2, 3 };
 	
-	private static final byte[] CLAN_RETEX_SLOTS = { 0, 1 };
+	private static final int[] CLAN_RETEX_SLOTS = { 0, 1 };
 	
 	private static final Set<Integer> CUSTOMISABLE_CAPES = new HashSet<>(Arrays.asList(new Integer[]{ 20767, 20769, 20771, 32151, 32152, 32153 }));
 	
@@ -59,7 +61,7 @@ public class EquipmentManager {
 	
 	private Player player;
 	
-	private EquipmentStyleOverride[] styleOverrides;
+	private PlayerModel model;
 	
 	private int[] slotOverrides;
 	
@@ -67,7 +69,7 @@ public class EquipmentManager {
 	
 	public EquipmentManager (Player player) {
 		this.player = player;
-		this.styleOverrides = new EquipmentStyleOverride[19];//TODO Find this out dynamically
+		this.model = player.getModel();
 		this.slotOverrides = new int[19];
 		Arrays.fill(this.slotOverrides, -1);
 	}
@@ -141,7 +143,7 @@ public class EquipmentManager {
 		}
 		
 		handleWearEvent(item, slot);//Process any onwear events
-		player.getAppearance().refresh();//Refresh the player model
+		player.getModel().refresh();//Refresh the player model
 		player.getInvs().updateContainer(ContainerState.EQUIPMENT, item.getType().wearpos, slot2, slot3);
 		player.getInvs().sendContainer(ContainerState.BACKPACK);
 		return true;
@@ -153,15 +155,15 @@ public class EquipmentManager {
 	 * @param slot The position in which the item was equipped
 	 */
 	private void handleWearEvent (Item item, int slot) {
-		styleOverrides[slot] = null;
+		model.setObjCustomisation(slot, null);
 		if (item.getId() == CLAN_CAPE) {
-			styleOverrides[slot] = new EquipmentStyleOverride(CLAN_CAPE, slot);
+			this.model.setObjCustomisation(slot, new ObjTypeCustomisation(item.getType()));
 			clanItemWorn = true;
 		} else if (item.getId() == CLAN_VEX) {
-			styleOverrides[slot] = new EquipmentStyleOverride(CLAN_VEX, slot);
+			this.model.setObjCustomisation(slot, new ObjTypeCustomisation(item.getType()));
 			clanItemWorn = true;
 		} else if (slot == SLOT_CAPE && CUSTOMISABLE_CAPES.contains(item.getId())) {
-			styleOverrides[slot] = new EquipmentStyleOverride(item.getId(), slot);
+			this.model.setObjCustomisation(slot, new ObjTypeCustomisation(item.getType()));
 			updateCapeOverrides();
 		}
 	}
@@ -180,7 +182,7 @@ public class EquipmentManager {
 		if (slot3 != -1) {
 			slotOverrides[slot3] = -1;
 		}
-		styleOverrides[slot] = null;
+		model.setObjCustomisation(slot, null);
 		
 		player.getInvs().updateContainer(ContainerState.EQUIPMENT, slot, slot2, slot3);
 	}
@@ -265,7 +267,7 @@ public class EquipmentManager {
 
 		int[] addedTo = player.getInvs().getContainer(ContainerState.BACKPACK).add(item);
 		player.getInvs().getContainer(ContainerState.EQUIPMENT).clearSlot(slot);
-		player.getAppearance().refresh();
+		player.getModel().refresh();
 		player.getInvs().updateContainer(ContainerState.EQUIPMENT, slot);
 		player.getInvs().updateContainer(ContainerState.BACKPACK, addedTo);		
 		return true;
@@ -278,14 +280,6 @@ public class EquipmentManager {
 	 */
 	public boolean isEquipable (Item item) {
 		return item.getType().wearpos != -1;
-	}
-	
-	public EquipmentStyleOverride getOverride (int slot) {
-		return styleOverrides[slot];
-	}
-	
-	public void setOverride (EquipmentStyleOverride styleOverride) {
-		this.styleOverrides[styleOverride.getEquipSlot()] = styleOverride;
 	}
 	
 	public boolean meetsEquipRequirements(Item item) {
@@ -313,7 +307,7 @@ public class EquipmentManager {
 			Player owner = (Player) player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
 			if (owner.exists()) {
 				owner.getVars().setVarValueInt(VarKey.Player.LOAN_TO_PLAYER, -1);
-				owner.getDispatcher().sendGameMessage(player.getName()+" has returned the item "+(Gender.MALE.equals(player.getAppearance().getGender()) ? "he" : "she")+" borrowed from you.");
+				owner.getDispatcher().sendGameMessage(player.getName()+" has returned the item "+(Gender.MALE.equals(player.getModel().getGender()) ? "he" : "she")+" borrowed from you.");
 				owner.getDispatcher().sendGameMessage("You may retrieve it from your Returned Items box by speaking to a banker.");
 			}
 		}		
@@ -326,7 +320,7 @@ public class EquipmentManager {
 			if (item != null && item.getType().lenttemplate != -1) {
 				equipment.clearSlot(slot);
 				player.getInvs().updateContainer(ContainerState.EQUIPMENT, slot);
-				player.getAppearance().refresh();
+				player.getModel().refresh();
 				return true;
 			}
 		}
@@ -359,10 +353,7 @@ public class EquipmentManager {
 	}
 	
 	public void updateCapeOverrides () {
-		if (styleOverrides[SLOT_CAPE] == null ) {
-			return;
-		}
-		if (CUSTOMISABLE_CAPES.contains(styleOverrides[SLOT_CAPE].getObjId())) {
+		if (CUSTOMISABLE_CAPES.contains(getWornId(SLOT_CAPE))) {
 			short[] colours = new short[4];
 			int col1 = player.getVars().getVarBitValue(VarKey.Bit.CAPE_COLOUR_1);
 			int col2 = player.getVars().getVarBitValue(VarKey.Bit.CAPE_COLOUR_2);
@@ -372,19 +363,19 @@ public class EquipmentManager {
 			colours[1] = col2 == 0 ? -336 : (short) col2;
 			colours[2] = col3 == 0 ? -350 : (short) col3;
 			colours[3] = col4 == 0 ? -2541 : (short) col4;
-			styleOverrides[SLOT_CAPE].setRecol(colours, CLAN_RECOL_SLOTS);
+			for (int slot=0;slot<CLAN_RECOL_SLOTS.length;slot++) {
+				model.getObjCustomisation(SLOT_CAPE).setRecol(CLAN_RECOL_SLOTS[slot], colours[slot]);
+			}
 		}
 	}
 	
 	public void updateClanOverride () {
 		boolean updateCape = false;
 		boolean updateVex = false;
-		if (styleOverrides[SLOT_CAPE] != null 
-				&& styleOverrides[SLOT_CAPE].getObjId() == CLAN_CAPE) {
+		if (getWornId(SLOT_CAPE) == CLAN_CAPE) {
 			updateCape = true;
 		}
-		if (styleOverrides[SLOT_WEAPON] != null 
-				&& styleOverrides[SLOT_WEAPON].getObjId() == CLAN_VEX) {
+		if (getWornId(SLOT_WEAPON) == CLAN_VEX) {
 			updateVex = true;
 		}
 		if (!updateCape && !updateVex) {
@@ -394,13 +385,11 @@ public class EquipmentManager {
 		ClanSettingsAPI clanSettings = Virtue.getInstance().getClans().getSettings();
 		if (player.getClanHash() == 0L) {
 			if (updateCape) {
-				styleOverrides[SLOT_CAPE].setRecol(null, null);
-				styleOverrides[SLOT_CAPE].setRetex(null, null);
+				model.setObjCustomisation(SLOT_CAPE, null);
 				player.getInvs().getContainer(ContainerState.EQUIPMENT).clearSlot(SLOT_CAPE);
 			}
 			if (updateVex) {
-				styleOverrides[SLOT_WEAPON].setRecol(null, null);
-				styleOverrides[SLOT_WEAPON].setRetex(null, null);
+				model.setObjCustomisation(SLOT_WEAPON, null);
 				player.getInvs().getContainer(ContainerState.EQUIPMENT).clearSlot(SLOT_WEAPON);
 			}
 		} else {
@@ -414,10 +403,14 @@ public class EquipmentManager {
 			clanColours[2] = col3 == null ? -22986 : ((Integer) col3).shortValue();
 			clanColours[3] = col4 == null ? -26154 : ((Integer) col4).shortValue();
 			if (updateCape) {
-				styleOverrides[SLOT_CAPE].setRecol(clanColours, CLAN_RECOL_SLOTS);
+				for (int slot=0;slot<CLAN_RECOL_SLOTS.length;slot++) {
+					model.getObjCustomisation(SLOT_CAPE).setRecol(CLAN_RECOL_SLOTS[slot], clanColours[slot]);
+				}				
 			}
 			if (updateVex) {
-				styleOverrides[SLOT_WEAPON].setRecol(clanColours, CLAN_RECOL_SLOTS);
+				for (int slot=0;slot<CLAN_RECOL_SLOTS.length;slot++) {
+					model.getObjCustomisation(SLOT_WEAPON).setRecol(CLAN_RECOL_SLOTS[slot], clanColours[slot]);
+				}
 			}
 			VarBitTypeList varBitTypeList = Virtue.getInstance().getConfigProvider().getVarBitTypes();
 			short[] clanTextures = new short[2];
@@ -429,40 +422,15 @@ public class EquipmentManager {
 			clanTextures[0] = logo1 == -1 ? 735 : (short) logo1;
 			clanTextures[1] = logo2 == -1 ? 642 : (short) logo2;
 			if (updateCape) {
-				styleOverrides[SLOT_CAPE].setRetex(clanTextures, CLAN_RETEX_SLOTS);
+				for (int slot=0;slot<CLAN_RETEX_SLOTS.length;slot++) {
+					model.getObjCustomisation(SLOT_CAPE).setRetex(CLAN_RETEX_SLOTS[slot], clanTextures[slot]);
+				}
 			}
 			if (updateVex) {
-				styleOverrides[SLOT_WEAPON].setRetex(clanTextures, CLAN_RETEX_SLOTS);
+				for (int slot=0;slot<CLAN_RETEX_SLOTS.length;slot++) {
+					model.getObjCustomisation(SLOT_WEAPON).setRetex(CLAN_RETEX_SLOTS[slot], clanTextures[slot]);
+				}
 			}
 		}
-		
 	}
-	
-	public enum WearPos {
-		HAT(0),
-		CAPE(1),
-		AMULET(2),
-		WEAPON(3),
-		TOP(4),
-		OFFHAND(5),
-		LEGS(7),
-		HANDS(9),
-		FEET(10),
-		RING(12),
-		QUIVER(13),
-		AURA(14),
-		POCKET(15);
-		
-		private int slot;
-		
-		WearPos (int id) {
-			this.slot = id;
-		}
-		
-		public int getSlot () {
-			return slot;
-		}
-	}
-
-	
 }

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var Render = Java.type('org.virtue.network.protocol.update.ref.Appearance.Render');
+var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
  /* The SpotAnimationBlock for adding ability graphics */
 var SpotAnimationBlock = Java.type('org.virtue.network.protocol.update.block.SpotAnimationBlock');

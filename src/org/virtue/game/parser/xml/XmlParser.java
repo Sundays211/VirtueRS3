@@ -56,6 +56,7 @@ import org.virtue.game.content.ignores.IgnoreList;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.InvRepository;
 import org.virtue.game.entity.player.inv.Inventory;
@@ -69,7 +70,6 @@ import org.virtue.game.world.region.Tile;
 import org.virtue.network.protocol.message.ResponseTypeMessage;
 import org.virtue.network.protocol.message.login.LoginRequestMessage;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
-import org.virtue.network.protocol.update.ref.Appearance.Gender;
 import org.virtue.utility.text.Base37Utility;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -214,28 +214,28 @@ public class XmlParser {
 					def.appendChild(coins);
 					
 					Element pre = document.createElement("prefix");
-					pre.appendChild(document.createTextNode(player.getAppearance().getPrefixTitle()));
+					pre.appendChild(document.createTextNode(player.getModel().getPrefixTitle()));
 					def.appendChild(pre);
 					
 					Element suffix = document.createElement("suffix");
-					suffix.appendChild(document.createTextNode(player.getAppearance().getSuffixTitle()));
+					suffix.appendChild(document.createTextNode(player.getModel().getSuffixTitle()));
 					def.appendChild(suffix);
 					
 					Element showSkill = document.createElement("showSkill");
-					showSkill.appendChild(document.createTextNode(Boolean.toString(player.getAppearance().showSkillLevel())));
+					showSkill.appendChild(document.createTextNode(Boolean.toString(player.getModel().showSkillLevel())));
 					def.appendChild(showSkill);
 					
 					Element render = document.createElement("render");
-					render.appendChild(document.createTextNode(Integer.toString(player.getAppearance().getRender().ordinal())));
+					render.appendChild(document.createTextNode(Integer.toString(player.getModel().getRender().ordinal())));
 					def.appendChild(render);
 					
 					Element model = document.createElement("model");
 					
 					Element gender = document.createElement("gender");
-					gender.appendChild(document.createTextNode(Integer.toString(player.getAppearance().getGender().ordinal())));
+					gender.appendChild(document.createTextNode(Integer.toString(player.getModel().getGender().ordinal())));
 					model.appendChild(gender);
 					
-					int[] idk = player.getAppearance().getStyles();
+					int[] idk = player.getModel().getStyles();
 					for (byte slot = 0; slot < idk.length; slot++) {
 						Element kitElement = document.createElement("idk");
 						model.appendChild(kitElement);
@@ -247,7 +247,7 @@ public class XmlParser {
 						kitElement.setTextContent(Integer.toString(idk[slot]));
 					}
 					
-					int[] recol = player.getAppearance().getColors();					
+					int[] recol = player.getModel().getColors();					
 					for (byte slot = 0; slot < recol.length; slot++) {
 						Element recolElement = document.createElement("recol");
 						model.appendChild(recolElement);
@@ -259,7 +259,7 @@ public class XmlParser {
 						recolElement.setTextContent(Integer.toString(recol[slot]));
 					}
 					
-					int[] retex = player.getAppearance().getTextures();					
+					int[] retex = player.getModel().getMaterials();					
 					for (byte slot = 0; slot < retex.length; slot++) {
 						Element recolElement = document.createElement("retex");
 						model.appendChild(recolElement);
@@ -823,15 +823,15 @@ public class XmlParser {
 						player.initialize(LoginTypeMessage.LOGIN_WORLD.equals(request.getLoginType()), Virtue.getInstance().getConfigProvider());
 						
 						if (idk != null && recol != null) {
-							player.getAppearance().setGender(gender == 0 ? Gender.MALE : Gender.FEMALE);
-							player.getAppearance().setPrefixTitle(pre);
-							player.getAppearance().setSuffixTitle(suf);
-							player.getAppearance().setStyles(idk);
-							player.getAppearance().setColors(recol);
+							player.getModel().setGender(gender == 0 ? Gender.MALE : Gender.FEMALE);
+							player.getModel().setPrefixTitle(pre);
+							player.getModel().setSuffixTitle(suf);
+							player.getModel().setStyles(idk);
+							player.getModel().setColors(recol);
 							if (retex != null) {
-								player.getAppearance().setTextures(retex);						
+								player.getModel().setMaterials(retex);						
 							}
-							player.getAppearance().setShowSkillLevel(showSkill);
+							player.getModel().setShowSkillLevel(showSkill);
 						}
 						player.setCurrentTile(posX, posY, posZ);
 						player.setLastTile(posX, posY, posZ);

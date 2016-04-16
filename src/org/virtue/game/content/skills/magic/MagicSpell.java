@@ -157,7 +157,7 @@ public abstract class MagicSpell {
 			for (Item rune : runes) {
 				if (!hasValidStaff(player, rune)) {
 					inv.remove(rune);
-					player.getAppearance().refresh();
+					player.getModel().refresh();
 				}
 			}
 		}

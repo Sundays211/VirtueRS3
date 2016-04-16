@@ -157,7 +157,7 @@ public class GameEventDispatcher {
 			
 			sendGameMessage("Welcome to " + Constants.FRAME_NAME + ".");
 			player.getEquipment().refresh(true);
-			player.getAppearance().refresh();
+			player.getModel().refresh();
 			player.updateWeight();
 			player.getSkills().sendAllSkills();
 			player.updateWeight();
@@ -519,7 +519,7 @@ public class GameEventDispatcher {
 	 */
 	public void sendCutscene(int id) {
 		sendEvent(CutsceneEventEncoder.class, new CutsceneEventContext(id,
-				player.getAppearance().getData()));
+				player.getModel().getData()));
 	}
 
 	public void sendMusic(int id, int vol) {

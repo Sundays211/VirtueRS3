@@ -65,7 +65,7 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 			packet.putByte(0);// 0 or 1
 
 			packet.putTri(8388608);//date of birth
-			packet.putByte(response.getPlayer().getAppearance().isMale() ? 0 : 1);//gender
+			packet.putByte(response.getPlayer().getModel().isMale() ? 0 : 1);//gender
 			packet.putByte(0);// 0 or 1
 			packet.putByte(0);// 0 or 1
 

@@ -277,10 +277,10 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		int maskData = 0x0;
 		Block appearanceBlock = null;
 		Block headIconBlock = null;
-		if (needsAppearanceUpdate(p.getIndex(), p.getAppearance().getHash(), context, block.offset())) {
+		if (needsAppearanceUpdate(p.getIndex(), p.getModel().getHash(), context, block.offset())) {
 			appearanceBlock = new AppearenceBlock();
 			maskData |= appearanceBlock.getMask(false);
-			context.getAppearanceHashes()[p.getIndex()] = p.getAppearance().getHash();
+			context.getAppearanceHashes()[p.getIndex()] = p.getModel().getHash();
 		}
 		if (needHeadIconUpdate(p.getIndex(), p.getHeadIcons().getHash(), context, block.offset())) {
 			headIconBlock = new HeadIconBlock();
@@ -333,7 +333,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 	 * @return True if a mask update is needed, false otherwise
 	 */
 	private boolean needsMaskUpdate (Player p, Viewport context, int blockSize) {
-		boolean appearanceUpdate = needsAppearanceUpdate(p.getIndex(), p.getAppearance().getHash(), context, blockSize);
+		boolean appearanceUpdate = needsAppearanceUpdate(p.getIndex(), p.getModel().getHash(), context, blockSize);
 		boolean headIconUpdate = needHeadIconUpdate(p.getIndex(), p.getHeadIcons().getHash(), context, blockSize);
 		return headIconUpdate || appearanceUpdate || p.needsMaskUpdate();
 	}

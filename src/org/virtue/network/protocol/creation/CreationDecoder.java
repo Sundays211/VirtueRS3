@@ -162,8 +162,8 @@ public class CreationDecoder extends ByteToMessageDecoder {
 		ctx.channel().pipeline().remove(this);
 		ctx.channel().pipeline().addFirst("decoder", new ProtocolDecoder(player.getDecodingCipher()));
 		ctx.channel().attr(NetworkHandler.attachment).set(new GameSession(ctx.channel(), player));
-		player.getAppearance().setTemp();
-		player.getAppearance().sendBlock(true);
+		player.getModel().setTemp();
+		player.getModel().sendBlock(true);
 		LoginDispatcher.onAccountCreation(player);
 		
 		//out.add(new CreationRequestMessage(ctx.channel(), new ISAACCipher(serverKeys), new ISAACCipher(serverKeys)));

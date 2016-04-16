@@ -29,9 +29,9 @@ import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.config.structtype.StructType;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
+import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.game.entity.player.widget.Widget;
 import org.virtue.network.event.context.impl.in.OptionButton;
-import org.virtue.network.protocol.update.ref.Appearance.Gender;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -102,12 +102,12 @@ public class AccountCreationWidget extends Widget {
 	public boolean click(int widgetId, int componentId, int slotId, int itemId, Player player, OptionButton option) {
 		switch (componentId) {
 		case 18:
-			player.getAppearance().setGender(Gender.FEMALE);
-			player.getAppearance().sendBlock(true);
+			player.getModel().setGender(Gender.FEMALE);
+			player.getModel().sendBlock(true);
 			return true;
 		case 19:
-			player.getAppearance().setGender(Gender.MALE);
-			player.getAppearance().sendBlock(true);
+			player.getModel().setGender(Gender.MALE);
+			player.getModel().sendBlock(true);
 			return true;
 		case 163://Select colour
 			setColour(player, slotId/2);
@@ -169,19 +169,19 @@ public class AccountCreationWidget extends Widget {
 		case 0://Skin colour
 			break;
 		case 1://Hairstyle
-			setStyle(player, player.getAppearance().isMale() ? MALE_HAIRSTYLES : FEMALE_HAIRSTYLES, slot, 1);
+			setStyle(player, player.getModel().isMale() ? MALE_HAIRSTYLES : FEMALE_HAIRSTYLES, slot, 1);
 			break;
 		case 2://Torso
-			setStyle(player, player.getAppearance().isMale() ? MALE_TORSO : FEMALE_TORSO, slot, 2);
+			setStyle(player, player.getModel().isMale() ? MALE_TORSO : FEMALE_TORSO, slot, 2);
 			break;
 		case 3://Legs
-			setStyle(player, player.getAppearance().isMale() ? MALE_LEGS : FEMALE_LEGS, slot, 3);
+			setStyle(player, player.getModel().isMale() ? MALE_LEGS : FEMALE_LEGS, slot, 3);
 			break;
 		case 4://Footware
-			setStyle(player, player.getAppearance().isMale() ? MALE_FOOTWARE : FEMALE_FOOTWARE, slot, 4);
+			setStyle(player, player.getModel().isMale() ? MALE_FOOTWARE : FEMALE_FOOTWARE, slot, 4);
 			break;
 		case 5://Facial hair
-			if (player.getAppearance().isMale()) {
+			if (player.getModel().isMale()) {
 				setStyle(player, FACIAL_HAIR, slot, 5);
 			}
 			break;
@@ -216,23 +216,23 @@ public class AccountCreationWidget extends Widget {
 		if (newColour != -1) {
 			switch (type) {
 			case 0://Skin
-				player.getAppearance().setTempColour(4, newColour);
+				player.getModel().setTempColour(4, newColour);
 				break;
 			case 1:
 			case 5://Hair
-				player.getAppearance().setTempColour(0, newColour);
+				player.getModel().setTempColour(0, newColour);
 				break;
 			case 2://Top
-				player.getAppearance().setTempColour(1, newColour);
+				player.getModel().setTempColour(1, newColour);
 				break;
 			case 3://Legs
-				player.getAppearance().setTempColour(2, newColour);
+				player.getModel().setTempColour(2, newColour);
 				break;
 			case 4://Feet
-				player.getAppearance().setTempColour(3, newColour);
+				player.getModel().setTempColour(3, newColour);
 				break;
 			}
-			player.getAppearance().sendBlock(true);
+			player.getModel().sendBlock(true);
 		}
 	}
 	
@@ -248,30 +248,30 @@ public class AccountCreationWidget extends Widget {
 		if (newStyle != -1) {
 			switch (type) {
 			case 1:
-				player.getAppearance().setTempStyle(0, newStyle);
+				player.getModel().setTempStyle(0, newStyle);
 				break;
 			case 2:
-				int setID = getSetByStyle(newStyle, 3, !player.getAppearance().isMale());
+				int setID = getSetByStyle(newStyle, 3, !player.getModel().isMale());
 				if (setID != -1) {
 					StructType set = Virtue.getInstance().getConfigProvider().getStructTypes().list(setID);
-					player.getAppearance().setTempStyle(2, set.getParam(1182, -1));
-					player.getAppearance().setTempStyle(3, set.getParam(1183, -1));
-					player.getAppearance().setTempStyle(4, set.getParam(1184, -1));
+					player.getModel().setTempStyle(2, set.getParam(1182, -1));
+					player.getModel().setTempStyle(3, set.getParam(1183, -1));
+					player.getModel().setTempStyle(4, set.getParam(1184, -1));
 				} else {
-					player.getAppearance().setTempStyle(2, newStyle);
+					player.getModel().setTempStyle(2, newStyle);
 				}
 				break;
 			case 3:
-				player.getAppearance().setTempStyle(5, newStyle);
+				player.getModel().setTempStyle(5, newStyle);
 				break;
 			case 4:
-				player.getAppearance().setTempStyle(6, newStyle);
+				player.getModel().setTempStyle(6, newStyle);
 				break;
 			case 5:
-				player.getAppearance().setTempStyle(1, newStyle);
+				player.getModel().setTempStyle(1, newStyle);
 				break;
 			}			
-			player.getAppearance().sendBlock(true);
+			player.getModel().sendBlock(true);
 		}
 	}
 	

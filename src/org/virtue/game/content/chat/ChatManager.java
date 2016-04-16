@@ -604,10 +604,10 @@ public class ChatManager implements SocialUser {
 			player.getInvs().getContainer(ContainerState.BACKPACK).removeAll(20709);
 			player.getInvs().getContainer(ContainerState.BANK).removeAll(20708);
 			player.getInvs().getContainer(ContainerState.BANK).removeAll(20709);
-			player.getAppearance().refresh();
+			player.getModel().refresh();
 		} else {
 			player.getEquipment().updateClanOverride();
-			player.getAppearance().refresh();
+			player.getModel().refresh();
 		}
 	}
 }

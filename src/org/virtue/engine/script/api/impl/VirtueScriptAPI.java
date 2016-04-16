@@ -138,12 +138,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 		String name = "";
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
-			if (player.getAppearance().getPrefixTitle() != null) {
-				name += player.getAppearance().getPrefixTitle();
+			if (player.getModel().getPrefixTitle() != null) {
+				name += player.getModel().getPrefixTitle();
 			}
 			name = entity.getName();
-			if (player.getAppearance().getSuffixTitle() != null) {
-				name += player.getAppearance().getSuffixTitle();
+			if (player.getModel().getSuffixTitle() != null) {
+				name += player.getModel().getSuffixTitle();
 			}
 		} else {
 			name = entity.getName();
@@ -1438,7 +1438,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean isFemale(Player player) {
-		return !player.getAppearance().isMale();
+		return !player.getModel().isMale();
 	}
 
 	/* (non-Javadoc)
@@ -1446,7 +1446,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getPlayerKit(Player player, int slot) {
-		return player.getAppearance().getTempStyle(slot);
+		return player.getModel().getTempStyle(slot);
 	}
 
 	/* (non-Javadoc)
@@ -1454,8 +1454,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setPlayerKit(Player player, int slot, int kitId) {
-		player.getAppearance().setTempStyle(slot, kitId);
-		player.getAppearance().sendBlock(true);
+		player.getModel().setTempStyle(slot, kitId);
+		player.getModel().sendBlock(true);
 	}
 
 	/* (non-Javadoc)
@@ -1463,7 +1463,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getPlayerColour(Player player, int slot) {
-		return player.getAppearance().getTempColour(slot);
+		return player.getModel().getTempColour(slot);
 	}
 
 	/* (non-Javadoc)
@@ -1471,8 +1471,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setPlayerColour(Player player, int slot, int colour) {
-		player.getAppearance().setTempColour(slot, colour);
-		player.getAppearance().sendBlock(true);
+		player.getModel().setTempColour(slot, colour);
+		player.getModel().sendBlock(true);
 	}
 
 	/* (non-Javadoc)
@@ -1480,7 +1480,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void startStyleEdit(Player player) {
-		player.getAppearance().setTemp();
+		player.getModel().setTemp();
 	}
 
 	/* (non-Javadoc)
@@ -1488,8 +1488,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void applyPlayerStyles(Player player) {
-		player.getAppearance().applyTemp();
-		player.getAppearance().refresh();
+		player.getModel().applyTemp();
+		player.getModel().refresh();
 	}
 
 	/* (non-Javadoc)
@@ -1497,8 +1497,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void clearStyleEdit(Player player) {
-		player.getAppearance().clearTemp();
-		player.getAppearance().refresh();
+		player.getModel().clearTemp();
+		player.getModel().refresh();
 	}
 
 	/*
@@ -1508,7 +1508,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void refreshEquipment(Player player) {
 		player.getEquipment().refresh(false);
-		player.getAppearance().refresh();
+		player.getModel().refresh();
 	}
 
 	/* (non-Javadoc)
@@ -1591,8 +1591,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setRenderAnim(Player player, int renderId) {
-		player.getAppearance().setBAS(renderId);
-		player.getAppearance().refresh();
+		player.getModel().setBAS(renderId);
+		player.getModel().refresh();
 	}
 
 	/* (non-Javadoc)
@@ -1600,8 +1600,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void resetRenderAnim(Player player) {
-		player.getAppearance().setBAS(-1);
-		player.getAppearance().refresh();
+		player.getModel().setBAS(-1);
+		player.getModel().refresh();
 	}
 
 	/* (non-Javadoc)

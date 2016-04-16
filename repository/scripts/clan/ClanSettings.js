@@ -32,16 +32,16 @@ var ClanSettingsOpenListener = Java.extend(Java.type('org.virtue.engine.script.l
 	invoke : function (event, trigger, args) {
 		var player = args.player;
 		
-		api.setWidgetEvents(player, 1096, 46, 0, 5, 2);
-		api.hideWidget(player, 1096, 223, false);
-		api.hideWidget(player, 1096, 208, false);
-		api.setWidgetEvents(player, 1096, 281, 0, 126, 2);
-		api.setWidgetEvents(player, 1096, 267, 0, 225, 2);
-		api.setWidgetEvents(player, 1096, 371, 0, 127, 2);
-		api.setWidgetEvents(player, 1096, 246, 0, 144, 2);
-		api.setWidgetEvents(player, 1096, 295, 1, 201, 2);
-		api.setWidgetEvents(player, 1096, 212, 0, 3, 2);
-		api.setWidgetEvents(player, 1096, 227, 0, 4, 2);
+		api.setWidgetEvents(player, 1096, 47, 0, 5, 2);
+		api.hideWidget(player, 1096, 224, false);
+		api.hideWidget(player, 1096, 209, false);
+		api.setWidgetEvents(player, 1096, 282, 0, 126, 2);
+		api.setWidgetEvents(player, 1096, 268, 0, 225, 2);
+		api.setWidgetEvents(player, 1096, 372, 0, 127, 2);
+		api.setWidgetEvents(player, 1096, 247, 0, 144, 2);
+		api.setWidgetEvents(player, 1096, 296, 1, 201, 2);
+		api.setWidgetEvents(player, 1096, 213, 0, 3, 2);
+		api.setWidgetEvents(player, 1096, 228, 0, 4, 2);
 	}
 });
 
@@ -51,7 +51,26 @@ var ClanSettingsButtonListener = Java.extend(Java.type('org.virtue.engine.script
 		//varbit 6339 = Clan citadel guest access
 		switch (args.component) {
 		case 52://Close/open clan member details
-		case 327://Close button
+		case 328://Close button
+			return;
+		case 47://Arrow beside member
+			var member = clanApi.getClanSettings().getMemberData(api.getClanHash(player), args.slot);
+			ClanSettings.showMember(player, member);
+			return;
+		case 64://Member banned from citadel
+			var wasBanned = api.getVarBit(player, 6148) == 1;
+			api.setVarBit(player, 6148, wasBanned ? 0 : 1);
+			api.setVarc(player, 1566, wasBanned ? 0 : 1);
+			return;
+		case 68://Member banned from keep
+			var wasBanned = api.getVarBit(player, 6149) == 1;
+			api.setVarBit(player, 6149, wasBanned ? 0 : 1);
+			api.setVarc(player, 1565, wasBanned ? 0 : 1);
+			return;
+		case 72://Member banned from island
+			var wasBanned = api.getVarBit(player, 6150) == 1;
+			api.setVarBit(player, 6150, wasBanned ? 0 : 1);
+			api.setVarc(player, 1567, wasBanned ? 0 : 1);
 			return;
 		case 100://Clan recruiting
 			var wasRecruiting = api.getVarBit(player, 8803);
@@ -67,9 +86,25 @@ var ClanSettingsButtonListener = Java.extend(Java.type('org.virtue.engine.script
 				api.hideWidget(player, 1096, 254, usedTime ? false : true);
 			}
 			return;
+		case 119://Clanmates tab
+			ClanSettings.setTab(player, 1);
+			return;
+		case 126://Clan settings tab
+			ClanSettings.setTab(player, 2);
+			return;
+		case 130://Open motif editor
+			ClanSettings.openMotifEditor(player);
+			return;
 		case 245://Clan timezone
 			var value = (slot - 72) * 10;
 			api.setVarClanSetting(player, 0, value);
+			return;
+		case 268://Set member job
+			api.setVarBit(player, 6146, args.slot);
+			api.setVarc(player, 1501, args.slot);
+			return;
+		case 282://Set member rank			
+			ClanSettings.setSelectedRank(player, args.slot);
 			return;
 		case 295://Clan home world
 			api.setVarBit(player, 8805, args.slot);
@@ -77,195 +112,160 @@ var ClanSettingsButtonListener = Java.extend(Java.type('org.virtue.engine.script
 		case 371://Clan member list filter
 			api.setVarc(player, 1516, args.slot);
 			return;
-		case 46://Arrow beside member
-			var member = clanApi.getClanSettings().getMemberData(api.getClanHash(player), args.slot);
-			ClanSettings.showMember(player, member);
-			return;
-		case 63://Member banned from citadel
-			var wasBanned = api.getVarBit(player, 6148) == 1;
-			api.setVarBit(player, 6148, wasBanned ? 0 : 1);
-			api.setVarc(player, 1566, wasBanned ? 0 : 1);
-			return;
-		case 67://Member banned from keep
-			var wasBanned = api.getVarBit(player, 6149) == 1;
-			api.setVarBit(player, 6149, wasBanned ? 0 : 1);
-			api.setVarc(player, 1565, wasBanned ? 0 : 1);
-			return;
-		case 71://Member banned from island
-			var wasBanned = api.getVarBit(player, 6150) == 1;
-			api.setVarBit(player, 6150, wasBanned ? 0 : 1);
-			api.setVarc(player, 1567, wasBanned ? 0 : 1);
-			return;
-		case 267://Set member job
-			api.setVarBit(player, 6146, args.slot);
-			api.setVarc(player, 1501, args.slot);
-			return;
-		case 281://Set member rank			
-			ClanSettings.setSelectedRank(player, args.slot);
-			return;
-		case 323://Save member data
+		case 324://Save member data
 			ClanSettings.saveMemberData(player);
 			return;
-		case 314://Kick clan member
+		case 315://Kick clan member
 			ClanSettings.kickClanMember(player);
 			return;
-		case 118://Clanmates tab
-			ClanSettings.setTab(player, 1);
-			return;
-		case 125://Clan settings tab
-			ClanSettings.setTab(player, 2);
-			return;
-		case 389://Permissions tab
+		case 390://Permissions tab
 			ClanSettings.setTab(player, 3);
 			return;
-		case 129://Open motif editor
-			ClanSettings.openMotifEditor(player);
-			return;
-		case 398://Recruit
+		case 399://Recruit
 			setPermissionGroup(player, 0);
 			return;
-		case 406://Corporal
+		case 407://Corporal
 			setPermissionGroup(player, 1);
 			return;
-		case 414://Sergeant
+		case 415://Sergeant
 			setPermissionGroup(player, 2);
 			return;
-		case 422://Lieutenant
+		case 423://Lieutenant
 			setPermissionGroup(player, 3);
 			return;
-		case 430://Captain
+		case 431://Captain
 			setPermissionGroup(player, 4);
 			return;
-		case 438://General
+		case 439://General
 			setPermissionGroup(player, 5);
 			return;
-		case 446://Admin
+		case 447://Admin
 			setPermissionGroup(player, 100);
 			return;
-		case 454://Organiser
+		case 455://Organiser
 			setPermissionGroup(player, 101);
 			return;
-		case 462://Coordinator
+		case 463://Coordinator
 			setPermissionGroup(player, 102);
 			return;
-		case 470://Overseer
+		case 471://Overseer
 			setPermissionGroup(player, 103);
 			return;
-		case 478://Deputy Owner
+		case 479://Deputy Owner
 			setPermissionGroup(player, 125);
 			return;
-		case 492://Admin permission tab
+		case 493://Admin permission tab
 			setPermissionTab(player, 1);
 			return;
-		case 501://Chat permission tab
+		case 502://Chat permission tab
 			setPermissionTab(player, 2);
 			return;
-		case 509://Events permission tab
+		case 510://Events permission tab
 			setPermissionTab(player, 3);
 			return;
-		case 517://Citadel permission tab
+		case 518://Citadel permission tab
 			setPermissionTab(player, 4);
 			return;
-		case 525://Skills permission tab			
+		case 526://Skills permission tab			
 			setPermissionTab(player, 5);
 			return;
-		case 537:
+		case 538:
 			var held = ClanPermissions.canBlockKeep(player, api.getVarBit(player, 6155));
 			ClanPermissions.setBlockKeep(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 550:
+		case 551:
 			var held = ClanPermissions.canBlockCitadel(player, api.getVarBit(player, 6155));
 			ClanPermissions.setBlockCitadel(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 486:
+		case 487:
 			var held = ClanPermissions.canRecruit(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanRecruit(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 640:
+		case 641:
 			var held = ClanPermissions.canStartBattles(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanStartBattles(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 651:
+		case 652:
 			var held = ClanPermissions.isRcwLeader(player, api.getVarBit(player, 6155));
 			ClanPermissions.setIsRcwLeader(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 663:
+		case 664:
 			var held = ClanPermissions.canStartVote(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanStartVote(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 676:
+		case 677:
 			var held = ClanPermissions.canStartMeeting(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanStartMeeting(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 688:
+		case 689:
 			var held = ClanPermissions.isPartyTech(player, api.getVarBit(player, 6155));
 			ClanPermissions.setIsPartyTech(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 785:
+		case 786:
 			var held = ClanPermissions.isTheatreTech(player, api.getVarBit(player, 6155));
 			ClanPermissions.setIsTheatreTech(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 595:
+		case 596:
 			var held = ClanPermissions.canEditNoticeboard(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanEditNoticeboard(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 584:
+		case 585:
 			var held = ClanPermissions.canEditSignpost(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanEditSignpost(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 628:
+		case 629:
 			var held = ClanPermissions.canEditBattlefield(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanEditBattlefield(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 606:
+		case 607:
 			var held = ClanPermissions.canUpgradeCitadel(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanUpgradeCitadel(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 617:
+		case 618:
 			var held = ClanPermissions.canDowngradeCitadel(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanDowngradeCitadel(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 700:
+		case 701:
 			var held = ClanPermissions.canSetGatherGoals(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanSetGatherGoals(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 774:
+		case 775:
 			var held = ClanPermissions.canChangeLanguage(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanChangeLanguage(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 796:
+		case 797:
 			var held = ClanPermissions.canLockPlots(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanLockPlots(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 807:
+		case 808:
 			var held = ClanPermissions.canCheckResources(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanCheckResources(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 840:
+		case 841:
 			var held = ClanPermissions.canRemoveAvatar(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanRemoveAvatar(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 829:
+		case 830:
 			var held = ClanPermissions.canAddAvatarBuffs(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanAddAvatarBuffs(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 818:
+		case 819:
 			var held = ClanPermissions.canCustomiseAvatar(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanCustomiseAvatar(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 712:
+		case 713:
 			var held = ClanPermissions.canMoveTick(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanMoveTick(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 851:
+		case 852:
 			var held = ClanPermissions.canBroadcastEvents(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanBroadcastEvents(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 869:
+		case 870:
 			var held = ClanPermissions.canChangeBroadcasts(player, api.getVarBit(player, 6155));
 			ClanPermissions.setCanChangeBroadcasts(player, api.getVarBit(player, 6155), held ? 0 : 1);
 			return;
-		case 857:
+		case 858:
 			if (ClanPermissions.canChangeBroadcasts(player, clanApi.getRank(api.getClanHash(player), player.getUserHash()))) {
 				api.closeCentralWidgets(player);
 				//api.openOverlaySub(player, 2008, 573, false);
@@ -295,12 +295,12 @@ var ClanSettings = {
 			return clanApi.getRank(api.getClanHash(player), api.getUserHash(player));
 		},
 		setTab : function (player, tab) {
-			api.hideWidget(player, 1096, 87, (tab != 1));
-			api.hideWidget(player, 1096, 88, (tab != 2));
-			api.hideWidget(player, 1096, 89, (tab != 3));
-			api.hideWidget(player, 1096, 115, (tab != 1));
-			api.hideWidget(player, 1096, 122, (tab != 2));
-			api.hideWidget(player, 1096, 388, (tab != 3));
+			api.hideWidget(player, 1096, 88, (tab != 1));
+			api.hideWidget(player, 1096, 89, (tab != 2));
+			api.hideWidget(player, 1096, 90, (tab != 3));
+			api.hideWidget(player, 1096, 116, (tab != 1));
+			api.hideWidget(player, 1096, 123, (tab != 2));
+			api.hideWidget(player, 1096, 389, (tab != 3));
 		},
 		showMember : function (player, member) {
 			if (member == null) {

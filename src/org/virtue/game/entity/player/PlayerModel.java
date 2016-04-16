@@ -1,26 +1,52 @@
-package org.virtue.network.protocol.update.ref;
+/**
+ * Copyright (c) 2016 Virtue Studios
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package org.virtue.game.entity.player;
 
 import java.util.Arrays;
 
 import org.virtue.Virtue;
+import org.virtue.config.defaults.WearposDefaults;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
+import org.virtue.config.objtype.ObjTypeCustomisation;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.entity.Entity;
-import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.ContainerState;
-import org.virtue.game.entity.player.inv.EquipmentStyleOverride;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.utility.MD5Encryption;
 
 /**
- * @author Tom
- *
+ * 
+ * @author Im Frizzy <skype:kfriz1998>
+ * @author Frosty Teh Snowman <skype:travis.mccorkle>
+ * @author Arthur <skype:arthur.behesnilian>
+ * @author Kayla <skype:ashbysmith1996>
+ * @author Sundays211
+ * @since 16/04/2016
  */
-public class Appearance {
+public class PlayerModel {
 
 	private static int[] DISABLED_SLOTS = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 };
 
@@ -52,9 +78,9 @@ public class Appearance {
 	private transient int[] tempStyles;
 	private transient int[] tempColours;
 
-	public int[] styles;
-	private int[] colors;
-	private int[] textures;
+	public int[] baseidkit;
+	private int[] basecolours;
+	private int[] basematerials;
 	private Gender gender;
 	private Render render;
 	private int npcId;
@@ -62,17 +88,20 @@ public class Appearance {
 	private boolean showSkill;
 	private String prefixTitle;
 	private String suffixTitle;
+	
+	private ObjTypeCustomisation[] objCustomisations;
+	private int[] objectIds;
 
 	/**
 	 * Custom render animation
 	 */
 	private int basTypeId = -1;
 
-	public Appearance(Player player) {
+	public PlayerModel(Player player, WearposDefaults wearposDefaults) {
 		this.player = player;
-		this.styles = new int[8];
-		this.colors = new int[10];
-		this.textures = new int[10];
+		this.baseidkit = new int[8];
+		this.basecolours = new int[10];
+		this.basematerials = new int[10];
 		this.gender = Gender.MALE;
 		this.render = Render.PLAYER;
 		this.npcId = -1;
@@ -82,6 +111,8 @@ public class Appearance {
 		this.suffixTitle = "";
 		this.set();
 
+		this.objCustomisations = new ObjTypeCustomisation[wearposDefaults.slots.length];
+		this.objectIds = new int[wearposDefaults.slots.length];
 		this.capeColors = new short[2][];
 		this.capeColors[0] = Arrays.copyOf(ObjTypeList.getInstance().list(20767).recol_s, 4);
 		this.capeColors[1] = Arrays.copyOf(ObjTypeList.getInstance().list(20769).recol_s, 4);
@@ -90,14 +121,14 @@ public class Appearance {
 
 	private void set() {
 		if (gender == Gender.MALE) {
-			styles[0] = 261;//8//261
-			styles[1] = 10;//11
-			styles[2] = 881;//4
-			styles[3] = 945;//6//945
-			styles[4] = 817;//9
-			styles[5] = 833;//7
-			styles[6] = 849;//10
-			styles[7] = -1;
+			baseidkit[0] = 261;//8//261
+			baseidkit[1] = 10;//11
+			baseidkit[2] = 881;//4
+			baseidkit[3] = 945;//6//945
+			baseidkit[4] = 817;//9
+			baseidkit[5] = 833;//7
+			baseidkit[6] = 849;//10
+			baseidkit[7] = -1;
 			/*styles[0] = 264;//Slot 8 (Hair)
 			styles[1] = 16;//Slot 11 (Facial hair)
 			styles[2] = 880;//Slot 4 (Gloves/Hands)
@@ -106,16 +137,16 @@ public class Appearance {
 			styles[5] = 832;//Slot 7 (Legs)
 			styles[6] = 848;//Slot 10 (Footware)
 			styles[7] = -1;//Slot 0 (Unknown)*/
-			colors[9] = 0;
-			colors[8] = 0;
-			colors[7] = 0;
-			colors[6] = 0;
-			colors[5] = 0;
-			colors[4] = 0;
-			colors[3] = 180;
-			colors[2] = 218;
-			colors[1] = 218;
-			colors[0] = 12;
+			basecolours[9] = 0;
+			basecolours[8] = 0;
+			basecolours[7] = 0;
+			basecolours[6] = 0;
+			basecolours[5] = 0;
+			basecolours[4] = 0;
+			basecolours[3] = 180;
+			basecolours[2] = 218;
+			basecolours[1] = 218;
+			basecolours[0] = 12;
 		} else {
 			/*styles[0] = 278;//Slot 8
 			styles[1] = 0;//Slot 11
@@ -124,28 +155,28 @@ public class Appearance {
 			styles[4] = 68;//Slot 9
 			styles[5] = 72;//Slot 11
 			styles[6] = 80;//Slot 10*/
-			styles[0] = 141;//Slot 8 (Hair)
-			styles[1] = -1;//Slot 11 (Not used for female avatars)
-			styles[2] = 912;//Slot 4 (Gloves/Hands)
-			styles[3] = -1;//Slot 6 (Arms)
-			styles[4] = 896;//Slot 9 (Body)
-			styles[5] = 800;//Slot 7 (Legs)
-			styles[6] = 864;//Slot 10 (Footware)
-			styles[7] = -1;//Slot 0 (Unknown)
-			colors[9] = 0;
-			colors[8] = 0;
-			colors[7] = 0;
-			colors[6] = 0;
-			colors[5] = 0;
-			colors[4] = 0;
-			colors[3] = 0;//Legs colour
-			colors[0] = 3;//Skin colour
-			colors[1] = 16;//Hair colour
-			colors[2] = 16;//Top colour
+			baseidkit[0] = 141;//Slot 8 (Hair)
+			baseidkit[1] = -1;//Slot 11 (Not used for female avatars)
+			baseidkit[2] = 912;//Slot 4 (Gloves/Hands)
+			baseidkit[3] = -1;//Slot 6 (Arms)
+			baseidkit[4] = 896;//Slot 9 (Body)
+			baseidkit[5] = 800;//Slot 7 (Legs)
+			baseidkit[6] = 864;//Slot 10 (Footware)
+			baseidkit[7] = -1;//Slot 0 (Unknown)
+			basecolours[9] = 0;
+			basecolours[8] = 0;
+			basecolours[7] = 0;
+			basecolours[6] = 0;
+			basecolours[5] = 0;
+			basecolours[4] = 0;
+			basecolours[3] = 0;//Legs colour
+			basecolours[0] = 3;//Skin colour
+			basecolours[1] = 16;//Hair colour
+			basecolours[2] = 16;//Top colour
 		}
 		if (tempStyles != null) {
-			System.arraycopy(styles, 0, tempStyles, 0, styles.length);
-			System.arraycopy(colors, 0, tempColours, 0, colors.length);
+			System.arraycopy(baseidkit, 0, tempStyles, 0, baseidkit.length);
+			System.arraycopy(basecolours, 0, tempColours, 0, basecolours.length);
 		}
 	}
 
@@ -189,17 +220,17 @@ public class Appearance {
 			update.putBigSmart(npcId);
 			update.putByte(0);
 		} else {
-			packStyles(update, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, styles);
+			encodeBaseAppearance(update, gender, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, baseidkit);
 		}
 
 		// Colour data.
-		for (int index = 0; index < colors.length; index++) {
-			update.putByte((byte) colors[index]);
+		for (int index = 0; index < basecolours.length; index++) {
+			update.putByte((byte) basecolours[index]);
 		}
 
 		// Textures data.
-		for (int index = 0; index < textures.length; index++) {
-			update.putByte((byte) textures[index]);
+		for (int index = 0; index < basematerials.length; index++) {
+			update.putByte((byte) basematerials[index]);
 		}
 
 
@@ -240,9 +271,9 @@ public class Appearance {
 		update.putVarShort(ServerProtocol.UPDATE_APPEARANCE, player);
 		update.putByte(gender.equals(Gender.FEMALE) ? 1 : 0);//Gender
 
-		packStyles(update, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, isTemp ? tempStyles : styles);
+		encodeBaseAppearance(update, gender, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, isTemp ? tempStyles : baseidkit);
 
-		int[] colours = isTemp ? tempColours : colors;
+		int[] colours = isTemp ? tempColours : basecolours;
 
 		/* Write colour data. */
 		for (int index = 0; index < colours.length; index++) {
@@ -260,7 +291,7 @@ public class Appearance {
 		player.getDispatcher().sendBuffer(update);
 	}
 
-	private void packStyles (OutboundBuffer update, boolean ignoreWorn, int[] styles) {
+	private void encodeBaseAppearance (OutboundBuffer update, Gender gender, boolean ignoreWorn, int[] styles) {
 		if (ignoreWorn) {
 			for (int slot=0;slot<DISABLED_SLOTS.length;slot++) {
 				if (DISABLED_SLOTS[slot] == 1) {
@@ -392,55 +423,11 @@ public class Appearance {
 					continue;
 				}
 				slotFlag++;
-				if (player.getEquipment().getOverride(slotId) != null) {
+				if (objCustomisations[slotId] != null) {
 					item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(slotId);
-					EquipmentStyleOverride override = player.getEquipment().getOverride(slotId);
-					if (item == null || item.getId() != override.getObjId()) {
-						continue;//Invalid override
-					}
-					int flags = 0;
-					if (override.getRecol() != null) {
-						flags |= 0x4;
-					}
-					if (override.getRetex() != null) {
-						flags |= 0x8;
-					}
+					ObjTypeCustomisation customisation = objCustomisations[slotId];
+					customisation.encode(update, item.getType());
 					hashData |= 1 << slotFlag;
-					update.putByte(flags);
-					if (override.getRecol() != null) {
-						int slotFlags = 0;
-						byte[] slots = override.getRecolSlots();
-						for (int slot = 0; slot < 4; slot++) {
-							if (slot < slots.length) {
-								slotFlags |= (slots[slot] & 0xf) << (slot*4);
-							} else {
-								slotFlags |= 15 << (slot*4);
-							}
-						}
-						update.putShort(slotFlags);
-						for (int slot = 0; slot < 4; slot++) {
-							if (slot < slots.length) {
-								update.putShort(override.getRecol()[slot]);
-							}
-						}
-					}
-					if (override.getRetex() != null) {
-						int slotFlags = 0;
-						byte[] slots = override.getRetexSlots();
-						for (int slot = 0; slot < 2; slot++) {
-							if (slot < slots.length) {
-								slotFlags |= (slots[slot] & 0xf) << (slot*4);
-							} else {
-								slotFlags |= 15 << (slot*4);
-							}
-						}
-						update.putByte(slotFlags);
-						for (int slot = 0; slot < 2; slot++) {
-							if (slot < slots.length) {
-								update.putShort(override.getRetex()[slot]);
-							}
-						}
-					}
 				} else if ((slotId == SLOT_WEAPON || slotId == SLOT_OFFHAND) && player.isSheathing()) {
 					item = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(slotId);
 					if (item == null) {
@@ -464,26 +451,6 @@ public class Appearance {
 					}
 					update.putBigSmart(def.manwear3);
 					update.putBigSmart(def.womanwear2);
-				} else if (slotId == SLOT_CAPE) {
-					Item cape = player.getInvs().getContainer(ContainerState.EQUIPMENT).get(SLOT_CAPE);
-					if (cape == null) {
-						continue;
-					}
-
-					if (cape.getId() != 20769 && cape.getId() != 20771 && cape.getId() != 20767) {
-						continue;
-					}
-
-					hashData |= 1 << slotFlag;
-					update.putByte(0x4);
-
-					short[] capeColours = capeColors[cape.getId() == 20767 ? 0 : 1];
-					int slots = 0 | 1 << 4 | 2 << 8 | 3 << 12;
-
-					update.putShort(slots);
-					for (int curSlot = 0; curSlot < 4; curSlot++) {
-						update.putShort(capeColours[curSlot]);
-					}
 				}
 			}
 
@@ -508,10 +475,10 @@ public class Appearance {
 	 */
 	public void setTemp () {
 		//if (tempStyles == null) {
-		tempStyles = new int[styles.length];
-		System.arraycopy(styles, 0, tempStyles, 0, styles.length);
-		tempColours = new int[colors.length];
-		System.arraycopy(colors, 0, tempColours, 0, colors.length);
+		tempStyles = new int[baseidkit.length];
+		System.arraycopy(baseidkit, 0, tempStyles, 0, baseidkit.length);
+		tempColours = new int[basecolours.length];
+		System.arraycopy(basecolours, 0, tempColours, 0, basecolours.length);
 		sendBlock(true);
 		//}
 	}
@@ -521,8 +488,8 @@ public class Appearance {
 	 */
 	public void applyTemp () {
 		if (tempStyles != null) {
-			styles = tempStyles;
-			colors = tempColours;
+			baseidkit = tempStyles;
+			basecolours = tempColours;
 			//tempStyles = null;
 			//tempColours = null;
 		}
@@ -546,6 +513,22 @@ public class Appearance {
 
 	public byte[] getData() {
 		return appearanceData;
+	}
+	
+	public void setWornObject (int slot, int objId) {
+		this.objectIds[slot] = objId;
+	}
+	
+	public int getWornObject (int slot) {
+		return this.objectIds[slot];
+	}
+	
+	public void setObjCustomisation (int slot, ObjTypeCustomisation customisation) {
+		this.objCustomisations[slot] = customisation;
+	}
+	
+	public ObjTypeCustomisation getObjCustomisation (int slot) {
+		return this.objCustomisations[slot];
 	}
 
 	public void setPrefixTitle(String title) {
@@ -593,35 +576,35 @@ public class Appearance {
 	}
 
 	public void setStyle(int slot, int style) {
-		this.styles[slot] = style;
+		this.baseidkit[slot] = style;
 	}
 
 	public void setStyles(int[] styles) {
-		this.styles = styles;
+		this.baseidkit = styles;
 	}
 
 	public int[] getStyles() {
-		return styles;
+		return baseidkit;
 	}
 
-	public void setColor(int index, int color) {
-		this.colors[index] = color;
+	public void setColour(int index, int color) {
+		this.basecolours[index] = color;
 	}
 
 	public void setColors(int[] colors) {
-		this.colors = colors;
+		this.basecolours = colors;
 	}
 
-	public void setTextures(int[] textures) {
-		this.textures = textures;
+	public void setMaterials(int[] textures) {
+		this.basematerials = textures;
 	}
 
-	public int[] getTextures() {
-		return textures;
+	public int[] getMaterials() {
+		return basematerials;
 	}
 
 	public int[] getColors() {
-		return colors;
+		return basecolours;
 	}
 
 	public boolean showSkillLevel() {

@@ -116,7 +116,7 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 	@SuppressWarnings("unchecked")
 	@Override
 	public T load(Integer id) throws Exception {
-		ByteBuffer data = dataArchive.getEntry(referenceTable.getEntry(configGroup.id, id).index());
+		ByteBuffer data = getData(id);
 		if (data == null) {
 			return null;
 		}
@@ -124,6 +124,10 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 		type.decode(data);
 		type.postDecode();
 		return (T) type;
+	}
+	
+	protected ByteBuffer getData (int id) {
+		return dataArchive.getEntry(referenceTable.getEntry(configGroup.id, id).index());
 	}
 
 	/* (non-Javadoc)

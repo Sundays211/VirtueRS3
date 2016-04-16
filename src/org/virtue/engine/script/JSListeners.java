@@ -59,7 +59,7 @@ import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.ability.ScriptedAbility;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.inv.ContainerState;
-import org.virtue.game.entity.player.inv.EquipmentManager.WearPos;
+import org.virtue.game.entity.player.inv.WearPos;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.utility.FileUtility;
 
@@ -196,7 +196,7 @@ public class JSListeners implements ScriptManager {
 		
 		map = new HashMap<>();
 		for (WearPos wearPos : WearPos.values()) {
-			map.put(wearPos.name(), wearPos.getSlot());
+			map.put(wearPos.name(), wearPos.getPos());
 		}
 		engine.put("WearPos", map);
 		

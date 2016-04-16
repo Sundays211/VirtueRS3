@@ -81,7 +81,7 @@ public final class TransformDeathEvent extends DeathEvent {
 			if (entity instanceof NPC) {
 				((NPC) entity).setType(npcId);
 			} else {
-				((Player) entity).getAppearance().setNPCId(npcId);
+				((Player) entity).getModel().setNPCId(npcId);
 			}
 			entity.queueUpdateBlock(transformAnimation);
 			entity.queueUpdateBlock(transformGraphic);

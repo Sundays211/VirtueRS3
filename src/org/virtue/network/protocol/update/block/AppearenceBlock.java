@@ -47,7 +47,7 @@ public class AppearenceBlock extends Block {
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
-			byte[] renderData = player.getAppearance().getData();
+			byte[] renderData = player.getModel().getData();
 			block.putA(renderData.length);
 			block.putReverseA(renderData, 0, renderData.length);
 		}

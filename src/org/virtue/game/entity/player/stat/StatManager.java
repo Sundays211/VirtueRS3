@@ -253,6 +253,6 @@ public class StatManager {
 		player.queueUpdateBlock(new SpotAnimationBlock(3, 2457, 230, 0, 0));//Height: 230, speed: 0, rotation: 0, unk1=0
 		player.queueUpdateBlock(new SpotAnimationBlock(4, 2457, 270, 10, 3));//Height: 270, speed: 10, rotation: 3, unk1=15
 		player.queueUpdateBlock(new SpotAnimationBlock(5, 2457, 300, 30, 6));//Height: 300, speed: 30, rotation: 6, unk1=15
-		player.getAppearance().refresh();
+		player.getModel().refresh();
 	}
 }

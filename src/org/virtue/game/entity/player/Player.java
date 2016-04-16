@@ -51,6 +51,7 @@ import org.virtue.game.entity.combat.AttackEvent;
 import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.combat.impl.SpecialAttackHandler;
 import org.virtue.game.entity.combat.impl.magic.MagicAttackEvent;
+import org.virtue.game.entity.player.PlayerModel.Render;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.interactions.ChallengeHandler;
 import org.virtue.game.entity.player.interactions.PlayerInteractions;
@@ -76,8 +77,6 @@ import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
 import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
 import org.virtue.network.protocol.update.block.AnimationBlock;
-import org.virtue.network.protocol.update.ref.Appearance;
-import org.virtue.network.protocol.update.ref.Appearance.Render;
 import org.virtue.network.protocol.update.ref.Viewport;
 import org.virtue.utility.ISAACCipher;
 import org.virtue.utility.text.Base37Utility;
@@ -98,17 +97,6 @@ public class Player extends Entity {
 	 * The {@link Channel} Instance
 	 */
 	private Channel channel;
-	
-	/**
-	 * New player
-	 */
-	public int newPlayer;
-	
-	private ObjType itemType;
-	
-	public ObjType getItemType() {
-		return itemType;
-	}
 
 	/**
 	 * The IP Address of the player
@@ -145,7 +133,7 @@ public class Player extends Entity {
 	/**
 	 * The players combat mode
 	 */
-	private CombatMode mode;
+	private CombatMode combatMode;
 
 	/**
 	 * The players encoding ISAACCipher seeds
@@ -215,7 +203,7 @@ public class Player extends Entity {
 	/**
 	 * The players appearance
 	 */
-	private Appearance appearance;
+	private PlayerModel model;
 
 	/**
 	 * The class for managing the player's chat (public chat, friendchat,
@@ -329,7 +317,7 @@ public class Player extends Entity {
 			ISAACCipher encoding, ISAACCipher decoding) {
 		this(channel, UsernameUtility.formatForProtocol(username), password,
 				CombatMode.EOC, encoding, decoding);
-		this.appearance = new Appearance(this);
+		this.model = new PlayerModel(this, Virtue.getInstance().getConfigProvider().getWearposDefaults());
 	}
 
 	/**
@@ -344,7 +332,7 @@ public class Player extends Entity {
 				.replace("/", "");
 		this.userhash = Base37Utility.encodeBase37(username);
 		this.password = password;
-		this.mode = mode;
+		this.combatMode = mode;
 		this.encoding = encoding;
 		this.decoding = decoding;
 	}
@@ -361,7 +349,7 @@ public class Player extends Entity {
 		this.chat = new ChatManager(this);
 		this.dialogs = new DialogManager(this);
 		this.widgets = new WidgetManager(this);
-		this.appearance = new Appearance(this);
+		this.model = new PlayerModel(this, configProvider.getWearposDefaults());
 		this.viewport = new Viewport(this);
 		this.stats = new StatManager(this);
 		this.inv = new InvRepository(this, configProvider.getInvTypes());
@@ -665,7 +653,7 @@ public class Player extends Entity {
 				if (this.getImpactHandler().inCombat()) {
 					id = type.getAggressiveRender();
 				} else {
-					if (getAppearance().isMale()) {
+					if (getModel().isMale()) {
 						id = type.getPassiveRender();
 					} else {
 						if (type.name.contains("crossbow")
@@ -682,13 +670,13 @@ public class Player extends Entity {
 							id = type.getPassiveRender();
 					}
 				}
-				if (CombatMode.LEGACY.equals(mode)) {
+				if (CombatMode.LEGACY.equals(combatMode)) {
 					id = type.getLegacyPassiveRender();
 				}
 			}
 		}
 		if (id == -1) {
-			id = CombatMode.EOC.equals(mode) ? (getAppearance().isMale() ? 2699
+			id = CombatMode.EOC.equals(combatMode) ? (getModel().isMale() ? 2699
 					: 2703) : 1426;
 		}
 		return id;
@@ -702,14 +690,14 @@ public class Player extends Entity {
 	 * Sets the players combat mode the the specified mode
 	 */
 	public void setMode(CombatMode mode) {
-		this.mode = mode;
+		this.combatMode = mode;
 	}
 
 	/**
 	 * Returns the players combat mode
 	 */
 	public CombatMode getMode() {
-		return mode;
+		return combatMode;
 	}
 
 	/**
@@ -830,8 +818,8 @@ public class Player extends Entity {
 	 * 
 	 * @return
 	 */
-	public Appearance getAppearance() {
-		return appearance;
+	public PlayerModel getModel() {
+		return model;
 	}
 
 	/**
@@ -1053,7 +1041,7 @@ public class Player extends Entity {
 		}
 		widgets.closeWidgets(true);
 		setPaused(false);
-		appearance.clearTemp();
+		model.clearTemp();
 	}
 
 	/*
@@ -1073,8 +1061,8 @@ public class Player extends Entity {
 	 */
 	@Override
 	public int getSize() {
-		if (Render.NPC.equals(appearance.getRender())) {
-			NpcType npcType = Virtue.getInstance().getConfigProvider().getNpcTypes().list(appearance.getRenderNpc());
+		if (Render.NPC.equals(model.getRender())) {
+			NpcType npcType = Virtue.getInstance().getConfigProvider().getNpcTypes().list(model.getRenderNpc());
 			return npcType != null ? npcType.size : 1;
 		}
 		return 1;
@@ -1406,6 +1394,6 @@ public class Player extends Entity {
 			this.setSheathing(true);
 		}
 		this.runAnimation(18027);
-		this.getAppearance().refresh();
+		this.getModel().refresh();
 	}
 }

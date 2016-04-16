@@ -43,9 +43,9 @@ import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
-import org.virtue.network.protocol.update.ref.Appearance.Gender;
 import org.virtue.utility.TimeUtility;
 
 /**
@@ -373,7 +373,7 @@ public class VarRepository implements VarDomain {
 			if (!((Entity) value).exists()) {
 				Player p2 = (Player) value;
 				//().getEquipment().returnBorrowedItem();
-				player.getDispatcher().sendGameMessage(p2.getName()+" has returned the item "+(Gender.MALE.equals(p2.getAppearance().getGender()) ? "he" : "she")+" borrowed from you.");
+				player.getDispatcher().sendGameMessage(p2.getName()+" has returned the item "+(Gender.MALE.equals(p2.getModel().getGender()) ? "he" : "she")+" borrowed from you.");
 				player.getDispatcher().sendGameMessage("You may retrieve it from your Returned Items box by speaking to a banker.");
 				setVarValue(VarKey.Player.LOAN_TO_PLAYER, -1);
 			}

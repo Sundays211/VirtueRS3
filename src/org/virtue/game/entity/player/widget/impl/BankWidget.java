@@ -708,7 +708,7 @@ public class BankWidget extends Widget {
 			}
 		}
 		player.getInvs().sendContainer(ContainerState.EQUIPMENT);
-		player.getAppearance().refresh();
+		player.getModel().refresh();
 	}
 	
 	private void depositMoneyPouch (Player player) {

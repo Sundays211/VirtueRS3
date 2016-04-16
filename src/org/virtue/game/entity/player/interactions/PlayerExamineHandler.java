@@ -61,7 +61,7 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 
 		player.getInvs().sendContainer(ContainerState.PLAYER_INSPECT_EQUIPMENT);
 		player.getWidgets().openOverlaySub(1024, 1560, true);
-		player.getVars().setVarValueInt(VarKey.Player.PLAYER_INSPECT_RENDER, target.getAppearance().getBASId());
+		player.getVars().setVarValueInt(VarKey.Player.PLAYER_INSPECT_RENDER, target.getModel().getBASId());
 		player.getDispatcher().sendOtherPlayerWidgetModel(1558, 19, target);
 		String clan = null;
 		if (target.getClanHash() != 0L) {

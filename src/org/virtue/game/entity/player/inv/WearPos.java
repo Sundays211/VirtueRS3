@@ -21,21 +21,43 @@
  */
 package org.virtue.game.entity.player.inv;
 
-import org.virtue.config.objtype.ObjType;
-
-/**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
- * @author Sundays211
- * @since 16/04/2016
- */
-public class ObjTypeCustomisation {
+public enum WearPos {
+	HAT(0),
+	CAPE(1),
+	AMULET(2),
+	RIGHTHAND(3),
+	TOP(4),
+	LEFTHAND(5),
+	ARMS(6),
+	LEGS(7),
+	HAIR(8),
+	HANDS(9),
+	FEET(10),
+	FACE(11),
+	RING(12),
+	QUIVER(13),
+	AURA(14),
+	POCKET(15),
+	//16
+	//17
+	WINGS(18);
 	
+	private int pos;
 	
-	public ObjTypeCustomisation(ObjType objType) {
-		// TODO Auto-generated constructor stub
+	WearPos (int id) {
+		this.pos = id;
 	}
-
+	
+	public int getPos () {
+		return pos;
+	}
+	
+	public static WearPos getByID (int id) {
+		for (WearPos pos : values()) {
+			if (pos.pos == id) {
+				return pos;
+			}
+		}
+		return null;
+	}
 }

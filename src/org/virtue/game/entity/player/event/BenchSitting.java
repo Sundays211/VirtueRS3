@@ -34,8 +34,8 @@ public class BenchSitting implements PlayerActionHandler {
 		} else if (loop == 1)
 			player.queueUpdateBlock(new FaceDirectionBlock(startTile));
 		else if (loop == 2) {
-			player.getAppearance().setBAS(2096);
-			player.getAppearance().refresh();
+			player.getModel().setBAS(2096);
+			player.getModel().refresh();
 		}
 		loop++;
 		return false;
@@ -44,7 +44,7 @@ public class BenchSitting implements PlayerActionHandler {
 	@Override
 	public void stop(Player player) {
 		player.getMovement().teleportTo(startTile);
-		player.getAppearance().setBAS(player.getBASId());
-		player.getAppearance().refresh();
+		player.getModel().setBAS(player.getBASId());
+		player.getModel().refresh();
 	}
 }

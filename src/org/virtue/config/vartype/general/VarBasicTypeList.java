@@ -21,6 +21,8 @@
  */
 package org.virtue.config.vartype.general;
 
+import java.nio.ByteBuffer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
@@ -49,4 +51,19 @@ public class VarBasicTypeList extends VarTypeList {
 		logger.info("Found "+getCapacity()+" "+domain.getJs5GroupID()+" definitions.");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.virtue.config.ConfigDecoder#load(java.lang.Integer)
+	 */
+	@Override
+	public VarType load(Integer id) throws Exception {
+		ByteBuffer data = getData(id);
+		if (data == null) {
+			return null;
+		}
+		VarType varType = new VarType(id, this);
+		varType.decode(data);
+		varType.postDecode();
+		return varType;
+	}
 }
