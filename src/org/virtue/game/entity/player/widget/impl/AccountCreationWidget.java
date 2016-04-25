@@ -103,11 +103,11 @@ public class AccountCreationWidget extends Widget {
 		switch (componentId) {
 		case 18:
 			player.getModel().setGender(Gender.FEMALE);
-			player.getModel().sendBlock(true);
+			player.getModel().sendBlock(true, Virtue.getInstance().getConfigProvider().getWearposDefaults());
 			return true;
 		case 19:
 			player.getModel().setGender(Gender.MALE);
-			player.getModel().sendBlock(true);
+			player.getModel().sendBlock(true, Virtue.getInstance().getConfigProvider().getWearposDefaults());
 			return true;
 		case 163://Select colour
 			setColour(player, slotId/2);
@@ -232,7 +232,7 @@ public class AccountCreationWidget extends Widget {
 				player.getModel().setTempColour(3, newColour);
 				break;
 			}
-			player.getModel().sendBlock(true);
+			player.getModel().sendBlock(true, Virtue.getInstance().getConfigProvider().getWearposDefaults());
 		}
 	}
 	
@@ -271,7 +271,7 @@ public class AccountCreationWidget extends Widget {
 				player.getModel().setTempStyle(1, newStyle);
 				break;
 			}			
-			player.getModel().sendBlock(true);
+			player.getModel().sendBlock(true, Virtue.getInstance().getConfigProvider().getWearposDefaults());
 		}
 	}
 	

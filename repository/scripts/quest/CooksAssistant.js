@@ -205,48 +205,36 @@ var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 		var player = args.player;
 		var location = args.location;
 		
-		switch (locTypeId) {
-	
-case 47721:
-if(questApi.isFinished(player, 6)) {
-if(api.itemTotal(player, Inv.BACKPACK, 1925)) {
-mesbox(player, "If you're after ordinary milk, you should use an ordinary dairy cow.");
-} else {
-api.sendMessage(player, "You'll need an empty bucket to collect the milk.");
-}
-} else if(questApi.isStarted(player, 6)) {
-	
-	if(api.itemTotal(player, Inv.BACKPACK, 15413)) {
-	if(api.itemTotal(player, Inv.BACKPACK, 1925)) {
-		api.sendMessage(player, "You've already got some top-quality milk; you should take it to the cook.");
-		} else {
-		api.sendMessage(player, "You'll need an empty bucket to collect the milk.");
-		}
-	} else {
-	if(api.itemTotal(player, Inv.BACKPACK, 1925)) {
-	api.runAnimation(player, 2305);
-	//todo wait till end off anim then add items
-		api.delCarriedItem(player, 1925,1);
-		api.addCarriedItem(player, 15413,1);
-  api.sendMessage(player, "You milk the cow for top-quality milk.");
-	} else {
-	api.sendMessage(player, "You'll need an empty bucket to collect the milk.");
-	}
-	}
-} else {	
-if(api.itemTotal(player, Inv.BACKPACK, 1925)) {
-mesbox(player, "If you're after ordinary milk, you should use an ordinary dairy cow.");
-} else {
-api.sendMessage(player, "You'll need an empty bucket to collect the milk.");
-}
-
-}
-
-			return true;
-			
-			
-default:
-				return false;
+		switch (locTypeId) {	
+		case 47721:
+			if(questApi.isStarted(player, 6) && !questApi.isFinished(player, 6)) {	
+				if(api.itemTotal(player, Inv.BACKPACK, 15413)) {
+					if(api.itemTotal(player, Inv.BACKPACK, 1925)) {
+						api.sendMessage(player, "You've already got some top-quality milk; you should take it to the cook.");
+					} else {
+						api.sendMessage(player, "You'll need an empty bucket to collect the milk.");
+					}
+				} else {
+					if(api.itemTotal(player, Inv.BACKPACK, 1925)) {
+						api.runAnimation(player, 2305);
+						//todo wait till end off anim then add items
+						api.delCarriedItem(player, 1925,1);
+						api.addCarriedItem(player, 15413,1);
+						api.sendMessage(player, "You milk the cow for top-quality milk.");
+					} else {
+						api.sendMessage(player, "You'll need an empty bucket to collect the milk.");
+					}
+				}
+			} else {	
+				if(api.itemTotal(player, Inv.BACKPACK, 1925)) {
+					mesbox(player, "If you're after ordinary milk, you should use an ordinary dairy cow.");
+				} else {
+					api.sendMessage(player, "You'll need an empty bucket to collect the milk.");
+				}			
+			}
+			return;
+		default:
+			return;
 		}		
 	}
 });
@@ -256,7 +244,7 @@ var listen = function(scriptManager) {
 	var listener = new CookListener();
 	scriptManager.registerListener(EventType.OPNPC1, 278, listener);
 	
-	var locs = [ 47721];
+	var locs = [47721];
 	var listener = new LocationListener();
 	for (var i in locs) {
 		scriptManager.registerListener(EventType.OPLOC1, locs[i], listener);

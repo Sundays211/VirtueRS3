@@ -307,6 +307,16 @@ public interface ScriptAPI {
 	
 	public void setWidgetText (Player player, int widgetID, int componentID, String text);
 	
+	/**
+	 * Sets an object (item) on an interface component
+	 * @param player The player 
+	 * @param widgetID The interface ID
+	 * @param componentID The component ID
+	 * @param objectId The object type ID to add to the interface
+	 * @param num The number of objects in the stack
+	 */
+	public void setWidgetObject (Player player, int widgetID, int componentID, int objectId, int num);
+	
 	public void setWidgetEvents (Player player, int widgetID, int componentID, int from, int to, int events);
 	
 	public Long getClanHash (Player player);

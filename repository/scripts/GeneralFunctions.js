@@ -310,6 +310,24 @@ function chatnpc (player, npc, message, callback) {
 	api.setInputHandler(player, new Handler());
 }
 
+function chatobj (player, obj, message, callback) {
+	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+		handle : function (value) {
+			if (callback !== undefined) {
+				callback();
+			}			
+		}
+	});
+	if (typeof(npc) !== "number") {
+		obj = api.getId(obj);
+	}
+	api.setWidgetText(player, 1184, 11, configApi.objName(obj));
+	api.setWidgetObject(player, 1184, 2, obj, 1);
+	api.setWidgetText(player, 1184, 9, message);	
+	api.openOverlaySub(player, 1006, 1184, false);
+	api.setInputHandler(player, new Handler());
+}
+
 function multi2 (player, message, op1, op1callback, op2, op2callback) {
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {

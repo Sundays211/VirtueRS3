@@ -418,6 +418,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.api.ScriptAPI#setWidgetObject(org.virtue.game.entity.player.Player, int, int, int)
+	 */
+	@Override
+	public void setWidgetObject(Player player, int widgetID, int componentID, int objectId, int num) {
+		player.getDispatcher().sendWidgetObject(widgetID, componentID, objectId, num);		
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#setWidgetEvents(org.virtue.game.entity.player.Player, int, int, int, int, int)
 	 */
 	@Override
@@ -1455,7 +1463,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void setPlayerKit(Player player, int slot, int kitId) {
 		player.getModel().setTempStyle(slot, kitId);
-		player.getModel().sendBlock(true);
+		player.getModel().sendBlock(true, configProvider.getWearposDefaults());
 	}
 
 	/* (non-Javadoc)
@@ -1472,7 +1480,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void setPlayerColour(Player player, int slot, int colour) {
 		player.getModel().setTempColour(slot, colour);
-		player.getModel().sendBlock(true);
+		player.getModel().sendBlock(true, configProvider.getWearposDefaults());
 	}
 
 	/* (non-Javadoc)

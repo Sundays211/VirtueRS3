@@ -163,7 +163,7 @@ public class CreationDecoder extends ByteToMessageDecoder {
 		ctx.channel().pipeline().addFirst("decoder", new ProtocolDecoder(player.getDecodingCipher()));
 		ctx.channel().attr(NetworkHandler.attachment).set(new GameSession(ctx.channel(), player));
 		player.getModel().setTemp();
-		player.getModel().sendBlock(true);
+		player.getModel().sendBlock(true, Virtue.getInstance().getConfigProvider().getWearposDefaults());
 		LoginDispatcher.onAccountCreation(player);
 		
 		//out.add(new CreationRequestMessage(ctx.channel(), new ISAACCipher(serverKeys), new ISAACCipher(serverKeys)));

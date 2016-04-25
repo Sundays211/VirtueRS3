@@ -68,7 +68,7 @@ public class CreationSession extends Session {
 			channel.pipeline().addFirst(new ProtocolDecoder(request.getDecodingCipher()));
 			channel.attr(NetworkHandler.attachment).set(new GameSession(channel, player));
 			player.getModel().setTemp();
-			player.getModel().sendBlock(true);
+			player.getModel().sendBlock(true, Virtue.getInstance().getConfigProvider().getWearposDefaults());
 			LoginDispatcher.onAccountCreation(player);
 		}
 	}

@@ -155,6 +155,7 @@ public class EquipmentManager {
 	 * @param slot The position in which the item was equipped
 	 */
 	private void handleWearEvent (Item item, int slot) {
+		model.setWornObject(slot, item.getId(), Virtue.getInstance().getConfigProvider().getObjTypes());
 		model.setObjCustomisation(slot, null);
 		if (item.getId() == CLAN_CAPE) {
 			this.model.setObjCustomisation(slot, new ObjTypeCustomisation(item.getType()));
@@ -182,6 +183,7 @@ public class EquipmentManager {
 		if (slot3 != -1) {
 			slotOverrides[slot3] = -1;
 		}
+		model.setWornObject(slot, -1, Virtue.getInstance().getConfigProvider().getObjTypes());
 		model.setObjCustomisation(slot, null);
 		
 		player.getInvs().updateContainer(ContainerState.EQUIPMENT, slot, slot2, slot3);

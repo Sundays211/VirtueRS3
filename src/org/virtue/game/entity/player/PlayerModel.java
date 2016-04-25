@@ -47,6 +47,8 @@ import org.virtue.utility.MD5Encryption;
  * @since 16/04/2016
  */
 public class PlayerModel {
+	
+	private static int[] BASE_PART_MAP = { 8, 11, 4, 6, 9, 7, 10, 0 };
 
 	private static int[] DISABLED_SLOTS = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 };
 
@@ -65,7 +67,6 @@ public class PlayerModel {
 
 	private static final int[] STYLE_LOOKUP = { -1, -1, -1, -1, 2, -1, 3, 5, 0, 4, 6, 1, -1, -1, -1, -1, -1, -1, -1 };
 	//private static final int[] STYLE_LOOKUP = { 7, -1, -1, -1, 2, -1, 3, 5, 0, 4, 6, 1, -1, -1, -1, -1, -1, -1, -1 };
-	short[][] capeColors;
 
 	public static final byte SLOT_HAT = 0, SLOT_CAPE = 1, SLOT_AMULET = 2, SLOT_WEAPON = 3, SLOT_CHEST = 4, SLOT_OFFHAND = 5, SLOT_LEGS = 7, SLOT_HANDS = 9, SLOT_FEET = 10, SLOT_RING = 12, SLOT_ARROWS = 13, SLOT_AURA = 14, SLOT_POCKET = 15;
 
@@ -90,7 +91,8 @@ public class PlayerModel {
 	private String suffixTitle;
 	
 	private ObjTypeCustomisation[] objCustomisations;
-	private int[] objectIds;
+	
+	private int[] parts;
 
 	/**
 	 * Custom render animation
@@ -112,11 +114,8 @@ public class PlayerModel {
 		this.set();
 
 		this.objCustomisations = new ObjTypeCustomisation[wearposDefaults.slots.length];
-		this.objectIds = new int[wearposDefaults.slots.length];
-		this.capeColors = new short[2][];
-		this.capeColors[0] = Arrays.copyOf(ObjTypeList.getInstance().list(20767).recol_s, 4);
-		this.capeColors[1] = Arrays.copyOf(ObjTypeList.getInstance().list(20769).recol_s, 4);
-
+		this.parts = new int[wearposDefaults.slots.length];
+		Arrays.fill(this.parts, -1);
 	}
 
 	private void set() {
@@ -220,7 +219,7 @@ public class PlayerModel {
 			update.putBigSmart(npcId);
 			update.putByte(0);
 		} else {
-			encodeBaseAppearance(update, gender, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, baseidkit);
+			encodeBaseAppearance1(update, gender, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, baseidkit);
 		}
 
 		// Colour data.
@@ -234,7 +233,7 @@ public class PlayerModel {
 		}
 
 
-		// Render animation
+		// Base Animation Set
 		update.putShort(basTypeId == -1 ? player.getBASId() : basTypeId);
 
 		update.putString(player.getName());
@@ -266,12 +265,12 @@ public class PlayerModel {
 		this.appearanceHash = md5Hash;
 	}
 
-	public void sendBlock(boolean isTemp) {
+	public void sendBlock(boolean isTemp, WearposDefaults wearposDefaults) {
 		OutboundBuffer update = new OutboundBuffer();
 		update.putVarShort(ServerProtocol.UPDATE_APPEARANCE, player);
 		update.putByte(gender.equals(Gender.FEMALE) ? 1 : 0);//Gender
 
-		encodeBaseAppearance(update, gender, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, isTemp ? tempStyles : baseidkit);
+		encodeBaseAppearance1(update, gender, player.getInvs().getContainer(ContainerState.EQUIPMENT) == null, isTemp ? tempStyles : baseidkit);
 
 		int[] colours = isTemp ? tempColours : basecolours;
 
@@ -290,8 +289,46 @@ public class PlayerModel {
 		update.finishVarShort();
 		player.getDispatcher().sendBuffer(update);
 	}
+	
+	private void encodeBaseAppearance (OutboundBuffer block, WearposDefaults wearposDefaults, ObjTypeList objTypeList) {
+		for (int slot=0;slot<wearposDefaults.slots.length;slot++) {
+			if (wearposDefaults.slots[slot] == 1) {
+				continue;
+			}
+			if ((parts[slot] & 0x40000000) != 0) {
+				block.putShort(0x4000 + (parts[slot] & 0x3fffffff));
+			} else if ((parts[slot] & ~0x7fffffff) != 0) {
+				block.putShort(0x100 + (parts[slot] & 0x3fffffff));
+			} else {
+				block.putByte(0);
+			}
+		}
+		
+		int flagsPosition = block.offset();
+		block.putShort(0);
 
-	private void encodeBaseAppearance (OutboundBuffer update, Gender gender, boolean ignoreWorn, int[] styles) {
+		int flags = 0, slotFlag = -1;
+		for (int slot = 0; slot < wearposDefaults.slots.length; slot++) {
+			if (wearposDefaults.slots[slot] != 0) {
+				continue;
+			}
+			slotFlag++;
+			if (objCustomisations[slot] != null) {
+				int objId = parts[slot] & 0x3fffffff;
+				ObjTypeCustomisation customisation = objCustomisations[slot];
+				customisation.encode(block, objTypeList.list(objId));
+				flags |= 1 << slotFlag;
+			}
+		}
+
+		int currentPosition = block.offset();
+		block.offset(flagsPosition);
+
+		block.putShort(flags);
+		block.offset(currentPosition);
+	}
+
+	private void encodeBaseAppearance1 (OutboundBuffer update, Gender gender, boolean ignoreWorn, int[] styles) {
 		if (ignoreWorn) {
 			for (int slot=0;slot<DISABLED_SLOTS.length;slot++) {
 				if (DISABLED_SLOTS[slot] == 1) {
@@ -479,7 +516,7 @@ public class PlayerModel {
 		System.arraycopy(baseidkit, 0, tempStyles, 0, baseidkit.length);
 		tempColours = new int[basecolours.length];
 		System.arraycopy(basecolours, 0, tempColours, 0, basecolours.length);
-		sendBlock(true);
+		sendBlock(true, null);
 		//}
 	}
 
@@ -499,7 +536,7 @@ public class PlayerModel {
 		if (tempStyles != null) {
 			tempStyles = null;
 			tempColours = null;
-			sendBlock(false);
+			sendBlock(false, null);
 		}
 	}
 
@@ -514,13 +551,39 @@ public class PlayerModel {
 	public byte[] getData() {
 		return appearanceData;
 	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+		this.set();
+	}
+
+	public void setBaseKit (int slot, int idkit) {
+		this.baseidkit[slot] = idkit;
+		int partSlot = BASE_PART_MAP[slot];
+		if ((this.parts[partSlot] & 0x40000000) == 0) {
+			if (idkit == -1) {
+				this.parts[partSlot] = 0;
+			} else {
+				this.parts[partSlot] = idkit | ~0x7fffffff;
+			}
+		}
+	}
 	
-	public void setWornObject (int slot, int objId) {
-		this.objectIds[slot] = objId;
+	public void setWornObject (int slot, int objectId, ObjTypeList objTypes) {
+		if (objectId == -1) {
+			this.parts[slot] = 0;
+			setBaseKit(0, this.baseidkit[0]);
+		} else if (objTypes.list(objectId) != null) {
+			this.parts[slot] = objectId | 0x40000000;
+		}
+	}
+
+	public int getBaseKit (int slot) {
+		return this.baseidkit[slot];
 	}
 	
 	public int getWornObject (int slot) {
-		return this.objectIds[slot];
+		return this.parts[slot];
 	}
 	
 	public void setObjCustomisation (int slot, ObjTypeCustomisation customisation) {
@@ -573,10 +636,6 @@ public class PlayerModel {
 	public void setTempColour(int slot, int colour) {
 		this.tempColours[slot] = colour;
 		//setColor(slot, colour);
-	}
-
-	public void setStyle(int slot, int style) {
-		this.baseidkit[slot] = style;
 	}
 
 	public void setStyles(int[] styles) {
@@ -637,11 +696,6 @@ public class PlayerModel {
 	//Select skin colour and gender.
 	public Gender getGender() {
 		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-		this.set();
 	}
 
 	public void setNPCId(int id) {
