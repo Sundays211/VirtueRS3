@@ -154,15 +154,15 @@ var CraftProcess = {
 		},
 		makeItem : function (player, productId) {
 			var amountPerBatch = configApi.objParam(productId, 2653);	
-			var stat = configApi.objParam(productId, 2696);
+			var stat = configApi.enumValue(681, configApi.objParam(productId, 2696));
 			var xp;
-			if (stat != 0) {
+			if (stat != -1) {
 				xp = configApi.objParam(productId, 2697) * amountPerBatch;
 				api.addExperience(player, stat, xp/10, true);
 				api.incrementVarp(player, 1176, xp);//Increment xp received value in the crafting process interface
 			}
-			stat = configApi.objParam(productId, 2698);
-			if (stat != 0) {
+			stat = configApi.enumValue(681, configApi.objParam(productId, 2698));
+			if (stat != -1) {
 				xp = configApi.objParam(productId, 2699) * amountPerBatch;
 				api.addExperience(player, stat, xp/10, true);
 				api.incrementVarp(player, 1177, xp);
