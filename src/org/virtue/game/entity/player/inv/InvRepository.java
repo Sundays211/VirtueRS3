@@ -49,6 +49,7 @@ public class InvRepository {
 			throw new IllegalStateException("invTypeList not loaded.");
 		}
 		this.player = player;
+		this.invTypeList = invTypeList;
 		this.containers = new Inventory[invTypeList.getCapacity()];
 		
 		@SuppressWarnings("unchecked")
