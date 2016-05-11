@@ -74,8 +74,8 @@ var MinimapListener = Java.extend(Java.type('org.virtue.engine.script.listeners.
 			api.hideWidget(player, 1477, 388, true);
 			api.setVarp(player, 622, api.getCoordHash(api.getCoords(player)));
 			api.setVarp(player, 674, api.getCoordHash(api.getCoords(player)));
-			api.openWidget(player, 1477, 15, 1421, true);
-			api.openWidget(player, 1477, 16, 1422, false);
+			api.openWidget(player, 1477, 16, 1421, true);
+			api.openWidget(player, 1477, 15, 1422, false);
 			api.openWidget(player, 1422, 107, 698, true);
 			/*player.getDispatcher().sendWidgetSettings(1422, 38, 2, 2, 2);
 			player.getDispatcher().sendWidgetSettings(1422, 39, 2, 2, 2);
