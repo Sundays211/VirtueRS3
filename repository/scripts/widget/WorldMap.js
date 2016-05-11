@@ -59,7 +59,7 @@ var WorldMapClose = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 		api.setVarc(player, 622, -1);
 		api.setVarc(player, 674, -1);
 		api.openOverlaySub(player, 1015, 1215, true);
-		api.openWidget(player, 1477, 15, 1482, true);
+		api.openWidget(player, 1477, 16, 1482, true);
 		player.clearAction();
 	}
 });
