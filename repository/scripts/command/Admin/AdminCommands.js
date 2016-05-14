@@ -5,6 +5,9 @@ var NPC = Java.type('org.virtue.game.entity.npc.NPC');
 var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
 var Tile = Java.type('org.virtue.game.world.region.Tile');
 
+
+var Gender = Java.type('org.virtue.game.entity.player.PlayerModel.Gender');
+
 /** An better optimize way, instead having tons of seperate command files.
  * @author Kayla
  * @date 11/28/2015
@@ -65,11 +68,11 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			return;
 		case "gender":
 			if (args[0] == 0) {
-				player.getAppearance().setGender(Gender.MALE);
-				player.getAppearance().refresh();
+				player.getModel().setGender(Gender.MALE);
+				player.getModel().refresh();
 			} else if (args[0] == 1) {
-				player.getAppearance().setGender(Gender.FEMALE);
-				player.getAppearance().refresh();
+				player.getModel().setGender(Gender.FEMALE);
+				player.getModel().refresh();
 			}
 			return;
 		case "music":
@@ -114,8 +117,8 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			return;
 		case "hair":
 		case "hairstyle":
-			player.getAppearance().setStyle(0, parseInt(args[0]));
-			player.getAppearance().refresh();
+			player.getModel().setTempStyle(0, parseInt(args[0]));
+			player.getModel().refresh();
 			return;
 		case "reloadNPCDefs":
 			api.sendMessage(player, "NPC Combat Definitions has been reloaded!");
@@ -130,20 +133,20 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 				return false;
 			}
 			var animID = parseInt(args[0]);
-			player.getAppearance().setRenderAnimation(animID);
-			player.getAppearance().refresh();
+			player.getModel().setRenderAnimation(animID);
+			player.getModel().refresh();
 			return;
 		case "render":
 			if (args[0] == 0) {
-				player.getAppearance().setRender(Render.PLAYER);
-				player.getAppearance().refresh();
+				player.getModel().setRender(Render.PLAYER);
+				player.getModel().refresh();
 			} else if (args[0] == 1) {
-				player.getAppearance().setRender(Render.NPC);
-				player.getAppearance().setNPCId(args[1]);
-				player.getAppearance().refresh();
+				player.getModel().setRender(Render.NPC);
+				player.getModel().setNPCId(args[1]);
+				player.getModel().refresh();
 			} else if (args[0] == 2) {
-				player.getAppearance().setRender(Render.INVISIBLE);
-				player.getAppearance().refresh();
+				player.getModel().setRender(Render.INVISIBLE);
+				player.getModel().refresh();
 			}
 			return;
 		case "glow":
@@ -185,12 +188,12 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.setRenderAnim(player, -1);
 			return;
 		case "devTitle":
-			player.getAppearance().setPrefixTitle("<col=33CCFF>");
-			player.getAppearance().refresh();
+			player.getModel().setPrefixTitle("<col=33CCFF>");
+			player.getModel().refresh();
 			return;
 		case "removeTitle":
-			player.getAppearance().setPrefixTitle("");
-			player.getAppearance().refresh();
+			player.getModel().setPrefixTitle("");
+			player.getModel().refresh();
 			return;
 		case "uptime":
 			var ticks = api.getServerCycle();
