@@ -55,16 +55,16 @@ public class ItemClickEventHandler implements GameEventHandler<ItemClickEventCon
 					player.getDispatcher().sendConsoleMessage("<col=ffff00>Unhandled ground item: " + context.getItemID() + ", baseX: " + context.getBaseX() + ", baseY: " + context.getBaseY() + ", forceRun: " + context.forceRun() + ", Button: "+context.getButton());
 				}
 			} else {
-				if (!player.getMovement().moveTo(item)) {
-					return;//TODO: Add handing if the player cannot reach the item
-				}
+                                if (!player.getMovement().moveTo(item.getTile())) { 
+					return;//TODO: Add handing if the player cannot reach the item 
+				} 
 				player.getMovement().setOnTarget(new Runnable() {
 					@Override
 					public void run () {
 						if (!item.exists()) {
 							return;
 						}
-						if (!player.getCurrentTile().withinDistance(item.getTile(), 1)) {
+						if (!player.getCurrentTile().withinDistance(item.getTile(), 0)) {
 							player.getDispatcher().sendGameMessage("You can't reach that.");
 							return;
 						}
