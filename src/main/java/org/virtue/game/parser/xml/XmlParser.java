@@ -692,7 +692,7 @@ public class XmlParser {
 //						System.err.println("Could not find character file!");
 //						return null;
 					}
-					Document doc = builder.parse(new File(type.getPath(), request.getUsername() + ".xml"));
+					Document doc = builder.parse(new File(pathLookup.get(type), request.getUsername() + ".xml"));
 	
 					doc.getDocumentElement().normalize();
 	
