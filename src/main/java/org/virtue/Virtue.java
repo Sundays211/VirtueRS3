@@ -160,7 +160,7 @@ public class Virtue {
 	 */
 	private MinigameProcessor controller;
 	
-	private Properties properties;
+	private Properties properties = new Properties();
 	
 	private ConfigProvider configProvider;
 	
@@ -177,13 +177,13 @@ public class Virtue {
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
 		instance = getInstance();
-		File propertiesFile = new File("repository/default.properties");
-		instance.loadProperties(propertiesFile);
-		if (args.length >= 1) {
-			propertiesFile = new File(args[0]);
-			instance.loadProperties(propertiesFile);
-		}
 		try {
+			instance.properties.load(Virtue.class.getResourceAsStream("/default.properties"));
+			if (args.length >= 1) {
+				File propertiesFile = new File(args[0]);
+				instance.loadProperties(propertiesFile);
+			}
+			
 			instance.loadEngine();
 			instance.loadCache();
 			instance.loadConfig();
