@@ -1,5 +1,7 @@
 /scripts_base
 /src_base
+/repository/cache*
+/repository/logs/
 *~
 
 *.class
@@ -14,3 +16,10 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+.gradle
+/build/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+/bin/
