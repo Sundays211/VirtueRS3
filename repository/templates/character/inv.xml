@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<containers>
+<backpack size="28"/>
+<equipment size="19"/>
+<money_pouch size="1">
+<item amount="0" id="995" slot="0"/>
+</money_pouch>
+</containers>

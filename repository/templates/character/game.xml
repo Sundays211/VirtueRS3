@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definition version="8">
+<username></username>
+<password></password>
+<privilege>0</privilege>
+<posX>3210</posX>
+<posY>3256</posY>
+<posZ>0</posZ>
+<mode>0</mode>
+<sheathe>false</sheathe>
+<login>0</login>
+<mute>false</mute>
+<ban>false</ban>
+<savedChat inchat="">0</savedChat>
+<clanHash>0</clanHash>
+<runenergy>100</runenergy>
+<keys>0</keys>
+<hearts>0</hearts>
+<loyalty>0</loyalty>
+<coins>0</coins>
+<prefix/>
+<suffix/>
+<showSkill>false</showSkill>
+<render>0</render>
+<model>
+<gender>0</gender>
+<idk slot="0">261</idk>
+<idk slot="1">10</idk>
+<idk slot="2">881</idk>
+<idk slot="3">945</idk>
+<idk slot="4">817</idk>
+<idk slot="5">833</idk>
+<idk slot="6">849</idk>
+<idk slot="7">-1</idk>
+<recol slot="0">12</recol>
+<recol slot="1">218</recol>
+<recol slot="2">218</recol>
+<recol slot="3">180</recol>
+<recol slot="4">0</recol>
+<recol slot="5">0</recol>
+<recol slot="6">0</recol>
+<recol slot="7">0</recol>
+<recol slot="8">0</recol>
+<recol slot="9">0</recol>
+<retex slot="0">0</retex>
+<retex slot="1">0</retex>
+<retex slot="2">0</retex>
+<retex slot="3">0</retex>
+<retex slot="4">0</retex>
+<retex slot="5">0</retex>
+<retex slot="6">0</retex>
+<retex slot="7">0</retex>
+<retex slot="8">0</retex>
+<retex slot="9">0</retex>
+</model>
+</definition>

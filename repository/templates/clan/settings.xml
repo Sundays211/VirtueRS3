@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings version="5">
+<clanHash>100</clanHash>
+<updateNum>0</updateNum>
+<name></name>
+<allowNonMembers>true</allowNonMembers>
+<rankTalk>0</rankTalk>
+<rankKick>0</rankKick>
+<members/>
+<bans/>
+<variables>
+<variable key="0" type="i">0</variable>
+<variable key="3" type="i">182</variable>
+<variable key="141" type="i">1076364544</variable>
+<variable key="5" type="i">16843013</variable>
+<variable key="143" type="i">10490882</variable>
+<variable key="6" type="i">16843011</variable>
+<variable key="142" type="i">-2142238207</variable>
+<variable key="7" type="i">16843009</variable>
+<variable key="8" type="i">16843009</variable>
+<variable key="9" type="i">16843009</variable>
+<variable key="10" type="i">16843009</variable>
+<variable key="11" type="i">16843009</variable>
+<variable key="12" type="i">507</variable>
+<variable key="14" type="i">0</variable>
+<variable key="327" type="i">41964180</variable>
+<variable key="294" type="i">83928064</variable>
+<variable key="144" type="i">173184165</variable>
+<variable key="145" type="i">168</variable>
+</variables>
+</settings>

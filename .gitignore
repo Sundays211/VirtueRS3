@@ -2,6 +2,8 @@
 /src_base
 /repository/cache*
 /repository/logs/
+/repository/character/
+/repository/clan/
 *~
 
 *.class

@@ -46,6 +46,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.common.io.Files;
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -83,7 +85,14 @@ public class XMLClanIndex implements ClanIndex, CachingParser {
 		
 		String clanIndexFile = properties.getProperty("clan.index.file", "./repository/clan/index.xml");
 		this.indexFile = FileUtility.parseFilePath(clanIndexFile, properties);
-		try {
+		
+		try {			
+			if (!indexFile.exists()) {
+				File indexTemplate = FileUtility.parseFilePath(properties.getProperty("clan.index-template"), properties);
+				logger.warn("Clan index not found at {}! Copying template from {}.", indexFile, indexTemplate);
+				Files.copy(indexTemplate, indexFile);
+			}
+			
 			load();
 		} catch (Exception ex) {
 			logger.error("Error loading clan index: ", ex);

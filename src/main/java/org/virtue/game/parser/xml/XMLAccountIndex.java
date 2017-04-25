@@ -50,6 +50,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.common.io.Files;
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -90,8 +92,14 @@ public class XMLAccountIndex extends AccountIndex implements CachingParser {
 		hashLookup = new HashMap<Long, AccountInfo>();
 		emailLookup = new HashMap<String, AccountInfo>();
 		displayLookup = new HashMap<Long, AccountInfo>();
-		String indexFileName = properties.getProperty("character.index.file", "./repository/character/index.xml");
+		String indexFileName = properties.getProperty("character.index-file", "./repository/character/index.xml");
 		indexFileLocation = FileUtility.parseFilePath(indexFileName, properties);
+		if (!indexFileLocation.exists()) {
+			File indexTemplate = FileUtility.parseFilePath(properties.getProperty("character.index-template"), properties);
+			logger.warn("Account index not found at {}! Copying template from {}.", indexFileLocation, indexTemplate);
+			Files.copy(indexTemplate, indexFileLocation);
+		}
+		
 		load(indexFileLocation);
 	}
 	
