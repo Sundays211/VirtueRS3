@@ -34,10 +34,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.PatternLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.cache.Cache;
@@ -188,7 +184,6 @@ public class Virtue {
 			instance.loadProperties(propertiesFile);
 		}
 		try {
-			instance.initLogging();
 			instance.loadEngine();
 			instance.loadCache();
 			instance.loadConfig();
@@ -225,25 +220,6 @@ public class Virtue {
 			logger.error("Failed to load properties file", ex);
 		}
 		
-	}
-	
-	private void initLogging () {
-		File loggerPath = FileUtility.parseFilePath(properties.getProperty("logging.dir", "/repository/log/game/"));
-		if (!loggerPath.exists()) {
-			loggerPath.mkdirs();
-		}
-		
-		org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
-		
-		org.apache.log4j.Logger.getRootLogger().addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
-		
-		try {
-			FileAppender appender = new FileAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN), loggerPath.getAbsolutePath()+getServerDay()+".log");
-			appender.setThreshold(Level.WARN);
-			org.apache.log4j.Logger.getRootLogger().addAppender(appender);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void loadEngine() {

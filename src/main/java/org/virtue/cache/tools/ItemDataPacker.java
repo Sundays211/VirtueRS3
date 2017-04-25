@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Constants;
@@ -65,7 +64,6 @@ public class ItemDataPacker {
 	
 	
 	public static void main (String... args) throws IOException {
-		BasicConfigurator.configure();
 		if (args.length >= 1) {
 			input = new File(args[0]);
 		}
