@@ -513,7 +513,7 @@ public class Virtue {
 	public void restart() {
 		System.gc();
 		try {
-			Runtime.getRuntime().exec("java -Xmx1024M -cp binary;library/binary/gson-2.3.jar;library/binary/slf4j-api-1.7.7.jar;library/binary/mysql-connector-java-5.1.34-bin.jar;library/binary/netty-all-4.0.26.Final.jar;library/binary/slf4j-log4j12-1.7.7.jar;library/binary/log4j-1.2.17.jar;library/binary/guava-18.0.jar org.virtue.Virtue");
+			Runtime.getRuntime().exec(getProperty("server.reboot-command", "./gradlew run"));
 			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
