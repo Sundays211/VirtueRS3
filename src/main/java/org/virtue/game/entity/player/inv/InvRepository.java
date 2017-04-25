@@ -28,7 +28,7 @@ import java.util.List;
 import org.virtue.Virtue;
 import org.virtue.config.invtype.InvTypeList;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.event.context.impl.out.InvEventContext;
 import org.virtue.network.event.encoder.impl.InvEventEncoder;
 
@@ -53,7 +53,7 @@ public class InvRepository {
 		this.containers = new Inventory[invTypeList.getCapacity()];
 		
 		@SuppressWarnings("unchecked")
-		EnumMap<ContainerState, Item[]> saved = (EnumMap<ContainerState, Item[]>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.INV);
+		EnumMap<ContainerState, Item[]> saved = (EnumMap<ContainerState, Item[]>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserType.INV);
 		for (ContainerState key : saved.keySet()) {
 			try {
 				containers[key.getID()] = new Inventory(invTypeList.list(key.getID()), key.alwaysStack());

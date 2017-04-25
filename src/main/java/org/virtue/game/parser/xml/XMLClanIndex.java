@@ -82,7 +82,7 @@ public class XMLClanIndex implements ClanIndex, CachingParser {
 		clanIndex = new HashMap<Long, Entry>();
 		
 		String clanIndexFile = properties.getProperty("clan.index.file", "./repository/clan/index.xml");
-		this.indexFile = FileUtility.parseFilePath(clanIndexFile);
+		this.indexFile = FileUtility.parseFilePath(clanIndexFile, properties);
 		try {
 			load();
 		} catch (Exception ex) {

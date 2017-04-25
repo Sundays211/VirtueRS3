@@ -35,7 +35,7 @@ import org.virtue.game.content.friends.FriendsList.Data;
 import org.virtue.game.content.ignores.Ignore;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.AccountInfo;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.QuickMessageEventContext;
 import org.virtue.utility.text.QuickChatMessage;
@@ -101,8 +101,8 @@ public class FriendChatManager implements FriendChatAPI {
 			chatData = owner.getChat().getFriendChatData();
 		} else {//Loads the data directly from file
 			@SuppressWarnings("unchecked")
-			List<Ignore> ignores = (List<Ignore>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(info.getUsername(), ParserDataType.IGNORE);
-			FriendsList.Data friendData = (Data) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(info.getUsername(), ParserDataType.FRIEND);
+			List<Ignore> ignores = (List<Ignore>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(info.getUsername(), ParserType.IGNORE);
+			FriendsList.Data friendData = (Data) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(info.getUsername(), ParserType.FRIEND);
 			chatData = new OfflineChatData(friendData, ignores, info);		
 		}
 		if (!chatData.hasFriendChannel()) {

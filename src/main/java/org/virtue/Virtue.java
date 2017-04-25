@@ -267,12 +267,12 @@ public class Virtue {
 		event = new EventRepository();
 		event.load();
 		parser = new ParserRepository();
-		parser.load();
+		parser.load(properties);
 		widget = new WidgetRepository();
 		widget.load();
 		
 		String scriptsFileDir = getProperty("scripts.dir", "./repository/scripts/");
-		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir), configProvider);
+		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir, properties), configProvider);
 		scripts.load();
 		
 		ClanIndex clanIndex = new XMLClanIndex(properties);
@@ -289,7 +289,7 @@ public class Virtue {
 		controller.start();
 
 		String newsDataFile = getProperty("news.file", "repository/news.json");
-		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile));
+		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile, properties));
 		
 		SpecialAttackHandler.init();
 		ActionBar.init();

@@ -123,7 +123,7 @@ public class ConfigProvider {
 		npcTypeList = new NpcTypeList(cache, Constants.NPC_DATA);
 		
 		String npcDataFile = properties.getProperty("npc.data.file", "repository/npc/NPCData.json");
-		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile), npcTypeList);		
+		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile, properties), npcTypeList);		
 		
 		ObjTypeList.init(cache, Constants.ITEM_DATA);
 		objTypeList = ObjTypeList.getInstance();

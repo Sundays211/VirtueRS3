@@ -33,10 +33,10 @@ package org.virtue.game.parser;
  */
 public interface Parser {
 
-	public void saveObjectDefinition(Object object, String file, ParserDataType type);
+	public void saveObjectDefinition(Object object, String file, ParserType type);
 	
-	public Object loadObjectDefinition(Object object, ParserDataType type);
+	public Object loadObjectDefinition(Object object, ParserType type);
 			
-	public boolean objectFileExists(String name, ParserDataType type);
+	public boolean objectFileExists(String name, ParserType type);
 	
 }

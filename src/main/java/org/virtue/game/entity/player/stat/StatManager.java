@@ -30,7 +30,7 @@ import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.enumtype.EnumTypeList;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
 /**
@@ -50,7 +50,7 @@ public class StatManager {
 		this.player = player;
 		setInitialLevels();
 		@SuppressWarnings("unchecked")
-		List<PlayerStat> savedValues = (List<PlayerStat>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.SKILL);
+		List<PlayerStat> savedValues = (List<PlayerStat>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserType.SKILL);
 		if (savedValues != null) {
 			for (PlayerStat entry : savedValues) {
 				stats.put(entry.getType(), entry);

@@ -39,7 +39,7 @@ import org.virtue.game.World;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.SocialUser;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.utility.text.Base37Utility;
 
 /**
@@ -80,7 +80,7 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 		int count = 0;
 		for (ClanSettings clanData : clanDataCache.values()) {
 			if (clanData.needsSave()) {
-				Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(clanData, Long.toString(clanData.getClanHash()), ParserDataType.CLAN_SETTINGS);
+				Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(clanData, Long.toString(clanData.getClanHash()), ParserType.CLAN_SETTINGS);
 				clanData.onSaved();
 				count++;
 			}
@@ -275,8 +275,8 @@ public class ClanSettingsManager implements ClanSettingsAPI {
 		if (settings != null) {
 			return settings;
 		}
-		if (Virtue.getInstance().getParserRepository().getParser().objectFileExists(Long.toString(clanHash), ParserDataType.CLAN_SETTINGS)) {
-			ClanSettings.Data data = (ClanSettings.Data) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(clanHash, ParserDataType.CLAN_SETTINGS);
+		if (Virtue.getInstance().getParserRepository().getParser().objectFileExists(Long.toString(clanHash), ParserType.CLAN_SETTINGS)) {
+			ClanSettings.Data data = (ClanSettings.Data) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(clanHash, ParserType.CLAN_SETTINGS);
 			if (data != null) {
 				clanDataCache.put(clanHash, new ClanSettings(data));
 			}

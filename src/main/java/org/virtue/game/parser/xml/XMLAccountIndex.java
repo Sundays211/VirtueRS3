@@ -84,12 +84,15 @@ public class XMLAccountIndex extends AccountIndex implements CachingParser {
 	
 	private boolean needsSave;
 	
+	private File indexFileLocation;
+	
 	public XMLAccountIndex(Properties properties) throws Exception {
 		hashLookup = new HashMap<Long, AccountInfo>();
 		emailLookup = new HashMap<String, AccountInfo>();
 		displayLookup = new HashMap<Long, AccountInfo>();
-		String indexFileLocation = properties.getProperty("character.index.file", "./repository/character/index.xml");
-		load(FileUtility.parseFilePath(indexFileLocation));
+		String indexFileName = properties.getProperty("character.index.file", "./repository/character/index.xml");
+		indexFileLocation = FileUtility.parseFilePath(indexFileName, properties);
+		load(indexFileLocation);
 	}
 	
 	public boolean needsSave () {
@@ -215,7 +218,7 @@ public class XMLAccountIndex extends AccountIndex implements CachingParser {
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(document);
-			StreamResult result = new StreamResult(new File("./repository/character/", "index.xml"));
+			StreamResult result = new StreamResult(indexFileLocation);
 			transformer.transform(source, result);
 			logger.info("Saved account index. Index now countains " + hashLookup.size() + " account(s)");
 		} catch (Exception ex) {

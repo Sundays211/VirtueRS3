@@ -32,7 +32,7 @@ import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.AccountInfo;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.event.context.impl.out.IgnoreListEventContext;
 import org.virtue.network.event.encoder.impl.IgnoreListEventEncoder;
 
@@ -59,7 +59,7 @@ public class IgnoreList {
 	@SuppressWarnings("unchecked")
 	public IgnoreList(Player player) {
 		this.setPlayer(player);
-		List<Ignore> ignores = (List<Ignore>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.IGNORE);
+		List<Ignore> ignores = (List<Ignore>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserType.IGNORE);
 		this.ignores = new HashMap<Long, Ignore>();
 		for (Ignore i : ignores) {
 			AccountInfo info = Virtue.getInstance().getAccountIndex().lookupByHash(i.getHash());

@@ -34,7 +34,7 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.parser.AccountInfo;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ClanChannelDeltaEventContext;
 import org.virtue.network.event.context.impl.out.ClanChannelEventContext;
@@ -481,8 +481,8 @@ public class ChatManager implements SocialUser {
 	 */
 	public void saveData () {
 		if (needsSave) {
-			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(this.getFriendsList(), player.getUsername(), ParserDataType.FRIEND);
-			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(this.getIgnoreList(), player.getUsername(), ParserDataType.IGNORE);
+			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(this.getFriendsList(), player.getUsername(), ParserType.FRIEND);
+			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(this.getIgnoreList(), player.getUsername(), ParserType.IGNORE);
 			friendChatManager.notifySave(chatData);
 			needsSave = false;
 		}

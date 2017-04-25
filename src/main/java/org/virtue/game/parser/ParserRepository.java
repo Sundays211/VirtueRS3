@@ -21,6 +21,8 @@
  */
 package org.virtue.game.parser;
 
+import java.util.Properties;
+
 import org.virtue.game.parser.xml.XmlParser;
 
 /**
@@ -37,8 +39,8 @@ public class ParserRepository {
 	/**
 	 * Loads the possible parsers into the repo
 	 */
-	public void load() {
-		xml = new XmlParser();
+	public void load(Properties properties) {
+		xml = new XmlParser(properties);
 	}
 	
 	public <T> T loadObject (Class<T> outputType, String name) {

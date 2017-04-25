@@ -6,7 +6,7 @@
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions\:
+ * furnished to do so, subject to the following conditions:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -21,15 +21,30 @@
  */
 package org.virtue.game.parser;
 
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Sundays211
- * @since 21/12/2014
+ * @since Sep 30, 2014
  */
-public enum ParserType {	
-	XML(),
-	JSON();
-
+public enum ParserType {
+	CHARACTER("${character.folder}/game/"), 
+	FRIEND("${character.folder}/friend/"),
+	IGNORE("${character.folder}/ignore/"),
+	VAR("${character.folder}/var/"), 
+	INV("${character.folder}/inv/"), 
+	SKILL("${character.folder}/skill/"),
+	EXCHANGE("${character.folder}/exchange/"),
+	LAYOUT("${character.folder}/layout/"),
+	CLAN_SETTINGS("${clan.folder}/settings/");
+	
+	String path;
+	
+	ParserType(String path) {
+		this.path = path;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+	
 }

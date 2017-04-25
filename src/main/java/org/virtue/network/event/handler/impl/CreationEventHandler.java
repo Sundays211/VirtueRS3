@@ -24,7 +24,7 @@ package org.virtue.network.event.handler.impl;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.event.context.impl.in.CreationEventContext;
 import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.event.handler.GameEventHandler;
@@ -119,7 +119,7 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 		newPlayer.setRuneCoins(0);
 		newPlayer.setRunEnergy(100);
 		Virtue.getInstance().getAccountIndex().addAccount(context.getEmail(), context.getName());
-		Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(newPlayer, newPlayer.getUsername(), ParserDataType.CHARACTER);
+		Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(newPlayer, newPlayer.getUsername(), ParserType.CHARACTER);
 		player.getDispatcher().sendEnum(ServerProtocol.CREATE_ACCOUNT_REPLY, SubmitStatus.SUCCESS);
 	}
 	

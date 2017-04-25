@@ -26,6 +26,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -33,6 +36,8 @@ import java.util.List;
  * @since Aug 8, 2014
  */
 public class FileUtility {
+	
+	private static final Pattern FILE_PATH_VARIABLE = Pattern.compile("\\$\\{(.+)\\}");
 
 	/**
 	 * Returns an array of classes in a specified package
@@ -117,7 +122,16 @@ public class FileUtility {
 		return files;		
 	}
 	
-	public static File parseFilePath (String path) {
+	public static File parseFilePath (String path, Properties properties) {
+		Matcher matcher = FILE_PATH_VARIABLE.matcher(path);
+		StringBuffer result = new StringBuffer();
+		while (matcher.find()) {
+			String key = matcher.group(1);
+			matcher.appendReplacement(result, properties.getProperty(key));
+		}
+		matcher.appendTail(result);
+		path = result.toString();
+		
 		if (path.charAt(0) == '~') {
 			path = System.getProperty("user.home")+path.substring(1);
 		}

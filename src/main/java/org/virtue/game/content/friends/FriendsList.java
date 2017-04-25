@@ -35,7 +35,7 @@ import org.virtue.game.content.chat.OnlineStatus;
 import org.virtue.game.content.friendchats.ChannelRank;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.AccountInfo;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.event.context.impl.out.FriendListEventContext;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.QuickMessageEventContext;
@@ -95,7 +95,7 @@ public class FriendsList {
 	 */
 	public FriendsList(Player player) {
 		this.setPlayer(player);
-		Data data = (Data) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.FRIEND);
+		Data data = (Data) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserType.FRIEND);
 		this.friends = new HashMap<Long, Friend>();
 		this.onlineStatus = data.onlineStatus;
 		this.friendChatName = data.friendChatName;

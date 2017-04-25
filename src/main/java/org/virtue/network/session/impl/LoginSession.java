@@ -34,7 +34,7 @@ import org.virtue.game.World;
 import org.virtue.game.entity.player.LoginDispatcher;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.parser.AccountInfo;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.network.NetworkHandler;
 import org.virtue.network.protocol.ProtocolDecoder;
 import org.virtue.network.protocol.login.LoginDecoder;
@@ -194,7 +194,7 @@ public class LoginSession extends Session {
 			return ResponseTypeMessage.STATUS_INVALID_PASSWORD.getCode();
 		}
 		request.setUsername(info.getUsername());
-		Object response = Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(request, ParserDataType.CHARACTER);
+		Object response = Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(request, ParserType.CHARACTER);
 		if (response instanceof Player) {			
 			player = (Player) response;
 			player.setNames(info.getDisplayName(), info.getPrevName());

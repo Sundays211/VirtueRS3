@@ -27,7 +27,7 @@ import org.virtue.game.content.exchange.ExchangeOfferStatus;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Inventory;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -48,7 +48,7 @@ public class ExchangeOffers {
 	}
 	
 	public void init () {
-		offers = (ExchangeOffer[][]) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.EXCHANGE);
+		offers = (ExchangeOffer[][]) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserType.EXCHANGE);
 		
 
 		if (offers == null || offers.length != 3) {
@@ -75,7 +75,7 @@ public class ExchangeOffers {
 	
 	public void save () {
 		if (needsSave) {
-			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(offers, player.getUsername(), ParserDataType.EXCHANGE);
+			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(offers, player.getUsername(), ParserType.EXCHANGE);
 		}
 	}
 	

@@ -65,7 +65,7 @@ import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.var.VarRepository;
 import org.virtue.game.entity.player.widget.WidgetManager;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
@@ -344,7 +344,7 @@ public class Player extends Entity {
 		this.eventDispatcher = new GameEventDispatcher(this);
 		
 		@SuppressWarnings("unchecked")
-		Map<Integer, Object> varValues = (Map<Integer, Object>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(getUsername(), ParserDataType.VAR);
+		Map<Integer, Object> varValues = (Map<Integer, Object>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(getUsername(), ParserType.VAR);
 		this.var = new VarRepository(this, varValues, configProvider.getVarTypes(VarDomainType.PLAYER), configProvider.getVarBitTypes());
 		this.chat = new ChatManager(this);
 		this.dialogs = new DialogManager(this);
@@ -413,22 +413,22 @@ public class Player extends Entity {
 					.getParserRepository()
 					.getParser()
 					.saveObjectDefinition(this, this.getUsername(),
-							ParserDataType.CHARACTER);
+							ParserType.CHARACTER);
 			Virtue.getInstance()
 					.getParserRepository()
 					.getParser()
 					.saveObjectDefinition(this.getSkills(), this.getUsername(),
-							ParserDataType.SKILL);
+							ParserType.SKILL);
 			Virtue.getInstance()
 					.getParserRepository()
 					.getParser()
 					.saveObjectDefinition(this.getInvs(), this.getUsername(),
-							ParserDataType.INV);
+							ParserType.INV);
 			Map<Integer, Object> varps = this.getVars().getPermanantVarps();
 			Virtue.getInstance()
 					.getParserRepository()
 					.getParser()
-					.saveObjectDefinition(varps, this.getUsername(), ParserDataType.VAR);
+					.saveObjectDefinition(varps, this.getUsername(), ParserType.VAR);
 			exchangeOffers.save();
 			widgets.saveLayout();
 		}

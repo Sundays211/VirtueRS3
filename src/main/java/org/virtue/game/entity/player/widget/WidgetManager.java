@@ -30,7 +30,7 @@ import org.virtue.config.structtype.StructType;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.parser.ParserDataType;
+import org.virtue.game.parser.ParserType;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.out.CloseWidgetEventContext;
 import org.virtue.network.event.context.impl.out.widget.WidgetSubEventContext;
@@ -92,7 +92,7 @@ public class WidgetManager {
 	public WidgetManager (Player player) {
 		this.player = player;
 		@SuppressWarnings("unchecked")
-		Map<Integer, Integer> vars = (Map<Integer, Integer>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserDataType.LAYOUT);
+		Map<Integer, Integer> vars = (Map<Integer, Integer>) Virtue.getInstance().getParserRepository().getParser().loadObjectDefinition(player.getUsername(), ParserType.LAYOUT);
 		if (vars != null) {
 			layoutVarcs.putAll(vars);
 		}
@@ -285,7 +285,7 @@ public class WidgetManager {
 	
 	public void saveLayout () {
 		if (needsSave) {
-			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(this.layoutVarcs, player.getUsername(), ParserDataType.LAYOUT);
+			Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(this.layoutVarcs, player.getUsername(), ParserType.LAYOUT);
 			needsSave = false;
 		}
 	}
