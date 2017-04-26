@@ -96,7 +96,7 @@ public class BankWidget extends Widget {
 		int offset = 0;
 		int tabSize;
 		boolean zeroTab = false;
-		for (int tab=2; tab<=9; tab++) {
+		for (int tab=0; tab<=9; tab++) {
 			if (zeroTab) {
 				setTabSize(player, tab, 0);
 				continue;
