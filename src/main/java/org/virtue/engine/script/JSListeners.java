@@ -169,6 +169,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("mapApi", mapApi);
 		engine.put("configApi", configApi);
 		engine.put("questApi", questApi);
+		engine.put("scriptEngine", this);
 		
 		Map<String, Integer> map = new HashMap<>();
 		for (ScriptEventType type : ScriptEventType.values()) {
@@ -225,13 +226,27 @@ public class JSListeners implements ScriptManager {
 	public synchronized boolean load() {
 		boolean success = true;
 		engine = engineManager.getEngineByName("nashorn");
-		if (engine == null) {
-			engine = engineManager.getEngineByName("JavaScript");//Fall back to Rhino if Nashorn is not available
-		}
 		setConstants(engine);
 		
 		for (File category : scriptDir.listFiles()) {
-			if (category.isDirectory()) {
+			if (category.toString().contains("clan")) {
+				//Temporary work-around until modularisation is expanded to all scripts
+				File bootstrap = new File(category, "bootstrap.js");
+				if (bootstrap.exists()) {
+					try {
+						engine.eval(new FileReader(bootstrap));
+						Invocable invoke = (Invocable) engine;
+						invoke.invokeFunction("init", this, category);
+					} catch (Exception ex) {
+						logger.error("Failed to load script "+bootstrap.getName(), ex);
+						success = false;
+					}
+				} else {
+					logger.warn("bootstrap.js not found in folder "+category);
+				}
+			} else if (category.toString().contains("core")) {
+				//Ignore folder
+			} else if (category.isDirectory()) {
 				if (!loadScriptCategory(engine, category)) {
 					success = false;
 				}
