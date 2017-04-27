@@ -38,6 +38,17 @@ var MageAbilitiesOpenListener = Java.extend(Java.type('org.virtue.engine.script.
 var MageAbilitiesButtonListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, binding, args) {
 		var player = args.player;
+		switch (args.slot) {
+		case 156:
+			EnchantCrossbowBolt.handleEnchantment(player, spell);
+			break;
+		case 155://Home teleport (Lodestone) Normal spellbook
+			api.openCentralWidget(player, 1092, false);
+			return;
+		default:
+			api.sendMessage(player, "Unhandled magic button: comp="+args.component+", slot="+args.slot+", button="+args.button);
+			return;
+		}
 		switch (args.component) {
 		case 1:
 			var spell = org.virtue.game.content.skills.magic.Spellbook.MODERN.get(args.slot);

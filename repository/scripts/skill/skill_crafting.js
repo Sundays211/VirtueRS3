@@ -67,7 +67,7 @@ var Crafting = {
 				category : 6974,
 				categoryNames : 1187,
 				text : "You attach the orb to the staff and create a ",
-				animation : 25594
+				animation : 16446
 			}
 
 		},
@@ -133,8 +133,11 @@ var Crafting = {
 				that.productLookup[id] = {"id":id, "animation":animation, "text":text};
 			}
 			//Used when the standard animation, specified in MaterialType, isn't appropriate for this product
-			
-			
+			addProduct(1397, 16446, "You make an Air battlestaff.");
+			addProduct(1399, 16447, "You make an Earth battlestaff.");
+			addProduct(1395, 16448, "You make a Water battlestaff.");
+			addProduct(1393, 16449, "You make a Fire battlestaff.");
+			addProduct(21777, 16450, "You make an Armadyl battlestaff.");
 			
 		},
 		handleCraft : function (player, itemId, slot, productId) {

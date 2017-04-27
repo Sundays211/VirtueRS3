@@ -51,7 +51,7 @@ var Cooking = {
 					var productData = 315;
 					if (amount > 0) {
 						api.setVarp(player, 1175, productId);
-						var animation = productData !== undefined ? 883 : 883;
+						var animation = productData !== undefined ? 25650 : 25650;
 						var text = productData !== undefined && "You successfully cook the food." !== undefined ? "You successfully cook the food." : material.type.text+configApi.objName(productId);
 						CraftProcess.startCrafting(player, amount, animation, text);
 					}			

@@ -27,7 +27,7 @@ var EnchantCrossbowBolt = {
 					var productData = 9236;
 					if (amount > 0) {
 						api.setVarp(player, 1175, productId);
-						var animation = productData !== undefined ? -1 : -1;//Anim
+						var animation = productData !== undefined ? 21670 : 21670;//Anim
 						var text = productData !== undefined && "You enchant the bolts." !== undefined ? "You enchant the bolts." : material.type.text+configApi.objName(productId);
 						CraftProcess.startCrafting(player, amount, animation, text);
 					}			
