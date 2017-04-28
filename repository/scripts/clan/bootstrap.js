@@ -20,5 +20,8 @@ function init (scriptManager, cwd) {
 		
 		
 	require(cwd+'/clan-chat')(scriptManagerWrapper);
+	require(cwd+'/clan-settings')(scriptManagerWrapper);
 	require(cwd+'/clan-vex')(scriptManagerWrapper);
+	require(cwd+'/clan-admin-messages')(scriptManagerWrapper);
+	require(cwd+'/clan-motif-editor')(scriptManagerWrapper);
 }

@@ -19,6 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+var util = require('../core/util');
+var widget = require('../core/widget');
+var clan = require('./logic/core');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,44 +30,42 @@
  * @author Sundays211
  * @since 25/12/2014
  */
-var api = require('../core/api');
-var ClanActions = require('./logic/logic');
 
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.IF_OPEN, 1110, function (ctx) {
-		api.setWidgetEvents(ctx.player, 1110, 34, 0, 200, 2);
-		api.setWidgetEvents(ctx.player, 1110, 72, 0, 600, 2);//Clan members list
-		api.setWidgetEvents(ctx.player, 1110, 70, 0, 600, 1040);
-		api.setWidgetEvents(ctx.player, 1110, 42, 0, 600, 1040);
+		widget.setEvents(ctx.player, 1110, 34, 0, 200, 2);
+		widget.setEvents(ctx.player, 1110, 72, 0, 600, 2);//Clan members list
+		widget.setEvents(ctx.player, 1110, 70, 0, 600, 1040);
+		widget.setEvents(ctx.player, 1110, 42, 0, 600, 1040);
 	});
 	scriptManager.bind(EventType.IF_BUTTON, 1110, function (ctx) {
 		switch (ctx.component) {
 		case 109://Expand clan actions
-			api.openWidget(ctx.player, 1477, 542, 234, true);
-			api.runClientScript(ctx.player, 8787, [-6, -24, 2, -1, 72745069, 40, 160]);
+			widget.open(ctx.player, 1477, 542, 234, true);
+			ENGINE.runClientScript(ctx.player, 8787, [-6, -24, 2, -1, 72745069, 40, 160]);
 			return;
 		case 168://Clan chat
 		case 170://Visited clan chat
 		case 166://Clan ban list
 			return;//Prevents swapping chat tabs from triggering a debug message
 		case 159://Leave clan
-			ClanActions.leaveClan(ctx.player);
+			clan.leave(ctx.player);
 			return;
 		case 142://Clan settings
-			if (api.getClanHash(ctx.player) == null) {
-				api.sendMessage(ctx.player, "You're not in a clan.");				
+			if (!clan.inClan(ctx.player)) {
+				ENGINE.sendMessage(ctx.player, "You're not in a clan.");				
 			} else {
-				api.openCentralWidget(ctx.player, 1096, false);
+				widget.openCentral(ctx.player, 1096);
 			}
 			return;
 		case 20://Add ban
-			ClanActions.addClanBan(ctx.player);
+			clan.addBan(ctx.player);
 			return;
 		case 28://Remove ban
-			ClanActions.removeClanBan(ctx.player, -1);
+			clan.removeBan(ctx.player, -1);
 			return;
 		case 34://Clan ban list interaction
-			ClanActions.removeClanBan(ctx.player, ctx.slot);
+			clan.removeBan(ctx.player, ctx.slot);
 			return;
 		case 118://Leave clan channel
 		case 126://Clan details
@@ -76,27 +77,27 @@ module.exports = function (scriptManager) {
 		case 83://Temp ban clan member
 		case 97://Show clanmate resources
 		default:
-			api.defaultHandler(ctx, "clan chat button");
+			util.defaultHandler(ctx, "clan chat");
 			return;
 		}
 	});
 	scriptManager.bind(EventType.IF_BUTTON, 234, function (ctx) {
 		switch (ctx.component) {
 		case 4://Leave clan
-			ClanActions.leaveClan(player);
+			clan.leave(ctx.player);
 			return;
 		case 16://Clan settings
-			if (api.getClanHash(player) == null) {
-				api.sendMessage(player, "You're not in a clan.");
+			if (!clan.inClan(ctx.player)) {
+				ENGINE.sendMessage(ctx.player, "You're not in a clan.");
 			} else {
-				api.openCentralWidget(player, 1096, false);
+				widget.openCentral(ctx.player, 1096, false);
 			}
 			return;
 		case 34://Leave clan channel
 		case 28://Clan details
 		case 22://Clan noticeboard
 		default:
-			api.defaultHandler(ctx, "clan action button");
+			util.defaultHandler(ctx, "clan action button");
 			return;
 		}
 	});

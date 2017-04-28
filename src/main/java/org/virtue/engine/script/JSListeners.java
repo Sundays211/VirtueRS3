@@ -165,7 +165,8 @@ public class JSListeners implements ScriptManager {
 	
 	private void setConstants (ScriptEngine engine) {
 		engine.put("api", getApi());
-		engine.put("clanApi", clanApi);
+		engine.put("ENGINE", getApi());
+		engine.put("CLAN_ENGINE", clanApi);
 		engine.put("mapApi", mapApi);
 		engine.put("configApi", configApi);
 		engine.put("questApi", questApi);
@@ -229,24 +230,7 @@ public class JSListeners implements ScriptManager {
 		setConstants(engine);
 		
 		for (File category : scriptDir.listFiles()) {
-			if (category.toString().contains("clan")) {
-				//Temporary work-around until modularisation is expanded to all scripts
-				File bootstrap = new File(category, "bootstrap.js");
-				if (bootstrap.exists()) {
-					try {
-						engine.eval(new FileReader(bootstrap));
-						Invocable invoke = (Invocable) engine;
-						invoke.invokeFunction("init", this, category);
-					} catch (Exception ex) {
-						logger.error("Failed to load script "+bootstrap.getName(), ex);
-						success = false;
-					}
-				} else {
-					logger.warn("bootstrap.js not found in folder "+category);
-				}
-			} else if (category.toString().contains("core")) {
-				//Ignore folder
-			} else if (category.isDirectory()) {
+			if (category.isDirectory()) {
 				if (!loadScriptCategory(engine, category)) {
 					success = false;
 				}
@@ -257,22 +241,45 @@ public class JSListeners implements ScriptManager {
 	}
 	
 	private boolean loadScriptCategory (ScriptEngine engine, File folder) {
-		boolean success = true;
-		List<File> files = FileUtility.findFiles(folder, "js");
-		int countBefore = listeners.size();
-		for (File file : files) {
-			try {
-				engine.eval(new FileReader(file));
-				Invocable invoke = (Invocable) engine;
-				invoke.invokeFunction("listen", this);
-			} catch (Exception ex) {
-				logger.error("Failed to load script "+file.getName(), ex);
-				success = false;
+		if (folder.toString().contains("clan")) {
+			//Temporary work-around until modularisation is expanded to all scripts
+			File bootstrap = new File(folder, "bootstrap.js");
+			if (bootstrap.exists()) {
+				try {
+					engine.eval(new FileReader(bootstrap));
+					Invocable invoke = (Invocable) engine;
+					invoke.invokeFunction("init", this, folder);
+				} catch (Exception ex) {
+					logger.error("Failed to load script "+bootstrap.getName(), ex);
+					return false;
+				}
+				return true;
+			} else {
+				logger.warn("bootstrap.js not found in folder "+folder);
+				return false;
 			}
+		} else if (folder.toString().contains("core")) {
+			//Ignore folder
+			return true;
+		} else {
+			boolean success = true;
+			List<File> files = FileUtility.findFiles(folder, "js");
+			int countBefore = listeners.size();
+			for (File file : files) {
+				try {
+					engine.eval(new FileReader(file));
+					Invocable invoke = (Invocable) engine;
+					invoke.invokeFunction("listen", this);
+				} catch (Exception ex) {
+					logger.error("Failed to load script "+file.getName(), ex);
+					success = false;
+				}
+			}
+			int totalScripts = listeners.size() - countBefore;
+			logger.info("Registered "+totalScripts+" "+folder.getName()+" event listener(s).");
+			return success;
 		}
-		int totalScripts = listeners.size() - countBefore;
-		logger.info("Registered "+totalScripts+" "+folder.getName()+" event listener(s).");
-		return success;
+		
 	}
 
 	/* (non-Javadoc)

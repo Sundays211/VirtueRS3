@@ -28,7 +28,7 @@
  * @author Sundays211
  * @since 24/01/2015
  */
-var api = require('../core/api');
+var api = require('../core/util');
 
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPHELD1, 20709, function (ctx) {
@@ -52,7 +52,7 @@ module.exports = function (scriptManager) {
 function placeClanVex (player, item, slot) {
 	var npc = api.createNpc(13634, api.getCoords(player));
 	if(npc.getOwner() != null) {
-		api.sendMessage(player, "You already have a clan vex out.");
+		ENGINE.sendMessage(player, "You already have a clan vex out.");
 	} else {
 	   npc.setOwner(player);
 	   api.spawnNpc(npc);
@@ -63,7 +63,7 @@ function placeClanVex (player, item, slot) {
 
 function checkVexOwnership(player, npc) {
 	if(!npc.isOwner(player)) {
-		api.sendMessage(player, "You are not the owner of this Clan Vex.");
+		ENGINE.sendMessage(player, "You are not the owner of this Clan Vex.");
 		return true;
 	}
 	npc.destroy();
@@ -72,5 +72,5 @@ function checkVexOwnership(player, npc) {
 }
 
 function readClanVex(player, npc) {
-	api.sendMessage(player, "There's no information about this clan.");
+	ENGINE.sendMessage(player, "There's no information about this clan.");
 }
