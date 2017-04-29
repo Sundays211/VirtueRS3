@@ -1,6 +1,8 @@
 /**
- * 
+ * Module to initialise the clan system script bindings.
+ * We use a bootstrap.js file here so we can tell the engine which scripts need initialising and which don't
  */
+/* globals load, Java */
 
 function init (scriptManager, cwd) {
 	load(cwd+'/../jvm-npm.js');
@@ -16,12 +18,12 @@ function init (scriptManager, cwd) {
 			});
 			scriptManager.registerListener(event, value, new Listener());
 		}
-	}
-		
+	};
 		
 	require(cwd+'/clan-chat')(scriptManagerWrapper);
 	require(cwd+'/clan-settings')(scriptManagerWrapper);
 	require(cwd+'/clan-vex')(scriptManagerWrapper);
+	require(cwd+'/clan-camp')(scriptManagerWrapper);
 	require(cwd+'/clan-admin-messages')(scriptManagerWrapper);
 	require(cwd+'/clan-motif-editor')(scriptManagerWrapper);
 }

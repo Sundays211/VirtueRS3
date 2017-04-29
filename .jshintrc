@@ -1,0 +1,7 @@
+{
+  "undef": true,
+  "globals": {
+    "module": true,
+    "require":true	
+  }
+}
