@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals api, MesType, ENGINE */
 var clan = require('./core');
 
 /**
@@ -101,7 +102,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canBlockCitadel (player, rank) {
 		switch (rank) {
@@ -121,7 +122,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canRecruit (player, rank) {
 		switch (rank) {
@@ -153,7 +154,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canStartBattles (player, rank) {
 		switch (rank) {
@@ -185,7 +186,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function isRcwLeader (player, rank) {
 		switch (rank) {
@@ -217,7 +218,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canStartVote (player, rank) {
 		switch (rank) {
@@ -249,7 +250,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canStartMeeting (player, rank) {
 		switch (rank) {
@@ -281,7 +282,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function isPartyTech (player, rank) {
 		switch (rank) {
@@ -313,7 +314,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function isTheatreTech (player, rank) {
 		switch (rank) {
@@ -345,7 +346,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canEditNoticeboard (player, rank) {
 		switch (rank) {
@@ -365,7 +366,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canEditSignpost (player, rank) {
 		switch (rank) {
@@ -385,7 +386,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canEditBattlefield (player, rank) {
 		switch (rank) {
@@ -417,7 +418,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canUpgradeCitadel (player, rank) {
 		switch (rank) {
@@ -437,7 +438,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canDowngradeCitadel (player, rank) {
 		switch (rank) {
@@ -457,7 +458,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canSetGatherGoals (player, rank) {
 		switch (rank) {
@@ -477,7 +478,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canChangeLanguage (player, rank) {
 		switch (rank) {
@@ -491,7 +492,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canLockPlots (player, rank) {
 		switch (rank) {
@@ -511,7 +512,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canCheckResources (player, rank) {
 		switch (rank) {
@@ -543,7 +544,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canRemoveAvatar (player, rank) {
 		switch (rank) {
@@ -563,7 +564,7 @@ function init () {
 		default:
 			return 0;	
 		}
-	};
+	}
 	
 	function canAddAvatarBuffs (player, rank) {
 		switch (rank) {
@@ -583,7 +584,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canCustomiseAvatar (player, rank) {
 		switch (rank) {
@@ -603,7 +604,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canMoveTick (player, rank) {
 		switch (rank) {
@@ -617,7 +618,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canBroadcastEvents (player, rank) {
 		switch (rank) {
@@ -649,7 +650,7 @@ function init () {
 		default:
 			return 0;
 		}
-	};
+	}
 	
 	function canChangeBroadcasts (player, rank) {
 		switch (rank) {
@@ -669,7 +670,7 @@ function init () {
 		default:
 			return 0;
 		}	
-	};
+	}
 	
 	function setBlockKeep (player, rank, holds) {			
 		if (!canBlockKeep(player, clan.getRank(player))) {
@@ -690,7 +691,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setBlockCitadel (player, rank, holds) {
 		if (!canBlockCitadel(player, clan.getRank(player))) {
@@ -711,7 +712,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanRecruit (player, rank, holds) {
 		if (!canRecruit(player, clan.getRank(player))) {
@@ -744,7 +745,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanStartBattles (player, rank, holds) {
 		if (!canStartBattles(player, clan.getRank(player))) {
@@ -777,7 +778,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setIsRcwLeader (player, rank, holds) {
 		if (!isRcwLeader(player, clan.getRank(player))) {
@@ -810,7 +811,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanStartVote (player, rank, holds) {
 		if (!canStartVote(player, clan.getRank(player))) {
@@ -843,7 +844,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanStartMeeting (player, rank, holds) {
 		if (!canStartMeeting(player, clan.getRank(player))) {
@@ -876,7 +877,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setIsPartyTech (player, rank, holds) {
 		if (!isPartyTech(player, clan.getRank(player))) {
@@ -909,7 +910,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setIsTheatreTech (player, rank, holds) {
 		if (!isTheatreTech(player, clan.getRank(player))) {
@@ -942,7 +943,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanEditNoticeboard (player, rank, holds) {
 		if (!canEditNoticeboard(player, clan.getRank(player))) {
@@ -963,7 +964,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanEditSignpost (player, rank, holds) {
 		if (!canEditSignpost(player, clan.getRank(player))) {
@@ -984,7 +985,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanEditBattlefield (player, rank, holds) {
 		if (!canEditBattlefield(player, clan.getRank(player))) {
@@ -1017,7 +1018,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanUpgradeCitadel (player, rank, holds) {
 		if (!canUpgradeCitadel(player, clan.getRank(player))) {
@@ -1038,7 +1039,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanDowngradeCitadel (player, rank, holds) {
 		if (!canDowngradeCitadel(player, clan.getRank(player))) {
@@ -1059,7 +1060,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanSetGatherGoals (player, rank, holds) {
 		if (!canSetGatherGoals(player, clan.getRank(player))) {
@@ -1080,7 +1081,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanChangeLanguage (player, rank, holds) {
 		if (!canChangeLanguage(player, clan.getRank(player))) {
@@ -1095,7 +1096,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanLockPlots (player, rank, holds) {
 		if (!canLockPlots(player, clan.getRank(player))) {
@@ -1116,7 +1117,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanCheckResources (player, rank, holds) {
 		if (!canCheckResources(player, clan.getRank(player))) {
@@ -1149,7 +1150,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanRemoveAvatar (player, rank, holds) {
 		if (!canRemoveAvatar(player, clan.getRank(player))) {
@@ -1170,7 +1171,7 @@ function init () {
 		default:
 			return false;	
 		}
-	};
+	}
 	
 	function setCanAddAvatarBuffs (player, rank, holds) {
 		if (!canAddAvatarBuffs(player, clan.getRank(player))) {
@@ -1191,7 +1192,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanCustomiseAvatar (player, rank, holds) {
 		if (!canCustomiseAvatar(player, clan.getRank(player))) {
@@ -1212,7 +1213,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanMoveTick (player, rank, holds) {
 		if (!canMoveTick(player, clan.getRank(player))) {
@@ -1227,7 +1228,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanBroadcastEvents (player, rank, holds) {
 		if (!canBroadcastEvents(player, clan.getRank(player))) {
@@ -1260,7 +1261,7 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 	
 	function setCanChangeBroadcasts (player, rank, holds) {
 		if (!canChangeBroadcasts(player, clan.getRank(player))) {
@@ -1282,4 +1283,4 @@ function init () {
 			return false;
 		}	
 	}
-};
+}

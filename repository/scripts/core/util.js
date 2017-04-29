@@ -12,6 +12,8 @@ function init () {
 		testBit : testBit,
 		setBit : setBit,
 		unsetBit : unsetBit,
+		getName : getName,
+		getUserHash : getUserHash
 	};
 	return utils;
 	
@@ -43,6 +45,14 @@ function init () {
 
 	function unsetBit (value, bit) {
 		return value & -1 - (1 << bit);
+	}
+	
+	function getName (entity) {
+		return ENGINE.getName(entity);
+	}
+	
+	function getUserHash (player) {
+		return ENGINE.getUserHash(player);
 	}
 }
 

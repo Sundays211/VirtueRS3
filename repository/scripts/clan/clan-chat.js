@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, ENGINE */
 var util = require('../core/util');
 var widget = require('../core/widget');
 var clan = require('./logic/core');
@@ -76,6 +77,8 @@ module.exports = function (scriptManager) {
 		case 101://Close clanmate options
 		case 83://Temp ban clan member
 		case 97://Show clanmate resources
+			util.defaultHandler(ctx, "clan chat");
+			return;
 		default:
 			util.defaultHandler(ctx, "clan chat");
 			return;
@@ -96,6 +99,8 @@ module.exports = function (scriptManager) {
 		case 34://Leave clan channel
 		case 28://Clan details
 		case 22://Clan noticeboard
+			util.defaultHandler(ctx, "clan action button");
+			return;
 		default:
 			util.defaultHandler(ctx, "clan action button");
 			return;

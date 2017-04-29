@@ -19,6 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, ENGINE, api */
+var util = require('../core/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -28,7 +30,6 @@
  * @author Sundays211
  * @since 24/01/2015
  */
-var api = require('../core/util');
 
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPHELD1, 20709, function (ctx) {
@@ -47,30 +48,31 @@ module.exports = function (scriptManager) {
 		//Option 3 (Remove) as an NPC vexillum
 		checkVexOwnership(ctx.player, ctx.npc);
 	});
-}
-
-function placeClanVex (player, item, slot) {
-	var npc = api.createNpc(13634, api.getCoords(player));
-	if(npc.getOwner() != null) {
-		ENGINE.sendMessage(player, "You already have a clan vex out.");
-	} else {
-	   npc.setOwner(player);
-	   api.spawnNpc(npc);
-	   api.runAnimation(player, 827);
-	   api.moveAdjacent(player);
-	}
-}
-
-function checkVexOwnership(player, npc) {
-	if(!npc.isOwner(player)) {
-		ENGINE.sendMessage(player, "You are not the owner of this Clan Vex.");
-		return true;
-	}
-	npc.destroy();
-	player.setPet(null);
 	
-}
+	function placeClanVex (player, item, slot) {
+		var npc = api.createNpc(13634, api.getCoords(player));
+		if(npc.getOwner() !== null) {
+			ENGINE.sendMessage(player, "You already have a clan vex out.");
+		} else {
+		   npc.setOwner(player);
+		   api.spawnNpc(npc);
+		   api.runAnimation(player, 827);
+		   api.moveAdjacent(player);
+		}
+	}
 
-function readClanVex(player, npc) {
-	ENGINE.sendMessage(player, "There's no information about this clan.");
-}
+	function checkVexOwnership(player, npc) {
+		if(!npc.isOwner(player)) {
+			ENGINE.sendMessage(player, "You are not the owner of this Clan Vex.");
+			return true;
+		}
+		npc.destroy();
+		player.setPet(null);
+		
+	}
+
+	function readClanVex(player, npc) {
+		ENGINE.sendMessage(player, "There's no information about this clan.");
+	}
+};
+

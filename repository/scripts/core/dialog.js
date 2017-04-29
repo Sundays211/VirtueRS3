@@ -1,7 +1,9 @@
 /**
  * Module for chatbox dialog-related functions
  */
+/* globals Java, ENGINE, api*/
 var widget = require('./widget');
+var config = require('./config');
 
 module.exports = init();
 
@@ -21,8 +23,9 @@ function init () {
 		multi3 : multi3,
 		multi4 : multi4,
 		multi5 : multi5,
+		setHslHandler : setHslHandler,
 		finish : finishDialog
-	}
+	};
 	
 	return dialog;
 
@@ -174,7 +177,7 @@ function init () {
 		if (typeof(npc) !== "number") {
 			obj = api.getId(obj);
 		}
-		widget.setText(player, 1184, 11, configApi.objName(obj));
+		widget.setText(player, 1184, 11, config.objName(obj));
 		widget.setObject(player, 1184, 2, obj, 1);
 		widget.setText(player, 1184, 9, message);
 		widget.openOverlaySub(player, 1006, 1184);
@@ -248,8 +251,22 @@ function init () {
 		
 		api.requestMulti(player, message, [op1, op2, op3, op4, op5], [1, 2, 3, 4, 5], new Handler());
 	}
+	
+	function setHslHandler (player, onSelect) {
+		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+			handle : function (value) {
+				onSelect(value);
+			}
+		});
+		api.setInputHandler(player, new Handler());
+	}
 
 	function finishDialog(player) {
 		widget.closeAll(player);
+	}
+
+	function openModalBase (player) {
+		widget.open(player, 1477, 521, 1418, true);
+		widget.open(player, 1418, 1, 1469, true);
 	}
 }

@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, MesType, CLAN_ENGINE, ENGINE */
 var util = require('../core/util');
 var widget = require('../core/widget');
 var clan = require('./logic/core');
@@ -48,6 +49,7 @@ module.exports = function (scriptManager) {
 
 	scriptManager.bind(EventType.IF_BUTTON, 1096, function (ctx) {
 		var player = ctx.player;
+		var wasBanned, held;
 		//varbit 6339 = Clan citadel guest access
 		switch (ctx.component) {
 		case 52://Close/open clan member details
@@ -55,21 +57,21 @@ module.exports = function (scriptManager) {
 			return;
 		case 47://Arrow beside member
 			//TODO: Replace with reference to clan API
-			var member = CLAN_ENGINE.getClanSettings().getMemberData(api.getClanHash(player), ctx.slot);
+			var member = CLAN_ENGINE.getClanSettings().getMemberData(clan.getHash(player), ctx.slot);
 			showMember(ctx.player, member);
 			return;
 		case 64://Member banned from citadel
-			var wasBanned = ENGINE.getVarBit(player, 6148) == 1;
+			wasBanned = ENGINE.getVarBit(player, 6148) == 1;
 			ENGINE.setVarBit(player, 6148, wasBanned ? 0 : 1);
 			ENGINE.setVarc(player, 1566, wasBanned ? 0 : 1);
 			return;
 		case 68://Member banned from keep
-			var wasBanned = ENGINE.getVarBit(player, 6149) == 1;
+			wasBanned = ENGINE.getVarBit(player, 6149) == 1;
 			ENGINE.setVarBit(player, 6149, wasBanned ? 0 : 1);
 			ENGINE.setVarc(player, 1565, wasBanned ? 0 : 1);
 			return;
 		case 72://Member banned from island
-			var wasBanned = ENGINE.getVarBit(player, 6150) == 1;
+			wasBanned = ENGINE.getVarBit(player, 6150) == 1;
 			ENGINE.setVarBit(player, 6150, wasBanned ? 0 : 1);
 			ENGINE.setVarc(player, 1567, wasBanned ? 0 : 1);
 			return;
@@ -97,8 +99,8 @@ module.exports = function (scriptManager) {
 			openMotifEditor(player);
 			return;
 		case 245://Clan timezone
-			var value = (slot - 72) * 10;
-			api.setVarClanSetting(player, 0, value);
+			var value = (ctx.slot - 72) * 10;
+			ENGINE.setVarClanSetting(player, 0, value);
 			return;
 		case 268://Set member job
 			ENGINE.setVarBit(player, 6146, ctx.slot);
@@ -172,99 +174,99 @@ module.exports = function (scriptManager) {
 			setPermissionTab(player, 5);
 			return;
 		case 538:
-			var held = permissions.canBlockKeep(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canBlockKeep(player, ENGINE.getVarBit(player, 6155));
 			permissions.setBlockKeep(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 551:
-			var held = permissions.canBlockCitadel(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canBlockCitadel(player, ENGINE.getVarBit(player, 6155));
 			permissions.setBlockCitadel(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 487:
-			var held = permissions.canRecruit(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canRecruit(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanRecruit(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 641:
-			var held = permissions.canStartBattles(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canStartBattles(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanStartBattles(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 652:
-			var held = permissions.isRcwLeader(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.isRcwLeader(player, ENGINE.getVarBit(player, 6155));
 			permissions.setIsRcwLeader(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 664:
-			var held = permissions.canStartVote(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canStartVote(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanStartVote(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 677:
-			var held = permissions.canStartMeeting(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canStartMeeting(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanStartMeeting(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 689:
-			var held = permissions.isPartyTech(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.isPartyTech(player, ENGINE.getVarBit(player, 6155));
 			permissions.setIsPartyTech(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 786:
-			var held = permissions.isTheatreTech(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.isTheatreTech(player, ENGINE.getVarBit(player, 6155));
 			permissions.setIsTheatreTech(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 596:
-			var held = permissions.canEditNoticeboard(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canEditNoticeboard(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanEditNoticeboard(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 585:
-			var held = permissions.canEditSignpost(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canEditSignpost(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanEditSignpost(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 629:
-			var held = permissions.canEditBattlefield(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canEditBattlefield(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanEditBattlefield(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 607:
-			var held = permissions.canUpgradeCitadel(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canUpgradeCitadel(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanUpgradeCitadel(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 618:
-			var held = permissions.canDowngradeCitadel(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canDowngradeCitadel(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanDowngradeCitadel(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 701:
-			var held = permissions.canSetGatherGoals(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canSetGatherGoals(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanSetGatherGoals(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 775:
-			var held = permissions.canChangeLanguage(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canChangeLanguage(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanChangeLanguage(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 797:
-			var held = permissions.canLockPlots(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canLockPlots(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanLockPlots(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 808:
-			var held = permissions.canCheckResources(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canCheckResources(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanCheckResources(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 841:
-			var held = permissions.canRemoveAvatar(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canRemoveAvatar(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanRemoveAvatar(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 830:
-			var held = permissions.canAddAvatarBuffs(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canAddAvatarBuffs(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanAddAvatarBuffs(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 819:
-			var held = permissions.canCustomiseAvatar(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canCustomiseAvatar(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanCustomiseAvatar(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 713:
-			var held = permissions.canMoveTick(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canMoveTick(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanMoveTick(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 852:
-			var held = permissions.canBroadcastEvents(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canBroadcastEvents(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanBroadcastEvents(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 870:
-			var held = permissions.canChangeBroadcasts(player, ENGINE.getVarBit(player, 6155));
+			held = permissions.canChangeBroadcasts(player, ENGINE.getVarBit(player, 6155));
 			permissions.setCanChangeBroadcasts(player, ENGINE.getVarBit(player, 6155), held ? 0 : 1);
 			return;
 		case 858:
@@ -289,11 +291,11 @@ module.exports = function (scriptManager) {
 		widget.hide(player, 1096, 116, (tab != 1));
 		widget.hide(player, 1096, 123, (tab != 2));
 		widget.hide(player, 1096, 389, (tab != 3));
-	};
+	}
 	
 	function showMember (player, member) {
 		//TODO: Remove direct references to 'member' methods
-		if (member == null) {
+		if (member === null) {
 			ENGINE.setVarp(player, 1844, -1);//Selected member
 			ENGINE.setVarp(player, 1845, 0);
 			ENGINE.setVarp(player, 1846, 0);
@@ -320,7 +322,7 @@ module.exports = function (scriptManager) {
 			ENGINE.setVarc(player, 2521, member.getDisplayName());//Display name
 			ENGINE.runClientScript(player, 4314, []);
 		}
-	};
+	}
 	
 	function setSelectedRank (player, rank) {
 		var prevRank = ENGINE.getVarBit(player, 6154);
@@ -331,7 +333,7 @@ module.exports = function (scriptManager) {
 			ENGINE.setVarBit(player, 6154, rank);
 			ENGINE.setVarc(player, 1500, rank);
 		}
-	};
+	}
 
 	function setPermissionTab(player, tab) {
 		ENGINE.hideWidget(player, 1096, 31, true);
@@ -341,7 +343,7 @@ module.exports = function (scriptManager) {
 		ENGINE.hideWidget(player, 1096, 24, (tab != 4));
 		ENGINE.hideWidget(player, 1096, 25, (tab != 5));
 		ENGINE.runClientScript(player, 5136, [tab]);
-	};
+	}
 
 	function setPermissionGroup (player, rank) {
 		ENGINE.setVarBit(player, 6155, rank);
@@ -374,7 +376,7 @@ module.exports = function (scriptManager) {
 		ENGINE.setVarc(player, 1590, permissions.canMoveTick(player, rank));//Change build tick
 		ENGINE.setVarc(player, 3855, permissions.canBroadcastEvents(player, rank));//Broadcast events
 		ENGINE.setVarc(player, 4125, permissions.canChangeBroadcasts(player, rank));//Modify broadcast settings	
-	};
+	}
 	
 	function openMotifEditor (player) {
 		var logo1 = ENGINE.getVarBit(player, 8815);
@@ -383,17 +385,17 @@ module.exports = function (scriptManager) {
 		var logo2 = ENGINE.getVarBit(player, 8816);
 		ENGINE.setVarBit(player, 8966, logo2 == -1 ? 0 : logo2);
 		
-		var col1 = api.getVarClanSetting(player, 16);
-		ENGINE.setVarp(player, 2067, col1 == null ? 6716 : col1);
+		var col1 = ENGINE.getVarClanSetting(player, 16);
+		ENGINE.setVarp(player, 2067, col1 === null ? 6716 : col1);
 		
-		var col2 = api.getVarClanSetting(player, 17);
-		ENGINE.setVarp(player, 2068, col2 == null ? 6716 : col2);
+		var col2 = ENGINE.getVarClanSetting(player, 17);
+		ENGINE.setVarp(player, 2068, col2 === null ? 6716 : col2);
 		
-		var col3 = api.getVarClanSetting(player, 18);
-		ENGINE.setVarp(player, 2069, col3 == null ? 42550 : col3);
+		var col3 = ENGINE.getVarClanSetting(player, 18);
+		ENGINE.setVarp(player, 2069, col3 === null ? 42550 : col3);
 		
-		var col4 = api.getVarClanSetting(player, 19);
-		ENGINE.setVarp(player, 2070, col4 == null ? 39382 : col4);
+		var col4 = ENGINE.getVarClanSetting(player, 19);
+		ENGINE.setVarp(player, 2070, col4 === null ? 39382 : col4);
 		
 		widget.openCentral(player, 1105);
 	}
@@ -407,6 +409,6 @@ module.exports = function (scriptManager) {
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, ENGINE.getVarBit(player, 6148), 11, 11);//Change citadel ban
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, ENGINE.getVarBit(player, 6149), 12, 12);//Change keep ban
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, ENGINE.getVarBit(player, 6150), 13, 13);//Change island ban
-		ENGINE.sendMessage(player, "Changes have been saved to clanmate.")
-	};
+		ENGINE.sendMessage(player, "Changes have been saved to clanmate.");
+	}
 };

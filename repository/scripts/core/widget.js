@@ -1,6 +1,7 @@
 /**
  * 
  */
+/* globals ENGINE */
 
 module.exports = init();
 

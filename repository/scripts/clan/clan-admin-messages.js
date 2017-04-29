@@ -1,6 +1,7 @@
 /**
  * 
  */
+/* globals EventType, ENGINE*/
 var util = require('../core/util');
 var widget = require('../core/widget');
 var config = require('../core/config');
@@ -46,7 +47,7 @@ module.exports = function (scriptManager) {
 	});
 	
 	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 59), function (ctx) {
-		broadcasts.setMinimumVisibleRank(ctx.player, ENGINE.getVarp(player, 4285), ctx.slot);//Select rank
+		broadcasts.setMinimumVisibleRank(ctx.player, ENGINE.getVarp(ctx.player, 4285), ctx.slot);//Select rank
 	});
 	
 	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 47), function (ctx) {
@@ -56,15 +57,15 @@ module.exports = function (scriptManager) {
 	});
 
 	function load (player) {
-		ENGINE.setVarp(player, 4276, getValue(api.getVarClanSetting(player, 5), 0));
-		ENGINE.setVarp(player, 4277, getValue(api.getVarClanSetting(player, 6), 0));
-		ENGINE.setVarp(player, 4278, getValue(api.getVarClanSetting(player, 7), 0));
-		ENGINE.setVarp(player, 4279, getValue(api.getVarClanSetting(player, 8), 0));
-		ENGINE.setVarp(player, 4280, getValue(api.getVarClanSetting(player, 9), 0));
-		ENGINE.setVarp(player, 4281, getValue(api.getVarClanSetting(player, 10), 0));
-		ENGINE.setVarp(player, 4282, getValue(api.getVarClanSetting(player, 11), 0));
-		ENGINE.setVarp(player, 4283, getValue(api.getVarClanSetting(player, 12), 0));
-		ENGINE.setVarp(player, 4284, getValue(api.getVarClanSetting(player, 14), 0));
+		ENGINE.setVarp(player, 4276, getValue(ENGINE.getVarClanSetting(player, 5), 0));
+		ENGINE.setVarp(player, 4277, getValue(ENGINE.getVarClanSetting(player, 6), 0));
+		ENGINE.setVarp(player, 4278, getValue(ENGINE.getVarClanSetting(player, 7), 0));
+		ENGINE.setVarp(player, 4279, getValue(ENGINE.getVarClanSetting(player, 8), 0));
+		ENGINE.setVarp(player, 4280, getValue(ENGINE.getVarClanSetting(player, 9), 0));
+		ENGINE.setVarp(player, 4281, getValue(ENGINE.getVarClanSetting(player, 10), 0));
+		ENGINE.setVarp(player, 4282, getValue(ENGINE.getVarClanSetting(player, 11), 0));
+		ENGINE.setVarp(player, 4283, getValue(ENGINE.getVarClanSetting(player, 12), 0));
+		ENGINE.setVarp(player, 4284, getValue(ENGINE.getVarClanSetting(player, 14), 0));
 	}
 
 	function getValue (value, def) {
@@ -72,18 +73,18 @@ module.exports = function (scriptManager) {
 	}
 
 	function save (player) {
-		if (permissions.canChangeBroadcasts(player, clan.getRank(clan.getHash(player), api.getUserHash(player)))) {
-			api.setVarClanSetting(player, 5, ENGINE.getVarp(player, 4276));
-			api.setVarClanSetting(player, 6, ENGINE.getVarp(player, 4277));
-			api.setVarClanSetting(player, 7, ENGINE.getVarp(player, 4278));
-			api.setVarClanSetting(player, 8, ENGINE.getVarp(player, 4279));
-			api.setVarClanSetting(player, 9, ENGINE.getVarp(player, 4280));
-			api.setVarClanSetting(player, 10, ENGINE.getVarp(player, 4281));
-			api.setVarClanSetting(player, 11, ENGINE.getVarp(player, 4282));
-			api.setVarClanSetting(player, 12, ENGINE.getVarp(player, 4283));
-			api.setVarClanSetting(player, 14, ENGINE.getVarp(player, 4284));
+		if (permissions.canChangeBroadcasts(player, clan.getRank(clan.getHash(player), util.getUserHash(player)))) {
+			ENGINE.setVarClanSetting(player, 5, ENGINE.getVarp(player, 4276));
+			ENGINE.setVarClanSetting(player, 6, ENGINE.getVarp(player, 4277));
+			ENGINE.setVarClanSetting(player, 7, ENGINE.getVarp(player, 4278));
+			ENGINE.setVarClanSetting(player, 8, ENGINE.getVarp(player, 4279));
+			ENGINE.setVarClanSetting(player, 9, ENGINE.getVarp(player, 4280));
+			ENGINE.setVarClanSetting(player, 10, ENGINE.getVarp(player, 4281));
+			ENGINE.setVarClanSetting(player, 11, ENGINE.getVarp(player, 4282));
+			ENGINE.setVarClanSetting(player, 12, ENGINE.getVarp(player, 4283));
+			ENGINE.setVarClanSetting(player, 14, ENGINE.getVarp(player, 4284));
 			ENGINE.setVarp(player, 4286, -1);
-			broadcasts.send(clan.getHash(player), 28, ["[Player A]"], [api.getName(player)]);
+			broadcasts.send(clan.getHash(player), 28, ["[Player A]"], [util.getName(player)]);
 		}
 	}
 
@@ -101,4 +102,4 @@ module.exports = function (scriptManager) {
 			}
 		}
 	}
-}
+};

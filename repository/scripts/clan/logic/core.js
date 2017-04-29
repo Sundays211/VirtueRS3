@@ -1,6 +1,8 @@
 /**
  * Manages the core functionality for clans
  */
+/* globals CLAN_ENGINE, ENGINE */
+var util = require('../../core/util');
 var dialog = require('../../core/dialog');
 var config = require('../../core/config');
 var broadcasts = require('./broadcasts');
@@ -20,7 +22,7 @@ function init () {
 		addBan : addClanBan,
 		removeBan : removeClanBan,
 		leave : leaveClan
-	}
+	};
 	
 	return logic;
 	
@@ -46,13 +48,13 @@ function init () {
 	
 	function getClanRank (player, clan) {
 		clan = clan || getClanHash(player);
-		return CLAN_ENGINE.getRank(clan, ENGINE.getUserHash(player));
+		return CLAN_ENGINE.getRank(clan, util.getUserHash(player));
 	}
 	
 	function setClanRank (player, memberHash, newRank) {
 		var oldRank = CLAN_ENGINE.getRank(getClanHash(player), memberHash);		
 		if (CLAN_ENGINE.setRank(player, memberHash, newRank)) {//Change rank
-			var replace = [api.getName(player), api.getName(memberHash), config.getEnumValue(3714, oldRank), config.getEnumValue(3714, newRank)];
+			var replace = [util.getName(player), util.getName(memberHash), config.getEnumValue(3714, oldRank), config.getEnumValue(3714, newRank)];
 			if (newRank > oldRank) {//Promoted			
 				broadcasts.send(getClanHash(player), 10, ["[Player A]", "[Player B]", "[old rank]", "[new rank]"], replace);
 			} else {//Demoted
@@ -64,24 +66,24 @@ function init () {
 	function setClanJob (player, memberHash, newJob) {
 		var oldJob = CLAN_ENGINE.getMemberVarBit(player, memberHash, 0, 9);
 		if (CLAN_ENGINE.setMemberVarBit(player, memberHash, newJob, 0, 9)) {//Change job
-			var replace = [api.getName(memberHash), config.getEnumValue(3720, oldJob), config.getEnumValue(3720, newJob), api.getName(player)];
+			var replace = [util.getName(memberHash), config.getEnumValue(3720, oldJob), config.getEnumValue(3720, newJob), util.getName(player)];
 			broadcasts.send(getClanHash(player), 1, ["[Player A]", "[Clan Job X]", "[Clan Job Y]", "[Player B]"], replace);
 		}
 	}
 	
 	function kickClanMember (player, memberHash) {
 		//TODO: Remove direct references
-		var displayName = api.getName(memberHash);
-		if (displayName != null) {
+		var displayName = util.getName(memberHash);
+		if (displayName !== null) {
 			dialog.multi2(player, "Really kick "+displayName+"?", "Yes, kick.", function () {
 				CLAN_ENGINE.getClanSettings().kickClanMember(getClanHash(player), player.getChat(), memberHash);
-				broadcasts.send(getClanHash(player), 29, ["[Player A]", "[Player B]"], [api.getName(player), displayName]);
+				broadcasts.send(getClanHash(player), 29, ["[Player A]", "[Player B]"], [util.getName(player), displayName]);
 				dialog.finish(player);
 			}, "No, cancel.", function () {
 				dialog.finish(player);
 			});
 		}
-	};
+	}
 	
 	function addClanBan (player) {
 		if (!inClan(player)) {
@@ -94,8 +96,8 @@ function init () {
 		}
 		dialog.requestString(player, "Enter the name to be banned:", function (name) {
 			ENGINE.sendMessage(player, "Attempting to ban "+name+".");
-			var userHash = api.getUserHash(name);
-			if (userHash == null) {
+			var userHash = util.getUserHash(name);
+			if (userHash === null) {
 				ENGINE.sendMessage(player, "An error was found while attempting to ban "+name+". No player of that name could be found.");
 				return;
 			}
@@ -108,7 +110,7 @@ function init () {
 				return;
 			}
 			CLAN_ENGINE.addBan(player, userHash);
-			broadcasts.send(getClanHash(player), 15, ["[Player A]", "[Player B]"], [api.getName(player), api.getName(userHash)]);
+			broadcasts.send(getClanHash(player), 15, ["[Player A]", "[Player B]"], [util.getName(player), util.getName(userHash)]);
 		});
 	}
 
@@ -126,8 +128,8 @@ function init () {
 		}
 		dialog.requestString(player, "Enter the name to be removed:", function (name) {
 			ENGINE.sendMessage(player, "Attempting to unban "+name+".");
-			var userHash = api.getUserHash(name);
-			if (userHash == null) {
+			var userHash = util.getUserHash(name);
+			if (userHash === null) {
 				ENGINE.sendMessage(player, "An error was found while attempting to unban "+name+". No player of that name could be found.");
 				return;
 			}
@@ -136,7 +138,7 @@ function init () {
 				return;
 			}
 			CLAN_ENGINE.removeBan(player, userHash);
-			broadcasts.send(getClanHash(player), 7, ["[Player A]", "[Player B]"], [api.getName(player), api.getName(userHash)]);
+			broadcasts.send(getClanHash(player), 7, ["[Player A]", "[Player B]"], [util.getName(player), util.getName(userHash)]);
 		});
 	}
 

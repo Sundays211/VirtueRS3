@@ -19,6 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, ENGINE */
+var util = require('../core/util');
+var widget = require('../core/widget');
+var dialog = require('../core/dialog');
+var broadcasts = require('./logic/broadcasts');
+var clan = require('./logic/core');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,10 +33,6 @@
  * @author Sundays211
  * @since 24/01/2015
  */
-var util = require('../core/util');
-var widget = require('../core/widget');
-var broadcasts = require('./logic/broadcasts');
-var clan = require('./logic/core');
 
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.IF_OPEN, 1105, function (ctx) {
@@ -110,12 +112,12 @@ module.exports = function (scriptManager) {
 	function saveChanges  (player) {
 		ENGINE.setVarBit(player, 8815, ENGINE.getVarBit(player, 8965));//Update logo 1
 		ENGINE.setVarBit(player, 8816, ENGINE.getVarBit(player, 8966));//Update logo 2
-		api.setVarClanSetting(player, 16, ENGINE.getVarp(player, 2067));//Update logo 1 colour
-		api.setVarClanSetting(player, 17, ENGINE.getVarp(player, 2068));//Update logo 2 colour
-		api.setVarClanSetting(player, 18, ENGINE.getVarp(player, 2069));//Update primary colour
-		api.setVarClanSetting(player, 19, ENGINE.getVarp(player, 2070));//Update secondary colour
+		ENGINE.setVarClanSetting(player, 16, ENGINE.getVarp(player, 2067));//Update logo 1 colour
+		ENGINE.setVarClanSetting(player, 17, ENGINE.getVarp(player, 2068));//Update logo 2 colour
+		ENGINE.setVarClanSetting(player, 18, ENGINE.getVarp(player, 2069));//Update primary colour
+		ENGINE.setVarClanSetting(player, 19, ENGINE.getVarp(player, 2070));//Update secondary colour
 		ENGINE.sendMessage(player, "Clan motif updated. Changes will take effect in the next few minutes.");
-		broadcasts.send(clan.getHash(player), 24, ["[Player A]"], [api.getName(player)]);
+		broadcasts.send(clan.getHash(player), 24, ["[Player A]"], [util.getName(player)]);
 		widget.closeAll(player);
 	}
 	
@@ -148,30 +150,27 @@ module.exports = function (scriptManager) {
 		}
 		ENGINE.setVarp(player, 1111, prevColour);
 		widget.openCentral(player, 1106);
-		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-			handle : function (value) {
-				widget.closeAll(player);
-				if (value != 0) {
-					switch (type) {
-					case 1:
-						ENGINE.setVarp(player, 2067, value);
-						break;
-					case 2:
-						ENGINE.setVarp(player, 2068, value);
-						break;
-					case 3:
-						ENGINE.setVarp(player, 2069, value);
-						break;
-					case 4:
-						ENGINE.setVarp(player, 2070, value);
-						break;
-					}
+		dialog.setHslHandler(player, function (value) {
+			widget.closeAll(player);
+			if (value !== 0) {
+				switch (type) {
+				case 1:
+					ENGINE.setVarp(player, 2067, value);
+					break;
+				case 2:
+					ENGINE.setVarp(player, 2068, value);
+					break;
+				case 3:
+					ENGINE.setVarp(player, 2069, value);
+					break;
+				case 4:
+					ENGINE.setVarp(player, 2070, value);
+					break;
 				}
-				widget.openCentral(player, 1105);
-				ENGINE.runClientScript(player, 4399, [72417469]);
 			}
+			widget.openCentral(player, 1105);
+			ENGINE.runClientScript(player, 4399, [72417469]);
 		});
-		api.setInputHandler(player, new Handler());
 	}
 	
 	function copyColour (player, fromType, toType) {
@@ -205,4 +204,4 @@ module.exports = function (scriptManager) {
 			break;
 		}
 	}
-}
+};

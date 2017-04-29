@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-//Requires: ENGINE, CLAN_ENGINE
+/* globals ENGINE, CLAN_ENGINE */
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -36,7 +36,8 @@ function init () {
 		isEnabled : isEnabled,
 		setEnabled : setEnabled,
 		setMinimumVisibleRank : setMinimumVisibleRank
-	}
+	};
+	
 	return broadcasts;
 	
 	function send (clanHash, type, find, replace) {
@@ -175,12 +176,12 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 
 	function setMinimumVisibleRank (player, type, rank) {
 		switch (type) {
 		case 0:
-			return api.setVarBit(player, 21993, rank);
+			return ENGINE.setVarBit(player, 21993, rank);
 		case 1:
 			return ENGINE.setVarBit(player, 21994, rank);
 		case 2:
@@ -242,6 +243,6 @@ function init () {
 		default:
 			return false;
 		}
-	};
+	}
 }
 

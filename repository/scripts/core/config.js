@@ -1,6 +1,7 @@
 /**
  * 
  */
+/* globals configApi */
 
 module.exports = init();
 
@@ -9,8 +10,9 @@ function init () {
 		enumValue : enumValue,
 		enumHasValue : enumHasValue,
 		enumSize : enumSize,
-		structParam : structParam
-	}
+		structParam : structParam,
+		objName : objName
+	};
 	
 	return config;
 	
@@ -28,5 +30,9 @@ function init () {
 	
 	function structParam (structId, param) {
 		return configApi.structParam(structId, param);
+	}
+	
+	function objName (objId) {
+		return configApi.objName(objId);
 	}
 }

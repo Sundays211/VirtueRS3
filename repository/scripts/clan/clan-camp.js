@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals api, EventType, ENGINE, Inv */
+/* globals EventType, ENGINE, Inv */
 var dialog = require('../core/dialog');
 var inv = require('../core/inv');
 var clan = require('./logic/core');
+var util = require('../core/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,7 +36,7 @@ var clan = require('./logic/core');
 
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPNPC1, 5915, function (ctx) {
-		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+api.getName(ctx.player)+", I am giving away free clan vex. If you right click me and click get vex.");
+		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+util.getName(ctx.player)+", I am giving away free clan vex. If you right click me and click get vex.");
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, 5915, function (ctx) {
@@ -43,7 +44,7 @@ module.exports = function (scriptManager) {
 	});
 	
 	scriptManager.bind(EventType.OPNPC1, 13633, function (ctx) {
-		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+api.getName(ctx.player)+", You can get a clan cape from me.");
+		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+util.getName(ctx.player)+", You can get a clan cape from me.");
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, 13633, function (ctx) {
@@ -64,23 +65,23 @@ module.exports = function (scriptManager) {
 			return;
 		}
 		inv.give(player, 20709, 1);
-		dialog.chatnpc(player, npc, "Here you go "+api.getName(player)+".");
+		dialog.chatnpc(player, npc, "Here you go "+util.getName(player)+".");
 	}
 
 	function startClanCloakGiver (player, npc) {
 		if (!inv.hasSpace(player)) {
-			api.sendMessage(player, "Not enough space in your inventory.");
+			ENGINE.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
 		if (!clan.inClan(player)) {
-			api.sendMessage(player, "You must be in a clan to get a clan cloak.");
+			ENGINE.sendMessage(player, "You must be in a clan to get a clan cloak.");
 			return;
 		}
 		if (inv.has(player, 20708) || inv.has(player, 20709, 1, Inv.BANK)) {
-			api.sendMessage(player, "You already own a clan cloak.");
+			ENGINE.sendMessage(player, "You already own a clan cloak.");
 			return;
 		}
 		inv.give(player, 20708, 1);
-		dialog.chatnpc(player, npc, "Here you go "+api.getName(player)+".");
+		dialog.chatnpc(player, npc, "Here you go "+util.getName(player)+".");
 	}
 };
