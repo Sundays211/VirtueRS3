@@ -74,11 +74,11 @@ function init () {
 		var displayName = api.getName(memberHash);
 		if (displayName != null) {
 			dialog.multi2(player, "Really kick "+displayName+"?", "Yes, kick.", function () {
-				clanApi.getClanSettings().kickClanMember(getClanHash(player), player.getChat(), memberHash);
+				CLAN_ENGINE.getClanSettings().kickClanMember(getClanHash(player), player.getChat(), memberHash);
 				broadcasts.send(getClanHash(player), 29, ["[Player A]", "[Player B]"], [api.getName(player), displayName]);
-				api.closeCentralWidgets(player);
+				dialog.finish(player);
 			}, "No, cancel.", function () {
-				api.closeCentralWidgets(player);
+				dialog.finish(player);
 			});
 		}
 	};

@@ -1,6 +1,7 @@
 /**
  * Module for chatbox dialog-related functions
  */
+var widget = require('./widget');
 
 module.exports = init();
 
@@ -19,7 +20,8 @@ function init () {
 		multi2 : multi2,
 		multi3 : multi3,
 		multi4 : multi4,
-		multi5 : multi5
+		multi5 : multi5,
+		finish : finishDialog
 	}
 	
 	return dialog;
@@ -33,8 +35,8 @@ function init () {
 			}
 		});	
 		openModalBase(player);
-		api.runClientScript(player, 108, [message]);
-		api.setInputHandler(player, new Handler());
+		ENGINE.runClientScript(player, 108, [message]);
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	/**
@@ -52,8 +54,8 @@ function init () {
 			}
 		});	
 		openModalBase(player);
-		api.runClientScript(player, 109, [message]);
-		api.setInputHandler(player, new Handler());
+		ENGINE.runClientScript(player, 109, [message]);
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	/**
@@ -71,8 +73,8 @@ function init () {
 			}
 		});	
 		openModalBase(player);
-		api.runClientScript(player, 110, [message]);
-		api.setInputHandler(player, new Handler());
+		ENGINE.runClientScript(player, 110, [message]);
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	/**
@@ -87,11 +89,11 @@ function init () {
 				callback(value);
 			}
 		});
-		api.openWidget(player, 1477, 521, 1418, true);
-		api.openWidget(player, 1418, 1, 389, true);
-		api.runClientScript(player, 8178, []);
-		api.runClientScript(player, 570, [message]);
-		api.setInputHandler(player, new Handler());	
+		widget.open(player, 1477, 521, 1418, true);
+		widget.open(player, 1418, 1, 389, true);
+		ENGINE.runClientScript(player, 8178, []);
+		ENGINE.runClientScript(player, 570, [message]);
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	function requestConfirm (player, message, onConfirm) {
@@ -127,11 +129,11 @@ function init () {
 				}
 			}
 		});
-		api.setWidgetText(player, 1186, 2, message);
-		api.hideWidget(player, 1186, 3, false);
-		api.openOverlaySub(player, 1006, 1186, false);
-		api.runClientScript(player, 8178, []);
-		api.setInputHandler(player, new Handler());
+		widget.setText(player, 1186, 2, message);
+		widget.hide(player, 1186, 3, false);
+		widget.openOverlaySub(player, 1006, 1186, false);
+		ENGINE.runClientScript(player, 8178, []);
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	function chatplayer (player, message, callback) {
@@ -143,7 +145,7 @@ function init () {
 			}
 		});
 		player.getDialogs().sendPlayerChat(message);
-		api.setInputHandler(player, new Handler());
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	function chatnpc (player, npc, message, callback) {
@@ -158,7 +160,7 @@ function init () {
 			npc = api.getId(npc);
 		}
 		player.getDialogs().sendNpcChat(message, npc);
-		api.setInputHandler(player, new Handler());
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	function chatobj (player, obj, message, callback) {
@@ -172,11 +174,11 @@ function init () {
 		if (typeof(npc) !== "number") {
 			obj = api.getId(obj);
 		}
-		api.setWidgetText(player, 1184, 11, configApi.objName(obj));
-		api.setWidgetObject(player, 1184, 2, obj, 1);
-		api.setWidgetText(player, 1184, 9, message);	
-		api.openOverlaySub(player, 1006, 1184, false);
-		api.setInputHandler(player, new Handler());
+		widget.setText(player, 1184, 11, configApi.objName(obj));
+		widget.setObject(player, 1184, 2, obj, 1);
+		widget.setText(player, 1184, 9, message);
+		widget.openOverlaySub(player, 1006, 1184);
+		ENGINE.setInputHandler(player, new Handler());
 	}
 
 	function multi2 (player, message, op1, op1callback, op2, op2callback) {
@@ -245,5 +247,9 @@ function init () {
 		});
 		
 		api.requestMulti(player, message, [op1, op2, op3, op4, op5], [1, 2, 3, 4, 5], new Handler());
+	}
+
+	function finishDialog(player) {
+		widget.closeAll(player);
 	}
 }
