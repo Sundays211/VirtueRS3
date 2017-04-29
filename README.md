@@ -1,6 +1,10 @@
 # VirtueRS3
 
-VirtueRS3 is a RS3 emulation framework originally developed for the 823 protocol, then progressively updated to 865. It aims to ease the development, testing, and integration of content by using the Java 8 Nashorn engine for content scripts, interacting with the engine via a series of APIs. 
+VirtueRS3 is a RS3 emulation framework originally developed for the 823 protocol, then progressively updated to 865. It aims to ease the development, testing, and integration of content by using the Java 8 Nashorn engine for content scripts, interacting with the engine via a series of APIs.
+
+## Running
+
+To run the framework, place an 865 cache in the folder `repostiory/cache_865/` then run `./gradlew run` in the root folder (or `gradlew.bat run` in Windows). This will download Gradle and all the libraries needed to run the server (if you don't already have them) before starting.
 
 ## Contributing
 

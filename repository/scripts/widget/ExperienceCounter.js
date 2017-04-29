@@ -29,7 +29,7 @@
  * @author Sundays211
  * @since Oct 10, 2014
  */
-var SWAP_SKILLS = [0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 18, 12, 13, 14, 15, 16, 17, 11, 19, 20, 21, 22, 23, 24, 25, 29, 30];
+var SWAP_SKILLS = [0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 18, 12, 13, 14, 15, 16, 17, 11, 19, 20, 21, 22, 23, 24, 25, 26, 29, 30];
 
 var ExperienceCounterListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, trigger, args) {
@@ -54,37 +54,38 @@ var ExperienceCounterListener = Java.extend(Java.type('org.virtue.engine.script.
 			var enabled = api.getVarBit(player, 228+counter) == 1;
 			api.setVarBit(player, 228+counter, enabled ? 0 : 1);
 			return;
-		case 41://Select attack
-		case 42://Select strength
-		case 43://Select defense
-		case 44://Select range
-		case 45://Select mage
-		case 46://Select hitpoints
-		case 47://Select prayer
-		case 48://Select agility
-		case 49://Select herblore
-		case 50://Select theiving
-		case 51://Select crafting
-		case 52://Select fletching
-		case 53://Select mining
-		case 54://Select smithing
-		case 55://Select fishing
-		case 56://Select cooking
-		case 57://Select firemaking
-		case 58://Select woodcutting
-		case 59://Select runecrafting
-		case 60://Select slayer
-		case 61://Select farming
-		case 62://Select construction
-		case 63://Select hunter
-		case 64://Select summoning
-		case 65://Select dungeoneering
-		case 66://Select divination
-		case 67://Select combat
-		case 68://Select all
-			setCounterSkill(player, component-41);
+		case 41:
+		case 42:
+		case 43:
+		case 44:
+		case 45:
+		case 46:
+		case 47:
+		case 48:
+		case 49:
+		case 50:
+		case 51:
+		case 52:	
+		case 53:
+		case 54:
+		case 55:
+		case 56:
+		case 57:
+		case 58:
+		case 59:	
+		case 60:	
+		case 61:	
+		case 62:	
+		case 63:	
+		case 64:
+		case 65:
+		case 66:
+		case 67:
+		case 68:
+		case 69:
+			setCounterSkill(player, args.component-41);
 			return;
-		case 70://Reset counter to zero
+		case 71://Reset counter to zero
 			api.setVarp(player, 90+counter, 0);
 			return;
 		default:
