@@ -81,7 +81,7 @@ public class JSListeners implements ScriptManager {
 	
 	private static String[] LEGACY_CATEGORIES = {"abilities", "agility", "chat", "command", "farming",
 			"interaction", "inv", "invention", "npcs", "quest", "settings",
-			"shop", "skill", "specials", "widget"};
+			"skill", "specials", "widget"};
 	
 	private static class EventBind {
 		private ScriptEventType type;

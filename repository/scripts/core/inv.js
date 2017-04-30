@@ -1,7 +1,7 @@
 /**
  * Module for inventory-related functions
  */
-/* globals Inv, ENGINE, MoneyPouch, COINS */
+/* globals Inv, ENGINE, MoneyPouch, COINS, configApi */
 var util = require('./util');
 
 module.exports = init();
@@ -12,34 +12,56 @@ function init() {
 		take : take,
 		has : has,
 		total : invTotal,
+		size : invSize,
 		hasSpace : hasSpace,
+		freeSpace : freeSpace,
+		getObjId : getObjId,
+		baseStock : baseStock
 	};
 	
 	return inv;
 	
-	function give (player, objId, count) {
+	/**
+	 * Gives items to the player
+	 * 
+	 * @param player The player to give items to
+	 * @param objId The item to give
+	 * @param count The number of items to give
+	 * @param invId The inventory to add items to. Defaults to BACKPACK
+	 */
+	function give (player, objId, count, invId) {
+		invId = typeof invId !== "undefined" ? invId : Inv.BACKPACK;
+		
 		if (objId == COINS) {
 			var coinsToAdd = Math.min(count, util.INTEGER_MAX-MoneyPouch.getCoinCount(player));
 			MoneyPouch.addCoins(player, coinsToAdd);
 			count -= coinsToAdd;
 		}
+		
 		if (count > 0) {
-			ENGINE.addItem(player, Inv.BACKPACK, objId, count);
+			ENGINE.addItem(player, invId, objId, count);
 		}
 	}
 	
 	/**
 	 * Removes items held by the player. 
 	 * WARNING: This method assumes the number of the item currently held is greater than or equal to the amount specified.
-	 * If amount is more than the amount held, and exception will be thrown
+	 * If amount is more than the amount held, an exception will be thrown
+	 * 
+	 * @param player The player to remove the item from
+	 * @param objId The item to remove
+	 * @param count The number of items to remove
+	 * @param invId The inventory to remove items from. Defaults to BACKPACK
 	 */
-	function take (player, objId, count) {
-		if (objId == COINS) {
+	function take (player, objId, count, invId) {
+		invId = typeof invId !== "undefined" ? invId : Inv.BACKPACK;
+		
+		if (objId == COINS && invId == Inv.BACKPACK) {
 			var coinsToRemove = Math.min(count, MoneyPouch.getCoinCount(player));
 			MoneyPouch.removeCoins(player, coinsToRemove);
 			count -= coinsToRemove;
 		}
-		ENGINE.delItem(player, Inv.BACKPACK, objId, count);
+		ENGINE.delItem(player, invId, objId, count);
 	}
 	
 	/**
@@ -60,17 +82,21 @@ function init() {
 	 * For coins (if BACKPACK is the inventory), also checks money pouch
 	 * @param player The player to check
 	 * @param objId The object to check
-	 * @param inv The inventory to check. Defaults to BACKPACK if not specified
+	 * @param invId The inventory to check. Defaults to BACKPACK if not specified
 	 */
-	function invTotal (player, objId, inv) {
-		inv = typeof inv !== "undefined" ? inv : Inv.BACKPACK;
+	function invTotal (player, objId, invId) {
+		invId = typeof invId !== "undefined" ? invId : Inv.BACKPACK;
 		
-		var held = ENGINE.itemTotal(player, inv, objId);
-		if (objId == COINS && inv == Inv.BACKPACK) {
+		var held = ENGINE.itemTotal(player, invId, objId);
+		if (objId == COINS && invId == Inv.BACKPACK) {
 			var moneyHeld = MoneyPouch.getCoinCount(player);
 			held = util.checkOverflow(held, moneyHeld) ? util.INTEGER_MAX : held + moneyHeld;
 		}
 		return held;
+	}
+	
+	function invSize (invId) {
+		return configApi.invSize(invId);
 	}
 	
 	/**
@@ -83,6 +109,19 @@ function init() {
 		count = typeof count !== "undefined" ? count : 1;
 		inv = typeof inv !== "undefined" ? inv : Inv.BACKPACK;
 		
-		return ENGINE.freeSpaceTotal(player, inv) >= count;
+		return freeSpace(player, inv) >= count;
+	}
+	
+	function freeSpace(player, inv) {
+		return ENGINE.freeSpaceTotal(player, inv);
+	}
+	
+	function getObjId (player, inv, slot) {
+		var item = ENGINE.getItem(player, inv, slot);
+		return item === null ? -1 : ENGINE.getId(item);
+	}
+	
+	function baseStock (player, inv, objId) {
+		return ENGINE.defaultItemTotal(player, inv, objId);
 	}
 }

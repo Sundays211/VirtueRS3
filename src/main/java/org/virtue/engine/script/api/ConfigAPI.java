@@ -166,4 +166,11 @@ public interface ConfigAPI {
 	 * @return The number of client cycles required
 	 */
 	public int seqLength (int seqTypeId);
+	
+	/**
+	 * Gets the total capacity of the specified inventory
+	 * @param invId The inventory ID
+	 * @return The capacity of the inventory
+	 */
+	public int invSize (int invId);
 }

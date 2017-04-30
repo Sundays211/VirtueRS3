@@ -1,7 +1,7 @@
 /**
  * 
  */
-/* globals configApi */
+/* globals configApi, ENGINE */
 
 module.exports = init();
 
@@ -11,7 +11,13 @@ function init () {
 		enumHasValue : enumHasValue,
 		enumSize : enumSize,
 		structParam : structParam,
-		objName : objName
+		objName : objName,
+		objDesc : objDesc,
+		objStackable : objStackable,
+		objCost : objCost,
+		objCert : objCert,
+		objUncert : objUncert,
+		objSellToGeneralStore : objSellToGeneralStore
 	};
 	
 	return config;
@@ -34,5 +40,30 @@ function init () {
 	
 	function objName (objId) {
 		return configApi.objName(objId);
+	}
+	
+	function objDesc (objId) {
+		return configApi.objDesc(objId);
+	}
+	
+	function objStackable (objId) {
+		return configApi.objStackable(objId);
+	}
+	
+	function objCost (objId) {
+		//TODO: Implement configApi method to get obj cost
+		return ENGINE.getItemType(objId).cost;
+	}
+	
+	function objCert (objId) {
+		return configApi.objCert(objId);
+	}
+	
+	function objUncert (objId) {
+		return configApi.objUncert(objId);
+	}
+	
+	function objSellToGeneralStore (objId) {
+		return ENGINE.getItemType(objId).canSellToGeneralStore();
 	}
 }

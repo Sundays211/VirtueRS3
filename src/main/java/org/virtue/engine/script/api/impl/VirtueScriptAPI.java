@@ -32,6 +32,7 @@ import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.invtype.InvType;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
@@ -747,20 +748,22 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (inv == null) {
 			throw new IllegalStateException("The inventory "+state+" has not been loaded yet!");
 		}
-		int freeSpace = inv.getFreeSlots();
-		if (ObjTypeList.getInstance().list(itemID).isStackable()) {
+		//Remove all checks for space here. If there's not enough space, an exception will be thrown 
+		/*int freeSpace = inv.getFreeSlots();
+		if (ObjTypeList.getInstance().list(itemID).isStackable() || state.alwaysStack()) {
 			int numOf = inv.getNumberOf(itemID);
 			if (numOf != 0 || freeSpace != 0) {
 				freeSpace = Integer.MAX_VALUE - numOf;
 			}			
 		}
 		if (count > freeSpace) {
-			Region region = World.getInstance().getRegions().getRegionByID(player.getCurrentTile().getRegionID());
+			throw new IllegalStateException("Not enough free space! Needed: "+count+", has: "+freeSpace);
+			/*Region region = World.getInstance().getRegions().getRegionByID(player.getCurrentTile().getRegionID());
 			if (region != null && region.isLoaded()) {
 				region.dropItem(itemID, count - freeSpace, player);
 			}
-			count = freeSpace;
-		}
+			count = freeSpace;*//*
+		}*/
 		int[] slots = inv.add(Item.create(itemID, count));
 		player.getInvs().updateContainer(state, slots);
 	}
@@ -893,11 +896,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 
 	@Override
 	public int invCapacity(Player player, int invId) {
-		ContainerState state = ContainerState.getById(invId);
-		if (state == null) {
+		InvType invType = configProvider.getInvTypes().list(invId);
+		if (invType == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		return player.getInvs().getContainer(state).getSize();
+		return invType.getCapacity();
 	}
 
 	/* (non-Javadoc)

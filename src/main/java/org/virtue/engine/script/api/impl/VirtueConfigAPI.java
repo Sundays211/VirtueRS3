@@ -31,6 +31,7 @@ import org.virtue.config.db.DBTableIndex;
 import org.virtue.config.db.dbrowtype.DBRowType;
 import org.virtue.config.db.dbtabletype.DBTableType;
 import org.virtue.config.enumtype.EnumType;
+import org.virtue.config.invtype.InvType;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
@@ -346,5 +347,14 @@ public class VirtueConfigAPI implements ConfigAPI {
 			throw new IllegalArgumentException("Invalid seqTypeId: "+seqTypeId);
 		}
 		return seqType.length;
+	}
+
+	@Override
+	public int invSize(int invId) {
+		InvType invType = configProvider.getInvTypes().list(invId);
+		if (invType == null) {
+			throw new IllegalArgumentException("Invalid inventory: "+invId);
+		}
+		return invType.getCapacity();
 	}
 }

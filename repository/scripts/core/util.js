@@ -10,6 +10,7 @@ function init () {
 		checkOverflow : checkOverflow,
 		defaultHandler : defaultHandler,
 		sendCommandResponse : sendCommandResponse,
+		isAdmin : isAdmin,
 		testBit : testBit,
 		setBit : setBit,
 		unsetBit : unsetBit,
@@ -38,6 +39,10 @@ function init () {
 
 	function sendCommandResponse (player, message, console) {
 		ENGINE.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
+	}
+	
+	function isAdmin (player) {
+		return ENGINE.isAdmin(player);
 	}
 
 	function testBit (value, bit) {

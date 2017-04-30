@@ -8,7 +8,8 @@
  */
 function getAllModules () {
 	var modules = [
-		'clan'
+		'clan',
+		'shop'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');
@@ -37,7 +38,13 @@ function init (scriptManager, cwd, modules) {
 					listener(args);
 				}
 			});
-			scriptManager.registerListener(event, value, new Listener());
+			if (Array.isArray(value)) {
+				for (var i in value) {
+					scriptManager.registerListener(event, value[i], new Listener());
+				}
+			} else {
+				scriptManager.registerListener(event, value, new Listener());				
+			}
 		}
 	};
 	
