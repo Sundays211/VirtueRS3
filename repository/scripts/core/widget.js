@@ -13,6 +13,7 @@ function init () {
 		open : open,
 		closeSub : closeSub,
 		closeAll : closeAll,
+		closeOverlaySub : closeOverlaySub,
 		setEvents : setEvents,
 		setText : setText,
 		setObject : setObject,
@@ -43,6 +44,10 @@ function init () {
 	
 	function closeAll (player) {
 		ENGINE.closeCentralWidgets(player);
+	}
+	
+	function closeOverlaySub (player, subId) {
+		ENGINE.closeOverlaySub(player, subId, true);
 	}
 	
 	function setEvents (player, iface, comp, from, to, events) {

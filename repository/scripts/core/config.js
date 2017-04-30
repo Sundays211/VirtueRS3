@@ -15,9 +15,14 @@ function init () {
 		objDesc : objDesc,
 		objStackable : objStackable,
 		objCost : objCost,
+		objCategory : objCategory,
 		objCert : objCert,
 		objUncert : objUncert,
-		objSellToGeneralStore : objSellToGeneralStore
+		objSellToGeneralStore : objSellToGeneralStore,
+		objParam : objParam,
+		lookupDbRowId : lookupDbRowId,
+		lookupDbRowIds : lookupDbRowIds,
+		getDbFieldValues : getDbFieldValues
 	};
 	
 	return config;
@@ -50,6 +55,10 @@ function init () {
 		return configApi.objStackable(objId);
 	}
 	
+	function objCategory (objId) {
+		return configApi.objCategory(objId);
+	}
+	
 	function objCost (objId) {
 		//TODO: Implement configApi method to get obj cost
 		return ENGINE.getItemType(objId).cost;
@@ -65,5 +74,21 @@ function init () {
 	
 	function objSellToGeneralStore (objId) {
 		return ENGINE.getItemType(objId).canSellToGeneralStore();
+	}
+	
+	function objParam (objId, param) {
+		return configApi.objParam(objId, param);
+	}
+	
+	function lookupDbRowId (dbTableId, rowPos) {
+		return configApi.lookupDbRowId(dbTableId, rowPos);
+	}
+	
+	function lookupDbRowIds (dbTableId, indexId, key) {
+		return configApi.lookupDbRowIds(dbTableId, indexId, key);
+	}
+	
+	function getDbFieldValues (dbTableId, dbRowId, column) {
+		return configApi.getDbFieldValues(dbTableId, dbRowId, column);
 	}
 }
