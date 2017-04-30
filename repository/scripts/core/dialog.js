@@ -24,7 +24,8 @@ function init () {
 		multi4 : multi4,
 		multi5 : multi5,
 		setResumeHandler : setResumeHandler,
-		finish : finishDialog
+		finish : finishDialog,
+		openModalBase : openModalBase
 	};
 	
 	return dialog;

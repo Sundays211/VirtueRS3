@@ -15,7 +15,9 @@ function init () {
 		setBit : setBit,
 		unsetBit : unsetBit,
 		getName : getName,
-		getUserHash : getUserHash
+		getUserHash : getUserHash,
+		fromBase37Hash : fromBase37Hash,
+		toBase37Hash : toBase37Hash
 	};
 	return utils;
 	
@@ -63,6 +65,14 @@ function init () {
 	
 	function getUserHash (player) {
 		return ENGINE.getUserHash(player);
+	}
+	
+	function fromBase37Hash (hash) {
+		return ENGINE.fromBase37Hash(hash);
+	}
+	
+	function toBase37Hash (hash) {
+		return ENGINE.getBase37Hash(hash);
 	}
 }
 

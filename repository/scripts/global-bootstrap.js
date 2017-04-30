@@ -8,6 +8,7 @@
  */
 function getAllModules () {
 	var modules = [
+		'chat',
 		'clan',
 		'shop'
 	];
