@@ -23,8 +23,10 @@ package org.virtue.engine.script;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,10 @@ public class JSListeners implements ScriptManager {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(JSListeners.class);
+	
+	private static String[] LEGACY_CATEGORIES = {"abilities", "agility", "chat", "command", "farming",
+			"interaction", "inv", "invention", "npcs", "quest", "settings",
+			"shop", "skill", "specials", "widget"};
 	
 	private static class EventBind {
 		private ScriptEventType type;
@@ -148,6 +154,8 @@ public class JSListeners implements ScriptManager {
 	private ScriptEngine engine;
 	
 	private File scriptDir;
+	
+	private List<String> modules;
 
 	public JSListeners(File scriptDir, ConfigProvider configProvider) {
 		this.listeners = new HashMap<>();
@@ -161,6 +169,7 @@ public class JSListeners implements ScriptManager {
 		this.configApi = new VirtueConfigAPI(configProvider);
 		this.questApi = new VirtueQuestAPI(configProvider);
 		this.scriptDir = scriptDir;
+		this.modules = new ArrayList<>();
 	}
 	
 	private void setConstants (ScriptEngine engine) {
@@ -228,58 +237,63 @@ public class JSListeners implements ScriptManager {
 		boolean success = true;
 		engine = engineManager.getEngineByName("nashorn");
 		setConstants(engine);
+		try {
+			loadModules();
+		} catch (Exception ex) {
+			logger.error("Failed to load script modules", ex);
+			success = false;
+		}
 		
-		for (File category : scriptDir.listFiles()) {
-			if (category.isDirectory()) {
-				if (!loadScriptCategory(engine, category)) {
+		for (String legacyCategory : LEGACY_CATEGORIES) {
+			File categoryDir = new File(scriptDir, legacyCategory);
+			if (categoryDir.exists()) {
+				if (!loadLegacyCategory(engine, categoryDir)) {
 					success = false;
 				}
-			}			
+			} else {
+				logger.warn("Legacy category {} does not exist!", categoryDir);
+			}
 		}
 		logger.info("Registerd " + varMap.size() + " Var Script(s).");
 		return success;
 	}
 	
-	private boolean loadScriptCategory (ScriptEngine engine, File folder) {
-		if (folder.toString().contains("clan")) {
-			//Temporary work-around until modularisation is expanded to all scripts
-			File bootstrap = new File(folder, "bootstrap.js");
-			if (bootstrap.exists()) {
-				try {
-					engine.eval(new FileReader(bootstrap));
-					Invocable invoke = (Invocable) engine;
-					invoke.invokeFunction("init", this, folder);
-				} catch (Exception ex) {
-					logger.error("Failed to load script "+bootstrap.getName(), ex);
-					return false;
-				}
-				return true;
-			} else {
-				logger.warn("bootstrap.js not found in folder "+folder);
-				return false;
-			}
-		} else if (folder.toString().contains("core")) {
-			//Ignore folder
-			return true;
-		} else {
-			boolean success = true;
-			List<File> files = FileUtility.findFiles(folder, "js");
-			int countBefore = listeners.size();
-			for (File file : files) {
-				try {
-					engine.eval(new FileReader(file));
-					Invocable invoke = (Invocable) engine;
-					invoke.invokeFunction("listen", this);
-				} catch (Exception ex) {
-					logger.error("Failed to load script "+file.getName(), ex);
-					success = false;
-				}
-			}
-			int totalScripts = listeners.size() - countBefore;
-			logger.info("Registered "+totalScripts+" "+folder.getName()+" event listener(s).");
-			return success;
-		}
+	@SuppressWarnings("unchecked")
+	private void loadModules () throws Exception {
+		File globalBootstrap = new File(scriptDir, "global-bootstrap.js");
+		engine.eval(new FileReader(globalBootstrap));
+		Invocable invoke = (Invocable) engine;
 		
+		modules.clear();		
+		Object modulesObj = invoke.invokeFunction("getAllModules");
+		modules.addAll((List<String>) modulesObj);
+		
+		logger.info("Found modules: {}", modules);
+		loadModules(modules);
+	}
+	
+	private void loadModules(List<String> modules) throws Exception {
+		Invocable invoke = (Invocable) engine;
+		invoke.invokeFunction("init", this, scriptDir, modules);
+	}
+	
+	private boolean loadLegacyCategory (ScriptEngine engine, File folder) {
+		boolean success = true;
+		List<File> files = FileUtility.findFiles(folder, "js");
+		int countBefore = listeners.size();
+		for (File file : files) {
+			try {
+				engine.eval(new FileReader(file));
+				Invocable invoke = (Invocable) engine;
+				invoke.invokeFunction("listen", this);
+			} catch (Exception ex) {
+				logger.error("Failed to load script "+file.getName(), ex);
+				success = false;
+			}
+		}
+		int totalScripts = listeners.size() - countBefore;
+		logger.info("Registered {} {} event listener(s).", totalScripts, folder.getName());
+		return success;
 	}
 
 	/* (non-Javadoc)
@@ -299,8 +313,19 @@ public class JSListeners implements ScriptManager {
 	 */
 	@Override
 	public synchronized boolean reload(String category) {
-		File folder = new File(scriptDir, category);
-		return loadScriptCategory(engine, folder);
+		boolean success = true;
+		if (modules.contains(category)) {
+			try {
+				loadModules(Collections.singletonList(category));
+			} catch (Exception ex) {
+				logger.error("Problem reloading module "+category, ex);
+				success = false;
+			}
+		} else {
+			File folder = new File(scriptDir, category);
+			success = loadLegacyCategory(engine, folder);
+		}
+		return success;
 	}
 	
 	/* (non-Javadoc)
@@ -317,6 +342,14 @@ public class JSListeners implements ScriptManager {
 	 */
 	public ScriptAPI getApi () {
 		return scriptAPI;
+	}
+	
+	/**
+	 * Returns the logger for the script manager, so logging can be performed within the script
+	 * @return The logger instance for this class
+	 */
+	public Logger getLogger () {
+		return logger;
 	}
 	
 	/**
