@@ -11,7 +11,7 @@ function init () {
 		openCentral : openCentral,
 		openOverlaySub : openOverlaySub,
 		open : open,
-		close : close,
+		closeSub : closeSub,
 		closeAll : closeAll,
 		setEvents : setEvents,
 		setText : setText,
@@ -37,8 +37,8 @@ function init () {
 		ENGINE.openWidget(player, parentId, parentComp, id, !!alwaysOpen);
 	}
 	
-	function close (player, id) {
-		
+	function closeSub (player, parentId, parentComp) {
+		ENGINE.closeWidget(player, parentId, parentComp);
 	}
 	
 	function closeAll (player) {

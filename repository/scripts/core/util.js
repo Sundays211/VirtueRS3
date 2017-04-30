@@ -1,7 +1,7 @@
 /**
  * Module containing miscellaneous utility functions
  */
-/* globals ENGINE*/
+/* globals ENGINE, MesType */
 module.exports = init();
 
 function init () {
@@ -9,6 +9,7 @@ function init () {
 		INTEGER_MAX : 2147483647,
 		checkOverflow : checkOverflow,
 		defaultHandler : defaultHandler,
+		sendCommandResponse : sendCommandResponse,
 		testBit : testBit,
 		setBit : setBit,
 		unsetBit : unsetBit,
@@ -33,6 +34,10 @@ function init () {
 		} else {
 			ENGINE.sendMessage(ctx.player, "Nothing interesting happens.");
 		}
+	}
+
+	function sendCommandResponse (player, message, console) {
+		ENGINE.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
 	}
 
 	function testBit (value, bit) {

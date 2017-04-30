@@ -26,4 +26,5 @@ function init (scriptManager, cwd) {
 	require(cwd+'/clan-camp')(scriptManagerWrapper);
 	require(cwd+'/clan-admin-messages')(scriptManagerWrapper);
 	require(cwd+'/clan-motif-editor')(scriptManagerWrapper);
+	require(cwd+'/clan-commands')(scriptManagerWrapper);
 }

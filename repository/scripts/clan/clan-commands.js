@@ -19,6 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, CLAN_ENGINE*/
+var widget = require('../core/widget');
+var dialog = require('../core/dialog');
+var clan = require('./logic/core');
+var util = require('../core/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -28,35 +33,18 @@
  * @since 26/12/2014
  */
 
-var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, scriptArgs) {
-		var player = scriptArgs.player;
-		var args = scriptArgs.cmdArgs;
-		
-		if (syntax == "makeclan") {
-			if (api.getClanHash(player) != null) {
-				sendCommandResponse(player, "You need to leave your current clan before you can use this command (clan="+api.getClanHash(player)+")", scriptArgs.console);
-				return;
-			}
-			var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
-				handle : function (value) {
-					api.closeWidget(player, 1477, 437);
-					if (value.length <= 0) {
-						return;
-					}
-					clanApi.createClan(value, player, []);
-				}
-			});
-			api.openWidget(player, 1477, 437, 1094, false);
-			api.setInputHandler(player, new Handler());
+module.exports = function (scriptManager) {
+	scriptManager.bind(EventType.COMMAND, "makeclan", function (ctx) {
+		if (clan.inClan(ctx.player)) {
+			util.sendCommandResponse(ctx.player, "You need to leave your current clan before you can use this command (clan="+clan.getHash(ctx.player)+")", ctx.console);
 			return;
 		}
-	}
-
-});
-
-/* Listen to the commands specified */
-var listen = function(scriptManager) {
-	var listener = new CommandListener();
-	scriptManager.registerListener(EventType.COMMAND, "makeclan", listener);
+		widget.open(ctx.player, 1477, 437, 1094, false);
+		dialog.setResumeHandler(ctx.player, function (value) {
+			widget.closeSub(ctx.player, 1477, 437);
+			if (value) {
+				CLAN_ENGINE.createClan(value, ctx.player, []);
+			}
+		});
+	});	
 };

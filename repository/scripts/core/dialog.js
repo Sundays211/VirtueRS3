@@ -23,7 +23,7 @@ function init () {
 		multi3 : multi3,
 		multi4 : multi4,
 		multi5 : multi5,
-		setHslHandler : setHslHandler,
+		setResumeHandler : setResumeHandler,
 		finish : finishDialog
 	};
 	
@@ -252,7 +252,7 @@ function init () {
 		api.requestMulti(player, message, [op1, op2, op3, op4, op5], [1, 2, 3, 4, 5], new Handler());
 	}
 	
-	function setHslHandler (player, onSelect) {
+	function setResumeHandler (player, onSelect) {
 		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 			handle : function (value) {
 				onSelect(value);

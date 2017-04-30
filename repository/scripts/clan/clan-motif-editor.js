@@ -150,7 +150,7 @@ module.exports = function (scriptManager) {
 		}
 		ENGINE.setVarp(player, 1111, prevColour);
 		widget.openCentral(player, 1106);
-		dialog.setHslHandler(player, function (value) {
+		dialog.setResumeHandler(player, function (value) {
 			widget.closeAll(player);
 			if (value !== 0) {
 				switch (type) {
