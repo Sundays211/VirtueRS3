@@ -10,7 +10,8 @@ function getAllModules () {
 	var modules = [
 		'chat',
 		'clan',
-		'shop'
+		'shop',
+		'skill/agility'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');

@@ -79,7 +79,7 @@ public class JSListeners implements ScriptManager {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(JSListeners.class);
 	
-	private static String[] LEGACY_CATEGORIES = {"abilities", "agility", "command", "farming",
+	private static String[] LEGACY_CATEGORIES = {"abilities", "command", "farming",
 			"interaction", "inv", "invention", "npcs", "quest", "settings",
 			"legacy_skill", "specials", "widget"};
 	
