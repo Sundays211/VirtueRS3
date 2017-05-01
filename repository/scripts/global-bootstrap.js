@@ -52,7 +52,7 @@ function init (scriptManager, cwd, modules) {
 	for (var i in modules) {
 		var module = modules[i];
 		logger.info('Loading module: '+module);
-		require(cwd+'/'+module+'/bootstrap')(scriptManagerWrapper);
+		require(cwd+'/'+module)(scriptManagerWrapper);
 		logger.info('Loaded module: '+module);
 	}
 }
