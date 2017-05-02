@@ -335,9 +335,9 @@ var Backpack = {
 				if (api.hasEvent(EventType.OPHELDU, api.getId(item))) {
 					var args = {
 							"player" : player,
-							"useitem" : useitem,
+							"useitem" : api.getId(useitem),
 							"useslot" : useslot,
-							"item" : item,
+							"item" : api.getId(item),
 							"slot" : slot
 					};
 					api.invokeEvent(EventType.OPHELDU, api.getId(item), args);
@@ -359,7 +359,7 @@ var Backpack = {
 			if (api.hasEvent(EventType.OPLOCU, api.getId(location))) {
 				var args = {
 						"player" : player,
-						"useitem" : useitem,
+						"useitem" : api.getId(useitem),
 						"useslot" : useslot,
 						"location" : eventArgs.targetLoc,
 						"coords" : eventArgs.targetCoords
@@ -378,7 +378,7 @@ var Backpack = {
 			if (api.hasEvent(EventType.OPNPCU, api.getId(npc))) {
 				var args = {
 						"player" : player,
-						"useitem" : useitem,
+						"useitem" : api.getId(useitem),
 						"useslot" : useslot,
 						"npc" : npc
 				};
@@ -396,7 +396,7 @@ var Backpack = {
 			if (api.hasEvent(EventType.OPPLAYERU, api.getId(useitem))) {
 				var args = {
 						"player" : player,
-						"useitem" : useitem,
+						"useitem" : api.getId(useitem),
 						"useslot" : useslot,
 						"target" : targetPlayer
 				};

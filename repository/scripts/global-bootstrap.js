@@ -11,7 +11,8 @@ function getAllModules () {
 		'chat',
 		'clan',
 		'shop',
-		'skill/agility'
+		'skill/agility',
+		'skill/runecrafting'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');
@@ -31,6 +32,8 @@ function init (scriptManager, cwd, modules) {
 
 	load(cwd+'/jvm-npm.js');
 	
+	var eventCount = 0;
+	
 	var scriptManagerWrapper = {
 		bind : function (event, value, listener) {
 			var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
@@ -40,12 +43,13 @@ function init (scriptManager, cwd, modules) {
 					listener(args);
 				}
 			});
-			if (Array.isArray(value)) {
-				for (var i in value) {
-					scriptManager.registerListener(event, value[i], new Listener());
+			var events = Array.isArray(event) ? event : [event];
+			var values = Array.isArray(value) ? value : [value];
+			for (var i in events) {
+				for (var j in values) {
+					scriptManager.registerListener(events[i], values[j], new Listener());
+					eventCount++;
 				}
-			} else {
-				scriptManager.registerListener(event, value, new Listener());				
 			}
 		}
 	};
@@ -54,6 +58,7 @@ function init (scriptManager, cwd, modules) {
 		var module = modules[i];
 		logger.info('Loading module: '+module);
 		require(cwd+'/'+module)(scriptManagerWrapper);
-		logger.info('Loaded module: '+module);
+		logger.info('Loaded '+eventCount+' '+module+' event listeners');
+		eventCount = 0;
 	}
 }

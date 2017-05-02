@@ -16,7 +16,8 @@ function init() {
 		hasSpace : hasSpace,
 		freeSpace : freeSpace,
 		getObjId : getObjId,
-		baseStock : baseStock
+		baseStock : baseStock,
+		isWearing : isWearing
 	};
 	
 	return inv;
@@ -123,5 +124,9 @@ function init() {
 	
 	function baseStock (player, inv, objId) {
 		return ENGINE.defaultItemTotal(player, inv, objId);
+	}
+	
+	function isWearing (player, objId) {
+		return has(player, objId, 1, Inv.EQUIPMENT);
 	}
 }
