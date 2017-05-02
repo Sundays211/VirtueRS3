@@ -10,6 +10,8 @@ function init() {
 	var inv = {
 		give : give,
 		take : take,
+		setSlot : setSlot,
+		clearSlot : clearSlot,
 		has : has,
 		total : invTotal,
 		size : invSize,
@@ -63,6 +65,31 @@ function init() {
 			count -= coinsToRemove;
 		}
 		ENGINE.delItem(player, invId, objId, count);
+	}
+	
+	/**
+	 * Replaces the item currently in the specified slot with the specified item 
+	 * 
+	 * @param player The player to remove the item from
+	 * @param invId The inventory to set the slot in
+	 * @param slot The slot to replace the item in
+	 * @param objId The replacement item id
+	 * @param count If an objId is specified, the number of replacement items. Defaults to 1
+	 */
+	function setSlot (player, invId, slot, objId, count) {
+		count = typeof count !== "undefined" ? count : 1;
+		ENGINE.setInvSlot(player, invId, slot, objId, count);
+	}
+	
+	/**
+	 * Removes the item in the specified slot from the player's inventory
+	 * 
+	 * @param player The player to remove the item from
+	 * @param invId The inventory to set the slot in
+	 * @param slot The slot to clear
+	 */
+	function clearSlot (player, invId, slot) {
+		ENGINE.clearInvSlot(player, invId, slot);
 	}
 	
 	/**

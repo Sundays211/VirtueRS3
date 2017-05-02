@@ -846,6 +846,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 		player.getInvs().updateContainer(state, slot);
 	}
 
+	@Override
+	public void clearInvSlot(Player player, int invId, int slot) {
+		setInvSlot(player, invId, slot, null);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#itemTotal(int, int)
 	 */

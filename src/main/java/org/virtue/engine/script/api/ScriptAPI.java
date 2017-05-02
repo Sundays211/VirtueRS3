@@ -500,6 +500,15 @@ public interface ScriptAPI {
 	public void setInvSlot (Player player, int invId, int slot, int itemId, int count);
 	
 	/**
+	 * Removes an item from the player's inventory
+	 * This should be used with care, as can cause issues in some inventories (such as shops and banks) which do not work properly with empty slots.
+	 * @param player The player
+	 * @param invId The inventory to clear the slot from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid containers
+	 * @param slot The slot to clear
+	 */
+	public void clearInvSlot (Player player, int invId, int slot);
+	
+	/**
 	 * Replaces an item in the player's inventory with a new item.
 	 * This should be used with care, as it deletes the old item without warning and can cause issues in some inventories (such as shops and banks).
 	 * @param player The player

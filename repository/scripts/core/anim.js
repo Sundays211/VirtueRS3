@@ -27,6 +27,10 @@ function init () {
 	}
 	
 	function addSpotAnim (entity, id, height, speed, rotation) {
+		height = typeof height !== "undefined" ? height : 0;
+		speed = typeof speed !== "undefined" ? speed : 0;
+		rotation = typeof rotation !== "undefined" ? rotation : 0;
+		
 		ENGINE.setSpotAnim(entity, 1, id, height, speed, rotation);
 	}
 }

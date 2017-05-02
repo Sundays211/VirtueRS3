@@ -12,6 +12,7 @@ function getAllModules () {
 		'clan',
 		'shop',
 		'skill/agility',
+		'skill/prayer',
 		'skill/runecrafting'
 	];
 	
