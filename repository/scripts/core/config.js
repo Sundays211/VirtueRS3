@@ -22,7 +22,9 @@ function init () {
 		objParam : objParam,
 		lookupDbRowId : lookupDbRowId,
 		lookupDbRowIds : lookupDbRowIds,
-		getDbFieldValues : getDbFieldValues
+		getDbFieldValues : getDbFieldValues,
+		npcName : npcName,
+		locName : locName
 	};
 	
 	return config;
@@ -90,5 +92,16 @@ function init () {
 	
 	function getDbFieldValues (dbTableId, dbRowId, column) {
 		return configApi.getDbFieldValues(dbTableId, dbRowId, column);
+	}
+	
+	function npcName (npc) {
+		if (typeof npcId !== 'number') {
+			npc = ENGINE.getId(npc);
+		}
+		return configApi.npcName(npc);
+	}
+	
+	function locName (locId) {
+		return configApi.locName(locId);
 	}
 }

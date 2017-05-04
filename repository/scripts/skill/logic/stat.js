@@ -16,11 +16,11 @@ function init () {
 	return xp;
 	
 	function getLevel (player, stat) {
-		ENGINE.getStatLevel(player, stat);
+		return ENGINE.getStatLevel(player, stat);
 	}
 	
 	function getBaseLevel (player, stat) {
-		ENGINE.getBaseLevel(player, stat);
+		return ENGINE.getBaseLevel(player, stat);
 	}
 	
 	function giveXp (player, stat, amount) {

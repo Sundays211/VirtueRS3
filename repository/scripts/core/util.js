@@ -11,6 +11,11 @@ function init () {
 		defaultHandler : defaultHandler,
 		sendCommandResponse : sendCommandResponse,
 		isAdmin : isAdmin,
+		getId : getId,
+		randomValue : randomValue,
+		pickRandom : pickRandom,
+		weightedRandom : weightedRandom,
+		lootItem : lootItem,
 		testBit : testBit,
 		setBit : setBit,
 		unsetBit : unsetBit,
@@ -45,6 +50,39 @@ function init () {
 	
 	function isAdmin (player) {
 		return ENGINE.isAdmin(player);
+	}
+	
+	function getId (node) {
+		return ENGINE.getId(node);
+	}
+	
+	function randomValue (min, max) {
+		return (Math.random()*(max-min))+min;
+	}
+	
+	function pickRandom (values) {
+		return values[Math.floor(Math.random()*values.length)];
+	}
+	
+	function weightedRandom (common, uncommon, uncommonChance, rare, rareChance, veryRare, veryRareChance) {
+		var selected = Math.random();
+		if (typeof veryRare !== "undefined" && selected > veryRareChance) {
+			return pickRandom(veryRare);
+		} else if (typeof rare !== "undefined" && selected > rareChance) {
+			return pickRandom(rare);			
+		} else if (typeof uncommon !== "undefined" && selected > uncommonChance) {
+			return pickRandom(uncommon);			
+		} else {
+			return pickRandom(common);
+		}
+	}
+	
+	function lootItem (id, min, max) {
+		return {
+			id : id,
+			min : min,
+			max : max
+		};
 	}
 
 	function testBit (value, bit) {

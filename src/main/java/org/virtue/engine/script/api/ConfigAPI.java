@@ -167,6 +167,10 @@ public interface ConfigAPI {
 	 */
 	public int seqLength (int seqTypeId);
 	
+	public String npcName (int npcTypeId);
+	
+	public String locName (int locTypeId);
+	
 	/**
 	 * Gets the total capacity of the specified inventory
 	 * @param invId The inventory ID

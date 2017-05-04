@@ -13,7 +13,8 @@ function getAllModules () {
 		'shop',
 		'skill/agility',
 		'skill/prayer',
-		'skill/runecrafting'
+		'skill/runecrafting',
+		'skill/thieving'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');
