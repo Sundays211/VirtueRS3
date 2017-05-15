@@ -59,7 +59,7 @@ function init (scriptManager, cwd, modules) {
 	for (var i in modules) {
 		var module = modules[i];
 		logger.info('Loading module: '+module);
-		require(cwd+'/'+module)(scriptManagerWrapper);
+		require(cwd+'/'+module).init(scriptManagerWrapper);
 		logger.info('Loaded '+eventCount+' '+module+' event listeners');
 		eventCount = 0;
 	}

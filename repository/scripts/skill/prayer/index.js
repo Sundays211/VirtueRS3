@@ -1,14 +1,20 @@
 /**
- *  Module to initialise the prayer script bindings.
+ * Module to initialise the prayer script bindings.
  */
 
-module.exports = function (scriptManager) {
-	var modules = [
-		require('./bones'),
-		require('./ashes')
-	];
+module.exports = (function () {
+	return {
+		init : init
+	};
 	
-	for (var i in modules) {
-		modules[i].init(scriptManager);
+	function init (scriptManager) {
+		var modules = [
+			require('./bones'),
+			require('./ashes')
+		];
+		
+		for (var i in modules) {
+			modules[i].init(scriptManager);
+		}
 	}
-};
+})();
