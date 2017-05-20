@@ -14,7 +14,8 @@ function getAllModules () {
 		'skill/agility',
 		'skill/prayer',
 		'skill/runecrafting',
-		'skill/thieving'
+		'skill/thieving',
+		'skill/makex'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');
@@ -62,5 +63,11 @@ function init (scriptManager, cwd, modules) {
 		require(cwd+'/'+module).init(scriptManagerWrapper);
 		logger.info('Loaded '+eventCount+' '+module+' event listeners');
 		eventCount = 0;
+	}
+	
+	//TODO: Method to support legacy skills. Remove once all have been converted
+	return {
+		CraftProcess : require(cwd+'/skill/makex/progress'),
+		CraftDialog : require(cwd+'/skill/makex/selection')
 	}
 }

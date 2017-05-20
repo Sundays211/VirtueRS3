@@ -1,7 +1,7 @@
 /**
  * Module for inventory-related functions
  */
-/* globals Inv, ENGINE, MoneyPouch, COINS, configApi */
+/* globals Inv, ENGINE, MoneyPouch, COINS, configApi, Toolbelt */
 var util = require('./util');
 
 module.exports = init();
@@ -19,7 +19,8 @@ function init() {
 		freeSpace : freeSpace,
 		getObjId : getObjId,
 		baseStock : baseStock,
-		isWearing : isWearing
+		isWearing : isWearing,
+		hasTool : hasTool
 	};
 	
 	return inv;
@@ -155,5 +156,10 @@ function init() {
 	
 	function isWearing (player, objId) {
 		return has(player, objId, 1, Inv.EQUIPMENT);
+	}
+	
+	function hasTool (player, objId) {
+		//TODO: Move toolbelt logic
+		return Toolbelt.hasTool(player, objId);
 	}
 }

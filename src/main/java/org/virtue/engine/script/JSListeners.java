@@ -271,10 +271,16 @@ public class JSListeners implements ScriptManager {
 		logger.info("Found modules: {}", modules);
 		loadModules(modules);
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	private void loadModules(List<String> modules) throws Exception {
 		Invocable invoke = (Invocable) engine;
-		invoke.invokeFunction("init", this, scriptDir, modules);
+		Object legacyGlobals = invoke.invokeFunction("init", this, scriptDir, modules);
+		//TODO: This section only exists to support legacy scripts. Remove once modular system is fully implemented
+		Map<String, Object> legacyGlobalMap = (Map<String, Object>) legacyGlobals;
+		for (Map.Entry<String, Object> entry : legacyGlobalMap.entrySet()) {
+			engine.put(entry.getKey(), entry.getValue());
+		}
 	}
 	
 	private boolean loadLegacyCategory (ScriptEngine engine, File folder) {

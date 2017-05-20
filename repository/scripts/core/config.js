@@ -24,7 +24,8 @@ function init () {
 		lookupDbRowIds : lookupDbRowIds,
 		getDbFieldValues : getDbFieldValues,
 		npcName : npcName,
-		locName : locName
+		locName : locName,
+		seqLength : seqLength
 	};
 	
 	return config;
@@ -103,5 +104,9 @@ function init () {
 	
 	function locName (locId) {
 		return configApi.locName(locId);
+	}
+	
+	function seqLength (seqId) {
+		return configApi.seqLength(seqId);
 	}
 }

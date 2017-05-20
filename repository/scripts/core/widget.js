@@ -1,7 +1,7 @@
 /**
  * 
  */
-/* globals ENGINE */
+/* globals ENGINE, Java */
 
 module.exports = init();
 
@@ -17,7 +17,8 @@ function init () {
 		setEvents : setEvents,
 		setText : setText,
 		setObject : setObject,
-		hide : hide
+		hide : hide,
+		inframeInput : inframeInput
 	};
 	
 	return widget;
@@ -46,8 +47,8 @@ function init () {
 		ENGINE.closeCentralWidgets(player);
 	}
 	
-	function closeOverlaySub (player, subId) {
-		ENGINE.closeOverlaySub(player, subId, true);
+	function closeOverlaySub (player, subId, handle) {
+		ENGINE.closeOverlaySub(player, subId, !!handle);
 	}
 	
 	function setEvents (player, iface, comp, from, to, events) {
@@ -64,5 +65,17 @@ function init () {
 
 	function hide (player, iface, comp, hidden) {
 		ENGINE.hideWidget(player, iface, comp, hidden);
+	}
+	
+	function inframeInput(player, ifaceId, comp, callback, type, maxlen) {
+		ENGINE.setVarc(player, 2235, getHash(ifaceId, comp));
+		ENGINE.setVarc(player, 2236, type);
+		ENGINE.setVarc(player, 2237, maxlen);
+		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
+			handle : function (value) {
+				callback(value);
+			}
+		});
+		ENGINE.setInputHandler(player, new Handler());	
 	}
 }

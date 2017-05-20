@@ -1,7 +1,7 @@
 /**
  * Module containing miscellaneous utility functions
  */
-/* globals ENGINE, MesType */
+/* globals ENGINE, MesType, Java */
 module.exports = init();
 
 function init () {
@@ -22,7 +22,8 @@ function init () {
 		getName : getName,
 		getUserHash : getUserHash,
 		fromBase37Hash : fromBase37Hash,
-		toBase37Hash : toBase37Hash
+		toBase37Hash : toBase37Hash,
+		delayFunction : delayFunction
 	};
 	return utils;
 	
@@ -111,6 +112,36 @@ function init () {
 	
 	function toBase37Hash (hash) {
 		return ENGINE.getBase37Hash(hash);
+	}
+	
+	/**
+	 * Runs a function after a delay. This delay is attached to the entity and is interrupted if the entity is stopped
+	 * @param entity The entity to link the task to
+	 * @param cycles The number of server cycles before the task is run
+	 * @param callback The function to run when the specified number of cycles passes
+	 * @param interruptable True if the task can be interrupted before it's run (such as if the player moves). Defaults to true if not specified
+	 * @param onInterrupt The function to run if the task is interrupted
+	 */
+	function delayFunction (entity, cycles, callback, interruptable, onInterrupt) {
+		var Handler = Java.extend(Java.type('java.lang.Runnable'), {
+			run : function () {
+				callback();
+			}
+		});	
+		if (interruptable === undefined) {
+			ENGINE.delay(entity, new Handler(), cycles);
+		} else {
+			var handler = null;
+			if (onInterrupt !== undefined) {
+				var InterruptHandler = Java.extend(Java.type('java.lang.Runnable'), {
+					run : function () {
+						onInterrupt();
+					}
+				});
+				handler = new InterruptHandler();
+			}		
+			ENGINE.delay(entity, new Handler(), cycles, interruptable, handler);
+		}
 	}
 }
 
