@@ -114,35 +114,35 @@ module.exports = (function () {
 		ENGINE.setVarc(player, 2690, 0);
 
 		var categoryId = ENGINE.getVarp(player, 1169);		
-		var selectedItemId = ENGINE.getVarp(player, 1170);
+		var selectedObjId = ENGINE.getVarp(player, 1170);
 		
-		if (!config.enumHasValue(categoryId, selectedItemId)) {
-			selectedItemId = -1;//Only select items actually in the category
+		if (!config.enumHasValue(categoryId, selectedObjId)) {
+			selectedObjId = -1;//Only select items actually in the category
 		}
 		
-		if (selectedItemId == -1) {//Auto-select item
+		if (selectedObjId == -1) {//Auto-select item
 			var productId;
 			for (var slot = 0; slot < config.enumSize(categoryId); slot++) {
 				productId = config.enumValue(categoryId, slot);
 				if (getMaxAmount(player, productId) > 1) {
 					ENGINE.setVarp(player, 1170, productId);
-					selectedItemId = productId;
+					selectedObjId = productId;
 					break;
 				}
 			}
 		}
-		if (selectedItemId == -1) {
-			selectedItemId = config.enumValue(categoryId, 0);
-			ENGINE.setVarp(player, 1170, selectedItemId);
+		if (selectedObjId == -1) {
+			selectedObjId = config.enumValue(categoryId, 0);
+			ENGINE.setVarp(player, 1170, selectedObjId);
 		}
-		var invCount = getMaxAmount(player, selectedItemId);//The maximum amount of the item the player can produce
+		var invCount = canCraft(player, selectedObjId) ? getMaxAmount(player, selectedObjId) : 0;//The maximum amount of the item the player can produce
 		ENGINE.setVarBit(player, 1002, invCount);//Product select max amount
 		ENGINE.setVarBit(player, 1003, invCount);//The amount currently selected
 		
 		//Information about the selected item
-		ENGINE.setVarc(player, 2391, config.objDesc(selectedItemId));//Description
+		ENGINE.setVarc(player, 2391, config.objDesc(selectedObjId));//Description
 		ENGINE.setVarc(player, 2223, 1);
-		ENGINE.setVarc(player, 2224, ENGINE.getExchangeCost(selectedItemId));//Exchange guide price
+		ENGINE.setVarc(player, 2224, ENGINE.getExchangeCost(selectedObjId));//Exchange guide price
 		
 		widget.open(player, 1370, 62, 1371, true);//The inner interface
 		
