@@ -17,6 +17,7 @@ function getAllModules () {
 		'skill/thieving',
 		'skill/cooking',
 		'skill/herblore',
+		'skill/smithing',
 		'skill/summoning',
 		'skill/makex'
 	];
