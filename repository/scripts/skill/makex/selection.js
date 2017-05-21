@@ -96,12 +96,11 @@ module.exports = (function () {
 	}
 	
 	function selectProduct (player, rootCategory, rootCategoryNames, category, productId) {
+		productId = typeof(productId) === 'number' ? productId : -1;
 		ENGINE.setVarp(player, 1168, rootCategory);
 		ENGINE.setVarc(player, 2222, rootCategoryNames);
 		ENGINE.setVarp(player, 1169, category);
-		if (typeof(productId) === 'number') {
-			ENGINE.setVarp(player, 1170, productId);
-		}
+		ENGINE.setVarp(player, 1170, productId);
 		widget.openCentral(player, 1370, false);
 	}
 	
