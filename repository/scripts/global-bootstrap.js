@@ -15,6 +15,7 @@ function getAllModules () {
 		'skill/prayer',
 		'skill/runecrafting',
 		'skill/thieving',
+		'skill/herblore',
 		'skill/makex'
 	];
 	
@@ -69,5 +70,5 @@ function init (scriptManager, cwd, modules) {
 	return {
 		CraftProcess : require(cwd+'/skill/makex/progress'),
 		CraftDialog : require(cwd+'/skill/makex/selection')
-	}
+	};
 }

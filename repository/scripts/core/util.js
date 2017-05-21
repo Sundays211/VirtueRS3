@@ -1,7 +1,7 @@
 /**
  * Module containing miscellaneous utility functions
  */
-/* globals ENGINE, MesType, Java */
+/* globals ENGINE, EventType, MesType, Java */
 module.exports = init();
 
 function init () {
@@ -38,8 +38,12 @@ function init () {
 	}
 
 	function defaultHandler (ctx, type) {
-		if (ENGINE.isAdmin(ctx.player)) {
-			ENGINE.sendMessage(ctx.player, "Unhandled "+(type?type:"interface")+" button: "+ctx.toString());
+		if (isAdmin(ctx.player)) {
+			if (type === EventType.OPHELDU) {
+				ENGINE.sendMessage(ctx.player, "Unhandled item use: item="+ctx.item+", slot="+ctx.slot+", useitem="+ctx.useitem+", useslot="+ctx.useslot);
+			} else {
+				ENGINE.sendMessage(ctx.player, "Unhandled "+(type?type:"interface")+" button: "+ctx.toString());
+			}
 		} else {
 			ENGINE.sendMessage(ctx.player, "Nothing interesting happens.");
 		}

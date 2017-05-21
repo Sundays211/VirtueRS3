@@ -37,6 +37,7 @@ var quest = require('../../core/quest');
 module.exports = (function () {
 	return {
 		init : init,
+		selectProduct : selectProduct,
 		structContainsItem : structContainsItem
 	};
 	
@@ -94,6 +95,15 @@ module.exports = (function () {
 		});
 	}
 	
+	function selectProduct (player, rootCategory, rootCategoryNames, category, productId) {
+		ENGINE.setVarp(player, 1168, rootCategory);
+		ENGINE.setVarc(player, 2222, rootCategoryNames);
+		ENGINE.setVarp(player, 1169, category);
+		if (typeof(productId) === 'number') {
+			ENGINE.setVarp(player, 1170, productId);
+		}
+		widget.openCentral(player, 1370, false);
+	}
 	
 	function openDialog (player) {
 		ENGINE.runClientScript(player, 6946, []);
