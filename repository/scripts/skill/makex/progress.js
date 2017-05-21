@@ -40,7 +40,9 @@ module.exports = (function () {
 		init : init,
 		startCrafting : startCrafting,
 		openInterface : openInterface,
-		setRemaining : setRemaining
+		makeItem : makeItem,
+		setRemaining : setRemaining,
+		removeMaterials : removeMaterials
 	};
 	
 	function init (scriptManager) {
@@ -154,10 +156,12 @@ module.exports = (function () {
 		}
 	}
 	
-	function makeItem (player, productId) {
-		var amountPerBatch = config.objParam(productId, 2653);	
+	function makeItem (player, productId, productCount) {
+		productCount = typeof(productCount) === 'number' ? productCount : 1;
+		
+		var amountPerBatch = config.objParam(productId, 2653) * productCount;	
 		giveXp(player, productId, amountPerBatch);
-		removeMaterials(player, productId);
+		removeMaterials(player, productId, productCount);
 		addProduct(player, productId, amountPerBatch);
 	}
 	
@@ -192,7 +196,7 @@ module.exports = (function () {
 		}
 	}
 	
-	function removeMaterials (player, productId) {
+	function removeMaterials (player, productId, productCount) {
 		//See clientscript 7108
 		var materialId = config.objParam(productId, 2655);
 		var matCountReq = config.objParam(productId, 2665);
@@ -204,11 +208,11 @@ module.exports = (function () {
 		var amountPerBatch = config.objParam(productId, 2653);			
 		while (materialId != -1 || structId != -1) {
 			if (structId != -1) {
-				removeStructMaterials(player, structId, amountPerBatch);
+				removeStructMaterials(player, structId, amountPerBatch * productCount);
 			} else {
 				if (matCountReq !== 0) {
 					var amount = separateAmount ? matCountReq : matCountReq * amountPerBatch;
-					inv.take(player, materialId, amount);
+					inv.take(player, materialId, amount * productCount);
 				}				
 			}
 			loop++;

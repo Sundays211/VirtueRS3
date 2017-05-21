@@ -8,7 +8,8 @@ module.exports = (function () {
 	return {
 		init : init,
 		startCrafting : progress.startCrafting,
-		selectProduct : selection.selectProduct
+		selectProduct : selection.selectProduct,
+		makeItem : progress.makeItem
 	};
 	
 	function init (scriptManager) {
