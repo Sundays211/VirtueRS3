@@ -54,14 +54,13 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.IF_BUTTON, 1371, function (ctx) {
 			var player = ctx.player;
-			
-			var mainCategory = ENGINE.getVarp(player, 1168);
-			if (mainCategory < 0) {
-				ENGINE.sendMessage(player, "No main category selected!");
-				return;
-			}
 			switch (ctx.component) {
 			case 62://Select product category
+				var mainCategory = ENGINE.getVarp(player, 1168);
+				if (mainCategory < 0) {
+					ENGINE.sendMessage(player, "No main category selected!");
+					return;
+				}
 				if (ctx.slot >= 0 && ctx.slot < config.enumSize(mainCategory)) {
 					var newCategory = config.enumValue(mainCategory, ctx.slot);
 					ENGINE.setVarp(player, 1169, newCategory);
@@ -95,8 +94,15 @@ module.exports = (function () {
 		});
 	}
 	
-	function selectProduct (player, rootCategory, rootCategoryNames, category, productId) {
+	function selectProduct (player, rootCategory, rootCategoryNames, category, productId, categoryName) {
 		productId = typeof(productId) === 'number' ? productId : -1;
+		if (typeof(categoryName) !== 'undefined') {
+			ENGINE.setVarc(player, 2390, categoryName);
+			rootCategory = -1;
+			rootCategoryNames = -1;
+		} else {
+			ENGINE.setVarc(player, 2390, "");
+		}
 		ENGINE.setVarp(player, 1168, rootCategory);
 		ENGINE.setVarc(player, 2222, rootCategoryNames);
 		ENGINE.setVarp(player, 1169, category);

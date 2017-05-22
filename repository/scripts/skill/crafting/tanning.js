@@ -1,6 +1,6 @@
 /**
  * @author Greco
- * @since 12/10/2016
+ * @since 01/07/2017
  */
 /* globals EventType, ENGINE */
 var makex = require('../makex');
@@ -14,25 +14,28 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, [ 67036, 94230 ], function (ctx) {
-			startSummoning(ctx.player);
+		scriptManager.bind(EventType.OPNPC3, 2824, function (ctx) {
+			selectHides(ctx.player);
+		});
+		
+		scriptManager.bind(EventType.OPNPC4, 14877, function (ctx) {
+			selectHides(ctx.player);
 		});
 	}
 	
-	function startSummoning (player) {
-		makex.selectProduct(player, 6932, 6933, 6934);
+	function selectHides (player) {
+		makex.selectProduct(player, -1, -1, 6989, -1, "Tanner");
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
 			var productId = ENGINE.getVarp(player, 1170);
 			var amount = ENGINE.getVarBit(player, 1003);
 			if (amount) {
-				createPouches(player, productId, amount);
+				tanHides(player, productId, amount);
 			}
 		});
 	}
 	
-	function createPouches (player, productId, amount) {
+	function tanHides (player, productId, amount) {
 		makex.makeItem(player, productId, amount);
-		anim.run(player, 8500);
 	}
 })();
