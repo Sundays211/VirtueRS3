@@ -287,6 +287,7 @@ public class JSListeners implements ScriptManager {
 		boolean success = true;
 		List<File> files = FileUtility.findFiles(folder, "js");
 		int countBefore = listeners.size();
+		long start = System.currentTimeMillis();
 		for (File file : files) {
 			try {
 				engine.eval(new FileReader(file));
@@ -298,7 +299,8 @@ public class JSListeners implements ScriptManager {
 			}
 		}
 		int totalScripts = listeners.size() - countBefore;
-		logger.info("Registered {} {} event listener(s).", totalScripts, folder.getName());
+		long time = System.currentTimeMillis() - start;
+		logger.info("Registered {} {} event listener(s) in {} milliseconds.", totalScripts, folder.getName(), time);
 		return success;
 	}
 
