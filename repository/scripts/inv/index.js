@@ -2,6 +2,7 @@
  * Module to initialise the inventory script bindings.
  */
 var toolbelt = require('./toolbelt');
+var moneyPouch = require('./money-pouch');
 
 module.exports = (function () {
 	return {
@@ -11,7 +12,8 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		var modules = [
-			toolbelt
+			toolbelt,
+			moneyPouch
 		];
 		
 		for (var i in modules) {

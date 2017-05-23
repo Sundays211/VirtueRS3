@@ -23,6 +23,7 @@ function init () {
 		getUserHash : getUserHash,
 		fromBase37Hash : fromBase37Hash,
 		toBase37Hash : toBase37Hash,
+		toFormattedString : toFormattedString,
 		delayFunction : delayFunction
 	};
 	return utils;
@@ -116,6 +117,10 @@ function init () {
 	
 	function toBase37Hash (hash) {
 		return ENGINE.getBase37Hash(hash);
+	}
+	
+	function toFormattedString (number) {
+		return ENGINE.getFormattedNumber(number);
 	}
 	
 	/**

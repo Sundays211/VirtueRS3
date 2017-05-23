@@ -76,6 +76,7 @@ function init (scriptManager, cwd, modules) {
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
 		CraftProcess : require(cwd+'/skill/makex/progress'),
-		CraftDialog : require(cwd+'/skill/makex/selection')
+		CraftDialog : require(cwd+'/skill/makex/selection'),
+		MoneyPouch : require(cwd+'/inv/money-pouch')
 	};
 }
