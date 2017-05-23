@@ -81,7 +81,7 @@ public class JSListeners implements ScriptManager {
 	
 	private static String[] LEGACY_CATEGORIES = {"abilities", "command", "farming",
 			"interaction", "inv", "invention", "npcs", "quest", "settings",
-			"legacy_skill", "specials", "widget"};
+			"skill", "specials", "widget"};
 	
 	private static class EventBind {
 		private ScriptEventType type;
@@ -243,9 +243,9 @@ public class JSListeners implements ScriptManager {
 			logger.error("Failed to load script modules", ex);
 			success = false;
 		}
-		
+		File legacyFolder = new File(scriptDir, "legacy");
 		for (String legacyCategory : LEGACY_CATEGORIES) {
-			File categoryDir = new File(scriptDir, legacyCategory);
+			File categoryDir = new File(legacyFolder, legacyCategory);
 			if (categoryDir.exists()) {
 				if (!loadLegacyCategory(engine, categoryDir)) {
 					success = false;
@@ -330,7 +330,8 @@ public class JSListeners implements ScriptManager {
 				success = false;
 			}
 		} else {
-			File folder = new File(scriptDir, category);
+			File legacyFolder = new File(scriptDir, "legacy");
+			File folder = new File(legacyFolder, category);
 			success = loadLegacyCategory(engine, folder);
 		}
 		return success;
