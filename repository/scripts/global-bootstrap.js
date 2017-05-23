@@ -10,6 +10,7 @@ function getAllModules () {
 	var modules = [
 		'chat',
 		'clan',
+		'inv',
 		'shop',
 		'skill/agility',
 		'skill/prayer',

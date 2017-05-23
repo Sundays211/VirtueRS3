@@ -333,6 +333,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 		return node == null ? -1 : node.getId();
 	}
 
+	@Override
+	public int getId(int id) {
+		return id;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#openCentralWidget(org.virtue.game.entity.player.Player, int, boolean)
 	 */

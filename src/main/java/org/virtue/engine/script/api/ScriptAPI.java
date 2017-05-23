@@ -221,6 +221,13 @@ public interface ScriptAPI {
 	public int getId (Node node);
 	
 	/**
+	 * Legacy work-around so we can provide either a node or an id
+	 * @param id
+	 * @return
+	 */
+	public int getId (int id);
+	
+	/**
 	 * Opens the specified widget in the central widget frame. 
 	 * @param player The player
 	 * @param widgetID The id of the widget to open

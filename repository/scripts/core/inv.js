@@ -1,8 +1,9 @@
 /**
  * Module for inventory-related functions
  */
-/* globals Inv, ENGINE, MoneyPouch, COINS, configApi, Toolbelt */
+/* globals Inv, ENGINE, MoneyPouch, COINS, configApi */
 var util = require('./util');
+var toolbelt = require('../inv/toolbelt');
 
 module.exports = init();
 
@@ -159,7 +160,6 @@ function init() {
 	}
 	
 	function hasTool (player, objId) {
-		//TODO: Move toolbelt logic
-		return Toolbelt.hasTool(player, objId);
+		return toolbelt.hasTool(player, objId);
 	}
 }
