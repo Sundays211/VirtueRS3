@@ -155,6 +155,8 @@ public class JSListeners implements ScriptManager {
 	
 	private File scriptDir;
 	
+	private File legacyScriptDir;
+	
 	private List<String> modules;
 
 	public JSListeners(File scriptDir, ConfigProvider configProvider) {
@@ -169,6 +171,7 @@ public class JSListeners implements ScriptManager {
 		this.configApi = new VirtueConfigAPI(configProvider);
 		this.questApi = new VirtueQuestAPI(configProvider);
 		this.scriptDir = scriptDir;
+		legacyScriptDir = new File(scriptDir, "legacy");
 		this.modules = new ArrayList<>();
 	}
 	
@@ -223,7 +226,7 @@ public class JSListeners implements ScriptManager {
 		}
 		engine.put("FriendChatData", map);
 		
-		File generalFunctions = new File(scriptDir, "GeneralFunctions.js");
+		File generalFunctions = new File(legacyScriptDir, "GeneralFunctions.js");
 		if (generalFunctions.exists()) {
 			try {
 				engine.eval(new FileReader(generalFunctions));
@@ -243,9 +246,8 @@ public class JSListeners implements ScriptManager {
 			logger.error("Failed to load script modules", ex);
 			success = false;
 		}
-		File legacyFolder = new File(scriptDir, "legacy");
 		for (String legacyCategory : LEGACY_CATEGORIES) {
-			File categoryDir = new File(legacyFolder, legacyCategory);
+			File categoryDir = new File(legacyScriptDir, legacyCategory);
 			if (categoryDir.exists()) {
 				if (!loadLegacyCategory(engine, categoryDir)) {
 					success = false;
@@ -330,8 +332,7 @@ public class JSListeners implements ScriptManager {
 				success = false;
 			}
 		} else {
-			File legacyFolder = new File(scriptDir, "legacy");
-			File folder = new File(legacyFolder, category);
+			File folder = new File(legacyScriptDir, category);
 			success = loadLegacyCategory(engine, folder);
 		}
 		return success;
