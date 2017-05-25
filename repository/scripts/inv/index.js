@@ -32,7 +32,8 @@ module.exports = (function () {
 			moneyPouch,
 			wornEquipment,
 			bank,
-			backpack
+			backpack,
+			require('./commands')
 		];
 		
 		for (var i in modules) {
