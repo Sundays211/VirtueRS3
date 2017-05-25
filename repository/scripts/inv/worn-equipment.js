@@ -23,6 +23,7 @@
 var widget = require('../core/widget');
 var util = require('../core/util');
 var config = require('../core/config');
+var inv = require('./core');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,6 +36,7 @@ var config = require('../core/config');
 module.exports = (function () {
 	return {
 		init : init,
+		isWearing : isWearing,
 		wearItem : wearItem,
 		removeItem : removeItem
 	};
@@ -85,6 +87,10 @@ module.exports = (function () {
 				return;
 			}
 		});
+	}
+	
+	function isWearing(player, objId) {
+		return inv.has(player, objId, 1, Inv.EQUIPMENT);
 	}
 	
 	function wearItem (player, objId, slot) {

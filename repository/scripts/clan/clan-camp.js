@@ -21,7 +21,7 @@
  */
 /* globals EventType, ENGINE, Inv */
 var dialog = require('../core/dialog');
-var inv = require('../core/inv');
+var inv = require('../inv');
 var clan = require('./logic/core');
 var util = require('../core/util');
 

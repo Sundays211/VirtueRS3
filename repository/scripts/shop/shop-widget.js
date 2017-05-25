@@ -22,7 +22,7 @@
 /* globals EventType, ENGINE, Inv */
 var util = require('../core/util');
 var widget = require('../core/widget');
-var inv = require('../core/inv');
+var inv = require('../inv');
 var config = require('../core/config');
 
 /**

@@ -22,7 +22,7 @@
 /* globals EventType, ENGINE */
 var map = require('../../core/map');
 var util = require('../../core/util');
-var inv = require('../../core/inv');
+var inv = require('../../inv');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

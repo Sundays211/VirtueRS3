@@ -22,7 +22,7 @@
 /* globals EventType, ENGINE, Stat */
 var util = require('../../core/util');
 var config = require('../../core/config');
-var inv = require('../../core/inv');
+var inv = require('../../inv');
 var anim = require('../../core/anim');
 var stat = require('../logic/stat');
 

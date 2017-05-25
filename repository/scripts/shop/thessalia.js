@@ -23,7 +23,7 @@
 var config = require('../core/config');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
-var inv = require('../core/inv');
+var inv = require('../inv');
 var util = require('../core/util');
 
 /**

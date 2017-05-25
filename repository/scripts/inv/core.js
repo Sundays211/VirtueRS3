@@ -2,7 +2,7 @@
  * Module for inventory-related functions
  */
 /* globals Inv, ENGINE, MoneyPouch, COINS, configApi */
-var util = require('./util');
+var util = require('../core/util');
 var toolbelt = require('../inv/toolbelt');
 
 module.exports = init();
@@ -11,17 +11,15 @@ function init() {
 	var inv = {
 		give : give,
 		take : take,
-		setSlot : setSlot,
-		clearSlot : clearSlot,
 		has : has,
 		total : invTotal,
 		size : invSize,
 		hasSpace : hasSpace,
 		freeSpace : freeSpace,
+		setSlot : setSlot,
+		clearSlot : clearSlot,
 		getObjId : getObjId,
-		baseStock : baseStock,
-		isWearing : isWearing,
-		hasTool : hasTool
+		baseStock : baseStock
 	};
 	
 	return inv;
@@ -153,13 +151,5 @@ function init() {
 	
 	function baseStock (player, inv, objId) {
 		return ENGINE.defaultItemTotal(player, inv, objId);
-	}
-	
-	function isWearing (player, objId) {
-		return has(player, objId, 1, Inv.EQUIPMENT);
-	}
-	
-	function hasTool (player, objId) {
-		return toolbelt.hasTool(player, objId);
 	}
 }

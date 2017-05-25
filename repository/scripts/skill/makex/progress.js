@@ -23,7 +23,7 @@
 var util = require('../../core/util');
 var widget = require('../../core/widget');
 var config = require('../../core/config');
-var inv = require('../../core/inv');
+var inv = require('../../inv');
 var anim = require('../../core/anim');
 var stat = require('../logic/stat');
 

@@ -22,7 +22,7 @@
 /* globals EventType, ENGINE */
 var util = require('../core/util');
 var config = require('../core/config');
-var inv = require('../core/inv');
+var inv = require('./core');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -22,7 +22,7 @@
 /* globals EventType, ENGINE, Inv, MesType */
 var CONST = require('../core/const');
 var util = require('../core/util');
-var inv = require('../core/inv');
+var inv = require('./core');
 var dialog = require('../core/dialog');
 
 /**
@@ -80,7 +80,7 @@ module.exports = (function () {
 	}
 	
 	function getCoinCount (player) {
-		return ENGINE.itemTotal(player, Inv.MONEY_POUCH, CONST.COINS);
+		return inv.total(player, CONST.COINS, Inv.MONEY_POUCH);
 	}
 	
 	function requestWithdrawCoins (player) {
