@@ -1,7 +1,7 @@
 /**
  * 
  */
-/* globals ENGINE, Java */
+/* globals ENGINE, Java, Overlay */
 
 module.exports = init();
 
@@ -18,7 +18,8 @@ function init () {
 		setText : setText,
 		setObject : setObject,
 		hide : hide,
-		inframeInput : inframeInput
+		inframeInput : inframeInput,
+		openOverlay : openOverlay
 	};
 	
 	return widget;
@@ -77,5 +78,9 @@ function init () {
 			}
 		});
 		ENGINE.setInputHandler(player, new Handler());	
+	}
+	
+	function openOverlay (player, overlayId) {
+		Overlay.openOverlay(player, overlayId);
 	}
 }

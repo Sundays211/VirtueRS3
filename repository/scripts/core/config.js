@@ -14,8 +14,10 @@ function init () {
 		objName : objName,
 		objDesc : objDesc,
 		objStackable : objStackable,
+		objWearpos : objWearpos,
 		objCost : objCost,
 		objCategory : objCategory,
+		objIop : objIop,
 		objCert : objCert,
 		objUncert : objUncert,
 		objSellToGeneralStore : objSellToGeneralStore,
@@ -58,6 +60,10 @@ function init () {
 		return configApi.objStackable(objId);
 	}
 	
+	function objWearpos (objId) {
+		return configApi.objWearpos(objId);
+	}
+	
 	function objCategory (objId) {
 		return configApi.objCategory(objId);
 	}
@@ -65,6 +71,10 @@ function init () {
 	function objCost (objId) {
 		//TODO: Implement configApi method to get obj cost
 		return ENGINE.getItemType(objId).cost;
+	}
+	
+	function objIop (objId, op) {
+		return configApi.objIop(objId, op);
 	}
 	
 	function objCert (objId) {

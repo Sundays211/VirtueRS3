@@ -24,6 +24,7 @@ function init () {
 		fromBase37Hash : fromBase37Hash,
 		toBase37Hash : toBase37Hash,
 		toFormattedString : toFormattedString,
+		toFormattedTime : toFormattedTime,
 		delayFunction : delayFunction
 	};
 	return utils;
@@ -121,6 +122,10 @@ function init () {
 	
 	function toFormattedString (number) {
 		return ENGINE.getFormattedNumber(number);
+	}
+	
+	function toFormattedTime (time) {
+		return ENGINE.getFormattedTime(time);
 	}
 	
 	/**

@@ -80,7 +80,7 @@ public class JSListeners implements ScriptManager {
 	private static Logger logger = LoggerFactory.getLogger(JSListeners.class);
 	
 	private static String[] LEGACY_CATEGORIES = {"abilities", "command", "farming",
-			"interaction", "inv", "invention", "npcs", "quest", "settings",
+			"interaction", "invention", "npcs", "quest", "settings",
 			"skill", "specials", "widget"};
 	
 	private static class EventBind {

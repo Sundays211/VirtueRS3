@@ -77,6 +77,7 @@ function init (scriptManager, cwd, modules) {
 	return {
 		CraftProcess : require(cwd+'/skill/makex/progress'),
 		CraftDialog : require(cwd+'/skill/makex/selection'),
-		MoneyPouch : require(cwd+'/inv/money-pouch')
+		MoneyPouch : require(cwd+'/inv/money-pouch'),
+		WornEquipment : require(cwd+'/inv/worn-equipment')
 	};
 }

@@ -39,7 +39,7 @@ module.exports = (function () {
 		addCoins : addCoins,
 		removeCoins : removeCoins,
 		getCoinCount : getCoinCount,
-		updateCoins : updateCoins,//TODO: Do we need to expose this?
+		updateCoins : updateCoins,
 		requestWithdrawCoins : requestWithdrawCoins
 	};
 	

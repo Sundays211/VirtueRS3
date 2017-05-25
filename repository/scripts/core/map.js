@@ -11,6 +11,7 @@ function init () {
 		getCoordY : getCoordY,
 		getLevel : getLevel,
 		getCoords : getCoords,
+		getPlayerCoords : getPlayerCoords,
 		teleport : teleport
 	};
 	
@@ -30,6 +31,10 @@ function init () {
 	
 	function getCoords (x, y, level) {
 		return ENGINE.getCoords(x, y, level);
+	}
+	
+	function getPlayerCoords (player) {
+		return ENGINE.getCoords(player);
 	}
 	
 	function teleport (entity, x, y, z) {

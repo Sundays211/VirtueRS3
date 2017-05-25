@@ -20,67 +20,67 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 251, function (ctx) {
-			cleanHerbUse(ctx.player, 93);//Marrentill
+			cleanHerbUse(ctx, 93);//Marrentill
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 253, function (ctx) {
-			cleanHerbUse(ctx.player, 95);//Tarromin
+			cleanHerbUse(ctx, 95);//Tarromin
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 255, function (ctx) {
-			cleanHerbUse(ctx.player, 97);//Harralander
+			cleanHerbUse(ctx, 97);//Harralander
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 257, function (ctx) {
-			cleanHerbUse(ctx.player, 99);//Ranarr
+			cleanHerbUse(ctx, 99);//Ranarr
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 259, function (ctx) {
-			cleanHerbUse(ctx.player, 101);//Irit
+			cleanHerbUse(ctx, 101);//Irit
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 261, function (ctx) {
-			cleanHerbUse(ctx.player, 103);//Avantoe
+			cleanHerbUse(ctx, 103);//Avantoe
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 263, function (ctx) {
-			cleanHerbUse(ctx.player, 105);//Kwuarm
+			cleanHerbUse(ctx, 105);//Kwuarm
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 265, function (ctx) {
-			cleanHerbUse(ctx.player, 107);//Cadantine
+			cleanHerbUse(ctx, 107);//Cadantine
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 267, function (ctx) {
-			cleanHerbUse(ctx.player, 109);//Dwarf weed
+			cleanHerbUse(ctx, 109);//Dwarf weed
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 269, function (ctx) {
-			cleanHerbUse(ctx.player, 111);//Torstol
+			cleanHerbUse(ctx, 111);//Torstol
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 2481, function (ctx) {
-			cleanHerbUse(ctx.player, 2483);//Lantadyme
+			cleanHerbUse(ctx, 2483);//Lantadyme
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 2998, function (ctx) {
-			cleanHerbUse(ctx.player, 3002);//Toadflax
+			cleanHerbUse(ctx, 3002);//Toadflax
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 3000, function (ctx) {
-			cleanHerbUse(ctx.player, 3004);//Snapdragon
+			cleanHerbUse(ctx, 3004);//Snapdragon
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 12172, function (ctx) {
-			cleanHerbUse(ctx.player, 12181);//Spirit weed
+			cleanHerbUse(ctx, 12181);//Spirit weed
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 14854, function (ctx) {
-			cleanHerbUse(ctx.player, 14856);//Wergali
+			cleanHerbUse(ctx, 14856);//Wergali
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 21624, function (ctx) {
-			cleanHerbUse(ctx.player, 21628);//Fellstalk
+			cleanHerbUse(ctx, 21628);//Fellstalk
 		});
 		
 		scriptManager.bind(EventType.OPHELDU, 227, function (ctx) {
@@ -147,7 +147,7 @@ module.exports = (function () {
 	}
 	
 	function cleanHerbUse(ctx, productId) {
-		if (ctx.useitem !== 227) {
+		if (ctx.useObjId !== 227) {
 			util.defaultHandler(ctx);
 		} else {
 			common.startHerblore(ctx.player, UNFINISHED_POTIONS, productId);
