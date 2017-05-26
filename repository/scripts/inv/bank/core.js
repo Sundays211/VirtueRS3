@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 /* globals ENGINE, Inv */
+var varbit = require('../../core/var/bit');
+
 var util = require('../../core/util');
 
 /**
@@ -50,7 +52,7 @@ module.exports = (function () {
 	}
 	
 	function deposit (player, objId, count) {
-		var selectedTab = ENGINE.getVarBit(player, 288);
+		var selectedTab = varbit(player, 288);
 		//TODO: Finish this
 	}
 })();

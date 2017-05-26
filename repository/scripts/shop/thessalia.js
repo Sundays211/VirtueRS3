@@ -20,6 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, ENGINE */
+var varp = require('../core/var/player');
+var varc = require('../core/var/client');
+var varbit = require('../core/var/bit');
+
 var config = require('../core/config');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
@@ -43,8 +47,8 @@ module.exports = function (scriptManager) {
 	var TOP_COLOURS = 3282, LEG_COLOURS = 3284;
 	
 	scriptManager.bind(EventType.OPNPC3, 548, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.THESSALIAS_FINE_SHOP);
-		ENGINE.setVarc(ctx.player, 2360, "Thessalia's Fine Clothes");
+		varp(ctx.player, 304, Inv.THESSALIAS_FINE_SHOP);
+		varc(ctx.player, 2360, "Thessalia's Fine Clothes");
 		widget.openCentral(ctx.player, 1265);
 	});
 
@@ -62,15 +66,15 @@ module.exports = function (scriptManager) {
 		widget.setEvents(player, 729, 17, 0, 126, 2);//17=Select style
 		widget.setEvents(player, 729, 20, 0, 500, 2);//20=Select colour
 		widget.setText(player, 729, 32, "Free!");
-		ENGINE.setVarBit(player, 481, 0);
+		varbit(player, 481, 0);
 		ENGINE.clearStyleEdit(player);
 		ENGINE.startStyleEdit(player);
-		ENGINE.setVarc(player, 1010, ENGINE.getPlayerKit(player, 2));//Top style
-		ENGINE.setVarc(player, 1011, ENGINE.getPlayerKit(player, 3));//Arm style
-		ENGINE.setVarc(player, 1012, ENGINE.getPlayerKit(player, 4));//Wrist style
-		ENGINE.setVarc(player, 1013, ENGINE.getPlayerKit(player, 5));//Leg style
-		ENGINE.setVarc(player, 1016, ENGINE.getPlayerColour(player, 1));//Top colour
-		ENGINE.setVarc(player, 1017, ENGINE.getPlayerColour(player, 2));//Legs colour
+		varc(player, 1010, ENGINE.getPlayerKit(player, 2));//Top style
+		varc(player, 1011, ENGINE.getPlayerKit(player, 3));//Arm style
+		varc(player, 1012, ENGINE.getPlayerKit(player, 4));//Wrist style
+		varc(player, 1013, ENGINE.getPlayerKit(player, 5));//Leg style
+		varc(player, 1016, ENGINE.getPlayerColour(player, 1));//Top colour
+		varc(player, 1017, ENGINE.getPlayerColour(player, 2));//Legs colour
 	});
 	
 	scriptManager.bind(EventType.IF_CLOSE, 729, function (ctx) {
@@ -82,25 +86,25 @@ module.exports = function (scriptManager) {
 		
 		switch (ctx.component) {
 		case 12://Choose top
-			ENGINE.setVarBit(player, 481, 0);
+			varbit(player, 481, 0);
 			return;
 		case 13://Choose arms
 			if (getSetByKit(ENGINE.getPlayerKit(player, 2), 3, ENGINE.isFemale(player)) == -1) {
-				ENGINE.setVarBit(player, 481, 1);
+				varbit(player, 481, 1);
 			} else {				
 				ENGINE.sendMessage(player, "You can't select different arms to go with that top.");
 			}
 			return;
 		case 14://Choose wrists
 			if (getSetByKit(ENGINE.getPlayerKit(player, 2), 3, ENGINE.isFemale(player)) == -1) {
-				ENGINE.setVarBit(player, 481, 2);
+				varbit(player, 481, 2);
 			} else {				
 				ENGINE.sendMessage(player, "You can't select different wrists to go with that top.");
 			}//Retro striped sweater
 			//Retro two-tonned
 			return;
 		case 15://Choose legs
-			ENGINE.setVarBit(player, 481, 3);
+			varbit(player, 481, 3);
 			return;
 		case 17:
 			setKit(player, ctx.slot/2);
@@ -119,7 +123,7 @@ module.exports = function (scriptManager) {
 	});
 	
 	function setKit (player, slot) {
-		switch(ENGINE.getVarBit(player, 481)) {
+		switch(varbit(player, 481)) {
 		case 0:
 			setKitInner(player, ENGINE.isFemale(player) ? FEMALE_TOPS : MALE_TOPS, slot, 0);
 			break;
@@ -136,7 +140,7 @@ module.exports = function (scriptManager) {
 	}
 	
 	function setColour (player, slot) {
-		switch(ENGINE.getVarBit(player, 481)) {
+		switch(varbit(player, 481)) {
 		case 0:
 		case 1:
 			setColourInner(player, TOP_COLOURS, slot, 0);

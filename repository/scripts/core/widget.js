@@ -2,6 +2,7 @@
  * 
  */
 /* globals ENGINE, Java, Overlay */
+var varc = require('./var/client');
 
 module.exports = init();
 
@@ -69,9 +70,9 @@ function init () {
 	}
 	
 	function inframeInput(player, ifaceId, comp, callback, type, maxlen) {
-		ENGINE.setVarc(player, 2235, getHash(ifaceId, comp));
-		ENGINE.setVarc(player, 2236, type);
-		ENGINE.setVarc(player, 2237, maxlen);
+		varc(player, 2235, getHash(ifaceId, comp));
+		varc(player, 2236, type);
+		varc(player, 2237, maxlen);
 		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 			handle : function (value) {
 				callback(value);

@@ -1,7 +1,9 @@
 /**
  * Common functionality for herblore
  */
-/* globals ENGINE */
+var varp = require('../../core/var/player');
+var varbit = require('../../core/var/bit');
+
 var makex = require('../makex');
 var dialog = require('../../core/dialog');
 var widget = require('../../core/widget');
@@ -18,9 +20,9 @@ module.exports = (function () {
 		makex.selectProduct(player, 6838, 6839, category, productId);
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
-			var category = ENGINE.getVarp(player, 1169).toString();
-			var productId = ENGINE.getVarp(player, 1170);
-			var amount = ENGINE.getVarBit(player, 1003);
+			var category = varp(player, 1169).toString();
+			var productId = varp(player, 1170);
+			var amount = varbit(player, 1003);
 			invokeProcessHandler(player, category, productId, amount);
 		});
 	}

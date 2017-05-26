@@ -1,4 +1,6 @@
 /* globals EventType, Inv, ENGINE */
+var varp = require('../core/var/player');
+var varc = require('../core/var/client');
 var widget = require('../core/widget');
 
 /**
@@ -7,9 +9,9 @@ var widget = require('../core/widget');
 
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPNPC4, 5913, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.AUBURYS_RUNE_SHOP);
-		ENGINE.setVarp(ctx.player, 305, Inv.AUBURYS_FREE_STOCK);
-		ENGINE.setVarc(ctx.player, 2360, "Aubury's Rune Shop");
+		varp(ctx.player, 304, Inv.AUBURYS_RUNE_SHOP);
+		varp(ctx.player, 305, Inv.AUBURYS_FREE_STOCK);
+		varc(ctx.player, 2360, "Aubury's Rune Shop");
 		widget.openCentral(ctx.player, 1265);
 	});
 };

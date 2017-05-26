@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
+var varp = require('../../core/var/player');
+
 var util = require('../../core/util');
 var config = require('../../core/config');
 var inv = require('../core');
@@ -49,10 +51,10 @@ module.exports = (function () {
 			switch (ctx.component) {
 			case 20://Reclaim item
 				if (ctx.button === 1) {
-					if (ENGINE.getVarp(player, 431) > 0) {
+					if (varp(player, 431) > 0) {
 						util.defaultHandler(ctx, "collection box");
 						return;
-					} else if (ENGINE.getVarp(player, 429) != -1) {
+					} else if (varp(player, 429) != -1) {
 						//Forcefully return
 						//[Name] wants [his/her] item returned now. The item [he/she] lent to you has been returned to [his/her] Returned Items box.
 						util.defaultHandler(ctx, "collection box");

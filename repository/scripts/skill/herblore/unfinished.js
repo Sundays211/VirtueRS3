@@ -3,6 +3,8 @@
  * @since 12/20/2016
  */
 /* globals EventType, ENGINE */
+var varp = require('../../core/var/player');
+
 var makex = require('../makex');
 var config = require('../../core/config');
 var util = require('../../core/util');
@@ -155,7 +157,7 @@ module.exports = (function () {
 	}
 	
 	function mixUnfinished (player, unfinishedId, amount) {
-		ENGINE.setVarp(player, 1175, unfinishedId);
+		varp(player, 1175, unfinishedId);
 		var text = "You mix the "+config.objName(unfinishedId);
 		makex.startCrafting(player, amount, 24896, text);
 	}

@@ -20,6 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Java, MesType */
+var varp = require('../../core/var/player');
+var varc = require('../../core/var/client');
+
 var util = require('../../core/util');
 var widget = require('../../core/widget');
 var config = require('../../core/config');
@@ -62,41 +65,41 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.IF_CLOSE, 1251, function (ctx) {
-			ENGINE.setVarp(ctx.player, 1175, -1);//Clear product
-			ENGINE.setVarp(ctx.player, 1176, 0);//Clear experience gained counter
-			ENGINE.setVarp(ctx.player, 1177, 0);
+			varp(ctx.player, 1175, -1);//Clear product
+			varp(ctx.player, 1176, 0);//Clear experience gained counter
+			varp(ctx.player, 1177, 0);
 			ENGINE.runClientScript(ctx.player, 3373, 1018);
-			ENGINE.setVarc(ctx.player, 2227, 0);//Clear time
-			ENGINE.setVarc(ctx.player, 2228, 0);//Clear total
-			ENGINE.setVarc(ctx.player, 2229, 0);//Clear remaining
+			varc(ctx.player, 2227, 0);//Clear time
+			varc(ctx.player, 2228, 0);//Clear total
+			varc(ctx.player, 2229, 0);//Clear remaining
 		});
 	}
 	
 	function openInterface (player, productId, category, amount, delayPerItem) {
 		widget.closeOverlaySub(player, 1018, false);
-		ENGINE.setVarp(player, 1175, productId);
-		ENGINE.setVarp(player, 1169, category);//enum 6816 maps categories -> names
-		ENGINE.setVarc(player, 2227, delayPerItem);//Time per item
-		ENGINE.setVarc(player, 2228, amount);//Total products
-		ENGINE.setVarc(player, 2229, amount);//Remaining products
+		varp(player, 1175, productId);
+		varp(player, 1169, category);//enum 6816 maps categories -> names
+		varc(player, 2227, delayPerItem);//Time per item
+		varc(player, 2228, amount);//Total products
+		varc(player, 2229, amount);//Remaining products
 		
-		ENGINE.setVarp(player, 1176, 0);//Xp received
-		ENGINE.setVarp(player, 1177, 0);//Secondary skill xp received
+		varp(player, 1176, 0);//Xp received
+		varp(player, 1177, 0);//Secondary skill xp received
 		widget.openOverlaySub(player, 1018, 1251, false);
 	}
 	
 	function startCrafting (player, amount, animation, successText) {
-		var productId = ENGINE.getVarp(player, 1175);
+		var productId = varp(player, 1175);
 		//api.setVarp(player, 1169, category);
 		widget.openOverlaySub(player, 1018, 1251, false);
 		var length = animation === undefined ? 1 : Math.ceil(config.seqLength(animation) / 30);//Round up
 		ENGINE.sendMessage(player, "Total time: "+length);
-		ENGINE.setVarc(player, 2227, length);//Time per item
-		ENGINE.setVarc(player, 2228, amount);//Total products
-		ENGINE.setVarc(player, 2229, amount);//Remaining products
+		varc(player, 2227, length);//Time per item
+		varc(player, 2228, amount);//Total products
+		varc(player, 2229, amount);//Remaining products
 		
-		ENGINE.setVarp(player, 1176, 0);//Xp received
-		ENGINE.setVarp(player, 1177, 0);//Secondary skill xp received
+		varp(player, 1176, 0);//Xp received
+		varp(player, 1177, 0);//Secondary skill xp received
 		var delay = length-1;
 		if (animation !== undefined) {
 			anim.run(player, animation);
@@ -108,7 +111,7 @@ module.exports = (function () {
 						return true;
 					}
 					amount--;
-					ENGINE.setVarc(player, 2229, amount);
+					varc(player, 2229, amount);
 					makeItem(player, productId);
 					if (successText !== undefined) {
 						ENGINE.sendMessage(player, successText, MesType.GAME_SPAM);
@@ -147,7 +150,7 @@ module.exports = (function () {
 	}
 	
 	function setRemaining (player, remaining) {
-		ENGINE.setVarc(player, 2229, remaining);
+		varc(player, 2229, remaining);
 		if (remaining === 0) {
 			var closeInterface = function () {
 				widget.closeOverlaySub(player, 1018, true);

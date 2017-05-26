@@ -20,6 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
+var varp = require('../core/var/player');
+var varbit = require('../core/var/bit');
+
 var util = require('../core/util');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
@@ -110,12 +113,12 @@ module.exports = function (scriptManager) {
 	});
 	
 	function saveChanges  (player) {
-		ENGINE.setVarBit(player, 8815, ENGINE.getVarBit(player, 8965));//Update logo 1
-		ENGINE.setVarBit(player, 8816, ENGINE.getVarBit(player, 8966));//Update logo 2
-		ENGINE.setVarClanSetting(player, 16, ENGINE.getVarp(player, 2067));//Update logo 1 colour
-		ENGINE.setVarClanSetting(player, 17, ENGINE.getVarp(player, 2068));//Update logo 2 colour
-		ENGINE.setVarClanSetting(player, 18, ENGINE.getVarp(player, 2069));//Update primary colour
-		ENGINE.setVarClanSetting(player, 19, ENGINE.getVarp(player, 2070));//Update secondary colour
+		varbit(player, 8815, varbit(player, 8965));//Update logo 1
+		varbit(player, 8816, varbit(player, 8966));//Update logo 2
+		ENGINE.setVarClanSetting(player, 16, varp(player, 2067));//Update logo 1 colour
+		ENGINE.setVarClanSetting(player, 17, varp(player, 2068));//Update logo 2 colour
+		ENGINE.setVarClanSetting(player, 18, varp(player, 2069));//Update primary colour
+		ENGINE.setVarClanSetting(player, 19, varp(player, 2070));//Update secondary colour
 		ENGINE.sendMessage(player, "Clan motif updated. Changes will take effect in the next few minutes.");
 		broadcasts.send(clan.getHash(player), 24, ["[Player A]"], [util.getName(player)]);
 		widget.closeAll(player);
@@ -124,10 +127,10 @@ module.exports = function (scriptManager) {
 	function selectLogo (player, type, slot) {
 		switch (type) {
 		case 1:
-			ENGINE.setVarBit(player, 8965, slot+1);
+			varbit(player, 8965, slot+1);
 			return;
 		case 2:
-			ENGINE.setVarBit(player, 8966, slot+1);
+			varbit(player, 8966, slot+1);
 			return;
 		}
 	}
@@ -136,35 +139,35 @@ module.exports = function (scriptManager) {
 		var prevColour;
 		switch (type) {
 		case 1:
-			prevColour = ENGINE.getVarp(player, 2067);
+			prevColour = varp(player, 2067);
 			break;
 		case 2:
-			prevColour = ENGINE.getVarp(player, 2068);
+			prevColour = varp(player, 2068);
 			break;
 		case 3:
-			prevColour = ENGINE.getVarp(player, 2069);
+			prevColour = varp(player, 2069);
 			break;
 		case 4:
-			prevColour = ENGINE.getVarp(player, 2070);
+			prevColour = varp(player, 2070);
 			break;
 		}
-		ENGINE.setVarp(player, 1111, prevColour);
+		varp(player, 1111, prevColour);
 		widget.openCentral(player, 1106);
 		dialog.setResumeHandler(player, function (value) {
 			widget.closeAll(player);
 			if (value !== 0) {
 				switch (type) {
 				case 1:
-					ENGINE.setVarp(player, 2067, value);
+					varp(player, 2067, value);
 					break;
 				case 2:
-					ENGINE.setVarp(player, 2068, value);
+					varp(player, 2068, value);
 					break;
 				case 3:
-					ENGINE.setVarp(player, 2069, value);
+					varp(player, 2069, value);
 					break;
 				case 4:
-					ENGINE.setVarp(player, 2070, value);
+					varp(player, 2070, value);
 					break;
 				}
 			}
@@ -177,30 +180,30 @@ module.exports = function (scriptManager) {
 		var colour;
 		switch (fromType) {
 		case 1:
-			colour = ENGINE.getVarp(player, 2067);
+			colour = varp(player, 2067);
 			break;
 		case 2:
-			colour = ENGINE.getVarp(player, 2068);
+			colour = varp(player, 2068);
 			break;
 		case 3:
-			colour = ENGINE.getVarp(player, 2069);
+			colour = varp(player, 2069);
 			break;
 		case 4:
-			colour = ENGINE.getVarp(player, 2070);
+			colour = varp(player, 2070);
 			break;
 		}
 		switch (toType) {
 		case 1:
-			ENGINE.setVarp(player, 2067, colour);
+			varp(player, 2067, colour);
 			break;
 		case 2:
-			ENGINE.setVarp(player, 2068, colour);
+			varp(player, 2068, colour);
 			break;
 		case 3:
-			ENGINE.setVarp(player, 2069, colour);
+			varp(player, 2069, colour);
 			break;
 		case 4:
-			ENGINE.setVarp(player, 2070, colour);
+			varp(player, 2070, colour);
 			break;
 		}
 	}

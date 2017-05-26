@@ -20,6 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
+var varbit = require('../core/var/bit');
+var varc = require('../core/var/client');
+
 var widget = require('../core/widget');
 var util = require('../core/util');
 var config = require('../core/config');
@@ -46,7 +49,7 @@ module.exports = (function () {
 			widget.setEvents(ctx.player, 1464, 15, 0, 18, 15302654);
 			widget.setEvents(ctx.player, 1464, 13, 2, 12, 2);
 			ENGINE.sendInv(ctx.player, Inv.EQUIPMENT);		
-			ENGINE.setVarc(ctx.player, 181, 0);
+			varc(ctx.player, 181, 0);
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON, 1464, function (ctx) {
@@ -64,7 +67,7 @@ module.exports = (function () {
 			case 13:
 				switch (ctx.slot) {
 				case 12:
-					ENGINE.setVarBit(player, 18995, 3);
+					varbit(player, 18995, 3);
 					widget.openOverlay(player, 0);
 					return;
 				case 7:

@@ -20,6 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv, Stat, Disassembly */
+var varp = require('../core/var/player');
+var varbit = require('../core/var/bit');
+
 var CONST = require('../core/const');
 var widget = require('../core/widget');
 var util = require('../core/util');
@@ -53,11 +56,11 @@ module.exports = (function() {
 			ENGINE.sendInv(player, Inv.MONEY_POUCH);
 			
 			//TODO: Move this logic to Invention code
-			if (ENGINE.getVarBit(player, 30224) != 1 &&
+			if (varbit(player, 30224) != 1 &&
 					ENGINE.getBaseLevel(player, Stat.SMITHING) > 80 &&
 					ENGINE.getBaseLevel(player, Stat.CRAFTING) > 80 &&
 					ENGINE.getBaseLevel(player, Stat.DIVINATION) > 80) {
-				ENGINE.setVarBit(player, 30224, 1);
+				varbit(player, 30224, 1);
 			}
 			moneyPouch.updateCoins(player);
 		});
@@ -370,12 +373,12 @@ module.exports = (function() {
 		var discard = function () {
 			ENGINE.delItem(player, Inv.BACKPACK, util.getId(item), 1, slot);
 			player.getEquipment().returnBorrowedItem();
-			ENGINE.setVarp(player, 428, -1);	
-			ENGINE.setVarp(player, 430, 0);
+			varp(player, 428, -1);	
+			varp(player, 430, 0);
 		};
 		
-		var timeRemaining = ENGINE.getVarp(player, 430);
-		var loanFrom = ENGINE.getVarp(player, 428);
+		var timeRemaining = varp(player, 430);
+		var loanFrom = varp(player, 428);
 		var message;
 		if (timeRemaining > 0) {
 			message = "<center>~Loan expires in "+util.toFormattedTime(timeRemaining)+"~</center><br>";

@@ -1,5 +1,7 @@
 
 /* globals EventType, Inv, ENGINE */
+var varp = require('../core/var/player');
+var varc = require('../core/var/client');
 var dialog = require('../core/dialog');
 var widget = require('../core/widget');
 
@@ -17,9 +19,9 @@ module.exports = function(scriptManager) {
 	});
 	
 	function openShop (player) {
-		ENGINE.setVarp(player, 304, Inv.SUMMONING_SHOP_1);
-		ENGINE.setVarp(player, 305, Inv.SUMMONING_SHOP_FREE);
-		ENGINE.setVarc(player, 2360, "Magestix's Summoning Shop");
+		varp(player, 304, Inv.SUMMONING_SHOP_1);
+		varp(player, 305, Inv.SUMMONING_SHOP_FREE);
+		varc(player, 2360, "Magestix's Summoning Shop");
 		widget.openCentral(player, 1265);
 	}
 	

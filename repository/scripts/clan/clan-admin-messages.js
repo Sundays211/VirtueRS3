@@ -1,7 +1,9 @@
 /**
  * 
  */
-/* globals EventType, ENGINE*/
+/* globals EventType, ENGINE */
+var varp = require('../core/var/player');
+
 var util = require('../core/util');
 var widget = require('../core/widget');
 var config = require('../core/config');
@@ -43,11 +45,11 @@ module.exports = function (scriptManager) {
 	
 	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 5), function (ctx) {
 		var rank = config.enumValue(8659, ctx.slot);//Select rank dropdown
-		ENGINE.setVarp(ctx.player, 4285, ctx.rank);
+		varp(ctx.player, 4285, ctx.rank);
 	});
 	
 	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 59), function (ctx) {
-		broadcasts.setMinimumVisibleRank(ctx.player, ENGINE.getVarp(ctx.player, 4285), ctx.slot);//Select rank
+		broadcasts.setMinimumVisibleRank(ctx.player, varp(ctx.player, 4285), ctx.slot);//Select rank
 	});
 	
 	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 47), function (ctx) {
@@ -57,15 +59,15 @@ module.exports = function (scriptManager) {
 	});
 
 	function load (player) {
-		ENGINE.setVarp(player, 4276, getValue(ENGINE.getVarClanSetting(player, 5), 0));
-		ENGINE.setVarp(player, 4277, getValue(ENGINE.getVarClanSetting(player, 6), 0));
-		ENGINE.setVarp(player, 4278, getValue(ENGINE.getVarClanSetting(player, 7), 0));
-		ENGINE.setVarp(player, 4279, getValue(ENGINE.getVarClanSetting(player, 8), 0));
-		ENGINE.setVarp(player, 4280, getValue(ENGINE.getVarClanSetting(player, 9), 0));
-		ENGINE.setVarp(player, 4281, getValue(ENGINE.getVarClanSetting(player, 10), 0));
-		ENGINE.setVarp(player, 4282, getValue(ENGINE.getVarClanSetting(player, 11), 0));
-		ENGINE.setVarp(player, 4283, getValue(ENGINE.getVarClanSetting(player, 12), 0));
-		ENGINE.setVarp(player, 4284, getValue(ENGINE.getVarClanSetting(player, 14), 0));
+		varp(player, 4276, getValue(ENGINE.getVarClanSetting(player, 5), 0));
+		varp(player, 4277, getValue(ENGINE.getVarClanSetting(player, 6), 0));
+		varp(player, 4278, getValue(ENGINE.getVarClanSetting(player, 7), 0));
+		varp(player, 4279, getValue(ENGINE.getVarClanSetting(player, 8), 0));
+		varp(player, 4280, getValue(ENGINE.getVarClanSetting(player, 9), 0));
+		varp(player, 4281, getValue(ENGINE.getVarClanSetting(player, 10), 0));
+		varp(player, 4282, getValue(ENGINE.getVarClanSetting(player, 11), 0));
+		varp(player, 4283, getValue(ENGINE.getVarClanSetting(player, 12), 0));
+		varp(player, 4284, getValue(ENGINE.getVarClanSetting(player, 14), 0));
 	}
 
 	function getValue (value, def) {
@@ -74,16 +76,16 @@ module.exports = function (scriptManager) {
 
 	function save (player) {
 		if (permissions.canChangeBroadcasts(player, clan.getRank(clan.getHash(player), util.getUserHash(player)))) {
-			ENGINE.setVarClanSetting(player, 5, ENGINE.getVarp(player, 4276));
-			ENGINE.setVarClanSetting(player, 6, ENGINE.getVarp(player, 4277));
-			ENGINE.setVarClanSetting(player, 7, ENGINE.getVarp(player, 4278));
-			ENGINE.setVarClanSetting(player, 8, ENGINE.getVarp(player, 4279));
-			ENGINE.setVarClanSetting(player, 9, ENGINE.getVarp(player, 4280));
-			ENGINE.setVarClanSetting(player, 10, ENGINE.getVarp(player, 4281));
-			ENGINE.setVarClanSetting(player, 11, ENGINE.getVarp(player, 4282));
-			ENGINE.setVarClanSetting(player, 12, ENGINE.getVarp(player, 4283));
-			ENGINE.setVarClanSetting(player, 14, ENGINE.getVarp(player, 4284));
-			ENGINE.setVarp(player, 4286, -1);
+			ENGINE.setVarClanSetting(player, 5, varp(player, 4276));
+			ENGINE.setVarClanSetting(player, 6, varp(player, 4277));
+			ENGINE.setVarClanSetting(player, 7, varp(player, 4278));
+			ENGINE.setVarClanSetting(player, 8, varp(player, 4279));
+			ENGINE.setVarClanSetting(player, 9, varp(player, 4280));
+			ENGINE.setVarClanSetting(player, 10, varp(player, 4281));
+			ENGINE.setVarClanSetting(player, 11, varp(player, 4282));
+			ENGINE.setVarClanSetting(player, 12, varp(player, 4283));
+			ENGINE.setVarClanSetting(player, 14, varp(player, 4284));
+			varp(player, 4286, -1);
 			broadcasts.send(clan.getHash(player), 28, ["[Player A]"], [util.getName(player)]);
 		}
 	}

@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, FriendChatData, ENGINE */
+var varc = require('../core/var/client');
 var config = require('../core/config');
 var widget = require('../core/widget');
 var util = require('../core/util');
@@ -42,8 +43,8 @@ module.exports = function(scriptManager) {
 		widget.setText(player, 1108, 11, nameFromRank(ENGINE.getFriendChatData(player, FriendChatData.RANKJOIN), false));
 		widget.setText(player, 1108, 13, nameFromRank(ENGINE.getFriendChatData(player, FriendChatData.RANKTALK), false));
 		widget.setText(player, 1108, 15, nameFromRank(ENGINE.getFriendChatData(player, FriendChatData.RANKKICK), false));
-		ENGINE.setVarc(player, 199, -1);
-		ENGINE.setVarc(player, 3678, -1);
+		varc(player, 199, -1);
+		varc(player, 3678, -1);
 		ENGINE.runClientScript(player, 8178, []);
 		widget.setEvents(player, 1108, 2, 0, 199, 254);//Allow all rank options to be sent to the server
 	});

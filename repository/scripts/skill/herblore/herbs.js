@@ -3,6 +3,8 @@
  * @since 12/20/2016
  */
 /* globals EventType, ENGINE */
+var varp = require('../../core/var/player');
+
 var makex = require('../makex');
 var config = require('../../core/config');
 var common = require('./common.js');
@@ -86,7 +88,7 @@ module.exports = (function () {
 	}
 	
 	function cleanHerbs (player, cleanHerbId, amount) {
-		ENGINE.setVarp(player, 1175, cleanHerbId);
+		varp(player, 1175, cleanHerbId);
 		var text = "You clean the dirt from the "+config.objName(config.objParam(cleanHerbId, 2655));
 		makex.startCrafting(player, amount, 22756, text);
 	}

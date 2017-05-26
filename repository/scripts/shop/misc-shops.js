@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
+var varp = require('../core/var/player');
+var varc = require('../core/var/client');
 var widget = require('../core/widget');
 
 /**
@@ -36,61 +38,61 @@ var widget = require('../core/widget');
 module.exports = function(scriptManager) {
 	
 	scriptManager.bind(EventType.OPNPC3, 519, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.BOBS_AXES);
-		ENGINE.setVarp(ctx.player, 305, Inv.BOBS_AXES_FREE_STOCK);
-		ENGINE.setVarc(ctx.player, 2360, "Bob's Brilliant Axes");
+		varp(ctx.player, 304, Inv.BOBS_AXES);
+		varp(ctx.player, 305, Inv.BOBS_AXES_FREE_STOCK);
+		varc(ctx.player, 2360, "Bob's Brilliant Axes");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, [520, 521], function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.LUMBRIDGE_GEN_STORE);
-		ENGINE.setVarp(ctx.player, 305, Inv.LUMBRIDGE_GEN_STORE_FREE_STOCK);
-		ENGINE.setVarc(ctx.player, 2360, "Lumbridge General Store");
+		varp(ctx.player, 304, Inv.LUMBRIDGE_GEN_STORE);
+		varp(ctx.player, 305, Inv.LUMBRIDGE_GEN_STORE_FREE_STOCK);
+		varc(ctx.player, 2360, "Lumbridge General Store");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, [522, 523], function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.VARROCK_GEN_STORE);
-		ENGINE.setVarc(ctx.player, 2360, "Varrock General Store");
+		varp(ctx.player, 304, Inv.VARROCK_GEN_STORE);
+		varc(ctx.player, 2360, "Varrock General Store");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, [526, 527], function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.FALADOR_GEN_STORE);
-		ENGINE.setVarc(ctx.player, 2360, "Falador General Store");
+		varp(ctx.player, 304, Inv.FALADOR_GEN_STORE);
+		varc(ctx.player, 2360, "Falador General Store");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, 546, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.ZAFF_STAFF_SHOP);
-		ENGINE.setVarc(ctx.player, 2360, "Zaff's Superior Staves");
+		varp(ctx.player, 304, Inv.ZAFF_STAFF_SHOP);
+		varc(ctx.player, 2360, "Zaff's Superior Staves");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, 549, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.HORVIKS_ARMOUR_SHOP);
-		ENGINE.setVarc(ctx.player, 2360, "Horvik's Armour Shop");
+		varp(ctx.player, 304, Inv.HORVIKS_ARMOUR_SHOP);
+		varc(ctx.player, 2360, "Horvik's Armour Shop");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, 550, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.LOWES_ARCHERY_SHOP);
-		ENGINE.setVarp(ctx.player, 305, Inv.LOWES_ARCHERY_FREE_STOCK);
-		ENGINE.setVarc(ctx.player, 2360, "Lowe's Archery Emporium");
+		varp(ctx.player, 304, Inv.LOWES_ARCHERY_SHOP);
+		varp(ctx.player, 305, Inv.LOWES_ARCHERY_FREE_STOCK);
+		varc(ctx.player, 2360, "Lowe's Archery Emporium");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, 551, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.VARROCK_SWORD_SHOP);
-		ENGINE.setVarp(ctx.player, 305, Inv.VARROCK_SWORD_FREE_STOCK);
-		ENGINE.setVarc(ctx.player, 2360, "Varrock Sword Shop");
+		varp(ctx.player, 304, Inv.VARROCK_SWORD_SHOP);
+		varp(ctx.player, 305, Inv.VARROCK_SWORD_FREE_STOCK);
+		varc(ctx.player, 2360, "Varrock Sword Shop");
 		widget.openCentral(ctx.player, 1265);
 	});
 	
 	scriptManager.bind(EventType.OPNPC3, 8864, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, Inv.LUMBRIDGE_FISH_STORE);
-		ENGINE.setVarp(ctx.player, 305, Inv.LUMBRIDGE_FISH_STORE_FREE);
-		ENGINE.setVarc(ctx.player, 2360, "Lumbridge Fishing Supplies");
+		varp(ctx.player, 304, Inv.LUMBRIDGE_FISH_STORE);
+		varp(ctx.player, 305, Inv.LUMBRIDGE_FISH_STORE_FREE);
+		varc(ctx.player, 2360, "Lumbridge Fishing Supplies");
 		widget.openCentral(ctx.player, 1265);
 	});
 };

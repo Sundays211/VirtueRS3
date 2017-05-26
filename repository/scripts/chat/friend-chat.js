@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
+var varc = require('../core/var/client');
 var util = require('../core/util');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
@@ -37,9 +38,9 @@ module.exports = function(scriptManager) {
 		var player = ctx.player;
 		
 		var name = util.getName(player.getSavedChannelOwner());
-		ENGINE.setVarc(player, 2508, name ? name : util.getName(player));//Last friend chat joined
-		ENGINE.setVarc(player, 1027, 1);
-		ENGINE.setVarc(player, 1034, 2);
+		varc(player, 2508, name ? name : util.getName(player));//Last friend chat joined
+		varc(player, 1027, 1);
+		varc(player, 1034, 2);
 		widget.setEvents(player, 1427, 29, 0, 600, 1024);
 	});
 	

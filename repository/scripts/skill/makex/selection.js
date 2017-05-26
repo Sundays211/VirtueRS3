@@ -19,7 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Inv */
+/* globals EventType, Inv, ENGINE */
+var varp = require('../../core/var/player');
+var varc = require('../../core/var/client');
+var varbit = require('../../core/var/bit');
+
 var widget = require('../../core/widget');
 var config = require('../../core/config');
 var util = require('../../core/util');
@@ -47,8 +51,8 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.IF_DRAG, widget.getHash(1371, 36), function (ctx) {
-			if (ctx.toslot < ENGINE.getVarBit(ctx.player, 1002) && ctx.toslot >= 0) {
-				ENGINE.setVarBit(ctx.player, 1003, ctx.toslot+1);
+			if (ctx.toslot < varbit(ctx.player, 1002) && ctx.toslot >= 0) {
+				varbit(ctx.player, 1003, ctx.toslot+1);
 			}
 		});
 		
@@ -56,14 +60,14 @@ module.exports = (function () {
 			var player = ctx.player;
 			switch (ctx.component) {
 			case 62://Select product category
-				var mainCategory = ENGINE.getVarp(player, 1168);
+				var mainCategory = varp(player, 1168);
 				if (mainCategory < 0) {
 					ENGINE.sendMessage(player, "No main category selected!");
 					return;
 				}
 				if (ctx.slot >= 0 && ctx.slot < config.enumSize(mainCategory)) {
 					var newCategory = config.enumValue(mainCategory, ctx.slot);
-					ENGINE.setVarp(player, 1169, newCategory);
+					varp(player, 1169, newCategory);
 					var slotCount = config.enumSize(newCategory) * 4;
 					widget.setEvents(player, 1371, 44, 0, slotCount, 2);
 					setSelectedProduct(player, 0);
@@ -73,18 +77,18 @@ module.exports = (function () {
 				setSelectedProduct(player, ctx.slot);
 				return;
 			case 29://Increase count
-				if (ENGINE.getVarBit(player, 1003) < ENGINE.getVarBit(player, 1002)) {
-					ENGINE.incrementVarBit(player, 1003, 1);
+				if (varbit(player, 1003) < varbit(player, 1002)) {
+					varbit(player, 1003, varbit(player, 1003)+1);
 				}
 				return;
 			case 31://Decrease count
-				if (ENGINE.getVarBit(player, 1003) > 0) {
-					ENGINE.incrementVarBit(player, 1003, -1);
+				if (varbit(player, 1003) > 0) {
+					varbit(player, 1003, varbit(player, 1003)-1);
 				}
 				return;
 			case 143://Click count
-				if (ctx.slot < ENGINE.getVarBit(player, 1002) && ctx.slot >= 0) {
-					ENGINE.setVarBit(player, 1003, ctx.slot+1);
+				if (ctx.slot < varbit(player, 1002) && ctx.slot >= 0) {
+					varbit(player, 1003, ctx.slot+1);
 				}
 				return;
 			default:
@@ -97,16 +101,16 @@ module.exports = (function () {
 	function selectProduct (player, rootCategory, rootCategoryNames, category, productId, categoryName) {
 		productId = typeof(productId) === 'number' ? productId : -1;
 		if (typeof(categoryName) !== 'undefined') {
-			ENGINE.setVarc(player, 2390, categoryName);
+			varc(player, 2390, categoryName);
 			rootCategory = -1;
 			rootCategoryNames = -1;
 		} else {
-			ENGINE.setVarc(player, 2390, "");
+			varc(player, 2390, "");
 		}
-		ENGINE.setVarp(player, 1168, rootCategory);
-		ENGINE.setVarc(player, 2222, rootCategoryNames);
-		ENGINE.setVarp(player, 1169, category);
-		ENGINE.setVarp(player, 1170, productId);
+		varp(player, 1168, rootCategory);
+		varc(player, 2222, rootCategoryNames);
+		varp(player, 1169, category);
+		varp(player, 1170, productId);
 		widget.openCentral(player, 1370, false);
 	}
 	
@@ -114,12 +118,12 @@ module.exports = (function () {
 		ENGINE.runClientScript(player, 6946, []);
 		widget.hide(player, 1371, 20, false);
 				
-		ENGINE.setVarc(player, 2225, 0);
-		ENGINE.setVarc(player, 2689, 0);
-		ENGINE.setVarc(player, 2690, 0);
+		varc(player, 2225, 0);
+		varc(player, 2689, 0);
+		varc(player, 2690, 0);
 
-		var categoryId = ENGINE.getVarp(player, 1169);		
-		var selectedObjId = ENGINE.getVarp(player, 1170);
+		var categoryId = varp(player, 1169);		
+		var selectedObjId = varp(player, 1170);
 		
 		if (!config.enumHasValue(categoryId, selectedObjId)) {
 			selectedObjId = -1;//Only select items actually in the category
@@ -130,7 +134,7 @@ module.exports = (function () {
 			for (var slot = 0; slot < config.enumSize(categoryId); slot++) {
 				productId = config.enumValue(categoryId, slot);
 				if (getMaxAmount(player, productId) > 1) {
-					ENGINE.setVarp(player, 1170, productId);
+					varp(player, 1170, productId);
 					selectedObjId = productId;
 					break;
 				}
@@ -138,16 +142,16 @@ module.exports = (function () {
 		}
 		if (selectedObjId == -1) {
 			selectedObjId = config.enumValue(categoryId, 0);
-			ENGINE.setVarp(player, 1170, selectedObjId);
+			varp(player, 1170, selectedObjId);
 		}
 		var invCount = canCraft(player, selectedObjId) ? getMaxAmount(player, selectedObjId) : 0;//The maximum amount of the item the player can produce
-		ENGINE.setVarBit(player, 1002, invCount);//Product select max amount
-		ENGINE.setVarBit(player, 1003, invCount);//The amount currently selected
+		varbit(player, 1002, invCount);//Product select max amount
+		varbit(player, 1003, invCount);//The amount currently selected
 		
 		//Information about the selected item
-		ENGINE.setVarc(player, 2391, config.objDesc(selectedObjId));//Description
-		ENGINE.setVarc(player, 2223, 1);
-		ENGINE.setVarc(player, 2224, ENGINE.getExchangeCost(selectedObjId));//Exchange guide price
+		varc(player, 2391, config.objDesc(selectedObjId));//Description
+		varc(player, 2223, 1);
+		varc(player, 2224, ENGINE.getExchangeCost(selectedObjId));//Exchange guide price
 		
 		widget.open(player, 1370, 62, 1371, true);//The inner interface
 		
@@ -166,23 +170,23 @@ module.exports = (function () {
 	 */
 	function setSelectedProduct (player, slot) {
 		slot = slot/4;
-		var subCategory = ENGINE.getVarp(player, 1169);
+		var subCategory = varp(player, 1169);
 		if (subCategory < 0) {
 			return false;
 		}
 		if (slot >= 0 && slot < config.enumValue(subCategory)) {
 			var objId = config.enumValue(subCategory, slot);
-			ENGINE.setVarp(player, 1170, objId);
-			ENGINE.setVarp(player, 1174, 0);
+			varp(player, 1170, objId);
+			varp(player, 1174, 0);
 			var heldCount = canCraft(player, objId) ? getMaxAmount(player, objId) : 0;
-			ENGINE.setVarBit(player, 1002, heldCount);//The maximum amount of the item the player can produce
-			ENGINE.setVarBit(player, 1003, heldCount);//The selected amount of the product to produce
+			varbit(player, 1002, heldCount);//The maximum amount of the item the player can produce
+			varbit(player, 1003, heldCount);//The selected amount of the product to produce
 			widget.setEvents(player, 1371, 36, 0, heldCount, 2359296);//Activates the count selection dragger
 			widget.setEvents(player, 1371, 143, 0, heldCount, 2);//Clicks on the count selection dragger
 			
-			ENGINE.setVarc(player, 2391, config.objDesc(objId));//Examine text
-			ENGINE.setVarc(player, 2223, 1);//
-			ENGINE.setVarc(player, 2224, ENGINE.getExchangeCost(objId));//Exchange guide price
+			varc(player, 2391, config.objDesc(objId));//Examine text
+			varc(player, 2223, 1);//
+			varc(player, 2224, ENGINE.getExchangeCost(objId));//Exchange guide price
 			
 			return true;
 		} else {
@@ -482,8 +486,8 @@ module.exports = (function () {
 		if (config.objStackable(productId)) {
 			maxAmount = Math.min(maxAmount, maxMakeSets);
 		}
-		if (ENGINE.getVarp(player, 1171) > 0) {
-			maxAmount = Math.min(maxAmount, ENGINE.getVarp(player, 1171));
+		if (varp(player, 1171) > 0) {
+			maxAmount = Math.min(maxAmount, varp(player, 1171));
 		}
 		return Math.min(maxAmount, 60);
 	}

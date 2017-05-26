@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
+var varbit = require('../core/var/bit');
+
 var filters = require('./chatbox-filters');
 var util = require('../core/util');
 var widget = require('../core/widget');
@@ -377,8 +379,8 @@ module.exports = function(scriptManager) {
 	});
 	
 	function toggleAlwaysOn (player) {
-		var on = ENGINE.getVarBit(player, 22310) == 1;
-		ENGINE.setVarBit(player, 22310, on ? 0 : 1);
+		var on = varbit(player, 22310) == 1;
+		varbit(player, 22310, on ? 0 : 1);
 	}
 	
 	function toggleVipBadge (player) {

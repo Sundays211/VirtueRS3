@@ -20,6 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
+var varc = require('../core/var/client');
+var varp = require('../core/var/player');
+var varbit = require('../core/var/bit');
+
 var util = require('../core/util');
 var widget = require('../core/widget');
 var inv = require('../inv');
@@ -40,19 +44,19 @@ module.exports = function (scriptManager) {
 	});
 	
 	scriptManager.bind(EventType.IF_CLOSE, 1265, function (ctx) {
-		ENGINE.setVarp(ctx.player, 304, -1);
-		ENGINE.setVarp(ctx.player, 305, -1);
-		ENGINE.setVarp(ctx.player, 306, -1);
-		ENGINE.setVarc(ctx.player, 1876, -1);
-		ENGINE.setVarc(ctx.player, 1878, -1);
+		varp(ctx.player, 304, -1);
+		varp(ctx.player, 305, -1);
+		varp(ctx.player, 306, -1);
+		varc(ctx.player, 1876, -1);
+		varc(ctx.player, 1878, -1);
 	});
 	
 	scriptManager.bind(EventType.IF_BUTTON, 1265, function (ctx) {
 		var player = ctx.player;
 		
-		if (ENGINE.getVarp(player, 304) != -1 && !ENGINE.containerReady(player, ENGINE.getVarp(player, 304))) {
+		if (varp(player, 304) != -1 && !ENGINE.containerReady(player, varp(player, 304))) {
 			if (util.isAdmin(player)) {
-				ENGINE.sendMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+ENGINE.getVarp(player, 304));
+				ENGINE.sendMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 304));
 			} else {
 				ENGINE.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
 			}				
@@ -63,7 +67,7 @@ module.exports = function (scriptManager) {
 		case 89://Close button
 			return;
 		case 20://Selected item
-			if (ENGINE.getVarp(player, 303) === 0) {
+			if (varp(player, 303) === 0) {
 				handleBuyButton(player, ctx.slot, ctx.button);
 			} else {
 				handleSellButton(player, ctx.slot, ctx.button);
@@ -73,52 +77,52 @@ module.exports = function (scriptManager) {
 			handleTakeButton(player, ctx.slot, ctx.button);
 			return;
 		case 28://Switch to "Buy Items"
-			ENGINE.setVarp(player, 303, 0);
+			varp(player, 303, 0);
 			return;
 		case 29://Switch to "Sell Items"
-			ENGINE.setVarp(player, 303, 1);
+			varp(player, 303, 1);
 			return;
 		case 49://Show full names
-			ENGINE.setVarBit(player, 987, 1);
+			varbit(player, 987, 1);
 			return;
 		case 50://Show icons
-			ENGINE.setVarBit(player, 987, 0);
+			varbit(player, 987, 0);
 			return;
 		case 205://Buy/Take/Sell
-			if (ENGINE.getVarp(player, 299) === ENGINE.getVarp(player, 304)) {
-				buyItem(player, ENGINE.getVarp(player, 300), ENGINE.getVarp(player, 302));
-			} else if (ENGINE.getVarp(player, 299) === Inv.BACKPACK) {
-				sellItem(player, ENGINE.getVarp(player, 300), ENGINE.getVarp(player, 302));
-			} else if (ENGINE.getVarp(player, 299) === ENGINE.getVarp(player, 305)) {
-				takeItem(player, ENGINE.getVarp(player, 300), ENGINE.getVarp(player, 302));
+			if (varp(player, 299) === varp(player, 304)) {
+				buyItem(player, varp(player, 300), varp(player, 302));
+			} else if (varp(player, 299) === Inv.BACKPACK) {
+				sellItem(player, varp(player, 300), varp(player, 302));
+			} else if (varp(player, 299) === varp(player, 305)) {
+				takeItem(player, varp(player, 300), varp(player, 302));
 			}
 			return;
 		case 15://Add one
-			ENGINE.setVarp(player, 302, Math.min(ENGINE.getVarp(player, 302)+1, getMaxBuySellAmount(player, ENGINE.getVarp(player, 300))));
+			varp(player, 302, Math.min(varp(player, 302)+1, getMaxBuySellAmount(player, varp(player, 300))));
 			return;
 		case 212://Add 5
-			ENGINE.setVarp(player, 302, Math.min(ENGINE.getVarp(player, 302)+5, getMaxBuySellAmount(player, ENGINE.getVarp(player, 300))));
+			varp(player, 302, Math.min(varp(player, 302)+5, getMaxBuySellAmount(player, varp(player, 300))));
 			return;
 		case 215://Set max amount
-			ENGINE.setVarp(player, 302, getMaxBuySellAmount(player, ENGINE.getVarp(player, 300)));
+			varp(player, 302, getMaxBuySellAmount(player, varp(player, 300)));
 			return;
 		case 218://Subtract 1
-			if (ENGINE.getVarp(player, 302) > 1) {
+			if (varp(player, 302) > 1) {
 				ENGINE.incrementVarp(player, 302, -1);
 			}
 			return;
 		case 221://Subtract 5
-			ENGINE.setVarp(player, 302, Math.max(ENGINE.getVarp(player, 302)-5, 1));
+			varp(player, 302, Math.max(varp(player, 302)-5, 1));
 			return;
 		case 224://Set min amount
-			ENGINE.setVarp(player, 302, 1);
+			varp(player, 302, 1);
 			return;
 		case 256:
 		case 266://Continue button
 			widget.hide(player, 1265, 64, true);
 			return;
 		case 251://Confirm buy
-			buyItem(player, ENGINE.getVarp(player, 300), ENGINE.getVarp(player, 302), true);
+			buyItem(player, varp(player, 300), varp(player, 302), true);
 			widget.hide(player, 1265, 62, true);
 			return;
 		case 242://Cancel buy
@@ -126,7 +130,7 @@ module.exports = function (scriptManager) {
 			widget.hide(player, 1265, 62, true);
 			return;
 		case 189://Confirm sell
-			sellItem(player, ENGINE.getVarp(player, 300), ENGINE.getVarp(player, 302), true);
+			sellItem(player, varp(player, 300), varp(player, 302), true);
 			widget.hide(player, 1265, 62, true);
 			return;
 		case 197://Cancel sell
@@ -140,10 +144,10 @@ module.exports = function (scriptManager) {
 	});
 	
 	function initShop (player) {
-		//ENGINE.setVarp(player, 304, 4);
-		//ENGINE.setVarp(player, 305, -1);
-		ENGINE.setVarp(player, 306, 995);//Currency
-		var shopId = ENGINE.getVarp(player, 304);
+		//varp(player, 304, 4);
+		//varp(player, 305, -1);
+		varp(player, 306, 995);//Currency
+		var shopId = varp(player, 304);
 		if (shopId != -1) {
 			if (!ENGINE.containerReady(player, shopId)) {
 				if (util.isAdmin(player)) {
@@ -155,7 +159,7 @@ module.exports = function (scriptManager) {
 			}
 			ENGINE.sendInv(player, shopId);
 		}
-		var freeStockId = ENGINE.getVarp(player, 305);
+		var freeStockId = varp(player, 305);
 		if (freeStockId != -1) {
 			if (!ENGINE.containerReady(player, freeStockId)) {
 				if (util.isAdmin(player)) {
@@ -170,20 +174,20 @@ module.exports = function (scriptManager) {
 		var canSell = 0;
 		for (var slot=0; slot<28; slot++) {
 			var item = ENGINE.getItem(player, Inv.BACKPACK, slot);
-			if (item !== null && canSellTo(player, ENGINE.getVarp(player, 304), ENGINE.getId(item))) {
+			if (item !== null && canSellTo(player, varp(player, 304), ENGINE.getId(item))) {
 				canSell |= 1 << slot;
 			}			
 		}
-		ENGINE.setVarc(player, 1879, canSell);//Bitpacked can sell
+		varc(player, 1879, canSell);//Bitpacked can sell
 		widget.setEvents(player, 1265, 20, 0, 40, 2097406);
 		widget.setEvents(player, 1265, 21, 0, 40, 2097406);
 		widget.setEvents(player, 1265, 26, 0, 40, 10223616);
 	}
 	
 	function handleBuyButton (player, slot, option) {
-		setSelectedItem(player, ENGINE.getVarp(player, 304), slot);
+		setSelectedItem(player, varp(player, 304), slot);
 		var amount = 0;
-		var objId = inv.getObjId(player, ENGINE.getVarp(player, 304), slot);
+		var objId = inv.getObjId(player, varp(player, 304), slot);
 		switch (option) {
 		case 2:
 			amount = 1;
@@ -201,7 +205,7 @@ module.exports = function (scriptManager) {
 			amount = 500;
 			break;
 		case 7:
-			amount = inv.total(player, objId, ENGINE.getVarp(player, 304));
+			amount = inv.total(player, objId, varp(player, 304));
 			break;
 		}
 		if (amount) {
@@ -210,17 +214,17 @@ module.exports = function (scriptManager) {
 	}
 	
 	function handleTakeButton (player, slot, option) {
-		if (!ENGINE.containerReady(player, ENGINE.getVarp(player, 305))) {
+		if (!ENGINE.containerReady(player, varp(player, 305))) {
 			if (util.isAdmin(player)) {
-				ENGINE.sendMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+ENGINE.getVarp(player, 305));
+				ENGINE.sendMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 305));
 			} else {
 				ENGINE.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
 			}				
 			return;
 		}
-		setSelectedItem(player, ENGINE.getVarp(player, 305), slot);
+		setSelectedItem(player, varp(player, 305), slot);
 		var amount = 0;
-		var objId = inv.getObjId(player, ENGINE.getVarp(player, 305), slot);
+		var objId = inv.getObjId(player, varp(player, 305), slot);
 		switch (option) {
 		case 2:
 			amount = 1;
@@ -238,7 +242,7 @@ module.exports = function (scriptManager) {
 			amount = 500;
 			break;
 		case 7:
-			amount = inv.total(player, objId, ENGINE.getVarp(player, 305));
+			amount = inv.total(player, objId, varp(player, 305));
 			break;
 		}
 		if (amount > 0) {
@@ -274,12 +278,12 @@ module.exports = function (scriptManager) {
 	}
 	
 	function setSelectedItem (player, invId, slot) {
-		ENGINE.setVarp(player, 299, invId);
-		ENGINE.setVarp(player, 301, slot);
+		varp(player, 299, invId);
+		varp(player, 301, slot);
 		var objId = inv.getObjId(player, invId, slot);
-		ENGINE.setVarp(player, 300, objId);
-		ENGINE.setVarp(player, 302, Math.min(Math.max(ENGINE.getVarp(player, 302), 1), inv.total(player, objId, invId)));
-		ENGINE.setVarc(player, 2361, config.objDesc(objId));//item examine
+		varp(player, 300, objId);
+		varp(player, 302, Math.min(Math.max(varp(player, 302), 1), inv.total(player, objId, invId)));
+		varc(player, 2361, config.objDesc(objId));//item examine
 		//api.sendMessage(player, "Setting selected item to inv="+inv+", slot="+slot);
 	}
 	
@@ -307,7 +311,7 @@ module.exports = function (scriptManager) {
 			}
 		} else if (!config.objSellToGeneralStore()) {
 			return false;
-		} else if (objId == 995 || objId == ENGINE.getVarp(player, 306)) {
+		} else if (objId == 995 || objId == varp(player, 306)) {
 			return false;
 		}
 		return true;
@@ -321,14 +325,14 @@ module.exports = function (scriptManager) {
 				canSell |= 1 << slot;
 			}			
 		}
-		ENGINE.setVarc(player, 1879, canSell);//Bitpacked can sell
+		varc(player, 1879, canSell);//Bitpacked can sell
 	}
 	
 	function getMaxBuySellAmount (player, objId) {
-		if (ENGINE.getVarp(player, 299) === Inv.BACKPACK) {
+		if (varp(player, 299) === Inv.BACKPACK) {
 			return Math.max(inv.total(player, objId, Inv.BACKPACK), 1);
 		} else {
-			var shopStock = inv.total(player, objId, ENGINE.getVarp(player, 299));
+			var shopStock = inv.total(player, objId, varp(player, 299));
 			if (!config.objStackable(objId)) {
 				var freeSpace = inv.freeSpace(player, Inv.BACKPACK);
 				return Math.max(Math.min(shopStock, freeSpace), 1);
@@ -339,8 +343,8 @@ module.exports = function (scriptManager) {
 	}
 	
 	function buyItem (player, objId, amount, confirmed) {
-		var invId = ENGINE.getVarp(player, 304);
-		var currency = ENGINE.getVarp(player, 306);
+		var invId = varp(player, 304);
+		var currency = varp(player, 306);
 		amount = Math.min(amount, inv.total(player, objId, invId));
 		if (amount < 1) {
 			return;//Shop has no stock
@@ -368,8 +372,8 @@ module.exports = function (scriptManager) {
 		}
 		if (!confirmed && cost*amount > 100000) {
 			//If the item costs more than 100k, warn the player first
-			ENGINE.setVarp(player, 302, amount);
-			ENGINE.setVarp(player, 300, objId);
+			varp(player, 302, amount);
+			varp(player, 300, objId);
 			widget.hide(player, 1265, 62, false);
 			return;
 		}
@@ -387,7 +391,7 @@ module.exports = function (scriptManager) {
 	}
 	
 	function sellItem (player, objId, amount, confirmed) {
-		var shopInv = ENGINE.getVarp(player, 304);
+		var shopInv = varp(player, 304);
 		if (!canSellTo(player, shopInv, objId)) {
 			return;//Can't sell this item
 		}
@@ -402,8 +406,8 @@ module.exports = function (scriptManager) {
 		var value = getSellPrice(player, objId);
 		if (!confirmed && value*amount > 30000) {
 			//If the player is trying to sell an item worth more than 30k, warn them first
-			ENGINE.setVarp(player, 302, amount);
-			ENGINE.setVarp(player, 300, objId);
+			varp(player, 302, amount);
+			varp(player, 300, objId);
 			widget.hide(player, 1265, 63, false);
 			return;
 		}
@@ -415,14 +419,14 @@ module.exports = function (scriptManager) {
 		inv.give(player, config.objUncert(objId), amount, shopInv);
 		
 		//Give currency back to the player
-		inv.give(player, ENGINE.getVarp(player, 306), amount*value);
+		inv.give(player, varp(player, 306), amount*value);
 		
 		//Refresh the sellability of items
 		sendBackpackCanSell(player, shopInv);
 	}
 	
 	function takeItem (player, objId, amount) {
-		var invId = ENGINE.getVarp(player, 305);
+		var invId = varp(player, 305);
 		amount = Math.min(amount, inv.total(player, objId, invId));
 		if (amount < 1) {
 			return;//Shop has no stock
@@ -446,6 +450,6 @@ module.exports = function (scriptManager) {
 		inv.give(player, objId, amount);
 		
 		//Refresh the sellability of items
-		sendBackpackCanSell(player, ENGINE.getVarp(player, 304));
+		sendBackpackCanSell(player, varp(player, 304));
 	}
 };

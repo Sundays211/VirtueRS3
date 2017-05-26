@@ -20,6 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
+var varp = require('../../core/var/player');
+var varc = require('../../core/var/client');
+var varbit = require('../../core/var/bit');
+
 var widget = require('../../core/widget');
 var dialog = require('../../core/dialog');
 var util = require('../../core/util');
@@ -45,11 +49,11 @@ module.exports = (function () {
 		scriptManager.bind(EventType.IF_OPEN, 105, function (ctx) {
 			var player = ctx.player;
 			
-			ENGINE.setVarp(player, 163, 4);
-			ENGINE.setVarp(player, 138, -1);//Exchange slot
-			ENGINE.setVarp(player, 139, -1);//Buy or sell (1=buy, 0=sell)
-			ENGINE.setVarp(player, 137, 1);//Amount
-			ENGINE.setVarp(player, 135, -1);//Item ID
+			varp(player, 163, 4);
+			varp(player, 138, -1);//Exchange slot
+			varp(player, 139, -1);//Buy or sell (1=buy, 0=sell)
+			varp(player, 137, 1);//Amount
+			varp(player, 135, -1);//Item ID
 			//api.openOverlaySub(player, 1008, 107, false);
 			ENGINE.runClientScript(player, 8178, []);
 			ENGINE.runClientScript(player, 8865, [1]);
@@ -66,7 +70,7 @@ module.exports = (function () {
 
 		scriptManager.bind(EventType.IF_CLOSE, 105, function (ctx) {
 			clearOffer(ctx.player);
-			ENGINE.setVarBit(ctx.player, 29044, 0);//0 - Unlock : 1 - Lock Exchange Tab
+			varbit(ctx.player, 29044, 0);//0 - Unlock : 1 - Lock Exchange Tab
 		});
 		
 		scriptManager.bind(EventType.IF_CLOSE, 107, function (ctx) {
@@ -128,7 +132,7 @@ module.exports = (function () {
 				viewOffer(player, 7);
 				return;
 			case 61://Abort current offer
-				var slot = ENGINE.getVarp(player, 138);
+				var slot = varp(player, 138);
 				if (slot >= 0 && slot < 8) {
 					ENGINE.abortExchangeOffer(player, 1, slot);
 				}				
@@ -140,7 +144,7 @@ module.exports = (function () {
 				collectItems(player, 1, ctx.button);
 				return;
 			case 121://Decrease quantity by one
-				if (ENGINE.getVarp(player, 136) > 0) {
+				if (varp(player, 136) > 0) {
 					ENGINE.incrementVarp(player, 136, -1);
 				}				
 				return;
@@ -160,12 +164,12 @@ module.exports = (function () {
 				handleQuantityButton(player, 5);
 				return;
 			case 145://Decrease price by 1gp
-				if (ENGINE.getVarp(player, 137) > 1) {
+				if (varp(player, 137) > 1) {
 					ENGINE.incrementVarp(player, 137, -1);
 				}				
 				return;
 			case 148://Increase price by 1gp
-				if (ENGINE.getVarp(player, 137) < CONST.INTEGER_MAX) {
+				if (varp(player, 137) < CONST.INTEGER_MAX) {
 					ENGINE.incrementVarp(player, 137, 1);
 				}
 				return;
@@ -173,7 +177,7 @@ module.exports = (function () {
 				setPrice(player, 95);
 				return;
 			case 158://Set to exchange price
-				ENGINE.setVarp(player, 137, ENGINE.getVarp(player, 140));
+				varp(player, 137, varp(player, 140));
 				return;
 			case 163://Increase price by 5%
 				setPrice(player, 105);
@@ -232,14 +236,14 @@ module.exports = (function () {
 			case 292://Custom quantity
 				widget.inframeInput(player, 105, 289, function (value) {
 					if (value > 0) {
-						ENGINE.setVarp(player, 136, value-1);
+						varp(player, 136, value-1);
 					}
 				}, 7, 7);
 				return;
 			case 298://Custom price
 				widget.inframeInput(player, 105, 295, function (value) {
 					if (value > 0) {
-						ENGINE.setVarp(player, 137, value-1);
+						varp(player, 137, value-1);
 					}
 				}, 7, 7);
 				return;
@@ -263,15 +267,15 @@ module.exports = (function () {
 			ENGINE.sendMessage(player, "You cannot use Grand Exchange while an Iron Man.");
 			return;
 		}
-		ENGINE.setVarBit(player, 444, 1);//Pin entered successfully
-		ENGINE.setVarBit(player, 29044, 0);//0 - Unlock : 1 - Lock Exchange Tab
+		varbit(player, 444, 1);//Pin entered successfully
+		varbit(player, 29044, 0);//0 - Unlock : 1 - Lock Exchange Tab
 		widget.openOverlay(player, 5);
 		//api.openCentralWidget(player, 105, false);
 	}
 	
 	function openOffer (player, slot, isSell) {
-		ENGINE.setVarp(player, 138, slot);
-		ENGINE.setVarp(player, 139, isSell ? 1 : 0);
+		varp(player, 138, slot);
+		varp(player, 139, isSell ? 1 : 0);
 		if (!isSell) {
 			searchForItem(player);
 		}
@@ -286,36 +290,36 @@ module.exports = (function () {
 			} else {
 				ENGINE.sendInv(player, returnInv);
 				var objId = offer.getOfferItem();
-				ENGINE.setVarp(player, 135, objId);
+				varp(player, 135, objId);
 				var exchangePrice = ENGINE.getExchangeCost(objId);
-				ENGINE.setVarp(player, 140, exchangePrice);
-				ENGINE.setVarc(player, 2354, config.objDesc(objId));
+				varp(player, 140, exchangePrice);
+				varc(player, 2354, config.objDesc(objId));
 				widget.setText(player, 105, 14, config.objDesc(objId));
-				ENGINE.setVarp(player, 138, slot);
+				varp(player, 138, slot);
 			}				
 		}			
 	}
 	
 	function clearOffer (player) {
-		ENGINE.setVarp(player, 138, -1);
-		ENGINE.setVarp(player, 139, -1);
-		ENGINE.setVarp(player, 137, 1);
-		ENGINE.setVarp(player, 136, 0);
-		ENGINE.setVarp(player, 135, -1);
+		varp(player, 138, -1);
+		varp(player, 139, -1);
+		varp(player, 137, 1);
+		varp(player, 136, 0);
+		varp(player, 135, -1);
 		ENGINE.runClientScript(player, 571, []);
 	}
 	
 	function offerItem (player, invSlot) {
-		if (ENGINE.getVarp(player, 139) != 1) {
-			if (ENGINE.getVarp(player, 139) == -1) {
+		if (varp(player, 139) != 1) {
+			if (varp(player, 139) == -1) {
 				for (var slot=0; slot<6; slot++) {
 					if (ENGINE.getExchangeOffer(player, 1, slot) === null) {
-						ENGINE.setVarp(player, 139, 1);
-						ENGINE.setVarp(player, 138, slot);
+						varp(player, 139, 1);
+						varp(player, 138, slot);
 						break;
 					}
 				}
-				if (ENGINE.getVarp(player, 139) != 1) {
+				if (varp(player, 139) != 1) {
 					ENGINE.sendMessage(player, "Unable to set up Sell Offer at this time.");
 					return;						
 				}
@@ -329,11 +333,11 @@ module.exports = (function () {
 			var exchangePrice = ENGINE.getExchangeCost(objId);
 			if (exchangePrice != -1) {
 				objId = config.objUncert(objId);
-				ENGINE.setVarp(player, 140, exchangePrice);
-				ENGINE.setVarp(player, 135, objId);
-				ENGINE.setVarp(player, 137, exchangePrice);
-				ENGINE.setVarp(player, 136, inv.total(player, objId));
-				ENGINE.setVarc(player, 2354, config.objDesc(objId));
+				varp(player, 140, exchangePrice);
+				varp(player, 135, objId);
+				varp(player, 137, exchangePrice);
+				varp(player, 136, inv.total(player, objId));
+				varc(player, 2354, config.objDesc(objId));
 				widget.setText(player, 105, 14, config.objDesc(objId));
 			} else {
 				ENGINE.sendMessage(player, "You can't buy or sell that item on the GE.");
@@ -345,20 +349,20 @@ module.exports = (function () {
 		widget.inframeInput(player, 105, 301, function (objId) {
 			var exchangePrice = ENGINE.getExchangeCost(objId);
 			if (exchangePrice != -1) {
-				ENGINE.setVarp(player, 140, exchangePrice);
-				ENGINE.setVarp(player, 135, objId);
-				ENGINE.setVarp(player, 137, exchangePrice);
-				ENGINE.setVarc(player, 2354, config.objDesc(objId));
+				varp(player, 140, exchangePrice);
+				varp(player, 135, objId);
+				varp(player, 137, exchangePrice);
+				varc(player, 2354, config.objDesc(objId));
 				widget.setText(player, 105, 14, config.objDesc(objId));
 			}
 		}, 10, 0);
 	}
 	
 	function setPrice (player, percent) {
-		if (ENGINE.getVarp(player, 135) == -1) {
+		if (varp(player, 135) == -1) {
 			return;
 		}
-		var currentPrice = ENGINE.getVarp(player, 137);
+		var currentPrice = varp(player, 137);
 		var newPrice = 0;
 		if (percent > 100 && currentPrice > 2045222520) {
 			newPrice = 2147483647;
@@ -374,49 +378,49 @@ module.exports = (function () {
 				}
 			}
 		}
-		ENGINE.setVarp(player, 137, newPrice);
+		varp(player, 137, newPrice);
 	}
 	
 	function handleQuantityButton (player, button) {
-		var isSell = ENGINE.getVarp(player, 139) == 1;
-		var offset = isSell ? 0 : ENGINE.getVarp(player, 136);
+		var isSell = varp(player, 139) == 1;
+		var offset = isSell ? 0 : varp(player, 136);
 		switch (button) {
 		case 1:
-			ENGINE.setVarp(player, 136, offset+1);
+			varp(player, 136, offset+1);
 			break;
 		case 2:
-			ENGINE.setVarp(player, 136, offset+10);
+			varp(player, 136, offset+10);
 			break;
 		case 3:
-			ENGINE.setVarp(player, 136, offset+100);
+			varp(player, 136, offset+100);
 			break;
 		case 4:
 			if (!isSell) {
 				ENGINE.incrementVarp(player, 136, 1000);
-			} else if (ENGINE.getVarp(player, 135) != -1) {
-				var objId = ENGINE.getVarp(player, 135);
+			} else if (varp(player, 135) != -1) {
+				var objId = varp(player, 135);
 				var itemTotal = inv.total(player, objId);
 				var certId = config.objUncert(objId);
 				if (certId !== objId) {
 					itemTotal += inv.total(player, certId);
 				}
-				ENGINE.setVarp(player, 136, itemTotal);					
+				varp(player, 136, itemTotal);					
 			}	
 			break;
 		case 5://Choose amount
 			dialog.requestCount(player, "Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":", function (value) {
-				ENGINE.setVarp(player, 136, value);
+				varp(player, 136, value);
 			});
 			break;
 		}
 	}
 	
 	function submitOffer (player) {
-		var slot = ENGINE.getVarp(player, 138);
-		var isSell = ENGINE.getVarp(player, 139) == 1;
-		var objId = ENGINE.getVarp(player, 135);
-		var amount = ENGINE.getVarp(player, 136);
-		var price = ENGINE.getVarp(player, 137);
+		var slot = varp(player, 138);
+		var isSell = varp(player, 139) == 1;
+		var objId = varp(player, 135);
+		var amount = varp(player, 136);
+		var price = varp(player, 137);
 		if (amount * price > CONST.INTEGER_MAX) {
 			ENGINE.sendMessage(player, "Cannot process - total cost is too high!");
 			return;
@@ -467,7 +471,7 @@ module.exports = (function () {
 	}
 	
 	function collectItems (player, slot, option) {
-		var exchangeSlot = ENGINE.getVarp(player, 138);
+		var exchangeSlot = varp(player, 138);
 		var returnInv = config.enumValue(1079, exchangeSlot);
 		var objId = inv.getObjId(player, returnInv, slot);
 		var amount = inv.getCount(player, returnInv, slot);
