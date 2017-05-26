@@ -190,6 +190,7 @@ module.exports = (function() {
 			var args = {
 					"player" : player,
 					"item" : item,
+					"objId" : objId,
 					"slot" : ctx.slot
 			};
 			ENGINE.invokeEvent(eventType, objId, args);

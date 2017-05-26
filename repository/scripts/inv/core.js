@@ -19,6 +19,7 @@ function init() {
 		setSlot : setSlot,
 		clearSlot : clearSlot,
 		getObjId : getObjId,
+		getCount : getCount,
 		baseStock : baseStock
 	};
 	
@@ -123,6 +124,12 @@ function init() {
 		return held;
 	}
 	
+	/**
+	 * Gets the total capacity of the provided inventory
+	 * 
+	 * @param invId The ID of the inventory to check
+	 * @return The capacity of the inventory
+	 */
 	function invSize (invId) {
 		return configApi.invSize(invId);
 	}
@@ -140,6 +147,13 @@ function init() {
 		return freeSpace(player, inv) >= count;
 	}
 	
+	/**
+	 * Checks the amount of free space the player has in the specified inventory
+	 * 
+	 * @param player The player to check
+	 * @param inv The inventory ID to check
+	 * @return The number of empty slots
+	 */
 	function freeSpace(player, inv) {
 		return ENGINE.freeSpaceTotal(player, inv);
 	}
@@ -147,6 +161,11 @@ function init() {
 	function getObjId (player, inv, slot) {
 		var item = ENGINE.getItem(player, inv, slot);
 		return item === null ? -1 : ENGINE.getId(item);
+	}
+	
+	function getCount (player, inv, slot) {
+		var item = ENGINE.getItem(player, inv, slot);
+		return item === null ? 0 : ENGINE.getCount(item);
 	}
 	
 	function baseStock (player, inv, objId) {
