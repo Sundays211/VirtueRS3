@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Virtue Studios
+ * Copyright (c) 2014 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,6 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType */
+var util = require('../../core/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -26,30 +28,25 @@
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 16/01/2016
+ * @since 08/01/2015
  */
-var HouseSettingsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, interfaceID, args) {
-		var player = args.player;
-		switch (args.component) {
-		case 18://Teleport arrive at house
-		case 22://Teleport arrive at portal
-		case 27://Doors closed
-		case 31://Doors open
-		case 51://Gathering prawnballs enabled
-		case 55://Gathering prawnballs disabled
-		case 76://Building mode on
-		case 80://Building mode off
-			
-		default:
-			api.sendMessage(player, "Unhandled house settings button: comp="+args.component+", slot="+args.slot+", button="+args.button);
-			return;
-		}
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.IF_BUTTON, 970, function (ctx) {
+			switch (ctx.component) {
+			/*case 11://Secondary action bar
+			case 14://Tertiary action bar
+			case 18://Quaternary action bar
+			case 22://Quinary action bar*/
+			default:
+				util.defaultHandler(ctx, "action bar settings");
+				return;
+			}
+		});
 	}
-});
+})();
 
-/* Listen to the interface ids specified */
-var listen = function(scriptManager) {
-	var listener = new HouseSettingsListener();
-	scriptManager.registerListener(EventType.IF_BUTTON, 1664, listener);
-};

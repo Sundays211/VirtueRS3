@@ -22,7 +22,8 @@ function getAllModules () {
 		'skill/smithing',
 		'skill/summoning',
 		'skill/makex',
-		'quest'
+		'quest',
+		'widget/settings'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');
