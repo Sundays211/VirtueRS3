@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var varbit = require('../core/var/bit');
 
 var filters = require('./chatbox-filters');
@@ -398,13 +398,13 @@ module.exports = function(scriptManager) {
 	
 	function joinLeaveFriendChat (player) {
 		if (player.getChat().getFriendChatOwner() !== 0) {
-			ENGINE.runClientScript(player, 194, [1]);
+			util.runClientScript(player, 194, [1]);
 			return;
 		}
 		dialog.openModalBase(player);
-		ENGINE.runClientScript(player, 8178, []);
-		ENGINE.runClientScript(player, 8537, []);
-		ENGINE.runClientScript(player, 194, [1]);
+		util.runClientScript(player, 8178, []);
+		util.runClientScript(player, 8537, []);
+		util.runClientScript(player, 194, [1]);
 	}
 	
 	function friendChatSettings (player) {

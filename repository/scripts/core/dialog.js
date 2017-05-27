@@ -4,6 +4,7 @@
 /* globals Java, ENGINE, api*/
 var widget = require('./widget');
 var config = require('./config');
+var util = require('./util');
 
 module.exports = init();
 
@@ -39,7 +40,7 @@ function init () {
 			}
 		});	
 		openModalBase(player);
-		ENGINE.runClientScript(player, 108, [message]);
+		util.runClientScript(player, 108, [message]);
 		ENGINE.setInputHandler(player, new Handler());
 	}
 
@@ -58,7 +59,7 @@ function init () {
 			}
 		});	
 		openModalBase(player);
-		ENGINE.runClientScript(player, 109, [message]);
+		util.runClientScript(player, 109, [message]);
 		ENGINE.setInputHandler(player, new Handler());
 	}
 
@@ -77,7 +78,7 @@ function init () {
 			}
 		});	
 		openModalBase(player);
-		ENGINE.runClientScript(player, 110, [message]);
+		util.runClientScript(player, 110, [message]);
 		ENGINE.setInputHandler(player, new Handler());
 	}
 
@@ -95,8 +96,8 @@ function init () {
 		});
 		widget.open(player, 1477, 521, 1418, true);
 		widget.open(player, 1418, 1, 389, true);
-		ENGINE.runClientScript(player, 8178, []);
-		ENGINE.runClientScript(player, 570, [message]);
+		util.runClientScript(player, 8178, []);
+		util.runClientScript(player, 570, [message]);
 		ENGINE.setInputHandler(player, new Handler());
 	}
 
@@ -136,7 +137,7 @@ function init () {
 		widget.setText(player, 1186, 2, message);
 		widget.hide(player, 1186, 3, false);
 		widget.openOverlaySub(player, 1006, 1186, false);
-		ENGINE.runClientScript(player, 8178, []);
+		util.runClientScript(player, 8178, []);
 		ENGINE.setInputHandler(player, new Handler());
 	}
 

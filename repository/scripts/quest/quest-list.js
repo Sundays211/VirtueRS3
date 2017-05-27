@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, QUEST_ENGINE, ENGINE */
+/* globals EventType, QUEST_ENGINE */
 var varbit = require('../core/var/bit');
 var varp = require('../core/var/player');
 var varc = require('../core/var/client');
@@ -122,7 +122,7 @@ module.exports = (function () {
 		}
 		widget.hide(player, 1500, 4, false);
 		widget.hide(player, 1500, 5, true);
-		ENGINE.runClientScript(player, 4021, [QUEST_ENGINE.getName(questId)]);
+		util.runClientScript(player, 4021, [QUEST_ENGINE.getName(questId)]);
 	}
 	
 	function setJournalLine (player, line, text) {

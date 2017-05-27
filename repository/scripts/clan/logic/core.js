@@ -1,7 +1,7 @@
 /**
  * Manages the core functionality for clans
  */
-/* globals CLAN_ENGINE, ENGINE */
+/* globals CLAN_ENGINE */
 var util = require('../../core/util');
 var dialog = require('../../core/dialog');
 var config = require('../../core/config');
@@ -126,7 +126,7 @@ function init () {
 			return;
 		}
 		if (slot != -1) {
-			ENGINE.runClientScript(player, 4581, [slot]);
+			util.runClientScript(player, 4581, [slot]);
 		}
 		dialog.requestString(player, "Enter the name to be removed:", function (name) {
 			chat.sendMessage(player, "Attempting to unban "+name+".");

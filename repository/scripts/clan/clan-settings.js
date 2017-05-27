@@ -325,7 +325,7 @@ module.exports = function (scriptManager) {
 			varc(player, 1567, varbit(player, 6150));//Ban from island
 			varc(player, 1568, varbit(player, 6151));//Probation status
 			varc(player, 2521, member.getDisplayName());//Display name
-			ENGINE.runClientScript(player, 4314, []);
+			util.runClientScript(player, 4314, []);
 		}
 	}
 	
@@ -347,7 +347,7 @@ module.exports = function (scriptManager) {
 		ENGINE.hideWidget(player, 1096, 22, (tab != 3));
 		ENGINE.hideWidget(player, 1096, 24, (tab != 4));
 		ENGINE.hideWidget(player, 1096, 25, (tab != 5));
-		ENGINE.runClientScript(player, 5136, [tab]);
+		util.runClientScript(player, 5136, [tab]);
 	}
 
 	function setPermissionGroup (player, rank) {

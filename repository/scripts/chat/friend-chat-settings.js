@@ -46,7 +46,7 @@ module.exports = function(scriptManager) {
 		widget.setText(player, 1108, 15, nameFromRank(ENGINE.getFriendChatData(player, FriendChatData.RANKKICK), false));
 		varc(player, 199, -1);
 		varc(player, 3678, -1);
-		ENGINE.runClientScript(player, 8178, []);
+		util.runClientScript(player, 8178, []);
 		widget.setEvents(player, 1108, 2, 0, 199, 254);//Allow all rank options to be sent to the server
 	});
 	

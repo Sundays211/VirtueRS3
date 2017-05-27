@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var util = require('../core/util');
 var widget = require('../core/widget');
 var chat = require('../chat');
@@ -44,7 +44,7 @@ module.exports = function (scriptManager) {
 		switch (ctx.component) {
 		case 109://Expand clan actions
 			widget.open(ctx.player, 1477, 542, 234, true);
-			ENGINE.runClientScript(ctx.player, 8787, [-6, -24, 2, -1, 72745069, 40, 160]);
+			util.runClientScript(ctx.player, 8787, [-6, -24, 2, -1, 72745069, 40, 160]);
 			return;
 		case 168://Clan chat
 		case 170://Visited clan chat

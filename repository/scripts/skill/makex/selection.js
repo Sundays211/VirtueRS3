@@ -116,7 +116,7 @@ module.exports = (function () {
 	}
 	
 	function openDialog (player) {
-		ENGINE.runClientScript(player, 6946, []);
+		util.runClientScript(player, 6946, []);
 		widget.hide(player, 1371, 20, false);
 				
 		varc(player, 2225, 0);

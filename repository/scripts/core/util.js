@@ -26,7 +26,8 @@ function init () {
 		toBase37Hash : toBase37Hash,
 		toFormattedString : toFormattedString,
 		toFormattedTime : toFormattedTime,
-		delayFunction : delayFunction
+		delayFunction : delayFunction,
+		runClientScript : runClientScript
 	};
 	return utils;
 	
@@ -153,6 +154,10 @@ function init () {
 			}		
 			ENGINE.delay(entity, new Handler(), cycles, interruptable, handler);
 		}
+	}
+	
+	function runClientScript (player, scriptId, args) {
+		ENGINE.runClientScript(player, scriptId, args);
 	}
 }
 

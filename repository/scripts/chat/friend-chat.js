@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var varc = require('../core/var/client');
 var util = require('../core/util');
 var widget = require('../core/widget');
@@ -51,19 +51,19 @@ module.exports = function(scriptManager) {
 		switch (ctx.component) {
 		case 10://Join/leave
 			if (player.getChat().getFriendChatOwner() !== 0) {
-				ENGINE.runClientScript(player, 194, [1]);
+				util.runClientScript(player, 194, [1]);
 				return;
 			} else {
 				dialog.openModalBase(player);
-				ENGINE.runClientScript(player, 8178, []);
-				ENGINE.runClientScript(player, 8537, []);
-				ENGINE.runClientScript(player, 194, [1]);
+				util.runClientScript(player, 8178, []);
+				util.runClientScript(player, 8537, []);
+				util.runClientScript(player, 194, [1]);
 			}				
 			return;
 		case 36://Manual kick/ban
 			dialog.openModalBase(player);
-			ENGINE.runClientScript(player, 8178, []);
-			ENGINE.runClientScript(player, 2688, []);
+			util.runClientScript(player, 8178, []);
+			util.runClientScript(player, 2688, []);
 			return;
 		case 4://Settings
 			widget.openCentral(player, 1108);

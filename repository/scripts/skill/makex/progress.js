@@ -69,7 +69,7 @@ module.exports = (function () {
 			varp(ctx.player, 1175, -1);//Clear product
 			varp(ctx.player, 1176, 0);//Clear experience gained counter
 			varp(ctx.player, 1177, 0);
-			ENGINE.runClientScript(ctx.player, 3373, 1018);
+			util.runClientScript(ctx.player, 3373, 1018);
 			varc(ctx.player, 2227, 0);//Clear time
 			varc(ctx.player, 2228, 0);//Clear total
 			varc(ctx.player, 2229, 0);//Clear remaining

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, ChatListType */
+/* globals EventType, ChatListType */
 var widget = require('../core/widget');
 var util = require('../core/util');
 var dialog = require('../core/dialog');
@@ -45,8 +45,8 @@ module.exports = function(scriptManager) {
 			switch (ctx.button) {
 			case 7:
 				widget.openOverlaySub(player, 1006, 451, false);
-				ENGINE.runClientScript(player, 8178, []);
-				ENGINE.runClientScript(player, 9206, [ctx.slot, 0, 29556758, 29556742, 29556743]);
+				util.runClientScript(player, 8178, []);
+				util.runClientScript(player, 9206, [ctx.slot, 0, 29556758, 29556742, 29556743]);
 				return;
 			}
 		}
@@ -60,21 +60,21 @@ module.exports = function(scriptManager) {
 		case 7://Friends list pane
 			if (ctx.button == 7) {
 				widget.openOverlaySub(player, 1006, 451, false);
-				ENGINE.runClientScript(player, 8178, []);
-				ENGINE.runClientScript(player, 9206, [ctx.slot, 0, 29556758, 29556742, 29556743]);
+				util.runClientScript(player, 8178, []);
+				util.runClientScript(player, 9206, [ctx.slot, 0, 29556758, 29556742, 29556743]);
 				return;
 			}
 			util.defaultHandler(ctx, "friend list");
 			return;
 		case 25://Add friend
 			dialog.openModalBase(player);
-			ENGINE.runClientScript(player, 8178, []);
-			ENGINE.runClientScript(player, 103, []);
+			util.runClientScript(player, 8178, []);
+			util.runClientScript(player, 103, []);
 			return;
 		case 33://Remove friend
 			dialog.openModalBase(player);
-			ENGINE.runClientScript(player, 8178, []);
-			ENGINE.runClientScript(player, 104, []);
+			util.runClientScript(player, 8178, []);
+			util.runClientScript(player, 104, []);
 			return;
 		case 42://Recruit friend
 			chat.sendDebugMessage(player, "Recruit friend has not been implemented");
@@ -82,21 +82,21 @@ module.exports = function(scriptManager) {
 		case 57://Add/set ignore note 
 			if (ctx.button == 1) {
 				widget.openOverlaySub(player, 1006, 451, false);
-				ENGINE.runClientScript(player, 8178, []);
-				ENGINE.runClientScript(player, 9206, [ctx.slot/2, 1, 29556758, 29556742, 29556743]);
+				util.runClientScript(player, 8178, []);
+				util.runClientScript(player, 9206, [ctx.slot/2, 1, 29556758, 29556742, 29556743]);
 				return;
 			}
 			util.defaultHandler(ctx, "ignore list");
 			return;
 		case 74://Add ignore
 			dialog.openModalBase(player);
-			ENGINE.runClientScript(player, 8178, []);
-			ENGINE.runClientScript(player, 105, []);
+			util.runClientScript(player, 8178, []);
+			util.runClientScript(player, 105, []);
 			return;
 		case 82://Remove ignore
 			dialog.openModalBase(player);
-			ENGINE.runClientScript(player, 8178, []);
-			ENGINE.runClientScript(player, 1419, []);
+			util.runClientScript(player, 8178, []);
+			util.runClientScript(player, 1419, []);
 			return;
 		case 49://Reorder friends list
 		case 90://Reorder ignore list

@@ -61,7 +61,7 @@ module.exports = (function () {
 		if (amount > 0) {
 			ENGINE.delItem(player, Inv.MONEY_POUCH, CONST.COINS, amount);
 			chat.sendMessage(player, util.toFormattedString(amount) +" coins have been removed from your money pouch.", MesType.GAME_SPAM);
-			ENGINE.runClientScript(player, 5561, [0, amount]);
+			util.runClientScript(player, 5561, [0, amount]);
 			updateCoins(player);
 		}
 	}
@@ -70,14 +70,14 @@ module.exports = (function () {
 		if (amount > 0) {
 			ENGINE.addItem(player, Inv.MONEY_POUCH, CONST.COINS, amount);
 			chat.sendMessage(player, util.toFormattedString(amount) +" coins have been added to your money pouch.", MesType.GAME_SPAM);
-			ENGINE.runClientScript(player, 5561 , [1, amount]);
+			util.runClientScript(player, 5561 , [1, amount]);
 			updateCoins(player);
 		}			
 	}
 	
 	function updateCoins (player) {
 		//api.sendMessage(player, "Updating coins... ("+this.getCoinCount(player)+" total)");
-		ENGINE.runClientScript(player, 5560,[ getCoinCount(player) ]);			
+		util.runClientScript(player, 5560,[ getCoinCount(player) ]);			
 	}
 	
 	function getCoinCount (player) {

@@ -43,7 +43,7 @@ module.exports = function (scriptManager) {
 		//if_opensub: parent=1477, parentSlot=412, if=1105, closable=0
 		widget.setEvents(ctx.player, 1105, 66, 0, 118, 2);
 		widget.setEvents(ctx.player, 1105, 63, 0, 118, 2);
-		ENGINE.runClientScript(ctx.player, 4399, [72417446]);
+		util.runClientScript(ctx.player, 4399, [72417446]);
 	});
 	
 	scriptManager.bind(EventType.IF_BUTTON, 1105, function (ctx) {
@@ -173,7 +173,7 @@ module.exports = function (scriptManager) {
 				}
 			}
 			widget.openCentral(player, 1105);
-			ENGINE.runClientScript(player, 4399, [72417469]);
+			util.runClientScript(player, 4399, [72417469]);
 		});
 	}
 	

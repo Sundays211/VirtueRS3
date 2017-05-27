@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Inv */
+/* globals EventType, Inv, ENGINE */
 var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 var varbit = require('../../core/var/bit');
@@ -56,8 +56,8 @@ module.exports = (function () {
 			varp(player, 137, 1);//Amount
 			varp(player, 135, -1);//Item ID
 			//api.openOverlaySub(player, 1008, 107, false);
-			ENGINE.runClientScript(player, 8178, []);
-			ENGINE.runClientScript(player, 8865, [1]);
+			util.runClientScript(player, 8178, []);
+			util.runClientScript(player, 8865, [1]);
 			widget.setEvents(player, 105, 63, -1, -1, 8650758);
 			widget.setEvents(player, 105, 65, -1, -1, 8650758);
 			widget.setEvents(player, 105, 99, -1, -1, 263170);
@@ -65,8 +65,8 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.IF_OPEN, 107, function (ctx) {
 			widget.setEvents(ctx.player, 107, 7, 0, 27, 14682110);
-			ENGINE.runClientScript(ctx.player, 8862, [0, 2]);
-			ENGINE.runClientScript(ctx.player, 8862, [0, 3]);
+			util.runClientScript(ctx.player, 8862, [0, 2]);
+			util.runClientScript(ctx.player, 8862, [0, 3]);
 		});
 
 		scriptManager.bind(EventType.IF_CLOSE, 105, function (ctx) {
@@ -75,8 +75,8 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.IF_CLOSE, 107, function (ctx) {
-			ENGINE.runClientScript(ctx.player, 8862, [1, 2]);
-			ENGINE.runClientScript(ctx.player, 8862, [1, 3]);
+			util.runClientScript(ctx.player, 8862, [1, 2]);
+			util.runClientScript(ctx.player, 8862, [1, 3]);
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON, 107, function (ctx) {
@@ -307,7 +307,7 @@ module.exports = (function () {
 		varp(player, 137, 1);
 		varp(player, 136, 0);
 		varp(player, 135, -1);
-		ENGINE.runClientScript(player, 571, []);
+		util.runClientScript(player, 571, []);
 	}
 	
 	function offerItem (player, invSlot) {
