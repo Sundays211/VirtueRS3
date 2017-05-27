@@ -27,6 +27,7 @@ function init () {
 		getDbFieldValues : getDbFieldValues,
 		npcName : npcName,
 		locName : locName,
+		locHasModel : locHasModel,
 		seqLength : seqLength
 	};
 	
@@ -114,6 +115,10 @@ function init () {
 	
 	function locName (locId) {
 		return configApi.locName(locId);
+	}
+	
+	function locHasModel (locId, modelId) {
+		return ENGINE.getLocType(locId).hasMesh(modelId);
 	}
 	
 	function seqLength (seqId) {

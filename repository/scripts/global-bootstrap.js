@@ -15,6 +15,7 @@ function getAllModules () {
 		'skill/agility',
 		'skill/prayer',
 		'skill/runecrafting',
+		'skill/mining',
 		'skill/thieving',
 		'skill/cooking',
 		'skill/crafting',

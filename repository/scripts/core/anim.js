@@ -6,12 +6,11 @@
 module.exports = init();
 
 function init () {
-	var anim = {
+	return {
 		run : runAnim,
+		stop : stopAnim,
 		addSpotAnim : addSpotAnim
 	};
-	
-	return anim;
 	
 	function runAnim (entity, id, callback) {
 		if (callback === undefined) {
@@ -24,6 +23,10 @@ function init () {
 			});
 			return ENGINE.runAnimation(entity, id, new Handler());
 		}
+	}
+	
+	function stopAnim (entity) {
+		ENGINE.stopAnimation(entity);
 	}
 	
 	function addSpotAnim (entity, id, height, speed, rotation) {

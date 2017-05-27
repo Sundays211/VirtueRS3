@@ -20,7 +20,7 @@ module.exports = (function () {
 	}
 	
 	function sendSpamMessage (player, message) {
-		ENGINE.sendFilteredMessage(player, message);
+		ENGINE.sendFilterMessage(player, message);
 	}
 	
 	function sendDebugMessage (player, message) {
