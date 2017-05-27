@@ -21,7 +21,8 @@ function getAllModules () {
 		'skill/herblore',
 		'skill/smithing',
 		'skill/summoning',
-		'skill/makex'
+		'skill/makex',
+		'quest'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');

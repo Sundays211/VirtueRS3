@@ -80,7 +80,7 @@ public class JSListeners implements ScriptManager {
 	private static Logger logger = LoggerFactory.getLogger(JSListeners.class);
 	
 	private static String[] LEGACY_CATEGORIES = {"abilities", "command", "farming",
-			"interaction", "invention", "npcs", "quest", "settings",
+			"interaction", "invention", "npcs", "settings",
 			"skill", "specials", "widget"};
 	
 	private static class EventBind {
@@ -181,7 +181,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("CLAN_ENGINE", clanApi);
 		engine.put("mapApi", mapApi);
 		engine.put("configApi", configApi);
-		engine.put("questApi", questApi);
+		engine.put("QUEST_ENGINE", questApi);
 		engine.put("scriptEngine", this);
 		
 		Map<String, Integer> map = new HashMap<>();

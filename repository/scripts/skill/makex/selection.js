@@ -30,7 +30,7 @@ var util = require('../../core/util');
 var inv = require('../../inv');
 var chat = require('../../chat');
 var stat = require('../logic/stat');
-var quest = require('../../core/quest');
+var quest = require('../../quest');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
