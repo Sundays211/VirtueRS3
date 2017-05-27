@@ -22,9 +22,9 @@
 /* globals EventType, FriendChatData, ENGINE */
 var varc = require('../core/var/client');
 var config = require('../core/config');
-var widget = require('../core/widget');
 var util = require('../core/util');
 var dialog = require('../core/dialog');
+var widget = require('../widget');
 var chat = require('./core');
 
 /**

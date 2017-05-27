@@ -2,7 +2,7 @@
  * Module for chatbox dialog-related functions
  */
 /* globals Java, ENGINE, api*/
-var widget = require('./widget');
+var widget = require('../widget');
 var config = require('./config');
 var util = require('./util');
 

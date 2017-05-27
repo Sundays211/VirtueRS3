@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, ChatListType */
-var widget = require('../core/widget');
+var widget = require('../widget');
 var util = require('../core/util');
 var dialog = require('../core/dialog');
 var chat = require('./core');

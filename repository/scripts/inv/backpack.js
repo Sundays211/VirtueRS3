@@ -24,11 +24,11 @@ var varp = require('../core/var/player');
 var varbit = require('../core/var/bit');
 
 var CONST = require('../core/const');
-var widget = require('../core/widget');
 var util = require('../core/util');
 var config = require('../core/config');
 var map = require('../core/map');
 var dialog = require('../core/dialog');
+var widget = require('../widget');
 var chat = require('../chat');
 
 var moneyPouch = require('./money-pouch');

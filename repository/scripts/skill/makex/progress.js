@@ -24,7 +24,7 @@ var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 
 var util = require('../../core/util');
-var widget = require('../../core/widget');
+var widget = require('../../widget');
 var config = require('../../core/config');
 var inv = require('../../inv');
 var chat = require('../../chat');

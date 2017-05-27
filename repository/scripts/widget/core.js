@@ -2,7 +2,7 @@
  * 
  */
 /* globals ENGINE, Java, Overlay */
-var varc = require('./var/client');
+var varc = require('../core/var/client');
 
 module.exports = init();
 

@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Exchange */
-var widget = require('../core/widget');
 var dialog = require('../core/dialog');
 var config = require('../core/config');
 var util = require('../core/util');
+var widget = require('../widget');
 var chat = require('../chat');
 var inv = require('./core');
 

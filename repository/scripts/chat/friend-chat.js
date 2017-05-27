@@ -22,7 +22,7 @@
 /* globals EventType */
 var varc = require('../core/var/client');
 var util = require('../core/util');
-var widget = require('../core/widget');
+var widget = require('../widget');
 var dialog = require('../core/dialog');
 var chat = require('./core');
 

@@ -6,7 +6,7 @@ var varbit = require('../../core/var/bit');
 
 var makex = require('../makex');
 var dialog = require('../../core/dialog');
-var widget = require('../../core/widget');
+var widget = require('../../widget');
 
 module.exports = (function () {
 	var _handlers = {};

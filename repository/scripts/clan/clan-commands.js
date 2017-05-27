@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, CLAN_ENGINE*/
-var widget = require('../core/widget');
+var widget = require('../widget');
 var dialog = require('../core/dialog');
 var clan = require('./logic/core');
 var chat = require('../chat');

@@ -21,7 +21,7 @@
  */
 /* globals EventType */
 var util = require('../core/util');
-var widget = require('../core/widget');
+var widget = require('../widget');
 var chat = require('../chat');
 var clan = require('./logic/core');
 

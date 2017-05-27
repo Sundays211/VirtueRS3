@@ -23,10 +23,10 @@
 var varbit = require('../core/var/bit');
 var varc = require('../core/var/client');
 
-var widget = require('../core/widget');
 var util = require('../core/util');
 var config = require('../core/config');
 var chat = require('../chat');
+var widget = require('../widget');
 var inv = require('./core');
 
 /**

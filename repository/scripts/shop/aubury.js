@@ -1,7 +1,7 @@
 /* globals EventType, Inv */
 var varp = require('../core/var/player');
 var varc = require('../core/var/client');
-var widget = require('../core/widget');
+var widget = require('../widget');
 
 /**
  * Aubury - Varrock Rune Shop

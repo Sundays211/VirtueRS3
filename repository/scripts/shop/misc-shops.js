@@ -22,7 +22,7 @@
 /* globals EventType, Inv */
 var varp = require('../core/var/player');
 var varc = require('../core/var/client');
-var widget = require('../core/widget');
+var widget = require('../widget');
 
 /**
  * Contains shops which don't have their own file. 

@@ -25,7 +25,7 @@ var varc = require('../core/var/client');
 var varbit = require('../core/var/bit');
 
 var util = require('../core/util');
-var widget = require('../core/widget');
+var widget = require('../widget');
 var chat = require('../chat');
 var clan = require('./logic/core');
 var permissions = require('./logic/permissions');

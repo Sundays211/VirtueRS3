@@ -5,7 +5,7 @@
 var varp = require('../core/var/player');
 
 var util = require('../core/util');
-var widget = require('../core/widget');
+var widget = require('../widget');
 var config = require('../core/config');
 var clan = require('./logic/core');
 var broadcasts = require('./logic/broadcasts');
