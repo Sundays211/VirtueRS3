@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Inv */
+/* globals EventType, Inv */
 var varp = require('../core/var/player');
 var varc = require('../core/var/client');
 var widget = require('../core/widget');

@@ -24,6 +24,7 @@ var varc = require('../core/var/client');
 var util = require('../core/util');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
+var chat = require('./core');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -68,7 +69,7 @@ module.exports = function(scriptManager) {
 			widget.openCentral(player, 1108);
 			return;
 		case 34://Loot share
-			ENGINE.sendMessage(player, "Loot share has not yet been implemented.");
+			chat.sendMessage(player, "Loot share has not yet been implemented.");
 			return;
 		default:
 			util.defaultHandler(ctx, "friends chat");

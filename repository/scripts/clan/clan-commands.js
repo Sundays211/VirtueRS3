@@ -23,7 +23,7 @@
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
 var clan = require('./logic/core');
-var util = require('../core/util');
+var chat = require('../chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -36,7 +36,7 @@ var util = require('../core/util');
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.COMMAND, "makeclan", function (ctx) {
 		if (clan.inClan(ctx.player)) {
-			util.sendCommandResponse(ctx.player, "You need to leave your current clan before you can use this command (clan="+clan.getHash(ctx.player)+")", ctx.console);
+			chat.sendCommandResponse(ctx.player, "You need to leave your current clan before you can use this command (clan="+clan.getHash(ctx.player)+")", ctx.console);
 			return;
 		}
 		widget.open(ctx.player, 1477, 437, 1094, false);

@@ -1,8 +1,9 @@
-/* globals api, ENGINE */
-
 /**
  * 
  */
+var varbit = require('../core/var/bit');
+var chat = require('../chat');
+
 module.exports = init();
 
 function init () {
@@ -35,35 +36,35 @@ function init () {
 		var on, filtered;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18797) == 1;
-			filtered = api.getVarBit(player, 18805) == 1;
+			on = varbit(player, 18797) == 1;
+			filtered = varbit(player, 18805) == 1;
 			break;
 		case 19:
-			on = api.getVarBit(player, 18812) == 1;
-			filtered = api.getVarBit(player, 18820) == 1;
+			on = varbit(player, 18812) == 1;
+			filtered = varbit(player, 18820) == 1;
 			break;
 		case 20:
-			on = api.getVarBit(player, 18827) == 1;
-			filtered = api.getVarBit(player, 18835) == 1;
+			on = varbit(player, 18827) == 1;
+			filtered = varbit(player, 18835) == 1;
 			break;
 		case 21:
-			on = api.getVarBit(player, 18842) == 1;
-			filtered = api.getVarBit(player, 18850) == 1;
+			on = varbit(player, 18842) == 1;
+			filtered = varbit(player, 18850) == 1;
 			break;
 		case 22:
-			on = api.getVarBit(player, 18857) == 1;
-			filtered = api.getVarBit(player, 18865) == 1;
+			on = varbit(player, 18857) == 1;
+			filtered = varbit(player, 18865) == 1;
 			break;
 		case 23:
-			on = api.getVarBit(player, 20813) == 1;
-			filtered = api.getVarBit(player, 20821) == 1;
+			on = varbit(player, 20813) == 1;
+			filtered = varbit(player, 20821) == 1;
 			break;
 		case 25:
-			on = api.getVarBit(player, 24563) == 1;
-			filtered = api.getVarBit(player, 24571) == 1;
+			on = varbit(player, 24563) == 1;
+			filtered = varbit(player, 24571) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled game filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled game filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -76,32 +77,32 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18797, on ? 1 : 0);
-			api.setVarBit(player, 18805, filtered ? 1 : 0);
+			varbit(player, 18797, on ? 1 : 0);
+			varbit(player, 18805, filtered ? 1 : 0);
 			break;
 		case 19:
-			api.setVarBit(player, 18812, on ? 1 : 0);
-			api.setVarBit(player, 18820, filtered ? 1 : 0);
+			varbit(player, 18812, on ? 1 : 0);
+			varbit(player, 18820, filtered ? 1 : 0);
 			break;
 		case 20:
-			api.setVarBit(player, 18827, on ? 1 : 0);
-			api.setVarBit(player, 18835, filtered ? 1 : 0);
+			varbit(player, 18827, on ? 1 : 0);
+			varbit(player, 18835, filtered ? 1 : 0);
 			break;
 		case 21:
-			api.setVarBit(player, 18842, on ? 1 : 0);
-			api.setVarBit(player, 18850, filtered ? 1 : 0);
+			varbit(player, 18842, on ? 1 : 0);
+			varbit(player, 18850, filtered ? 1 : 0);
 			break;
 		case 22:
-			api.setVarBit(player, 18857, on ? 1 : 0);
-			api.setVarBit(player, 18865, filtered ? 1 : 0);
+			varbit(player, 18857, on ? 1 : 0);
+			varbit(player, 18865, filtered ? 1 : 0);
 			break;
 		case 23:
-			api.setVarBit(player, 20813, on ? 1 : 0);
-			api.setVarBit(player, 20821, filtered ? 1 : 0);
+			varbit(player, 20813, on ? 1 : 0);
+			varbit(player, 20821, filtered ? 1 : 0);
 			break;
 		case 25:
-			api.setVarBit(player, 24563, on ? 1 : 0);
-			api.setVarBit(player, 24571, filtered ? 1 : 0);
+			varbit(player, 24563, on ? 1 : 0);
+			varbit(player, 24571, filtered ? 1 : 0);
 			break;
 		}
 	}
@@ -110,15 +111,15 @@ function init () {
 		var on, friends;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18800) == 1;
-			friends = api.getVarBit(player, 18808) == 1;
+			on = varbit(player, 18800) == 1;
+			friends = varbit(player, 18808) == 1;
 			break;
 		case 23:
-			on = api.getVarBit(player, 20816) == 1;
-			friends = api.getVarBit(player, 20824) == 1;
+			on = varbit(player, 20816) == 1;
+			friends = varbit(player, 20824) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled public filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled public filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -131,12 +132,12 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18800, on ? 1 : 0);
-			api.setVarBit(player, 18808, friends ? 1 : 0);
+			varbit(player, 18800, on ? 1 : 0);
+			varbit(player, 18808, friends ? 1 : 0);
 			break;
 		case 23:
-			api.setVarBit(player, 20816, on ? 1 : 0);
-			api.setVarBit(player, 20824, friends ? 1 : 0);
+			varbit(player, 20816, on ? 1 : 0);
+			varbit(player, 20824, friends ? 1 : 0);
 			break;
 		}
 	}
@@ -145,15 +146,15 @@ function init () {
 		var on, friends;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18801) == 1;
-			friends = api.getVarBit(player, 18809) == 1;
+			on = varbit(player, 18801) == 1;
+			friends = varbit(player, 18809) == 1;
 			break;
 		case 19:
-			on = api.getVarBit(player, 18816) == 1;
-			friends = api.getVarBit(player, 18824) == 1;
+			on = varbit(player, 18816) == 1;
+			friends = varbit(player, 18824) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled private filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled private filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -166,12 +167,12 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18801, on ? 1 : 0);
-			api.setVarBit(player, 18809, friends ? 1 : 0);
+			varbit(player, 18801, on ? 1 : 0);
+			varbit(player, 18809, friends ? 1 : 0);
 			break;
 		case 19:
-			api.setVarBit(player, 18816, on ? 1 : 0);
-			api.setVarBit(player, 18824, friends ? 1 : 0);
+			varbit(player, 18816, on ? 1 : 0);
+			varbit(player, 18824, friends ? 1 : 0);
 			break;
 		}
 	}
@@ -180,15 +181,15 @@ function init () {
 		var on, friends;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18802) == 1;
-			friends = api.getVarBit(player, 18810) == 1;
+			on = varbit(player, 18802) == 1;
+			friends = varbit(player, 18810) == 1;
 			break;
 		case 20:
-			on = api.getVarBit(player, 18832) == 1;
-			friends = api.getVarBit(player, 18840) == 1;
+			on = varbit(player, 18832) == 1;
+			friends = varbit(player, 18840) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled friend chat filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled friend chat filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -201,11 +202,11 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18802, on ? 1 : 0);
-			api.setVarBit(player, 18810, friends ? 1 : 0);
+			varbit(player, 18802, on ? 1 : 0);
+			varbit(player, 18810, friends ? 1 : 0);
 			break;
 		case 20:
-			api.setVarBit(player, 18840, friends ? 1 : 0);
+			varbit(player, 18840, friends ? 1 : 0);
 			break;
 		}
 	}
@@ -214,15 +215,15 @@ function init () {
 		var on, friends;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18803) == 1;
-			friends = api.getVarBit(player, 18811) == 1;
+			on = varbit(player, 18803) == 1;
+			friends = varbit(player, 18811) == 1;
 			break;
 		case 21:
-			on = api.getVarBit(player, 18848) == 1;
-			friends = api.getVarBit(player, 18856) == 1;
+			on = varbit(player, 18848) == 1;
+			friends = varbit(player, 18856) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled clan filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled clan filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -235,11 +236,11 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18803, on ? 1 : 0);
-			api.setVarBit(player, 18811, friends ? 1 : 0);
+			varbit(player, 18803, on ? 1 : 0);
+			varbit(player, 18811, friends ? 1 : 0);
 			break;
 		case 21:
-			api.setVarBit(player, 18856, friends ? 1 : 0);
+			varbit(player, 18856, friends ? 1 : 0);
 			break;
 		}
 	}
@@ -248,15 +249,15 @@ function init () {
 		var on, friends;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18804) == 1;
-			friends = api.getVarBit(player, 18811) == 1;
+			on = varbit(player, 18804) == 1;
+			friends = varbit(player, 18811) == 1;
 			break;
 		case 22:
-			on = api.getVarBit(player, 18864) == 1;
-			friends = api.getVarBit(player, 18871) == 1;
+			on = varbit(player, 18864) == 1;
+			friends = varbit(player, 18871) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled guest clan filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled guest clan filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -269,11 +270,11 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18804, on ? 1 : 0);
-			api.setVarBit(player, 18811, friends ? 1 : 0);
+			varbit(player, 18804, on ? 1 : 0);
+			varbit(player, 18811, friends ? 1 : 0);
 			break;
 		case 22:
-			api.setVarBit(player, 18871, friends ? 1 : 0);
+			varbit(player, 18871, friends ? 1 : 0);
 			break;
 		}
 	}
@@ -282,19 +283,19 @@ function init () {
 		var on, friends;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18798) == 1;
-			friends = api.getVarBit(player, 18806) == 1;
+			on = varbit(player, 18798) == 1;
+			friends = varbit(player, 18806) == 1;
 			break;
 		case 19:
-			on = api.getVarBit(player, 18813) == 1;
-			friends = api.getVarBit(player, 18821) == 1;
+			on = varbit(player, 18813) == 1;
+			friends = varbit(player, 18821) == 1;
 			break;
 		case 23:
-			on = api.getVarBit(player, 20814) == 1;
-			friends = api.getVarBit(player, 20822) == 1;
+			on = varbit(player, 20814) == 1;
+			friends = varbit(player, 20822) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled trade filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled trade filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -307,16 +308,16 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18798, on ? 1 : 0);
-			api.setVarBit(player, 18806, friends ? 1 : 0);
+			varbit(player, 18798, on ? 1 : 0);
+			varbit(player, 18806, friends ? 1 : 0);
 			break;
 		case 19:
-			api.setVarBit(player, 18813, on ? 1 : 0);
-			api.setVarBit(player, 18821, friends ? 1 : 0);
+			varbit(player, 18813, on ? 1 : 0);
+			varbit(player, 18821, friends ? 1 : 0);
 			break;
 		case 23:
-			api.setVarBit(player, 20814, on ? 1 : 0);
-			api.setVarBit(player, 20822, friends ? 1 : 0);
+			varbit(player, 20814, on ? 1 : 0);
+			varbit(player, 20822, friends ? 1 : 0);
 			break;
 		}
 	}
@@ -325,19 +326,19 @@ function init () {
 		var on, friends;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 18799) == 1;
-			friends = api.getVarBit(player, 18807) == 1;
+			on = varbit(player, 18799) == 1;
+			friends = varbit(player, 18807) == 1;
 			break;
 		case 19:
-			on = api.getVarBit(player, 18814) == 1;
-			friends = api.getVarBit(player, 18822) == 1;
+			on = varbit(player, 18814) == 1;
+			friends = varbit(player, 18822) == 1;
 			break;
 		case 23:
-			on = api.getVarBit(player, 20815) == 1;
-			friends = api.getVarBit(player, 20823) == 1;
+			on = varbit(player, 20815) == 1;
+			friends = varbit(player, 20823) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled assist filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled assist filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -350,16 +351,16 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 18799, on ? 1 : 0);
-			api.setVarBit(player, 18807, friends ? 1 : 0);
+			varbit(player, 18799, on ? 1 : 0);
+			varbit(player, 18807, friends ? 1 : 0);
 			break;
 		case 19:
-			api.setVarBit(player, 18814, on ? 1 : 0);
-			api.setVarBit(player, 18822, friends ? 1 : 0);
+			varbit(player, 18814, on ? 1 : 0);
+			varbit(player, 18822, friends ? 1 : 0);
 			break;
 		case 23:
-			api.setVarBit(player, 20815, on ? 1 : 0);
-			api.setVarBit(player, 20823, friends ? 1 : 0);
+			varbit(player, 20815, on ? 1 : 0);
+			varbit(player, 20823, friends ? 1 : 0);
 			break;
 		}
 	}
@@ -368,15 +369,15 @@ function init () {
 		var on, team;
 		switch (chatWindow) {
 		case 18:
-			on = api.getVarBit(player, 24578) == 1;
-			team = api.getVarBit(player, 24586) == 1;
+			on = varbit(player, 24578) == 1;
+			team = varbit(player, 24586) == 1;
 			break;
 		case 25:
-			on = api.getVarBit(player, 24585) == 1;
-			team = api.getVarBit(player, 24592) == 1;
+			on = varbit(player, 24585) == 1;
+			team = varbit(player, 24592) == 1;
 			break;
 		default:
-			api.sendMessage(player, "Unhandled group filter toggle for chatbox "+chatWindow);
+			chat.sendDebugMessage(player, "Unhandled group filter toggle for chatbox "+chatWindow);
 			return;
 		}
 		if (!on) {
@@ -389,22 +390,22 @@ function init () {
 		}
 		switch (chatWindow) {
 		case 18:
-			api.setVarBit(player, 24578, on ? 1 : 0);
-			api.setVarBit(player, 24586, team ? 1 : 0);
+			varbit(player, 24578, on ? 1 : 0);
+			varbit(player, 24586, team ? 1 : 0);
 			break;
 		case 18:
-			api.setVarBit(player, 24592, team ? 1 : 0);
+			varbit(player, 24592, team ? 1 : 0);
 			break;
 		}
 	}
 	
 	function toggleProfanity (player, chatWindow) {
-		api.sendMessage(player, "Unhandled profanity toggle.");
+		chat.sendDebugMessage(player, "Unhandled profanity toggle.");
 	}
 	
 	function toggleBroadcasts (player, chatWindow) {
-		var on = api.getVarBit(player, 20828) == 1;
-		api.setVarBit(player, 20828, on ? 0 : 1);
+		var on = varbit(player, 20828) == 1;
+		varbit(player, 20828, on ? 0 : 1);
 	}
 	
 	function setGame (player, chatWindow, mode) {
@@ -416,8 +417,8 @@ function init () {
 			filtered = true;
 			on = true;
 		}
-		api.setVarBit(player, 18797, on ? 1 : 0);
-		api.setVarBit(player, 18805, filtered ? 1 : 0);
+		varbit(player, 18797, on ? 1 : 0);
+		varbit(player, 18805, filtered ? 1 : 0);
 	}
 	
 	function setPublic (player, chatWindow, mode) {
@@ -429,8 +430,8 @@ function init () {
 			friends = true;
 			on = true;
 		}
-		api.setVarBit(player, 18800, on ? 1 : 0);
-		api.setVarBit(player, 18808, friends ? 1 : 0);
+		varbit(player, 18800, on ? 1 : 0);
+		varbit(player, 18808, friends ? 1 : 0);
 	}
 	
 	function setPrivate (player, chatWindow, mode) {
@@ -442,8 +443,8 @@ function init () {
 			friends = true;
 			on = true;
 		}
-		api.setVarBit(player, 18801, on ? 1 : 0);
-		api.setVarBit(player, 18809, friends ? 1 : 0);
+		varbit(player, 18801, on ? 1 : 0);
+		varbit(player, 18809, friends ? 1 : 0);
 	}
 	
 	function setFriendChat (player, chatWindow, mode) {
@@ -455,8 +456,8 @@ function init () {
 			friends = true;
 			on = true;
 		}
-		api.setVarBit(player, 18802, on ? 1 : 0);
-		api.setVarBit(player, 18810, friends ? 1 : 0);
+		varbit(player, 18802, on ? 1 : 0);
+		varbit(player, 18810, friends ? 1 : 0);
 	}
 	
 	function setClan (player, chatWindow, mode) {
@@ -468,8 +469,8 @@ function init () {
 			friends = true;
 			on = true;
 		}
-		api.setVarBit(player, 18803, on ? 1 : 0);
-		api.setVarBit(player, 18811, friends ? 1 : 0);
+		varbit(player, 18803, on ? 1 : 0);
+		varbit(player, 18811, friends ? 1 : 0);
 	}
 	
 	function setGuestClan (player, chatWindow, mode) {
@@ -481,8 +482,8 @@ function init () {
 			friends = true;
 			on = true;
 		}
-		api.setVarBit(player, 18804, on ? 1 : 0);
-		api.setVarBit(player, 18811, friends ? 1 : 0);
+		varbit(player, 18804, on ? 1 : 0);
+		varbit(player, 18811, friends ? 1 : 0);
 	}
 	
 	function setTrade (player, chatWindow, mode) {
@@ -494,8 +495,8 @@ function init () {
 			friends = true;
 			on = true;
 		}
-		api.setVarBit(player, 18798, on ? 1 : 0);
-		api.setVarBit(player, 18806, friends ? 1 : 0);
+		varbit(player, 18798, on ? 1 : 0);
+		varbit(player, 18806, friends ? 1 : 0);
 	}
 	
 	function setAssist (player, chatWindow, mode) {
@@ -507,8 +508,8 @@ function init () {
 			friends = true;
 			on = true;
 		}
-		api.setVarBit(player, 18799, on ? 1 : 0);
-		api.setVarBit(player, 18807, friends ? 1 : 0);
+		varbit(player, 18799, on ? 1 : 0);
+		varbit(player, 18807, friends ? 1 : 0);
 	}
 	
 	function setGroup (player, chatWindow, mode) {
@@ -520,7 +521,7 @@ function init () {
 			team = true;
 			on = true;
 		}
-		api.setVarBit(player, 24578, on ? 1 : 0);
-		api.setVarBit(player, 24586, team ? 1 : 0);
+		varbit(player, 24578, on ? 1 : 0);
+		varbit(player, 24586, team ? 1 : 0);
 	}
 }

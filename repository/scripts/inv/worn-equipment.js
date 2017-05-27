@@ -26,6 +26,7 @@ var varc = require('../core/var/client');
 var widget = require('../core/widget');
 var util = require('../core/util');
 var config = require('../core/config');
+var chat = require('../chat');
 var inv = require('./core');
 
 /**
@@ -101,7 +102,7 @@ module.exports = (function () {
 			return;
 		}
 		if (!player.getEquipment().wearItem(slot)) {
-			ENGINE.sendMessage(player, "You do not have enough space in your backpack to equip that item.");
+			chat.sendMessage(player, "You do not have enough space in your backpack to equip that item.");
 		}
 	}
 	
@@ -131,7 +132,7 @@ module.exports = (function () {
 			eventType = EventType.OPWORN5;
 			break;
 		case 10://Examine
-			ENGINE.sendMessage(player, config.objDesc(objId));
+			chat.sendMessage(player, config.objDesc(objId));
 			return;
 		default:
 			break;

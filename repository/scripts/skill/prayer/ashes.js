@@ -19,9 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, MesType, Stat, Inv, ENGINE */
+/* globals EventType, Stat, Inv */
 var stat = require('../logic/stat');
 var inv = require('../../inv');
+var chat = require('../../chat');
 var config = require('../../core/config');
 var anim = require('../../core/anim');
 
@@ -74,7 +75,7 @@ module.exports = (function () {
 		inv.clearSlot(player, Inv.BACKPACK, slot);
 		anim.addSpotAnim(player, ashes.spotAnimId);
 		anim.run(player, 445, function () {
-			ENGINE.sendMessage(player, "You scatter the ashes into the wind.", MesType.GAME_SPAM);
+			chat.sendSpamMessage(player, "You scatter the ashes into the wind.");
 			stat.giveXp(player, Stat.PRAYER, ashes.xp);
 		});
 	}

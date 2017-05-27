@@ -19,8 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var map = require('../../core/map');
+var chat = require('../../chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,61 +34,61 @@ var map = require('../../core/map');
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPLOC1, 2465, function (ctx) {
 		map.teleport(ctx.player, 3129, 3407, 0);//Air exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2466, function (ctx) {
 		map.teleport(ctx.player, 2980, 3515, 0);//Mind exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2467, function (ctx) {
 		map.teleport(ctx.player, 3157, 3160, 0);//Water exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2468, function (ctx) {
 		map.teleport(ctx.player, 3304, 3476, 0);//Earth exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2469, function (ctx) {
 		map.teleport(ctx.player, 3311, 3257, 0);//Fire exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2470, function (ctx) {
 		map.teleport(ctx.player, 3055, 3443, 0);//Body exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2471, function (ctx) {
 		map.teleport(ctx.player, 2406, 4379, 0);//Cosmic exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2474, function (ctx) {
 		map.teleport(ctx.player, 3059, 3588, 0);//Chaos exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2473, function (ctx) {
 		map.teleport(ctx.player, 2867, 3017, 0);//Nature exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2472, function (ctx) {
 		map.teleport(ctx.player, 2856, 3379, 0);//Law exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2475, function (ctx) {
 		map.teleport(ctx.player, 1863, 4637, 0);//Death exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2477, function (ctx) {
 		map.teleport(ctx.player, 3560, 9779, 0);//Blood exit portal
-		ENGINE.sendMessage(ctx.player, "You step through the portal.");		
+		chat.sendMessage(ctx.player, "You step through the portal.");		
 	});
 };

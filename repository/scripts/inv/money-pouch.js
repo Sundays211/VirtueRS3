@@ -22,6 +22,7 @@
 /* globals EventType, ENGINE, Inv, MesType */
 var CONST = require('../core/const');
 var util = require('../core/util');
+var chat = require('../chat');
 var inv = require('./core');
 var dialog = require('../core/dialog');
 
@@ -48,7 +49,7 @@ module.exports = (function () {
 			var amount = ENGINE.getCount(ctx.item);
 			
 			if (util.checkOverflow(getCoinCount(ctx.player), amount)) {
-				ENGINE.sendMessage(ctx.player, "You do not have enough space in your money pouch.");
+				chat.sendMessage(ctx.player, "You do not have enough space in your money pouch.");
 				return;
 			}
 			addCoins(ctx.player, amount);
@@ -59,7 +60,7 @@ module.exports = (function () {
 	function removeCoins (player, amount) {
 		if (amount > 0) {
 			ENGINE.delItem(player, Inv.MONEY_POUCH, CONST.COINS, amount);
-			ENGINE.sendMessage(player, util.toFormattedString(amount) +" coins have been removed from your money pouch.", MesType.GAME_SPAM);
+			chat.sendMessage(player, util.toFormattedString(amount) +" coins have been removed from your money pouch.", MesType.GAME_SPAM);
 			ENGINE.runClientScript(player, 5561, [0, amount]);
 			updateCoins(player);
 		}
@@ -68,7 +69,7 @@ module.exports = (function () {
 	function addCoins (player, amount) {
 		if (amount > 0) {
 			ENGINE.addItem(player, Inv.MONEY_POUCH, CONST.COINS, amount);
-			ENGINE.sendMessage(player, util.toFormattedString(amount) +" coins have been added to your money pouch.", MesType.GAME_SPAM);
+			chat.sendMessage(player, util.toFormattedString(amount) +" coins have been added to your money pouch.", MesType.GAME_SPAM);
 			ENGINE.runClientScript(player, 5561 , [1, amount]);
 			updateCoins(player);
 		}			
@@ -85,7 +86,7 @@ module.exports = (function () {
 	
 	function requestWithdrawCoins (player) {
 		if (ENGINE.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-			ENGINE.sendMessage(player, "You don't have space in your inventory to do that.");
+			chat.sendMessage(player, "You don't have space in your inventory to do that.");
 			return;
 		}
 		var message = "Your money pouch contains "+util.toFormattedString(getCoinCount(player))+" coins.";
@@ -97,12 +98,12 @@ module.exports = (function () {
 				return;
 			}
 			if (ENGINE.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-				ENGINE.sendMessage(player, "You don't have space in your inventory to do that.");
+				chat.sendMessage(player, "You don't have space in your inventory to do that.");
 				return;
 			}
 			var heldCoins = ENGINE.itemTotal(player, Inv.BACKPACK, CONST.COINS);
 			if (util.checkOverflow(heldCoins, amount)) {
-				ENGINE.sendMessage(player, "You don't have space in your inventory to do that.");
+				chat.sendMessage(player, "You don't have space in your inventory to do that.");
 				return;
 			}
 			removeCoins(player, amount);

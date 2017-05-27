@@ -28,6 +28,7 @@ var widget = require('../../core/widget');
 var config = require('../../core/config');
 var util = require('../../core/util');
 var inv = require('../../inv');
+var chat = require('../../chat');
 var stat = require('../logic/stat');
 var quest = require('../../core/quest');
 
@@ -62,7 +63,7 @@ module.exports = (function () {
 			case 62://Select product category
 				var mainCategory = varp(player, 1168);
 				if (mainCategory < 0) {
-					ENGINE.sendMessage(player, "No main category selected!");
+					chat.sendDebugMessage(player, "No main category selected!");
 					return;
 				}
 				if (ctx.slot >= 0 && ctx.slot < config.enumSize(mainCategory)) {

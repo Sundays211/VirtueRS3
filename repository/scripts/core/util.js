@@ -2,6 +2,8 @@
  * Module containing miscellaneous utility functions
  */
 /* globals ENGINE, EventType, MesType, Java */
+var chat = require('../chat');
+
 module.exports = init();
 
 function init () {
@@ -9,7 +11,6 @@ function init () {
 		INTEGER_MAX : 2147483647,
 		checkOverflow : checkOverflow,
 		defaultHandler : defaultHandler,
-		sendCommandResponse : sendCommandResponse,
 		isAdmin : isAdmin,
 		getId : getId,
 		randomValue : randomValue,
@@ -42,17 +43,13 @@ function init () {
 	function defaultHandler (ctx, type) {
 		if (isAdmin(ctx.player)) {
 			if (type === EventType.OPHELDU) {
-				ENGINE.sendMessage(ctx.player, "Unhandled item use: item="+ctx.item+", slot="+ctx.slot+", useitem="+ctx.useitem+", useslot="+ctx.useslot);
+				chat.sendMessage(ctx.player, "Unhandled item use: item="+ctx.item+", slot="+ctx.slot+", useitem="+ctx.useitem+", useslot="+ctx.useslot);
 			} else {
-				ENGINE.sendMessage(ctx.player, "Unhandled "+(type?type:"interface")+" button: "+ctx.toString());
+				chat.sendMessage(ctx.player, "Unhandled "+(type?type:"interface")+" button: "+ctx.toString());
 			}
 		} else {
-			ENGINE.sendMessage(ctx.player, "Nothing interesting happens.");
+			chat.sendMessage(ctx.player, "Nothing interesting happens.");
 		}
-	}
-
-	function sendCommandResponse (player, message, console) {
-		ENGINE.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
 	}
 	
 	function isAdmin (player) {

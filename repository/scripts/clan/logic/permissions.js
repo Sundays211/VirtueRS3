@@ -19,7 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals api, MesType, ENGINE */
+/* globals MesType */
+var chat = require('../../chat');
+var varbit = require('../../core/var/bit');
 var clan = require('./core');
 
 /**
@@ -87,15 +89,15 @@ function init () {
 	function canBlockKeep (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6182);
+			return varbit(player, 6182);
 		case 101:
-			return api.getVarBit(player, 6183);
+			return varbit(player, 6183);
 		case 102:
-			return api.getVarBit(player, 6184);
+			return varbit(player, 6184);
 		case 103:
-			return api.getVarBit(player, 6185);
+			return varbit(player, 6185);
 		case 125:
-			return api.getVarBit(player, 6186);
+			return varbit(player, 6186);
 		case 126:
 		case 127:
 			return 1;
@@ -107,15 +109,15 @@ function init () {
 	function canBlockCitadel (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6187);
+			return varbit(player, 6187);
 		case 101:
-			return api.getVarBit(player, 6188);
+			return varbit(player, 6188);
 		case 102:
-			return api.getVarBit(player, 6189);
+			return varbit(player, 6189);
 		case 103:
-			return api.getVarBit(player, 6190);
+			return varbit(player, 6190);
 		case 125:
-			return api.getVarBit(player, 6191);
+			return varbit(player, 6191);
 		case 126:
 		case 127:
 			return 1;
@@ -127,27 +129,27 @@ function init () {
 	function canRecruit (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6192);
+			return varbit(player, 6192);
 		case 1:
-			return api.getVarBit(player, 6193);
+			return varbit(player, 6193);
 		case 2:
-			return api.getVarBit(player, 6194);
+			return varbit(player, 6194);
 		case 3:
-			return api.getVarBit(player, 6195);
+			return varbit(player, 6195);
 		case 4:
-			return api.getVarBit(player, 6196);
+			return varbit(player, 6196);
 		case 5:
-			return api.getVarBit(player, 6197);
+			return varbit(player, 6197);
 		case 100:
-			return api.getVarBit(player, 6198);
+			return varbit(player, 6198);
 		case 101:
-			return api.getVarBit(player, 6199);
+			return varbit(player, 6199);
 		case 102:
-			return api.getVarBit(player, 6200);
+			return varbit(player, 6200);
 		case 103:
-			return api.getVarBit(player, 6201);
+			return varbit(player, 6201);
 		case 125:
-			return api.getVarBit(player, 6202);
+			return varbit(player, 6202);
 		case 126:
 		case 127:
 			return 1;
@@ -159,27 +161,27 @@ function init () {
 	function canStartBattles (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6203);
+			return varbit(player, 6203);
 		case 1:
-			return api.getVarBit(player, 6204);
+			return varbit(player, 6204);
 		case 2:
-			return api.getVarBit(player, 6205);
+			return varbit(player, 6205);
 		case 3:
-			return api.getVarBit(player, 6206);
+			return varbit(player, 6206);
 		case 4:
-			return api.getVarBit(player, 6207);
+			return varbit(player, 6207);
 		case 5:
-			return api.getVarBit(player, 6208);
+			return varbit(player, 6208);
 		case 100:
-			return api.getVarBit(player, 6209);
+			return varbit(player, 6209);
 		case 101:
-			return api.getVarBit(player, 6210);
+			return varbit(player, 6210);
 		case 102:
-			return api.getVarBit(player, 6211);
+			return varbit(player, 6211);
 		case 103:
-			return api.getVarBit(player, 6212);
+			return varbit(player, 6212);
 		case 125:
-			return api.getVarBit(player, 6213);
+			return varbit(player, 6213);
 		case 126:
 		case 127:
 			return 1;
@@ -191,27 +193,27 @@ function init () {
 	function isRcwLeader (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6214);
+			return varbit(player, 6214);
 		case 1:
-			return api.getVarBit(player, 6215);
+			return varbit(player, 6215);
 		case 2:
-			return api.getVarBit(player, 6216);
+			return varbit(player, 6216);
 		case 3:
-			return api.getVarBit(player, 6217);
+			return varbit(player, 6217);
 		case 4:
-			return api.getVarBit(player, 6218);
+			return varbit(player, 6218);
 		case 5:
-			return api.getVarBit(player, 6219);
+			return varbit(player, 6219);
 		case 100:
-			return api.getVarBit(player, 6220);
+			return varbit(player, 6220);
 		case 101:
-			return api.getVarBit(player, 6221);
+			return varbit(player, 6221);
 		case 102:
-			return api.getVarBit(player, 6222);
+			return varbit(player, 6222);
 		case 103:
-			return api.getVarBit(player, 6223);
+			return varbit(player, 6223);
 		case 125:
-			return api.getVarBit(player, 6224);
+			return varbit(player, 6224);
 		case 126:
 		case 127:
 			return 1;
@@ -223,27 +225,27 @@ function init () {
 	function canStartVote (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6225);
+			return varbit(player, 6225);
 		case 1:
-			return api.getVarBit(player, 6226);
+			return varbit(player, 6226);
 		case 2:
-			return api.getVarBit(player, 6227);
+			return varbit(player, 6227);
 		case 3:
-			return api.getVarBit(player, 6228);
+			return varbit(player, 6228);
 		case 4:
-			return api.getVarBit(player, 6229);
+			return varbit(player, 6229);
 		case 5:
-			return api.getVarBit(player, 6230);
+			return varbit(player, 6230);
 		case 100:
-			return api.getVarBit(player, 6231);
+			return varbit(player, 6231);
 		case 101:
-			return api.getVarBit(player, 6232);
+			return varbit(player, 6232);
 		case 102:
-			return api.getVarBit(player, 6233);
+			return varbit(player, 6233);
 		case 103:
-			return api.getVarBit(player, 6234);
+			return varbit(player, 6234);
 		case 125:
-			return api.getVarBit(player, 6235);
+			return varbit(player, 6235);
 		case 126:
 		case 127:
 			return 1;
@@ -255,27 +257,27 @@ function init () {
 	function canStartMeeting (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6236);
+			return varbit(player, 6236);
 		case 1:
-			return api.getVarBit(player, 6237);
+			return varbit(player, 6237);
 		case 2:
-			return api.getVarBit(player, 6238);
+			return varbit(player, 6238);
 		case 3:
-			return api.getVarBit(player, 6239);
+			return varbit(player, 6239);
 		case 4:
-			return api.getVarBit(player, 6240);
+			return varbit(player, 6240);
 		case 5:
-			return api.getVarBit(player, 6241);
+			return varbit(player, 6241);
 		case 100:
-			return api.getVarBit(player, 6242);
+			return varbit(player, 6242);
 		case 101:
-			return api.getVarBit(player, 6243);
+			return varbit(player, 6243);
 		case 102:
-			return api.getVarBit(player, 6244);
+			return varbit(player, 6244);
 		case 103:
-			return api.getVarBit(player, 6245);
+			return varbit(player, 6245);
 		case 125:
-			return api.getVarBit(player, 6246);
+			return varbit(player, 6246);
 		case 126:
 		case 127:
 			return 1;
@@ -287,27 +289,27 @@ function init () {
 	function isPartyTech (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6247);
+			return varbit(player, 6247);
 		case 1:
-			return api.getVarBit(player, 6248);
+			return varbit(player, 6248);
 		case 2:
-			return api.getVarBit(player, 6249);
+			return varbit(player, 6249);
 		case 3:
-			return api.getVarBit(player, 6250);
+			return varbit(player, 6250);
 		case 4:
-			return api.getVarBit(player, 6251);
+			return varbit(player, 6251);
 		case 5:
-			return api.getVarBit(player, 6252);
+			return varbit(player, 6252);
 		case 100:
-			return api.getVarBit(player, 6253);
+			return varbit(player, 6253);
 		case 101:
-			return api.getVarBit(player, 6254);
+			return varbit(player, 6254);
 		case 102:
-			return api.getVarBit(player, 6255);
+			return varbit(player, 6255);
 		case 103:
-			return api.getVarBit(player, 6256);
+			return varbit(player, 6256);
 		case 125:
-			return api.getVarBit(player, 6257);
+			return varbit(player, 6257);
 		case 126:
 		case 127:
 			return 1;
@@ -319,27 +321,27 @@ function init () {
 	function isTheatreTech (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6258);
+			return varbit(player, 6258);
 		case 1:
-			return api.getVarBit(player, 6259);
+			return varbit(player, 6259);
 		case 2:
-			return api.getVarBit(player, 6260);
+			return varbit(player, 6260);
 		case 3:
-			return api.getVarBit(player, 6261);
+			return varbit(player, 6261);
 		case 4:
-			return api.getVarBit(player, 6262);
+			return varbit(player, 6262);
 		case 5:
-			return api.getVarBit(player, 6263);
+			return varbit(player, 6263);
 		case 100:
-			return api.getVarBit(player, 6264);
+			return varbit(player, 6264);
 		case 101:
-			return api.getVarBit(player, 6265);
+			return varbit(player, 6265);
 		case 102:
-			return api.getVarBit(player, 6266);
+			return varbit(player, 6266);
 		case 103:
-			return api.getVarBit(player, 6267);
+			return varbit(player, 6267);
 		case 125:
-			return api.getVarBit(player, 6268);
+			return varbit(player, 6268);
 		case 126:
 		case 127:
 			return 1;
@@ -351,15 +353,15 @@ function init () {
 	function canEditNoticeboard (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6269);
+			return varbit(player, 6269);
 		case 101:
-			return api.getVarBit(player, 6270);
+			return varbit(player, 6270);
 		case 102:
-			return api.getVarBit(player, 6271);
+			return varbit(player, 6271);
 		case 103:
-			return api.getVarBit(player, 6272);
+			return varbit(player, 6272);
 		case 125:
-			return api.getVarBit(player, 6273);
+			return varbit(player, 6273);
 		case 126:
 		case 127:
 			return 1;
@@ -371,15 +373,15 @@ function init () {
 	function canEditSignpost (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6274);
+			return varbit(player, 6274);
 		case 101:
-			return api.getVarBit(player, 6275);
+			return varbit(player, 6275);
 		case 102:
-			return api.getVarBit(player, 6276);
+			return varbit(player, 6276);
 		case 103:
-			return api.getVarBit(player, 6277);
+			return varbit(player, 6277);
 		case 125:
-			return api.getVarBit(player, 6278);
+			return varbit(player, 6278);
 		case 126:
 		case 127:
 			return 1;
@@ -391,27 +393,27 @@ function init () {
 	function canEditBattlefield (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6279);
+			return varbit(player, 6279);
 		case 1:
-			return api.getVarBit(player, 6280);
+			return varbit(player, 6280);
 		case 2:
-			return api.getVarBit(player, 6281);
+			return varbit(player, 6281);
 		case 3:
-			return api.getVarBit(player, 6282);
+			return varbit(player, 6282);
 		case 4:
-			return api.getVarBit(player, 6283);
+			return varbit(player, 6283);
 		case 5:
-			return api.getVarBit(player, 6284);
+			return varbit(player, 6284);
 		case 100:
-			return api.getVarBit(player, 6285);
+			return varbit(player, 6285);
 		case 101:
-			return api.getVarBit(player, 6286);
+			return varbit(player, 6286);
 		case 102:
-			return api.getVarBit(player, 6287);
+			return varbit(player, 6287);
 		case 103:
-			return api.getVarBit(player, 6288);
+			return varbit(player, 6288);
 		case 125:
-			return api.getVarBit(player, 6289);
+			return varbit(player, 6289);
 		case 126:
 		case 127:
 			return 1;
@@ -423,15 +425,15 @@ function init () {
 	function canUpgradeCitadel (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6290);
+			return varbit(player, 6290);
 		case 101:
-			return api.getVarBit(player, 6291);
+			return varbit(player, 6291);
 		case 102:
-			return api.getVarBit(player, 6292);
+			return varbit(player, 6292);
 		case 103:
-			return api.getVarBit(player, 6293);
+			return varbit(player, 6293);
 		case 125:
-			return api.getVarBit(player, 6294);
+			return varbit(player, 6294);
 		case 126:
 		case 127:
 			return 1;
@@ -443,15 +445,15 @@ function init () {
 	function canDowngradeCitadel (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6295);
+			return varbit(player, 6295);
 		case 101:
-			return api.getVarBit(player, 6296);
+			return varbit(player, 6296);
 		case 102:
-			return api.getVarBit(player, 6297);
+			return varbit(player, 6297);
 		case 103:
-			return api.getVarBit(player, 6298);
+			return varbit(player, 6298);
 		case 125:
-			return api.getVarBit(player, 6299);
+			return varbit(player, 6299);
 		case 126:
 		case 127:
 			return 1;
@@ -463,15 +465,15 @@ function init () {
 	function canSetGatherGoals (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6305);
+			return varbit(player, 6305);
 		case 101:
-			return api.getVarBit(player, 6306);
+			return varbit(player, 6306);
 		case 102:
-			return api.getVarBit(player, 6307);
+			return varbit(player, 6307);
 		case 103:
-			return api.getVarBit(player, 6308);
+			return varbit(player, 6308);
 		case 125:
-			return api.getVarBit(player, 6309);
+			return varbit(player, 6309);
 		case 126:
 		case 127:
 			return 1;
@@ -483,9 +485,9 @@ function init () {
 	function canChangeLanguage (player, rank) {
 		switch (rank) {
 		case 103:
-			return api.getVarBit(player, 6313);
+			return varbit(player, 6313);
 		case 125:
-			return api.getVarBit(player, 6314);
+			return varbit(player, 6314);
 		case 126:
 		case 127:
 			return 1;
@@ -497,15 +499,15 @@ function init () {
 	function canLockPlots (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6166);
+			return varbit(player, 6166);
 		case 101:
-			return api.getVarBit(player, 6167);
+			return varbit(player, 6167);
 		case 102:
-			return api.getVarBit(player, 6168);
+			return varbit(player, 6168);
 		case 103:
-			return api.getVarBit(player, 6169);
+			return varbit(player, 6169);
 		case 125:
-			return api.getVarBit(player, 6170);
+			return varbit(player, 6170);
 		case 126:
 		case 127:
 			return 1;
@@ -517,27 +519,27 @@ function init () {
 	function canCheckResources (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 6171);
+			return varbit(player, 6171);
 		case 1:
-			return api.getVarBit(player, 6172);
+			return varbit(player, 6172);
 		case 2:
-			return api.getVarBit(player, 6173);
+			return varbit(player, 6173);
 		case 3:
-			return api.getVarBit(player, 6174);
+			return varbit(player, 6174);
 		case 4:
-			return api.getVarBit(player, 6175);
+			return varbit(player, 6175);
 		case 5:
-			return api.getVarBit(player, 6176);
+			return varbit(player, 6176);
 		case 100:
-			return api.getVarBit(player, 6177);
+			return varbit(player, 6177);
 		case 101:
-			return api.getVarBit(player, 6178);
+			return varbit(player, 6178);
 		case 102:
-			return api.getVarBit(player, 6179);
+			return varbit(player, 6179);
 		case 103:
-			return api.getVarBit(player, 6180);
+			return varbit(player, 6180);
 		case 125:
-			return api.getVarBit(player, 6181);
+			return varbit(player, 6181);
 		case 126:
 		case 127:
 			return 1;
@@ -549,15 +551,15 @@ function init () {
 	function canRemoveAvatar (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6340);
+			return varbit(player, 6340);
 		case 101:
-			return api.getVarBit(player, 6341);
+			return varbit(player, 6341);
 		case 102:
-			return api.getVarBit(player, 6342);
+			return varbit(player, 6342);
 		case 103:
-			return api.getVarBit(player, 6343);
+			return varbit(player, 6343);
 		case 125:
-			return api.getVarBit(player, 6344);
+			return varbit(player, 6344);
 		case 126:
 		case 127:
 			return 1;
@@ -569,15 +571,15 @@ function init () {
 	function canAddAvatarBuffs (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6350);
+			return varbit(player, 6350);
 		case 101:
-			return api.getVarBit(player, 6351);
+			return varbit(player, 6351);
 		case 102:
-			return api.getVarBit(player, 6352);
+			return varbit(player, 6352);
 		case 103:
-			return api.getVarBit(player, 6353);
+			return varbit(player, 6353);
 		case 125:
-			return api.getVarBit(player, 6354);
+			return varbit(player, 6354);
 		case 126:
 		case 127:
 			return 1;
@@ -589,15 +591,15 @@ function init () {
 	function canCustomiseAvatar (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 6345);
+			return varbit(player, 6345);
 		case 101:
-			return api.getVarBit(player, 6346);
+			return varbit(player, 6346);
 		case 102:
-			return api.getVarBit(player, 6347);
+			return varbit(player, 6347);
 		case 103:
-			return api.getVarBit(player, 6348);
+			return varbit(player, 6348);
 		case 125:
-			return api.getVarBit(player, 6349);
+			return varbit(player, 6349);
 		case 126:
 		case 127:
 			return 1;
@@ -609,9 +611,9 @@ function init () {
 	function canMoveTick (player, rank) {
 		switch (rank) {
 		case 103:
-			return api.getVarBit(player, 6315);
+			return varbit(player, 6315);
 		case 125:
-			return api.getVarBit(player, 6316);
+			return varbit(player, 6316);
 		case 126:
 		case 127:
 			return 1;
@@ -623,27 +625,27 @@ function init () {
 	function canBroadcastEvents (player, rank) {
 		switch (rank) {
 		case 0:
-			return api.getVarBit(player, 20978);
+			return varbit(player, 20978);
 		case 1:
-			return api.getVarBit(player, 20979);
+			return varbit(player, 20979);
 		case 2:
-			return api.getVarBit(player, 20980);
+			return varbit(player, 20980);
 		case 3:
-			return api.getVarBit(player, 20981);
+			return varbit(player, 20981);
 		case 4:
-			return api.getVarBit(player, 20982);
+			return varbit(player, 20982);
 		case 5:
-			return api.getVarBit(player, 20983);
+			return varbit(player, 20983);
 		case 100:
-			return api.getVarBit(player, 20984);
+			return varbit(player, 20984);
 		case 101:
-			return api.getVarBit(player, 20985);
+			return varbit(player, 20985);
 		case 102:
-			return api.getVarBit(player, 20986);
+			return varbit(player, 20986);
 		case 103:
-			return api.getVarBit(player, 20987);
+			return varbit(player, 20987);
 		case 125:
-			return api.getVarBit(player, 20988);
+			return varbit(player, 20988);
 		case 126:
 		case 127:
 			return 1;
@@ -655,15 +657,15 @@ function init () {
 	function canChangeBroadcasts (player, rank) {
 		switch (rank) {
 		case 100:
-			return api.getVarBit(player, 21735);
+			return varbit(player, 21735);
 		case 101:
-			return api.getVarBit(player, 21736);
+			return varbit(player, 21736);
 		case 102:
-			return api.getVarBit(player, 21737);
+			return varbit(player, 21737);
 		case 103:
-			return api.getVarBit(player, 21738);
+			return varbit(player, 21738);
 		case 125:
-			return api.getVarBit(player, 21739);
+			return varbit(player, 21739);
 		case 126:
 		case 127:
 			return 1;
@@ -674,20 +676,20 @@ function init () {
 	
 	function setBlockKeep (player, rank, holds) {			
 		if (!canBlockKeep(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow locking of the keep if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow locking of the keep if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6182, holds);
+			return varbit(player, 6182, holds);
 		case 101:
-			return api.setVarBit(player, 6183, holds);
+			return varbit(player, 6183, holds);
 		case 102:
-			return api.setVarBit(player, 6184, holds);
+			return varbit(player, 6184, holds);
 		case 103:
-			return api.setVarBit(player, 6185, holds);
+			return varbit(player, 6185, holds);
 		case 125:
-			return api.setVarBit(player, 6186, holds);
+			return varbit(player, 6186, holds);
 		default:
 			return false;
 		}
@@ -695,20 +697,20 @@ function init () {
 	
 	function setBlockCitadel (player, rank, holds) {
 		if (!canBlockCitadel(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow locking of the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow locking of the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6187, holds);
+			return varbit(player, 6187, holds);
 		case 101:
-			return api.setVarBit(player, 6188, holds);
+			return varbit(player, 6188, holds);
 		case 102:
-			return api.setVarBit(player, 6189, holds);
+			return varbit(player, 6189, holds);
 		case 103:
-			return api.setVarBit(player, 6190, holds);
+			return varbit(player, 6190, holds);
 		case 125:
-			return api.setVarBit(player, 6191, holds);
+			return varbit(player, 6191, holds);
 		default:
 			return false;
 		}
@@ -716,32 +718,32 @@ function init () {
 	
 	function setCanRecruit (player, rank, holds) {
 		if (!canRecruit(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow recruiting if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow recruiting if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6192, holds);
+			return varbit(player, 6192, holds);
 		case 1:
-			return api.setVarBit(player, 6193, holds);
+			return varbit(player, 6193, holds);
 		case 2:
-			return api.setVarBit(player, 6194, holds);
+			return varbit(player, 6194, holds);
 		case 3:
-			return api.setVarBit(player, 6195, holds);
+			return varbit(player, 6195, holds);
 		case 4:
-			return api.setVarBit(player, 6196, holds);
+			return varbit(player, 6196, holds);
 		case 5:
-			return api.setVarBit(player, 6197, holds);
+			return varbit(player, 6197, holds);
 		case 100:
-			return api.setVarBit(player, 6198, holds);
+			return varbit(player, 6198, holds);
 		case 101:
-			return api.setVarBit(player, 6199, holds);
+			return varbit(player, 6199, holds);
 		case 102:
-			return api.setVarBit(player, 6200, holds);
+			return varbit(player, 6200, holds);
 		case 103:
-			return api.setVarBit(player, 6201, holds);
+			return varbit(player, 6201, holds);
 		case 125:
-			return api.setVarBit(player, 6202, holds);
+			return varbit(player, 6202, holds);
 		default:
 			return false;
 		}
@@ -749,32 +751,32 @@ function init () {
 	
 	function setCanStartBattles (player, rank, holds) {
 		if (!canStartBattles(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow starting of battles if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow starting of battles if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6203, holds);
+			return varbit(player, 6203, holds);
 		case 1:
-			return api.setVarBit(player, 6204, holds);
+			return varbit(player, 6204, holds);
 		case 2:
-			return api.setVarBit(player, 6205, holds);
+			return varbit(player, 6205, holds);
 		case 3:
-			return api.setVarBit(player, 6206, holds);
+			return varbit(player, 6206, holds);
 		case 4:
-			return api.setVarBit(player, 6207, holds);
+			return varbit(player, 6207, holds);
 		case 5:
-			return api.setVarBit(player, 6208, holds);
+			return varbit(player, 6208, holds);
 		case 100:
-			return api.setVarBit(player, 6209, holds);
+			return varbit(player, 6209, holds);
 		case 101:
-			return api.setVarBit(player, 6210, holds);
+			return varbit(player, 6210, holds);
 		case 102:
-			return api.setVarBit(player, 6211, holds);
+			return varbit(player, 6211, holds);
 		case 103:
-			return api.setVarBit(player, 6212, holds);
+			return varbit(player, 6212, holds);
 		case 125:
-			return api.setVarBit(player, 6213, holds);
+			return varbit(player, 6213, holds);
 		default:
 			return false;
 		}
@@ -782,32 +784,32 @@ function init () {
 	
 	function setIsRcwLeader (player, rank, holds) {
 		if (!isRcwLeader(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to lead Rated Clan Wars if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to lead Rated Clan Wars if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6214, holds);
+			return varbit(player, 6214, holds);
 		case 1:
-			return api.setVarBit(player, 6215, holds);
+			return varbit(player, 6215, holds);
 		case 2:
-			return api.setVarBit(player, 6216, holds);
+			return varbit(player, 6216, holds);
 		case 3:
-			return api.setVarBit(player, 6217, holds);
+			return varbit(player, 6217, holds);
 		case 4:
-			return api.setVarBit(player, 6218, holds);
+			return varbit(player, 6218, holds);
 		case 5:
-			return api.setVarBit(player, 6219, holds);
+			return varbit(player, 6219, holds);
 		case 100:
-			return api.setVarBit(player, 6220, holds);
+			return varbit(player, 6220, holds);
 		case 101:
-			return api.setVarBit(player, 6221, holds);
+			return varbit(player, 6221, holds);
 		case 102:
-			return api.setVarBit(player, 6222, holds);
+			return varbit(player, 6222, holds);
 		case 103:
-			return api.setVarBit(player, 6223, holds);
+			return varbit(player, 6223, holds);
 		case 125:
-			return api.setVarBit(player, 6224, holds);
+			return varbit(player, 6224, holds);
 		default:
 			return false;
 		}
@@ -815,32 +817,32 @@ function init () {
 	
 	function setCanStartVote (player, rank, holds) {
 		if (!canStartVote(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to call a vote if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to call a vote if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6225, holds);
+			return varbit(player, 6225, holds);
 		case 1:
-			return api.setVarBit(player, 6226, holds);
+			return varbit(player, 6226, holds);
 		case 2:
-			return api.setVarBit(player, 6227, holds);
+			return varbit(player, 6227, holds);
 		case 3:
-			return api.setVarBit(player, 6228, holds);
+			return varbit(player, 6228, holds);
 		case 4:
-			return api.setVarBit(player, 6229, holds);
+			return varbit(player, 6229, holds);
 		case 5:
-			return api.setVarBit(player, 6230, holds);
+			return varbit(player, 6230, holds);
 		case 100:
-			return api.setVarBit(player, 6231, holds);
+			return varbit(player, 6231, holds);
 		case 101:
-			return api.setVarBit(player, 6232, holds);
+			return varbit(player, 6232, holds);
 		case 102:
-			return api.setVarBit(player, 6233, holds);
+			return varbit(player, 6233, holds);
 		case 103:
-			return api.setVarBit(player, 6234, holds);
+			return varbit(player, 6234, holds);
 		case 125:
-			return api.setVarBit(player, 6235, holds);
+			return varbit(player, 6235, holds);
 		default:
 			return false;
 		}
@@ -848,32 +850,32 @@ function init () {
 	
 	function setCanStartMeeting (player, rank, holds) {
 		if (!canStartMeeting(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to begin a meeting if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to begin a meeting if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6236, holds);
+			return varbit(player, 6236, holds);
 		case 1:
-			return api.setVarBit(player, 6237, holds);
+			return varbit(player, 6237, holds);
 		case 2:
-			return api.setVarBit(player, 6238, holds);
+			return varbit(player, 6238, holds);
 		case 3:
-			return api.setVarBit(player, 6239, holds);
+			return varbit(player, 6239, holds);
 		case 4:
-			return api.setVarBit(player, 6240, holds);
+			return varbit(player, 6240, holds);
 		case 5:
-			return api.setVarBit(player, 6241, holds);
+			return varbit(player, 6241, holds);
 		case 100:
-			return api.setVarBit(player, 6242, holds);
+			return varbit(player, 6242, holds);
 		case 101:
-			return api.setVarBit(player, 6243, holds);
+			return varbit(player, 6243, holds);
 		case 102:
-			return api.setVarBit(player, 6244, holds);
+			return varbit(player, 6244, holds);
 		case 103:
-			return api.setVarBit(player, 6245, holds);
+			return varbit(player, 6245, holds);
 		case 125:
-			return api.setVarBit(player, 6246, holds);
+			return varbit(player, 6246, holds);
 		default:
 			return false;
 		}
@@ -881,32 +883,32 @@ function init () {
 	
 	function setIsPartyTech (player, rank, holds) {
 		if (!isPartyTech(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only set a rank as a party tech if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only set a rank as a party tech if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6247, holds);
+			return varbit(player, 6247, holds);
 		case 1:
-			return api.setVarBit(player, 6248, holds);
+			return varbit(player, 6248, holds);
 		case 2:
-			return api.setVarBit(player, 6249, holds);
+			return varbit(player, 6249, holds);
 		case 3:
-			return api.setVarBit(player, 6250, holds);
+			return varbit(player, 6250, holds);
 		case 4:
-			return api.setVarBit(player, 6251, holds);
+			return varbit(player, 6251, holds);
 		case 5:
-			return api.setVarBit(player, 6252, holds);
+			return varbit(player, 6252, holds);
 		case 100:
-			return api.setVarBit(player, 6253, holds);
+			return varbit(player, 6253, holds);
 		case 101:
-			return api.setVarBit(player, 6254, holds);
+			return varbit(player, 6254, holds);
 		case 102:
-			return api.setVarBit(player, 6255, holds);
+			return varbit(player, 6255, holds);
 		case 103:
-			return api.setVarBit(player, 6256, holds);
+			return varbit(player, 6256, holds);
 		case 125:
-			return api.setVarBit(player, 6257, holds);
+			return varbit(player, 6257, holds);
 		default:
 			return false;
 		}
@@ -914,32 +916,32 @@ function init () {
 	
 	function setIsTheatreTech (player, rank, holds) {
 		if (!isTheatreTech(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only set a rank as a theatre tech if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only set a rank as a theatre tech if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6258, holds);
+			return varbit(player, 6258, holds);
 		case 1:
-			return api.setVarBit(player, 6259, holds);
+			return varbit(player, 6259, holds);
 		case 2:
-			return api.setVarBit(player, 6260, holds);
+			return varbit(player, 6260, holds);
 		case 3:
-			return api.setVarBit(player, 6261, holds);
+			return varbit(player, 6261, holds);
 		case 4:
-			return api.setVarBit(player, 6262, holds);
+			return varbit(player, 6262, holds);
 		case 5:
-			return api.setVarBit(player, 6263, holds);
+			return varbit(player, 6263, holds);
 		case 100:
-			return api.setVarBit(player, 6264, holds);
+			return varbit(player, 6264, holds);
 		case 101:
-			return api.setVarBit(player, 6265, holds);
+			return varbit(player, 6265, holds);
 		case 102:
-			return api.setVarBit(player, 6266, holds);
+			return varbit(player, 6266, holds);
 		case 103:
-			return api.setVarBit(player, 6267, holds);
+			return varbit(player, 6267, holds);
 		case 125:
-			return api.setVarBit(player, 6268, holds);
+			return varbit(player, 6268, holds);
 		default:
 			return false;
 		}
@@ -947,20 +949,20 @@ function init () {
 	
 	function setCanEditNoticeboard (player, rank, holds) {
 		if (!canEditNoticeboard(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow adding of notices if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow adding of notices if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6269, holds);
+			return varbit(player, 6269, holds);
 		case 101:
-			return api.setVarBit(player, 6270, holds);
+			return varbit(player, 6270, holds);
 		case 102:
-			return api.setVarBit(player, 6271, holds);
+			return varbit(player, 6271, holds);
 		case 103:
-			return api.setVarBit(player, 6272, holds);
+			return varbit(player, 6272, holds);
 		case 125:
-			return api.setVarBit(player, 6273, holds);
+			return varbit(player, 6273, holds);
 		default:
 			return false;
 		}
@@ -968,20 +970,20 @@ function init () {
 	
 	function setCanEditSignpost (player, rank, holds) {
 		if (!canEditSignpost(player, clan.getRank(player))) {
-			api.sendMessage(player, "You may only allow adding to the signpost if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow adding to the signpost if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6274, holds);
+			return varbit(player, 6274, holds);
 		case 101:
-			return api.setVarBit(player, 6275, holds);
+			return varbit(player, 6275, holds);
 		case 102:
-			return api.setVarBit(player, 6276, holds);
+			return varbit(player, 6276, holds);
 		case 103:
-			return api.setVarBit(player, 6277, holds);
+			return varbit(player, 6277, holds);
 		case 125:
-			return api.setVarBit(player, 6278, holds);
+			return varbit(player, 6278, holds);
 		default:
 			return false;
 		}
@@ -989,32 +991,32 @@ function init () {
 	
 	function setCanEditBattlefield (player, rank, holds) {
 		if (!canEditBattlefield(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow editing of the clan battlefield if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow editing of the clan battlefield if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6279, holds);
+			return varbit(player, 6279, holds);
 		case 1:
-			return api.setVarBit(player, 6280, holds);
+			return varbit(player, 6280, holds);
 		case 2:
-			return api.setVarBit(player, 6281, holds);
+			return varbit(player, 6281, holds);
 		case 3:
-			return api.setVarBit(player, 6282, holds);
+			return varbit(player, 6282, holds);
 		case 4:
-			return api.setVarBit(player, 6283, holds);
+			return varbit(player, 6283, holds);
 		case 5:
-			return api.setVarBit(player, 6284, holds);
+			return varbit(player, 6284, holds);
 		case 100:
-			return api.setVarBit(player, 6285, holds);
+			return varbit(player, 6285, holds);
 		case 101:
-			return api.setVarBit(player, 6286, holds);
+			return varbit(player, 6286, holds);
 		case 102:
-			return api.setVarBit(player, 6287, holds);
+			return varbit(player, 6287, holds);
 		case 103:
-			return api.setVarBit(player, 6288, holds);
+			return varbit(player, 6288, holds);
 		case 125:
-			return api.setVarBit(player, 6289, holds);
+			return varbit(player, 6289, holds);
 		default:
 			return false;
 		}
@@ -1022,20 +1024,20 @@ function init () {
 	
 	function setCanUpgradeCitadel (player, rank, holds) {
 		if (!canUpgradeCitadel(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow upgrades to the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow upgrades to the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6290, holds);
+			return varbit(player, 6290, holds);
 		case 101:
-			return api.setVarBit(player, 6291, holds);
+			return varbit(player, 6291, holds);
 		case 102:
-			return api.setVarBit(player, 6292, holds);
+			return varbit(player, 6292, holds);
 		case 103:
-			return api.setVarBit(player, 6293, holds);
+			return varbit(player, 6293, holds);
 		case 125:
-			return api.setVarBit(player, 6294, holds);
+			return varbit(player, 6294, holds);
 		default:
 			return false;
 		}
@@ -1043,20 +1045,20 @@ function init () {
 	
 	function setCanDowngradeCitadel (player, rank, holds) {
 		if (!canDowngradeCitadel(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow downgrades to the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow downgrades to the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6295, holds);
+			return varbit(player, 6295, holds);
 		case 101:
-			return api.setVarBit(player, 6296, holds);
+			return varbit(player, 6296, holds);
 		case 102:
-			return api.setVarBit(player, 6297, holds);
+			return varbit(player, 6297, holds);
 		case 103:
-			return api.setVarBit(player, 6298, holds);
+			return varbit(player, 6298, holds);
 		case 125:
-			return api.setVarBit(player, 6299, holds);
+			return varbit(player, 6299, holds);
 		default:
 			return false;
 		}
@@ -1064,20 +1066,20 @@ function init () {
 	
 	function setCanSetGatherGoals (player, rank, holds) {
 		if (!canSetGatherGoals(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only set gather goals if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only set gather goals if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6305, holds);
+			return varbit(player, 6305, holds);
 		case 101:
-			return api.setVarBit(player, 6306, holds);
+			return varbit(player, 6306, holds);
 		case 102:
-			return api.setVarBit(player, 6307, holds);
+			return varbit(player, 6307, holds);
 		case 103:
-			return api.setVarBit(player, 6308, holds);
+			return varbit(player, 6308, holds);
 		case 125:
-			return api.setVarBit(player, 6309, holds);
+			return varbit(player, 6309, holds);
 		default:
 			return false;
 		}
@@ -1085,14 +1087,14 @@ function init () {
 	
 	function setCanChangeLanguage (player, rank, holds) {
 		if (!canChangeLanguage(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to change the stronghold's language if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to change the stronghold's language if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 103:
-			return api.setVarBit(player, 6313, holds);
+			return varbit(player, 6313, holds);
 		case 125:
-			return api.setVarBit(player, 6314, holds);
+			return varbit(player, 6314, holds);
 		default:
 			return false;
 		}
@@ -1100,20 +1102,20 @@ function init () {
 	
 	function setCanLockPlots (player, rank, holds) {
 		if (!canLockPlots(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to lock plots if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to lock plots if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6166, holds);
+			return varbit(player, 6166, holds);
 		case 101:
-			return api.setVarBit(player, 6167, holds);
+			return varbit(player, 6167, holds);
 		case 102:
-			return api.setVarBit(player, 6168, holds);
+			return varbit(player, 6168, holds);
 		case 103:
-			return api.setVarBit(player, 6169, holds);
+			return varbit(player, 6169, holds);
 		case 125:
-			return api.setVarBit(player, 6170, holds);
+			return varbit(player, 6170, holds);
 		default:
 			return false;
 		}
@@ -1121,32 +1123,32 @@ function init () {
 	
 	function setCanCheckResources (player, rank, holds) {
 		if (!canCheckResources(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to check resources if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to check resources if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 6171, holds);
+			return varbit(player, 6171, holds);
 		case 1:
-			return api.setVarBit(player, 6172, holds);
+			return varbit(player, 6172, holds);
 		case 2:
-			return api.setVarBit(player, 6173, holds);
+			return varbit(player, 6173, holds);
 		case 3:
-			return api.setVarBit(player, 6174, holds);
+			return varbit(player, 6174, holds);
 		case 4:
-			return api.setVarBit(player, 6175, holds);
+			return varbit(player, 6175, holds);
 		case 5:
-			return api.setVarBit(player, 6176, holds);
+			return varbit(player, 6176, holds);
 		case 100:
-			return api.setVarBit(player, 6177, holds);
+			return varbit(player, 6177, holds);
 		case 101:
-			return api.setVarBit(player, 6178, holds);
+			return varbit(player, 6178, holds);
 		case 102:
-			return api.setVarBit(player, 6179, holds);
+			return varbit(player, 6179, holds);
 		case 103:
-			return api.setVarBit(player, 6180, holds);
+			return varbit(player, 6180, holds);
 		case 125:
-			return api.setVarBit(player, 6181, holds);
+			return varbit(player, 6181, holds);
 		default:
 			return false;
 		}
@@ -1154,20 +1156,20 @@ function init () {
 	
 	function setCanRemoveAvatar (player, rank, holds) {
 		if (!canRemoveAvatar(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow another rank to remove the avatar habitat if your rank has permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow another rank to remove the avatar habitat if your rank has permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6340, holds);
+			return varbit(player, 6340, holds);
 		case 101:
-			return api.setVarBit(player, 6341, holds);
+			return varbit(player, 6341, holds);
 		case 102:
-			return api.setVarBit(player, 6342, holds);
+			return varbit(player, 6342, holds);
 		case 103:
-			return api.setVarBit(player, 6343, holds);
+			return varbit(player, 6343, holds);
 		case 125:
-			return api.setVarBit(player, 6344, holds);
+			return varbit(player, 6344, holds);
 		default:
 			return false;	
 		}
@@ -1175,20 +1177,20 @@ function init () {
 	
 	function setCanAddAvatarBuffs (player, rank, holds) {
 		if (!canAddAvatarBuffs(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to fill avatar buff slots if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to fill avatar buff slots if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6350, holds);
+			return varbit(player, 6350, holds);
 		case 101:
-			return api.setVarBit(player, 6351, holds);
+			return varbit(player, 6351, holds);
 		case 102:
-			return api.setVarBit(player, 6352, holds);
+			return varbit(player, 6352, holds);
 		case 103:
-			return api.setVarBit(player, 6353, holds);
+			return varbit(player, 6353, holds);
 		case 125:
-			return api.setVarBit(player, 6354, holds);
+			return varbit(player, 6354, holds);
 		default:
 			return false;
 		}
@@ -1196,20 +1198,20 @@ function init () {
 	
 	function setCanCustomiseAvatar (player, rank, holds) {
 		if (!canCustomiseAvatar(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow another rank to customise the clan avatar if your rank has permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow another rank to customise the clan avatar if your rank has permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 6345, holds);
+			return varbit(player, 6345, holds);
 		case 101:
-			return api.setVarBit(player, 6346, holds);
+			return varbit(player, 6346, holds);
 		case 102:
-			return api.setVarBit(player, 6347, holds);
+			return varbit(player, 6347, holds);
 		case 103:
-			return api.setVarBit(player, 6348, holds);
+			return varbit(player, 6348, holds);
 		case 125:
-			return api.setVarBit(player, 6349, holds);
+			return varbit(player, 6349, holds);
 		default:
 			return false;
 		}
@@ -1217,14 +1219,14 @@ function init () {
 	
 	function setCanMoveTick (player, rank, holds) {
 		if (!canMoveTick(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to change the stronghold's build time if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to change the stronghold's build time if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 103:
-			return api.setVarBit(player, 6315, holds);
+			return varbit(player, 6315, holds);
 		case 125:
-			return api.setVarBit(player, 6316, holds);
+			return varbit(player, 6316, holds);
 		default:
 			return false;
 		}
@@ -1232,32 +1234,32 @@ function init () {
 	
 	function setCanBroadcastEvents (player, rank, holds) {
 		if (!canBroadcastEvents(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to broadcast a noticeboard event if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to broadcast a noticeboard event if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 0:
-			return api.setVarBit(player, 20978, holds);
+			return varbit(player, 20978, holds);
 		case 1:
-			return api.setVarBit(player, 20979, holds);
+			return varbit(player, 20979, holds);
 		case 2:
-			return api.setVarBit(player, 20980, holds);
+			return varbit(player, 20980, holds);
 		case 3:
-			return api.setVarBit(player, 20981, holds);
+			return varbit(player, 20981, holds);
 		case 4:
-			return api.setVarBit(player, 20982, holds);
+			return varbit(player, 20982, holds);
 		case 5:
-			return api.setVarBit(player, 20983, holds);
+			return varbit(player, 20983, holds);
 		case 100:
-			return api.setVarBit(player, 20984, holds);
+			return varbit(player, 20984, holds);
 		case 101:
-			return api.setVarBit(player, 20985, holds);
+			return varbit(player, 20985, holds);
 		case 102:
-			return api.setVarBit(player, 20986, holds);
+			return varbit(player, 20986, holds);
 		case 103:
-			return api.setVarBit(player, 20987, holds);
+			return varbit(player, 20987, holds);
 		case 125:
-			return api.setVarBit(player, 20988, holds);
+			return varbit(player, 20988, holds);
 		default:
 			return false;
 		}
@@ -1265,20 +1267,20 @@ function init () {
 	
 	function setCanChangeBroadcasts (player, rank, holds) {
 		if (!canChangeBroadcasts(player, clan.getRank(player))) {
-			ENGINE.sendMessage(player, "You may only allow a rank to change clan broadcast settings if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendMessage(player, "You may only allow a rank to change clan broadcast settings if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
 		}
 		switch (rank) {
 		case 100:
-			return api.setVarBit(player, 21735, holds);
+			return varbit(player, 21735, holds);
 		case 101:
-			return api.setVarBit(player, 21736, holds);
+			return varbit(player, 21736, holds);
 		case 102:
-			return api.setVarBit(player, 21737, holds);
+			return varbit(player, 21737, holds);
 		case 103:
-			return api.setVarBit(player, 21738, holds);
+			return varbit(player, 21738, holds);
 		case 125:
-			return api.setVarBit(player, 21739, holds);
+			return varbit(player, 21739, holds);
 		default:
 			return false;
 		}	

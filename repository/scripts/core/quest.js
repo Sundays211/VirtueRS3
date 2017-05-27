@@ -1,7 +1,7 @@
 /**
  * 
  */
-/* globals ENGINE, questApi, Java */
+/* globals questApi, Java */
 module.exports = init();
 
 function init () {

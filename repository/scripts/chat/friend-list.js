@@ -23,6 +23,7 @@
 var widget = require('../core/widget');
 var util = require('../core/util');
 var dialog = require('../core/dialog');
+var chat = require('./core');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -76,7 +77,7 @@ module.exports = function(scriptManager) {
 			ENGINE.runClientScript(player, 104, []);
 			return;
 		case 42://Recruit friend
-			ENGINE.sendMessage(player, "Recruit friend has not been implemented");
+			chat.sendDebugMessage(player, "Recruit friend has not been implemented");
 			return;
 		case 57://Add/set ignore note 
 			if (ctx.button == 1) {

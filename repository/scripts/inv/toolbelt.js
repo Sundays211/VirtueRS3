@@ -19,11 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var varbit = require('../core/var/bit');
 
 var util = require('../core/util');
 var config = require('../core/config');
+var chat = require('../chat');
 var inv = require('./core');
 
 /**
@@ -95,14 +96,14 @@ module.exports = (function () {
 	
 	function addSingleLevelTool(player, toolId) {
 		if (hasTool(player, toolId)) {
-			ENGINE.sendMessage(player, "That is already on your tool belt.");
+			chat.sendMessage(player, "That is already on your tool belt.");
 			return;
 		}
 
 		var success = addTool(player, toolId);
 		if (success) {
 			inv.take(player, toolId, 1);
-			ENGINE.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
+			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}
 	
@@ -207,9 +208,9 @@ module.exports = (function () {
 			return;
 		}
 		if (level === currentLevel) {
-			ENGINE.sendMessage(player, "That is already on your tool belt.");
+			chat.sendMessage(player, "That is already on your tool belt.");
 		} else if (level < currentLevel) {
-			ENGINE.sendMessage(player, "Your tool belt already contains a higher tier of this tool.");
+			chat.sendMessage(player, "Your tool belt already contains a higher tier of this tool.");
 		} else {
 			switch (type) {
 			case 1://Pickaxe
@@ -226,7 +227,7 @@ module.exports = (function () {
 				break;
 			}
 			inv.take(player, toolId, 1);
-			ENGINE.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
+			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}
 	

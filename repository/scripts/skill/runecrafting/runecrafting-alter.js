@@ -19,9 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Stat, ENGINE */
+/* globals EventType, Stat */
 var stat = require('../logic/stat');
 var inv = require('../../inv');
+var chat = require('../../chat');
 var anim = require('../../core/anim');
 var config = require('../../core/config');
 
@@ -89,7 +90,7 @@ module.exports = function (scriptManager) {
 	function craftRunes (player, alter) {
 		var level = stat.getLevel(player, Stat.RUNECRAFTING);
 		if (level < alter.level) {
-			ENGINE.sendMessage(player, "You need a runecrafting level of "+alter.level+" to craft this rune.");
+			chat.sendMessage(player, "You need a runecrafting level of "+alter.level+" to craft this rune.");
 			return;
 		}
 		
@@ -101,7 +102,7 @@ module.exports = function (scriptManager) {
 				essCount = inv.total(player, 1436);//Normal essence
 			}
 			if (essCount < 1) {
-				ENGINE.sendMessage(player, "You don't have any "+(alter.pureOnly ? "pure" : "rune")+" essence.");
+				chat.sendMessage(player, "You don't have any "+(alter.pureOnly ? "pure" : "rune")+" essence.");
 				return;
 			}
 		}
@@ -112,7 +113,7 @@ module.exports = function (scriptManager) {
 		anim.run(player, 23250, function () {
 			stat.giveXp(player, Stat.RUNECRAFTING, totalXp);
 			inv.give(player, alter.runeID, essCount * getHighestMultiple(alter, level));
-			ENGINE.sendMessage(player, "You bind the temple's power into "+config.objName(alter.runeID)+"s.");
+			chat.sendMessage(player, "You bind the temple's power into "+config.objName(alter.runeID)+"s.");
 		});
 	}
 	

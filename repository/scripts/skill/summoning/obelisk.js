@@ -2,7 +2,7 @@
  * @author Greco
  * @since 12/10/2016
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var varp = require('../../core/var/player');
 var varbit = require('../../core/var/bit');
 

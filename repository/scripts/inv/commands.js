@@ -24,6 +24,7 @@ var widget = require('../core/widget');
 var dialog = require('../core/dialog');
 var config = require('../core/config');
 var util = require('../core/util');
+var chat = require('../chat');
 var inv = require('./core');
 
 /**
@@ -55,13 +56,13 @@ module.exports = (function () {
 			var args = ctx.cmdArgs;
 			
 			if (args.length < 1) {
-				util.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
+				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
 				return;
 			}
 			var amount = 1;
 			var objId = parseInt(args[0]);
 			if (isNaN(objId)) {
-				util.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
+				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
 				return;
 			}
 			
@@ -85,12 +86,12 @@ module.exports = (function () {
 					} else if (inv.hasSpace(player, amount)) {
 						inv.give(player, objId, amount);
 					} else {
-						ENGINE.sendMessage(player, "You do not have enough space in your backpack to store this item.");
+						chat.sendMessage(player, "You do not have enough space in your backpack to store this item.");
 					}
 				});
 			} else {
 				if (args.length < 1) {
-					util.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
+					chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
 					return;
 				}
 				var amount = 1;
@@ -99,7 +100,7 @@ module.exports = (function () {
 					amount = parseInt(args[1]);
 				}
 				if (!ENGINE.itemExists(objId)) {
-					util.sendCommandResponse(player, "The item you specified does not exist.", ctx.console);
+					chat.sendCommandResponse(player, "The item you specified does not exist.", ctx.console);
 					return;
 				}
 
@@ -107,12 +108,12 @@ module.exports = (function () {
 				if (config.objStackable(objId) || inv.hasSpace(player, amount)) {
 					inv.give(player, objId, amount);
 					if (value == -1) {
-						util.sendCommandResponse(player, "This item cannot be traded on the Grand Exchange.", ctx.console);
+						chat.sendCommandResponse(player, "This item cannot be traded on the Grand Exchange.", ctx.console);
 					} else {
-						util.sendCommandResponse(player, "This item is worth: "+value+"gp on the Grand Exchange.", ctx.console);
+						chat.sendCommandResponse(player, "This item is worth: "+value+"gp on the Grand Exchange.", ctx.console);
 					}				
 				} else {
-					util.sendCommandResponse(player, "You do not have enough space in your backpack to store this item.", ctx.console);
+					chat.sendCommandResponse(player, "You do not have enough space in your backpack to store this item.", ctx.console);
 				}
 			}
 		});

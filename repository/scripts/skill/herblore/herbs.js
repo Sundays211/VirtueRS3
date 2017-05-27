@@ -2,7 +2,7 @@
  * @author Greco
  * @since 12/20/2016
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var varp = require('../../core/var/player');
 
 var makex = require('../makex');

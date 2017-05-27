@@ -25,6 +25,7 @@ var config = require('../core/config');
 var widget = require('../core/widget');
 var util = require('../core/util');
 var dialog = require('../core/dialog');
+var chat = require('./core');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -96,7 +97,7 @@ module.exports = function(scriptManager) {
 			return;
 		case 17://Set lootshare rank
 		case 20://Toggle coinshare
-			ENGINE.sendMessage(player, "Loot Share is not implemented");
+			chat.sendDebugMessage(player, "Loot Share is not implemented");
 			return;
 		default:
 			util.defaultHandler(ctx, "friends chat settings");

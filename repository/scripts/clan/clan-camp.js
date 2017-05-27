@@ -19,11 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Inv */
+/* globals EventType, Inv */
 var dialog = require('../core/dialog');
-var inv = require('../inv');
-var clan = require('./logic/core');
 var util = require('../core/util');
+var inv = require('../inv');
+var chat = require('../chat');
+var clan = require('./logic/core');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -53,15 +54,15 @@ module.exports = function (scriptManager) {
 
 	function startClanVexGiver (player, npc) {
 		if (!inv.hasSpace(player)) {
-			ENGINE.sendMessage(player, "Not enough space in your inventory.");
+			chat.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
 		if (!clan.inClan(player)) {
-			ENGINE.sendMessage(player, "You must be in a clan to get a clan vex.");
+			chat.sendMessage(player, "You must be in a clan to get a clan vex.");
 			return;
 		}
 		if (inv.has(player, 20709) || inv.has(player, 20709, 1, Inv.BANK) > 0) {
-			ENGINE.sendMessage(player, "You already own a clan vexillum.");
+			chat.sendMessage(player, "You already own a clan vexillum.");
 			return;
 		}
 		inv.give(player, 20709, 1);
@@ -70,15 +71,15 @@ module.exports = function (scriptManager) {
 
 	function startClanCloakGiver (player, npc) {
 		if (!inv.hasSpace(player)) {
-			ENGINE.sendMessage(player, "Not enough space in your inventory.");
+			chat.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
 		if (!clan.inClan(player)) {
-			ENGINE.sendMessage(player, "You must be in a clan to get a clan cloak.");
+			chat.sendMessage(player, "You must be in a clan to get a clan cloak.");
 			return;
 		}
 		if (inv.has(player, 20708) || inv.has(player, 20709, 1, Inv.BANK)) {
-			ENGINE.sendMessage(player, "You already own a clan cloak.");
+			chat.sendMessage(player, "You already own a clan cloak.");
 			return;
 		}
 		inv.give(player, 20708, 1);

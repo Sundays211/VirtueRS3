@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Java, MesType */
+/* globals EventType, ENGINE, Java */
 var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 
@@ -27,6 +27,7 @@ var util = require('../../core/util');
 var widget = require('../../core/widget');
 var config = require('../../core/config');
 var inv = require('../../inv');
+var chat = require('../../chat');
 var anim = require('../../core/anim');
 var stat = require('../logic/stat');
 
@@ -93,7 +94,7 @@ module.exports = (function () {
 		//api.setVarp(player, 1169, category);
 		widget.openOverlaySub(player, 1018, 1251, false);
 		var length = animation === undefined ? 1 : Math.ceil(config.seqLength(animation) / 30);//Round up
-		ENGINE.sendMessage(player, "Total time: "+length);
+		chat.sendDebugMessage(player, "Total time: "+length);
 		varc(player, 2227, length);//Time per item
 		varc(player, 2228, amount);//Total products
 		varc(player, 2229, amount);//Remaining products
@@ -114,7 +115,7 @@ module.exports = (function () {
 					varc(player, 2229, amount);
 					makeItem(player, productId);
 					if (successText !== undefined) {
-						ENGINE.sendMessage(player, successText, MesType.GAME_SPAM);
+						chat.sendSpamMessage(player, successText);
 					}
 					
 					if (amount >= 1 && animation !== undefined) {

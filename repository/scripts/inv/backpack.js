@@ -29,6 +29,7 @@ var util = require('../core/util');
 var config = require('../core/config');
 var map = require('../core/map');
 var dialog = require('../core/dialog');
+var chat = require('../chat');
 
 var moneyPouch = require('./money-pouch');
 var wornEquipment = require('./worn-equipment');
@@ -85,7 +86,7 @@ module.exports = (function() {
 					return;
 				case 3://Examine
 					var count = ENGINE.itemTotal(player, Inv.MONEY_POUCH, CONST.COINS);
-					ENGINE.sendMessage(player, "Your money pouch contains "+util.toFormattedString(count) +" coins.");
+					chat.sendMessage(player, "Your money pouch contains "+util.toFormattedString(count) +" coins.");
 					return;
 				case 4://Withdraw
 					moneyPouch.requestWithdrawCoins(player);
@@ -182,8 +183,8 @@ module.exports = (function() {
 			opString = config.objIop(objId, 5);
 			break;
 		case 10://Examine
-			ENGINE.sendMessage(player, ""+item);
-			ENGINE.sendMessage(player, config.objDesc(objId));
+			chat.sendMessage(player, ""+item);
+			chat.sendMessage(player, config.objDesc(objId));
 			return;
 		default:
 			util.defaultHandler(ctx, "backpack");
@@ -210,7 +211,7 @@ module.exports = (function() {
 				discardItem(player, item, ctx.slot);
 			}
 		} else {
-			ENGINE.sendMessage(player, "Unhanded inventory item option: item="+item+", slot="+ctx.slot+", option="+opString+" ("+ctx.button+")");
+			chat.sendDebugMessage(player, "Unhanded inventory item option: item="+item+", slot="+ctx.slot+", option="+opString+" ("+ctx.button+")");
 		}
 	}
 	
@@ -224,7 +225,7 @@ module.exports = (function() {
 		}
 		
 		if (ctx.targetInterface != 1473) {//Item used on something other than backpack
-			ENGINE.sendMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+ctx.targetInterface+", targetComp="+ctx.targetComponent);
+			chat.sendDebugMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+ctx.targetInterface+", targetComp="+ctx.targetComponent);
 			return;
 		}
 		switch (ctx.targetComponent) {
@@ -257,7 +258,7 @@ module.exports = (function() {
 				if (util.isAdmin(player)) {
 					message = "Unhandled item use: item="+item+", slot="+slot+", useitem="+useitem+", useslot="+useslot;
 				}
-				ENGINE.sendMessage(player, message);
+				chat.sendDebugMessage(player, message);
 			}
 			return;
 		default:
@@ -292,7 +293,7 @@ module.exports = (function() {
 			if (util.isAdmin(player)) {
 				message = "Unhandled location use: location="+location+", useitem="+useitem+", useslot="+useslot;
 			}
-			ENGINE.sendMessage(player, message);
+			chat.sendDebugMessage(player, message);
 		}
 	}
 	
@@ -320,7 +321,7 @@ module.exports = (function() {
 			if (util.isAdmin(player)) {
 				message = "Unhandled NPC use: npc="+npc+", useitem="+useitem+", useslot="+useslot;
 			}
-			ENGINE.sendMessage(player, message);
+			chat.sendDebugMessage(player, message);
 		}
 	}
 	
@@ -348,7 +349,7 @@ module.exports = (function() {
 			if (util.isAdmin(player)) {
 				message = "Unhandled player use: player="+targetPlayer+", useitem="+useitem+", useslot="+useslot;
 			}
-			ENGINE.sendMessage(player, message);
+			chat.sendDebugMessage(player, message);
 		}
 	}
 	
@@ -365,7 +366,7 @@ module.exports = (function() {
 	function destroyItem (player, item, slot) {
 		//Are you sure you want to destroy this object?
 		//You can get a new one from....
-		ENGINE.sendMessage(player, "Destroyed item: "+util.getId(item));
+		chat.sendDebugMessage(player, "Destroyed item: "+util.getId(item));
 		ENGINE.setInvSlot(player, Inv.BACKPACK, slot, null);
 	}
 	

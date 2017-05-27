@@ -26,6 +26,7 @@ var varbit = require('../core/var/bit');
 
 var util = require('../core/util');
 var widget = require('../core/widget');
+var chat = require('../chat');
 var clan = require('./logic/core');
 var permissions = require('./logic/permissions');
 
@@ -279,7 +280,7 @@ module.exports = function (scriptManager) {
 				//api.openOverlaySub(player, 2008, 573, false);
 				widget.open(player, 1477, 326, 573, false);
 			} else {
-				ENGINE.sendMessage(player, "You do not have sufficient rank in your clan to do this.");
+				chat.sendMessage(player, "You do not have sufficient rank in your clan to do this.");
 			}
 			return;
 		default:
@@ -331,7 +332,7 @@ module.exports = function (scriptManager) {
 	function setSelectedRank (player, rank) {
 		var prevRank = varbit(player, 6154);
 		if (prevRank == 126 || prevRank == 127) {
-			ENGINE.sendMessage(player, "Changing owner ranks has not yet been implemented.", MesType.CLANCHANNEL_SYSTEM);
+			chat.sendDebugMessage(player, "Changing owner ranks has not yet been implemented.", MesType.CLANCHANNEL_SYSTEM);
 			varc(player, 1500, prevRank);
 		} else {
 			varbit(player, 6154, rank);
@@ -413,6 +414,6 @@ module.exports = function (scriptManager) {
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, varbit(player, 6148), 11, 11);//Change citadel ban
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, varbit(player, 6149), 12, 12);//Change keep ban
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, varbit(player, 6150), 13, 13);//Change island ban
-		ENGINE.sendMessage(player, "Changes have been saved to clanmate.");
+		chat.sendMessage(player, "Changes have been saved to clanmate.");
 	}
 };

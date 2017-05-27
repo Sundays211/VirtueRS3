@@ -22,6 +22,7 @@
 /* globals EventType, ENGINE */
 var util = require('../core/util');
 var widget = require('../core/widget');
+var chat = require('../chat');
 var clan = require('./logic/core');
 
 /** 
@@ -54,7 +55,7 @@ module.exports = function (scriptManager) {
 			return;
 		case 142://Clan settings
 			if (!clan.inClan(ctx.player)) {
-				ENGINE.sendMessage(ctx.player, "You're not in a clan.");				
+				chat.sendMessage(ctx.player, "You're not in a clan.");				
 			} else {
 				widget.openCentral(ctx.player, 1096);
 			}
@@ -91,7 +92,7 @@ module.exports = function (scriptManager) {
 			return;
 		case 16://Clan settings
 			if (!clan.inClan(ctx.player)) {
-				ENGINE.sendMessage(ctx.player, "You're not in a clan.");
+				chat.sendMessage(ctx.player, "You're not in a clan.");
 			} else {
 				widget.openCentral(ctx.player, 1096, false);
 			}

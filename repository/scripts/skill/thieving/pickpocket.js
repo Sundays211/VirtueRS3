@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Stat */
+/* globals EventType, Stat, ENGINE */
 var util = require('../../core/util');
 var config = require('../../core/config');
 var inv = require('../../inv');
+var chat = require('../../chat');
 var anim = require('../../core/anim');
 var stat = require('../logic/stat');
 
@@ -335,18 +336,18 @@ module.exports = (function () {
 		ENGINE.faceEntity(player, npc);
 		
 		if (stat.getLevel(player, Stat.THIEVING) < data.level) {
-			ENGINE.sendMessage(player, "You need a thieving level of " + 
+			chat.sendMessage(player, "You need a thieving level of " + 
 					data.level + " to steal from this " + config.npcName(npc) + ".");
 			return;
 		}
 		if (!inv.hasSpace(player)) {
-			ENGINE.sendMessage(player, "Not enough space in your inventory.");
+			chat.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
 		if (Math.random() <= 0.10) {//TODO Figure out thieving chance
-			ENGINE.sendMessage(player, "You fail to pick the " + config.npcName(npc).toLowerCase() + "'s pocket.");
+			chat.sendMessage(player, "You fail to pick the " + config.npcName(npc).toLowerCase() + "'s pocket.");
 			ENGINE.freezeEntity(player, data.stunTime/0.6);
-			ENGINE.sendMessage(player, "You've been stunned.");
+			chat.sendMessage(player, "You've been stunned.");
 			var delay = data.stunTime/0.6;
 			var damage = data.stunDamage;
 			if(typeof data.stunDamageLpPercentage !== 'undefined')
@@ -380,16 +381,16 @@ module.exports = (function () {
         switch(multiplier){
         //TODO find the correct multiplier animation ids
         case 2:
-            ENGINE.sendFilterMessage(player, "Your lightning-fast reactions allow you to steal double the loot.");
+        	chat.sendSpamMessage(player, "Your lightning-fast reactions allow you to steal double the loot.");
             break;
         case 3:
-            ENGINE.sendFilterMessage(player, "Your lightning-fast reactions allow you to steal triple the loot.");
+        	chat.sendSpamMessage(player, "Your lightning-fast reactions allow you to steal triple the loot.");
             break;
         case 4:
-            ENGINE.sendFilterMessage(player, "Your lightning-fast reactions allow you to steal quadruple the loot.");
+        	chat.sendSpamMessage(player, "Your lightning-fast reactions allow you to steal quadruple the loot.");
             break;
         default:
-        	ENGINE.sendFilterMessage(player, "You pick the " + config.npcName(npc).toLowerCase() + "'s pocket.");
+        	chat.sendSpamMessage(player, "You pick the " + config.npcName(npc).toLowerCase() + "'s pocket.");
             break;
         }
 

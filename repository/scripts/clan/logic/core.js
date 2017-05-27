@@ -5,6 +5,8 @@
 var util = require('../../core/util');
 var dialog = require('../../core/dialog');
 var config = require('../../core/config');
+var chat = require('../../chat');
+
 var broadcasts = require('./broadcasts');
 var permissions = require('./permissions');
 
@@ -87,26 +89,26 @@ function init () {
 	
 	function addClanBan (player) {
 		if (!inClan(player)) {
-			ENGINE.sendMessage(player, "You must be in a clan to do that.");
+			chat.sendMessage(player, "You must be in a clan to do that.");
 			return;
 		}
 		if (!isClanAdmin(player)) {
-			ENGINE.sendMessage(player, "You must be a clan admin to do that.");
+			chat.sendMessage(player, "You must be a clan admin to do that.");
 			return;
 		}
 		dialog.requestString(player, "Enter the name to be banned:", function (name) {
-			ENGINE.sendMessage(player, "Attempting to ban "+name+".");
+			chat.sendMessage(player, "Attempting to ban "+name+".");
 			var userHash = util.getUserHash(name);
 			if (userHash === null) {
-				ENGINE.sendMessage(player, "An error was found while attempting to ban "+name+". No player of that name could be found.");
+				chat.sendMessage(player, "An error was found while attempting to ban "+name+". No player of that name could be found.");
 				return;
 			}
 			if (CLAN_ENGINE.isBanned(getClanHash(player), userHash)) {
-				ENGINE.sendMessage(player, "That player is already banned from your clan.");
+				chat.sendMessage(player, "That player is already banned from your clan.");
 				return;
 			}
 			if (!isClanAdmin(player)) {//Double check, in case they're no longer an admin
-				ENGINE.sendMessage(player, "You must be a clan admin to do that.");
+				chat.sendMessage(player, "You must be a clan admin to do that.");
 				return;
 			}
 			CLAN_ENGINE.addBan(player, userHash);
@@ -116,25 +118,25 @@ function init () {
 
 	function removeClanBan (player, slot) {
 		if (!inClan(player)) {
-			ENGINE.sendMessage(player, "You must be in a clan to do that.");
+			chat.sendMessage(player, "You must be in a clan to do that.");
 			return;
 		}
 		if (!isClanAdmin(player)) {
-			ENGINE.sendMessage(player, "You must be a clan admin to do that.");
+			chat.sendMessage(player, "You must be a clan admin to do that.");
 			return;
 		}
 		if (slot != -1) {
 			ENGINE.runClientScript(player, 4581, [slot]);
 		}
 		dialog.requestString(player, "Enter the name to be removed:", function (name) {
-			ENGINE.sendMessage(player, "Attempting to unban "+name+".");
+			chat.sendMessage(player, "Attempting to unban "+name+".");
 			var userHash = util.getUserHash(name);
 			if (userHash === null) {
-				ENGINE.sendMessage(player, "An error was found while attempting to unban "+name+". No player of that name could be found.");
+				chat.sendMessage(player, "An error was found while attempting to unban "+name+". No player of that name could be found.");
 				return;
 			}
 			if (!CLAN_ENGINE.isBanned(getClanHash(player), userHash)) {
-				ENGINE.sendMessage(player, "That player is not banned from your clan.");
+				chat.sendMessage(player, "That player is not banned from your clan.");
 				return;
 			}
 			CLAN_ENGINE.removeBan(player, userHash);
@@ -155,7 +157,7 @@ function init () {
 
 	function leaveClan (player) {
 		if (!inClan(player)) {
-			ENGINE.sendMessage(player, "You're not in a clan.");		
+			chat.sendMessage(player, "You're not in a clan.");		
 			return;
 		}
 		var clanHash = getClanHash(player);

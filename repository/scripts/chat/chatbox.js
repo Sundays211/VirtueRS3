@@ -26,6 +26,7 @@ var filters = require('./chatbox-filters');
 var util = require('../core/util');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
+var chat = require('./core');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -384,7 +385,7 @@ module.exports = function(scriptManager) {
 	}
 	
 	function toggleVipBadge (player) {
-		ENGINE.sendMessage(player, "Unhandled VIP badge toggle.");
+		chat.sendDebugMessage(player, "Unhandled VIP badge toggle.");
 	}
 	
 	function report (player) {
@@ -392,7 +393,7 @@ module.exports = function(scriptManager) {
 	}
 	
 	function assistTime (player) {
-		ENGINE.sendMessage(player, "Unhandled assist time button.");
+		chat.sendDebugMessage(player, "Unhandled assist time button.");
 	}
 	
 	function joinLeaveFriendChat (player) {
@@ -411,19 +412,19 @@ module.exports = function(scriptManager) {
 	}
 	
 	function joinLeaveClanChat (player) {
-		ENGINE.sendMessage(player, "Unhandled join/leave clan chat button.");
+		chat.sendDebugMessage(player, "Unhandled join/leave clan chat button.");
 	}
 	
 	function joinLeaveGuestClanChat (player) {
-		ENGINE.sendMessage(player, "Unhandled join/leave guest clan chat button.");
+		chat.sendDebugMessage(player, "Unhandled join/leave guest clan chat button.");
 	}
 	
 	function createGroup (player) {
-		ENGINE.sendMessage(player, "Unhandled group create button.");
+		chat.sendDebugMessage(player, "Unhandled group create button.");
 	}
 	
 	function switchGroupTeam (player) {
-		ENGINE.sendMessage(player, "Unhandled switch group team button.");
+		chat.sendDebugMessage(player, "Unhandled switch group team button.");
 	}
 	
 	function openExamineSettings (player) {

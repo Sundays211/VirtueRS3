@@ -26,6 +26,7 @@ var varbit = require('../core/var/bit');
 var util = require('../core/util');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
+var chat = require('../chat');
 var broadcasts = require('./logic/broadcasts');
 var clan = require('./logic/core');
 
@@ -119,7 +120,7 @@ module.exports = function (scriptManager) {
 		ENGINE.setVarClanSetting(player, 17, varp(player, 2068));//Update logo 2 colour
 		ENGINE.setVarClanSetting(player, 18, varp(player, 2069));//Update primary colour
 		ENGINE.setVarClanSetting(player, 19, varp(player, 2070));//Update secondary colour
-		ENGINE.sendMessage(player, "Clan motif updated. Changes will take effect in the next few minutes.");
+		chat.sendMessage(player, "Clan motif updated. Changes will take effect in the next few minutes.");
 		broadcasts.send(clan.getHash(player), 24, ["[Player A]"], [util.getName(player)]);
 		widget.closeAll(player);
 	}

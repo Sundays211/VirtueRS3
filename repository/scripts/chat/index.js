@@ -1,10 +1,15 @@
 /**
  * Module to initialise the chat system script bindings.
  */
+var chat = require('./core');
 
 module.exports = (function () {
 	return {
-		init : init
+		init : init,
+		sendMessage : chat.sendMessage,
+		sendSpamMessage : chat.sendSpamMessage,
+		sendDebugMessage : chat.sendDebugMessage,
+		sendCommandResponse : chat.sendCommandResponse
 	};
 	
 	function init (scriptManager) {

@@ -28,6 +28,7 @@ var widget = require('../../core/widget');
 var dialog = require('../../core/dialog');
 var util = require('../../core/util');
 var config = require('../../core/config');
+var chat = require('../../chat');
 var inv = require('../core');
 var CONST = require('../../core/const');
 
@@ -88,7 +89,7 @@ module.exports = (function () {
 			} else if (ctx.button == 10) {
 				var objId = inv.getObjId(ctx.player, Inv.BACKPACK, ctx.slot);
 				var desc = config.objDesc(objId);
-				ENGINE.sendMessage(ctx.player, desc);
+				chat.sendMessage(ctx.player, desc);
 			} else {
 				util.defaultHandler(ctx, "exchange inventory");
 			}
@@ -264,7 +265,7 @@ module.exports = (function () {
 	function openExchange (player) {
 		if (ENGINE.getAccountType(player) == 6 || ENGINE.getAccountType(player) == 7 ||
 				ENGINE.getAccountType(player) == 8) {
-			ENGINE.sendMessage(player, "You cannot use Grand Exchange while an Iron Man.");
+			chat.sendMessage(player, "You cannot use Grand Exchange while an Iron Man.");
 			return;
 		}
 		varbit(player, 444, 1);//Pin entered successfully
@@ -320,7 +321,7 @@ module.exports = (function () {
 					}
 				}
 				if (varp(player, 139) != 1) {
-					ENGINE.sendMessage(player, "Unable to set up Sell Offer at this time.");
+					chat.sendMessage(player, "Unable to set up Sell Offer at this time.");
 					return;						
 				}
 			} else {
@@ -340,7 +341,7 @@ module.exports = (function () {
 				varc(player, 2354, config.objDesc(objId));
 				widget.setText(player, 105, 14, config.objDesc(objId));
 			} else {
-				ENGINE.sendMessage(player, "You can't buy or sell that item on the GE.");
+				chat.sendMessage(player, "You can't buy or sell that item on the GE.");
 			}
 		}
 	}
@@ -422,7 +423,7 @@ module.exports = (function () {
 		var amount = varp(player, 136);
 		var price = varp(player, 137);
 		if (amount * price > CONST.INTEGER_MAX) {
-			ENGINE.sendMessage(player, "Cannot process - total cost is too high!");
+			chat.sendMessage(player, "Cannot process - total cost is too high!");
 			return;
 		}
 		if (objId !== -1 && amount > 0) {
@@ -452,7 +453,7 @@ module.exports = (function () {
 					ENGINE.sendExchangeOffer(player, 1, slot, isSell, objId, fullAmount, price);
 					clearOffer(player);
 				} else {
-					ENGINE.sendMessage(player, "You do not have enough of this item in your inventory to cover the offer.");
+					chat.sendMessage(player, "You do not have enough of this item in your inventory to cover the offer.");
 				}
 			} else {
 				var totalCoins = price*amount;
@@ -463,7 +464,7 @@ module.exports = (function () {
 					ENGINE.sendExchangeOffer(player, 1, slot, isSell, objId, amount, price);
 					clearOffer(player);
 				} else {
-					ENGINE.sendMessage(player, "You do not have enough coins to cover the offer.");
+					chat.sendMessage(player, "You do not have enough coins to cover the offer.");
 				}
 			}
 			
@@ -476,7 +477,7 @@ module.exports = (function () {
 		var objId = inv.getObjId(player, returnInv, slot);
 		var amount = inv.getCount(player, returnInv, slot);
 		if (objId !== CONST.COINS && inv.hasSpace(player)) {
-			ENGINE.sendMessage(player, "You don't have enough room in your inventory.");
+			chat.sendMessage(player, "You don't have enough room in your inventory.");
 			return;
 		}
 		if (!config.objStackable(objId) &&

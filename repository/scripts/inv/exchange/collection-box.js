@@ -24,6 +24,7 @@ var varp = require('../../core/var/player');
 
 var util = require('../../core/util');
 var config = require('../../core/config');
+var chat = require('../../chat');
 var inv = require('../core');
 
 /**
@@ -61,7 +62,7 @@ module.exports = (function () {
 						return;
 					} else {
 						if (inv.hasSpace(player, 1, Inv.BACKPACK)) {
-							ENGINE.sendMessage(player, "Not enough space.");
+							chat.sendMessage(player, "Not enough space.");
 							return;
 						}
 						var objId = inv.getObjId(player, Inv.LOAN_RETURN, 0);
@@ -75,7 +76,7 @@ module.exports = (function () {
 					return;
 				} else if (ctx.button === 10) {				
 					var desc = config.objDesc(ctx.objId);
-					ENGINE.sendMessage(player, desc);
+					chat.sendMessage(player, desc);
 					return;
 				}
 				util.defaultHandler(ctx, "collection box");

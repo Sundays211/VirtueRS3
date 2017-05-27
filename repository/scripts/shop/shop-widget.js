@@ -27,6 +27,7 @@ var varbit = require('../core/var/bit');
 var util = require('../core/util');
 var widget = require('../core/widget');
 var inv = require('../inv');
+var chat = require('../chat');
 var config = require('../core/config');
 
 /**
@@ -56,9 +57,9 @@ module.exports = function (scriptManager) {
 		
 		if (varp(player, 304) != -1 && !ENGINE.containerReady(player, varp(player, 304))) {
 			if (util.isAdmin(player)) {
-				ENGINE.sendMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 304));
+				chat.sendDebugMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 304));
 			} else {
-				ENGINE.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
+				chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
 			}				
 			return;
 		}
@@ -151,9 +152,9 @@ module.exports = function (scriptManager) {
 		if (shopId != -1) {
 			if (!ENGINE.containerReady(player, shopId)) {
 				if (util.isAdmin(player)) {
-					ENGINE.sendMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+shopId);
+					chat.sendDebugMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+shopId);
 				} else {
-					ENGINE.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
+					chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
 				}				
 				return;
 			}
@@ -163,9 +164,9 @@ module.exports = function (scriptManager) {
 		if (freeStockId != -1) {
 			if (!ENGINE.containerReady(player, freeStockId)) {
 				if (util.isAdmin(player)) {
-					ENGINE.sendMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+freeStockId);
+					chat.sendDebugMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+freeStockId);
 				} else {
-					ENGINE.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
+					chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
 				}				
 				return;
 			}
@@ -216,9 +217,9 @@ module.exports = function (scriptManager) {
 	function handleTakeButton (player, slot, option) {
 		if (!ENGINE.containerReady(player, varp(player, 305))) {
 			if (util.isAdmin(player)) {
-				ENGINE.sendMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 305));
+				chat.sendDebugMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 305));
 			} else {
-				ENGINE.sendMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
+				chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
 			}				
 			return;
 		}

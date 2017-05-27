@@ -28,6 +28,7 @@ var config = require('../core/config');
 var widget = require('../core/widget');
 var dialog = require('../core/dialog');
 var inv = require('../inv');
+var chat = require('../chat');
 var util = require('../core/util');
 
 /**
@@ -92,14 +93,14 @@ module.exports = function (scriptManager) {
 			if (getSetByKit(ENGINE.getPlayerKit(player, 2), 3, ENGINE.isFemale(player)) == -1) {
 				varbit(player, 481, 1);
 			} else {				
-				ENGINE.sendMessage(player, "You can't select different arms to go with that top.");
+				chat.sendMessage(player, "You can't select different arms to go with that top.");
 			}
 			return;
 		case 14://Choose wrists
 			if (getSetByKit(ENGINE.getPlayerKit(player, 2), 3, ENGINE.isFemale(player)) == -1) {
 				varbit(player, 481, 2);
 			} else {				
-				ENGINE.sendMessage(player, "You can't select different wrists to go with that top.");
+				chat.sendMessage(player, "You can't select different wrists to go with that top.");
 			}//Retro striped sweater
 			//Retro two-tonned
 			return;

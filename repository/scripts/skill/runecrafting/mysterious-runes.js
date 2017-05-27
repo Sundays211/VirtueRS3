@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE */
+/* globals EventType */
 var map = require('../../core/map');
 var util = require('../../core/util');
 var inv = require('../../inv');
+var chat = require('../../chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -88,10 +89,10 @@ module.exports = function(scriptManager) {
 				return;
 			}
 		} else if (!inv.isWearing(player, runes.tiara) && !inv.isWearing(player, runes.staff)) {
-			ENGINE.sendMessage(player, runes.noAccessMsg);
+			chat.sendMessage(player, runes.noAccessMsg);
 			return;
 		}
-		ENGINE.sendMessage(player, "You feel a powerful force take hold of you.");		
+		chat.sendMessage(player, "You feel a powerful force take hold of you.");		
 		var dest = runes.destination;
 		map.teleport(player, dest.x, dest.y, dest.level);
 	}

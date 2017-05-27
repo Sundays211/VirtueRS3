@@ -19,11 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Stat, ENGINE */
+/* globals EventType, Stat */
 var stat = require('../logic/stat');
 var config = require('../../core/config');
 var util = require('../../core/util');
 var inv = require('../../inv');
+var chat = require('../../chat');
 var anim = require('../../core/anim');
 
 /**
@@ -60,18 +61,18 @@ module.exports = (function () {
 	
 	function stealFromStall (player, stall, loc) {
 		if (stat.getLevel(player, Stat.THIEVING) < stall.level) {
-			ENGINE.sendMessage(player, "You need a thieving level of " + stall.level + " to steal from this " + config.locName(util.getId(loc))+".");
+			chat.sendMessage(player, "You need a thieving level of " + stall.level + " to steal from this " + config.locName(util.getId(loc))+".");
 			return;
 		}
 		if (!inv.hasSpace(player)) {
-			ENGINE.sendMessage(player, "Not enough space in your inventory.");
+			chat.sendMessage(player, "Not enough space in your inventory.");
 			return;
 		}
 		anim.run(player, 881, function () {
 			stat.giveXp(player, Stat.THIEVING, stall.xp);
 			var loot = Array.isArray(stall.loot) ? util.pickRandom(stall.loot) : stall.loot;
 			inv.give(player, loot.id, loot.count);
-			ENGINE.sendFilterMessage(player, "You successfully stole from the " + config.locName(util.getId(loc)) + ".");
+			chat.sendSpamMessage(player, "You successfully stole from the " + config.locName(util.getId(loc)) + ".");
 		});
 	}
 })();
