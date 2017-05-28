@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Inv, Stat, Disassembly */
+/* globals EventType, ENGINE, Inv, Stat */
 var varp = require('../core/var/player');
 var varbit = require('../core/var/bit');
 
@@ -33,6 +33,7 @@ var chat = require('../chat');
 
 var moneyPouch = require('./money-pouch');
 var wornEquipment = require('./worn-equipment');
+var disassembly = require('../skill/invention/disassembly');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -142,7 +143,7 @@ module.exports = (function() {
 					ENGINE.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 					return;
 				}
-				Disassembly.startDisassembly(player, item, ctx.fromslot);
+				disassembly.start(player, util.getId(item), ctx.fromslot);
 				return;
 			default:
 				util.defaultHandler(ctx, "backpack item");

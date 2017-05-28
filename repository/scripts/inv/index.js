@@ -4,10 +4,7 @@
 var toolbelt = require('./toolbelt');
 var moneyPouch = require('./money-pouch');
 var wornEquipment = require('./worn-equipment');
-var bank = require('./bank');
-var backpack = require('./backpack');
 var inv = require('./core');
-var exchange = require('./exchange');
 
 module.exports = (function () {
 	return {
@@ -109,10 +106,10 @@ module.exports = (function () {
 			toolbelt,
 			moneyPouch,
 			wornEquipment,
-			bank,
-			backpack,
+			require('./bank'),
+			require('./backpack'),
 			require('./commands'),
-			exchange
+			require('./exchange')
 		];
 		
 		for (var i in modules) {

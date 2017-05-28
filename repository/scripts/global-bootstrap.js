@@ -22,6 +22,7 @@ function getAllModules () {
 		'skill/herblore',
 		'skill/smithing',
 		'skill/summoning',
+		'skill/invention',
 		'skill/makex',
 		'quest',
 		'widget/settings',
@@ -82,6 +83,7 @@ function init (scriptManager, cwd, modules) {
 		CraftProcess : require(cwd+'/skill/makex/progress'),
 		CraftDialog : require(cwd+'/skill/makex/selection'),
 		MoneyPouch : require(cwd+'/inv/money-pouch'),
-		WornEquipment : require(cwd+'/inv/worn-equipment')
+		WornEquipment : require(cwd+'/inv/worn-equipment'),
+		Toolbelt : require(cwd+'/inv/toolbelt')
 	};
 }
