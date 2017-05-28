@@ -25,14 +25,14 @@ To register a module, it's relative path from the root script directory must be 
 ### Registering Events
 
 Registering event requires the following line to be used within the `init` function: `scriptManager.bind(eventType, binding, listener);`, where: 
-+ `eventType` is the type of event which triggers the function (eg `EventType.OPHELD1` for the first inventory option on an item). For a list of possibile event types, see the (Script Event Bindings wiki page)[https://github.com/Sundays211/VirtueRS3/wiki/Script-Event-Bindings].
++ `eventType` is the type of event which triggers the function (eg `EventType.OPHELD1` for the first inventory option on an item). For a list of possibile event types, see the [Script Event Bindings wiki page](https://github.com/Sundays211/VirtueRS3/wiki/Script-Event-Bindings);
 + `binding` is the specific item which triggers the command (eg 1962 for `EventType.OPLOC1` would be the first option on a location with the ID 1962). Note: You can also provide an array of ids to bind to (eg [ 20, 822, 400 ] would bind the same listener to items with IDs of either 20, 822, or 400).
 + `listener` is the function to call when the event is triggered. The function is provided with a `ctx` argument, providing the event context object which can be used to gather useful event parameters (eg `ctx.player`)
 
 ### Core Modules
 
 There are a handful of core modules you can require in your module to perform useful functions. Doing so is preferable to interacting directly with the game engine.
-For a list of core modules, see the (Core Modules wiki page)[https://github.com/Sundays211/VirtueRS3/wiki/Core-Modules]
+For a list of core modules, see the [Core Modules wiki page](https://github.com/Sundays211/VirtueRS3/wiki/Core-Modules)
 
 ## Terminology
 
