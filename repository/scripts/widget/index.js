@@ -2,6 +2,7 @@
  * Module to initialise the widget script bindings.
  */
 var widget = require('./core');
+var frame = require('./frame');
 
 module.exports = (function () {
 	return {
@@ -18,9 +19,7 @@ module.exports = (function () {
 		setObject : widget.setObject,
 		hide : widget.hide,
 		inframeInput : widget.inframeInput,
-		
-		//TODO: Move this to overlay code
-		openOverlay : widget.openOverlay
+		openOverlay : frame.openOverlay
 	};
 	
 	function init (scriptManager) {

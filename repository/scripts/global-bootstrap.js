@@ -24,7 +24,8 @@ function getAllModules () {
 		'skill/summoning',
 		'skill/makex',
 		'quest',
-		'widget/settings'
+		'widget/settings',
+		'widget/frame'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');

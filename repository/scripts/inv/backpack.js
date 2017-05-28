@@ -85,8 +85,7 @@ module.exports = (function() {
 					widget.openCentral(player, 206, false);
 					return;
 				case 3://Examine
-					var count = ENGINE.itemTotal(player, Inv.MONEY_POUCH, CONST.COINS);
-					chat.sendMessage(player, "Your money pouch contains "+util.toFormattedString(count) +" coins.");
+					moneyPouch.examine(player);
 					return;
 				case 4://Withdraw
 					moneyPouch.requestWithdrawCoins(player);

@@ -19,6 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType */
+var util = require('../../core/util');
+
+var overlay = require('./overlay');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,44 +31,43 @@
  * @author Sundays211
  * @since 14/01/2016
  */
-var RibbonListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, trigger, args) {
-		var player = args.player;
-		switch (args.component) {
-		case 7://Hero
-			Overlay.openOverlay(player, 0);
-			return;
-		case 8://Customisations
-			Overlay.openOverlay(player, 1);
-			return;
-		case 9://Adventures
-			Overlay.openOverlay(player, 3);
-			return;
-		case 10://Powers
-			Overlay.openOverlay(player, 2);
-			return;
-		case 11://Community
-			Overlay.openOverlay(player, 4);
-			return;
-		case 13://Upgrades & Extras
-			Overlay.openOverlay(player, 7);
-			return;
-		case 14://RuneMetrics
-			Overlay.openOverlay(player, 8);
-			return;
-		default:
-			api.sendMessage(player, "Unhandled ribbon button: comp="+args.component+", slot="+args.slot+", button="+args.button);
-			return;
-		}		
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.IF_BUTTON, 1431, function (ctx) {
+			var player = ctx.player;
+			switch (ctx.component) {
+			case 7://Hero
+				overlay.open(player, 0);
+				return;
+			case 8://Customisations
+				overlay.open(player, 1);
+				return;
+			case 9://Adventures
+				overlay.open(player, 3);
+				return;
+			case 10://Powers
+				overlay.open(player, 2);
+				return;
+			case 11://Community
+				overlay.open(player, 4);
+				return;
+			case 13://Upgrades & Extras
+				overlay.open(player, 7);
+				return;
+			case 14://RuneMetrics
+				overlay.open(player, 8);
+				return;
+			default:
+				util.defaultHandler(ctx, "ribbon");
+				return;
+			}
+		});
 	}
-});
-
-/* Listen to the interface ids specified */
-var listen = function(scriptManager) {
-	var listener = new RibbonListener();
-	scriptManager.registerListener(EventType.IF_BUTTON, 1431, listener);
-};
-
+})();
 /*
 case 7:// Hero
 	player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 0);

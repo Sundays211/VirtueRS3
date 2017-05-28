@@ -41,6 +41,7 @@ module.exports = (function () {
 		removeCoins : removeCoins,
 		getCoinCount : getCoinCount,
 		updateCoins : updateCoins,
+		examine : examine,
 		requestWithdrawCoins : requestWithdrawCoins
 	};
 	
@@ -82,6 +83,11 @@ module.exports = (function () {
 	
 	function getCoinCount (player) {
 		return inv.total(player, CONST.COINS, Inv.MONEY_POUCH);
+	}
+	
+	function examine (player) {
+		var count = ENGINE.itemTotal(player, Inv.MONEY_POUCH, CONST.COINS);
+		chat.sendMessage(player, "Your money pouch contains "+util.toFormattedString(count) +" coins.");
 	}
 	
 	function requestWithdrawCoins (player) {

@@ -876,6 +876,8 @@ public interface ScriptAPI {
 	
 	public void clearStyleEdit (Player player);
 	
+	public void refreshModel (Player player);
+	
 	public void refreshEquipment (Player player);
 	
 	public Entity getInteractionTarget (Player player);

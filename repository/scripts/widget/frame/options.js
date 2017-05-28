@@ -19,6 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, ENGINE */
+var varbit = require('../../core/var/bit');
+var varp = require('../../core/var/player');
+var varc = require('../../core/var/client');
+
+var widget = require('../core');
+var overlay = require('./overlay');
+var util = require('../../core/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,81 +35,81 @@
  * @author Sundays211
  * @since 14/01/2016
  */
-var OptionsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, trigger, args) {
-		var player = args.player;
-		switch (args.component) {
-		case 67://Logout to lobby
-			api.kickPlayer(player, true);
-			return true;
-		case 75://Logout
-			api.kickPlayer(player, false);
-			return true;
-		case 35://Edit mode
-			//IF open sub: parentId=1477, parentComp=381, id=1215, mode=1
-			//IF hide: if=1477, comp=381, hidden=0
-			//IF hide: if=745, comp=5, hidden=1
-			//IF open sub: parentId=1477, parentComp=506, id=1475, mode=0
-			//IF events: if=1475, comp=68, from=0, to=7, events=2
-			//api.setVarp(player, 659, 65537790);
-			api.openWidget(player, 1477, 524, 1475, false);
-			api.setWidgetEvents(player, 1475, 68, 2, 7, 2);
-			return true;
-		case 43://Game Settings
-			api.setVarBit(player, 19001, 1);
-			Overlay.openOverlay(player, 9);
-			break;
-		case 83://Interface Settings
-			api.setVarBit(player, 19001, 2);
-			Overlay.openOverlay(player, 9);
-			break;
-		case 91://Controls
-			api.setVarBit(player, 19001, 3);
-			Overlay.openOverlay(player, 9);
-			break;
-		case 51://Graphics
-			api.setVarBit(player, 19001, 4);
-			Overlay.openOverlay(player, 9);
-			break;
-		case 59://Audio
-			api.setVarBit(player, 19001, 5);
-			Overlay.openOverlay(player, 9);
-			break;
-		case 25://Hero
-			Overlay.openOverlay(player, 0);
-			break;
-		case 136://Customisations
-			Overlay.openOverlay(player, 1);
-			break;
-		case 137://Adventures
-			Overlay.openOverlay(player, 3);
-			break;
-		case 138://Powers
-			Overlay.openOverlay(player, 2);
-			break;
-		case 139://Community
-			Overlay.openOverlay(player, 4);
-			break;
-		case 140://Extras
-			Overlay.openOverlay(player, 7);
-			break;
-		case 145://Hop Worlds
-			api.setVarp(player, 2250, 1073741824);
-			api.setVarc(player, 2771, 53038235);
-			api.openCentralWidget(player, 1587, false);
-			break;
-		default:
-			api.sendMessage(player, "Unhandled options button: comp="+args.component+", slot="+args.slot+", button="+args.button);
-			return;
-		}		
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.IF_BUTTON, 1433, function (ctx) {
+			var player = ctx.player;
+			switch (ctx.component) {
+			case 67://Logout to lobby
+				ENGINE.kickPlayer(player, true);
+				return;
+			case 75://Logout
+				ENGINE.kickPlayer(player, false);
+				return;
+			case 35://Edit mode
+				//IF open sub: parentId=1477, parentComp=381, id=1215, mode=1
+				//IF hide: if=1477, comp=381, hidden=0
+				//IF hide: if=745, comp=5, hidden=1
+				//IF open sub: parentId=1477, parentComp=506, id=1475, mode=0
+				//IF events: if=1475, comp=68, from=0, to=7, events=2
+				//api.setVarp(player, 659, 65537790);
+				widget.open(player, 1477, 524, 1475, false);
+				widget.setEvents(player, 1475, 68, 2, 7, 2);
+				return;
+			case 43://Game Settings
+				varbit(player, 19001, 1);
+				overlay.open(player, 9);
+				return;
+			case 83://Interface Settings
+				varbit(player, 19001, 2);
+				overlay.open(player, 9);
+				return;
+			case 91://Controls
+				varbit(player, 19001, 3);
+				overlay.open(player, 9);
+				return;
+			case 51://Graphics
+				varbit(player, 19001, 4);
+				overlay.open(player, 9);
+				return;
+			case 59://Audio
+				varbit(player, 19001, 5);
+				overlay.open(player, 9);
+				return;
+			case 25://Hero
+				overlay.open(player, 0);
+				return;
+			case 136://Customisations
+				overlay.open(player, 1);
+				return;
+			case 137://Adventures
+				overlay.open(player, 3);
+				return;
+			case 138://Powers
+				overlay.open(player, 2);
+				return;
+			case 139://Community
+				overlay.open(player, 4);
+				return;
+			case 140://Extras
+				overlay.open(player, 7);
+				return;
+			case 145://Hop Worlds
+				varp(player, 2250, 1073741824);
+				varc(player, 2771, 53038235);
+				widget.openCentral(player, 1587, false);
+				return;
+			default:
+				util.defaultHandler(ctx, "options");
+				return;
+			}
+		});
 	}
-});
-
-/* Listen to the interface ids specified */
-var listen = function(scriptManager) {
-	var listener = new OptionsListener();
-	scriptManager.registerListener(EventType.IF_BUTTON, 1433, listener);
-};
+})();
 
 /*
 case 43://Game Settings

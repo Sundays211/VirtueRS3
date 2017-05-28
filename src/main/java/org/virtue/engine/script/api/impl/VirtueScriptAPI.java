@@ -1522,6 +1522,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 		player.getModel().refresh();
 	}
 
+	@Override
+	public void refreshModel(Player player) {
+		player.getModel().refresh();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#refreshEquipment(org.virtue.game.entity.player.Player)

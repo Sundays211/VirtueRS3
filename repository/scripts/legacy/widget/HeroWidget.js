@@ -9,7 +9,7 @@ var HeroOpenListener = Java.extend(Java.type('org.virtue.engine.script.listeners
 		switch (args["interface"]) {
 		case 1446:
 			api.setWidgetText(player, 1446, 94, api.getName(player));
-			api.setWidgetText(player, 1446, 93, player.getAppearance().getPrefixTitle());
+			api.setWidgetText(player, 1446, 93, player.getModel().getPrefixTitle());
 			return;
 		case 1560:
 			api.openWidget(player, 1560, 16, 1558, true);//
