@@ -33,7 +33,6 @@ var chat = require('../chat');
 
 var moneyPouch = require('./money-pouch');
 var wornEquipment = require('./worn-equipment');
-var disassembly = require('../skill/invention/disassembly');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -143,6 +142,7 @@ module.exports = (function() {
 					ENGINE.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 					return;
 				}
+				var disassembly = require('../skill/invention/disassembly');
 				disassembly.start(player, util.getId(item), ctx.fromslot);
 				return;
 			default:
