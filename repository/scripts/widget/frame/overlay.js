@@ -24,7 +24,7 @@ var varbit = require('../../core/var/bit');
 var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 
-var widget = require('../core');
+var common = require('../common');
 var config = require('../../core/config');
 var util = require('../../core/util');
 
@@ -55,7 +55,7 @@ module.exports = (function () {
 				break;
 			case 71://Logout
 				varp(player, 3813, 6);
-				widget.open(player, 1477, 853, 26, true);
+				common.open(player, 1477, 853, 26, true);
 				return;
 			case 496://Overlay tab switch
 				switch (ctx.slot) {
@@ -97,15 +97,15 @@ module.exports = (function () {
 	}
 	
 	function comp (id) {
-		return widget.getHash(1477, id);
+		return common.getHash(1477, id);
 	}
 	
 	function openOverlay (player, overlay) {
 		varc(player, 2911, -1);
-		widget.hide(player, 1477, 479, false);
-		widget.setEvents(player, 1477, 496, 0, 24, 2);
-		widget.setEvents(player, 1477, 499, 1, 1, 2);
-		widget.setEvents(player, 1477, 498, 1, 1, 2);
+		common.hide(player, 1477, 479, false);
+		common.setEvents(player, 1477, 496, 0, 24, 2);
+		common.setEvents(player, 1477, 499, 1, 1, 2);
+		common.setEvents(player, 1477, 498, 1, 1, 2);
 		varc(player, 2911, overlay);
 		varbit(player, 18994, overlay);
 		var selectedTab = getSelectedTab(player);
@@ -325,51 +325,51 @@ module.exports = (function () {
 	function openOverlayTab (player, tabStruct) {
 		var ifaceId = config.structParam(tabStruct, 3456);
 		if (ifaceId == -1) {
-			widget.hide(player, 1448, 3, true);		
+			common.hide(player, 1448, 3, true);		
 		} else {
-			widget.hide(player, 1448, 3, false);
-			widget.open(player, 1448, 3, ifaceId, true);
+			common.hide(player, 1448, 3, false);
+			common.open(player, 1448, 3, ifaceId, true);
 		}
-		widget.hide(player, 1448, 4, true);
+		common.hide(player, 1448, 4, true);
 		
 		ifaceId = config.structParam(tabStruct, 3461);
 		if (ifaceId == -1) {
-			widget.hide(player, 1448, 5, true);		
+			common.hide(player, 1448, 5, true);		
 		} else {
-			widget.hide(player, 1448, 5, false);
-			widget.open(player, 1448, 5, ifaceId, true);
+			common.hide(player, 1448, 5, false);
+			common.open(player, 1448, 5, ifaceId, true);
 		}			
-		widget.hide(player, 1448, 6, true);
+		common.hide(player, 1448, 6, true);
 		
 		ifaceId = config.structParam(tabStruct, 3466);
 		if (ifaceId == -1) {
-			widget.hide(player, 1448, 7, true);		
+			common.hide(player, 1448, 7, true);		
 		} else {
-			widget.hide(player, 1448, 7, false);
-			widget.open(player, 1448, 7, ifaceId, true);
+			common.hide(player, 1448, 7, false);
+			common.open(player, 1448, 7, ifaceId, true);
 		}			
-		widget.hide(player, 1448, 8, true);
+		common.hide(player, 1448, 8, true);
 		
 		ifaceId = config.structParam(tabStruct, 3471);
 		if (ifaceId == -1) {
-			widget.hide(player, 1448, 9, true);		
+			common.hide(player, 1448, 9, true);		
 		} else {
-			widget.hide(player, 1448, 9, false);
-			widget.open(player, 1448, 9, ifaceId, true);
+			common.hide(player, 1448, 9, false);
+			common.open(player, 1448, 9, ifaceId, true);
 		}			
-		widget.hide(player, 1448, 10, true);
+		common.hide(player, 1448, 10, true);
 
 		
 		ifaceId = config.structParam(tabStruct, 3476);
 		if (ifaceId == -1) {
-			widget.hide(player, 1448, 11, true);		
+			common.hide(player, 1448, 11, true);		
 		} else {
-			widget.hide(player, 1448, 11, false);
-			widget.open(player, 1448, 11, ifaceId, true);
+			common.hide(player, 1448, 11, false);
+			common.open(player, 1448, 11, ifaceId, true);
 		}	
-		widget.hide(player, 1448, 12, true);
+		common.hide(player, 1448, 12, true);
 		
-		widget.hide(player, 1448, 1, true);//Close loading overlay
+		common.hide(player, 1448, 1, true);//Close loading overlay
 	}
 	
 	function closeOverlay (player) {
@@ -377,10 +377,10 @@ module.exports = (function () {
 		var tab = getSelectedTab(player);
 		varc(player, 2911, -1);
 		util.runClientScript(player, 187, [overlay, tab]);
-		widget.closeSub(player, 1448, 3);
-		widget.closeSub(player, 1448, 5);
-		widget.closeSub(player, 1448, 7);
-		widget.closeSub(player, 1448, 9);
-		widget.closeSub(player, 1448, 11);
+		common.closeSub(player, 1448, 3);
+		common.closeSub(player, 1448, 5);
+		common.closeSub(player, 1448, 7);
+		common.closeSub(player, 1448, 9);
+		common.closeSub(player, 1448, 11);
 	}
 })();

@@ -25,7 +25,7 @@ var config = require('../core/config');
 var util = require('../core/util');
 var widget = require('../widget');
 var chat = require('../chat');
-var inv = require('./core');
+var inv = require('../inv');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

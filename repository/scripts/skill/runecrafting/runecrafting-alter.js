@@ -34,99 +34,7 @@ var config = require('../../core/config');
  * @since 11/11/2014
  */
 
-module.exports = function (scriptManager) {
-	scriptManager.bind(EventType.OPLOC1, 2478, function (ctx) {
-		craftRunes(ctx.player, Alter.AIR);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2479, function (ctx) {
-		craftRunes(ctx.player, Alter.MIND);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2480, function (ctx) {
-		craftRunes(ctx.player, Alter.WATER);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2481, function (ctx) {
-		craftRunes(ctx.player, Alter.EARTH);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2482, function (ctx) {
-		craftRunes(ctx.player, Alter.FIRE);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2483, function (ctx) {
-		craftRunes(ctx.player, Alter.BODY);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2484, function (ctx) {
-		craftRunes(ctx.player, Alter.COSMIC);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2487, function (ctx) {
-		craftRunes(ctx.player, Alter.CHAOS);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 17010, function (ctx) {
-		craftRunes(ctx.player, Alter.ASTRAL);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2486, function (ctx) {
-		craftRunes(ctx.player, Alter.NATURE);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2485, function (ctx) {
-		craftRunes(ctx.player, Alter.LAW);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 2488, function (ctx) {
-		craftRunes(ctx.player, Alter.DEATH);
-	});
-	
-	scriptManager.bind(EventType.OPLOC1, 30624, function (ctx) {
-		craftRunes(ctx.player, Alter.BLOOD);
-	});
-	
-	function craftRunes (player, alter) {
-		var level = stat.getLevel(player, Stat.RUNECRAFTING);
-		if (level < alter.level) {
-			chat.sendMessage(player, "You need a runecrafting level of "+alter.level+" to craft this rune.");
-			return;
-		}
-		
-		var essCount = inv.total(player, 7936);//Pure essence
-		var pureEss = true;
-		if (essCount < 1) {
-			if (!alter.pureOnly) {
-				pureEss = false;
-				essCount = inv.total(player, 1436);//Normal essence
-			}
-			if (essCount < 1) {
-				chat.sendMessage(player, "You don't have any "+(alter.pureOnly ? "pure" : "rune")+" essence.");
-				return;
-			}
-		}
-		var totalXp = essCount * alter.xp;
-		inv.take(player, pureEss ? 7936 : 1436, essCount);
-		
-		anim.addSpotAnim(player, alter.spotAnim, 0, 5, 0);
-		anim.run(player, 23250, function () {
-			stat.giveXp(player, Stat.RUNECRAFTING, totalXp);
-			inv.give(player, alter.runeID, essCount * getHighestMultiple(alter, level));
-			chat.sendMessage(player, "You bind the temple's power into "+config.objName(alter.runeID)+"s.");
-		});
-	}
-	
-	function getHighestMultiple (alter, level) {
-		var multiple = 1;
-		for (var ordinal in alter.multiplesAt) {
-			if (alter.multiplesAt[ordinal] <= level) {
-				multiple++;
-			}
-		}
-		return multiple;
-	}
-	
+module.exports = (function () {
 	var Alter = {
 		AIR : {
 			level : 1,
@@ -233,5 +141,102 @@ module.exports = function (scriptManager) {
 			multiplesAt : []
 		}
 	};
-};
-
+	
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.OPLOC1, 2478, function (ctx) {
+			craftRunes(ctx.player, Alter.AIR);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2479, function (ctx) {
+			craftRunes(ctx.player, Alter.MIND);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2480, function (ctx) {
+			craftRunes(ctx.player, Alter.WATER);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2481, function (ctx) {
+			craftRunes(ctx.player, Alter.EARTH);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2482, function (ctx) {
+			craftRunes(ctx.player, Alter.FIRE);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2483, function (ctx) {
+			craftRunes(ctx.player, Alter.BODY);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2484, function (ctx) {
+			craftRunes(ctx.player, Alter.COSMIC);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2487, function (ctx) {
+			craftRunes(ctx.player, Alter.CHAOS);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 17010, function (ctx) {
+			craftRunes(ctx.player, Alter.ASTRAL);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2486, function (ctx) {
+			craftRunes(ctx.player, Alter.NATURE);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2485, function (ctx) {
+			craftRunes(ctx.player, Alter.LAW);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2488, function (ctx) {
+			craftRunes(ctx.player, Alter.DEATH);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 30624, function (ctx) {
+			craftRunes(ctx.player, Alter.BLOOD);
+		});
+	}
+	
+	function craftRunes (player, alter) {
+		var level = stat.getLevel(player, Stat.RUNECRAFTING);
+		if (level < alter.level) {
+			chat.sendMessage(player, "You need a runecrafting level of "+alter.level+" to craft this rune.");
+			return;
+		}
+		
+		var essCount = inv.total(player, 7936);//Pure essence
+		var pureEss = true;
+		if (essCount < 1) {
+			if (!alter.pureOnly) {
+				pureEss = false;
+				essCount = inv.total(player, 1436);//Normal essence
+			}
+			if (essCount < 1) {
+				chat.sendMessage(player, "You don't have any "+(alter.pureOnly ? "pure" : "rune")+" essence.");
+				return;
+			}
+		}
+		var totalXp = essCount * alter.xp;
+		inv.take(player, pureEss ? 7936 : 1436, essCount);
+		
+		anim.addSpotAnim(player, alter.spotAnim, 0, 5, 0);
+		anim.run(player, 23250, function () {
+			stat.giveXp(player, Stat.RUNECRAFTING, totalXp);
+			inv.give(player, alter.runeID, essCount * getHighestMultiple(alter, level));
+			chat.sendMessage(player, "You bind the temple's power into "+config.objName(alter.runeID)+"s.");
+		});
+	}
+	
+	function getHighestMultiple (alter, level) {
+		var multiple = 1;
+		for (var ordinal in alter.multiplesAt) {
+			if (alter.multiplesAt[ordinal] <= level) {
+				multiple++;
+			}
+		}
+		return multiple;
+	}
+})();

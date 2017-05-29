@@ -22,7 +22,7 @@
 /* globals EventType */
 var varbit = require('../../core/var/bit');
 
-var widget = require('../core');
+var widget = require('../common');
 var util = require('../../core/util');
 var chat = require('../../chat');
 

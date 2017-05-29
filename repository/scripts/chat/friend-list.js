@@ -23,7 +23,7 @@
 var widget = require('../widget');
 var util = require('../core/util');
 var dialog = require('../core/dialog');
-var chat = require('./core');
+var chat = require('../chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

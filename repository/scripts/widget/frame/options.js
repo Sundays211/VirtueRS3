@@ -24,7 +24,7 @@ var varbit = require('../../core/var/bit');
 var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 
-var widget = require('../core');
+var common = require('../common');
 var overlay = require('./overlay');
 var util = require('../../core/util');
 
@@ -57,8 +57,8 @@ module.exports = (function () {
 				//IF open sub: parentId=1477, parentComp=506, id=1475, mode=0
 				//IF events: if=1475, comp=68, from=0, to=7, events=2
 				//api.setVarp(player, 659, 65537790);
-				widget.open(player, 1477, 524, 1475, false);
-				widget.setEvents(player, 1475, 68, 2, 7, 2);
+				common.open(player, 1477, 524, 1475, false);
+				common.setEvents(player, 1475, 68, 2, 7, 2);
 				return;
 			case 43://Game Settings
 				varbit(player, 19001, 1);
@@ -101,7 +101,7 @@ module.exports = (function () {
 			case 145://Hop Worlds
 				varp(player, 2250, 1073741824);
 				varc(player, 2771, 53038235);
-				widget.openCentral(player, 1587, false);
+				common.openCentral(player, 1587, false);
 				return;
 			default:
 				util.defaultHandler(ctx, "options");

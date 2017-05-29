@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var quest = require('./core');
+var quest = require('../quest');
 var dialog = require('../core/dialog');
 var anim = require('../core/anim');
 var inv = require('../inv');

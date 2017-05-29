@@ -23,7 +23,7 @@
 var varbit = require('../../core/var/bit');
 
 var util = require('../../core/util');
-var widget = require('../core');
+var widget = require('../common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

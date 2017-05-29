@@ -29,7 +29,7 @@ var dialog = require('../../core/dialog');
 var util = require('../../core/util');
 var config = require('../../core/config');
 var chat = require('../../chat');
-var inv = require('../core');
+var inv = require('../../inv');
 var CONST = require('../../core/const');
 
 /**

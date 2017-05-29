@@ -1,22 +1,34 @@
 /**
- * Module to initialise the chat system script bindings.
+ * Core functions for the chat system
  */
-var chat = require('./core');
+/* globals ENGINE, MesType */
 
 module.exports = (function () {
 	return {
-		init : init,
-		sendMessage : chat.sendMessage,
-		sendSpamMessage : chat.sendSpamMessage,
-		sendDebugMessage : chat.sendDebugMessage,
-		sendCommandResponse : chat.sendCommandResponse
+		sendMessage : sendMessage,
+		sendSpamMessage : sendSpamMessage,
+		sendDebugMessage : sendDebugMessage,
+		sendCommandResponse : sendCommandResponse
 	};
 	
-	function init (scriptManager) {
-		require('./chatbox')(scriptManager);
-		require('./friend-list')(scriptManager);
-		require('./friend-chat')(scriptManager);
-		require('./friend-chat-settings')(scriptManager);
-		require('./chat-settings')(scriptManager);
+	function sendMessage(player, message, type) {
+		if (typeof(type) !== "undefined") {
+			ENGINE.sendMessage(player, message, type);
+		}  else {
+			ENGINE.sendMessage(player, message);
+		}
+	}
+	
+	function sendSpamMessage (player, message) {
+		ENGINE.sendFilterMessage(player, message);
+	}
+	
+	function sendDebugMessage (player, message) {
+		//For now just send a regular message, though ultimately this will be sent to admins only
+		ENGINE.sendMessage(player, message);
+	}
+
+	function sendCommandResponse (player, message, console) {
+		ENGINE.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
 	}
 })();

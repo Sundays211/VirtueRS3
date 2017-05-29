@@ -6,20 +6,9 @@ var selection = require('./selection');
 
 module.exports = (function () {
 	return {
-		init : init,
 		startCrafting : progress.startCrafting,
 		selectProduct : selection.selectProduct,
 		makeItem : progress.makeItem
 	};
 	
-	function init (scriptManager) {
-		var modules = [
-			progress,
-			selection
-		];
-		
-		for (var i in modules) {
-			modules[i].init(scriptManager);
-		}
-	}
 })();

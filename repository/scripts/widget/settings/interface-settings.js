@@ -27,7 +27,7 @@ var varc = require('../../core/var/client');
 var config = require('../../core/config');
 var util = require('../../core/util');
 var chat = require('../../chat');
-var widget = require('../core');
+var widget = require('../common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

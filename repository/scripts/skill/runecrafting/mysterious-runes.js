@@ -33,73 +33,7 @@ var chat = require('../../chat');
  * @since 11/11/2014
  */
 
-module.exports = function(scriptManager) {
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2452, function (ctx) {
-		enterRunes(ctx.player, Runes.AIR, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2453, function (ctx) {
-		enterRunes(ctx.player, Runes.MIND, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2454, function (ctx) {
-		enterRunes(ctx.player, Runes.WATER, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2455, function (ctx) {
-		enterRunes(ctx.player, Runes.EARTH, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2456, function (ctx) {
-		enterRunes(ctx.player, Runes.FIRE, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2457, function (ctx) {
-		enterRunes(ctx.player, Runes.BODY, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2458, function (ctx) {
-		enterRunes(ctx.player, Runes.COSMIC, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2461, function (ctx) {
-		enterRunes(ctx.player, Runes.CHAOS, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2460, function (ctx) {
-		enterRunes(ctx.player, Runes.NATURE, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2459, function (ctx) {
-		enterRunes(ctx.player, Runes.LAW, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2462, function (ctx) {
-		enterRunes(ctx.player, Runes.DEATH, ctx.useitem, ctx);
-	});
-	
-	scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2464, function (ctx) {
-		enterRunes(ctx.player, Runes.BLOOD, ctx.useitem, ctx);
-	});
-	
-	function enterRunes (player, runes, useitem, ctx) {
-		if (useitem) {
-			if (useitem !== runes.talisman) {
-				util.defaultHandler(ctx, "mysterious runes");
-				return;
-			}
-		} else if (!inv.isWearing(player, runes.tiara) && !inv.isWearing(player, runes.staff)) {
-			chat.sendMessage(player, runes.noAccessMsg);
-			return;
-		}
-		chat.sendMessage(player, "You feel a powerful force take hold of you.");		
-		var dest = runes.destination;
-		map.teleport(player, dest.x, dest.y, dest.level);
-	}
-	
-	function coords (x, y, level) {
-		return { x:x, y:y, level:level };
-	}
+module.exports = (function () {
 	
 	var Runes = {
 		AIR : {
@@ -187,4 +121,79 @@ module.exports = function(scriptManager) {
 			noAccessMsg : "You need a blood talisman to access the Blood Altar."
 		}
 	};
-};
+	
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2452, function (ctx) {
+			enterRunes(ctx.player, Runes.AIR, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2453, function (ctx) {
+			enterRunes(ctx.player, Runes.MIND, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2454, function (ctx) {
+			enterRunes(ctx.player, Runes.WATER, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2455, function (ctx) {
+			enterRunes(ctx.player, Runes.EARTH, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2456, function (ctx) {
+			enterRunes(ctx.player, Runes.FIRE, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2457, function (ctx) {
+			enterRunes(ctx.player, Runes.BODY, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2458, function (ctx) {
+			enterRunes(ctx.player, Runes.COSMIC, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2461, function (ctx) {
+			enterRunes(ctx.player, Runes.CHAOS, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2460, function (ctx) {
+			enterRunes(ctx.player, Runes.NATURE, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2459, function (ctx) {
+			enterRunes(ctx.player, Runes.LAW, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2462, function (ctx) {
+			enterRunes(ctx.player, Runes.DEATH, ctx.useitem, ctx);
+		});
+		
+		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2464, function (ctx) {
+			enterRunes(ctx.player, Runes.BLOOD, ctx.useitem, ctx);
+		});
+	}
+	
+
+	
+	function enterRunes (player, runes, useitem, ctx) {
+		if (useitem) {
+			if (useitem !== runes.talisman) {
+				util.defaultHandler(ctx, "mysterious runes");
+				return;
+			}
+		} else if (!inv.isWearing(player, runes.tiara) && !inv.isWearing(player, runes.staff)) {
+			chat.sendMessage(player, runes.noAccessMsg);
+			return;
+		}
+		chat.sendMessage(player, "You feel a powerful force take hold of you.");		
+		var dest = runes.destination;
+		map.teleport(player, dest.x, dest.y, dest.level);
+	}
+	
+	function coords (x, y, level) {
+		return { x:x, y:y, level:level };
+	}
+})();

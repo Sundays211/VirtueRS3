@@ -4,14 +4,12 @@
 /* globals ENGINE, Java */
 var varc = require('../core/var/client');
 
-module.exports = init();
-
-function init () {
-	var widget = {
+module.exports = (function () {
+	return {
 		getHash : getHash,
+		open : open,
 		openCentral : openCentral,
 		openOverlaySub : openOverlaySub,
-		open : open,
 		closeSub : closeSub,
 		closeAll : closeAll,
 		closeOverlaySub : closeOverlaySub,
@@ -21,11 +19,13 @@ function init () {
 		hide : hide,
 		inframeInput : inframeInput
 	};
-	
-	return widget;
 
 	function getHash (iface, comp) {
 		return (iface << 16) | comp;
+	}
+
+	function open (player, parentId, parentComp, id, alwaysOpen) {
+		ENGINE.openWidget(player, parentId, parentComp, id, !!alwaysOpen);
 	}
 	
 	function openCentral (player, id, alwaysOpen) {
@@ -34,10 +34,6 @@ function init () {
 	
 	function openOverlaySub (player, subId, id, alwaysOpen) {
 		ENGINE.openOverlaySub(player, subId, id, !!alwaysOpen);
-	}
-
-	function open (player, parentId, parentComp, id, alwaysOpen) {
-		ENGINE.openWidget(player, parentId, parentComp, id, !!alwaysOpen);
 	}
 	
 	function closeSub (player, parentId, parentComp) {
@@ -79,4 +75,4 @@ function init () {
 		});
 		ENGINE.setInputHandler(player, new Handler());	
 	}
-}
+})();

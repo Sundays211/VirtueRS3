@@ -25,7 +25,7 @@ var varp = require('../../core/var/player');
 var util = require('../../core/util');
 var config = require('../../core/config');
 var chat = require('../../chat');
-var inv = require('../core');
+var inv = require('../../inv');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
