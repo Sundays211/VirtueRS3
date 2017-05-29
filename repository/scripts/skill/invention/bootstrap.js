@@ -5,7 +5,8 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./workbench'),
-		require('./disassembly')
+		require('./disassembly'),
+		require('./commands')
 	];
 	
 	for (var i in modules) {

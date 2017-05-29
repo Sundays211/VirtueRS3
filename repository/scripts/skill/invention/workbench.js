@@ -32,7 +32,8 @@ var makex = require('../makex');
  */
 module.exports = (function () {
 	return {
-		init : init
+		init : init,
+		selectInventionProduct : selectInventionProduct
 	};
 	
 	function init (scriptManager) {
