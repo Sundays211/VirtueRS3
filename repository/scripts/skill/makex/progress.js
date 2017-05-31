@@ -90,10 +90,11 @@ module.exports = (function () {
 	}
 	
 	function startCrafting (player, amount, animation, successText) {
+		animation = animation || -1;
 		var productId = varp(player, 1175);
 		//api.setVarp(player, 1169, category);
 		widget.openOverlaySub(player, 1018, 1251, false);
-		var length = animation === undefined ? 1 : Math.ceil(config.seqLength(animation) / 30);//Round up
+		var length = animation == -1 ? 1 : Math.ceil(config.seqLength(animation) / 30);//Round up
 		chat.sendDebugMessage(player, "Total time: "+length);
 		varc(player, 2227, length);//Time per item
 		varc(player, 2228, amount);//Total products
@@ -102,7 +103,7 @@ module.exports = (function () {
 		varp(player, 1176, 0);//Xp received
 		varp(player, 1177, 0);//Secondary skill xp received
 		var delay = length-1;
-		if (animation !== undefined) {
+		if (animation != -1) {
 			anim.run(player, animation);
 		}			
 		var CraftAction = Java.extend(Java.type("org.virtue.game.entity.player.event.PlayerActionHandler"), {
@@ -118,7 +119,7 @@ module.exports = (function () {
 						chat.sendSpamMessage(player, successText);
 					}
 					
-					if (amount >= 1 && animation !== undefined) {
+					if (amount >= 1 && animation != -1) {
 						anim.run(player, animation);
 					}
 					delay = length;

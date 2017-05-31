@@ -198,7 +198,7 @@ var Firemaking = {
 					Firemaking.runFiremakingAction(player, item, slot);
 					break;
 				case 946://Craft
-					Fletching.handleCraft(player, api.getId(item), slot);
+					Fletching.selectProduct(player, api.getId(item), slot);
 					//item.handleItemOnItem(player, slot, Item.create(946, 1), -1);//A hacky solution, but it should work
 					break;
 				case 24291://Add logs to a nearby bonfire

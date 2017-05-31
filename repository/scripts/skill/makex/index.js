@@ -8,7 +8,8 @@ module.exports = (function () {
 	return {
 		startCrafting : progress.startCrafting,
 		selectProduct : selection.selectProduct,
-		makeItem : progress.makeItem
+		makeItem : progress.makeItem,
+		hasPossibleIngredient : selection.structContainsItem
 	};
 	
 })();

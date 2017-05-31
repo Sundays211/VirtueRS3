@@ -19,6 +19,7 @@ function getAllModules () {
 		'skill/thieving',
 		'skill/cooking',
 		'skill/crafting',
+		'skill/fletching',
 		'skill/herblore',
 		'skill/smithing',
 		'skill/summoning',
@@ -84,6 +85,7 @@ function init (scriptManager, cwd, modules) {
 		CraftDialog : require(cwd+'/skill/makex/selection'),
 		MoneyPouch : require(cwd+'/inv/money-pouch'),
 		WornEquipment : require(cwd+'/inv/worn-equipment'),
-		Toolbelt : require(cwd+'/inv/toolbelt')
+		Toolbelt : require(cwd+'/inv/toolbelt'),
+		Fletching : require(cwd+'/skill/fletching/fletch-log')
 	};
 }
