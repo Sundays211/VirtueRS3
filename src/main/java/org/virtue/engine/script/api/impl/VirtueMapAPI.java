@@ -37,6 +37,10 @@ public class VirtueMapAPI implements MapAPI {
 	public VirtueMapAPI() {
 		
 	}
+	
+	private Region getRegion (Tile coords) {
+		return World.getInstance().getRegions().getRegionByID(coords.getRegionID());
+	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.MapAPI#createArea()
@@ -126,4 +130,34 @@ public class VirtueMapAPI implements MapAPI {
 		return addLoc(area, locTypeID, localX, localY, level, 10, 0);
 	}
 
+	@Override
+	public SceneLocation addLoc(int locTypeId, int coordHash, int nodeType, int rotation) {
+		Tile coords = new Tile(coordHash);
+		SceneLocation location = SceneLocation.create(locTypeId, coords, nodeType, rotation);
+		getRegion(coords).spawnTempLocation(location, -1);
+		return location;
+	}
+
+	@Override
+	public SceneLocation getLoc(Tile coords, int type) {
+		if (type < 0 || type > 22) {
+			throw new IllegalArgumentException("Invalid location type: "+type);
+		}
+		Region region = getRegion(coords);
+		if (region == null) {
+			return null;
+		}
+		SceneLocation[] locs = region.getLocations(coords.getX(), coords.getY(), coords.getPlane());
+		if (locs == null) {
+			return null;
+		}
+		return locs[type];
+	}
+
+	@Override
+	public void delLoc(SceneLocation loc) {
+		getRegion(loc.getTile()).removeLocation(loc, loc.isTemporary());
+	}
+
+	
 }

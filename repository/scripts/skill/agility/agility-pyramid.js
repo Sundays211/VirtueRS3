@@ -22,7 +22,7 @@
 /* globals EventType, Stat */
 var util = require('../../core/util');
 var stat = require('../logic/stat');
-var map = require('../../core/map');
+var map = require('../../map');
 var anim = require('../../core/anim');
 
 /**
@@ -33,9 +33,9 @@ var anim = require('../../core/anim');
 module.exports = function(scriptManager) {
 	scriptManager.bind(EventType.OPLOC1, 10857, function (ctx) {
 		if (map.getCoordX(ctx.location) == 3354 && map.getCoordY(ctx.location) == 2831) {
-			map.teleport(ctx.player, 3355, 2833, 1);
+			map.setCoords(ctx.player, 3355, 2833, 1);
 		} else if (map.getCoordX(ctx.location) == 3200 && map.getCoordY(ctx.location) == 3243) {
-			map.teleport(ctx.player, 3200, 3242, 1);
+			map.setCoords(ctx.player, 3200, 3242, 1);
 		} else {
 			util.defaultHandler(ctx, "agility pyramid");
 		}
@@ -43,11 +43,11 @@ module.exports = function(scriptManager) {
 
 	scriptManager.bind(EventType.OPLOC1, 10860, function (ctx) {
 		if (map.getCoordX(ctx.location) == 3364 && map.getCoordY(ctx.location) == 2851) {
-			map.teleport(ctx.player, 3368, 2851, 1);
+			map.setCoords(ctx.player, 3368, 2851, 1);
 			anim.run(ctx.player, 756);
 			stat.giveXp(ctx.player, Stat.AGILITY, 15);
 		} else if (map.getCoordX(ctx.location) == 3200 && map.getCoordY(ctx.location) == 3243) {
-			map.teleport(ctx.player, 3200, 3242, 1);
+			map.setCoords(ctx.player, 3200, 3242, 1);
 		} else {
 			util.defaultHandler(ctx, "agility pyramid");
 		}
@@ -55,11 +55,11 @@ module.exports = function(scriptManager) {
 
 	scriptManager.bind(EventType.OPLOC1, 10865, function (ctx) {
 		if (map.getCoordX(ctx.location) == 3354 && map.getCoordY(ctx.location) == 2849) {
-			map.teleport(ctx.player, 3354, 2850, 1);
+			map.setCoords(ctx.player, 3354, 2850, 1);
 			anim.run(ctx.player, 769);
 			stat.giveXp(ctx.player, Stat.AGILITY, 15);
 		} else if (map.getCoordX(ctx.location) == 3200 && map.getCoordY(ctx.location) == 3243) {
-			map.teleport(ctx.player, 3200, 3245, 0);
+			map.setCoords(ctx.player, 3200, 3245, 0);
 		} else {
 			util.defaultHandler(ctx, "agility pyramid");
 		}
@@ -67,11 +67,11 @@ module.exports = function(scriptManager) {
 
 	scriptManager.bind(EventType.OPLOC1, 10868, function (ctx) {
 		if (map.getCoordX(ctx.location) == 3375 && map.getCoordY(ctx.location) == 2845) {
-			map.teleport(ctx.player, 3375, 2840, 1);
+			map.setCoords(ctx.player, 3375, 2840, 1);
 			anim.run(ctx.player, 762);
 			stat.giveXp(ctx.player, Stat.AGILITY, 15);
 		} else if (map.getCoordX(ctx.location) == 3200 && map.getCoordY(ctx.location) == 3243) {
-			map.teleport(ctx.player, 3200, 3242, 1);
+			map.setCoords(ctx.player, 3200, 3242, 1);
 		} else {
 			util.defaultHandler(ctx, "agility pyramid");
 		}
