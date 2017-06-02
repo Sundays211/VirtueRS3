@@ -160,6 +160,16 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
+	public int getLocRotation(SceneLocation loc) {
+		return loc.getRotation();
+	}
+
+	@Override
+	public int getLocShape(SceneLocation loc) {
+		return loc.getShape();
+	}
+
+	@Override
 	public void delay(SceneLocation loc, Runnable task, int ticks) {
 		loc.addDelayTask(task, ticks);
 	}

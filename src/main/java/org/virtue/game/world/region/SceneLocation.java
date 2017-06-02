@@ -56,7 +56,7 @@ public class SceneLocation extends Node {
 	
 	private Tile baseTile;
 	
-	private int nodeType;
+	private int shape;
 	
 	private int rotation;
 	
@@ -66,12 +66,12 @@ public class SceneLocation extends Node {
 	
 	private Set<DelayTask> delayTasks = new HashSet<>();
 	
-	protected SceneLocation (int id, Tile tile, int nodeType, int rotation) {
+	protected SceneLocation (int id, Tile tile, int shape, int rotation) {
 		super(id);
 		super.currentTile = tile;
 		this.originalID = id;
 		this.baseTile = tile;
-		this.nodeType = nodeType;
+		this.shape = shape;
 		this.rotation = rotation;
 		super.name = getLocType().name;
 		if ((rotation & 2) == 0) {
@@ -170,11 +170,11 @@ public class SceneLocation extends Node {
 	}
 
 	/**
-	 * Gets the integer representing the node type of this location (eg wall, door, stand-alone, etc)
-	 * @return The node type
+	 * Gets the integer representing the shape of this location (eg wall, door, stand-alone, etc)
+	 * @return The shape
 	 */
-	public int getNodeType () {
-		return nodeType;
+	public int getShape () {
+		return shape;
 	}
 	
 	/**

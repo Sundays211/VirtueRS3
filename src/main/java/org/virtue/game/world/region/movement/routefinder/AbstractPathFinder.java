@@ -64,7 +64,7 @@ public abstract class AbstractPathFinder implements Pathfinder {
         	locLength = location.getLocType().sizeX;
         }
 
-        if(location.getNodeType() != 10 && location.getNodeType() != 11 && location.getNodeType() != 22) {
+        if(location.getShape() != 10 && location.getShape() != 11 && location.getShape() != 22) {
         	locWidth = locLength = 0;
         }
 

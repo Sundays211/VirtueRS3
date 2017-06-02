@@ -58,25 +58,39 @@ public interface MapAPI {
 	 * Spawns a new location at the specified coords
 	 * @param locTypeId The ID of the location to spawn
 	 * @param coords The coordinates to spawn the location on
-	 * @param nodeType The node type to spawn
+	 * @param shape The location shape to spawn
 	 * @param rotation The rotation of the node (0-3, clockwise from the default position)
 	 * @return The newly created location
 	 */
-	public SceneLocation addLoc(int locTypeId, int coords, int nodeType, int rotation);
+	public SceneLocation addLoc(int locTypeId, int coords, int shape, int rotation);
 	
 	/**
 	 * Fetches a location at the specified coords of the specified type
 	 * @param coords The coordinates to look at
-	 * @param type The node type to look for
+	 * @param shape The location shape to look for
 	 * @return The location at the specified coords, or null if none could be found
 	 */
-	public SceneLocation getLoc(Tile coords, int type);
+	public SceneLocation getLoc(Tile coords, int shape);
 	
 	/**
 	 * Removes the specified location from the map
 	 * @param loc The location to remove
 	 */
 	public void delLoc(SceneLocation loc);
+	
+	/**
+	 * Gets the current rotation for the specified location
+	 * @param loc The location to check
+	 * @return The rotation, between 0 and 3 clockwise from the default rotation
+	 */
+	public int getLocRotation(SceneLocation loc);
+	
+	/**
+	 * Gets the shape of the specified location
+	 * @param loc The location to check
+	 * @return The location's shape
+	 */
+	public int getLocShape(SceneLocation loc);
 	
 	/**
 	 * Delays the execution of a task by the given number of server cycles.

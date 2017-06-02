@@ -102,7 +102,7 @@ public class DynamicRegionLoadTask implements Runnable {
 					finalX = (chunkX * 8) + getRotatedXPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
 					finalY = (chunkY * 8) + getRotatedYPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
 					tile = new Tile(finalX, finalY, z, region.mapSquareHash);
-					loc = SceneLocation.create(loc.getID(), tile, loc.getNodeType(), rotation); 
+					loc = SceneLocation.create(loc.getID(), tile, loc.getShape(), rotation); 
 					region.addLocation(loc, finalX, finalY, z);
 				}
 			}
