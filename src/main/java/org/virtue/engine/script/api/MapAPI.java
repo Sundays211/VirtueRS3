@@ -62,7 +62,7 @@ public interface MapAPI {
 	 * @param rotation The rotation of the node (0-3, clockwise from the default position)
 	 * @return The newly created location
 	 */
-	public SceneLocation addLoc(int locTypeId, int coords, int shape, int rotation);
+	public SceneLocation addLoc(int locTypeId, Tile coords, int shape, int rotation);
 	
 	/**
 	 * Fetches a location at the specified coords of the specified type

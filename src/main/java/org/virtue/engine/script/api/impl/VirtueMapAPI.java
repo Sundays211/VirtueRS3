@@ -131,8 +131,7 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
-	public SceneLocation addLoc(int locTypeId, int coordHash, int nodeType, int rotation) {
-		Tile coords = new Tile(coordHash);
+	public SceneLocation addLoc(int locTypeId, Tile coords, int nodeType, int rotation) {
 		SceneLocation location = SceneLocation.create(locTypeId, coords, nodeType, rotation);
 		getRegion(coords).spawnTempLocation(location, -1);
 		return location;

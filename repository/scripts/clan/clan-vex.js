@@ -23,7 +23,7 @@
 var util = require('../core/util');
 var chat = require('../chat');
 var anim = require('../core/anim');
-var map = require('../map");
+var map = require('../map');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
