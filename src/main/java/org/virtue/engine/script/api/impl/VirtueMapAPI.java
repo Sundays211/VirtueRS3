@@ -159,5 +159,8 @@ public class VirtueMapAPI implements MapAPI {
 		getRegion(loc.getTile()).removeLocation(loc, loc.isTemporary());
 	}
 
-	
+	@Override
+	public void delay(SceneLocation loc, Runnable task, int ticks) {
+		loc.addDelayTask(task, ticks);
+	}
 }

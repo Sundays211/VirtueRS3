@@ -77,4 +77,13 @@ public interface MapAPI {
 	 * @param loc The location to remove
 	 */
 	public void delLoc(SceneLocation loc);
+	
+	/**
+	 * Delays the execution of a task by the given number of server cycles.
+	 * The task will be cancelled if the location is destroyed
+	 * @param loc The location to delay on
+	 * @param task The task to run after the delay
+	 * @param ticks The number of server cycles to delay by
+	 */
+	public void delay (SceneLocation loc, Runnable task, int ticks);
 }

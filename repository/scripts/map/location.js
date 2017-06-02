@@ -7,7 +7,8 @@ module.exports = (function () {
 	return {
 		add : addLocation,
 		get : getLocation,
-		del : delLocation
+		del : delLocation,
+		delay : delay
 	};
 	
 	function addLocation (locTypeId, coords, nodeType, rotation) {
@@ -20,5 +21,9 @@ module.exports = (function () {
 	
 	function delLocation (location) {
 		MAP_ENGINE.delLoc(location);
+	}
+	
+	function delay (location, delay, task) {
+		MAP_ENGINE.delay(location, task, delay);
 	}
 })();
