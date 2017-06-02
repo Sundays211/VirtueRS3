@@ -12,23 +12,27 @@ To contribute to the project, fork it to your own repository using the link at t
 
 ## Script System
 
-All content scripts are located under repository/scripts/. These scripts are loaded automatically when the server is first started, and they can be reloaded using the "::scripts" or "::reload <folder>" command in-game (while logged into an Admin account) if you want to test a change without restarting the entire server. While scripts are organised into folders of related scripts, the folder used for each script only affects the "reload" command and the debug output when scripts are loaded.
+All content scripts are located under repository/scripts/. These scripts are loaded automatically when the server is first started, and they can be reloaded using the `::scripts` or `::reload <module>` command in-game (while logged into an Admin account) if you want to test a change without restarting the entire server. The [CommonJS module structure](http://wiki.commonjs.org/wiki/Modules/1.1) is used to organise scripts into modules which declare dependencies on other modules using `require(<relative path to module>)`. 
 
-### Script File Requirements
+NOTE: you must use the _relative path to the module_ when requiring modules, which usually involves stepping up one or more levels first. For example, if your module was in the folder `/skill/mining` and you wanted to import the `/core/var/bit` module, you would need to use `var varbit = require('../../core/var/bit');`
 
-Each script file must contain a "listen" function which takes one argument, "scriptManager", representing the script execution environment instance. Within this function, event listeners should be bound to their respective event types, so the server knows which functions to call when an event is triggered. Note: All scripts registered on the server share a single scope/context, so you can call functions from different files within your script. Also make sure you don't re-use a function or global variable name which has already been used in another script - if a function/variable name is used multiple times, one of the function/variable definitions will replace the other, which will cause issues when its events are run.
+### Creating and Registering Modules
+
+Each module must contain an `index.js` file which exports at least an `init()` function. When the module is loaded, the `global-bootstrap.js` file will call it's `init()` function with the `scriptManager` argument, which can be used to bind events as outlined in the next section. 
+
+To register a module, it's relative path from the root script directory must be declared in the `getAllModules()` function in `global-bootstrap.js`. This allows the module to be loaded both when the server is launched and when the `::reload <module>` command is used (`<module>` is the name provided in the `getAllModules()` function).
 
 ### Registering Events
 
-Registering event requires the following line to be used within the "listen" function: "scriptManager.registerListener(eventType, binding, listener);", where "eventType" is the type of event which triggers the function (eg EventType.OPHELD1 for the first inventory option on an item), "binding" is the specific item which triggers the command (eg 1962 for EventType.OPLOC1 would be the first option on a location with the ID 1962), and "listener" is the function to call when the event is triggered. 
+Registering event requires the following line to be used within the `init` function: `scriptManager.bind(eventType, binding, listener);`, where: 
++ `eventType` is the type of event which triggers the function (eg `EventType.OPHELD1` for the first inventory option on an item). For a list of possibile event types, see the [Script Event Bindings wiki page](https://github.com/Sundays211/VirtueRS3/wiki/Script-Event-Bindings);
++ `binding` is the specific item which triggers the command (eg 1962 for `EventType.OPLOC1` would be the first option on a location with the ID 1962). Note: You can also provide an array of ids to bind to (eg [ 20, 822, 400 ] would bind the same listener to items with IDs of either 20, 822, or 400).
++ `listener` is the function to call when the event is triggered. The function is provided with a `ctx` argument, providing the event context object which can be used to gather useful event parameters (eg `ctx.player`)
 
-### Script APIs
+### Core Modules
 
-While it's possible to use existing Java methods to integrate with the engine, it's highly recommended to use one of the various script APIs instead. Using these APIs ensures your script won't break if the internal structure of the engine changes, and it creates a clear separation between the content and the engine itself. 
-
-The main API uses the variable "api" within scripts. It's used for most interaction methods, including getting & setting variables (eg api.getVarp(player, 1823) to return the value of varp 1823), managing player inventories, opening & closing interfaces, running animations, etc. 
-
-There are two additional specialist APIs. "clanAPI" is used for functions relating to the clan system (eg "clanAPI.isBanned(clanHash, userHash)" to find out whether a player is banned from the clan), while "mapAPI" handles some of the map-related functions, particularly those used in dynamic maps like player-owned-houses.
+There are a handful of core modules you can require in your module to perform useful functions. Doing so is preferable to interacting directly with the game engine.
+For a list of core modules, see the [Core Modules wiki page](https://github.com/Sundays211/VirtueRS3/wiki/Core-Modules)
 
 ## Terminology
 

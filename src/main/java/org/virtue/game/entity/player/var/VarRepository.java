@@ -44,6 +44,7 @@ import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PlayerModel.Gender;
+import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
 import org.virtue.utility.TimeUtility;
@@ -161,11 +162,18 @@ public class VarRepository implements VarDomain {
 				if ((value instanceof Player)) {
 					value = ((Entity) value).getIndex();
 				}
-			default:
-				if (!(value instanceof Integer)) {
-					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
+				break;
+			case COORDGRID:
+				if ((value instanceof Tile)) {
+					value = ((Tile) value).getTileHash();
 				}
-			}			
+				break;
+ 			default:
+				
+			}
+			if (!(value instanceof Integer)) {
+				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
+			}
 			break;
 		case LONG:
 			if (!(value instanceof Long)) {

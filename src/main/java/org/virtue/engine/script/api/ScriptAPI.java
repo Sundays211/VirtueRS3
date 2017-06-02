@@ -221,6 +221,13 @@ public interface ScriptAPI {
 	public int getId (Node node);
 	
 	/**
+	 * Legacy work-around so we can provide either a node or an id
+	 * @param id
+	 * @return
+	 */
+	public int getId (int id);
+	
+	/**
 	 * Opens the specified widget in the central widget frame. 
 	 * @param player The player
 	 * @param widgetID The id of the widget to open
@@ -498,6 +505,15 @@ public interface ScriptAPI {
 	 * @param count The number of items to add
 	 */
 	public void setInvSlot (Player player, int invId, int slot, int itemId, int count);
+	
+	/**
+	 * Removes an item from the player's inventory
+	 * This should be used with care, as can cause issues in some inventories (such as shops and banks) which do not work properly with empty slots.
+	 * @param player The player
+	 * @param invId The inventory to clear the slot from. See {@link org.virtue.game.entity.player.inv.ContainerState} for the ids of valid containers
+	 * @param slot The slot to clear
+	 */
+	public void clearInvSlot (Player player, int invId, int slot);
 	
 	/**
 	 * Replaces an item in the player's inventory with a new item.
@@ -859,6 +875,8 @@ public interface ScriptAPI {
 	public void applyPlayerStyles (Player player);
 	
 	public void clearStyleEdit (Player player);
+	
+	public void refreshModel (Player player);
 	
 	public void refreshEquipment (Player player);
 	

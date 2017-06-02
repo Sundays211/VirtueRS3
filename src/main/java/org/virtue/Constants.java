@@ -42,7 +42,7 @@ public class Constants {
 	/**
 	 * The Framework Version
 	 */
-	public static final double FRAME_VERSION = 1.0;
+	public static final double FRAME_VERSION = 1.1;
 	
 	/**
 	 * The Framework Major Revision

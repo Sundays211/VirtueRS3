@@ -142,13 +142,13 @@ public final class Inventory {
 					}
 					return slots;
 				} else {
-					return null;
+					throw new IllegalStateException("Not enough space for "+item);
 				}
 			}
 		}
 		int index = nextFreeSlot();
 		if (index == -1) {
-			return null;
+			throw new IllegalStateException("Not enough space for "+item);
 		}
 		data[index] = item;
 		return new int[] { index };

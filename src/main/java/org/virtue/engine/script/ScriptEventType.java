@@ -164,7 +164,7 @@ public enum ScriptEventType {
 	OPHELD5(65),
 	
 	/**
-	 * Called when an inventory item is used on another inventory item
+	 * Called when an inventory item is <b>used on</b> the specified inventory item
 	 */
 	OPHELDU(66),
 	

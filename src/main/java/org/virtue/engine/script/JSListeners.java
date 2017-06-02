@@ -23,8 +23,10 @@ package org.virtue.engine.script;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,10 @@ public class JSListeners implements ScriptManager {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(JSListeners.class);
+	
+	private static String[] LEGACY_CATEGORIES = {"abilities", "command", "farming",
+			"interaction", "npcs",
+			"skill", "specials", "widget"};
 	
 	private static class EventBind {
 		private ScriptEventType type;
@@ -148,6 +154,10 @@ public class JSListeners implements ScriptManager {
 	private ScriptEngine engine;
 	
 	private File scriptDir;
+	
+	private File legacyScriptDir;
+	
+	private List<String> modules;
 
 	public JSListeners(File scriptDir, ConfigProvider configProvider) {
 		this.listeners = new HashMap<>();
@@ -161,14 +171,18 @@ public class JSListeners implements ScriptManager {
 		this.configApi = new VirtueConfigAPI(configProvider);
 		this.questApi = new VirtueQuestAPI(configProvider);
 		this.scriptDir = scriptDir;
+		legacyScriptDir = new File(scriptDir, "legacy");
+		this.modules = new ArrayList<>();
 	}
 	
 	private void setConstants (ScriptEngine engine) {
 		engine.put("api", getApi());
-		engine.put("clanApi", clanApi);
+		engine.put("ENGINE", getApi());
+		engine.put("CLAN_ENGINE", clanApi);
 		engine.put("mapApi", mapApi);
 		engine.put("configApi", configApi);
-		engine.put("questApi", questApi);
+		engine.put("QUEST_ENGINE", questApi);
+		engine.put("scriptEngine", this);
 		
 		Map<String, Integer> map = new HashMap<>();
 		for (ScriptEventType type : ScriptEventType.values()) {
@@ -212,7 +226,7 @@ public class JSListeners implements ScriptManager {
 		}
 		engine.put("FriendChatData", map);
 		
-		File generalFunctions = new File(scriptDir, "GeneralFunctions.js");
+		File generalFunctions = new File(legacyScriptDir, "GeneralFunctions.js");
 		if (generalFunctions.exists()) {
 			try {
 				engine.eval(new FileReader(generalFunctions));
@@ -225,26 +239,57 @@ public class JSListeners implements ScriptManager {
 	public synchronized boolean load() {
 		boolean success = true;
 		engine = engineManager.getEngineByName("nashorn");
-		if (engine == null) {
-			engine = engineManager.getEngineByName("JavaScript");//Fall back to Rhino if Nashorn is not available
-		}
 		setConstants(engine);
-		
-		for (File category : scriptDir.listFiles()) {
-			if (category.isDirectory()) {
-				if (!loadScriptCategory(engine, category)) {
+		try {
+			loadModules();
+		} catch (Exception ex) {
+			logger.error("Failed to load script modules", ex);
+			success = false;
+		}
+		for (String legacyCategory : LEGACY_CATEGORIES) {
+			File categoryDir = new File(legacyScriptDir, legacyCategory);
+			if (categoryDir.exists()) {
+				if (!loadLegacyCategory(engine, categoryDir)) {
 					success = false;
 				}
-			}			
+			} else {
+				logger.warn("Legacy category {} does not exist!", categoryDir);
+			}
 		}
 		logger.info("Registerd " + varMap.size() + " Var Script(s).");
 		return success;
 	}
 	
-	private boolean loadScriptCategory (ScriptEngine engine, File folder) {
+	@SuppressWarnings("unchecked")
+	private void loadModules () throws Exception {
+		File globalBootstrap = new File(scriptDir, "global-bootstrap.js");
+		engine.eval(new FileReader(globalBootstrap));
+		Invocable invoke = (Invocable) engine;
+		
+		modules.clear();		
+		Object modulesObj = invoke.invokeFunction("getAllModules");
+		modules.addAll((List<String>) modulesObj);
+		
+		logger.info("Found modules: {}", modules);
+		loadModules(modules);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void loadModules(List<String> modules) throws Exception {
+		Invocable invoke = (Invocable) engine;
+		Object legacyGlobals = invoke.invokeFunction("init", this, scriptDir, modules);
+		//TODO: This section only exists to support legacy scripts. Remove once modular system is fully implemented
+		Map<String, Object> legacyGlobalMap = (Map<String, Object>) legacyGlobals;
+		for (Map.Entry<String, Object> entry : legacyGlobalMap.entrySet()) {
+			engine.put(entry.getKey(), entry.getValue());
+		}
+	}
+	
+	private boolean loadLegacyCategory (ScriptEngine engine, File folder) {
 		boolean success = true;
 		List<File> files = FileUtility.findFiles(folder, "js");
 		int countBefore = listeners.size();
+		long start = System.currentTimeMillis();
 		for (File file : files) {
 			try {
 				engine.eval(new FileReader(file));
@@ -256,7 +301,8 @@ public class JSListeners implements ScriptManager {
 			}
 		}
 		int totalScripts = listeners.size() - countBefore;
-		logger.info("Registered "+totalScripts+" "+folder.getName()+" event listener(s).");
+		long time = System.currentTimeMillis() - start;
+		logger.info("Registered {} {} event listener(s) in {} milliseconds.", totalScripts, folder.getName(), time);
 		return success;
 	}
 
@@ -277,8 +323,19 @@ public class JSListeners implements ScriptManager {
 	 */
 	@Override
 	public synchronized boolean reload(String category) {
-		File folder = new File(scriptDir, category);
-		return loadScriptCategory(engine, folder);
+		boolean success = true;
+		if (modules.contains(category)) {
+			try {
+				loadModules(Collections.singletonList(category));
+			} catch (Exception ex) {
+				logger.error("Problem reloading module "+category, ex);
+				success = false;
+			}
+		} else {
+			File folder = new File(legacyScriptDir, category);
+			success = loadLegacyCategory(engine, folder);
+		}
+		return success;
 	}
 	
 	/* (non-Javadoc)
@@ -295,6 +352,14 @@ public class JSListeners implements ScriptManager {
 	 */
 	public ScriptAPI getApi () {
 		return scriptAPI;
+	}
+	
+	/**
+	 * Returns the logger for the script manager, so logging can be performed within the script
+	 * @return The logger instance for this class
+	 */
+	public Logger getLogger () {
+		return logger;
 	}
 	
 	/**
