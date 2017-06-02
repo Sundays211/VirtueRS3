@@ -21,6 +21,7 @@
  */
 package org.virtue.engine.script.api;
 
+import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
@@ -100,4 +101,25 @@ public interface MapAPI {
 	 * @param ticks The number of server cycles to delay by
 	 */
 	public void delay (SceneLocation loc, Runnable task, int ticks);
+	
+	/**
+	 * Adds an item to the map at the given coordinates.
+	 * The item will remain for {@link org.virtue.Constants#ITEM_REMOVAL_DELAY} ticks, unless the server is restarted or the region destroyed
+	 * @param objTypeId The object ID to add
+	 * @param coords The coordinates to add the object to
+	 * @param player The player who 'owns' the object (ie. to whom the object is first visible)
+	 * @param amount The number of objects to drop (defaults to 1)
+	 */
+	public void addObj (int objTypeId, Tile coords, Player player, int amount);
+	
+	/**
+	 * Adds an item to the map at the given coordinates.
+	 * The item will remain for the specified number of ticks, or "permanently" if -1, unless the server is restarted or the region destroyed
+	 * @param objTypeId The object ID to add
+	 * @param coords The coordinates to add the object to
+	 * @param player The player who 'owns' the object (ie. to whom the object is first visible)
+	 * @param amount The number of objects to drop (defaults to 1)
+	 * @param respawnDelay The time before the object disappears. Defaults to {@link org.virtue.Constants#ITEM_REMOVAL_DELAY}
+	 */
+	public void addObj (int objTypeId, Tile coords, Player player, int amount, int respawnDelay);
 }

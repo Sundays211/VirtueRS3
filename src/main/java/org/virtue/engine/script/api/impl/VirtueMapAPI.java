@@ -21,9 +21,12 @@
  */
 package org.virtue.engine.script.api.impl;
 
+import org.virtue.Constants;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.DynamicRegion;
+import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
@@ -171,5 +174,21 @@ public class VirtueMapAPI implements MapAPI {
 	@Override
 	public void delay(SceneLocation loc, Runnable task, int ticks) {
 		loc.addDelayTask(task, ticks);
+	}
+
+	@Override
+	public void addObj(int objTypeId, Tile coords, Player player, int amount) {
+		addObj(objTypeId, coords, player, amount, Constants.ITEM_REMOVAL_DELAY);
+	}
+
+	@Override
+	public void addObj(int objTypeId, Tile coords, Player player, int amount, int respawnDelay) {
+		Region region = getRegion(coords);
+		if (region == null) {
+			throw new IllegalArgumentException("Invalid coords: "+coords);
+		}
+		GroundItem item = new GroundItem(objTypeId, amount, coords, player);
+		item.setSpawnTime(respawnDelay);
+		region.addItem(item);
 	}
 }
