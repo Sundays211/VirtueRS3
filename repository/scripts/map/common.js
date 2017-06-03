@@ -9,7 +9,7 @@ module.exports = (function () {
 		getCoordY : getCoordY,
 		getLevel : getLevel,
 		getCoords : getCoords,
-		setCoords : setCoords
+		getGlobalCoord : getGlobalCoord
 	};
 	
 	function getCoordX (node) {
@@ -28,7 +28,7 @@ module.exports = (function () {
 		return ENGINE.getCoords(node);
 	}
 	
-	function setCoords (entity, coords) {
-		ENGINE.teleportEntity(entity, coords);
+	function getGlobalCoord (squareCoord, localCoord) {
+		return (localCoord + ((squareCoord & 0xff) << 6));
 	}
 })();

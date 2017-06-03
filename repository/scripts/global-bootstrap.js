@@ -12,6 +12,7 @@ function getAllModules () {
 		'clan',
 		'inv',
 		'shop',
+		'map/commands',
 		'skill/agility',
 		'skill/prayer',
 		'skill/runecrafting',

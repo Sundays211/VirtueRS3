@@ -22,6 +22,7 @@
 package org.virtue.engine.script.api;
 
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.node.Node;
 import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
@@ -32,6 +33,33 @@ import org.virtue.game.world.region.Tile;
  * @since 10/01/2016
  */
 public interface MapAPI {
+	
+	/**
+	 * Gets the coordinates for the specified game node
+	 * @param node The game node
+	 * @return The current coords of the node
+	 */
+	public Tile getCoords (Node node);
+	
+	/**
+	 * Gets the coordinate from the specified components
+	 * @param x The x-component of the coordinate
+	 * @param y The y-component of the coordinate
+	 * @param level The level-component of the coordinate
+	 * @return The coordinate
+	 */
+	public Tile getCoords (int x, int y, int level);
+	
+	/**
+	 * Gets the coordinate from the specified components
+	 * @param squareX The x-coordinate of the map square
+	 * @param squareY The y-coordinate of the map square
+	 * @param level The level-component of the coordinate
+	 * @param localX The local x tile within the map square
+	 * @param localY The local y tile within the map square
+	 * @return The coordinate
+	 */
+	public Tile getCoords (int squareX, int squareY, int level, int localX, int localY);
 	
 	public DynamicRegion createArea();
 	

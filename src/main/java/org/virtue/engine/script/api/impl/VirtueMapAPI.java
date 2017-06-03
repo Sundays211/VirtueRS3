@@ -25,6 +25,7 @@ import org.virtue.Constants;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.node.Node;
 import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
@@ -39,6 +40,21 @@ public class VirtueMapAPI implements MapAPI {
 
 	public VirtueMapAPI() {
 		
+	}
+
+	@Override
+	public Tile getCoords(Node node) {
+		return node.getCurrentTile();
+	}
+
+	@Override
+	public Tile getCoords(int x, int y, int level) {
+		return new Tile(x, y, level);
+	}
+
+	@Override
+	public Tile getCoords(int squareX, int squareY, int level, int localX, int localY) {
+		return new Tile(localX, localY, level, squareX, squareY);
 	}
 	
 	private Region getRegion (Tile coords) {
