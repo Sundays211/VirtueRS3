@@ -46,10 +46,23 @@ module.exports = function (player) {
 		}
 	});
 	
+	var futureStep = false;
+	
+	function pushStep (step) {
+		if (!futureStep) {
+			if (step()) {
+				futureStep = true;
+				ENGINE.setInputHandler(player, new Handler());
+			}
+		} else {
+			flow.push(step);
+		}
+	}
+	
 	return dialog;
 	
 	function chatplayer (message) {
-		flow.push(function () {
+		pushStep(function () {
 			//TODO: Remove this from the game engine & replace here
 			player.getDialogs().sendPlayerChat(message);
 			return true;
@@ -59,7 +72,7 @@ module.exports = function (player) {
 
 	function chatnpc (npc, message) {
 		npc = typeof(npc) !== "number" ? util.getId(npc) : npc;
-		flow.push(function () {
+		pushStep(function () {
 			//TODO: Remove this from the game engine & replace here
 			player.getDialogs().sendNpcChat(message, npc);
 			return true;
@@ -68,7 +81,7 @@ module.exports = function (player) {
 	}
 
 	function mesbox (message) {
-		flow.push(function () {
+		pushStep(function () {
 			widget.setText(player, 1186, 2, message);
 			widget.hide(player, 1186, 3, false);
 			widget.openOverlaySub(player, 1006, 1186, false);
@@ -80,7 +93,7 @@ module.exports = function (player) {
 
 	function objbox (obj, message) {
 		obj = typeof(obj) !== "number" ? util.getId(obj) : obj;
-		flow.push(function () {
+		pushStep(function () {
 			widget.setText(player, 1184, 11, config.objName(obj));
 			widget.setObject(player, 1184, 2, obj, 1);
 			widget.setText(player, 1184, 9, message);
@@ -99,7 +112,7 @@ module.exports = function (player) {
 	 * @return A continuing dialog segment
 	 */
 	function then (callback) {
-		flow.push(callback);
+		pushStep(callback);
 		return dialog;
 	}
 
@@ -107,7 +120,7 @@ module.exports = function (player) {
 	 * Finishes the dialog, closing all dialog windows (and any other open windows)
 	 */
 	function finish() {
-		flow.push(closeDialog);
+		pushStep(closeDialog);
 	}
 
 	/**
@@ -117,7 +130,7 @@ module.exports = function (player) {
 	 * @return A continuing dialog segment
 	 */
 	function requestCount (message) {
-		flow.push(function () {
+		pushStep(function () {
 			common.openModalBase(player);
 			util.runClientScript(player, 108, [message]);
 			nextHandler = checkForCancel;
@@ -133,7 +146,7 @@ module.exports = function (player) {
 	 * @return A continuing dialog segment
 	 */
 	function requestName (message) {
-		flow.push(function () {
+		pushStep(function () {
 			common.openModalBase(player);
 			util.runClientScript(player, 109, [message]);
 			nextHandler = checkForCancel;
@@ -149,7 +162,7 @@ module.exports = function (player) {
 	 * @return A continuing dialog segment
 	 */
 	function requestString (message) {
-		flow.push(function () {
+		pushStep(function () {
 			common.openModalBase(player);
 			util.runClientScript(player, 110, [message]);
 			nextHandler = checkForCancel;
@@ -165,7 +178,7 @@ module.exports = function (player) {
 	 * @return A continuing dialog segment
 	 */
 	function requestItem (message) {
-		flow.push(function () {
+		pushStep(function () {
 			widget.open(player, 1477, 521, 1418, true);
 			widget.open(player, 1418, 1, 389, true);
 			util.runClientScript(player, 8178, []);
@@ -184,7 +197,7 @@ module.exports = function (player) {
 	 * @return A continuing dialog segment
 	 */
 	function requestConfirm (message) {
-		flow.push(function () {
+		pushStep(function () {
 			ENGINE.requestMulti(player, message, ["Yes", "No"], [0, 1], new Handler());
 			nextHandler = checkForCancel;
 			return true;
