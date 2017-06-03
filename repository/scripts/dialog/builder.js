@@ -2,12 +2,11 @@
  * Module for chatbox dialog-related functions
  */
 /* globals Java, ENGINE */
-var varp = require('./var/player');
-var varc = require('./var/client');
-
 var widget = require('../widget');
-var config = require('./config');
-var util = require('./util');
+var config = require('../core/config');
+var util = require('../core/util');
+
+var common = require('./common');
 
 module.exports = function (player) {
 	var dialog = {
@@ -119,7 +118,7 @@ module.exports = function (player) {
 	 */
 	function requestCount (message) {
 		flow.push(function () {
-			openModalBase(player);
+			common.openModalBase(player);
 			util.runClientScript(player, 108, [message]);
 			nextHandler = checkForCancel;
 			return true;
@@ -135,7 +134,7 @@ module.exports = function (player) {
 	 */
 	function requestName (message) {
 		flow.push(function () {
-			openModalBase(player);
+			common.openModalBase(player);
 			util.runClientScript(player, 109, [message]);
 			nextHandler = checkForCancel;
 			return true;
@@ -151,7 +150,7 @@ module.exports = function (player) {
 	 */
 	function requestString (message) {
 		flow.push(function () {
-			openModalBase(player);
+			common.openModalBase(player);
 			util.runClientScript(player, 110, [message]);
 			nextHandler = checkForCancel;
 			return true;
@@ -190,11 +189,6 @@ module.exports = function (player) {
 			nextHandler = checkForCancel;
 			return true;
 		});
-	}
-
-	function openModalBase (player) {
-		widget.open(player, 1477, 521, 1418, true);
-		widget.open(player, 1418, 1, 1469, true);
 	}
 	
 	function closeDialog () {
