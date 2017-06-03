@@ -20,7 +20,11 @@ module.exports = function (player) {
 		requestName : requestName,
 		requestString : requestString,
 		requestItem : requestItem,
-		confirm : requestConfirm
+		confirm : requestConfirm,
+		multi2 : multi2,
+		multi3 : multi3,
+		multi4 : multi4,
+		multi5 : multi5
 	};
 	
 	var flow = [];
@@ -202,6 +206,39 @@ module.exports = function (player) {
 			nextHandler = checkForCancel;
 			return true;
 		});
+		return dialog;
+	}
+	
+	function multi2 (message, op1, op1callback, op2, op2callback) {
+		pushStep(function () {
+			ENGINE.requestMulti(player, message, [op1, op2], [1, 2], new Handler());
+			nextHandler = multiChoiceHandler(op1callback, op2callback);
+			return true;
+		});
+	}
+
+	function multi3 (message, op1, op1callback, op2, op2callback, op3, op3callback) {
+		pushStep(function () {
+			ENGINE.requestMulti(player, message, [op1, op2, op3], [1, 2, 3], new Handler());
+			nextHandler = multiChoiceHandler(op1callback, op2callback, op3callback);
+			return true;
+		});
+	}
+
+	function multi4 (message, op1, op1callback, op2, op2callback, op3, op3callback, op4, op4callback) {
+		pushStep(function () {
+			ENGINE.requestMulti(player, message, [op1, op2, op3, op4], [1, 2, 3, 4], new Handler());
+			nextHandler = multiChoiceHandler(op1callback, op2callback, op3callback, op4callback);
+			return true;
+		});
+	}
+
+	function multi5 (player, message, op1, op1callback, op2, op2callback, op3, op3callback, op4, op4callback, op5, op5callback) {
+		pushStep(function () {
+			ENGINE.requestMulti(player, message, [op1, op2, op3, op4, op5], [1, 2, 3, 4, 5], new Handler());
+			nextHandler = multiChoiceHandler(op1callback, op2callback, op3callback, op4callback, op5callback);
+			return true;
+		});
 	}
 	
 	function closeDialog () {
@@ -218,5 +255,21 @@ module.exports = function (player) {
 			flow.length = 0;
 			closeDialog();
 		}
+	}
+	
+	function multiChoiceHandler (op1callback, op2callback, op3callback, op4callback, op5callback) {
+		return function (value) {
+			if (value == 1 && op1callback) {
+				op1callback();
+			} else if (value == 2 && op2callback) {
+				op2callback();
+			} else if (value == 3 && op3callback) {
+				op3callback();
+			} else if (value == 4 && op4callback) {
+				op4callback();
+			} else if (value == 5 && op5callback) {
+				op5callback();
+			}
+		};
 	}
 };

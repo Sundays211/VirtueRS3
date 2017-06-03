@@ -10,6 +10,7 @@ module.exports = {
 	openModalBase : common.openModalBase,
 	requestTool : common.requestTool,
 	setResumeHandler : common.setResumeHandler,
+	closeModal : common.closeModal,
 	requestMulti : multiChoice.requestMulti,
 	multi2 : multiChoice.multi2,
 	multi3 : multiChoice.multi3,

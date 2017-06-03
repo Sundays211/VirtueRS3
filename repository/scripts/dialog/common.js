@@ -13,7 +13,8 @@ module.exports = (function () {
 	return {
 		openModalBase : openModalBase,
 		requestTool : requestTool,
-		setResumeHandler : setResumeHandler
+		setResumeHandler : setResumeHandler,
+		closeModal : closeModal
 	};
 
 	function openModalBase (player) {
@@ -28,6 +29,10 @@ module.exports = (function () {
 			}
 		});
 		ENGINE.setInputHandler(player, new Handler());
+	}
+	
+	function closeModal (player) {
+		widget.closeAll(player);
 	}
 	
 	/**
