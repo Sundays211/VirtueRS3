@@ -21,9 +21,13 @@
  */
 package org.virtue.engine.script.api.impl;
 
+import org.virtue.Constants;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.game.World;
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.node.Node;
 import org.virtue.game.world.region.DynamicRegion;
+import org.virtue.game.world.region.GroundItem;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.game.world.region.Tile;
@@ -36,6 +40,25 @@ public class VirtueMapAPI implements MapAPI {
 
 	public VirtueMapAPI() {
 		
+	}
+
+	@Override
+	public Tile getCoords(Node node) {
+		return node.getCurrentTile();
+	}
+
+	@Override
+	public Tile getCoords(int x, int y, int level) {
+		return new Tile(x, y, level);
+	}
+
+	@Override
+	public Tile getCoords(int squareX, int squareY, int level, int localX, int localY) {
+		return new Tile(localX, localY, level, squareX, squareY);
+	}
+	
+	private Region getRegion (Tile coords) {
+		return World.getInstance().getRegions().getRegionByID(coords.getRegionID());
 	}
 
 	/* (non-Javadoc)
@@ -126,4 +149,62 @@ public class VirtueMapAPI implements MapAPI {
 		return addLoc(area, locTypeID, localX, localY, level, 10, 0);
 	}
 
+	@Override
+	public SceneLocation addLoc(int locTypeId, Tile coords, int nodeType, int rotation) {
+		SceneLocation location = SceneLocation.create(locTypeId, coords, nodeType, rotation);
+		getRegion(coords).spawnTempLocation(location, -1);
+		return location;
+	}
+
+	@Override
+	public SceneLocation getLoc(Tile coords, int type) {
+		if (type < 0 || type > 22) {
+			throw new IllegalArgumentException("Invalid location type: "+type);
+		}
+		Region region = getRegion(coords);
+		if (region == null) {
+			return null;
+		}
+		SceneLocation[] locs = region.getLocations(coords.getX(), coords.getY(), coords.getPlane());
+		if (locs == null) {
+			return null;
+		}
+		return locs[type];
+	}
+
+	@Override
+	public void delLoc(SceneLocation loc) {
+		getRegion(loc.getTile()).removeLocation(loc, loc.isTemporary());
+	}
+
+	@Override
+	public int getLocRotation(SceneLocation loc) {
+		return loc.getRotation();
+	}
+
+	@Override
+	public int getLocShape(SceneLocation loc) {
+		return loc.getShape();
+	}
+
+	@Override
+	public void delay(SceneLocation loc, Runnable task, int ticks) {
+		loc.addDelayTask(task, ticks);
+	}
+
+	@Override
+	public void addObj(int objTypeId, Tile coords, Player player, int amount) {
+		addObj(objTypeId, coords, player, amount, Constants.ITEM_REMOVAL_DELAY);
+	}
+
+	@Override
+	public void addObj(int objTypeId, Tile coords, Player player, int amount, int respawnDelay) {
+		Region region = getRegion(coords);
+		if (region == null) {
+			throw new IllegalArgumentException("Invalid coords: "+coords);
+		}
+		GroundItem item = new GroundItem(objTypeId, amount, coords, player);
+		item.setSpawnTime(respawnDelay);
+		region.addItem(item);
+	}
 }

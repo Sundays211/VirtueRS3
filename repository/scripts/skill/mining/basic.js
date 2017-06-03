@@ -24,6 +24,9 @@ var config = require('../../core/config');
 var util = require('../../core/util');
 var chat = require('../../chat');
 var inv = require('../../inv');
+var map = require('../../map');
+var loc = require('../../map/location');
+
 var stat = require('../logic/stat');
 var mining = require('./common');
 
@@ -217,9 +220,24 @@ module.exports = (function () {
 		}
 		mining.runMiningAction(player, rockType.level, function () {
 			stat.giveXp(player, Stat.MINING, rockType.xp);
-			ENGINE.transformLoc(location, getEmptyId(player, util.getId(location)), rockType.respawnDelay);
+			setEmpty(player, location, rockType.respawnDelay);
+			
 			inv.give(player, rockType.oreId, 1);
 			chat.sendSpamMessage(player, "You mine some " + config.objName(rockType.oreId) + ".");
+		});
+	}
+	
+	function setEmpty (player, location, respawnDelay) {
+		var rockCoords = map.getCoords(location);
+		var fullId = util.getId(location);
+		var emptyId = getEmptyId(player, fullId);
+		var rotation = loc.getRotation(location);
+		var shape = loc.getShape(location);
+		
+		var emptyRock = loc.add(emptyId, rockCoords, shape, rotation);
+		
+		loc.delay(emptyRock, respawnDelay, function () {
+			loc.add(fullId, rockCoords, shape, rotation);
 		});
 	}
 	

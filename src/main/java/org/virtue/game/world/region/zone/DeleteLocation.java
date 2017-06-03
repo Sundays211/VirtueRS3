@@ -39,7 +39,7 @@ public class DeleteLocation implements ZoneUpdatePacket {
 	private Tile coord;
 	
 	public DeleteLocation (SceneLocation object) {
-		this.flags = (object.getRotation() & 0x3) | (object.getNodeType() << 2);
+		this.flags = (object.getRotation() & 0x3) | (object.getShape() << 2);
 		this.coord = object.getTile();
 	}
 

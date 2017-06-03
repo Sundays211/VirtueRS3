@@ -21,6 +21,8 @@
  */
 package org.virtue.engine.script.api;
 
+import org.virtue.game.entity.player.Player;
+import org.virtue.game.node.Node;
 import org.virtue.game.world.region.DynamicRegion;
 import org.virtue.game.world.region.Region;
 import org.virtue.game.world.region.SceneLocation;
@@ -31,6 +33,33 @@ import org.virtue.game.world.region.Tile;
  * @since 10/01/2016
  */
 public interface MapAPI {
+	
+	/**
+	 * Gets the coordinates for the specified game node
+	 * @param node The game node
+	 * @return The current coords of the node
+	 */
+	public Tile getCoords (Node node);
+	
+	/**
+	 * Gets the coordinate from the specified components
+	 * @param x The x-component of the coordinate
+	 * @param y The y-component of the coordinate
+	 * @param level The level-component of the coordinate
+	 * @return The coordinate
+	 */
+	public Tile getCoords (int x, int y, int level);
+	
+	/**
+	 * Gets the coordinate from the specified components
+	 * @param squareX The x-coordinate of the map square
+	 * @param squareY The y-coordinate of the map square
+	 * @param level The level-component of the coordinate
+	 * @param localX The local x tile within the map square
+	 * @param localY The local y tile within the map square
+	 * @return The coordinate
+	 */
+	public Tile getCoords (int squareX, int squareY, int level, int localX, int localY);
 	
 	public DynamicRegion createArea();
 	
@@ -54,4 +83,71 @@ public interface MapAPI {
 	
 	public SceneLocation addLoc(Region area, int locTypeID, int localX, int localY, int level);
 
+	/**
+	 * Spawns a new location at the specified coords
+	 * @param locTypeId The ID of the location to spawn
+	 * @param coords The coordinates to spawn the location on
+	 * @param shape The location shape to spawn
+	 * @param rotation The rotation of the node (0-3, clockwise from the default position)
+	 * @return The newly created location
+	 */
+	public SceneLocation addLoc(int locTypeId, Tile coords, int shape, int rotation);
+	
+	/**
+	 * Fetches a location at the specified coords of the specified type
+	 * @param coords The coordinates to look at
+	 * @param shape The location shape to look for
+	 * @return The location at the specified coords, or null if none could be found
+	 */
+	public SceneLocation getLoc(Tile coords, int shape);
+	
+	/**
+	 * Removes the specified location from the map
+	 * @param loc The location to remove
+	 */
+	public void delLoc(SceneLocation loc);
+	
+	/**
+	 * Gets the current rotation for the specified location
+	 * @param loc The location to check
+	 * @return The rotation, between 0 and 3 clockwise from the default rotation
+	 */
+	public int getLocRotation(SceneLocation loc);
+	
+	/**
+	 * Gets the shape of the specified location
+	 * @param loc The location to check
+	 * @return The location's shape
+	 */
+	public int getLocShape(SceneLocation loc);
+	
+	/**
+	 * Delays the execution of a task by the given number of server cycles.
+	 * The task will be cancelled if the location is destroyed
+	 * @param loc The location to delay on
+	 * @param task The task to run after the delay
+	 * @param ticks The number of server cycles to delay by
+	 */
+	public void delay (SceneLocation loc, Runnable task, int ticks);
+	
+	/**
+	 * Adds an item to the map at the given coordinates.
+	 * The item will remain for {@link org.virtue.Constants#ITEM_REMOVAL_DELAY} ticks, unless the server is restarted or the region destroyed
+	 * @param objTypeId The object ID to add
+	 * @param coords The coordinates to add the object to
+	 * @param player The player who 'owns' the object (ie. to whom the object is first visible)
+	 * @param amount The number of objects to drop (defaults to 1)
+	 */
+	public void addObj (int objTypeId, Tile coords, Player player, int amount);
+	
+	/**
+	 * Adds an item to the map at the given coordinates.
+	 * The item will remain for the specified number of ticks, or "permanently" if -1, unless the server is restarted or the region destroyed
+	 * @param objTypeId The object ID to add
+	 * @param coords The coordinates to add the object to
+	 * @param player The player who 'owns' the object (ie. to whom the object is first visible)
+	 * @param amount The number of objects to drop (defaults to 1)
+	 * @param respawnDelay The time before the object disappears. Defaults to {@link org.virtue.Constants#ITEM_REMOVAL_DELAY}
+	 */
+	public void addObj (int objTypeId, Tile coords, Player player, int amount, int respawnDelay);
 }

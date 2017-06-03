@@ -20,7 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var map = require('../../core/map');
+var coords = require('../../map/coords');
+
+var map = require('../../map');
 var util = require('../../core/util');
 var inv = require('../../inv');
 var chat = require('../../chat');
@@ -190,10 +192,6 @@ module.exports = (function () {
 		}
 		chat.sendMessage(player, "You feel a powerful force take hold of you.");		
 		var dest = runes.destination;
-		map.teleport(player, dest.x, dest.y, dest.level);
-	}
-	
-	function coords (x, y, level) {
-		return { x:x, y:y, level:level };
+		map.setCoords(player, dest);
 	}
 })();

@@ -21,6 +21,9 @@
  */
 package org.virtue.game.world.region;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.virtue.Virtue;
 import org.virtue.config.loctype.LocType;
 import org.virtue.game.World;
@@ -36,6 +39,11 @@ import org.virtue.network.event.context.impl.in.OptionButton;
  */
 public class SceneLocation extends Node {
 	
+	private static class DelayTask {
+		private int delayTime;
+		private Runnable onFinish;		
+	}
+	
 	public static SceneLocation create (int id, Tile tile, int type, int rotation) {
 		SceneLocation object = new SceneLocation(id, tile, type, rotation);
 		return object;
@@ -48,7 +56,7 @@ public class SceneLocation extends Node {
 	
 	private Tile baseTile;
 	
-	private int nodeType;
+	private int shape;
 	
 	private int rotation;
 	
@@ -56,12 +64,14 @@ public class SceneLocation extends Node {
 	
 	private boolean exists = true;
 	
-	protected SceneLocation (int id, Tile tile, int nodeType, int rotation) {
+	private Set<DelayTask> delayTasks = new HashSet<>();
+	
+	protected SceneLocation (int id, Tile tile, int shape, int rotation) {
 		super(id);
 		super.currentTile = tile;
 		this.originalID = id;
 		this.baseTile = tile;
-		this.nodeType = nodeType;
+		this.shape = shape;
 		this.rotation = rotation;
 		super.name = getLocType().name;
 		if ((rotation & 2) == 0) {
@@ -93,11 +103,26 @@ public class SceneLocation extends Node {
 		return id;
 	}
 	
-	protected boolean processTick () {
+	protected synchronized boolean processTick () {
+		Set<DelayTask> tasks = delayTasks;
+		delayTasks = new HashSet<>();
+		for (DelayTask task : tasks) {
+			task.delayTime--;
+			if (task.delayTime > 0) {
+				delayTasks.add(task);
+			} else {
+				if (task.onFinish != null) {
+					task.onFinish.run();
+				}
+				delayTasks.remove(task);
+			}
+		}
+		
 		if (respawnTime < 0) {
 			respawnTime = -1;
 			return false;
 		}
+		
 		respawnTime--;
 		if (respawnTime == 0) {
 			return true;
@@ -145,11 +170,11 @@ public class SceneLocation extends Node {
 	}
 
 	/**
-	 * Gets the integer representing the node type of this location (eg wall, door, stand-alone, etc)
-	 * @return The node type
+	 * Gets the integer representing the shape of this location (eg wall, door, stand-alone, etc)
+	 * @return The shape
 	 */
-	public int getNodeType () {
-		return nodeType;
+	public int getShape () {
+		return shape;
 	}
 	
 	/**
@@ -239,6 +264,13 @@ public class SceneLocation extends Node {
 		} else {
 			return false;
 		}
+	}
+	
+	public synchronized void addDelayTask (Runnable onFinish, int delay) {
+		DelayTask task = new DelayTask();
+		task.onFinish = onFinish;
+		task.delayTime = delay;
+		delayTasks.add(task);
 	}
 	
 	@Override

@@ -47,9 +47,9 @@ public class ClipMap implements TraversalMap {
 	 * @param location The location to add
 	 */
 	public void addLocation (SceneLocation location) {
-		if (location.getNodeType() >= 0 && location.getNodeType() <= 3) {
+		if (location.getShape() >= 0 && location.getShape() <= 3) {
 			addWall(location);
-		} else if (location.getNodeType() >= 9 && location.getNodeType() <= 11) {//21
+		} else if (location.getShape() >= 9 && location.getShape() <= 11) {//21
 			int mask = ClipFlag.LOC;
 			int posX = location.getTile().getXInRegion();
 			int posY = location.getTile().getYInRegion();
@@ -72,7 +72,7 @@ public class ClipMap implements TraversalMap {
 					clipTile(tileX, tileY, location.getTile().getPlane(), mask);
 				}
 			}
-		} else if (location.getNodeType() == 22) {
+		} else if (location.getShape() == 22) {
 			if (location.getLocType().clipType == 1) {
 				clipFloorDeco(location.getTile().getXInRegion(), location.getTile().getYInRegion(), location.getTile().getPlane());
 			}
@@ -83,7 +83,7 @@ public class ClipMap implements TraversalMap {
 		int localX = loc.getTile().getXInRegion();
 		int localY = loc.getTile().getYInRegion();
 		int plane = loc.getTile().getPlane();
-		if (loc.getNodeType() == 0) {//WALL
+		if (loc.getShape() == 0) {//WALL
 			if (loc.getRotation() == 0) {
 				clipTile(localX, localY, plane, ClipFlag.WALL_WEST);//128
 				clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
@@ -101,7 +101,7 @@ public class ClipMap implements TraversalMap {
 				clipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH);//2
 			}
 		}
-		if (loc.getNodeType() == 1 || loc.getNodeType() == 3) {
+		if (loc.getShape() == 1 || loc.getShape() == 3) {
 			if (loc.getRotation() == 0) {
 				clipTile(localX, localY, plane, ClipFlag.CORNEROBJ_NORTHWEST);//1
 				clipTile(localX-1, localY+1, plane, ClipFlag.CORNEROBJ_SOUTHEAST);//16
@@ -119,7 +119,7 @@ public class ClipMap implements TraversalMap {
 				clipTile(localX-1, localY-1, plane, ClipFlag.CORNEROBJ_NORTHEAST);//4
 			}
 		}
-		if (loc.getNodeType() == 2) {//WALL_CORNER
+		if (loc.getShape() == 2) {//WALL_CORNER
 			if (loc.getRotation() == 0) {
 				clipTile(localX, localY, plane, ClipFlag.WALL_NORTH | ClipFlag.WALL_WEST);//130
 				clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
@@ -142,7 +142,7 @@ public class ClipMap implements TraversalMap {
 			}
 		}
 		if (loc.getLocType().clipType != 0) {
-			if (loc.getNodeType() == 0) {
+			if (loc.getShape() == 0) {
 				if (loc.getRotation() == 0) {
 					clipTile(localX, localY, plane, ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20000000
 					clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
@@ -160,7 +160,7 @@ public class ClipMap implements TraversalMap {
 					clipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE);//0x800000
 				}
 			}
-			if (loc.getNodeType() == 1 || loc.getNodeType() == 3) {
+			if (loc.getShape() == 1 || loc.getShape() == 3) {
 				if (loc.getRotation() == 0) {
 					clipTile(localX, localY, plane, ClipFlag.CORNEROBJ_NORTHWEST_BLOCKSWALK_ALTERNATIVE);//0x400000
 					clipTile(localX-1, localY+1, plane, ClipFlag.CORNEROBJ_SOUTHEAST_BLOCKSWALK_ALTERNATIVE);//0x4000000
@@ -178,7 +178,7 @@ public class ClipMap implements TraversalMap {
 					clipTile(localX-1, localY-1, plane, ClipFlag.CORNEROBJ_NORTHEAST_BLOCKSWALK_ALTERNATIVE);//0x1000000
 				}
 			}
-			if (loc.getNodeType() == 2) {
+			if (loc.getShape() == 2) {
 				if (loc.getRotation() == 0) {
 					clipTile(localX, localY, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20800000
 					clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
@@ -225,9 +225,9 @@ public class ClipMap implements TraversalMap {
 	}
 	
 	public void removeLocation (SceneLocation loc) {
-		if (loc.getNodeType() >= 0 && loc.getNodeType() <= 3) {
+		if (loc.getShape() >= 0 && loc.getShape() <= 3) {
 			//addWall(loc);
-		} else if (loc.getNodeType() >= 9 && loc.getNodeType() <= 21) {
+		} else if (loc.getShape() >= 9 && loc.getShape() <= 21) {
 			int mask = ClipFlag.LOC;
 			int posX = loc.getTile().getXInRegion();
 			int posY = loc.getTile().getYInRegion();
