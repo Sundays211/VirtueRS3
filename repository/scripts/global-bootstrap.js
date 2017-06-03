@@ -8,6 +8,7 @@
  */
 function getAllModules () {
 	var modules = [
+		'area/kandarin',
 		'chat',
 		'clan',
 		'inv',
