@@ -33,6 +33,14 @@ module.exports = (function () {
 		return MAP_ENGINE.getLocShape(location);
 	}
 	
+	/**
+	 * Runs the specified function after a delay on the given location.
+	 * If the location is destroyed (or the region reset), the function will not run
+	 * 
+	 * @param location The location to delay the function on
+	 * @param delay The number of game cycles to delay by
+	 * @param task The function to run after the given delay
+	 */
 	function delay (location, delay, task) {
 		MAP_ENGINE.delay(location, task, delay);
 	}
