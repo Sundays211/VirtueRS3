@@ -26,7 +26,7 @@ var varbit = require('../core/var/bit');
 var CONST = require('../core/const');
 var util = require('../core/util');
 var config = require('../core/config');
-var map = require('../core/map');
+var map = require('../map');
 var dialog = require('../core/dialog');
 var widget = require('../widget');
 var chat = require('../chat');
@@ -358,7 +358,7 @@ module.exports = (function() {
 		//I wish to drop it.
 		//I wish to keep it.
 		if (item !== null) {
-			ENGINE.dropItem(map.getPlayerCoords(player), util.getId(item), ENGINE.getCount(item), player);
+			ENGINE.dropItem(map.getCoords(player), util.getId(item), ENGINE.getCount(item), player);
 			ENGINE.setInvSlot(player, Inv.BACKPACK, slot, null);
 		}
 	}

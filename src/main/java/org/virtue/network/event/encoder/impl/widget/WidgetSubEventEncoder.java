@@ -63,7 +63,7 @@ public class WidgetSubEventEncoder implements EventEncoder<WidgetSubEventContext
 			buffer.putInt(context.getRoot() << 16 | context.getComponent());
 			buffer.putLEInt(loc.getTile().getTileHash());
 			buffer.putIntAlt3(context.getKeys()[1]);
-			buffer.putC((loc.getNodeType() << 2) | (loc.getRotation() & 0x3));
+			buffer.putC((loc.getShape() << 2) | (loc.getRotation() & 0x3));
 			buffer.putLEInt(context.getKeys()[3]);
 			buffer.putByte(context.alwaysOpen() ? 1 : 0);
 			buffer.putLEInt(loc.getID());

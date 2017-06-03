@@ -179,7 +179,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("api", getApi());
 		engine.put("ENGINE", getApi());
 		engine.put("CLAN_ENGINE", clanApi);
-		engine.put("mapApi", mapApi);
+		engine.put("MAP_ENGINE", mapApi);
 		engine.put("configApi", configApi);
 		engine.put("QUEST_ENGINE", questApi);
 		engine.put("scriptEngine", this);

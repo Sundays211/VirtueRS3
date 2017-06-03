@@ -19,40 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, MAP_ENGINE */
+var coords = require('../coords');
+
+var chat = require('../../chat');
+var entityMap = require('../entity');
+
 /**
  * @author Kayla
  * @date 11/17/2015
  */
-
-var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, scriptArgs) {
-		var player = scriptArgs.player;
-		var args = scriptArgs.cmdArgs;
-		
-		if (syntax.toLowerCase() == "makeregion") {
-			var dynamicRegion = mapApi.createArea();
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.COMMAND_ADMIN, "makeregion", function (ctx) {
+			var dynamicRegion = MAP_ENGINE.createArea();
 			for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 				for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-					mapApi.setChunk(dynamicRegion, xOffSet, yOffSet, 0, 14, 624, 0, 0);
+					MAP_ENGINE.setChunk(dynamicRegion, xOffSet, yOffSet, 0, 14, 624, 0, 0);
 				}
 			}
-			mapApi.setChunk(dynamicRegion, 1, 1, 0, 18, 532, 0, 0);
-			mapApi.buildArea(dynamicRegion);
-			var squareX = mapApi.getSquareX(dynamicRegion);
-			var squareY = mapApi.getSquareY(dynamicRegion);
-			api.teleportEntity(player, 0, squareX, squareY, 10, 10);
-			api.sendMessage(player, "You made a dynamic region!");
-		} else if (syntax.toLowerCase() == "delregion") {
-			var dynamicRegion = player.getArmarDynamicRegion();
-			mapApi.destroyArea(dynamicRegion);
-			api.sendMessage(player, "Dynamic Region deleted!");
-		}
+			MAP_ENGINE.setChunk(dynamicRegion, 1, 1, 0, 18, 532, 0, 0);
+			MAP_ENGINE.buildArea(dynamicRegion);
+			var squareX = MAP_ENGINE.getSquareX(dynamicRegion);
+			var squareY = MAP_ENGINE.getSquareY(dynamicRegion);
+			entityMap.setCoords(ctx.player, coords(squareX, squareY, 0, 10, 10));
+			chat.sendMessage(ctx.player, "You made a dynamic region!");
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "delregion", function (ctx) {
+			var dynamicRegion = ctx.player.getArmarDynamicRegion();
+			MAP_ENGINE.destroyArea(dynamicRegion);
+			chat.sendMessage(ctx.player, "Dynamic Region deleted!");
+		});
 	}
-});
-
-/* Listen to the commands specified */
-var listen = function(scriptManager) {
-	var listener = new CommandListener();
-	scriptManager.registerListener(EventType.COMMAND_ADMIN, "makeregion", listener);
-	scriptManager.registerListener(EventType.COMMAND_ADMIN, "delregion", listener);
-};
+})();

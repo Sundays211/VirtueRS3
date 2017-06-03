@@ -93,7 +93,7 @@ public class Region {
 				if (!locations.containsKey(hash)) {
 					locations.put(hash, new SceneLocation[23]);
 				}
-				locations.get(hash)[loc.getNodeType()] = loc;
+				locations.get(hash)[loc.getShape()] = loc;
 			}
 		}
 		
@@ -109,7 +109,7 @@ public class Region {
 			if (wasTemp) {
 				tempLocs.remove(loc);
 				synchronized (locations) {
-					locations.get(hash)[loc.getNodeType()] = null;
+					locations.get(hash)[loc.getShape()] = null;
 				}
 			} else {
 				tempLocs.add(loc);				

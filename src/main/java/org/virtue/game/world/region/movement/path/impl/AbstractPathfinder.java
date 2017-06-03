@@ -146,7 +146,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	public static Path find(Tile start, int moverSize, Node destination, boolean near, Pathfinder finder) {
 		if (destination instanceof SceneLocation) {
 			SceneLocation object = (SceneLocation) destination;
-			int type = object.getNodeType();
+			int type = object.getShape();
 			int rotation = object.getRotation();
 			if (type == 10 || type == 11 || type == 22) {
 				int sizeX = object.getSizeX();

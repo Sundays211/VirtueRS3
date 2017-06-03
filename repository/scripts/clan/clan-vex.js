@@ -23,7 +23,7 @@
 var util = require('../core/util');
 var chat = require('../chat');
 var anim = require('../core/anim');
-var map = require('../core/map');
+var map = require('../map');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -53,7 +53,7 @@ module.exports = function (scriptManager) {
 	});
 	
 	function placeClanVex (player, item, slot) {
-		var npc = ENGINE.createNpc(13634, map.getPlayerCoords(player));
+		var npc = ENGINE.createNpc(13634, map.getCoords(player));
 		if(npc.getOwner() !== null) {
 			chat.sendMessage(player, "You already have a clan vex out.");
 		} else {
