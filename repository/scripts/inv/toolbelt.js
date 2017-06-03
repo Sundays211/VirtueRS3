@@ -25,7 +25,7 @@ var varbit = require('../core/var/bit');
 var util = require('../core/util');
 var config = require('../core/config');
 var chat = require('../chat');
-var inv = require('../inv');
+var common = require('./common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -102,7 +102,7 @@ module.exports = (function () {
 
 		var success = addTool(player, toolId);
 		if (success) {
-			inv.take(player, toolId, 1);
+			common.take(player, toolId, 1);
 			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}
@@ -226,7 +226,7 @@ module.exports = (function () {
 				varbit(player, 4935, level);
 				break;
 			}
-			inv.take(player, toolId, 1);
+			common.take(player, toolId, 1);
 			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}

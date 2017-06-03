@@ -27,7 +27,7 @@ var util = require('../core/util');
 var config = require('../core/config');
 var chat = require('../chat');
 var widget = require('../widget');
-var inv = require('../inv');
+var common = require('./common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -94,7 +94,7 @@ module.exports = (function () {
 	}
 	
 	function isWearing(player, objId) {
-		return inv.has(player, objId, 1, Inv.EQUIPMENT);
+		return common.has(player, objId, 1, Inv.EQUIPMENT);
 	}
 	
 	function wearItem (player, objId, slot) {
