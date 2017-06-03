@@ -23,8 +23,8 @@
 var CONST = require('../core/const');
 var util = require('../core/util');
 var chat = require('../chat');
-var inv = require('../inv');
 var dialog = require('../core/dialog');
+var common = require('./common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -82,7 +82,7 @@ module.exports = (function () {
 	}
 	
 	function getCoinCount (player) {
-		return inv.total(player, CONST.COINS, Inv.MONEY_POUCH);
+		return common.total(player, CONST.COINS, Inv.MONEY_POUCH);
 	}
 	
 	function examine (player) {
