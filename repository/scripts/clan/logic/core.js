@@ -3,7 +3,7 @@
  */
 /* globals CLAN_ENGINE */
 var util = require('../../core/util');
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var config = require('../../core/config');
 var chat = require('../../chat');
 

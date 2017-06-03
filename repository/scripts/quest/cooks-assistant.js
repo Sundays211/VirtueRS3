@@ -21,7 +21,7 @@
  */
 /* globals EventType */
 var quest = require('../quest');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var anim = require('../core/anim');
 var inv = require('../inv');
 var chat = require('../chat');

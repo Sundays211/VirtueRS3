@@ -2,12 +2,12 @@
  * Module for chatbox dialog-related functions
  */
 /* globals Java, ENGINE */
-var varp = require('./var/player');
-var varc = require('./var/client');
+var varp = require('../core/var/player');
+var varc = require('../core/var/client');
 
 var widget = require('../widget');
-var config = require('./config');
-var util = require('./util');
+var config = require('../core/config');
+var util = require('../core/util');
 
 module.exports = (function () {
 	return {

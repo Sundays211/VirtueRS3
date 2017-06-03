@@ -23,7 +23,7 @@
 var CONST = require('../core/const');
 var util = require('../core/util');
 var chat = require('../chat');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var common = require('./common');
 
 /**

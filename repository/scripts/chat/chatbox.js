@@ -25,7 +25,7 @@ var varbit = require('../core/var/bit');
 var filters = require('./chatbox-filters');
 var util = require('../core/util');
 var widget = require('../widget');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var chat = require('../chat');
 
 /**

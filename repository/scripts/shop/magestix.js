@@ -2,7 +2,7 @@
 /* globals EventType, Inv */
 var varp = require('../core/var/player');
 var varc = require('../core/var/client');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var widget = require('../widget');
 
 /**

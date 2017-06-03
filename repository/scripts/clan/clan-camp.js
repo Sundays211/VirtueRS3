@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv */
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var util = require('../core/util');
 var inv = require('../inv');
 var chat = require('../chat');

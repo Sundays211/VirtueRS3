@@ -23,7 +23,7 @@
 var varc = require('../core/var/client');
 var config = require('../core/config');
 var util = require('../core/util');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var widget = require('../widget');
 var chat = require('../chat');
 

@@ -22,7 +22,7 @@
 /* globals EventType */
 var coords = require('../coords');
 
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var util = require('../../core/util');
 var chat = require('../../chat');
 var entityMap = require('../entity');

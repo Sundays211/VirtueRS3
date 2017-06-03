@@ -21,7 +21,7 @@
  */
 /* globals EventType, CLAN_ENGINE*/
 var widget = require('../widget');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var clan = require('./logic/core');
 var chat = require('../chat');
 

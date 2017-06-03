@@ -27,7 +27,7 @@ var CONST = require('../core/const');
 var util = require('../core/util');
 var config = require('../core/config');
 var map = require('../map');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var widget = require('../widget');
 var chat = require('../chat');
 

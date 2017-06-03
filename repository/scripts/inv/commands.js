@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Exchange */
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var config = require('../core/config');
 var util = require('../core/util');
 var widget = require('../widget');
