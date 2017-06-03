@@ -26,15 +26,21 @@ module.exports = function (player) {
 	
 	var flow = [];
 	
+	var nextHandler;
+
 	var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {
 		handle : function (value) {
+			if (nextHandler) {
+				nextHandler(value);
+				nextHandler = null;
+			}
 			var callback = flow.pop();
 			while (callback) {
 				//Run the callback. If it returns true, reset the resume handler.
 				//If false, process the next callback.
 				callback = callback(value) ? undefined : flow.pop();
 			}
-			if (flow) {
+			if (flow.length > 0) {
 				//If there are remaining items, set the handler for the next ones
 				ENGINE.setInputHandler(player, new Handler());
 			}
@@ -115,6 +121,7 @@ module.exports = function (player) {
 		flow.push(function () {
 			openModalBase(player);
 			util.runClientScript(player, 108, [message]);
+			nextHandler = checkForCancel;
 			return true;
 		});
 		return dialog;
@@ -130,6 +137,7 @@ module.exports = function (player) {
 		flow.push(function () {
 			openModalBase(player);
 			util.runClientScript(player, 109, [message]);
+			nextHandler = checkForCancel;
 			return true;
 		});
 		return dialog;
@@ -145,6 +153,7 @@ module.exports = function (player) {
 		flow.push(function () {
 			openModalBase(player);
 			util.runClientScript(player, 110, [message]);
+			nextHandler = checkForCancel;
 			return true;
 		});
 		return dialog;
@@ -162,6 +171,7 @@ module.exports = function (player) {
 			widget.open(player, 1418, 1, 389, true);
 			util.runClientScript(player, 8178, []);
 			util.runClientScript(player, 570, [message]);
+			nextHandler = checkForCancel;
 			return true;
 		});
 		return dialog;
@@ -176,7 +186,9 @@ module.exports = function (player) {
 	 */
 	function requestConfirm (message) {
 		flow.push(function () {
-			ENGINE.requestMulti(player, message, ["Yes", "No"], [0, 1], new Handler());	
+			ENGINE.requestMulti(player, message, ["Yes", "No"], [0, 1], new Handler());
+			nextHandler = checkForCancel;
+			return true;
 		});
 	}
 
@@ -187,5 +199,17 @@ module.exports = function (player) {
 	
 	function closeDialog () {
 		widget.closeAll(player);
+	}
+
+	/**
+	 * Checks if the provided value is falsy (0 or an empty string)
+	 * If so, close the dialog
+	 */
+	function checkForCancel (value) {
+		if (!value) {
+			//Clear the remaining queue and close the dialog
+			flow.length = 0;
+			closeDialog();
+		}
 	}
 };
