@@ -12,12 +12,12 @@ module.exports = (function () {
 		objbox : objbox
 	};
 
-	function chatplayer (player, message) {
+	function chatplayer (player, message, expression) {
 		return builder(player).chatplayer(message);
 	}
 
-	function chatnpc (player, npc, message) {
-		return builder(player).chatnpc(npc, message);
+	function chatnpc (player, npc, message, expression) {
+		return builder(player).chatnpc(npc, message, expression);
 	}
 
 	function mesbox (player, message) {

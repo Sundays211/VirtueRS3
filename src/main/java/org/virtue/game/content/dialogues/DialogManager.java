@@ -102,31 +102,20 @@ public class DialogManager {
 	}
 	
 	/**
-	 * Sends a generic message box with the specified message
-	 * @param message The message
-	 */
-	public void sendMessageBox (String message) {
-		player.getDispatcher().sendWidgetText(1186, 2, message);
-		player.getDispatcher().sendHideWidget(1186, 3, false);
-		player.getWidgets().openOverlaySub(WidgetManager.DIALOG_OVERLAY_SUB, 1186, false);
-		player.getDispatcher().sendCS2Script(8178);
-	}
-	
-	/**
 	 * Sends a dialog box with the player's chathead. Uses the "Neutral" animation
 	 * @param message The chat message
 	 */
 	public void sendPlayerChat(String message) {
-		sendChat(ChatDialogType.PLAYER_L, message, ChatheadEmoteType.NEUTRAL, -1);
+		sendPlayerChat(message, ChatheadEmoteType.NEUTRAL);
 	}
 	
 	/**
 	 * Sends a dialog box with the player's chathead. 
 	 * @param message The chat message
-	 * @param emoteName The name of the chathead emotion
+	 * @param expressionAnim The animation ID to play as the expression
 	 */
-	public void sendPlayerChat(String message, String emoteName) {
-		sendPlayerChat(message, ChatheadEmoteType.forName(emoteName));
+	public void sendPlayerChat(String message, int expressionAnim) {
+		sendChat(ChatDialogType.PLAYER_L, message, expressionAnim, -1);
 	}
 	
 	/**
@@ -135,7 +124,7 @@ public class DialogManager {
 	 * @param emote The chathead emotion
 	 */
 	public void sendPlayerChat(String message, ChatheadEmoteType emote) {
-		sendChat(ChatDialogType.PLAYER_L, message, emote, -1);
+		sendChat(ChatDialogType.PLAYER_L, message, emote.getAnimID(), -1);
 	}
 	
 	/**
@@ -144,18 +133,18 @@ public class DialogManager {
 	 * @param npcID The type ID of the NPC
 	 */
 	public void sendNpcChat(String message, int npcID) {
-		sendChat(ChatDialogType.NPC_R, message, ChatheadEmoteType.NEUTRAL, npcID);
+		sendNpcChat(message, npcID, ChatheadEmoteType.NEUTRAL);
 	}
 	
-	public void sendNpcChat(String message, int npcID, String emoteName) {
-		sendChat(ChatDialogType.NPC_R, message, ChatheadEmoteType.forName(emoteName), npcID);
+	public void sendNpcChat(String message, int npcID, int expressionAnim) {
+		sendChat(ChatDialogType.NPC_R, message, expressionAnim, npcID);
 	}
 	
 	public void sendNpcChat(String message, int npcID, ChatheadEmoteType emote) {
-		sendChat(ChatDialogType.NPC_R, message, emote, npcID);
+		sendChat(ChatDialogType.NPC_R, message, emote.getAnimID(), npcID);
 	}
 	
-	public void sendChat (ChatDialogType type, String message, ChatheadEmoteType emote, int entityID) {
+	public void sendChat (ChatDialogType type, String message, int expressionAnim, int entityID) {
 		String name = player.getName();
 		ModelType modelType = ModelType.PLAYER_HEAD_SELF;
 		switch (type) {
@@ -165,7 +154,7 @@ public class DialogManager {
 		case PLAYER_L:
 			player.getDispatcher().sendWidgetText(1191, 2, name);
 			player.getDispatcher().sendWidgetModel(modelType, 1191, 10, entityID);
-			player.getDispatcher().sendWidgetModel(ModelType.ANIMATION, 1191, 10, emote.getAnimID());
+			player.getDispatcher().sendWidgetModel(ModelType.ANIMATION, 1191, 10, expressionAnim);
 			player.getDispatcher().sendHideWidget(1191, 7, false);
 			player.getDispatcher().sendWidgetText(1191, 6, message);
 			player.getWidgets().openOverlaySub(WidgetManager.DIALOG_OVERLAY_SUB, 1191, false);//Send chat dialog
@@ -176,7 +165,7 @@ public class DialogManager {
 		case PLAYER_R://1184
 			player.getDispatcher().sendWidgetText(1184, 11, name);
 			player.getDispatcher().sendWidgetModel(modelType, 1184, 2, entityID);
-			player.getDispatcher().sendWidgetModel(ModelType.ANIMATION, 1184, 2, emote.getAnimID());
+			player.getDispatcher().sendWidgetModel(ModelType.ANIMATION, 1184, 2, expressionAnim);
 			player.getDispatcher().sendHideWidget(1184, 11, false);
 			player.getDispatcher().sendWidgetText(1184, 9, message);	
 			player.getWidgets().openOverlaySub(WidgetManager.DIALOG_OVERLAY_SUB, 1184, false);//Send chat dialog
@@ -184,10 +173,6 @@ public class DialogManager {
 		}
 		player.getDispatcher().sendCS2Script(8178);
 	}
-	
-	/*player.getActionSender().sendWidget(1477, 315, 1215, true);//Interface_sub: parent:1477, slot:333, id=1215, clipped=1
-	player.getActionSender().sendHideWidget(1477, 315, false);//IF_Sethide: id=1477, comp=333, hidden=0
-	player.getActionSender().sendHideWidget(745, 2, true);//IF_Sethide: id=745, comp=2, hidden=1*/
 		
 	/**
 	 * Processes the entered input. This method should be called only by the input handler

@@ -1,7 +1,7 @@
 /**
  * Module for chatbox dialog-related functions
  */
-/* globals Java, ENGINE */
+/* globals Java, ENGINE, Expression */
 var widget = require('../widget');
 var config = require('../core/config');
 var util = require('../core/util');
@@ -65,20 +65,22 @@ module.exports = function (player) {
 	
 	return dialog;
 	
-	function chatplayer (message) {
+	function chatplayer (message, expression) {
+		expression = expression || Expression.NEUTRAL;
 		pushStep(function () {
 			//TODO: Remove this from the game engine & replace here
-			player.getDialogs().sendPlayerChat(message);
+			player.getDialogs().sendPlayerChat(message, expression);
 			return true;
 		});
 		return dialog;
 	}
 
-	function chatnpc (npc, message) {
+	function chatnpc (npc, message, expression) {
 		npc = typeof(npc) !== "number" ? util.getId(npc) : npc;
+		expression = expression || Expression.NEUTRAL;
 		pushStep(function () {
 			//TODO: Remove this from the game engine & replace here
-			player.getDialogs().sendNpcChat(message, npc);
+			player.getDialogs().sendNpcChat(message, npc, expression);
 			return true;
 		});
 		return dialog;
