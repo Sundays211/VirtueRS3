@@ -384,16 +384,12 @@ module.exports = (function() {
 		if (timeRemaining > 0) {
 			message = "<center>~Loan expires in "+util.toFormattedTime(timeRemaining)+"~</center><br>";
 			message += "If you discard this item, it will disappear. You won't be able to pick it up again.";
-			dialog.mesbox(player, message, function () {
-				dialog.requestConfirm(player, "Discard the item?", discard);
-			});
+			dialog.mesbox(player, message).requestConfirm("Discard the item?").then(discard).finish();
 		} else if (loanFrom !== null && loanFrom != -1) {
 			message = "<center>~Session-based loan~</center><br>";
 			message += "If you discard this item, it will return to its owner, "+util.getName(loanFrom);
 			message += ". You won't be able to pick it up again.";
-			dialog.mesbox(player, message, function () {
-				dialog.requestConfirm(player, "Discard the item?", discard);
-			});
+			dialog.mesbox(player, message).requestConfirm("Discard the item?").then(discard).finish();
 		} else {
 			discard();//Destroy immediately, as the player should not still have the item.
 		}

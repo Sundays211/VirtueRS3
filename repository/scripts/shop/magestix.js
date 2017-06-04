@@ -10,9 +10,10 @@ var widget = require('../widget');
  */
 module.exports = function(scriptManager) {
 	scriptManager.bind(EventType.OPNPC1, 14866, function (ctx) {
-		dialog.chatnpc(ctx.player, ctx.npc, "If you want to know how to bring forth magical creatures from the ether, you've come to the right place!", function () {
-			maintalk(ctx.player, ctx.npc);
-       });
+		dialog.chatnpc(ctx.player, ctx.npc, "If you want to know how to bring forth magical creatures from the ether, you've come to the right place!")
+			.then(function () {
+				maintalk(ctx.player, ctx.npc);
+			});
 	});
 	scriptManager.bind(EventType.OPNPC5, 14866, function (ctx) {
 		openShop(ctx.player);
@@ -36,22 +37,15 @@ module.exports = function(scriptManager) {
 	}
 
 	function howtotrain (player, npc) {
-		dialog.chatnpc(player, npc, "You need to create pouches, by combining reagents with spirit shards.", function () {
-			
-		}); 
+		dialog.chatnpc(player, npc, "You need to create pouches, by combining reagents with spirit shards.").finish(); 
 	}
 	
 	function moreinfo (player, npc) {
-		dialog.chatnpc(player, npc, "There is another world, besides this one. That world is filled with wondrous creatures, great and small. Summoning is the art of drawing those creatures forth to server you.", function () {
-			dialog.chatnpc(player, npc, "By combining rare reagents with our spirit shards, you can create pouches to perform this act.", function () {
-				
-			}); 
-		});
+		dialog.chatnpc(player, npc, "There is another world, besides this one. That world is filled with wondrous creatures, great and small. Summoning is the art of drawing those creatures forth to server you.")
+			.chatnpc(npc, "By combining rare reagents with our spirit shards, you can create pouches to perform this act.").finish();
 	}
 	
 	function farewell (player, npc) {
-		dialog.chatnpc(player, npc, "Thank you for the information about Summoning.", function () {
-			
-		}); 
+		dialog.chatnpc(player, npc, "Thank you for the information about Summoning.").finish();
 	}
 };

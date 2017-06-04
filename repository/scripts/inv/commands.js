@@ -77,18 +77,20 @@ module.exports = (function () {
 			var args = ctx.cmdArgs;
 			
 			if (args.length < 1 || isNaN(args[0])) {
-				dialog.requestItem(player, "Choose an item to spawn.", function (objId) {
-					var amount = 1;
-					if (config.objStackable(objId)) {
-						dialog.requestCount(player, "Enter the number of items to spawn: ", function (amount) {
+				dialog.requestItem(player, "Choose an item to spawn.")
+					.then(function (objId) {
+						var amount = 1;
+						if (config.objStackable(objId)) {
+							dialog.requestCount(player, "Enter the number of items to spawn: ")
+								.then(function (amount) {
+									common.give(player, objId, amount);
+								});	
+						} else if (common.hasSpace(player, amount)) {
 							common.give(player, objId, amount);
-						});	
-					} else if (common.hasSpace(player, amount)) {
-						common.give(player, objId, amount);
-					} else {
-						chat.sendMessage(player, "You do not have enough space in your backpack to store this item.");
-					}
-				});
+						} else {
+							chat.sendMessage(player, "You do not have enough space in your backpack to store this item.");
+						}
+					});
 			} else {
 				if (args.length < 1) {
 					chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
