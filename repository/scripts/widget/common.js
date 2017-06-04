@@ -57,6 +57,7 @@ module.exports = (function () {
 	}
 
 	function setObject (player, iface, comp, obj, number) {
+		number = typeof(number) === "undefined" ? 1 : number;
 		ENGINE.setWidgetObject(player, iface, comp, obj, number);
 	}
 

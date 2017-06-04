@@ -25,11 +25,11 @@ var varc = require('../../core/var/client');
 var varbit = require('../../core/var/bit');
 
 var widget = require('../../widget');
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var util = require('../../core/util');
 var config = require('../../core/config');
 var chat = require('../../chat');
-var inv = require('../../inv');
+var common = require('../common');
 var CONST = require('../../core/const');
 
 /**
@@ -87,7 +87,7 @@ module.exports = (function () {
 			if (ctx.button == 1) {
 				offerItem(ctx.player, ctx.slot);
 			} else if (ctx.button == 10) {
-				var objId = inv.getObjId(ctx.player, Inv.BACKPACK, ctx.slot);
+				var objId = common.getObjId(ctx.player, Inv.BACKPACK, ctx.slot);
 				var desc = config.objDesc(objId);
 				chat.sendMessage(ctx.player, desc);
 			} else {
@@ -286,7 +286,7 @@ module.exports = (function () {
 		var offer = ENGINE.getExchangeOffer(player, 1, slot);
 		if (offer !== null) {
 			var returnInv = config.enumValue(1079, slot);
-			if (inv.freeSpace(player, returnInv) == 2 && ENGINE.exchangeOfferFinished(player, 1, slot)) {
+			if (common.freeSpace(player, returnInv) == 2 && ENGINE.exchangeOfferFinished(player, 1, slot)) {
 				ENGINE.clearExchangeOffer(player, 1, slot);
 			} else {
 				ENGINE.sendInv(player, returnInv);
@@ -329,7 +329,7 @@ module.exports = (function () {
 			}				
 		}
 
-		var objId = inv.getObjId(player, Inv.BACKPACK, invSlot);
+		var objId = common.getObjId(player, Inv.BACKPACK, invSlot);
 		if (objId !== -1) {
 			var exchangePrice = ENGINE.getExchangeCost(objId);
 			if (exchangePrice != -1) {
@@ -337,7 +337,7 @@ module.exports = (function () {
 				varp(player, 140, exchangePrice);
 				varp(player, 135, objId);
 				varp(player, 137, exchangePrice);
-				varp(player, 136, inv.total(player, objId));
+				varp(player, 136, common.total(player, objId));
 				varc(player, 2354, config.objDesc(objId));
 				widget.setText(player, 105, 14, config.objDesc(objId));
 			} else {
@@ -400,18 +400,19 @@ module.exports = (function () {
 				ENGINE.incrementVarp(player, 136, 1000);
 			} else if (varp(player, 135) != -1) {
 				var objId = varp(player, 135);
-				var itemTotal = inv.total(player, objId);
+				var itemTotal = common.total(player, objId);
 				var certId = config.objUncert(objId);
 				if (certId !== objId) {
-					itemTotal += inv.total(player, certId);
+					itemTotal += common.total(player, certId);
 				}
 				varp(player, 136, itemTotal);					
 			}	
 			break;
 		case 5://Choose amount
-			dialog.requestCount(player, "Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":", function (value) {
-				varp(player, 136, value);
-			});
+			dialog.requestCount(player, "Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":")
+				.then(function (value) {
+					varp(player, 136, value);
+				});
 			break;
 		}
 	}
@@ -430,26 +431,26 @@ module.exports = (function () {
 			var offerInv = config.enumValue(1078, slot);
 			ENGINE.sendInv(player, offerInv);
 			if (isSell) {
-				var carriedTotal = inv.total(player, objId);
+				var carriedTotal = common.total(player, objId);
 				var certId = config.objUncert(objId);
 				var certTotal = 0;
 				if (certId !== objId) {
-					certTotal += inv.total(player, certId);
+					certTotal += common.total(player, certId);
 				}
 				if ((carriedTotal+certTotal) >= amount) {
 					var fullAmount = amount;
 					
 					//Grab as much as we can as un-certed objects
 					amount = Math.min(carriedTotal, amount);
-					inv.take(player, objId, amount, Inv.BACKPACK);
+					common.take(player, objId, amount, Inv.BACKPACK);
 					
 					//And grab the rest as certed objects
 					amount = fullAmount - carriedTotal;
 					if (amount > 0) {
-						inv.take(player, certId, amount, Inv.BACKPACK);
+						common.take(player, certId, amount, Inv.BACKPACK);
 					}
 					
-					inv.give(player, objId, fullAmount, offerInv);
+					common.give(player, objId, fullAmount, offerInv);
 					ENGINE.sendExchangeOffer(player, 1, slot, isSell, objId, fullAmount, price);
 					clearOffer(player);
 				} else {
@@ -457,9 +458,9 @@ module.exports = (function () {
 				}
 			} else {
 				var totalCoins = price*amount;
-				if (inv.has(player, CONST.COINS, totalCoins)) {
-					inv.take(player, CONST.COINS, totalCoins);
-					inv.give(player, CONST.COINS, totalCoins, offerInv);
+				if (common.has(player, CONST.COINS, totalCoins)) {
+					common.take(player, CONST.COINS, totalCoins);
+					common.give(player, CONST.COINS, totalCoins, offerInv);
 					
 					ENGINE.sendExchangeOffer(player, 1, slot, isSell, objId, amount, price);
 					clearOffer(player);
@@ -474,24 +475,24 @@ module.exports = (function () {
 	function collectItems (player, slot, option) {
 		var exchangeSlot = varp(player, 138);
 		var returnInv = config.enumValue(1079, exchangeSlot);
-		var objId = inv.getObjId(player, returnInv, slot);
-		var amount = inv.getCount(player, returnInv, slot);
-		if (objId !== CONST.COINS && inv.hasSpace(player)) {
+		var objId = common.getObjId(player, returnInv, slot);
+		var amount = common.getCount(player, returnInv, slot);
+		if (objId !== CONST.COINS && common.hasSpace(player)) {
 			chat.sendMessage(player, "You don't have enough room in your inventory.");
 			return;
 		}
 		if (!config.objStackable(objId) &&
-				amount > inv.freeSpace(player, Inv.BACKPACK)) {
-			amount = inv.freeSpace(player, Inv.BACKPACK);
+				amount > common.freeSpace(player, Inv.BACKPACK)) {
+			amount = common.freeSpace(player, Inv.BACKPACK);
 		}
-		inv.take(player, objId, amount, returnInv);
+		common.take(player, objId, amount, returnInv);
 		
 		if (option === 1 && amount > 1) {
 			objId = config.objCert(objId);
 		}		
-		inv.give(player, objId, amount);
+		common.give(player, objId, amount);
 		
-		if (inv.freeSpace(player, returnInv) == 2 && ENGINE.exchangeOfferFinished(player, 1, exchangeSlot)) {
+		if (common.freeSpace(player, returnInv) == 2 && ENGINE.exchangeOfferFinished(player, 1, exchangeSlot)) {
 			ENGINE.clearExchangeOffer(player, 1, exchangeSlot);
 		}
 	}
