@@ -77,5 +77,4 @@ var listen = function(scriptManager) {
 	scriptManager.registerListener(EventType.IF_BUTTON, 1458, listener);
 	scriptManager.registerListener(EventType.IF_BUTTON, 1452, listener);
 	scriptManager.registerListener(EventType.IF_BUTTON, 1449, listener);
-	scriptManager.registerListener(EventType.IF_BUTTON, 1503, listener);
 };
