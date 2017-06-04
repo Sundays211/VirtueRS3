@@ -273,7 +273,7 @@ public class GameEventDispatcher {
 	 */
 	public void sendWidgetObject (int widget, int component, int objectId, int count) {
 		sendEvent(WidgetModelEventEncoder.class, new WidgetModelEventContext(
-				ModelType.PLAYER_MODEL_OTHER, widget, component, objectId, count));
+				ModelType.OBJECT, widget, component, objectId, count));
 	}
 
 	public void sendWidgetEvents(int root, int component, int from, int to,

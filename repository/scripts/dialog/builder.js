@@ -37,11 +37,11 @@ module.exports = function (player) {
 				nextHandler(value);
 				nextHandler = null;
 			}
-			var callback = flow.pop();
+			var callback = flow.shift();
 			while (callback) {
 				//Run the callback. If it returns true, reset the resume handler.
 				//If false, process the next callback.
-				callback = callback(value) ? undefined : flow.pop();
+				callback = callback(value) ? undefined : flow.shift();
 			}
 			if (flow.length > 0) {
 				//If there are remaining items, set the handler for the next ones
@@ -96,12 +96,13 @@ module.exports = function (player) {
 	}
 
 	function objbox (obj, message) {
-		obj = typeof(obj) !== "number" ? util.getId(obj) : obj;
+		var objId = typeof(obj) !== "number" ? util.getId(obj) : obj;
 		pushStep(function () {
-			widget.setText(player, 1184, 11, config.objName(obj));
-			widget.setObject(player, 1184, 2, obj, 1);
+			widget.setText(player, 1184, 11, config.objName(objId));
+			widget.setObject(player, 1184, 2, objId);
 			widget.setText(player, 1184, 9, message);
-			widget.openOverlaySub(player, 1006, 1184);
+			widget.openOverlaySub(player, 1006, 1184, false);
+			util.runClientScript(player, 8178, []);
 			return true;
 		});
 		return dialog;
@@ -233,7 +234,7 @@ module.exports = function (player) {
 		});
 	}
 
-	function multi5 (player, message, op1, op1callback, op2, op2callback, op3, op3callback, op4, op4callback, op5, op5callback) {
+	function multi5 (message, op1, op1callback, op2, op2callback, op3, op3callback, op4, op4callback, op5, op5callback) {
 		pushStep(function () {
 			ENGINE.requestMulti(player, message, [op1, op2, op3, op4, op5], [1, 2, 3, 4, 5], new Handler());
 			nextHandler = multiChoiceHandler(op1callback, op2callback, op3callback, op4callback, op5callback);
@@ -269,6 +270,8 @@ module.exports = function (player) {
 				op4callback();
 			} else if (value == 5 && op5callback) {
 				op5callback();
+			} else {
+				closeDialog();
 			}
 		};
 	}
