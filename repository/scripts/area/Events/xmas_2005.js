@@ -19,9 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var dialog = require('../../dialog');
+var dialog = require('../dialog');
+var anim = require('../../core/anim');
+var inv = require('../../inv');
 var map = require('../../map');
 var coords = require('../../map/coords');
+var widget = require('../../widget');
 
 module.exports = (function () {
 	return {
@@ -29,9 +32,30 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 100850, function (ctx) {
-		var player = ctx.player;
-        map.setCoords(player, coords(6169, 1038, 0));
-		});
+	 scriptManager.bind(EventType.OPLOC1, [10673,10674,10675], function (ctx) {//Paintcans
+	 widget.openCentral(ctx.player, 383, false); 
+	 });	 
+	 scriptManager.bind(EventType.OPLOC1, 10687, function (ctx) {//puppet torsos blue
+	//if varbit or varp 
+	//dialog.chatplayer(ctx.player, "NEUTRAL", "I should speak to Rosie befor I touch these.", function () {
+	//});
+	//else
+	 anim.run(ctx.player, 832, function () {	
+	 inv.give(ctx.player, 6875, 1);
+	 });
+	 dialog.chatobj(ctx.player, 6875, "You take a blue marionette torso from the box.", function () {
+	 });	
+	 });
+	 scriptManager.bind(EventType.OPLOC1, 10699, function (ctx) {//Trapdoor steps
+	 dialog.mesbox(ctx.player,"If you leave Diango's workshop, any marionette parts, bits of bauble or<br> boxes will be removed from your inventory.", function () {
+	//dialog.multi2(player, "LEAVE DIANGO'S WORKSHOP?", "Yes", function () {
+	 anim.run(ctx.player, 828, function () {	
+	 map.setCoords(ctx.player, coords(2007, 4427, 1));	
+	 });
+	//}, "No", function () {	
+	 });	
+	 });
+	 
 	}
+
 })();

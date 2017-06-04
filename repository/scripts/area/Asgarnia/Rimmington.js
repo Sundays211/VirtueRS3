@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 
 module.exports = (function () {
 	return {

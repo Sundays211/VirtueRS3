@@ -21,7 +21,7 @@
  */
 var chat = require('../../chat');
 var inv = require('../../inv');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 
 module.exports = (function () {
 	return {

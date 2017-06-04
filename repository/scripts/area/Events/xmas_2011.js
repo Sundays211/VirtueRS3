@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 var chat = require('../../chat');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var map = require('../../map');
 var coords = require('../../map/coords');
 

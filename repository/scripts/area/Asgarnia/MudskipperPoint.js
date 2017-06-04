@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var map = require('../../map');
 var coords = require('../../map/coords');
 

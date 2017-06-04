@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 
 /**
  * 
