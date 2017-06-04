@@ -3,7 +3,7 @@
  */
 /* globals CLAN_ENGINE */
 var util = require('../../core/util');
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var config = require('../../core/config');
 var chat = require('../../chat');
 
@@ -80,9 +80,9 @@ function init () {
 			dialog.multi2(player, "Really kick "+displayName+"?", "Yes, kick.", function () {
 				CLAN_ENGINE.getClanSettings().kickClanMember(getClanHash(player), player.getChat(), memberHash);
 				broadcasts.send(getClanHash(player), 29, ["[Player A]", "[Player B]"], [util.getName(player), displayName]);
-				dialog.finish(player);
+				dialog.closeModal(player);
 			}, "No, cancel.", function () {
-				dialog.finish(player);
+				dialog.closeModal(player);
 			});
 		}
 	}
@@ -96,7 +96,7 @@ function init () {
 			chat.sendMessage(player, "You must be a clan admin to do that.");
 			return;
 		}
-		dialog.requestString(player, "Enter the name to be banned:", function (name) {
+		dialog.builder(player).requestString("Enter the name to be banned:").then(function (name) {
 			chat.sendMessage(player, "Attempting to ban "+name+".");
 			var userHash = util.getUserHash(name);
 			if (userHash === null) {
@@ -128,7 +128,7 @@ function init () {
 		if (slot != -1) {
 			util.runClientScript(player, 4581, [slot]);
 		}
-		dialog.requestString(player, "Enter the name to be removed:", function (name) {
+		dialog.builder(player).requestString("Enter the name to be removed:").then(function (name) {
 			chat.sendMessage(player, "Attempting to unban "+name+".");
 			var userHash = util.getUserHash(name);
 			if (userHash === null) {
@@ -163,29 +163,28 @@ function init () {
 		var clanHash = getClanHash(player);
 		
 		if (!CLAN_ENGINE.isClanOwner(player)) {
-			dialog.mesbox(player, "If you leave the clan, you will need to be invited before you can join again,<br>and must wait a week before you contribute to clan resources.", function () {
-				dialog.multi2(player, "Really leave the clan?", "Yes, leave the clan.", function () {
+			dialog.builder(player).mesbox("If you leave the clan, you will need to be invited before you can join again,"+
+					"<br>and must wait a week before you contribute to clan resources.")
+				.multi2("Really leave the clan?", "Yes, leave the clan.", function () {
 					CLAN_ENGINE.leaveClan(player);
 				}, "No, I will remain in the clan.", function () {
-					dialog.chatplayer(player, "<p=2>No, I will remain in the clan.");
+					dialog.builder(player).chatplayer("<p=2>No, I will remain in the clan.").finish();
 				});
-			});
 		} else if (CLAN_ENGINE.hasReplacementOwner(clanHash)) {
-			dialog.mesbox(player, "If you leave, then the deputy owner will become the owner of the clan. Are you sure you wish to continue?", function () {
-				dialog.multi2(player, "Leave the clan, losing ownership of it?", "Yes, leave, I no longer want to be owner.", function () {
+			dialog.builder(player).mesbox("If you leave, then the deputy owner will become the owner of the clan. Are you sure you wish to continue?")
+				.multi2("Leave the clan, losing ownership of it?", "Yes, leave, I no longer want to be owner.", function () {
 					CLAN_ENGINE.leaveClan(player);
 				}, "No, I want to continue as clan owner.", function () {
-					dialog.chatplayer(player, "<p=2>No, I want to continue as clan owner.");
+					dialog.builder(player).chatplayer("<p=2>No, I want to continue as clan owner.").finish();
 				});
-			});
 		} else if (CLAN_ENGINE.getMemberCount(clanHash) <= 1) {
-			dialog.mesbox(player, "[TODO: Correct dialog] Leaving the clan will cause it to disband. Are you sure?", function () {
-				dialog.requestConfirm(player, "Leave the clan?", function () {
+			dialog.builder(player).mesbox("[TODO: Correct dialog] Leaving the clan will cause it to disband. Are you sure?")
+				.confirm("Leave the clan?")
+				.then(function () {
 					CLAN_ENGINE.leaveClan(player);
-				});
-			});				
+				});		
 		} else {
-			dialog.mesbox(player, "Before you can leave the clan, you must assign a deputy owner. Once you have left, they will become the owner in your place. Remember that you will need to be invited to rejoin the clan.");
+			dialog.builder(player).mesbox("Before you can leave the clan, you must assign a deputy owner. Once you have left, they will become the owner in your place. Remember that you will need to be invited to rejoin the clan.");
 		}
 	}
 }

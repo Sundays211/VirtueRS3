@@ -21,7 +21,7 @@
  */
 /* globals EventType */
 var quest = require('../quest');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var anim = require('../core/anim');
 var inv = require('../inv');
 var chat = require('../chat');
@@ -47,17 +47,17 @@ module.exports = (function () {
 			var npc = ctx.npc;
 			
 			if(quest.hasFinished(player, 6)) {
-				dialog.chatnpc(player, npc, "Hello, friend, how is the adventuring going?", function () {
-					cookFinished(player, npc);
-				});	
+				dialog.chatnpc(player, npc, "Hello, friend, how is the adventuring going?")
+					.then(function () {
+						cookFinished(player, npc);
+					});
 			} else if(quest.hasStarted(player, 6)) {
-				dialog.chatnpc(player, npc, "How are you getting on with finding the ingredients?", function () {
-	            	cookStarted(player, npc);
-				});	
+				dialog.chatnpc(player, npc, "How are you getting on with finding the ingredients?")
+					.then(function () {
+						cookStarted(player, npc);
+					});
 			} else {
-				dialog.chatnpc(player, npc, "What am I to do?", function () {
-					cook(player, npc);
-				});	
+				startCookDialog(player, npc);
 			}
 		});
 		
@@ -116,40 +116,33 @@ module.exports = (function () {
 	
 	function cookFinished (player, npc) {
 		dialog.multi4(player, "SELECT AN OPTION", "I'm getting strong and mighty.", function () {
-			dialog.chatplayer(player, "I'm getting strong and mighty. Grr.", function () {
-				dialog.chatnpc(player, npc, "Glad to hear it.", function () {});
-			   });
+			dialog.builder(player).chatplayer("I'm getting strong and mighty. Grr.")
+				.chatnpc(npc, "Glad to hear it.").finish();
 		}, "I keep on dying.", function () {
-			dialog.chatplayer(player, "I keep on dying.", function () {
-				dialog.chatnpc(player, npc, "Ah, well, at least you keep coming back to life too!", function () {});
-			});
+			dialog.builder(player).chatplayer("I keep on dying.")
+				.chatnpc(npc, "Ah, well, at least you keep coming back to life too!");
 		}, "Can i use your range?", function () {
-			dialog.chatplayer(player, "Can i use your range?", function () {
-				dialog.chatnpc(player, npc, "Go ahead! It's a very good range;it's better than most<br> other ranges.", function () {
-					dialog.chatnpc(player, npc, "It's called the Cook-o-Matic 25 and it uses a combination<br> of state-of-the-art temperature regulation and magic.", function () {
-						dialog.chatplayer(player, "will it mean my food will burn less often?", function () {
-							dialog.chatnpc(player, npc, "As long as the food is fairly easy to cook in the first place!", function () {
-				   if(inv.has(player, 15411)) {
-					   dialog.chatnpc(player, npc, "The manual you have in your inventory should tell you<br> more.", function () {
-						   dialog.chatplayer(player, "Thanks!", function () {});
-					   });
-				   } else {
-					   dialog.chatnpc(player, npc, "Here, take this manual. It should tell you everything you<br> need to know about this range.", function () {
-						   inv.give(player, 15411, 1);
-						   dialog.chatobj(player, 15411, "The cook hands you a manual.", function () {//and add item to inv
-							   dialog.chatplayer(player, "Thanks!", function () {});
-						   });
-					   });
+			dialog.builder(player).chatplayer("Can i use your range?")
+				.chatnpc(npc, "Go ahead! It's a very good range;it's better than most<br> other ranges.")
+				.chatnpc(npc, "It's called the Cook-o-Matic 25 and it uses a combination<br> of state-of-the-art temperature regulation and magic.")
+				.chatplayer("will it mean my food will burn less often?")
+				.chatnpc(npc, "As long as the food is fairly easy to cook in the first place!")
+				.then(function () {
+					if(inv.has(player, 15411)) {
+						dialog.builder(player).chatnpc(npc, "The manual you have in your inventory should tell you<br> more.")
+						   .chatplayer("Thanks!").finish();
+					} else {
+						dialog.builder(player).chatnpc(npc, "Here, take this manual. It should tell you everything you<br> need to know about this range.")
+							.then(function () {//and add item to inv
+								inv.give(player, 15411, 1);
+							}).objbox(15411, "The cook hands you a manual.")
+							.chatplayer("Thanks!").finish();
 				   }
-							});
-						});
-					});
 				});
-			});
 		}, "What happened to the castle?", function () {
-			dialog.chatnpc(player, npc, "The castle really did suffer in the battle of Lumbridge. I'm<br> glad it's over", function () {
-				dialog.chatnpc(player, npc, "People came from all over the world to help rebuild, and<br> now things are getting back to normal. I'm glad - I have<br> important things to cook and I'm not letting anything get<br> in the way!", function () {});	
-			});	
+			dialog.builder(player).chatnpc(npc, "The castle really did suffer in the battle of Lumbridge. I'm<br> glad it's over")
+				.chatnpc(npc, "People came from all over the world to help rebuild, and<br> now things are getting back to normal. I'm glad - I have<br> important things to cook and I'm not letting anything get<br> in the way!")
+				.finish();
 		});
 	}
 	
@@ -157,65 +150,61 @@ module.exports = (function () {
 		//TODO: Implement this
 	}
 	
-	function cook (player, npc) {
-		dialog.multi5(player, "SELECT AN OPTION", "What's wrong?", function () {		
-			startQuest(player, npc);
-		}, "Can you make me a cake?", function () {
-			dialog.chatnpc(player, npc, "*sniff* Don't talk to me about cakes...", function () {
-				startQuest(player, npc);
-			});	
-		}, "You don't look very happy.", function () {	
-			dialog.chatnpc(player, npc, "No, I'm not. The world is caving in around me. I'm<br> overcome with dark feelings of impending doom.", function () {
-				dialog.multi2(player, "SELECT AN OPTION", "What's wrong?", function () {	
-					startQuest(player, npc);
-				}, "I'd take the rest of the day off, if I were you.", function () {	
-					dialog.chatnpc(player, npc, "No, that's the worst thing I could do. I'd get in terrible<br> trouble.", function () {
-						dialog.chatplayer(player, "Well, maybe you need to take a holiday...", function () {
-							dialog.chatnpc(player, npc, "That would be nice, but the Duke doesn't allow holidays<br> for core staff.", function () {
-								dialog.chatplayer(player, "Hmm, why not run away to the sea and start a new life as<br> a pirate?", function () {
-									dialog. chatnpc(player, npc, "My wife gets seasick and I have an irrational fear of<br> eyepatches. I don't see it working.", function () {		
-										dialog.chatplayer(player, "I'm afraid I've run out of ideas.", function () {	
-											dialog.chatnpc(player, npc, "I know, I'm doomed.", function () {	
-												startQuest(player, npc);	
-											}); 	
-										}); 
-									}); 	
-								}); 
-							});		
-						}); 
+	function startCookDialog (player, npc) {
+		dialog.builder(player).chatnpc(npc, "What am I to do?")
+			.multi5("SELECT AN OPTION", "What's wrong?", function () {		
+				cookStartQuest(player, npc);
+			}, "Can you make me a cake?", function () {
+				dialog.builder(player).chatnpc(npc, "*sniff* Don't talk to me about cakes...")
+					.then(function () {
+						cookStartQuest(player, npc);
 					});	
-				}); 
-			}); 
-		}, "Nice hat!", function () {
-			dialog.chatnpc(player, npc, "Er, thank you. It's a pretty ordinary cook's hat, really.", function () {
-				dialog.chatplayer(player, "Still, it suits you. The trousers are pretty special too.", function () {
-					dialog.chatnpc(player, npc, "It's all standard-issue cook's uniform.", function () {
-						dialog.chatplayer(player, "The whole hat, apron and stripy trousers ensemble...it<br> works. It makes you look like a real cook.", function () {
-							dialog.chatnpc(player, npc, "I AM a real cook! I haven't got time to be chatting about culinary fashion, I'm in desperate need of help!", function () {
-								startQuest(player, npc);
-							}); 
-						}); 
-					}); 
-				}); 
+			}, "You don't look very happy.", function () {
+				dialog.builder(player).chatnpc(npc, "No, I'm not. The world is caving in around me. I'm<br> overcome with dark feelings of impending doom.")
+					.multi2("SELECT AN OPTION", "What's wrong?", function () {	
+						cookStartQuest(player, npc);
+					}, "I'd take the rest of the day off, if I were you.", function () {	
+						cook2(player, npc);
+					});
+			}, "Nice hat!", function () {
+				dialog.builder(player).chatnpc(npc, "Er, thank you. It's a pretty ordinary cook's hat, really.")
+					.chatplayer("Still, it suits you. The trousers are pretty special too.")
+					.chatnpc(npc, "It's all standard-issue cook's uniform.")
+					.chatplayer("The whole hat, apron and stripy trousers ensemble...it<br> works. It makes you look like a real cook.")
+					.chatnpc(npc, "I AM a real cook! I haven't got time to be chatting about culinary fashion, I'm in desperate need of help!")
+					.then(function () {
+						cookStartQuest(player, npc);
+					});
+			}, "What happened to the castle?", function () {
+				dialog.builder(player).chatnpc(npc, "The castle really did suffer in the battle of Lumbridge. I'm<br> glad it's over")
+					.chatnpc(npc, "People came from all over the world to help rebuild, and<br> now things are getting back to normal. I'm glad - I have<br> important things to cook and I'm not letting anything get<br> in the way!")
+					.chatnpc(npc, "In fact, even now I'm preparing a cake for the Duke's<br> birthday! Although...umm...")
+					.multi2("SELECT AN OPTION", "What's the problem?", function () {
+						cookStartQuest(player, npc);
+					}, "I'll let you get on with it!");
 			});
-		}, "What happened to the castle?", function () {
-			dialog.chatnpc(player, npc, "The castle really did suffer in the battle of Lumbridge. I'm<br> glad it's over", function () {
-				dialog.chatnpc(player, npc, "People came from all over the world to help rebuild, and<br> now things are getting back to normal. I'm glad - I have<br> important things to cook and I'm not letting anything get<br> in the way!", function () {
-					dialog.chatnpc(player, npc, "In fact, even now I'm preparing a cake for the Duke's<br> birthday! Although...umm...", function () {
-						dialog.multi2(player, "SELECT AN OPTION", "What's the problem?", function () {
-							startQuest(player, npc);
-						}, "I'll let you get on with it!", function () {});	
-					});	
-				});	
-			});	
-		});
 	}
 	
-	function startQuest (player, npc) {
-		dialog.chatnpc(player, npc, "Oh dear, oh dear, oh dear, I'm in a terrible, terrible mess!<br> It's the Duke's birthday today, and I should be making him<br> a lovely, big birthday cake using special ingredients...", function () {	
-			dialog.chatnpc(player, npc, "...but I've forgotten to get the ingredients. I'll never get<br> them in time now. He'll sack me! Whatever will I do? I have<br> four children and a goat to look after. Would you help me?<br> Please?", function () {
-				//TODO: start quest			
-			}); 
-		});
+	function cook2 (player, npc) {
+		dialog.builder(player).chatnpc(npc, "No, that's the worst thing I could do. I'd get in terrible<br> trouble.")
+			.chatplayer("Well, maybe you need to take a holiday...")
+			.chatnpc(npc, "That would be nice, but the Duke doesn't allow holidays<br> for core staff.")
+			.chatplayer("Hmm, why not run away to the sea and start a new life as<br> a pirate?")
+			.chatnpc(npc, "My wife gets seasick and I have an irrational fear of<br> eyepatches. I don't see it working.")		
+			.chatplayer("I'm afraid I've run out of ideas.")	
+			.chatnpc(npc, "I know, I'm doomed.")
+			.then(function () {
+				cookStartQuest(player, npc);	
+			});
+	}
+	
+	function cookStartQuest (player, npc) {
+		dialog.builder(player).chatnpc(npc, "Oh dear, oh dear, oh dear, I'm in a terrible, terrible mess!<br> It's the Duke's birthday today, and I should be making him<br> a lovely, big birthday cake using special ingredients...")
+			.chatnpc(npc, "...but I've forgotten to get the ingredients. I'll never get<br> them in time now. He'll sack me! Whatever will I do? I have<br> four children and a goat to look after. Would you help me?<br> Please?")
+			.then(function () {
+				chat.sendDebugMessage(player, "Quest start not yet implemented!");
+				//TODO: start quest	
+			})
+			.finish();
 	}
 })();

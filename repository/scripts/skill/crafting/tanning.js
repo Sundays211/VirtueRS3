@@ -7,7 +7,7 @@ var varp = require('../../core/var/player');
 var varbit = require('../../core/var/bit');
 
 var makex = require('../makex');
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var widget = require('../../widget');
 var anim = require('../../core/anim');
 

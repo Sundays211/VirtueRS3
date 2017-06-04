@@ -22,7 +22,7 @@
 /* globals EventType */
 var coords = require('../coords');
 
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var util = require('../../core/util');
 var chat = require('../../chat');
 var entityMap = require('../entity');
@@ -74,7 +74,7 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teleto", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to:";
-			dialog.requestName(ctx.player, message, function (name) {
+			dialog.requestName(ctx.player, message).then(function (name) {
 				var hash = util.getUserHash(name);
 				if (hash) {
 					var targetPlayer = entityMap.getPlayer(hash);
@@ -91,7 +91,7 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teletome", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to you:";
-			dialog.requestName(ctx.player, message, function (name) {
+			dialog.requestName(ctx.player, message).then(function (name) {
 				var hash = util.getUserHash(name);
 				if (hash) {
 					var targetPlayer = entityMap.getPlayer(hash);

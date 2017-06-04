@@ -23,7 +23,7 @@
 var varc = require('../core/var/client');
 var config = require('../core/config');
 var util = require('../core/util');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var widget = require('../widget');
 var chat = require('../chat');
 
@@ -40,7 +40,7 @@ module.exports = function(scriptManager) {
 		var player = ctx.player;
 		//player.getVars().setVarp(1258, 299248);
 		var nameHash = ENGINE.getFriendChatData(player, FriendChatData.NAME);
-		widget.setText(player, 1108, 9, nameHash === 0 ? "Chat disabled" : util.fromBase37Hash(nameHash));
+		widget.setText(player, 1108, 9, nameHash ? util.fromBase37Hash(nameHash) : "Chat disabled");
 		widget.setText(player, 1108, 11, nameFromRank(ENGINE.getFriendChatData(player, FriendChatData.RANKJOIN), false));
 		widget.setText(player, 1108, 13, nameFromRank(ENGINE.getFriendChatData(player, FriendChatData.RANKTALK), false));
 		widget.setText(player, 1108, 15, nameFromRank(ENGINE.getFriendChatData(player, FriendChatData.RANKKICK), false));
@@ -58,7 +58,7 @@ module.exports = function(scriptManager) {
 			return;
 		case 9://Set prefix/disable
 			if (ctx.button == 1) {
-				dialog.requestString(player, "Enter chat prefix:", function (value) {
+				dialog.builder(player).requestString("Enter chat prefix:").then(function (value) {
 					var prefix = util.toBase37Hash(value);
 					if (prefix === 0) {
 						return;

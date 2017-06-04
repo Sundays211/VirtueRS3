@@ -56,6 +56,7 @@ import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.engine.script.listeners.VarListenerWrapper;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.ChatOptionType;
+import org.virtue.game.content.dialogues.ChatheadEmoteType;
 import org.virtue.game.content.friendchats.FriendChatDataType;
 import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.combat.impl.ability.ScriptedAbility;
@@ -171,7 +172,7 @@ public class JSListeners implements ScriptManager {
 		this.configApi = new VirtueConfigAPI(configProvider);
 		this.questApi = new VirtueQuestAPI(configProvider);
 		this.scriptDir = scriptDir;
-		legacyScriptDir = new File(scriptDir, "legacy");
+		this.legacyScriptDir = new File(scriptDir, "legacy");
 		this.modules = new ArrayList<>();
 	}
 	
@@ -225,6 +226,12 @@ public class JSListeners implements ScriptManager {
 			map.put(opType.name(), opType.getId());
 		}
 		engine.put("FriendChatData", map);
+		
+		map = new HashMap<>();
+		for (ChatheadEmoteType expression : ChatheadEmoteType.values()) {
+			map.put(expression.name(), expression.getAnimID());
+		}
+		engine.put("Expression", map);
 		
 		File generalFunctions = new File(legacyScriptDir, "GeneralFunctions.js");
 		if (generalFunctions.exists()) {

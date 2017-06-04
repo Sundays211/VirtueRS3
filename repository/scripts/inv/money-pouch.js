@@ -23,7 +23,7 @@
 var CONST = require('../core/const');
 var util = require('../core/util');
 var chat = require('../chat');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var common = require('./common');
 
 /**
@@ -98,7 +98,7 @@ module.exports = (function () {
 		var message = "Your money pouch contains "+util.toFormattedString(getCoinCount(player))+" coins.";
 		message += "<br>How many would you like to withdraw?";
 		
-		dialog.requestCount(player, message, function (value) {
+		dialog.requestCount(player, message).then(function (value) {
 			var amount = Math.min(value, getCoinCount(player));
 			if (amount < 1) {
 				return;

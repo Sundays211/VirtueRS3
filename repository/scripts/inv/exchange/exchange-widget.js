@@ -25,7 +25,7 @@ var varc = require('../../core/var/client');
 var varbit = require('../../core/var/bit');
 
 var widget = require('../../widget');
-var dialog = require('../../core/dialog');
+var dialog = require('../../dialog');
 var util = require('../../core/util');
 var config = require('../../core/config');
 var chat = require('../../chat');
@@ -409,9 +409,10 @@ module.exports = (function () {
 			}	
 			break;
 		case 5://Choose amount
-			dialog.requestCount(player, "Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":", function (value) {
-				varp(player, 136, value);
-			});
+			dialog.requestCount(player, "Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":")
+				.then(function (value) {
+					varp(player, 136, value);
+				});
 			break;
 		}
 	}

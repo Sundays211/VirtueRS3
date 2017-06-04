@@ -22,7 +22,7 @@
 /* globals EventType, ChatListType */
 var widget = require('../widget');
 var util = require('../core/util');
-var dialog = require('../core/dialog');
+var dialog = require('../dialog');
 var chat = require('../chat');
 
 /**
