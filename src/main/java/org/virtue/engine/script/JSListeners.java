@@ -164,7 +164,7 @@ public class JSListeners implements ScriptManager {
 		this.modules = new ArrayList<>();
 	}
 	
-	private void setConstants (ScriptEngine engine) {
+	protected void setConstants (ScriptEngine engine) {
 		engine.put("api", getScriptApi());
 		engine.put("ENGINE", getScriptApi());
 		engine.put("CLAN_ENGINE", clanApi);
@@ -236,7 +236,11 @@ public class JSListeners implements ScriptManager {
 		engine = engineManager.getEngineByName("nashorn");
 		setConstants(engine);
 		try {
-			loadModules();
+			initModuleBootstrap(engine);
+			modules = initModuleBootstrap(engine);			
+			logger.info("Found modules: {}", modules);
+			
+			loadModules(engine, modules);
 		} catch (Exception ex) {
 			logger.error("Failed to load script modules", ex);
 			success = false;
@@ -254,23 +258,20 @@ public class JSListeners implements ScriptManager {
 		logger.info("Registerd " + varMap.size() + " Var Script(s).");
 		return success;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private void loadModules () throws Exception {
+	protected List<String> initModuleBootstrap(ScriptEngine engine) throws Exception {
 		File globalBootstrap = new File(scriptDir, "global-bootstrap.js");
 		engine.eval(new FileReader(globalBootstrap));
 		Invocable invoke = (Invocable) engine;
 		
 		modules.clear();		
 		Object modulesObj = invoke.invokeFunction("getAllModules");
-		modules.addAll((List<String>) modulesObj);
-		
-		logger.info("Found modules: {}", modules);
-		loadModules(modules);
+		return (List<String>) modulesObj;
 	}
 
 	@SuppressWarnings("unchecked")
-	private void loadModules(List<String> modules) throws Exception {
+	protected void loadModules(ScriptEngine engine, List<String> modules) throws Exception {
 		Invocable invoke = (Invocable) engine;
 		Object legacyGlobals = invoke.invokeFunction("init", this, scriptDir, modules);
 		//TODO: This section only exists to support legacy scripts. Remove once modular system is fully implemented
@@ -321,7 +322,7 @@ public class JSListeners implements ScriptManager {
 		boolean success = true;
 		if (modules.contains(category)) {
 			try {
-				loadModules(Collections.singletonList(category));
+				loadModules(engine, Collections.singletonList(category));
 			} catch (Exception ex) {
 				logger.error("Problem reloading module "+category, ex);
 				success = false;
