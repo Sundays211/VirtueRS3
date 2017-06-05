@@ -17,7 +17,7 @@ import org.virtue.game.entity.player.stat.Stat;
  */
 public class Formula {
 
-	private static ScriptAPI api = Virtue.getInstance().getScripts().getApi();
+	private static ScriptAPI api = Virtue.getInstance().getScripts().getScriptApi();
 
 	/**
 	 * Calculates the Max Melee Hit.

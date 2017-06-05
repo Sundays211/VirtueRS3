@@ -37,18 +37,11 @@ import javax.script.ScriptEngineManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
-import org.virtue.Virtue;
 import org.virtue.engine.script.api.ClanAPI;
 import org.virtue.engine.script.api.ConfigAPI;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.engine.script.api.QuestAPI;
 import org.virtue.engine.script.api.ScriptAPI;
-import org.virtue.engine.script.api.impl.VirtueClanAPI;
-import org.virtue.engine.script.api.impl.VirtueConfigAPI;
-import org.virtue.engine.script.api.impl.VirtueMapAPI;
-import org.virtue.engine.script.api.impl.VirtueQuestAPI;
-import org.virtue.engine.script.api.impl.VirtueScriptAPI;
 import org.virtue.engine.script.listeners.AbilityListener;
 import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.EventListener;
@@ -142,7 +135,7 @@ public class JSListeners implements ScriptManager {
 	
 	private Map<Integer, VarListener> vars;
 	
-	private ScriptAPI scriptAPI;
+	private ScriptAPI scriptApi;
 	
 	private ClanAPI clanApi;
 	
@@ -160,25 +153,20 @@ public class JSListeners implements ScriptManager {
 	
 	private List<String> modules;
 
-	public JSListeners(File scriptDir, ConfigProvider configProvider) {
+	public JSListeners(File scriptDir) {
 		this.listeners = new HashMap<>();
-		this.abstractNPCMap = new HashMap<Integer, AbstractNPC>();
-		this.combatScriptMap = new HashMap<Integer, CombatHandler>();
-		this.varMap = new HashMap<Integer, VarListener>();
-		this.vars = new HashMap<Integer, VarListener>();
-		this.scriptAPI = new VirtueScriptAPI(configProvider);
-		this.clanApi = new VirtueClanAPI(Virtue.getInstance().getClans());
-		this.mapApi = new VirtueMapAPI();
-		this.configApi = new VirtueConfigAPI(configProvider);
-		this.questApi = new VirtueQuestAPI(configProvider);
+		this.abstractNPCMap = new HashMap<>();
+		this.combatScriptMap = new HashMap<>();
+		this.varMap = new HashMap<>();
+		this.vars = new HashMap<>();
 		this.scriptDir = scriptDir;
 		this.legacyScriptDir = new File(scriptDir, "legacy");
 		this.modules = new ArrayList<>();
 	}
 	
 	private void setConstants (ScriptEngine engine) {
-		engine.put("api", getApi());
-		engine.put("ENGINE", getApi());
+		engine.put("api", getScriptApi());
+		engine.put("ENGINE", getScriptApi());
 		engine.put("CLAN_ENGINE", clanApi);
 		engine.put("MAP_ENGINE", mapApi);
 		engine.put("configApi", configApi);
@@ -357,10 +345,46 @@ public class JSListeners implements ScriptManager {
 	 * Returns the api for this script enviroment, which is used to interact with the underlying server
 	 * @return The {@link ScriptAPI} instance
 	 */
-	public ScriptAPI getApi () {
-		return scriptAPI;
+	public ScriptAPI getScriptApi () {
+		return scriptApi;
 	}
 	
+	public void setScriptApi(ScriptAPI scriptApi) {
+		this.scriptApi = scriptApi;
+	}
+
+	public ClanAPI getClanApi() {
+		return clanApi;
+	}
+
+	public void setClanApi(ClanAPI clanApi) {
+		this.clanApi = clanApi;
+	}
+
+	public MapAPI getMapApi() {
+		return mapApi;
+	}
+
+	public void setMapApi(MapAPI mapApi) {
+		this.mapApi = mapApi;
+	}
+
+	public ConfigAPI getConfigApi() {
+		return configApi;
+	}
+
+	public void setConfigApi(ConfigAPI configApi) {
+		this.configApi = configApi;
+	}
+
+	public QuestAPI getQuestApi() {
+		return questApi;
+	}
+
+	public void setQuestApi(QuestAPI questApi) {
+		this.questApi = questApi;
+	}
+
 	/**
 	 * Returns the logger for the script manager, so logging can be performed within the script
 	 * @return The logger instance for this class

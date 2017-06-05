@@ -28,7 +28,7 @@ public final class TreasureHunter {
 	 */
 	private boolean selectable;
 	
-	private ScriptAPI api = Virtue.getInstance().getScripts().getApi();
+	private ScriptAPI api = Virtue.getInstance().getScripts().getScriptApi();
 	
 	/**
 	 * Constructs a new {@code TreasureHunter} {@code Object}.

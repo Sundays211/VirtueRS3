@@ -45,6 +45,11 @@ import org.virtue.config.db.DBIndexProvider;
 import org.virtue.engine.GameEngine;
 import org.virtue.engine.cycle.ticks.SystemUpdateTick;
 import org.virtue.engine.script.JSListeners;
+import org.virtue.engine.script.api.impl.VirtueClanAPI;
+import org.virtue.engine.script.api.impl.VirtueConfigAPI;
+import org.virtue.engine.script.api.impl.VirtueMapAPI;
+import org.virtue.engine.script.api.impl.VirtueQuestAPI;
+import org.virtue.engine.script.api.impl.VirtueScriptAPI;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.clans.ClanManager;
@@ -187,6 +192,7 @@ public class Virtue {
 			instance.loadEngine();
 			instance.loadCache();
 			instance.loadConfig();
+			instance.loadScripts();
 			instance.loadGame();
 			instance.loadNetwork();
 			//new GameTick().start();
@@ -271,10 +277,6 @@ public class Virtue {
 		widget = new WidgetRepository();
 		widget.load();
 		
-		String scriptsFileDir = getProperty("scripts.dir", "./repository/scripts/");
-		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir, properties), configProvider);
-		scripts.load();
-		
 		ClanIndex clanIndex = new XMLClanIndex(properties);
 		if (clanIndex instanceof CachingParser){
 			cachingParsers.add((CachingParser) clanIndex);
@@ -297,6 +299,17 @@ public class Virtue {
 		NpcSpawnParser.loadNpcs();
 		NpcDropParser.loadNpcDrops();
 		DialogueHandler.handle();
+	}
+	
+	private void loadScripts() {
+		String scriptsFileDir = getProperty("scripts.dir", "./repository/scripts/");
+		scripts = new JSListeners(FileUtility.parseFilePath(scriptsFileDir, properties));
+		scripts.setScriptApi(new VirtueScriptAPI(configProvider));
+		scripts.setClanApi(new VirtueClanAPI(clans));
+		scripts.setMapApi(new VirtueMapAPI());
+		scripts.setConfigApi(new VirtueConfigAPI(configProvider));
+		scripts.setQuestApi(new VirtueQuestAPI(configProvider));
+		scripts.load();
 	}
 	
 	/**
