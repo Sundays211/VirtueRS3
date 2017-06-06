@@ -21,6 +21,7 @@ function getAllModules () {
 		'skill/cooking',
 		'skill/crafting',
 		'skill/fletching',
+		'skill/farming',
 		'skill/herblore',
 		'skill/smithing',
 		'skill/summoning',
