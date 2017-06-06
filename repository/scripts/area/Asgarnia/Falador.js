@@ -19,18 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var dialog = require('../../dialog');
-var map = require('../../map');
-var coords = require('../../map/coords');
+var dialog = require('../dialog');
+var anim = require('../../core/anim');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
-	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 100850, function (ctx) {
-        map.setCoords(ctx.player, coords(6169, 1038, 0));
-		});
+	function init (scriptManager) { 
+	 scriptManager.bind(EventType.OPLOC1, 26194, function (ctx) {//party room lever
+	 dialog.multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", function () { 
+	 }, "Nightly Dance (500 coins).", function () {
+	 }, "No action.", function () {
+	 });
+	 });
+	 
+	 
 	}
+
 })();

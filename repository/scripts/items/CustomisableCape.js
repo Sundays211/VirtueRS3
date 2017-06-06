@@ -19,18 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var dialog = require('../../dialog');
 var map = require('../../map');
 var coords = require('../../map/coords');
+var chat = require('../../chat');
+var widget = require('../../widget');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 100850, function (ctx) {
-        map.setCoords(ctx.player, coords(6169, 1038, 0));
-		});
+		
+		
+		
+	 scriptManager.bind(EventType.OPWORN1, [20769,20771,32152,32153], function (ctx) {//Kandarin Monastery
+	 map.setCoords(ctx.player, coords(3086, 3502, 0));
+	 });	 
+     scriptManager.bind(EventType.OPWORN2, [20769,20771,32152,32153], function (ctx) {//Ardougne farm
+	 map.setCoords(ctx.player, coords(2663, 3374, 0));
+	 });
+     scriptManager.bind(EventType.OPWORN3, [20769,20771,32152,32153], function (ctx) {//Max Guild
+	 map.setCoords(ctx.player, coords(2276, 3314, 1));
+	 });
+	 scriptManager.bind(EventType.OPWORN4, [20769,20771,32152,32153], function (ctx) {//Summoning restore
+	 chat.sendMessage(ctx.player, "<col=ff0000>will be added soon. bugged atm.");
+	 });
+     scriptManager.bind(EventType.OPWORN5, [20769,20771,32152,32153], function (ctx) {//Customise
+	 widget.openCentral(ctx.player, 20, false);
+	 });
+	 
 	}
+
 })();

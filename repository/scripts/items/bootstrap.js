@@ -3,12 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./DarkWizardsTower'),
-		require('./IceMountain'),
-		require('./MudskipperPoint'),
-		require('./Rimmington'),
-		require('./Falador'),
-		require('./Taverley')
+	    require('./CustomisableCape'),
+		require('./RottenPotato')
 	];
 	
 	for (var i in modules) {

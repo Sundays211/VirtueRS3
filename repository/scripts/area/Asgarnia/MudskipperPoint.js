@@ -30,8 +30,7 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 9472, function (ctx) {//Asgarnian ice dungeon
-		var player = ctx.player;
-        map.setCoords(player, coords(3007, 9550, 0));
+        map.setCoords(ctx.player, coords(3007, 9550, 0));
 		});
 	}
 })();

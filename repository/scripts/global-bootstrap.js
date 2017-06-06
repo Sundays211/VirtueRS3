@@ -8,6 +8,8 @@
  */
 function getAllModules () {
 	var modules = [
+		'items',
+		'area',
 	    'area/Asgarnia',
 		'area/Events',
 		'area/kandarin',
