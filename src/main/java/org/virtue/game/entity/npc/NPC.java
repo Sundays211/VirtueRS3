@@ -433,7 +433,7 @@ public class NPC extends Entity {
 		this.respawnTime = respawnDelay;
 	}
 	
-	private ScriptAPI api = Virtue.getInstance().getScripts().getApi();
+	private ScriptAPI api = Virtue.getInstance().getScripts().getScriptApi();
 	
 	public static Set<Integer> itemDropCalls = new HashSet<>(Arrays.asList(new Integer[]{ 11286, 21793, 21787, 27481, 27484, 27487, 11702, 11704, 11706, 31719, 31724 }));
 	
