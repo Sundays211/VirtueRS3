@@ -3,11 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    require('./Cannon'),
-	    require('./CustomisableCape'),
-		require('./HolidayItems-TreasureHunterItems'),
-		require('./MusicBox'),
-		require('./RottenPotato')
+		require('./LunarIsle')
 	];
 	
 	for (var i in modules) {

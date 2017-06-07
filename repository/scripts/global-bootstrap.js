@@ -10,6 +10,7 @@ function getAllModules () {
 	var modules = [
 		'items',
 		'area',
+		'area/FremennikLands',
 	    'area/Asgarnia',
 		'area/Events',
 		'area/kandarin',

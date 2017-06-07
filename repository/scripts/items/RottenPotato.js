@@ -23,10 +23,13 @@
 
 var inv = require('../../inv');
 var map = require('../../map');
+var entityMap = require('../../map/entity');
 var widget = require('../../widget');
 var util = require('../../core/util');
 var stat = require('../../skill/logic/stat');
 var chat = require('../../chat');
+var anim = require('../../core/anim');
+
 module.exports = (function () {
 	return {
 		init : init
@@ -49,14 +52,12 @@ module.exports = (function () {
 	 widget.setText(ctx.player, 1691, 7, util.toFormattedString(total)); //Total Bank Value
 	 }, "Send "+util.getName(ctx.target)+" to Botany Bay", function() {
 	 multi2(ctx.player, "DEFINITELY SEND "+ util.getName(ctx.target) + " TO BOTANY BAY?",  "Yes", function () {
-	 //RottenPotato.requestLookup(ctx.player,ctx.target);
+     var hash = util.getUserHash(ctx.target);
+	 if (hash) { 
+ 	 var targetPlayer = entityMap.getPlayer(hash); 
+ 	 if (targetPlayer) { 
 
-	 
-	// var hash = util.getUserHash(ctx.target);
-		//	if (hash != null) {
-			//		var targetPlayer = ENGINE.getWorldPlayerByHash(hash);
-				//	if (targetPlayer != null) {
-					//var frame = 0;
+ 	//var frame = 0;
 			   //var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
 				  // process : function (ctx.player) {
 					//if (frame === 0) {
@@ -79,14 +80,15 @@ module.exports = (function () {
 				//	api.clearSpotAnim(player, 1);
 				//}
 		//	});
-		//	player.setAction(new Action());
-				//	} else {
-			//			chat.sendMessage(ctx.player, "The specified player is not currently in the game world.")
-					//}
-			//	}
-			//	}
-	 
-
+		//	player.setAction(new Action()); 
+		 
+	 });
+ 	 } else { 
+ 	 chat.sendMessage(ctx.player, "The specified player is not currently in the game world."); 
+ 	 } 
+ 	 } else { 
+ 	 chat.sendMessage(ctx.player, ctx.target+" is not registered on this server."); 
+ 	 } 
 	 }, "No", function() {		
 	 });
 	 }, "Cancel", function() {

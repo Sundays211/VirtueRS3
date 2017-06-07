@@ -19,40 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var dialog = require('../dialog');
+ 
 var anim = require('../../core/anim');
-var map = require('../../map');
-var loc = require('../../map/location');
+var chat = require('../../chat');
+var util = require('../core/util');
+var map = require('../map');
+var inv = require('../../inv');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
+	function init (scriptManager) {
+	 
+	 scriptManager.bind(EventType.OPHELD1, 6, function (ctx) {//cannon 
+	 var coords = map.getCoords(ctx.player);
+	 anim.run(ctx.player, 827, function () {
+	 map.addLoc(7, coords, 10, 0);
+	 inv.take(ctx.player, 6, 1);
+     anim.run(ctx.player, 827, function () {
+	 map.addLoc(8, coords, 10, 0);
+	 inv.take(ctx.player, 8, 1);
+	 anim.run(ctx.player, 827, function () {
+	 map.addLoc(9, coords, 10, 0);
+	 inv.take(ctx.player, 10, 1);
+     anim.run(ctx.player, 827, function () {
+	 map.addLoc(6, coords, 10, 0);
+	 inv.take(ctx.player, 12, 1);
+     });
+	 });
+     });
+     });
+	 });	 
 	
-	function init (scriptManager) { 
-	 scriptManager.bind(EventType.OPLOC1, 26194, function (ctx) {//party room lever
-	 anim.run(ctx.player, 6933);
-	// object.anim(6934)
-	 dialog.multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", function () { 
-	 }, "Nightly Dance (500 coins).", function () {
-	 }, "No action.", function () {
-	 });
-	 });
-	 
-	 scriptManager.bind(EventType.OPLOC1, 26193, function (ctx) {//party room chest
-	 anim.run(ctx.player, 536, function () {
-	 loc.add(2418, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-	 });
-	 });
-	 scriptManager.bind(EventType.OPLOC2, 2418, function (ctx) {//party room chest
-	//deposit
-	 });
-	 scriptManager.bind(EventType.OPLOC3, 2418, function (ctx) {//party room chest
-	 anim.run(ctx.player, 535, function () {
-	 loc.add(26193, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-	 });
-	 });
-	 
 	}
 
 })();

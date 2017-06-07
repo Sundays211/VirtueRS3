@@ -19,39 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var dialog = require('../dialog');
-var anim = require('../../core/anim');
-var map = require('../../map');
-var loc = require('../../map/location');
-
+ 
+var VarBit = require('../../core/var/bit');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
-	function init (scriptManager) { 
-	 scriptManager.bind(EventType.OPLOC1, 26194, function (ctx) {//party room lever
-	 anim.run(ctx.player, 6933);
-	// object.anim(6934)
-	 dialog.multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", function () { 
-	 }, "Nightly Dance (500 coins).", function () {
-	 }, "No action.", function () {
-	 });
-	 });
-	 
-	 scriptManager.bind(EventType.OPLOC1, 26193, function (ctx) {//party room chest
-	 anim.run(ctx.player, 536, function () {
-	 loc.add(2418, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-	 });
-	 });
-	 scriptManager.bind(EventType.OPLOC2, 2418, function (ctx) {//party room chest
-	//deposit
-	 });
-	 scriptManager.bind(EventType.OPLOC3, 2418, function (ctx) {//party room chest
-	 anim.run(ctx.player, 535, function () {
-	 loc.add(26193, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-	 });
-	 });
+	function init (scriptManager) {
+	 scriptManager.bind(EventType.OPLOC2, 17010, function (ctx) {
+	 multi2(ctx.player, "CHOOSE AN OPTION", "Lunar spellbook", function () {		
+	 VarBit(ctx.player, 0, 2);
+	}, "Normal spellbook", function () {
+     VarBit(ctx.player, 0, 0);
+	});
+	});
+
 	 
 	}
 
