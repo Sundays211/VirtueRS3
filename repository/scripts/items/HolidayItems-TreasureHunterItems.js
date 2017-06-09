@@ -36,7 +36,7 @@ module.exports = (function () {
 	chat.sendMessage(ctx.player, "<col=00ff00>You gain 3,970 dungeoneering tokens. You now have "+ varp(ctx.player, 1097) +" tokens.");	 
 	});	 
 	scriptManager.bind(EventType.OPHELD1, 19832, function (ctx) {//Bone brooch
-	api.setSpotAnim(ctx.player, 1, 2838);
+	anim.addSpotAnim(ctx.player, 2838);
 	anim.run(ctx.player, 14870, function () {
 	ctx.player.getModel().setRender(Render.NPC);
 	ctx.player.getModel().setNPCId(12373);
@@ -58,20 +58,20 @@ module.exports = (function () {
 	});
 	scriptManager.bind(EventType.OPHELD1, 28134, function (ctx) {//sparkler
     anim.run(ctx.player, 20139);
-	api.setSpotAnim(ctx.player, 1, 3953);
+	anim.addSpotAnim(ctx.player, 3953);
 	inv.take(ctx.player, 28134, 1);
 	});
     scriptManager.bind(EventType.OPHELD1, 6865, function (ctx) {//blue marionette jump
     anim.run(ctx.player, 3003);
-	api.setSpotAnim(ctx.player, 1, 511);
+	anim.addSpotAnim(ctx.player, 511);
 	});
 	scriptManager.bind(EventType.OPHELD1, 6866, function (ctx) {//green marionette jump
     anim.run(ctx.player, 3003);
-	api.setSpotAnim(ctx.player, 1, 515);
+	anim.addSpotAnim(ctx.player, 515);
 	});
 	scriptManager.bind(EventType.OPHELD1, 6867, function (ctx) {//red marionette jump
     anim.run(ctx.player, 3003);
-	api.setSpotAnim(ctx.player, 1, 507);
+	anim.addSpotAnim(ctx.player, 507);
 	});
 	scriptManager.bind(EventType.OPHELD1, 4079, function (ctx) {//Yo-yo play
     anim.run(ctx.player, 1457);
@@ -87,15 +87,15 @@ module.exports = (function () {
 	});
 	scriptManager.bind(EventType.OPHELD2, 6865, function (ctx) {//blue marionette walk
     anim.run(ctx.player, 3004);
-	api.setSpotAnim(ctx.player, 1, 512);
+	anim.addSpotAnim(ctx.player, 512);
 	});
 	scriptManager.bind(EventType.OPHELD2, 6866, function (ctx) {//green marionette walk
     anim.run(ctx.player, 3004);
-	api.setSpotAnim(ctx.player, 1, 516);
+	anim.addSpotAnim(ctx.player, 516);
 	});
 	scriptManager.bind(EventType.OPHELD2, 6867, function (ctx) {//red marionette walk
     anim.run(ctx.player, 3004);
-	api.setSpotAnim(ctx.player, 1, 508);
+	anim.addSpotAnim(ctx.player, 508);
 	});
 	scriptManager.bind(EventType.OPHELD2, 4079, function (ctx) {//Yo-yo loop
     anim.run(ctx.player, 1458);
@@ -111,36 +111,36 @@ module.exports = (function () {
 	});
 	scriptManager.bind(EventType.OPHELD3, 6865, function (ctx) {//blue marionette bow
     anim.run(ctx.player, 3005);
-	api.setSpotAnim(ctx.player, 1, 513);
+	anim.addSpotAnim(ctx.player, 513);
 	});
 	scriptManager.bind(EventType.OPHELD3, 6866, function (ctx) {//green marionette bow
     anim.run(ctx.player, 3005);
-	api.setSpotAnim(ctx.player, 1, 517);
+	anim.addSpotAnim(ctx.player, 517);
 	});
 	scriptManager.bind(EventType.OPHELD3, 6867, function (ctx) {//red marionette bow
     anim.run(ctx.player, 3005);
-	api.setSpotAnim(ctx.player, 1, 509);
+	anim.addSpotAnim(ctx.player, 509);
 	});
 	scriptManager.bind(EventType.OPHELD3, 4079, function (ctx) {//Yo-yo walk
     anim.run(ctx.player, 1459);
 	});
 	scriptManager.bind(EventType.OPHELD3, 15353, function (ctx) {//eek play
     anim.run(ctx.player, 12490);
-	api.setSpotAnim(ctx.player, 1, 2178);
+	anim.addSpotAnim(ctx.player, 2178);
 	});
 	
 	
 	scriptManager.bind(EventType.OPHELD4, 6865, function (ctx) {//blue marionette dance
     anim.run(ctx.player, 3006);
-	api.setSpotAnim(ctx.player, 1, 514);
+	anim.addSpotAnim(ctx.player, 514);
 	});
 	scriptManager.bind(EventType.OPHELD4, 6866, function (ctx) {//green marionette dance
     anim.run(ctx.player, 3006);
-	api.setSpotAnim(ctx.player, 1, 518);
+	anim.addSpotAnim(ctx.player, 518);
 	});
 	scriptManager.bind(EventType.OPHELD4, 6867, function (ctx) {//red marionette dance
     anim.run(ctx.player, 3006);
-	api.setSpotAnim(ctx.player, 1, 510);
+	anim.addSpotAnim(ctx.player, 510);
 	});
 	scriptManager.bind(EventType.OPHELD4, 4079, function (ctx) {//Yo-yo crazy
     anim.run(ctx.player, 1460);
@@ -164,21 +164,21 @@ module.exports = (function () {
 	});
 	scriptManager.bind(EventType.OPWORN1, 12645, function (ctx) {//Chocatrice cape
     anim.run(ctx.player, 8903);
-	api.setSpotAnim(ctx.player, 1, 1566);
+	anim.addSpotAnim(ctx.player, 1566);
 	});
 	scriptManager.bind(EventType.OPWORN1, 10507, function (ctx) {//Reindeer hat prance
     anim.run(ctx.player, 5059);
-	api.setSpotAnim(ctx.player, 1, 263);
+	anim.addSpotAnim(ctx.player, 263);
 	});
 	
 	
 	scriptManager.bind(EventType.OPWORN2, 20084, function (ctx) {//Golden hammer
     anim.run(ctx.player, 15149);
-	api.setSpotAnim(ctx.player, 1, 2953);
+	anim.addSpotAnim(ctx.player, 2953);
 	});
 	scriptManager.bind(EventType.OPWORN2, 15673, function (ctx) {//Squirrel Ears juggle
     anim.run(ctx.player, 12265);
-	api.setSpotAnim(ctx.player, 1, 2145);
+	anim.addSpotAnim(ctx.player, 2145);
 	});
 	
 	}

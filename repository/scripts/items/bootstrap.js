@@ -5,9 +5,11 @@ module.exports = function (scriptManager) {
 	var modules = [
 	    require('./Cannon'),
 	    require('./CustomisableCape'),
+		require('./FoodTypes'),
 		require('./HolidayItems-TreasureHunterItems'),
 		require('./MusicBox'),
-		require('./RottenPotato')
+		require('./RottenPotato'),
+		require('./Teletabs')
 	];
 	
 	for (var i in modules) {
