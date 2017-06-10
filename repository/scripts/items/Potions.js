@@ -19,17 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
-var anim = require('../../core/anim');
-var chat = require('../../chat');
-var util = require('../core/util');
-var map = require('../map');
-var inv = require('../../inv');
-var coords = require('../../map/coords');
-var config = require('../../core/config');
+/* globals EventType, ENGINE, Stat */
+var anim = require('../core/anim');
+var chat = require('../chat');
+var inv = require('../inv');
+var config = require('../core/config');
 
 module.exports = (function () {
-		
 	var PotionTypes = {
  	   OVERLOAD_FLASK : {
 			itemID : 23531,
@@ -40,68 +36,52 @@ module.exports = (function () {
 	        delayTime : 1,
 	        potionText : null
 	    }	    		    		    	   
-};
+	};
 
-   return {
+	return {
 		init : init
 	};
 
-
 	function init (scriptManager) {
-	var ids = [];
-	for (var i in PotionTypes) {
-	ids.push(PotionTypes[i].itemID);
+		var ids = [];
+		for (var i in PotionTypes) {
+			ids.push(PotionTypes[i].itemID);
+		}
+		scriptManager.bind(EventType.OPHELD1, ids, function (ctx) {
+			var potion = forPotion(ctx.player, ctx.item);
+			if (potion === null) {
+				return;
+			}
+			var delay = 2;
+			ENGINE.freezeEntity(ctx.player, delay+1);
+			if (potion.healText !== null) {
+				chat.sendMessage(ctx.player, potion.healText);		
+			} else {
+				chat.sendMessage(ctx.player, "You drink the " + config.objName(potion.itemID) + ".");
+			}
+			if (ctx.player.getImpactHandler().inCombat()) {
+				anim.run(ctx.player, 18002);
+			} else {
+				anim.run(ctx.player, 18001);
+			}
+			//To get the current level, use api.getStatLevel(player, stat)
+			//To set the current level, use api.setStatLevel(player, stat, level)
+			ENGINE.boostStat(ctx.player, Stat.STRENGTH, potion.buffStrength);
+			ENGINE.boostStat(ctx.player, Stat.ATTACK, potion.buffAttack);
+			ENGINE.boostStat(ctx.player, Stat.MAGIC, potion.buffMagic);
+			ENGINE.boostStat(ctx.player, Stat.RANGED, potion.buffRanged);
+			inv.take(ctx.player, potion.itemID, 1);
+		});
 	}
-    for (var i in ids) {
-	scriptManager.bind(EventType.OPHELD1, ids[i], function (ctx) {
-	var potion = forPotion(ctx.player, ctx.item);
-	if (potion == null) {
-		return;
-	}
-	var delay = 2;
-	ENGINE.freezeEntity(ctx.player, delay+1);
-	if (potion.healText != null) {
-		chat.sendMessage(ctx.player, potion.healText);		
-	} else {
-		chat.sendMessage(ctx.player, "You drink the " + config.objName(potion.itemID) + ".");
-	}
-	if(ctx.player.getImpactHandler().inCombat() == true) {
-		anim.run(ctx.player, 18002);
-	} else {
-		anim.run(ctx.player, 18001);
-	}
-	//To get the current level, use api.getStatLevel(player, stat)
-	//To set the current level, use api.setStatLevel(player, stat, level)
-	api.boostStat(ctx.player, Stat.STRENGTH, potion.buffStrength);
-	api.boostStat(ctx.player, Stat.ATTACK, potion.buffAttack);
-	api.boostStat(ctx.player, Stat.MAGIC, potion.buffMagic);
-	api.boostStat(ctx.player, Stat.RANGED, potion.buffRanged);
-	inv.take(ctx.player, potion.itemID, 1);
-	});	 
-	}
-	}
-	
-	function getDelay (player, PotionTypes) {
-	var timer = 1;
-    print(timer+"\n");
-	if (timer < 1 + PotionTypes.delayTime) {
-		timer = 1 + Math.floor((Math.random() * PotionTypes.delayTime));
-		print(timer+"\n");
-	}
-	return timer;
-    }
    
 	function forPotion(player, item) {
-	var potion;
-	for (ordial in PotionTypes) {
-		potion = PotionTypes[ordial];
-		if (potion.itemID == item.getID()) {
-			return potion;
+		var potion;
+		for (var ordial in PotionTypes) {
+			potion = PotionTypes[ordial];
+			if (potion.itemID == item.getID()) {
+				return potion;
+			}
 		}
+		return null;
 	}
-	return null;
-} 
-
-
-	
 })();
