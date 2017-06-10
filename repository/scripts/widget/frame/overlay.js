@@ -91,7 +91,7 @@ module.exports = (function () {
 		scriptManager.bind(EventType.IF_DRAG, [ comp(251), comp(89), comp(295),
 			comp(164), comp(186), comp(328), comp(118), comp(100), comp(127), comp(136),
 			comp(78), comp(154), comp(145), comp(262), comp(306), comp(219), comp(197),
-			comp(208), comp(230) ], function (ctx) {
+			comp(208), comp(230) ], function () {
 				//Do nothing as this is handled on the client side
 		});
 	}

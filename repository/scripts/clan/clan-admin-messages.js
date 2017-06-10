@@ -45,7 +45,7 @@ module.exports = function (scriptManager) {
 	
 	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 5), function (ctx) {
 		var rank = config.enumValue(8659, ctx.slot);//Select rank dropdown
-		varp(ctx.player, 4285, ctx.rank);
+		varp(ctx.player, 4285, rank);
 	});
 	
 	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 59), function (ctx) {

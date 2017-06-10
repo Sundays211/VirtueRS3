@@ -22,7 +22,6 @@
 /* globals EventType, ENGINE, Exchange */
 var dialog = require('../dialog');
 var config = require('../core/config');
-var util = require('../core/util');
 var widget = require('../widget');
 var chat = require('../chat');
 var common = require('./common');
@@ -79,14 +78,13 @@ module.exports = (function () {
 			if (args.length < 1 || isNaN(args[0])) {
 				dialog.requestItem(player, "Choose an item to spawn.")
 					.then(function (objId) {
-						var amount = 1;
 						if (config.objStackable(objId)) {
 							dialog.requestCount(player, "Enter the number of items to spawn: ")
 								.then(function (amount) {
 									common.give(player, objId, amount);
 								});	
-						} else if (common.hasSpace(player, amount)) {
-							common.give(player, objId, amount);
+						} else if (common.hasSpace(player)) {
+							common.give(player, objId, 1);
 						} else {
 							chat.sendMessage(player, "You do not have enough space in your backpack to store this item.");
 						}

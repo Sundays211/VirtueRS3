@@ -19,9 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, Expression */
 var chat = require('../../chat');
 var inv = require('../../inv');
-var dialog = require('../dialog');
+var dialog = require('../../dialog');
 
 module.exports = (function () {
 	return {
@@ -29,24 +30,25 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-	 scriptManager.bind(EventType.OPLOC1, 24842, function (ctx) {//Manhole (Quest Witch's House)
-		chat.sendMessage(ctx.player, "The cover won't budge. It seems to be locked.");
-	 });
-	 scriptManager.bind(EventType.OPLOC1, 2867, function (ctx) {//Potted plant (Quest Witch's House)
-		if (inv.has(ctx.player, 2409)) {
-		chat.sendMessage(ctx.player, "You don't find anything interesting."); 
-		} else{
-		inv.give(ctx.player, 2409, 1);
-		dialog.mesbox(ctx.player, "You find a key hidden under the flower pot."); 	 
-		}	 
-	 });
-	 scriptManager.bind(EventType.OPLOC1, 2861, function (ctx) {//Door (Quest Witch's House)
-        if (inv.has(ctx.player, 2409)) {
-		dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL)	
-		} else{
-		chat.sendMessage(ctx.player, "This door is locked."); 	 
-		}		
-	 });	
+		scriptManager.bind(EventType.OPLOC1, 24842, function (ctx) {//Manhole (Quest Witch's House)
+			chat.sendMessage(ctx.player, "The cover won't budge. It seems to be locked.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2867, function (ctx) {//Potted plant (Quest Witch's House)
+			if (inv.has(ctx.player, 2409)) {
+				chat.sendMessage(ctx.player, "You don't find anything interesting."); 
+			} else {
+				inv.give(ctx.player, 2409, 1);
+				dialog.mesbox(ctx.player, "You find a key hidden under the flower pot."); 	 
+			}	 
+		});
+		scriptManager.bind(EventType.OPLOC1, 2861, function (ctx) {//Door (Quest Witch's House)
+			if (inv.has(ctx.player, 2409)) {
+				dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL);
+			} else {
+				chat.sendMessage(ctx.player, "This door is locked."); 	 
+			}
+		});	
 	}
 
 })();

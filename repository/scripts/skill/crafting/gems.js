@@ -118,19 +118,19 @@ module.exports = (function () {
 		makex.selectProduct(player, 6981, 6982, category, productId);
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
-			var category = varp(player, 1169);
-			var productId = varp(player, 1170);
+			var selectedCategory = varp(player, 1169);
+			var selectedProduct = varp(player, 1170);
 			var amount = varbit(player, 1003);
 			if (amount) {
-				switch (category) {
+				switch (selectedCategory) {
 					case 6983:
-						cutGem(player, productId, amount);
+						cutGem(player, selectedProduct, amount);
 						return;
 					case 6961:
-						makeTips(player, productId, amount);
+						makeTips(player, selectedProduct, amount);
 						return;
 					default:
-						throw "Unsupported category: "+category;
+						throw "Unsupported category: "+selectedCategory;
 				}
 			}
 		});

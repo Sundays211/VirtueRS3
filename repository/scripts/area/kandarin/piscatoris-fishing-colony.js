@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+/* globals EventType, Expression */
 var dialog = require('../../dialog');
 
 /**
@@ -33,7 +33,7 @@ module.exports = (function () {
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 14964, function (ctx) {
 			//Barrel
-			dialog.chatplayer(ctx.player,"I think I should maby catch my own.", Expression.NEUTRAL) //just need the right chat head
+			dialog.chatplayer(ctx.player, "I think I should maby catch my own.", Expression.NEUTRAL);//just need the right chat head
 		    
 		});
 	}

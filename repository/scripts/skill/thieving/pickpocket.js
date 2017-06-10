@@ -348,7 +348,6 @@ module.exports = (function () {
 			chat.sendMessage(player, "You fail to pick the " + config.npcName(npc).toLowerCase() + "'s pocket.");
 			ENGINE.freezeEntity(player, data.stunTime/0.6);
 			chat.sendMessage(player, "You've been stunned.");
-			var delay = data.stunTime/0.6;
 			var damage = data.stunDamage;
 			if(typeof data.stunDamageLpPercentage !== 'undefined')
 			    damage += player.getImpactHandler().getLifepoints()*data.stunDamageLpPercentage/100;
@@ -397,16 +396,16 @@ module.exports = (function () {
 		stat.giveXp(player, Stat.THIEVING, data.xp);
 		
 		//uncommon (1:20), rare (1:100), veryRare (1:500)
-		var item = util.weightedRandom(data.common, data.uncommon, 0.95,
+		var loot = util.weightedRandom(data.common, data.uncommon, 0.95,
 				data.rare, 0.99, data.veryRare, 0.998);
 		var amount = 1;
-		if (typeof item.min !== "undefined") {
-			if (typeof item.max !== "undefined") {
-				amount = util.randomValue(item.min, item.max);
+		if (typeof loot.min !== "undefined") {
+			if (typeof loot.max !== "undefined") {
+				amount = util.randomValue(loot.min, loot.max);
 			} else {
-				amount = item.min;
+				amount = loot.min;
 			}
 		}
-		inv.give(player, item.id, amount*multiplier);
+		inv.give(player, loot.id, amount*multiplier);
 	}
 })();

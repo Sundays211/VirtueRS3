@@ -23,7 +23,6 @@
 var stat = require('../logic/stat');
 var inv = require('../../inv');
 var chat = require('../../chat');
-var config = require('../../core/config');
 var anim = require('../../core/anim');
 
 /**
@@ -109,14 +108,12 @@ module.exports = (function () {
 			xp : 200
 		}
 	};
-	
-	var bones = {
+
+	return {
 		init : init,
 		bury : buryBones,
 		values : Bones
 	};
-	
-	return bones;
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, 526, function (ctx) {

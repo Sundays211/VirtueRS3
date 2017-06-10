@@ -131,7 +131,8 @@ module.exports = (function () {
 		}
 	}
 	
-	function showQuestComplete (player, questId) {
+	function showQuestComplete (player, questId) {// jshint ignore:line
+		//TODO: Remove jshint ignore when implemented
 		
 	}
 })();

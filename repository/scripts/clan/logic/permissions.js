@@ -75,6 +75,7 @@ function init () {
 		setCanDowngradeCitadel : setCanDowngradeCitadel,
 		setCanSetGatherGoals : setCanSetGatherGoals,
 		setCanChangeLanguage : setCanChangeLanguage,
+		setCanLockPlots : setCanLockPlots,
 		setCanCheckResources : setCanCheckResources,
 		setCanRemoveAvatar : setCanRemoveAvatar,
 		setCanAddAvatarBuffs : setCanAddAvatarBuffs,
