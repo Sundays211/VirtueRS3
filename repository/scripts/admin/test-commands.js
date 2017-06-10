@@ -73,7 +73,7 @@ module.exports = (function () {
 		}
 	}
 	
-	function testNameChange (player, args, ctx) {
+	function testNameChange (player) {
 		dialog.requestName(player, "Please enter your desired display name: ").then(function (name) {
 			var userHash = util.getUserHash(player);
 			var oldName = util.getName(userHash);
@@ -94,8 +94,8 @@ module.exports = (function () {
 			return;
 		}
 		var animId = parseInt(args[1]);
-		var locCoords = coords(1234, 1234, 0);
-		var shape = 1;
+		var locCoords = coords(2551, 3550, 0);
+		var shape = 10;
 		
 		var loc = map.getLoc(locCoords, shape);
 		map.locAnim(loc, animId);
