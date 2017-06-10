@@ -9,6 +9,7 @@
 function getAllModules () {
 	var modules = [
 		'items',
+		'admin',
 		'area',
 		'area/FremennikLands',
 	    'area/Asgarnia',
