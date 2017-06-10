@@ -1,5 +1,8 @@
 {
   "undef": true,
+  "unused": true,
+  "shadow": "outer",
+  "latedef": true,
   "globals": {
     "module": true,
     "require":true	
