@@ -95,7 +95,8 @@ module.exports = (function () {
 	return {
 		init : init,
 		process : process,
-		values : Saplings
+		values : Saplings,
+		fill : fill
 	};
 	
 	function init (scriptManager) {
@@ -192,13 +193,13 @@ module.exports = (function () {
 		makex.selectProduct(player, 6821, 6822, productCategory, productId);
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
-			var productId = varp(player, 1170);
+			var selectedProduct = varp(player, 1170);
 			var count = varbit(player, 1003);
-			var xp = config.objParam(productId, 2697) * count;
+			var xp = config.objParam(selectedProduct, 2697) * count;
 			stat.giveXp(player, Stat.FARMING, xp);
 			inv.take(player, 5354, count);
-			inv.take(player, config.objParam(productId, 2656), count);
-			inv.give(player, productId, count);
+			inv.take(player, config.objParam(selectedProduct, 2656), count);
+			inv.give(player, selectedProduct, count);
 		});
 	}
 	
@@ -206,10 +207,10 @@ module.exports = (function () {
 		makex.selectProduct(player, 6823, 6824, productCategory, productId);
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
-			var productId = varp(player, 1170);
+			var selectedProduct = varp(player, 1170);
 			var amount = varbit(player, 1003);
 			if (amount) {
-				varp(player, 1175, productId);
+				varp(player, 1175, selectedProduct);
 				makex.startCrafting(player, amount);
 			}
 		});
