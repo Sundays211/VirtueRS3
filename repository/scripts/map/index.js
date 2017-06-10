@@ -16,5 +16,6 @@ module.exports = {
 	addLoc : location.add,
 	getLoc : location.get,
 	delLoc : location.del,
+	locAnim : location.anim,
 	delayLoc : location.delay
 };

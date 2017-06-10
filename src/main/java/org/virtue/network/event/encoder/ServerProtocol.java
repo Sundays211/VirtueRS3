@@ -323,6 +323,11 @@ public enum ServerProtocol {
 	 * Removes a location from the map
 	 */
 	LOC_DEL(141, 2),
+	
+	/**
+	 * Runs an animation on a location
+	 */
+	LOC_ANIM(57, 7),
 
 	/**
 	 * Sends a projectile within the map
