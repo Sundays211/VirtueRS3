@@ -4,7 +4,9 @@
 
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./plant-pots')
+		require('./plant-pots'),
+		require('./flower-patch'),
+		require('./growth-cycle')
 	];
 	
 	for (var i in modules) {

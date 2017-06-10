@@ -47,12 +47,6 @@ var PatchType = {
 		tickType : 4,//Run tick once every 20 mins
 		name : "herb patch"
 	},
-	FLOWER : {
-		id : 2,
-		seedCount : 1,
-		tickType : 1,//Run tick once every 5 mins
-		name : "flower patch"
-	},
 	TREE : {
 		id : 3,
 		seedCount : 1,
@@ -196,21 +190,6 @@ var FarmingCrop = {
 		diseaseStages : [137, 138, 139],
 		deadStages : [170, 171, 172],//Dead stages are the same for all herbs
 		harvestStages : [29, 30, 31]
-	},
-	MARIGOLD : {
-		type : PatchType.FLOWER,
-		level : 2,
-		plantxp : 8.5,
-		harvestxp : 47,
-		seedId : 5096,
-		productId : 6010,
-		plantStage : 8,
-		wateredSeedling : 72,
-		growthStages : [9, 10, 11],
-		wateredStages : [73, 74, 75],
-		diseaseStages : [137, 138, 139],
-		deadStages : [201, 202, 203],
-		harvestStages : [12]
 	},
 	OAK : {
 		type : PatchType.TREE,
@@ -556,30 +535,6 @@ HerbPatch.prototype = Object.create(FarmingPatch.prototype);
 HerbPatch.prototype.constructor = HerbPatch;
 HerbPatch.statusLookup = new Array(256);
 
-var FlowerPatch = function (location, varbit, compostVarbit) {
-	this.location = location;
-	this.varbit = varbit;
-	this.compostVarbit = compostVarbit;
-	this.type = PatchType.FLOWER;
-}
-patchTypes[PatchType.FLOWER.id] = FlowerPatch;
-FlowerPatch.prototype = Object.create(FarmingPatch.prototype);
-FlowerPatch.prototype.constructor = FlowerPatch;
-FlowerPatch.statusLookup = new Array(256);
-FlowerPatch.prototype.harvest = function (player, crop) {
-	//24910?
-	var that = this;
-	runAnimation(player, 22705, function () {//Probably not the right animation, but at least it shows us doing something...
-		if (api.freeSpaceTotal(player, Inv.BACKPACK) < 1) {
-			api.sendMessage(player, "You need free space!");
-			return;
-		}
-		api.addCarriedItem(player, crop.productId, 1);
-		api.addExperience(player, Stat.FARMING, crop.harvestXp, true);
-		that.setEmpty(player);
-	});
-}
-
 var TreePatch = function (location, varbit, compostVarbit) {
 	this.location = location;
 	this.varbit = varbit;
@@ -632,10 +587,6 @@ patches[8554] = new Allotment(8554, 56, 107);
 patches[8555] = new Allotment(8555, 57, 108);
 patches[8556] = new Allotment(8556, 58, 109);//North-West Morytania
 patches[8557] = new Allotment(8557, 59, 110);//South-East Morytania
-patches[7847] = new FlowerPatch(7847, 72, 115);//Falador
-patches[7848] = new FlowerPatch(7848, 73, 116);//Catherby
-patches[7849] = new FlowerPatch(7849, 74, 117);//Ardougne
-patches[7850] = new FlowerPatch(7850, 75, 118);//Morytania
 patches[8150] = new HerbPatch(8150, 124, 129);//Falador
 patches[8151] = new HerbPatch(8151, 125, 130);//Catherby
 patches[8152] = new HerbPatch(8152, 126, 131);//Ardougne
@@ -686,7 +637,6 @@ var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarL
 		if (api.isAdmin(player)) {
 			api.sendMessage(player, "Running farming tick "+(tick/TICK_DURATION));
 		}
-		PlantPots.process(player);
 		for (var key in patches) {
 			patches[key].growWeeds(player);
 			if (patches[key].canRunTick(serverTick)) {
@@ -862,10 +812,7 @@ var Farming = {
 			player.setAction(new Action());
 		},
 		handleItemUse : function (player, patchType, patchID, item, invSlot) {
-			if (item.getID() == 5350) {
-				PlantPots.fill(player);
-				return true;
-			} else if (patchType.SEEDS.indexOf(item.getID()) !== -1) {
+			if (patchType.SEEDS.indexOf(item.getID()) !== -1) {
 				if (!patchType.isEmpty(player, patchID)) {
 					api.sendMessage(player, "Patch not empty!");
 					return true;
