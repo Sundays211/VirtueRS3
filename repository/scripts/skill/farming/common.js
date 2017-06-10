@@ -40,7 +40,7 @@ module.exports = (function () {
 		//TODO: Find out the right formula for this
 		var chance = 0.05;
 		chance /= compostStatus+1;
-		return Math.random() < chance;
+		return Math.random() > chance;
 	}
 	
 	function plantSeed (player, seedId, onPlanted, seedCount) {

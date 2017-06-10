@@ -93,8 +93,18 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOCU, [ 7847, 7848, 7849, 7850 ], function (ctx) {
 			var player = ctx.player;
 			var patchId = ctx.locTypeId;
-			if (ctx.useObjId === 5350) {
+			switch (ctx.useObjId) {//Items which work regardless of current status
+			case 5733://Rotten Potato
+				if (util.isAdmin(player)) {
+					process(player, patchId);
+					chat.sendMessage(player, "Advanced farming patch to status"+getStatus(player, patchId));
+				} else {
+					util.defaultHandler(ctx, "flower patch");
+				}
+				return;
+			case 5350://Empty plant pot
 				plantPots.fill(player);
+				return;
 			}
 			switch(getStatus(player, patchId)) {
 			case 3://Empty patch
