@@ -41,10 +41,10 @@ module.exports = (function () {
 		makex.selectProduct(player, -1, -1, 6974, productId, "Battlestaves");
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
-			var productId = varp(player, 1170);
+			var staffId = varp(player, 1170);
 			var amount = varbit(player, 1003);
 			if (amount) {
-				craftBattlestaves(player, productId, amount);
+				craftBattlestaves(player, staffId, amount);
 			}
 		});
 	}

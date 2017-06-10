@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var util = require('../core/util');
 var chat = require('../chat');
 var anim = require('../core/anim');
 var map = require('../map');
@@ -37,22 +36,22 @@ var map = require('../map');
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPHELD1, 20709, function (ctx) {
 		//Option 1 (Place) as an inventory item
-		placeClanVex(ctx.player, ctx.item, ctx.slot);
+		placeClanVex(ctx.player);
 	});
 	scriptManager.bind(EventType.OPWORN1, 20709, function (ctx) {
 		//Option 1 (Place) as a worn item
-		placeClanVex(ctx.player, ctx.item, ctx.slot);
+		placeClanVex(ctx.player);
 	});
 	scriptManager.bind(EventType.OPNPC1, 13634, function (ctx) {
 		//Option 1 (Read) as an NPC vexillum
-		readClanVex(ctx.player, ctx.npc);
+		readClanVex(ctx.player);
 	});
 	scriptManager.bind(EventType.OPNPC3, 13634, function (ctx) {
 		//Option 3 (Remove) as an NPC vexillum
-		checkVexOwnership(ctx.player, ctx.npc);
+		checkVexOwnership(ctx.player);
 	});
 	
-	function placeClanVex (player, item, slot) {
+	function placeClanVex (player) {
 		var npc = ENGINE.createNpc(13634, map.getCoords(player));
 		if(npc.getOwner() !== null) {
 			chat.sendMessage(player, "You already have a clan vex out.");
@@ -74,7 +73,7 @@ module.exports = function (scriptManager) {
 		
 	}
 
-	function readClanVex(player, npc) {
+	function readClanVex(player) {
 		chat.sendMessage(player, "There's no information about this clan.");
 	}
 };

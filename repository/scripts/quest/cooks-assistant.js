@@ -146,7 +146,8 @@ module.exports = (function () {
 		});
 	}
 	
-	function cookStarted (player, npc) {
+	function cookStarted (player, npc) {// jshint ignore:line
+		//TODO: Remove jshint ignore when implemented
 		//TODO: Implement this
 	}
 	

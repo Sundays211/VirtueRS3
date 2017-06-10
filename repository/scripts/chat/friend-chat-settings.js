@@ -130,7 +130,7 @@ module.exports = function(scriptManager) {
 		}
 	}
 	
-	function nameFromRank (rankId, lootshare) {
+	function nameFromRank (rankId) {
 		return config.enumValue(616, rankId+1);
 	}
 };

@@ -1,7 +1,7 @@
 /**
  * Module containing miscellaneous utility functions
  */
-/* globals ENGINE, EventType, MesType, Java */
+/* globals ENGINE, EventType, Java */
 var chat = require('../chat');
 
 module.exports = init();

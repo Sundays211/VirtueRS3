@@ -20,10 +20,10 @@ module.exports = (function () {
 		makex.selectProduct(player, 6838, 6839, category, productId);
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
-			var category = varp(player, 1169).toString();
-			var productId = varp(player, 1170);
+			var selectedCategory = varp(player, 1169).toString();
+			var selectedProduct = varp(player, 1170);
 			var amount = varbit(player, 1003);
-			invokeProcessHandler(player, category, productId, amount);
+			invokeProcessHandler(player, selectedCategory, selectedProduct, amount);
 		});
 	}
 	

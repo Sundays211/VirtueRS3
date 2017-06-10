@@ -54,7 +54,7 @@ module.exports = (function () {
 		analyseItem : analyseItem
 	};
 	
-	function init (scriptManager) {
+	function init () {
 		_categoryLookup = {};
 		function registerCategory (id, materialCount, often, sometimes, rarely, boosted) {
 			boosted = boosted === undefined ? false : boosted;
@@ -76,7 +76,7 @@ module.exports = (function () {
 		return lookupCategory(category) !== undefined;
 	}
 	
-	function startDisassembly (player, objId, slot) {
+	function startDisassembly (player, objId) {
 		ENGINE.interrupt(player);
 		if (!canDisassemble(objId)) {
 			chat.sendMessage(player, "You can't disassemble that item (not yet implemented)");

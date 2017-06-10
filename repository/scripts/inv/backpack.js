@@ -23,7 +23,6 @@
 var varp = require('../core/var/player');
 var varbit = require('../core/var/bit');
 
-var CONST = require('../core/const');
 var util = require('../core/util');
 var config = require('../core/config');
 var map = require('../map');
@@ -158,7 +157,6 @@ module.exports = (function() {
 	}
 	
 	function handleItemInteraction (player, item, ctx) {
-		var event;
 		var objId = util.getId(item);
 		var opString, eventType;
 		switch (ctx.button) {
