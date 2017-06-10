@@ -42,7 +42,7 @@ module.exports = (function () {
 	 });
 	 scriptManager.bind(EventType.OPLOC1, 2861, function (ctx) {//Door (Quest Witch's House)
         if (inv.has(ctx.player, 2409)) {
-		dialog.chatplayer(ctx.player, "NEUTRAL", "It would be rude to break into this house.")	
+		dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL)	
 		} else{
 		chat.sendMessage(ctx.player, "This door is locked."); 	 
 		}		
