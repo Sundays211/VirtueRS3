@@ -1,7 +1,6 @@
 /**
  * 
  */
-var common = require('./common');
 var builder = require('./builder');
 
 module.exports = (function () {

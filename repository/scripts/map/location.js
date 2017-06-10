@@ -46,7 +46,7 @@ module.exports = (function () {
 	 * @param delay The number of game cycles to delay by
 	 * @param task The function to run after the given delay
 	 */
-	function delay (location, delay, task) {
-		MAP_ENGINE.delay(location, task, delay);
+	function delay (location, delayTime, task) {
+		MAP_ENGINE.delay(location, task, delayTime);
 	}
 })();

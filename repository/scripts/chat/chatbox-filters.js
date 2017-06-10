@@ -400,10 +400,10 @@ function init () {
 	}
 	
 	function toggleProfanity (player, chatWindow) {
-		chat.sendDebugMessage(player, "Unhandled profanity toggle.");
+		chat.sendDebugMessage(player, "Unhandled profanity toggle on chat window: "+chatWindow);
 	}
 	
-	function toggleBroadcasts (player, chatWindow) {
+	function toggleBroadcasts (player) {
 		var on = varbit(player, 20828) == 1;
 		varbit(player, 20828, on ? 0 : 1);
 	}

@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 /* globals ENGINE, Inv */
-var varbit = require('../../core/var/bit');
-
 var util = require('../../core/util');
 
 /**
@@ -51,8 +49,9 @@ module.exports = (function () {
 		}
 	}
 	
-	function deposit (player, objId, count) {
-		var selectedTab = varbit(player, 288);
+	function deposit (player, objId, count) {// jshint ignore:line
+		//TODO: Remove jshint ignore when implemented
+		//var selectedTab = varbit(player, 288);
 		//TODO: Finish this
 	}
 })();

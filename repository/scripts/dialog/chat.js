@@ -1,7 +1,6 @@
 /**
  * 
  */
-var common = require('./common');
 var builder = require('./builder');
 
 module.exports = (function () {
@@ -13,7 +12,7 @@ module.exports = (function () {
 	};
 
 	function chatplayer (player, message, expression) {
-		return builder(player).chatplayer(message);
+		return builder(player).chatplayer(message, expression);
 	}
 
 	function chatnpc (player, npc, message, expression) {

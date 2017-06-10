@@ -237,7 +237,7 @@ module.exports = (function () {
 		 return true;
 	}
 	
-	function checkRequirement (player, key, value, unk1, boostable, reqID) {
+	function checkRequirement (player, key, value, unk1, boostable) {
 		if (key > 0 && key < 61) {//Stat
 			if (boostable) {
 				if (stat.getLevel(player, config.enumValue(681, key)) >= value) {
@@ -303,7 +303,7 @@ module.exports = (function () {
 		return inv.hasTool(player, toolId);
 	}
 	
-	function isTool (productId, itemId) {
+	/*function isTool (productId, itemId) {
 		var toolId = config.objParam(productId, 2655);
 		var structId = config.objParam(productId, 2675);
 		var param = 1;
@@ -330,7 +330,7 @@ module.exports = (function () {
 			}
 		}
 		return false;
-	}
+	}*/
 	
 	function structContainsItem (structId, objId) {
 		var id = config.structParam(structId, 2655);

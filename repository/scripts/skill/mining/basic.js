@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Stat */
+/* globals EventType, Stat */
 var config = require('../../core/config');
 var util = require('../../core/util');
 var chat = require('../../chat');

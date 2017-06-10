@@ -24,7 +24,6 @@ var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
 var coords = require('../../map/coords');
 
-var anim = require('../../core/anim');
 var chat = require('../../chat');
 var common = require('../common');
 var util = require('../../core/util');
@@ -40,21 +39,21 @@ module.exports = (function () {
 			var player = ctx.player;
 			switch (ctx.component) {
 			case 82://Heal
-				ENGINE.restoreLifePoints(ctx.player);
-				chat.sendMessage(ctx.player, "You set your health to max.");
+				ENGINE.restoreLifePoints(player);
+				chat.sendMessage(player, "You set your health to max.");
 				return;
 			case 115://Exit Button
-				common.closeAll(ctx.player);
+				common.closeAll(player);
 				return;
 			case 145://invis
-				ctx.player.getModel().setRender(Render.INVISIBLE);
-			    ctx.player.getModel().refresh();
+				player.getModel().setRender(Render.INVISIBLE);
+			    player.getModel().refresh();
 				return;
 			case 185://Jmod Quick-Chat Option
 				return;
 			case 269://Panic!
-				ENGINE.restoreLifePoints(ctx.player);
-				map.setCoords(ctx.player, coords(2908, 3332, 2));
+				ENGINE.restoreLifePoints(player);
+				map.setCoords(player, coords(2908, 3332, 2));
 				return;
 			default:
 				util.defaultHandler(ctx, "JModToolBox");

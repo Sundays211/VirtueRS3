@@ -161,12 +161,12 @@ module.exports = (function () {
 	
 		
 	function getById (id) {
-			for (var ordial in LodestoneType) {
-				if (LodestoneType[ordial].base == id) {
-					return LodestoneType[ordial];
-				}
+		for (var ordial in LodestoneType) {
+			if (LodestoneType[ordial].base == id) {
+				return LodestoneType[ordial];
 			}
 		}
+	}
 	
 	function init (scriptManager) {
 		var ids = [];
