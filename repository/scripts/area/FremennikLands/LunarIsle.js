@@ -19,23 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
+/* globals EventType */
 var varbit = require('../../core/var/bit');
+var dialog = require('../../dialog');
+
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-	 scriptManager.bind(EventType.OPLOC2, 17010, function (ctx) {
-	 multi2(ctx.player, "CHOOSE AN OPTION", "Lunar spellbook", function () {		
-	 varbit(ctx.player, 0, 2);
-	}, "Normal spellbook", function () {
-     varbit(ctx.player, 0, 0);
-	});
-	});
-
-	 
+		scriptManager.bind(EventType.OPLOC2, 17010, function (ctx) {
+			dialog.multi2(ctx.player, "CHOOSE AN OPTION", "Lunar spellbook", function () {		
+				varbit(ctx.player, 0, 2);
+			}, "Normal spellbook", function () {
+				varbit(ctx.player, 0, 0);
+			});
+		});
 	}
 
 })();
