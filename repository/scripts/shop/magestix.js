@@ -45,7 +45,7 @@ module.exports = function(scriptManager) {
 			.chatnpc(npc, "By combining rare reagents with our spirit shards, you can create pouches to perform this act.").finish();
 	}
 	
-	function farewell (player, npc) {
+	/*function farewell (player, npc) {
 		dialog.chatnpc(player, npc, "Thank you for the information about Summoning.").finish();
-	}
+	}*/
 };

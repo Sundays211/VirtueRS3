@@ -115,7 +115,6 @@ module.exports = (function () {
 	
 	function getPickaxe (player) {
 		var playerLevel = stat.getLevel(player, Stat.MINING);
-        var bestPick = null;
         var objId = inv.getObjId(player, Inv.EQUIPMENT, WearPos.WEAPON);
         var pickaxe;
         if (objId !== -1 && config.objCategory(objId) === 67) {

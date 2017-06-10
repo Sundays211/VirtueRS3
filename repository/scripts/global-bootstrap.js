@@ -6,7 +6,7 @@
 /**
  * Gets the names of all modules within the script system
  */
-function getAllModules () {
+function getAllModules () {// jshint ignore:line
 	var modules = [
 		'items',
 		'area',
@@ -49,7 +49,7 @@ function getAllModules () {
  * @param cwd The root folder containing the scripts
  * @param modules An array of modules to initialise
  */
-function init (scriptManager, cwd, modules) {	
+function init (scriptManager, cwd, modules) {// jshint ignore:line
 	var logger = scriptManager.logger;//Shortcut method
 
 	load(cwd+'/jvm-npm.js');
@@ -59,8 +59,8 @@ function init (scriptManager, cwd, modules) {
 	var scriptManagerWrapper = {
 		bind : function (event, value, listener) {
 			var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-				invoke : function (event, trigger, args) {
-					args.event = event;
+				invoke : function (eventType, trigger, args) {
+					args.event = eventType;
 					args.trigger = trigger;
 					listener(args);
 				}

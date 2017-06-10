@@ -210,26 +210,26 @@ module.exports = function (scriptManager) {
 			var v6 = config.enumValue(5735, slot);
 			if (v6 != -1) {
 				var v7 = 0;
-				for (var setKit = getSetStruct(v6, 0, female); setKit != -1; setKit = getSetStruct(v6, v7, female)) {
+				for (var kitSetId = getSetStruct(v6, 0, female); kitSetId != -1; kitSetId = getSetStruct(v6, v7, female)) {
 					switch (kitSlot) {
 						case 3:
-							if (config.structParam(setKit, 1182) === kitId) {
-								return setKit;
+							if (config.structParam(kitSetId, 1182) === kitId) {
+								return kitSetId;
 							}
 							break;
 						case 4:
-							if (config.structParam(setKit, 1183) === kitId) {
-								return setKit;
+							if (config.structParam(kitSetId, 1183) === kitId) {
+								return kitSetId;
 							}
 							break;
 						case 5:
-							if (config.structParam(setKit, 1184) === kitId) {
-								return setKit;
+							if (config.structParam(kitSetId, 1184) === kitId) {
+								return kitSetId;
 							}
 							break;
 						case 6:
-							if (config.structParam(setKit, 1185) === kitId) {
-								return setKit;
+							if (config.structParam(kitSetId, 1185) === kitId) {
+								return kitSetId;
 							}
 							break;
 						default:

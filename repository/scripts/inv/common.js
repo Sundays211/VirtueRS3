@@ -94,6 +94,7 @@ function init() {
 			 */
 			clearSlot : clearSlot,
 			getObjId : getObjId,
+			getCount : getCount,
 			baseStock : baseStock
 	};
 	

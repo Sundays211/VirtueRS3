@@ -9,7 +9,6 @@ var varbit = require('../../core/var/bit');
 var makex = require('../makex');
 var dialog = require('../../dialog');
 var widget = require('../../widget');
-var anim = require('../../core/anim');
 
 module.exports = (function () {
 	return {

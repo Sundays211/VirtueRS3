@@ -1,9 +1,6 @@
 /**
  * 
  */
-/* globals ENGINE, Java */
-var varc = require('../core/var/client');
-
 var overlay = require('./frame/overlay');
 var common = require('./common');
 

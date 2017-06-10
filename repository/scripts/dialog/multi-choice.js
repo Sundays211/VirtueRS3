@@ -2,7 +2,6 @@
  * 
  */
 /* globals ENGINE, Java */
-var common = require('./common');
 
 module.exports = (function () {
 	return {

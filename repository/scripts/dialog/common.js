@@ -6,7 +6,6 @@ var varp = require('../core/var/player');
 var varc = require('../core/var/client');
 
 var widget = require('../widget');
-var config = require('../core/config');
 var util = require('../core/util');
 
 module.exports = (function () {

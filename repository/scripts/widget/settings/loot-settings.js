@@ -128,8 +128,8 @@ module.exports = (function () {
 				}
 				return;
 			case 139://Enter manual amount
-				widget.inframeInput(player, 1623, 139, function (value) {
-					varbit(player, 21238, Math.min(1000000, Math.max(50000, value-1)));
+				widget.inframeInput(player, 1623, 139, function (newValue) {
+					varbit(player, 21238, Math.min(1000000, Math.max(50000, newValue-1)));
 				}, 7, 7);
 				return;
 			case 145://Rotate lootbeam
