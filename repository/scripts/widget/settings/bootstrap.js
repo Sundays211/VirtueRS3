@@ -3,6 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
+	    require('./combat-settings'),
 		require('./action-bar-settings'),
 		require('./doomsayer-settings'),
 		require('./game-settings'),

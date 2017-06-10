@@ -18,32 +18,44 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
-
-/**
- * 
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
- * @author Sundays211
- * @since 1/05/2015
  */
 
-var LocationListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, locTypeId, args) {
-		multi3(args.player, "Which training dummy would you prefer?", "Range Dummy", function () {
-			api.sendMessage(player, "Training Dummy content coming soon.");
-		}, "Melee Dummy", function () {
-			api.sendMessage(player, "Training Dummy content coming soon.");
-		}, "Magic Dummy", function () {
-			api.sendMessage(player, "Training Dummy content coming soon.");
-		});
-		api.openDialog(args.player, "Dispenser");	
-	}
-});
+var varbit = require('../../core/var/bit');
+var util = require('../../core/util');
+var chat = require('../../chat');
 
-/* Listen to the location ids specified */
-var listen = function(scriptManager) {
-	var listener = new LocationListener();
-	scriptManager.registerListener(EventType.OPLOC1, 79034, listener);
-};
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.IF_BUTTON, 1503, function (ctx) {
+			switch (ctx.component) {
+            case 2://sheathe
+			player.switchSheathing();
+			return;	
+			case 4://special attack
+			player.getCombatSchedule().updateAdrenaline(1000);
+		    player.getCombatSchedule().setSpecialEnabled(!player.getCombatSchedule().isSpecialEnabled());
+			player.getCombatSchedule().setDefaultAttack();
+			chat.sendMessage(ctx.player, "Special is " + (player.getCombatSchedule().isSpecialEnabled() ? "enabled." : "disabled."));
+			return true;
+		    case 49://retaliate
+			var wasRetaliating = varbit(ctx.player, 462) == 0;
+			varbit(ctx.player, 462, wasRetaliating ? 1 : 0);
+			return;
+		    case 32://attack
+		    case 36://balance
+		    case 40://strength
+		    case 44://defence
+			default:
+			util.defaultHandler(ctx, "Combat Settings");
+			return;
+			}
+		});
+		
+		
+		
+	}
+})();

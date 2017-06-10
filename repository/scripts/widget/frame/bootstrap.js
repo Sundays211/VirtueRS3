@@ -3,6 +3,10 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
+	require('./JModToolBox'),
+	    require('./Lodestone'),
+	    require('./worldmap'),
+	    require('./skilltab'),
 		require('./overlay'),
 		require('./ribbon'),
 		require('./minimap'),
