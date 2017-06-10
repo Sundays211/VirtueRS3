@@ -157,9 +157,9 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
-	public SceneLocation getLoc(Tile coords, int type) {
-		if (type < 0 || type > 22) {
-			throw new IllegalArgumentException("Invalid location type: "+type);
+	public SceneLocation getLoc(Tile coords, int shape) {
+		if (shape < 0 || shape > 22) {
+			throw new IllegalArgumentException("Invalid location shape: "+shape);
 		}
 		Region region = getRegion(coords);
 		if (region == null) {
@@ -169,12 +169,17 @@ public class VirtueMapAPI implements MapAPI {
 		if (locs == null) {
 			return null;
 		}
-		return locs[type];
+		return locs[shape];
 	}
 
 	@Override
 	public void delLoc(SceneLocation loc) {
 		getRegion(loc.getTile()).removeLocation(loc, loc.isTemporary());
+	}
+
+	@Override
+	public void locAnim(SceneLocation loc, int animId) {
+		getRegion(loc.getTile()).locationAnim(loc, animId);;
 	}
 
 	@Override

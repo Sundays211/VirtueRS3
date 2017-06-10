@@ -108,6 +108,13 @@ public interface MapAPI {
 	public void delLoc(SceneLocation loc);
 	
 	/**
+	 * Runs an animation on a location
+	 * @param loc The location
+	 * @param animId The animation ID to run
+	 */
+	public void locAnim(SceneLocation loc, int animId);
+	
+	/**
 	 * Gets the current rotation for the specified location
 	 * @param loc The location to check
 	 * @return The rotation, between 0 and 3 clockwise from the default rotation

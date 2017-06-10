@@ -36,6 +36,7 @@ import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.world.region.zone.AddObject;
 import org.virtue.game.world.region.zone.DeleteObject;
+import org.virtue.game.world.region.zone.LocationAnim;
 import org.virtue.game.world.region.zone.DeleteLocation;
 import org.virtue.game.world.region.zone.AddUpdateLocation;
 import org.virtue.game.world.region.zone.ZoneUpdatePacket;
@@ -363,6 +364,12 @@ public class Region {
 		}
 		for (Player p : players) {
 			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new DeleteLocation(loc)));
+		}
+	}
+	
+	public void locationAnim(SceneLocation loc, int animId) {
+		for (Player p : players) {
+			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new LocationAnim(loc, animId)));
 		}
 	}
 	

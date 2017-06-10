@@ -8,6 +8,7 @@ module.exports = (function () {
 		add : addLocation,
 		get : getLocation,
 		del : delLocation,
+		anim : locationAnim,
 		getRotation : getLocRotation,
 		getShape : getLocShape,
 		delay : delay
@@ -23,6 +24,10 @@ module.exports = (function () {
 	
 	function delLocation (location) {
 		MAP_ENGINE.delLoc(location);
+	}
+	
+	function locationAnim (location, animId) {
+		MAP_ENGINE.locAnim(location, animId);
 	}
 	
 	function getLocRotation (location) {
