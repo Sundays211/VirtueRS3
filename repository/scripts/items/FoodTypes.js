@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2014 Virtue Studios
+ * Copyright (c) 2017 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions\:
+ * furnished to do so, subject to the following conditions:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -19,17 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-/**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
- * @author Sundays211
- * @since 24/01/2015
- */
  
- var Types = {
+var anim = require('../../core/anim');
+var chat = require('../../chat');
+var inv = require('../../inv');
+var config = require('../../core/config');
+
+
+module.exports = (function () {
+		
+	var Types = {
  	    ANCHOVIES : {
 			itemID : 319,
 			healAmount : 200,
@@ -300,80 +299,52 @@
 	        healText : null
 	    }	    			    		    		    	   
 };
- 
-var ItemListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, objTypeId, args) {
-		var player = args.player;
-		var item = args.item;
-		var slot = args.slot;
-		
-		startFood(player, item, slot);
-	}
-});
 
-/* Listen to the item ids specified */
-var listen = function(scriptManager) {
-	var ids = [ 1973, 319, 2309, 13433, 2140, 2142, 315, 325, 347, 355, 333, 339, 351, 
-	    		329, 361, 365, 379, 373, 7946, 385, 397, 15266, 391, 15272, 1891, 1897, 2289, 
-	    		2293, 2297, 2301, 7178, 6705, 7056, 7060, 7208, 7218, 21521, 19948, 19949, 26313, 6685, 23351, 28191, 28227 ];
-	var itemListener = new ItemListener();
-	for (var i in ids) {
-		scriptManager.registerListener(EventType.OPHELD1, ids[i], itemListener);
-	}
-}
+   return {
+		init : init
+	};
 
-function startFood (player, item, slot) {
-	if (api.isPaused(player)) {
-		return false;
+
+	function init (scriptManager) {
+	var ids = [];
+	for (var i in Types) {
+	ids.push(Types[i].itemID);
 	}
-	var food = forFood(player, item);
+    for (var i in ids) {
+	scriptManager.bind(EventType.OPHELD1, ids[i], function (ctx) {
+	var food = forFood(ctx.player, ctx.item);
 	if (food == null) {
 		return;
 	}
 	var delay = 2;
-	api.freezeEntity(player, delay+1);
+	ENGINE.freezeEntity(ctx.player, delay+1);
 	if (food.healText != null) {
-		api.sendFilterMessage(player, food.healText);		
+		chat.sendMessage(ctx.player, food.healText);		
 	} else {
-		api.sendFilterMessage(player, "You eat the " + api.getItemName(food.itemID) + ".");
+		chat.sendMessage(ctx.player, "You eat the " + config.objName(food.itemID) + ".");
 	}
-	if(player.getCombat().inCombat() == true) {
-		api.runAnimation(player, 18002);
+	if(ctx.player.getImpactHandler().inCombat() == true) {
+		anim.run(ctx.player, 18002);
 	} else {
-		api.runAnimation(player, 18001);
+		anim.run(ctx.player, 18001);
 	}
-	player.getImpactHandler().heal(food.healAmount, true);
-	api.delCarriedItem(player, item.getID(), 1, slot);
-	var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {	
-			process : function (player) {
-				if (delay <= 0) {
-					api.sendFilterMessage(player, "It heals some health.");
-					return true;
-				}
-				delay--;
-				return false;
-			},
-			stop : function (player) {//Clear the current animation block
-				api.stopAnimation(player);
-			}
-		
-		});
-		player.setAction(new Action());	
-}
-
-//Get Food Delay to stop all actions until animation is over, then re-continue the action
-function getDelay (player, types) {
+	ctx.player.getImpactHandler().heal(food.healAmount, true);
+	inv.take(ctx.player, food.itemID, 1);
+	});	 
+	}
+	}
+	
+	function getDelay (player, types) {
 	var timer = 1;
-	print(timer+"\n");
+    print(timer+"\n");
 	if (timer < 1 + types.delayTime) {
 		timer = 1 + Math.floor((Math.random() * types.delayTime));
 		print(timer+"\n");
 	}
 	return timer;
-}
-
-//Call correct food name
-function forFood(player, item) {
+    }
+   
+	function forFood(player, item) {
 	var food;
 	for (ordial in Types) {
 		food = Types[ordial];
@@ -383,3 +354,7 @@ function forFood(player, item) {
 	}
 	return null;
 } 
+
+
+	
+})();
