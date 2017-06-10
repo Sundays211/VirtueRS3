@@ -33,8 +33,8 @@ module.exports = (function () {
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 14964, function (ctx) {
 			//Barrel
-			dialog.chatplayer(ctx.player, "NEUTRAL", "I think I should maby catch my own.", function () { //just need the right chat head
-		    });	
+			dialog.chatplayer(ctx.player,"I think I should maby catch my own.", Expression.NEUTRAL) //just need the right chat head
+		    
 		});
 	}
 })();

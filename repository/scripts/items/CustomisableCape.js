@@ -52,7 +52,7 @@ module.exports = (function () {
 	 widget.openCentral(ctx.player, 20, false);
 	 });
 	 scriptManager.bind(EventType.OPWORN2, [20767,32151], function (ctx) {//max cape Max Guild
-	 map.setCoords(ctx.player, coords(2276, 3314, 1));;
+	 map.setCoords(ctx.player, coords(2276, 3314, 1));
 	 });
 	 
 	}

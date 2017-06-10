@@ -29,7 +29,7 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 100850, function (ctx) {
+		scriptManager.bind(EventType.OPLOC1, 100850, function (ctx) {//Invention Guild
         map.setCoords(ctx.player, coords(6169, 1038, 0));
 		});
 	}

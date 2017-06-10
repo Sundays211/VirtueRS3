@@ -8,6 +8,7 @@ module.exports = function (scriptManager) {
 		require('./FoodTypes'),
 		require('./HolidayItems-TreasureHunterItems'),
 		require('./MusicBox'),
+		require('./Potions'),
 		require('./RottenPotato'),
 		require('./Teletabs')
 	];

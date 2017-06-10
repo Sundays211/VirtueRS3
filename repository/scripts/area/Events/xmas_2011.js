@@ -31,12 +31,10 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 	 scriptManager.bind(EventType.OPLOC1, 65907, function (ctx) {//Staircase
-	 dialog.chatplayer(ctx.player, "NEUTRAL", "I should speak to Sedridor to find out how i can help at<br> the banquet before I start exploring.", function () {
-	 });
+	 dialog.chatplayer(ctx.player, "I should speak to Sedridor to find out how i can help at<br> the banquet before I start exploring.", Expression.NEUTRAL)
 	 });
 	 scriptManager.bind(EventType.OPLOC1, 65913, function (ctx) {//Ladder
-	 dialog.chatplayer(ctx.player, "NEUTRAL", "I should speak to Sedridor to find out how i can help at<br> the banquet before I start exploring.", function () {
-	 });
+	 dialog.chatplayer(ctx.player, "I should speak to Sedridor to find out how i can help at<br> the banquet before I start exploring.", Expression.NEUTRAL)
 	 });
 	 scriptManager.bind(EventType.OPLOC1, 65938, function (ctx) {//Scoreboard
 	 //interface 290

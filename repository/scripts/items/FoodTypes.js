@@ -23,6 +23,7 @@
 var anim = require('../../core/anim');
 var chat = require('../../chat');
 var inv = require('../../inv');
+var config = require('../../core/config');
 
 
 module.exports = (function () {
@@ -320,7 +321,7 @@ module.exports = (function () {
 	if (food.healText != null) {
 		chat.sendMessage(ctx.player, food.healText);		
 	} else {
-		chat.sendMessage(ctx.player, "You eat the " + ENGINE.getItemName(food.itemID) + ".");
+		chat.sendMessage(ctx.player, "You eat the " + config.objName(food.itemID) + ".");
 	}
 	if(ctx.player.getImpactHandler().inCombat() == true) {
 		anim.run(ctx.player, 18002);

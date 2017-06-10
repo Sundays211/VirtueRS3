@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
  
-var VarBit = require('../../core/var/bit');
+var varbit = require('../../core/var/bit');
 module.exports = (function () {
 	return {
 		init : init
@@ -29,9 +29,9 @@ module.exports = (function () {
 	function init (scriptManager) {
 	 scriptManager.bind(EventType.OPLOC2, 17010, function (ctx) {
 	 multi2(ctx.player, "CHOOSE AN OPTION", "Lunar spellbook", function () {		
-	 VarBit(ctx.player, 0, 2);
+	 varbit(ctx.player, 0, 2);
 	}, "Normal spellbook", function () {
-     VarBit(ctx.player, 0, 0);
+     varbit(ctx.player, 0, 0);
 	});
 	});
 

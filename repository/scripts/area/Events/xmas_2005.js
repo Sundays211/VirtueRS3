@@ -43,16 +43,15 @@ module.exports = (function () {
 	 anim.run(ctx.player, 832, function () {	
 	 inv.give(ctx.player, 6875, 1);
 	 });
-	 dialog.chatobj(ctx.player, 6875, "You take a blue marionette torso from the box.", function () {
-	 });	
+	 dialog.objbox(ctx.player, 6875, "You take a blue marionette torso from the box.")	
 	 });
 	 scriptManager.bind(EventType.OPLOC1, 10699, function (ctx) {//Trapdoor steps
-	 dialog.mesbox(ctx.player,"If you leave Diango's workshop, any marionette parts, bits of bauble or<br> boxes will be removed from your inventory.", function () {
-	//dialog.multi2(player, "LEAVE DIANGO'S WORKSHOP?", "Yes", function () {
+	 dialog.mesbox(ctx.player,"If you leave Diango's workshop, any marionette parts, bits of bauble or<br> boxes will be removed from your inventory.")
+	 .multi2("LEAVE DIANGO'S WORKSHOP?", "Yes", function () {
 	 anim.run(ctx.player, 828, function () {	
 	 map.setCoords(ctx.player, coords(2007, 4427, 1));	
 	 });
-	//}, "No", function () {	
+	}, "No", function () {	
 	 });	
 	 });
 	 
