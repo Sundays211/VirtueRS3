@@ -19,46 +19,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+/* globals EventType */
 
 var util = require('../../core/util');
 var widget = require('../../widget');
-var varc = require('../core/var/client');
-var anim = require('../../core/anim');
+
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.IF_OPEN, 1422, function (ctx) {
-		widget.setEvents(ctx.player, 1422, 38, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 39, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 40, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 41, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 42, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 43, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 44, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 45, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 46, 2, 2, 2);
-		widget.setEvents(ctx.player, 1422, 47, 2, 2, 2);
-		//varc(ctx.player, 622, getCoordHash(map.getCoords(ctx.player)));
-		widget.setEvents(ctx.player, 1422, 86, 0, 19, 2);
-		widget.hide(ctx.player, 1422, 49, true);
-		varc(ctx.player, 4197, -1);
-		//varc(ctx.player, 674, getCoordHash(map.getCoords(ctx.player)));
-		anim.run(ctx.player, 22748);
+		scriptManager.bind(EventType.IF_BUTTON, 1466, function (ctx) {
+			switch (ctx.component) {
+			case 7:
+			switch (ctx.slot) {
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
+			case 18:
+			case 19:
+			case 20:
+			case 21:
+			case 23:
+			case 24:
+			case 25:
+			case 26:
+				widget.openOverlay(ctx.player, 0);
+				break;
+			}
+			break;
+			
+			default:
+				util.defaultHandler(ctx, "skilltab");
+				return;
+			}
 		});
 		
-		scriptManager.bind(EventType.IF_CLOSE, 1422, function (ctx) {
-		util.runClientScript(ctx.player, 8105, []);
-		varc(ctx.player, 622, -1);
-		varc(ctx.player, 674, -1);
-		widget.openOverlaySub(ctx.player, 1015, 1215, true);
-		widget.open(ctx.player, 1477, 16, 1482, true);
-		anim.stop(ctx.player);
-		anim.run(ctx.player, 22749);
-		});
+		
 	
 	}
 })();
