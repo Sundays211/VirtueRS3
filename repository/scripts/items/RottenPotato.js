@@ -82,7 +82,7 @@ module.exports = (function () {
 		//	});
 		//	player.setAction(new Action()); 
 		 
-	 });
+	// });
  	 } else { 
  	 chat.sendMessage(ctx.player, "The specified player is not currently in the game world."); 
  	 } 
