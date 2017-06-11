@@ -506,18 +506,6 @@ var PatchListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 		}
 		if (!handled) {
 			switch (locTypeId) {
-			case 7836://Falador compost
-				handled = Farming.COMPOST.handleBin(player, 1, option);
-				break;
-			case 7837://Catherby compost
-				handled = Farming.COMPOST.handleBin(player, 2, option);
-				break;
-			case 7838://Morytania compost
-				handled = Farming.COMPOST.handleBin(player, 3, option);
-				break;
-			case 7839://Ardougne compost
-				handled = Farming.COMPOST.handleBin(player, 4, option);
-				break;
 			case 8388://Taverly tree patch
 				handled = Farming.TREES.handlePatch(player, 1, option);
 				break;
@@ -576,14 +564,7 @@ var ItemOnPatchListener = Java.extend(Java.type('org.virtue.engine.script.listen
 				return;
 			}
 		}
-		switch (locTypeId) {
-		case 7836://Falador compost
-		case 7837://Catherby compost
-		case 7838://Morytania compost
-		case 7839://Ardougne compost
-		default:
-			api.sendMessage(player, "Used item on farming patch: item="+item+", patch="+args.location+", slot="+invSlot);
-		}
+		api.sendMessage(player, "Used item on farming patch: item="+item+", patch="+args.location+", slot="+invSlot);
 	}
 });
 
@@ -592,7 +573,7 @@ var listen = function(scriptManager) {
 	var varListener = new VarListener();
 	scriptManager.registerVarListener(varListener, varListener.getIDs());
 	
-	var locTypes = [ 7836, 7837, 7838, 7839 ];
+	var locTypes = [ ];
 	for (var key in patches) {
 		locTypes.push(parseInt(key));
 	}
@@ -690,62 +671,6 @@ var Farming = {
 				return true;
 			}
 			return false;
-		},
-		COMPOST : {
-			REGULAR_ITEMS : [1942, 1965],
-			handleBin : function (player, bin, option) {
-				if (option == 6) {
-					return false;
-				}
-				var currentStatus = Farming.COMPOST.getStatus(player, bin);
-				if (currentStatus > 15 && currentStatus <= 30) {
-					if (api.carriedItemTotal(player, 1925) > 0) {
-						api.delCarriedItem(player, 1925, 1);
-						api.addCarriedItem(player, 6032, 1);
-						if (currentStatus > 16) {
-							Farming.COMPOST.setStatus(player, bin, currentStatus-1);
-						} else {
-							Farming.COMPOST.setStatus(player, bin, 0);
-						}						
-					} else {
-						api.sendMessage(player, "Need a bucket!");
-					}
-				} else {
-					api.sendMessage(player, "Clicked compost bin "+bin+": option="+option+", currentStatus="+currentStatus)
-				}
-				
-				return true;
-			},
-			getStatus : function (player, bin) {
-				switch (bin) {
-				case 1://Falador
-					return api.getVarBit(player, 84);
-				case 2://Catherby
-					return api.getVarBit(player, 85);
-				case 3://Ardougne
-					return api.getVarBit(player, 86);
-				case 4://Morytania
-					return api.getVarBit(player, 87);
-				default:
-					return -1;
-				}
-			},
-			setStatus : function (player, bin, status) {
-				switch (bin) {
-				case 1://Falador
-					api.setVarBit(player, 84, status);
-					return;
-				case 2://Catherby
-					api.setVarBit(player, 85, status);
-					return;
-				case 3://Ardougne
-					api.setVarBit(player, 86, status);
-					return;
-				case 4://Morytania
-					api.setVarBit(player, 87, status);
-					return;
-				}
-			}
 		}
 }
 

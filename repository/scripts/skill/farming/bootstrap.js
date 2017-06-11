@@ -5,6 +5,7 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./plant-pots'),
+		require('./compost-bin'),
 		require('./flower-patch'),
 		require('./herb-patch'),
 		require('./allotment'),
