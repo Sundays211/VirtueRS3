@@ -9,6 +9,7 @@ var inv = require('../../inv');
 var stat = require('../logic/stat');
 
 var variables = require('./variables');
+var resources = require('../makex/resources');
 
 module.exports = (function () {
 	//The number of game cycles between farming ticks
@@ -145,7 +146,7 @@ module.exports = (function () {
 		}
 		
 		anim.run(player, 24924, function () {
-			inv.take(player, 5338, 1);
+			resources.take(player, 5338, 1);
 			variables.setStatus(player, patchId, wateredStatus);
 		});
 	}

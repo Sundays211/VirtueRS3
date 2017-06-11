@@ -32,6 +32,8 @@ var chat = require('../../chat');
 var stat = require('../logic/stat');
 var quest = require('../../quest');
 
+var resources = require('./resources');
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -378,9 +380,11 @@ module.exports = (function () {
 	function getMaxAmount (player, productId) {
 		//See clientscript 7108
 		var materialId = config.objParam(productId, 2655);
-		var structId = config.objParam(productId, 2675);
-		var separateAmount = config.objParam(productId, 2686) == 1;
 		var matCountReq = config.objParam(productId, 2665);
+		//int v11 = config.objParam(productId, 4134);
+		var separateAmount = config.objParam(productId, 2686) == 1;
+		var structId = config.objParam(productId, 2675);
+		//int v1 = config.objParam(productId, 5456);
 		var maxAmount = 2147483647;
 		var materialCount;
 		var createPerCycle = config.objParam(productId, 2653);
@@ -394,7 +398,7 @@ module.exports = (function () {
 				}
 			} else {
 				if (matCountReq !== 0) {
-					materialCount = inv.total(player, materialId);
+					materialCount = resources.getCount(player, materialId);
 					if (materialCount != -1) {
 						if (separateAmount) {
 							maxAmount = Math.min(maxAmount, materialCount / matCountReq);
@@ -409,74 +413,74 @@ module.exports = (function () {
 			case 2:
 				materialId = config.objParam(productId, 2656);
 				matCountReq = config.objParam(productId, 2666);
-				//v11 = configApi.objParam(productId, 4135);
+				//v11 = config.objParam(productId, 4135);
 				separateAmount = config.objParam(productId, 2687) == 1;
 				structId = config.objParam(productId, 2676);
-				//v1 = configApi.objParam(productId, 5457);
+				//v1 = config.objParam(productId, 5457);
 				break;
 			case 3:
 				materialId = config.objParam(productId, 2657);
 				matCountReq = config.objParam(productId, 2667);
-				//v11 = configApi.objParam(productId, 4136);
+				//v11 = config.objParam(productId, 4136);
 				separateAmount = config.objParam(productId, 2688) == 1;
 				structId = config.objParam(productId, 2677);
-				//v1 = configApi.objParam(productId, 5458);
+				//v1 = config.objParam(productId, 5458);
 				break;
 			case 4:
 				materialId = config.objParam(productId, 2658);
 				matCountReq = config.objParam(productId, 2668);
-				//v11 = configApi.objParam(productId, 4137);
+				//v11 = config.objParam(productId, 4137);
 				separateAmount = config.objParam(productId, 2689);
 				structId = config.objParam(productId, 2678);
-				//v1 = configApi.objParam(productId, 5459);
+				//v1 = config.objParam(productId, 5459);
 				break;
 			case 5:
 				materialId = config.objParam(productId, 2659);
 				matCountReq = config.objParam(productId, 2669);
-				//v11 = configApi.objParam(productId, 4138);
+				//v11 = config.objParam(productId, 4138);
 				separateAmount = config.objParam(productId, 2690);
 				structId = config.objParam(productId, 2679);
-				//v1 = configApi.objParam(productId, 5460);
+				//v1 = config.objParam(productId, 5460);
 				break;
 			case 6:
 				materialId = config.objParam(productId, 2660);
 				matCountReq = config.objParam(productId, 2670);
-				//v11 = configApi.objParam(productId, 4139);
+				//v11 = config.objParam(productId, 4139);
 				separateAmount = config.objParam(productId, 2691);
 				structId = config.objParam(productId, 2680);
-				//v1 = configApi.objParam(productId, 5461);
+				//v1 = config.objParam(productId, 5461);
 				break;
 			case 7:
 				materialId = config.objParam(productId, 2661);
 				matCountReq = config.objParam(productId, 2671);
-				//v11 = configApi.objParam(productId, 4140);
+				//v11 = config.objParam(productId, 4140);
 				separateAmount = config.objParam(productId, 2692);
 				structId = config.objParam(productId, 2681);
-				//v1 = configApi.objParam(productId, 5462);
+				//v1 = config.objParam(productId, 5462);
 				break;
 			case 8:
 				materialId = config.objParam(productId, 2662);
 				matCountReq = config.objParam(productId, 2672);
-				//v11 = configApi.objParam(productId, 4141);
+				//v11 = config.objParam(productId, 4141);
 				separateAmount = config.objParam(productId, 2693);
 				structId = config.objParam(productId, 2682);
-				//v1 = configApi.objParam(productId, 5463);
+				//v1 = config.objParam(productId, 5463);
 				break;
 			case 9:
 				materialId = config.objParam(productId, 2663);
 				matCountReq = config.objParam(productId, 2673);
-				//v11 = configApi.objParam(productId, 4142);
+				//v11 = config.objParam(productId, 4142);
 				separateAmount = config.objParam(productId, 2694);
 				structId = config.objParam(productId, 2683);
-				//v1 = configApi.objParam(productId, 5464);
+				//v1 = config.objParam(productId, 5464);
 				break;
 			case 10:
 				materialId = config.objParam(productId, 2664);
 				matCountReq = config.objParam(productId, 2674);
-				//v11 = configApi.objParam(productId, 4143);
+				//v11 = config.objParam(productId, 4143);
 				separateAmount = config.objParam(productId, 2695);
 				structId = config.objParam(productId, 2684);
-				//v1 = configApi.objParam(productId, 5465);
+				//v1 = config.objParam(productId, 5465);
 				break;
 			default:
 				materialId = -1;

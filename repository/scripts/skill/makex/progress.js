@@ -31,6 +31,8 @@ var chat = require('../../chat');
 var anim = require('../../core/anim');
 var stat = require('../logic/stat');
 
+var resources = require('./resources');
+
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -217,7 +219,7 @@ module.exports = (function () {
 			} else {
 				if (matCountReq !== 0) {
 					var amount = separateAmount ? matCountReq : matCountReq * amountPerBatch;
-					inv.take(player, materialId, amount * productCount);
+					resources.take(player, materialId, amount * productCount);
 				}				
 			}
 			loop++;
