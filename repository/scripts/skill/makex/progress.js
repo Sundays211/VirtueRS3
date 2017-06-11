@@ -107,20 +107,20 @@ module.exports = (function () {
 			anim.run(player, animation);
 		}			
 		var CraftAction = Java.extend(Java.type("org.virtue.game.entity.player.event.PlayerActionHandler"), {
-			process : function (player) {
+			process : function (player1) {
 				if (delay <= 0) {
 					if (amount <= 0) {
 						return true;
 					}
 					amount--;
-					varc(player, 2229, amount);
-					makeItem(player, productId);
+					varc(player1, 2229, amount);
+					makeItem(player1, productId);
 					if (successText !== undefined) {
-						chat.sendSpamMessage(player, successText);
+						chat.sendSpamMessage(player1, successText);
 					}
 					
 					if (amount >= 1 && animation != -1) {
-						anim.run(player, animation);
+						anim.run(player1, animation);
 					}
 					delay = length;
 				}
@@ -128,9 +128,9 @@ module.exports = (function () {
 				return false;
 			},
 			
-			stop : function (player) {
-				ENGINE.stopAnimation(player);//Clear animation
-				widget.closeOverlaySub(player, 1018, true);//Close interface
+			stop : function (player1) {
+				ENGINE.stopAnimation(player1);//Clear animation
+				widget.closeOverlaySub(player1, 1018, true);//Close interface
 			}
 		});
 		player.setAction(new CraftAction());
@@ -307,7 +307,6 @@ module.exports = (function () {
 		var separateAmount = config.structParam(structId, 2686) == 1;
 		var loop = 1;
 		while (id != -1) {
-			var required = separateAmount ? matCountReq : matCountReq * amount;
 			var has = inv.total(player, id);
 			if (matCountReq <= has) {//The player has enough of the material for at least one item
 				if (separateAmount) {

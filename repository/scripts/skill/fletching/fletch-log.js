@@ -37,7 +37,7 @@ module.exports = (function (){
 		selectProduct : selectProduct
 	};
 	
-	function init (scriptManager) {
+	function init () {
 		common.registerProcessHandler(6947, fletchLogs);//Logs
 		
 		common.registerProcessHandler(6948, fletchLogs);//Achey logs

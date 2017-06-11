@@ -1,7 +1,7 @@
 /**
  * 
  */
-/* globals QUEST_ENGINE, Java */
+/* globals QUEST_ENGINE */
 module.exports = init();
 
 function init () {

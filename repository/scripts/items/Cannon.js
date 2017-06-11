@@ -19,39 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
-var anim = require('../../core/anim');
-var chat = require('../../chat');
-var util = require('../core/util');
+/* globals EventType */
+var anim = require('../core/anim');
 var map = require('../map');
-var inv = require('../../inv');
+var inv = require('../inv');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	function init (scriptManager) {
-	 
-	 scriptManager.bind(EventType.OPHELD1, 6, function (ctx) {//cannon 
-	 var coords = map.getCoords(ctx.player);
-	 anim.run(ctx.player, 827, function () {
-	 map.addLoc(7, coords, 10, 0);
-	 inv.take(ctx.player, 6, 1);
-     anim.run(ctx.player, 827, function () {
-	 map.addLoc(8, coords, 10, 0);
-	 inv.take(ctx.player, 8, 1);
-	 anim.run(ctx.player, 827, function () {
-	 map.addLoc(9, coords, 10, 0);
-	 inv.take(ctx.player, 10, 1);
-     anim.run(ctx.player, 827, function () {
-	 map.addLoc(6, coords, 10, 0);
-	 inv.take(ctx.player, 12, 1);
-     });
-	 });
-     });
-     });
-	 });	 
 	
+	function init (scriptManager) {
+	 scriptManager.bind(EventType.OPHELD1, 6, function (ctx) {//cannon 
+		 var coords = map.getCoords(ctx.player);
+		 anim.run(ctx.player, 827, function () {
+			 map.addLoc(7, coords, 10, 0);
+			 inv.take(ctx.player, 6, 1);
+		     anim.run(ctx.player, 827, function () {
+				 map.addLoc(8, coords, 10, 0);
+				 inv.take(ctx.player, 8, 1);
+				 anim.run(ctx.player, 827, function () {
+					 map.addLoc(9, coords, 10, 0);
+					 inv.take(ctx.player, 10, 1);
+				     anim.run(ctx.player, 827, function () {
+						 map.addLoc(6, coords, 10, 0);
+						 inv.take(ctx.player, 12, 1);
+				     });
+				 });
+		     });
+	     });
+	 });
 	}
 
 })();

@@ -19,11 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
-var anim = require('../../core/anim');
-var chat = require('../../chat');
-var inv = require('../../inv');
-var config = require('../../core/config');
+/* globals EventType, ENGINE */
+var anim = require('../core/anim');
+var chat = require('../chat');
+var inv = require('../inv');
+var config = require('../core/config');
 
 
 module.exports = (function () {
@@ -167,12 +167,6 @@ module.exports = (function () {
 	        delayTime : 1,
 	        healText : null
 	    },
-	    ROCKTAIL : {
-			itemID : 15272,
-			healAmount : 2300,
-	        delayTime : 1,
-	        healText : null
-	    },
 	    CAKE	 : {
 			itemID : 1891,
 			healAmount : 999,
@@ -298,62 +292,50 @@ module.exports = (function () {
 	        delayTime : 1,
 	        healText : null
 	    }	    			    		    		    	   
-};
+	};
 
-   return {
+	return {
 		init : init
 	};
 
 
 	function init (scriptManager) {
-	var ids = [];
-	for (var i in Types) {
-	ids.push(Types[i].itemID);
+		var ids = [];
+		for (var i in Types) {
+			ids.push(Types[i].itemID);
+		}
+		scriptManager.bind(EventType.OPHELD1, ids, function (ctx) {
+			var food = forFood(ctx.player, ctx.item);
+			if (food === null) {
+				return;
+			}
+			var delay = 2;
+			ENGINE.freezeEntity(ctx.player, delay+1);
+			if (food.healText !== null) {
+				chat.sendMessage(ctx.player, food.healText);		
+			} else {
+				chat.sendMessage(ctx.player, "You eat the " + config.objName(food.itemID) + ".");
+			}
+			if(ctx.player.getImpactHandler().inCombat()) {
+				anim.run(ctx.player, 18002);
+			} else {
+				anim.run(ctx.player, 18001);
+			}
+			ctx.player.getImpactHandler().heal(food.healAmount, true);
+			inv.take(ctx.player, food.itemID, 1);
+		});
 	}
-    for (var i in ids) {
-	scriptManager.bind(EventType.OPHELD1, ids[i], function (ctx) {
-	var food = forFood(ctx.player, ctx.item);
-	if (food == null) {
-		return;
-	}
-	var delay = 2;
-	ENGINE.freezeEntity(ctx.player, delay+1);
-	if (food.healText != null) {
-		chat.sendMessage(ctx.player, food.healText);		
-	} else {
-		chat.sendMessage(ctx.player, "You eat the " + config.objName(food.itemID) + ".");
-	}
-	if(ctx.player.getImpactHandler().inCombat() == true) {
-		anim.run(ctx.player, 18002);
-	} else {
-		anim.run(ctx.player, 18001);
-	}
-	ctx.player.getImpactHandler().heal(food.healAmount, true);
-	inv.take(ctx.player, food.itemID, 1);
-	});	 
-	}
-	}
-	
-	function getDelay (player, types) {
-	var timer = 1;
-    print(timer+"\n");
-	if (timer < 1 + types.delayTime) {
-		timer = 1 + Math.floor((Math.random() * types.delayTime));
-		print(timer+"\n");
-	}
-	return timer;
-    }
    
 	function forFood(player, item) {
-	var food;
-	for (ordial in Types) {
-		food = Types[ordial];
-		if (food.itemID == item.getID()) {
-			return food;
+		var food;
+		for (var ordial in Types) {
+			food = Types[ordial];
+			if (food.itemID == item.getID()) {
+				return food;
+			}
 		}
+		return null;
 	}
-	return null;
-} 
 
 
 	

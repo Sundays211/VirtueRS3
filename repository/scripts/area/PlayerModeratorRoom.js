@@ -19,9 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var chat = require('../../chat');
-var map = require('../../map');
-var coords = require('../../map/coords');
+/* globals EventType */
+var coords = require('../map/coords');
+var chat = require('../chat');
+var map = require('../map');
 
 module.exports = (function () {
 	return {
@@ -29,13 +30,13 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-	 scriptManager.bind(EventType.OPLOC1, 26806, function (ctx) {//Staircase
-	 map.setCoords(ctx.player, coords(3230, 3231, 0));
-	 });
-	 scriptManager.bind(EventType.OPLOC2, 26807, function (ctx) {//Table
- 	 chat.sendMessage(ctx.player, "todo");  			 
-	 });
-	
+		scriptManager.bind(EventType.OPLOC1, 26806, function (ctx) {//Staircase
+			map.setCoords(ctx.player, coords(3230, 3231, 0));
+		});
+		
+		scriptManager.bind(EventType.OPLOC2, 26807, function (ctx) {//Table
+			chat.sendMessage(ctx.player, "todo");  			 
+		});
 	}
 
 })();

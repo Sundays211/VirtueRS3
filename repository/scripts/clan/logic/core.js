@@ -8,7 +8,6 @@ var config = require('../../core/config');
 var chat = require('../../chat');
 
 var broadcasts = require('./broadcasts');
-var permissions = require('./permissions');
 
 module.exports = init();
 

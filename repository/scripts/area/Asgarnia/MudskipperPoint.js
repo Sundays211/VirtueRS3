@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var dialog = require('../../dialog');
+/* globals EventType */
 var map = require('../../map');
 var coords = require('../../map/coords');
 
@@ -30,7 +30,7 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 9472, function (ctx) {//Asgarnian ice dungeon
-        map.setCoords(ctx.player, coords(3007, 9550, 0));
+			map.setCoords(ctx.player, coords(3007, 9550, 0));
 		});
 	}
 })();
