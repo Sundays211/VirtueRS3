@@ -10,7 +10,8 @@ module.exports = (function () {
 	
 	var patches = [
 		require('./flower-patch'),
-		require('./herb-patch')
+		require('./herb-patch'),
+		require('./allotment')
 	];
 	
 	return {

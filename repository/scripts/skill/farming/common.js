@@ -23,8 +23,38 @@ module.exports = (function () {
 		water : water,
 		applyCompost : applyCompost,
 		harvest : harvest,
-		clear : clear
+		clear : clear,
+		getInspectMessage : getInspectMessage
 	};
+	
+	function getInspectMessage(player, patchId, patchType, statusType) {
+		var message = patchType;
+		var status = variables.getStatus(player, patchId);
+		var compost = variables.getCompost(player, patchId);
+		
+		if (compost === 0) {
+			message += " The soil has not been treated.";
+		} else if (compost === 1) {
+			message += " The soil has been treated with compost.";
+		} else if (compost === 2) {
+			message += " The soil has been treated with supercompost.";
+		}
+		
+		if (status < 3) {
+			message += " The patch needs weeding.";
+		} else if (status === 3) {
+			message += " The patch is empty and weeded.";
+		} else if (statusType === "grown") {
+			message += " The patch is fully grown.";
+		} else if (statusType === "dead") {
+			message += " The patch has become infected by disease and has died.";
+		} else if (statusType === "diseased") {
+			message += " The patch has become infected by disease.";
+		} else {
+			message += " The patch has something growing in it.";
+		}
+		return message;
+	}
 
 	/**
 	 * Checks if a farming cycle can proceed

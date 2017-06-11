@@ -32,6 +32,24 @@ module.exports = (function () {
 			return varbit(player, 126);
 		case 8153://Morytania
 			return varbit(player, 127);
+			
+		/* Allotments */
+		case 8550://North-West Falador
+			return varbit(player, 52);
+		case 8551://South-East Falador
+			return varbit(player, 53);
+		case 8552://North Catherby
+			return varbit(player, 54);
+		case 8553://South Catherby
+			return varbit(player, 55);
+		case 8554://North Ardougne
+			return varbit(player, 56);
+		case 8555://South Ardougne
+			return varbit(player, 57);
+		case 8556://North-West Morytania
+			return varbit(player, 58);
+		case 8557://South-East Morytania
+			return varbit(player, 59);
 		default:
 			throw "Unknown farming patch: "+patchId;
 		}
@@ -66,6 +84,32 @@ module.exports = (function () {
 		case 8153://Morytania
 			varbit(player, 127, status);
 			return;
+			
+		/* Allotments */
+		case 8550://North-West Falador
+			varbit(player, 52, status);
+			return;
+		case 8551://South-East Falador
+			varbit(player, 53, status);
+			return;
+		case 8552://North Catherby
+			varbit(player, 54, status);
+			return;
+		case 8553://South Catherby
+			varbit(player, 55, status);
+			return;
+		case 8554://North Ardougne
+			varbit(player, 56, status);
+			return;
+		case 8555://South Ardougne
+			varbit(player, 57, status);
+			return;
+		case 8556://North-West Morytania
+			varbit(player, 58, status);
+			return;
+		case 8557://South-East Morytania
+			varbit(player, 59, status);
+			return;
 		default:
 			throw "Unknown farming patch: "+patchId;
 		}
@@ -92,6 +136,24 @@ module.exports = (function () {
 			return varbit(player, 131);
 		case 8153://Morytania
 			return varbit(player, 132);
+			
+		/* Allotments */
+		case 8550://North-West Falador
+			return varbit(player, 103);
+		case 8551://South-East Falador
+			return varbit(player, 104);
+		case 8552://North Catherby
+			return varbit(player, 105);
+		case 8553://South Catherby
+			return varbit(player, 106);
+		case 8554://North Ardougne
+			return varbit(player, 107);
+		case 8555://South Ardougne
+			return varbit(player, 108);
+		case 8556://North-West Morytania
+			return varbit(player, 109);
+		case 8557://South-East Morytania
+			return varbit(player, 110);
 		default:
 			throw "Unknown farming patch: "+patchId;
 		}
@@ -125,6 +187,32 @@ module.exports = (function () {
 			return;
 		case 8153://Morytania
 			varbit(player, 132, status);
+			return;
+			
+		/* Allotments */
+		case 8550://North-West Falador
+			varbit(player, 103, status);
+			return;
+		case 8551://South-East Falador
+			varbit(player, 104, status);
+			return;
+		case 8552://North Catherby
+			varbit(player, 105, status);
+			return;
+		case 8553://South Catherby
+			varbit(player, 106, status);
+			return;
+		case 8554://North Ardougne
+			varbit(player, 107, status);
+			return;
+		case 8555://South Ardougne
+			varbit(player, 108, status);
+			return;
+		case 8556://North-West Morytania
+			varbit(player, 109, status);
+			return;
+		case 8557://South-East Morytania
+			varbit(player, 110, status);
 			return;
 		default:
 			throw "Unknown farming patch: "+patchId;

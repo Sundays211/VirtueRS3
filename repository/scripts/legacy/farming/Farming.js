@@ -50,81 +50,6 @@ var PatchType = {
 }
 
 var FarmingCrop = {
-	POTATOES : {
-		type : PatchType.ALLOTMENT,
-		level : 1,
-		plantxp : 8,
-		harvestxp : 9,
-		seedId : 5318,
-		productId : 1942,
-		plantStage : 6,
-		wateredSeedling : 70,
-		growthStages : [7, 8, 9],
-		wateredStages : [71, 72, 73],
-		diseaseStages : [135, 136, 137],
-		deadStages : [199, 200, 201],
-		harvestStages : [10, 11, 12]
-	},
-	ONIONS : {
-		type : PatchType.ALLOTMENT,
-		level : 5,
-		plantxp : 9.5,
-		harvestxp : 10.5,
-		seedId : 5319,
-		productId : 1957,
-		plantStage : 13,
-		wateredSeedling : 77,
-		growthStages : [14, 15, 16],
-		wateredStages : [78, 79, 80],
-		diseaseStages : [142, 143, 144],
-		deadStages : [206, 207, 208],
-		harvestStages : [17, 18, 19]
-	},
-	CABBAGES : {
-		type : PatchType.ALLOTMENT,
-		level : 7,
-		plantxp : 10,
-		harvestxp : 11.5,
-		seedId : 5324,
-		productId : 1965,
-		plantStage : 20,
-		wateredSeedling : 84,
-		growthStages : [21, 22, 23],
-		wateredStages : [85, 86, 87],
-		diseaseStages : [149, 150, 151],
-		deadStages : [213, 214, 215],
-		harvestStages : [24, 25, 26]
-	},
-	TOMATOES : {
-		type : PatchType.ALLOTMENT,
-		level : 12,
-		plantxp : 12.5,
-		harvestxp : 14,
-		seedId : 5322,
-		productId : 1982,
-		plantStage : 27,
-		wateredSeedling : 91,
-		growthStages : [28, 29, 30],
-		wateredStages : [92, 93, 94],
-		diseaseStages : [156, 157, 158],
-		deadStages : [220, 221, 222],
-		harvestStages : [31, 32, 33]
-	},
-	SWEETCORN : {
-		type : PatchType.ALLOTMENT,
-		level : 20,
-		plantxp : 17,
-		harvestxp : 19,
-		seedId : 5320,
-		productId : 5986,
-		plantStage : 34,
-		wateredSeedling : 98,
-		growthStages : [35, 36, 37, 38, 39],
-		wateredStages : [99, 100, 101, 102, 103],
-		diseaseStages : [163, 164, 165, 166, 167],
-		deadStages : [227, 228, 229, 230, 231],
-		harvestStages : [40, 41, 42]
-	},
 	OAK : {
 		type : PatchType.TREE,
 		level : 15,
@@ -447,17 +372,6 @@ FarmingPatch.prototype = {
 var patchTypes = {};
 var seedLookup = {};
 
-var Allotment = function (location, varbit, compostVarbit) {
-	this.location = location;
-	this.varbit = varbit;
-	this.compostVarbit = compostVarbit;
-	this.type = PatchType.ALLOTMENT;
-}
-patchTypes[PatchType.ALLOTMENT.id] = Allotment;
-Allotment.prototype = Object.create(FarmingPatch.prototype);
-Allotment.prototype.constructor = Allotment;
-Allotment.statusLookup = new Array(256);
-
 var TreePatch = function (location, varbit, compostVarbit) {
 	this.location = location;
 	this.varbit = varbit;
@@ -502,14 +416,6 @@ patches[8388] = new TreePatch(8388, 44, 95);//Taverly
 patches[8389] = new TreePatch(8389, 45, 96);//Falador
 patches[8390] = new TreePatch(8390, 46, 97);//Falador
 patches[8391] = new TreePatch(8391, 47, 98);//Lumbridge
-patches[8550] = new Allotment(8550, 52, 103);//North-West Falador
-patches[8551] = new Allotment(8551, 53, 104);//South-East Falador
-patches[8552] = new Allotment(8552, 54, 105);//North Catherby
-patches[8553] = new Allotment(8553, 55, 106);//South Catherby
-patches[8554] = new Allotment(8554, 56, 107);
-patches[8555] = new Allotment(8555, 57, 108);
-patches[8556] = new Allotment(8556, 58, 109);//North-West Morytania
-patches[8557] = new Allotment(8557, 59, 110);//South-East Morytania
 
 var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarListener'), {
 
