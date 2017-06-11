@@ -22,6 +22,18 @@ module.exports = (function () {
 			return varbit(player, 74);
 		case 7850://Morytania
 			return varbit(player, 75);
+		
+		/* Herb Patches */
+		case 8150://Falador
+			return varbit(player, 124);
+		case 8151://Catherby
+			return varbit(player, 125);
+		case 8152://Ardougne
+			return varbit(player, 126);
+		case 8153://Morytania
+			return varbit(player, 127);
+		default:
+			throw "Unknown farming patch: "+patchId;
 		}
 	}
 	
@@ -40,6 +52,22 @@ module.exports = (function () {
 		case 7850://Morytania
 			varbit(player, 75, status);
 			return;
+			
+		/* Herb Patches */
+		case 8150://Falador
+			varbit(player, 124, status);
+			return;
+		case 8151://Catherby
+			varbit(player, 125, status);
+			return;
+		case 8152://Ardougne
+			varbit(player, 126, status);
+			return;
+		case 8153://Morytania
+			varbit(player, 127, status);
+			return;
+		default:
+			throw "Unknown farming patch: "+patchId;
 		}
 	}
 	
@@ -54,6 +82,18 @@ module.exports = (function () {
 			return varbit(player, 117);
 		case 7850://Morytania
 			return varbit(player, 118);
+			
+		/* Herb Patches */
+		case 8150://Falador
+			return varbit(player, 129);
+		case 8151://Catherby
+			return varbit(player, 130);
+		case 8152://Ardougne
+			return varbit(player, 131);
+		case 8153://Morytania
+			return varbit(player, 132);
+		default:
+			throw "Unknown farming patch: "+patchId;
 		}
 	}
 	
@@ -72,6 +112,22 @@ module.exports = (function () {
 		case 7850://Morytania
 			varbit(player, 118, status);
 			return;
+			
+		/* Herb Patches */
+		case 8150://Falador
+			varbit(player, 129, status);
+			return;
+		case 8151://Catherby
+			varbit(player, 130, status);
+			return;
+		case 8152://Ardougne
+			varbit(player, 131, status);
+			return;
+		case 8153://Morytania
+			varbit(player, 132, status);
+			return;
+		default:
+			throw "Unknown farming patch: "+patchId;
 		}
 	}
 })();

@@ -4,6 +4,7 @@
 /* globals Stat */
 var anim = require('../../core/anim');
 var chat = require('../../chat');
+var dialog = require('../../dialog');
 var inv = require('../../inv');
 var stat = require('../logic/stat');
 
@@ -20,7 +21,9 @@ module.exports = (function () {
 		plantSeed : plantSeed,
 		rake : rake,
 		water : water,
-		applyCompost : applyCompost
+		applyCompost : applyCompost,
+		harvest : harvest,
+		clear : clear
 	};
 
 	/**
@@ -134,6 +137,50 @@ module.exports = (function () {
 			}						
 			inv.give(player, 1925, 1);
 			variables.setCompost(player, patchId, type);
+		});
+	}
+	
+	function harvest (player, patchId, crop, statuses) {
+		if (!inv.hasSpace(player)) {
+			dialog.mesbox(player, "You don't have enough free space in your inventory to harvest these crops");
+			return;
+		}
+		//Probably not the right animation, but at least it shows us doing something...
+		anim.run(player, 22705, function () {
+			inv.give(player, crop.produce, 1);
+			stat.giveXp(player, Stat.FARMING, crop.harvestxp);
+			var compost = variables.getCompost(player, patchId);
+			if (canSaveLife(player)) {
+				//Don't deduct a "life"
+				chat.sendDebugMessage(player, "Life not deducted");
+				harvest(player, patchId, crop, statuses);
+			} else if (statuses && statuses.length > 0) {
+				//Take a life off the status
+				chat.sendDebugMessage(player, "Deducted status life");
+				variables.setStatus(player, patchId, statuses[0]);
+				harvest(player, patchId, crop, statuses.slice(1));
+			} else if (compost > 0) {
+				//Take a life off the compost
+				chat.sendDebugMessage(player, "Deducted compost life");
+				variables.setCompost(player, patchId, compost-1);
+				harvest(player, patchId, crop);
+			} else {
+				//Reset the patch to empty & finish the harvest
+				chat.sendDebugMessage(player, "Fully harvested");
+				variables.setStatus(player, patchId, 3);
+			}
+		});
+	}
+	
+	function canSaveLife (player) {
+		var chance = ((16 * stat.getLevel(player, Stat.FARMING) / 99) + 12)/100;
+		return Math.random() < chance;
+	}
+	
+	function clear (player, patchId) {
+		anim.run(player, 22705, function () {
+			variables.setStatus(player, patchId, 3);
+			variables.setCompost(player, patchId, 0);
 		});
 	}
 })();

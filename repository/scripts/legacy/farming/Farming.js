@@ -41,12 +41,6 @@ var PatchType = {
 		tickType : 2,//Run tick once every 10 mins
 		name : "allotment"
 	},
-	HERB : {
-		id : 1,
-		seedCount : 1,
-		tickType : 4,//Run tick once every 20 mins
-		name : "herb patch"
-	},
 	TREE : {
 		id : 3,
 		seedCount : 1,
@@ -130,66 +124,6 @@ var FarmingCrop = {
 		diseaseStages : [163, 164, 165, 166, 167],
 		deadStages : [227, 228, 229, 230, 231],
 		harvestStages : [40, 41, 42]
-	},
-	GUAM : {
-		type : PatchType.HERB,
-		level : 9,
-		plantxp : 11,
-		harvestxp : 12.5,
-		seedId : 5291,
-		productId : 199,
-		plantStage : 4,
-		wateredSeedling : -1,
-		growthStages : [5, 6, 7],
-		wateredStages : [],//Herb patches cannot be watered
-		diseaseStages : [128, 129, 130],
-		deadStages : [170, 171, 172],//Dead stages are the same for all herbs
-		harvestStages : [8, 9, 10]
-	},
-	MARRENTILL : {
-		type : PatchType.HERB,
-		level : 14,
-		plantxp : 13.5,
-		harvestxp : 15,
-		seedId : 5292,
-		productId : 201,
-		plantStage : 11,
-		wateredSeedling : -1,
-		growthStages : [12, 13, 14],
-		wateredStages : [],//Herb patches cannot be watered
-		diseaseStages : [131, 132, 133],
-		deadStages : [170, 171, 172],//Dead stages are the same for all herbs
-		harvestStages : [15, 16, 17]
-	},
-	TARROMIN : {
-		type : PatchType.HERB,
-		level : 19,
-		plantxp : 16,
-		harvestxp : 18,
-		seedId : 5293,
-		productId : 203,
-		plantStage : 18,
-		wateredSeedling : -1,
-		growthStages : [19, 20, 21],
-		wateredStages : [],//Herb patches cannot be watered
-		diseaseStages : [134, 135, 136],
-		deadStages : [170, 171, 172],//Dead stages are the same for all herbs
-		harvestStages : [22, 23, 24]
-	},
-	HARRALANDER : {
-		type : PatchType.HERB,
-		level : 26,
-		plantxp : 21.5,
-		harvestxp : 24,
-		seedId : 5294,
-		productId : 205,
-		plantStage : 25,
-		wateredSeedling : -1,
-		growthStages : [26, 27, 28],
-		wateredStages : [],//Herb patches cannot be watered
-		diseaseStages : [137, 138, 139],
-		deadStages : [170, 171, 172],//Dead stages are the same for all herbs
-		harvestStages : [29, 30, 31]
 	},
 	OAK : {
 		type : PatchType.TREE,
@@ -524,17 +458,6 @@ Allotment.prototype = Object.create(FarmingPatch.prototype);
 Allotment.prototype.constructor = Allotment;
 Allotment.statusLookup = new Array(256);
 
-var HerbPatch = function (location, varbit, compostVarbit) {
-	this.location = location;
-	this.varbit = varbit;
-	this.compostVarbit = compostVarbit;
-	this.type = PatchType.HERB;
-}
-patchTypes[PatchType.HERB.id] = HerbPatch;
-HerbPatch.prototype = Object.create(FarmingPatch.prototype);
-HerbPatch.prototype.constructor = HerbPatch;
-HerbPatch.statusLookup = new Array(256);
-
 var TreePatch = function (location, varbit, compostVarbit) {
 	this.location = location;
 	this.varbit = varbit;
@@ -587,10 +510,6 @@ patches[8554] = new Allotment(8554, 56, 107);
 patches[8555] = new Allotment(8555, 57, 108);
 patches[8556] = new Allotment(8556, 58, 109);//North-West Morytania
 patches[8557] = new Allotment(8557, 59, 110);//South-East Morytania
-patches[8150] = new HerbPatch(8150, 124, 129);//Falador
-patches[8151] = new HerbPatch(8151, 125, 130);//Catherby
-patches[8152] = new HerbPatch(8152, 126, 131);//Ardougne
-patches[8153] = new HerbPatch(8153, 127, 132);//Morytania
 
 var VarListener = Java.extend(Java.type('org.virtue.engine.script.listeners.VarListener'), {
 

@@ -5,9 +5,14 @@
 var chat = require('../../chat');
 
 var plantPots = require('./plant-pots');
-var flowerPatch = require('./flower-patch');
 
 module.exports = (function () {
+	
+	var patches = [
+		require('./flower-patch'),
+		require('./herb-patch')
+	];
+	
 	return {
 		init : init
 	};
@@ -23,19 +28,24 @@ module.exports = (function () {
 			if (cycleCount > 1) {
 				for (var i=1; i<=cycleCount; i++) {
 					//chat.sendMessage(ctx.player, "Running growth cycle "+i);
-					process(ctx.player);
+					process(ctx.player, 0);
 				}
 			} else {
 				//chat.sendMessage(ctx.player, "Running growth cycle...");
-				process(ctx.player);
+				process(ctx.player, 0);
 			}
 			var end = new Date().getTime();
 			chat.sendMessage(ctx.player, "Finshed "+cycleCount+" growth cycles in "+(end-start)+" milliseconds");
 		});
 	}
 	
-	function process(player) {
+	function process(player, serverCycle) {
 		plantPots.process(player);
-		flowerPatch.processAll(player);
+		for (var i in patches) {
+			var patch = patches[i];
+			if (patch.canProcess && patch.canProcess(serverCycle)) {
+				patch.processAll(player);
+			}
+		}
 	}
 })();
