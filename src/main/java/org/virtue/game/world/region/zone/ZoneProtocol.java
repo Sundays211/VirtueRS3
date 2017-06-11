@@ -27,6 +27,7 @@ public enum ZoneProtocol {
 	LOC_ADD_CHANGE(0, 6, ServerProtocol.LOC_ADD_CHANGE),
 	LOC_DEL(1, 2, ServerProtocol.LOC_DEL),
 	OBJ_ADD(4, 5, ServerProtocol.OBJ_ADD),
+	LOC_ANIM(6, 7, ServerProtocol.LOC_ANIM),
 	OBJ_REVEAL(9, 7, ServerProtocol.OBJ_REVEAL),
 	OBJ_DEL(10, 3, ServerProtocol.OBJ_DEL),
 	MAP_PROJANIM(13, 18, ServerProtocol.MAP_PROJECTILE);

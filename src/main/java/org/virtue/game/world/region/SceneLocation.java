@@ -275,6 +275,6 @@ public class SceneLocation extends Node {
 	
 	@Override
 	public String toString () {
-		return "Location[type="+id+", rotation="+rotation+", name="+getLocType().name+", tile="+baseTile+"]";
+		return "Location[type="+id+", shape="+shape+", rotation="+rotation+", name="+getLocType().name+", tile="+baseTile+"]";
 	}
 }

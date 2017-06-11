@@ -9,6 +9,7 @@
 function getAllModules () {// jshint ignore:line
 	var modules = [
 		'items',
+		'admin',
 		'area',
 		'area/FremennikLands',
 	    'area/Asgarnia',
