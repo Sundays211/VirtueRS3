@@ -7,13 +7,16 @@ var chat = require('../../chat');
 var inv = require('../../inv');
 var stat = require('../logic/stat');
 
+var variables = require('./variables');
+
 module.exports = (function () {
 	//The number of game cycles between farming ticks
 	var TICK_DURATION = 500;//500
 	
 	return {
 		canRunCycle : canRunCycle,
-		processGrow : processGrow,
+		processGrowthStage : processGrowthStage,
+		processDiseasedStage : processDiseasedStage,
 		plantSeed : plantSeed,
 		rake : rake,
 		water : water,
@@ -32,15 +35,31 @@ module.exports = (function () {
 	}
 	
 	/**
-	 * Determines whether the growth cycle produces a healthy or diseased crop
+	 * Determines whether the growth cycle produces a healthy or diseased crop.
+	 * Sets the patch status to either growStatus or diseaseStatus depending on the determined result
 	 * @param player The player
-	 * @param compostStatus The compost status of the patch (0=none, 1=normal, 2=super)
+	 * @param patchId The ID of the patch to modify
+	 * @param growStatus The status to set if the growth cycle produces a healty crop
+	 * @param diseaseStatus The status to set if the growth cycle produces a diseased crop
 	 */
-	function processGrow (player, compostStatus) {
+	function processGrowthStage (player, patchId, growStatus, diseaseStatus) {
 		//TODO: Find out the right formula for this
 		var chance = 0.05;
-		chance /= compostStatus+1;
-		return Math.random() > chance;
+		chance /= variables.getCompost(player, patchId)+1;
+		variables.setStatus(player, patchId, Math.random() > chance ? growStatus : diseaseStatus);
+	}
+	
+	/**
+	 * Checks whether a diseased patch should advance to the "dead" stage
+	 * If so, sets the patch to "dead"
+	 * @param player The player
+	 * @param patchId The ID of the patch to modify
+	 * @param deadStatus The status to set if the patch becomes dead 
+	 */
+	function processDiseasedStage (player, patchId, deadStatus) {
+		if (Math.random() > 0.5) {
+			variables.setStatus(player, patchId, deadStatus);
+		}
 	}
 	
 	function plantSeed (player, seedId, onPlanted, seedCount) {
@@ -51,7 +70,10 @@ module.exports = (function () {
 		}			
 	}
 	
-	function rake (player, onSuccess) {
+	/**
+	 * Rakes the specified patch, clearing any weeds
+	 */
+	function rake (player, patchId) {
 		if (!inv.has(player, 5341) && !inv.hasTool(player, 5341)) {
 			chat.sendMessage(player, "You need a rake to clear this patch.");
 			return;
@@ -59,16 +81,31 @@ module.exports = (function () {
 		
 		anim.run(player, 10574, function () {
 			inv.give(player, 6055, 1);
-			onSuccess();
+			switch (variables.getStatus(player, patchId)) {
+			case 0://Weeds 1
+				variables.setStatus(player, patchId, 1);
+				rake(player, patchId);
+				return;
+			case 1://Weeds 2
+				variables.setStatus(player, patchId, 2);
+				rake(player, patchId);
+				return;
+			case 2://Weeds 3
+				variables.setStatus(player, patchId, 3);
+				return;
+			default://Unknown status
+				throw "Unknown patch status: "+variables.getStatus(player, patchId);
+			}
 		});
 	}
 	
 	/**
 	 * Water the current farming patch
 	 * @param player The player
-	 * @param onWatered The status to set this farming patch to once finished
+	 * @param patchId The ID of the patch to water
+	 * @param wateredStatus The status to set this farming patch to once finished
 	 */
-	function water (player, onWatered) {
+	function water (player, patchId, wateredStatus) {
 		if (!inv.has(player, 5338)) {
 			chat.sendMessage(player, "You need a watering can to water this patch.");
 			return;
@@ -76,17 +113,17 @@ module.exports = (function () {
 		
 		anim.run(player, 24924, function () {
 			inv.take(player, 5338, 1);
-			onWatered();
+			variables.setStatus(player, patchId, wateredStatus);
 		});
 	}
 	
 	/**
 	 * Applies compost to a farming patch
 	 * @param player The player
+	 * @param patchId The ID of the patch to apply compost to
 	 * @param type The compost type (1=normal, 2=super)
-	 * @param onApplied The function to run after compost has been applied
 	 */
-	function applyCompost(player, type, onApplied) {
+	function applyCompost(player, patchId, type) {
 		anim.run(player, 24912, function () {
 			if (type == 1) {//Regular compost
 				inv.take(player, 6032, 1);
@@ -96,7 +133,7 @@ module.exports = (function () {
 				stat.giveXp(player, Stat.FARMING, 26);
 			}						
 			inv.give(player, 1925, 1);
-			onApplied();
+			variables.setCompost(player, patchId, type);
 		});
 	}
 })();
