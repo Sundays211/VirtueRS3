@@ -8,6 +8,7 @@ module.exports = function (scriptManager) {
 		require('./compost-bin'),
 		require('./flower-patch'),
 		require('./herb-patch'),
+		require('./tree-patch'),
 		require('./allotment'),
 		require('./growth-cycle')
 	];

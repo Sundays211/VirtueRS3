@@ -33,6 +33,16 @@ module.exports = (function () {
 		case 8153://Morytania
 			return varbit(player, 127);
 			
+		/* Tree Patches */
+		case 8388://Taverly
+			return varbit(player, 44);
+		case 8389://Falador
+			return varbit(player, 45);
+		case 8390://Varrock
+			return varbit(player, 46);
+		case 8391://Lumbridge
+			return varbit(player, 47);
+			
 		/* Allotments */
 		case 8550://North-West Falador
 			return varbit(player, 52);
@@ -83,6 +93,20 @@ module.exports = (function () {
 			return;
 		case 8153://Morytania
 			varbit(player, 127, status);
+			return;
+			
+		/* Tree Patches */
+		case 8388://Taverly
+			varbit(player, 44, status);
+			return;
+		case 8389://Falador
+			varbit(player, 45, status);
+			return;
+		case 8390://Varrock
+			varbit(player, 46, status);
+			return;
+		case 8391://Lumbridge
+			varbit(player, 47, status);
 			return;
 			
 		/* Allotments */
@@ -137,6 +161,16 @@ module.exports = (function () {
 		case 8153://Morytania
 			return varbit(player, 132);
 			
+		/* Tree Patches */
+		case 8388://Taverly
+			return varbit(player, 95);
+		case 8389://Falador
+			return varbit(player, 96);
+		case 8390://Varrock
+			return varbit(player, 97);
+		case 8391://Lumbridge
+			return varbit(player, 98);
+			
 		/* Allotments */
 		case 8550://North-West Falador
 			return varbit(player, 103);
@@ -187,6 +221,20 @@ module.exports = (function () {
 			return;
 		case 8153://Morytania
 			varbit(player, 132, status);
+			return;
+			
+		/* Tree Patches */
+		case 8388://Taverly
+			varbit(player, 95, status);
+			return;
+		case 8389://Falador
+			varbit(player, 96, status);
+			return;
+		case 8390://Varrock
+			varbit(player, 97, status);
+			return;
+		case 8391://Lumbridge
+			varbit(player, 98, status);
 			return;
 			
 		/* Allotments */

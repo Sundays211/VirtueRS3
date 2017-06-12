@@ -2,6 +2,8 @@
  * Common functionality for farming
  */
 /* globals Stat */
+var varbit = require('../../core/var/bit');
+
 var anim = require('../../core/anim');
 var chat = require('../../chat');
 var dialog = require('../../dialog');
@@ -20,11 +22,14 @@ module.exports = (function () {
 		processGrowthStage : processGrowthStage,
 		processDiseasedStage : processDiseasedStage,
 		plantSeed : plantSeed,
+		plantSapling : plantSapling,
 		rake : rake,
 		water : water,
 		applyCompost : applyCompost,
 		harvest : harvest,
 		clear : clear,
+		prune : prune,
+		checkHealth : checkHealth,
 		getInspectMessage : getInspectMessage
 	};
 	
@@ -101,7 +106,31 @@ module.exports = (function () {
 		var success = anim.run(player, 24926, onPlanted);
 		if (success) {//Don't remove the seed unless the animation was actually run
 			inv.take(player, seedId, seedCount);
-		}			
+		}
+	}
+	
+	/**
+	 * Plants a sapling in the specified patch
+	 * 
+	 * @param player The player
+	 * @param patchId The ID of the patch to plant the sapling in
+	 * @param crop The type of crop to plant
+	 * @param plantStatus The status to set when the sapling is planted
+	 */
+	function plantSapling (player, patchId, crop, plantStatus) {
+		if (stat.getLevel(player, Stat.FARMING) < crop.level) {
+			dialog.mesbox(player, "You need a farming level of "+crop.level+" to plant this sapling.");
+			return;
+		}
+		
+		anim.run(player, 22705, function () {
+			inv.take(player, crop.sapling, 1);
+			stat.giveXp(player, Stat.FARMING, crop.plantxp);
+			variables.setStatus(player, patchId, plantStatus);
+			if (varbit(player, 29816) === 0) {
+				inv.give(player, 5350, 1);
+			}
+		});
 	}
 	
 	/**
@@ -218,5 +247,25 @@ module.exports = (function () {
 			variables.setStatus(player, patchId, 3);
 			variables.setCompost(player, patchId, 0);
 		});
+	}
+	
+	function prune (player, patchId, healthyStatus) {
+		anim.run(player, 24900, function () {
+			variables.setStatus(player, patchId, healthyStatus);
+			//TODO: Send message and (possibly) give xp
+		});
+	}
+	
+	/**
+	 * Runs the health check on the specified patch, granting the player xp
+	 * @param player The player
+	 * @param patchId The ID of the patch to check
+	 * @param crop The type of crop planted in the patch
+	 * @param checkedStatus The status to set once the patch has been checked
+	 */
+	function checkHealth (player, patchId, crop, checkedStatus) {
+		variables.setStatus(player, patchId, checkedStatus);
+		chat.sendMessage(player, "You examine the tree for signs of disease and find that it is in perfect health.");
+		stat.giveXp(player, Stat.FARMING, crop.checkxp);
 	}
 })();
