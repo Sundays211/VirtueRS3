@@ -36,7 +36,8 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-		var bankBooths = [ 782, 2213, 10517, 11758, 14369, 29085, 34752, 42217 ];
+		var bankBooths = [ 782, 2213, 10517, 11758, 14369, 29085, 34752, 42217,
+			66665, 66666, 66667];
 		var bankChests = [ 83634, 42192, 20607, 79036 ];
 		var bankers = [ 494, 495, 496, 497, 498, 499, 2718, 3293, 3416, 4907 ];
 		

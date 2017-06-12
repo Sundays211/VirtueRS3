@@ -124,6 +124,7 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 				Map<String, Object> args = new HashMap<>();
 				args.put("player", player);
 				args.put("location", location);
+				args.put("locTypeId", location.getId());
 				args.put("coords", clickCoords);
 				scripts.invokeScriptChecked(type, location.getId(), args);
 			} else {

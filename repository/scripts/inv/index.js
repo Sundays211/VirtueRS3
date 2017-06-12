@@ -45,7 +45,7 @@ module.exports = {
 		 * @param objId The object to check
 		 * @param invId The inventory to check. Defaults to BACKPACK if not specified
 		 */
-		total : common.invTotal,
+		total : common.total,
 		
 		/**
 		 * Gets the total capacity of the provided inventory
@@ -53,7 +53,7 @@ module.exports = {
 		 * @param invId The ID of the inventory to check
 		 * @return The capacity of the inventory
 		 */
-		size : common.invSize,
+		size : common.size,
 		
 		/**
 		 * Checks whether the player has space for the given number of items in their inventory
