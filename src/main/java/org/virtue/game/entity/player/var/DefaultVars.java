@@ -92,7 +92,7 @@ public class DefaultVars {
 		varps[108] = -2147483648;
 		varps[110] = 134217728;
 		varps[111] = 10000;
-		varps[115] = 5632;
+		varps[115] = 4608;
 		varps[120] = -1;
 		varps[126] = 536870912;
 		varps[128] = 67108864;
