@@ -140,12 +140,17 @@ module.exports = (function () {
 	 * @param wateredStatus The status to set this farming patch to once finished
 	 */
 	function water (player, patchId, wateredStatus) {
-		if (!inv.has(player, 5338)) {
-			chat.sendMessage(player, "You need a watering can to water this patch.");
+		var animId;
+		if (inv.has(player, 18682) || inv.hasTool(player, 18682)) {
+			animId = 24925;
+		} else if (inv.has(player, 5338)) {
+			animId = 24924;
+		} else {
+			chat.sendMessage(player, "You do not have anything suitable for watering that.");
 			return;
 		}
 		
-		anim.run(player, 24924, function () {
+		anim.run(player, animId, function () {
 			resources.take(player, 5338, 1);
 			variables.setStatus(player, patchId, wateredStatus);
 		});
