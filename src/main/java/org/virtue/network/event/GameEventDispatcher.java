@@ -21,16 +21,18 @@
  */
 package org.virtue.network.event;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.cache.utility.crypto.BKDR;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.OnlineStatus;
 import org.virtue.game.content.ignores.Ignore;
@@ -109,12 +111,22 @@ import org.virtue.network.event.encoder.impl.widget.WidgetTextEventEncoder;
 import org.virtue.network.event.encoder.impl.widget.WidgetTopEventEncoder;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
 import org.virtue.utility.SerialisableEnum;
+import org.virtue.utility.TimeUtility;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 9, 2014
  */
 public class GameEventDispatcher {
+
+	/**
+	 * The {@link Logger} Instance
+	 */
+	private static Logger logger = LoggerFactory.getLogger(Virtue.class);
 
 	/**
 	 * The player to dispatch game events
@@ -177,6 +189,7 @@ public class GameEventDispatcher {
 			player.getImpactHandler().restoreLifepoints();
 			player.getVars().processLogin(player.getLastLogin());
 			//sendMusic(36067, 100);
+			invokePlayerLoginEvent(player);
 			break;
 		}
 		sendOnlineStatus(player.getChat().getFriendsList().getOnlineStatus());
@@ -186,6 +199,21 @@ public class GameEventDispatcher {
 		player.getChat().getFriendsList().sendFriendsList();
 		if (player.getClanHash() != 0L) {
 			Virtue.getInstance().getClans().getChannels().joinMyChannel(player.getChat());
+		}
+	}
+	
+	
+	private void invokePlayerLoginEvent (Player player) {
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(ScriptEventType.PLAYER_LOGIN, null)) {
+			int tickDifference = (int) Math.abs(TimeUtility.getDifferenceInTicks(player.getLastLogin(), System.currentTimeMillis()));
+
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", player);
+			args.put("tickDifference", tickDifference);
+			scripts.invokeScriptChecked(ScriptEventType.PLAYER_LOGIN, null, args);
+		} else {
+			logger.warn("No login event bound!");
 		}
 	}
 

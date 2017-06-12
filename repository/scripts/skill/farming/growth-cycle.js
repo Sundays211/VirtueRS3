@@ -3,19 +3,22 @@
  */
 /* globals EventType */
 var chat = require('../../chat');
-
-var plantPots = require('./plant-pots');
+var CONST = require('../../core/const');
+var util = require('../../core/util');
 
 module.exports = (function () {
 	
 	var patches = [
 		require('./flower-patch'),
 		require('./herb-patch'),
-		require('./allotment')
+		require('./allotment'),
+		require('./tree-patch'),
+		require('./plant-pots')
 	];
 	
 	return {
-		init : init
+		init : init,
+		processLogin : processLogin
 	};
 	
 	function init (scriptManager) {
@@ -40,13 +43,46 @@ module.exports = (function () {
 		});
 	}
 	
-	function process(player, serverCycle) {
-		plantPots.process(player);
-		for (var i in patches) {
-			var patch = patches[i];
-			if (patch.canProcess && patch.canProcess(serverCycle)) {
-				patch.processAll(player);
+	function processLogin(ctx) {
+		var player = ctx.player;
+		var tickDifference = ctx.tickDifference;
+		
+		chat.sendDebugMessage(player, "Running farming login tasks.");
+		
+		var currentTick = util.getServerCycle();
+		var start;
+		var end = currentTick;
+		if (tickDifference <= currentTick) {
+			start = currentTick - tickDifference;
+		} else {
+			var daysDifference = Math.min((tickDifference - currentTick) | 0, 3 * CONST.CYCLES_PER_DAY);
+			start = CONST.CYCLES_PER_DAY - (tickDifference - daysDifference - currentTick);
+			end = start + tickDifference;
+		}
+		var count = 0;
+		for (var serverCycle = start; serverCycle < end; serverCycle+= CONST.FARMING_CYCLE_LENGTH) {
+			process(player, serverCycle);
+			count++;
+			if (count > 864) {
+				break;//Maximum of 3 days worth of cycles
 			}
+		}
+		chat.sendDebugMessage(player, "Finished "+count+" farming cycles.");
+		queueFarmingCycle(player, 1);
+	}
+	
+	function queueFarmingCycle (player, cycleId) {
+		util.delayFunction(player, CONST.FARMING_CYCLE_LENGTH, function () {
+			var serverCycle = util.getServerCycle();
+			chat.sendDebugMessage(player, "Running farming tick "+cycleId+" (cycle="+serverCycle+")");
+			process(player, serverCycle);
+			queueFarmingCycle(player, ++cycleId);
+		}, false);
+	}
+	
+	function process(player, serverCycle) {
+		for (var i in patches) {
+			patches[i].process(player, serverCycle);
 		}
 	}
 })();

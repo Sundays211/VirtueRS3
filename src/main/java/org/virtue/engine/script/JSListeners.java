@@ -395,6 +395,24 @@ public class JSListeners implements ScriptManager {
 	}
 	
 	/**
+	 * Registers a general event listener of the given type, which is bound to no objects.
+	 * This can be used to bind global listeners, such as player login/logouts
+	 * @param eventTypeId The event type ID. Must match a valid id in {@link ScriptEventType}, otherwise an {@link IllegalArgumentException} will be thrown.
+	 * @param listener The listener to bind
+	 */
+	public void registerListener (int eventTypeId, EventListener listener) {
+		ScriptEventType eventType = ScriptEventType.getById(eventTypeId);
+		if (eventType == null) {
+			throw new IllegalArgumentException("Invalid event type ID: "+eventTypeId);
+		}
+		if (eventType.getTriggerType() != Void.class) {
+			throw new IllegalArgumentException("Invalid event binding: expected "+eventType.getTriggerType()+", found java.lang.Void");
+		}
+		EventBind bind = new EventBind(eventType, null);
+		listeners.put(bind, listener);
+	}
+	
+	/**
 	 * Registers a general event listener of the given type which is bound to the given object
 	 * @param eventTypeId The event type ID. Must match a valid id in {@link ScriptEventType}, otherwise an {@link IllegalArgumentException} will be thrown. 
 	 * @param binding The item to bind to. The use of this paramater depends on the event type specified.

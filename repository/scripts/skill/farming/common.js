@@ -3,6 +3,7 @@
  */
 /* globals Stat */
 var varbit = require('../../core/var/bit');
+var CONST = require('../../core/const');
 
 var anim = require('../../core/anim');
 var chat = require('../../chat');
@@ -13,14 +14,12 @@ var stat = require('../logic/stat');
 var variables = require('./variables');
 var resources = require('../makex/resources');
 
-module.exports = (function () {
-	//The number of game cycles between farming ticks
-	var TICK_DURATION = 500;//500
-	
+module.exports = (function () {	
 	return {
 		canRunCycle : canRunCycle,
 		processGrowthStage : processGrowthStage,
 		processDiseasedStage : processDiseasedStage,
+		processWeeds : processWeeds,
 		plantSeed : plantSeed,
 		plantSapling : plantSapling,
 		rake : rake,
@@ -69,7 +68,7 @@ module.exports = (function () {
 	 * @return True if the cycle can run, false otherwise
 	 */
 	function canRunCycle (serverCycle, cycleGap) {
-		var gap = (serverCycle / TICK_DURATION) | 0;
+		var gap = (serverCycle / CONST.FARMING_CYCLE_LENGTH) | 0;
 		return gap % cycleGap === 0;
 	}
 	
@@ -98,6 +97,20 @@ module.exports = (function () {
 	function processDiseasedStage (player, patchId, deadStatus) {
 		if (Math.random() > 0.5) {
 			variables.setStatus(player, patchId, deadStatus);
+		}
+	}
+	
+	function processWeeds (player, patchId) {
+		switch(variables.getStatus(player, patchId)) {
+		case 1://Weeds (2)
+			variables.setStatus(player, patchId, 0);
+			break;
+		case 2://Weeds (1)
+			variables.setStatus(player, patchId, 1);
+			break;
+		case 3://Empty
+			variables.setStatus(player, patchId, 2);
+			break;
 		}
 	}
 	
@@ -172,7 +185,7 @@ module.exports = (function () {
 		var animId;
 		if (inv.has(player, 18682) || inv.hasTool(player, 18682)) {
 			animId = 24925;
-		} else if (inv.has(player, 5338)) {
+		} else if (resources.has(player, 5338)) {
 			animId = 24924;
 		} else {
 			chat.sendMessage(player, "You do not have anything suitable for watering that.");

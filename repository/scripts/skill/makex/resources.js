@@ -9,9 +9,14 @@ var inv = require('../../inv');
 
 module.exports = (function () {
 	return {
+		has : has,
 		getCount : getResourceCount,
 		take : takeResources
 	};
+	
+	function has (player, resourceId) {
+		return getResourceCount(player, resourceId) > 0;
+	}
 	
 	function getResourceCount (player, resourceId, hasBeastOfBurden) {
 		//See clientscript 7115

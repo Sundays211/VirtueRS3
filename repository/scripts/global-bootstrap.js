@@ -1,7 +1,7 @@
 /**
  * The global bootstrap file for initialising all the script modules
  */
-/* globals load, Java */
+/* globals load, Java, EventType */
 
 /**
  * Gets the names of all modules within the script system
@@ -88,6 +88,8 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 		eventCount = 0;
 	}
 	
+	registerLoginEvents(scriptManager, cwd);
+	
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
 		CraftProcess : require(cwd+'/skill/makex/progress'),
@@ -97,4 +99,20 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 		Toolbelt : require(cwd+'/inv/toolbelt'),
 		Fletching : require(cwd+'/skill/fletching/fletch-log')
 	};
+}
+
+function registerLoginEvents (scriptManager, cwd) {
+	var loginModules = [
+		require(cwd+'/skill/farming/growth-cycle')
+	];
+	
+	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+		invoke : function (eventType, trigger, args) {
+			for (var i in loginModules) {
+				loginModules[i].processLogin(args);
+			}
+		}
+	});
+	
+	scriptManager.registerListener(EventType.PLAYER_LOGIN, new Listener());
 }

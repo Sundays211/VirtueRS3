@@ -54,9 +54,7 @@ module.exports = (function () {
 	
 	return {
 		init : init,
-		canProcess : canProcess,
 		process : process,
-		processAll : processAll,
 		values : Tree
 	};
 	
@@ -119,7 +117,7 @@ module.exports = (function () {
 			switch (ctx.useObjId) {//Items which work regardless of current status
 			case 5733://Rotten Potato
 				if (util.isAdmin(player)) {
-					process(player, patchId);
+					processPatch(player, patchId);
 					chat.sendMessage(player, "Advanced farming patch to status "+variables.getStatus(player, patchId));
 				} else {
 					util.defaultHandler(ctx, "tree patch");
@@ -173,29 +171,22 @@ module.exports = (function () {
 		}
 	}
 	
-	function canProcess (serverCycle) {
-		return common.canRunCycle(serverCycle, 8);
+	function process (player, serverCycle) {
+		processPatch(player, 8388, serverCycle);
+		processPatch(player, 8389, serverCycle);
+		processPatch(player, 8390, serverCycle);
+		processPatch(player, 8391, serverCycle);
 	}
 	
-	function processAll (player) {
-		process(player, 8388);
-		process(player, 8389);
-		process(player, 8390);
-		process(player, 8391);
+	function processPatch (player, patchId, serverCycle) {
+		common.processWeeds(player, patchId);
+		if (common.canRunCycle(serverCycle, 8)) {
+			processGrowth(player, patchId);
+		}
 	}
 	
-	function process (player, patchId) {
-		switch(variables.getStatus(player, patchId)) {
-		case 1://Weeds (2)
-			variables.setStatus(player, patchId, 0);
-			break;
-		case 2://Weeds (1)
-			variables.setStatus(player, patchId, 1);
-			break;
-		case 3://Empty
-			variables.setStatus(player, patchId, 2);
-			break;
-			
+	function processGrowth (player, patchId) {
+		switch(variables.getStatus(player, patchId)) {			
 		/* Regular growth */
 		case 8://Oak (1)
 			variables.setStatus(player, patchId, 9);

@@ -27,7 +27,8 @@ function init () {
 		toFormattedString : toFormattedString,
 		toFormattedTime : toFormattedTime,
 		delayFunction : delayFunction,
-		runClientScript : runClientScript
+		runClientScript : runClientScript,
+		getServerCycle : getServerCycle,
 	};
 	return utils;
 	
@@ -158,6 +159,10 @@ function init () {
 	
 	function runClientScript (player, scriptId, args) {
 		ENGINE.runClientScript(player, scriptId, args);
+	}
+	
+	function getServerCycle () {
+		return ENGINE.getTickInDay();
 	}
 }
 

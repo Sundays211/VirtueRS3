@@ -54,7 +54,6 @@ module.exports = (function () {
 	return {
 		init : init,
 		process : process,
-		processAll : processAll,
 		values : Flower
 	};
 	
@@ -95,7 +94,7 @@ module.exports = (function () {
 			switch (ctx.useObjId) {//Items which work regardless of current status
 			case 5733://Rotten Potato
 				if (util.isAdmin(player)) {
-					process(player, patchId);
+					processPatch(player, patchId);
 					chat.sendMessage(player, "Advanced farming patch to status "+variables.getStatus(player, patchId));
 				} else {
 					util.defaultHandler(ctx, "flower patch");
@@ -144,25 +143,20 @@ module.exports = (function () {
 		}
 	}
 	
-	function processAll (player) {
-		process(player, 7847);
-		process(player, 7848);
-		process(player, 7849);
-		process(player, 7850);
+	function process (player) {
+		processPatch(player, 7847);
+		processPatch(player, 7848);
+		processPatch(player, 7849);
+		processPatch(player, 7850);
 	}
 	
-	function process (player, patchId) {
-		switch(variables.getStatus(player, patchId)) {
-		case 1://Weeds (2)
-			variables.setStatus(player, patchId, 0);
-			break;
-		case 2://Weeds (1)
-			variables.setStatus(player, patchId, 1);
-			break;
-		case 3://Empty
-			variables.setStatus(player, patchId, 2);
-			break;
-			
+	function processPatch (player, patchId) {
+		common.processWeeds(player, patchId);
+		processGrowth(player, patchId);
+	}
+	
+	function processGrowth (player, patchId) {
+		switch(variables.getStatus(player, patchId)) {			
 		/* Regular growth */
 		case 8://Marigolds (1)
 			variables.setStatus(player, patchId, 9);

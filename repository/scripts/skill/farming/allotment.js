@@ -79,9 +79,7 @@ module.exports = (function () {
 	
 	return {
 		init : init,
-		canProcess : canProcess,
 		process : process,
-		processAll : processAll,
 		values : Produce
 	};
 	
@@ -251,7 +249,7 @@ module.exports = (function () {
 			switch (ctx.useObjId) {//Items which work regardless of current status
 			case 5733://Rotten Potato
 				if (util.isAdmin(player)) {
-					process(player, patchId);
+					processPatch(player, patchId);
 					chat.sendMessage(player, "Advanced farming patch to status "+variables.getStatus(player, patchId));
 				} else {
 					util.defaultHandler(ctx, "herb patch");
@@ -314,33 +312,26 @@ module.exports = (function () {
 		}
 	}
 	
-	function canProcess (serverCycle) {
-		return common.canRunCycle(serverCycle, 2);
+	function process (player, serverCycle) {
+		processPatch(player, 8550, serverCycle);
+		processPatch(player, 8551, serverCycle);
+		processPatch(player, 8552, serverCycle);
+		processPatch(player, 8553, serverCycle);
+		processPatch(player, 8554, serverCycle);
+		processPatch(player, 8555, serverCycle);
+		processPatch(player, 8556, serverCycle);
+		processPatch(player, 8557, serverCycle);
 	}
 	
-	function processAll (player) {
-		process(player, 8550);
-		process(player, 8551);
-		process(player, 8552);
-		process(player, 8553);
-		process(player, 8554);
-		process(player, 8555);
-		process(player, 8556);
-		process(player, 8557);
+	function processPatch (player, patchId, serverCycle) {
+		common.processWeeds(player, patchId);
+		if (common.canRunCycle(serverCycle, 2)) {
+			processGrowth(player, patchId);
+		}
 	}
 	
-	function process (player, patchId) {
+	function processGrowth (player, patchId) {
 		switch(variables.getStatus(player, patchId)) {
-		case 1://Weeds (2)
-			variables.setStatus(player, patchId, 0);
-			break;
-		case 2://Weeds (1)
-			variables.setStatus(player, patchId, 1);
-			break;
-		case 3://Empty
-			variables.setStatus(player, patchId, 2);
-			break;
-			
 		/* Regular growth */
 		case 6://Potatoes (1)
 			variables.setStatus(player, patchId, 7);
