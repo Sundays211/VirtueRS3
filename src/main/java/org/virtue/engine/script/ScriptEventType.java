@@ -311,7 +311,19 @@ public enum ScriptEventType {
 	/**
 	 * Called when the specified moderator-only command is entered
 	 */
-	COMMAND_MOD(103, String.class);
+	COMMAND_MOD(103, String.class),
+	
+	/**
+	 * Called whenever a player logs in. 
+	 * Only one listener can be bound to this event, which should be used to call any other dependent functions
+	 */
+	PLAYER_LOGIN(110, Void.class),
+	
+	/**
+	 * Called whenever a player logs out. 
+	 * Only one listener can be bound to this event, which should be used to call any other dependent functions
+	 */
+	PLAYER_LOGOUT(111, Void.class);
 	
 	private int id;
 	private Class<?> triggerType;

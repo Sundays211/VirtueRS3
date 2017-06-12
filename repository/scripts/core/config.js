@@ -10,6 +10,7 @@ function init () {
 		enumValue : enumValue,
 		enumHasValue : enumHasValue,
 		enumSize : enumSize,
+		enumValueList : enumValueList,
 		structParam : structParam,
 		objName : objName,
 		objDesc : objDesc,
@@ -43,6 +44,14 @@ function init () {
 	
 	function enumSize (enumId) {
 		return configApi.enumSize(enumId);
+	}
+	
+	function enumValueList (enumId) {
+		var result = [];
+		for (var i=0; i<enumSize(enumId); i++){
+			result.push(enumValue(enumId, i));
+		}
+		return result;
 	}
 	
 	function structParam (structId, param) {

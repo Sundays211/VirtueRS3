@@ -77,6 +77,8 @@ public enum ContainerState {
 	EXCHANGE_RETURN_4(527, true, true),
 	EXCHANGE_RETURN_5(528, true, true),
 	
+	BEAST_OF_BURDEN(530, false, true),
+	
 	/**
 	 * Contains the item the player currently has loaned out.
 	 */
