@@ -19,6 +19,7 @@ function getAllModules () {// jshint ignore:line
 		'clan',
 		'inv',
 		'shop',
+		'trade',
 		'map/commands',
 		'skill/agility',
 		'skill/prayer',

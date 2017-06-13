@@ -25,6 +25,7 @@ module.exports = {
 		 * @param objId The item to remove
 		 * @param count The number of items to remove
 		 * @param invId The inventory to remove items from. Defaults to BACKPACK
+		 * @param slot The slot to remove from
 		 */
 		take : common.take,
 		
@@ -73,6 +74,15 @@ module.exports = {
 		freeSpace : common.freeSpace,
 		
 		/**
+		 * Gets the number of slots currently used in the specified inventory
+		 * 
+		 * @param player The player to check
+		 * @param inv The inventory ID to check
+		 * @return The number of used slots
+		 */
+		usedSpace : common.usedSpace,
+		
+		/**
 		 * Replaces the item currently in the specified slot with the specified item 
 		 * 
 		 * @param player The player to remove the item from
@@ -91,7 +101,24 @@ module.exports = {
 		 * @param slot The slot to clear
 		 */
 		clearSlot : common.clearSlot,
+		
+		/**
+		 * Gets the object ID at the given slot in the given inventory
+		 * Returns -1 if there is no item in the slot
+		 * @param player The player to check
+		 * @param inv The inventory to check
+		 * @param slot The slot to fetch from
+		 */
 		getObjId : common.getObjId,
+		
+		/**
+		 * Gets the number of items in the given slot in the given inventory
+		 * Returns 0 if there is no item in the slot
+		 * @param player The player to check
+		 * @param inv The inventory to check
+		 * @param slot The slot to fetch from
+		 */
+		getCount : common.getCount,
 		baseStock : common.baseStock,
 		hasTool : toolbelt.hasTool,
 		isWearing : wornEquipment.isWearing
