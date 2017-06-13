@@ -40,13 +40,24 @@ module.exports = (function () {
 	return {
 		init : init,
 		processLogin : processLogin,
-		lendItem : lendItem
+		lendItem : lendItem,
+		isBorrowing : isBorrowing
 	};
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "loan", function () {
 			
 		});
+	}
+	
+	function isBorrowing (player) {
+		if (varp(player, 430) > 0) {
+			return false;
+		} else if (varp(player, 428) != -1) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	function lendItem (fromPlayer, toPlayer, objId, duration) {

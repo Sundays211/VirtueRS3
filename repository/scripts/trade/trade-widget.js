@@ -22,7 +22,6 @@
 /* globals EventType, ENGINE, Inv */
 var varbit = require('../core/var/bit');
 var varc = require('../core/var/client');
-var varp = require('../core/var/player');
 var CONST = require('../core/const');
 
 var config = require('../core/config');
@@ -32,7 +31,7 @@ var widget = require('../widget');
 var inv = require('../inv');
 var dialog = require('../dialog');
 
-var loan = require('./loan');
+var logic = require('./trade-logic');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -75,11 +74,7 @@ module.exports = (function () {
 			if (!targetPlayer) {
 				return;
 			}
-			ENGINE.sendInv(player, Inv.TRADE);
-			ENGINE.sendInvTo(player, targetPlayer, Inv.TRADE);
-			ENGINE.sendInv(player, Inv.LOAN_OFFER);
-			ENGINE.sendInvTo(player, targetPlayer, Inv.LOAN_OFFER);
-			ENGINE.sendInv(player, Inv.LOAN_RETURN);
+			logic.startTrade(player, targetPlayer);
 			widget.openOverlaySub(player, 1008, 336, false);
 			//api.openWidget(player, 1477, 391, 336, false);
 			//api.openWidget(player, 1477, 390, 449, false);
@@ -132,7 +127,7 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.IF_CLOSE, [ 334, 335 ], function (ctx) {
 			varc(ctx.player, 2504, "");
-			removeAll(ctx.player);
+			logic.removeAll(ctx.player);
 			cancelTrade(ctx.player);
 			ENGINE.clearInteractionTarget(ctx.player);
 		});
@@ -170,7 +165,7 @@ module.exports = (function () {
 				break;
 			case 5://Add x
 				dialog.requestCount(player, "Remove how many items from your offer?").then(function (value) {
-					removeItem(player, objId, value, ctx.slot);
+					logic.removeItem(player, objId, value, ctx.slot);
 					refreshTrade(player);
 				});
 				return;
@@ -185,7 +180,7 @@ module.exports = (function () {
 				return;
 			}
 			if (count > 0) {
-				removeItem(player, objId, count, ctx.slot);
+				logic.removeItem(player, objId, count, ctx.slot);
 				refreshTrade(player);
 			}
 			return;
@@ -228,7 +223,7 @@ module.exports = (function () {
 				return;		
 			}
 			if (ctx.button == 1) {
-				removeLoanItem(player, objId);
+				logic.removeLoanItem(player, objId);
 				refreshTrade(player);
 			} else if (ctx.button == 10) {
 				chat.sendMessage(player, config.objDesc(objId));
@@ -287,7 +282,7 @@ module.exports = (function () {
 			break;
 		case 5://Add x
 			dialog.requestCount(player, "Add how many items to your offer?", function (value) {
-				offerItem(player, objId, value, ctx.slot);
+				logic.offerItem(player, objId, value, ctx.slot);
 				refreshTrade(player);
 			});
 			return;
@@ -295,7 +290,7 @@ module.exports = (function () {
 			showValue(player, objId);
 			return;
 		case 7://Lend
-			offerLoanItem(player, objId, ctx.slot);
+			logic.offerLoanItem(player, objId, ctx.slot);
 			refreshTrade(player);
 			return;
 		case 10://Examine
@@ -306,74 +301,15 @@ module.exports = (function () {
 			if (!config.objTradable(objId)) {
 				chat.sendMessage(player, "That item isn't tradeable.");
 			} else {
-				offerItem(player, objId, count, ctx.slot);
+				logic.offerItem(player, objId, count, ctx.slot);
 				refreshTrade(player);
 			}				
 		}
 	}
 	
-	function offerItem (player, objId, amount, slot) {
-		amount = Math.min(amount, inv.total(player, objId));
-		inv.take(player, objId, amount, Inv.BACKPACK, slot);
-		inv.give(player, objId, amount, Inv.TRADE);			
-		chat.sendDebugMessage(player, "Offering item: "+objId+", slot="+slot+", amount="+amount);
-	}
-	
 	function offerCoins (player, amount) {
 		//Money pouch uses the same inv methods
-		offerItem(player, CONST.COINS, amount);
-	}
-	
-	function offerLoanItem (player, objId, slot) {
-		var targetPlayer = ENGINE.getInteractionTarget(player);
-		if (!targetPlayer) {
-			return;
-		} else if (!canAcceptLoanItems(player)) {
-			chat.sendMessage(player, "[TODO:Message]Other player cannot accept lent item");
-		} else if (!inv.hasSpace(player, Inv.LOAN_OFFER) || !inv.hasSpace(player, Inv.LOAN_RETURN)) {
-			chat.sendMessage(player, "You've already lent out an item; you cannot lend out any more items until it's been returned and you've collected it from your Returned Items box.");
-			chat.sendMessage(player, "Most bankers will let you access your Returned Items box.");
-		} else if (config.objLent(objId) === objId) {
-			chat.sendMessage(player, "That item cannot be lent.");
-		} else {
-			inv.take(player, objId, 1, Inv.BACKPACK, slot);
-			inv.give(player, objId, 1, Inv.LOAN_OFFER);
-			varbit(player, 1046, 0);
-			varbit(targetPlayer, 1047, 0);
-			//api.sendMessage(player, "Offering loan item: "+item+", slot="+slot);
-		}
-	}
-	
-	function removeItem (player, objId, amount, slot) {
-		amount = Math.min(amount, inv.total(player, objId, Inv.TRADE));
-		inv.take(player, objId, amount, Inv.TRADE, slot);
-		inv.give(player, objId, amount);
-		//api.sendMessage(player, "Removing item: item="+item+", slot="+slot+", amount="+amount);
-	}
-	
-	function removeLoanItem (player, objId) {
-		inv.take(player, objId, 1, Inv.LOAN_OFFER);
-		inv.give(player, objId, 1);
-		varbit(player, 1046, 0);
-		var targetPlayer = ENGINE.getInteractionTarget(player);
-		if (targetPlayer) {
-			varbit(targetPlayer, 1047, 0);
-		}
-	}
-	
-	function removeAll (player) {
-		ENGINE.setTradeAccepted(player, false);
-		var objId = inv.getObjId(player, Inv.LOAN_OFFER, 0);
-		if (objId !== -1) {
-			removeLoanItem(player, objId);
-		}
-		for (var slot=0; slot<28; slot++) {
-			objId = inv.getObjId(player, Inv.TRADE, slot);
-			if (objId !== -1) {
-				removeItem(player, objId, CONST.INTEGER_MAX, slot);
-			}
-		}
-		//Trade.refreshTrade(player);
+		logic.offerItem(player, CONST.COINS, amount);
 	}
 	
 	function refreshTrade (player) {
@@ -422,16 +358,6 @@ module.exports = (function () {
 		});
 	}
 	
-	function canAcceptLoanItems (player) {
-		if (varp(player, 430) > 0) {
-			return false;
-		} else if (varp(player, 428) != -1) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
 	function cancelTrade (player) {
 		var targetPlayer = ENGINE.getInteractionTarget(player);
 		if (targetPlayer) {
@@ -439,7 +365,7 @@ module.exports = (function () {
 			widget.closeOverlaySub(targetPlayer, 1008, false);
 			util.runClientScript(targetPlayer, 8862, [1, 2]);
 			util.runClientScript(targetPlayer, 8862, [1, 3]);
-			removeAll(targetPlayer);
+			logic.removeAll(targetPlayer);
 			ENGINE.clearInteractionTarget(targetPlayer);
 			chat.sendMessage(targetPlayer, "Other player declined trade.");
 		}
@@ -457,76 +383,17 @@ module.exports = (function () {
 			widget.setText(player, 335, 31, "Waiting for other player...");
 			widget.setText(player, 334, 14, "Waiting for other player...");
 		} else if (isConfirm) {
-			processTrade(player, targetPlayer);
+			logic.tradeItems(player, targetPlayer);
+			
+			widget.closeOverlaySub(player, 1007, false);
+			widget.closeAll(player);
+			widget.closeOverlaySub(targetPlayer, 1007, false);
+			widget.closeAll(targetPlayer);
 		} else {
 			widget.closeOverlaySub(targetPlayer, 1007, false);
 			widget.openCentral(targetPlayer, 334, false);
 			widget.closeOverlaySub(player, 1007, false);
 			widget.openCentral(player, 334, false);
 		}
-	}
-	
-	function getTotalTradeSize (player) {
-		return inv.usedSpace(player, Inv.TRADE) + inv.usedSpace(player, Inv.LOAN_OFFER);
-	}
-	
-	function hasSpaceForTrade (toPlayer, fromPlayer) {
-		var tradeSize = getTotalTradeSize(fromPlayer);
-		if (inv.freeSpace(toPlayer, Inv.BACKPACK) < tradeSize) {
-			return false;
-		} else {
-			for (var slot=0; slot<28; slot++) {
-				var objId = inv.getObjId(fromPlayer, Inv.TRADE, slot);
-				var count = inv.getCount(fromPlayer, Inv.TRADE, slot);
-				if (objId !== -1) {
-					if (util.checkOverflow(inv.total(toPlayer, objId), count)) {
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
-	
-	function sendTrade (fromPlayer, toPlayer) {
-		for (var slot=0; slot<28; slot++) {
-			var p1objId = inv.getObjId(fromPlayer, Inv.TRADE, slot);
-			var p1objCount = inv.getCount(fromPlayer, Inv.TRADE, slot);
-			if (p1objId !== -1) {
-				inv.clearSlot(fromPlayer, Inv.TRADE, slot);
-				inv.give(toPlayer, p1objId, p1objCount);
-			}
-		}
-	}
-	
-	function processTrade (player1, player2) {
-		if (!hasSpaceForTrade(player1, player2)) {
-			chat.sendMessage(player1, "You don't have enough space in your inventory for this trade.");
-			chat.sendMessage(player2, "Other player doesn't have enough space in their inventory for this trade.");
-		} else if (!hasSpaceForTrade(player2, player1)) {
-			chat.sendMessage(player2, "You don't have enough space in your inventory for this trade.");
-			chat.sendMessage(player1, "Other player doesn't have enough space in their inventory for this trade.");
-		} else {
-			var loanObj1 = inv.getObjId(player1, Inv.LOAN_OFFER, 0);
-			var loanObj2 = inv.getObjId(player2, Inv.LOAN_OFFER, 0);
-			var duration;
-			if (loanObj1 !== -1) {
-				duration = varbit(player1, 1046);
-				loan.lendItem(player1, player2, loanObj1, duration);
-			}
-			if (loanObj2 !== -1) {
-				duration = varbit(player2, 1046);
-				loan.lendItem(player2, player1, loanObj2, duration);
-			}
-			sendTrade(player1, player2);
-			sendTrade(player2, player1);
-			
-			chat.sendMessage(player1, "Accepted trade.");
-			chat.sendMessage(player2, "Accepted trade.");
-		}
-		widget.closeOverlaySub(player1, 1007, false);
-		widget.closeOverlaySub(player2, 1007, false);
-		widget.closeAll(player1);
-		widget.closeAll(player2);
 	}
 })();
