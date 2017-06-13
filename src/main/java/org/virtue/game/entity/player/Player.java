@@ -21,13 +21,12 @@
  */
 package org.virtue.game.entity.player;
 
-import io.netty.channel.Channel;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -38,6 +37,8 @@ import org.virtue.Virtue;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.vartype.VarDomainType;
+import org.virtue.engine.script.ScriptEventType;
+import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.MoneyPouch;
@@ -81,6 +82,8 @@ import org.virtue.network.protocol.update.ref.Viewport;
 import org.virtue.utility.ISAACCipher;
 import org.virtue.utility.text.Base37Utility;
 import org.virtue.utility.text.UsernameUtility;
+
+import io.netty.channel.Channel;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -457,6 +460,7 @@ public class Player extends Entity {
 			if (house != null) {
 				World.getInstance().getRegions().destroyDynamicRegion(house);
 			}
+			runLogoutScripts();
 			save();
 			break;
 		case LOBBY:
@@ -468,6 +472,18 @@ public class Player extends Entity {
 			break;
 		}
 		gameState = GameState.FINISHED;
+	}
+	
+	private void runLogoutScripts () {
+		ScriptManager scripts = Virtue.getInstance().getScripts();
+		if (scripts.hasBinding(ScriptEventType.PLAYER_LOGOUT, null)) {
+			
+			Map<String, Object> args = new HashMap<>();
+			args.put("player", this);
+			scripts.invokeScriptChecked(ScriptEventType.PLAYER_LOGOUT, null, args);
+		} else {
+			logger.warn("No logout event bound!");
+		}
 	}
 
 	public CompassPoint getDirection() {
@@ -920,7 +936,6 @@ public class Player extends Entity {
 			kick(true);
 		}
 		restoreRunEnergy();
-		var.process();
 		if (currentAction != null) {
 			try {
 				if (currentAction.process(this)) {

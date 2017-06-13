@@ -38,7 +38,6 @@ import org.virtue.config.vartype.constants.VarLifetime;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
@@ -58,7 +57,6 @@ public class VarRepository implements VarDomain {
 
 	private Player player;
 	private Map<Integer, Object> varValues = new HashMap<>();
-	private int tick = -1;
 	
 	private VarTypeList varTypes;
 	
@@ -306,69 +304,5 @@ public class VarRepository implements VarDomain {
 	 */
 	public void processLogin (long lastLoginTime) {
 		player.getMovement().setRunning(getVarValueInt(VarKey.Player.RUN_STATUS) == 1);
-		
-		/*//Checks the item currently being loaned
-		if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING)-tickDifference < 0) {
-			setVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING, 0);
-			if (player.getEquipment().destroyBorrowedItems()) {
-				player.getActionSender().sendGameMessage("");
-			}
-		} else {
-			incrementVarp(VarKey.Player.LOAN_FROM_TIME_REMAINING, -tickDifference);
-		}
-		//Checks the item currently loaned out
-		if (getVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING)-tickDifference < 0) {
-			setVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING, 0);
-		} else {
-			incrementVarp(VarKey.Player.LOAN_TO_TIME_REMAINING, -tickDifference);
-		}*/
-		this.tick = 1;
-	}
-	
-	/**
-	 * Processes the variables and changes any that need to be changed.
-	 * This should be run once every tick. 
-	 */
-	public void process () {
-		if (tick < 1) {
-			return;//This means the login processes haven't run yet
-		}
-		/*if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING) > 0) {
-			incrementVarp(VarKey.Player.LOAN_FROM_TIME_REMAINING, -1);
-			if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING) == 0) {
-				player.getEquipment().destroyBorrowedItems();
-			}
-		}
-		if (getVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING) > 0) {
-			incrementVarp(VarKey.Player.LOAN_TO_TIME_REMAINING, -1);
-			if (getVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING) == 0) {
-				player.getActionSender().sendGameMessage("Your item has been returned.");
-			}
-		}*/	
-		//Checks the player that the current item is loaned to
-		Object value = this.getVarValue(VarKey.Player.LOAN_TO_PLAYER);
-		if (value != null && value instanceof Player) {
-			if (!((Entity) value).exists()) {
-				Player p2 = (Player) value;
-				//().getEquipment().returnBorrowedItem();
-				player.getDispatcher().sendGameMessage(p2.getName()+" has returned the item "+(Gender.MALE.equals(p2.getModel().getGender()) ? "he" : "she")+" borrowed from you.");
-				player.getDispatcher().sendGameMessage("You may retrieve it from your Returned Items box by speaking to a banker.");
-				setVarValue(VarKey.Player.LOAN_TO_PLAYER, -1);
-			}
-		}
-		//Checks the player that the current item is loaned from
-		value = this.getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
-		if (value != null && value instanceof Player) {
-			if (!((Entity) value).exists()) {
-				player.getDispatcher().sendGameMessage("Your item has been returned.");
-				setVarValue(VarKey.Player.LOAN_FROM_PLAYER, -1);
-				player.getEquipment().destroyBorrowedItems();
-			}
-		}
-		this.tick++;
-	}
-	
-	public int getTick () {
-		return tick;
 	}
 }

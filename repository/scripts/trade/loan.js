@@ -40,6 +40,7 @@ module.exports = (function () {
 	return {
 		init : init,
 		processLogin : processLogin,
+		processLogout : processLogout,
 		lendItem : lendItem,
 		isBorrowing : isBorrowing
 	};
@@ -53,7 +54,7 @@ module.exports = (function () {
 	function isBorrowing (player) {
 		if (varp(player, 430) > 0) {
 			return false;
-		} else if (varp(player, 428) != -1) {
+		} else if (varp(player, 428)) {
 			return false;
 		} else {
 			return true;
@@ -111,6 +112,26 @@ module.exports = (function () {
 				varp(player, 431, varp(player, 431)-minutesPassed);
 				checkLentItem(player);
 			}
+		}
+	}
+	
+	function processLogout (ctx) {
+		var player = ctx.player;
+		var lentFrom = varp(player, 428);
+		if (lentFrom) {
+			chat.sendMessage(lentFrom, util.getName(player)+" has returned the item "+util.textGender(player, "he", "she")+" borrowed from you.");
+			chat.sendMessage(lentFrom, "You may retrieve it from your Returned Items box by speaking to a banker.");
+			
+			player.getEquipment().destroyBorrowedItems();
+			varp(player, 428, null);
+			varp(lentFrom, 429, null);
+		}
+		var loanTo = varp(player, 429);
+		if (loanTo) {
+			chat.sendMessage(loanTo, "Your item has been returned.");
+			loanTo.getEquipment().destroyBorrowedItems();
+			varp(player, 429, null);
+			varp(loanTo, 428, null);
 		}
 	}
 	
