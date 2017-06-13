@@ -22,14 +22,10 @@
 package org.virtue.game.entity.player.var;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.Virtue;
 import org.virtue.config.vartype.VarDomain;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
@@ -39,7 +35,6 @@ import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.config.vartype.constants.VarLifetime;
-import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
@@ -47,7 +42,6 @@ import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
-import org.virtue.utility.TimeUtility;
 
 /**
  * 
@@ -65,7 +59,6 @@ public class VarRepository implements VarDomain {
 	private Player player;
 	private Map<Integer, Object> varValues = new HashMap<>();
 	private int tick = -1;
-	private Set<VarListener> tickTasks = new HashSet<VarListener>();
 	
 	private VarTypeList varTypes;
 	
@@ -194,17 +187,10 @@ public class VarRepository implements VarDomain {
 	
 	
 	private void setVarValue(int key, Object value) {
-		Object oldValue = varValues.get(key);
 		if (value == null) {
 			varValues.remove(key);
 		} else {
 			varValues.put(key, value);
-		}
-		VarListener listener = Virtue.getInstance().getScripts().forVarID(key);
-		if (listener != null && player.exists() && tick > 0) {
-			if (listener.onValueChange(player, key, oldValue, value)) {
-				tickTasks.add(listener);
-			}
 		}
 	}
 
@@ -319,14 +305,7 @@ public class VarRepository implements VarDomain {
 	 * @param lastLoginTime The time, in milliseconds, of the last player login
 	 */
 	public void processLogin (long lastLoginTime) {
-		int tickDifference = (int) Math.abs(TimeUtility.getDifferenceInTicks(lastLoginTime, System.currentTimeMillis()));
 		player.getMovement().setRunning(getVarValueInt(VarKey.Player.RUN_STATUS) == 1);
-		
-		for (VarListener listener : Virtue.getInstance().getScripts().getVarListeners()) {
-			if (listener.onLogin(player, tickDifference)) {
-				tickTasks.add(listener);
-			}
-		}
 		
 		/*//Checks the item currently being loaned
 		if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING)-tickDifference < 0) {
@@ -353,15 +332,6 @@ public class VarRepository implements VarDomain {
 	public void process () {
 		if (tick < 1) {
 			return;//This means the login processes haven't run yet
-		}
-		Iterator<VarListener> iterator = tickTasks.iterator();
-		while (iterator.hasNext()) {
-			VarListener listener = iterator.next();
-			if (tick % listener.getProcessDelay() == 0) {
-				if (!listener.process(player, tick)) {
-					iterator.remove();
-				}
-			}
 		}
 		/*if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING) > 0) {
 			incrementVarp(VarKey.Player.LOAN_FROM_TIME_REMAINING, -1);

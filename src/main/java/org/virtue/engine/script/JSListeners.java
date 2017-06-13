@@ -24,8 +24,6 @@ package org.virtue.engine.script;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +43,6 @@ import org.virtue.engine.script.api.ScriptAPI;
 import org.virtue.engine.script.listeners.AbilityListener;
 import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.EventListener;
-import org.virtue.engine.script.listeners.VarListener;
-import org.virtue.engine.script.listeners.VarListenerWrapper;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.ChatOptionType;
 import org.virtue.game.content.dialogues.ChatheadEmoteType;
@@ -125,14 +121,10 @@ public class JSListeners implements ScriptManager {
 	 * A map centralising all event listeners into one place
 	 */
 	private Map<EventBind, EventListener> listeners;
-	
-	private Map<Integer, VarListener> varMap;
 
 	private Map<Integer, AbstractNPC> abstractNPCMap;
 
 	private Map<Integer, CombatHandler> combatScriptMap;
-	
-	private Map<Integer, VarListener> vars;
 	
 	private ScriptAPI scriptApi;
 	
@@ -156,8 +148,6 @@ public class JSListeners implements ScriptManager {
 		this.listeners = new HashMap<>();
 		this.abstractNPCMap = new HashMap<>();
 		this.combatScriptMap = new HashMap<>();
-		this.varMap = new HashMap<>();
-		this.vars = new HashMap<>();
 		this.scriptDir = scriptDir;
 		this.legacyScriptDir = new File(scriptDir, "legacy");
 		this.modules = new ArrayList<>();
@@ -254,7 +244,6 @@ public class JSListeners implements ScriptManager {
 				logger.warn("Legacy category {} does not exist!", categoryDir);
 			}
 		}
-		logger.info("Registerd " + varMap.size() + " Var Script(s).");
 		return success;
 	}
 
@@ -308,8 +297,6 @@ public class JSListeners implements ScriptManager {
 	public synchronized boolean reload() {
 		listeners.clear();
 		abstractNPCMap.clear();
-		varMap.clear();
-		vars.clear();
 		return load();
 	}
 	
@@ -451,20 +438,6 @@ public class JSListeners implements ScriptManager {
 		registerListener(eventTypeId, iface << 16 | (comp & 0xffff), listener);
 	}
 	
-	/**
-	 * Registers a {@link VarListener} which monitors player variables and is triggered when they change.
-	 * VarListeners also run once upon login, then on a regular basis if desired. Because of this, they do not have to be tied to a specific variable
-	 * @param listener The listener
-	 * @param varps The ids of the varps which will trigger the listener
-	 */
-	public void registerVarListener(VarListener listener, int[] varps) {
-		listener = new VarListenerWrapper(listener);//Use a wrapper to avoid issues with hashing (since the javascript version does not support proper hashing)
-		vars.put(Arrays.hashCode(varps), listener);
-		for (int id : varps) {
-			varMap.put(id, listener);
-		}
-	}
-	
 	public void registerAbilityListener(AbilityListener listener, int shortcut) {
 		ActionBar.getAbilities().put(listener.getAbilityID(), new ScriptedAbility(listener));
 	}
@@ -521,13 +494,5 @@ public class JSListeners implements ScriptManager {
 		} catch (Exception ex) {
 			logger.warn("Error executing script: type="+type+", trigger="+trigger, ex);
 		}
-	}
-	
-	public VarListener forVarID (int varp) {
-		return varMap.get(varp);
-	}
-	
-	public Collection<VarListener> getVarListeners () {
-		return vars.values();
 	}
 }
