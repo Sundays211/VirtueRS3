@@ -3,7 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./LunarIsle')
+		require('./lunar-isle')
 	];
 	
 	for (var i in modules) {
