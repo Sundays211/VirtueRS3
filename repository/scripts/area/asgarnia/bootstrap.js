@@ -3,9 +3,12 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    require('./15_Year_Anniversary'),
-		require('./xmas_2005'),
-		require('./xmas_2011')
+		require('./dark-wizards-tower'),
+		require('./ice-mountain'),
+		require('./mudskipper-point'),
+		require('./rimmington'),
+		require('./falador'),
+		require('./taverley')
 	];
 	
 	for (var i in modules) {

@@ -3,12 +3,9 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./DarkWizardsTower'),
-		require('./IceMountain'),
-		require('./MudskipperPoint'),
-		require('./Rimmington'),
-		require('./Falador'),
-		require('./Taverley')
+	    require('./15-year-anniversary'),
+		require('./xmas-2005'),
+		require('./xmas-2011')
 	];
 	
 	for (var i in modules) {
