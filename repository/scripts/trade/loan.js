@@ -42,12 +42,21 @@ module.exports = (function () {
 		processLogin : processLogin,
 		processLogout : processLogout,
 		lendItem : lendItem,
-		isBorrowing : isBorrowing
+		isBorrowing : isBorrowing,
+		returnBorrowedItem : returnBorrowedItem
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.COMMAND_ADMIN, "loan", function () {
-			
+		scriptManager.bind(EventType.COMMAND_ADMIN, "testloan", function (ctx) {
+			var args = ctx.cmdArgs;
+			var objId = 4151, duration=1;
+			if (args.length > 0) {
+				objId = args[0];
+			}
+			if (args.length > 1) {
+				duration = args[1];
+			}
+			lendItem(ctx.player, ctx.player, objId, duration);
 		});
 	}
 	
@@ -62,7 +71,6 @@ module.exports = (function () {
 	}
 	
 	function lendItem (fromPlayer, toPlayer, objId, duration) {
-		inv.take(fromPlayer, objId, 1, Inv.LOAN_OFFER);
 		inv.give(fromPlayer, objId, 1, Inv.LOAN_RETURN);
 		
 		var lentId = config.objLent(objId);
@@ -94,7 +102,7 @@ module.exports = (function () {
 		if (varp(player, 430)) {
 			if (varp(player, 430)-minutesPassed < 0) {
 				varp(player, 430, 0);
-				if (player.getEquipment().destroyBorrowedItems()) {
+				if (destroyBorrowedItems(player)) {
 					chat.sendMessage(player, "The item you were borrowing has been returned.");
 				}
 			} else {
@@ -122,14 +130,14 @@ module.exports = (function () {
 			chat.sendMessage(lentFrom, util.getName(player)+" has returned the item "+util.textGender(player, "he", "she")+" borrowed from you.");
 			chat.sendMessage(lentFrom, "You may retrieve it from your Returned Items box by speaking to a banker.");
 			
-			player.getEquipment().destroyBorrowedItems();
+			destroyBorrowedItems(player);
 			varp(player, 428, null);
 			varp(lentFrom, 429, null);
 		}
 		var loanTo = varp(player, 429);
 		if (loanTo) {
 			chat.sendMessage(loanTo, "Your item has been returned.");
-			loanTo.getEquipment().destroyBorrowedItems();
+			destroyBorrowedItems(loanTo);
 			varp(player, 429, null);
 			varp(loanTo, 428, null);
 		}
@@ -140,7 +148,7 @@ module.exports = (function () {
 			if (varp(player, 430) > 0) {
 				varp(player, 430, varp(player, 430)-1);
 				if (varp(player, 430) === 0) {
-					player.getEquipment().destroyBorrowedItems();
+					destroyBorrowedItems(player);
 				} else {
 					checkLoanedItem(player);
 				}
@@ -159,5 +167,45 @@ module.exports = (function () {
 				}
 			}
 		}, false);
+	}
+	
+	function returnBorrowedItem (player) {
+		var lentFrom = varp(player, 428);
+		if (lentFrom) {
+			varp(player, 428, null);	
+			varp(player, 430, 0);
+			varp(lentFrom, 429, null);
+			chat.sendMessage(lentFrom, util.getName(player)+" has returned the item "+util.textGender(player, "he", "she")+" borrowed from you.");
+			chat.sendMessage(lentFrom, "You may retrieve it from your Returned Items box by speaking to a banker.");
+		}		
+	}
+	
+	function destroyBorrowedItems (player) {
+		var slot, objId;
+		for (slot=0; slot<inv.size(Inv.EQUIPMENT); slot++) {
+			objId = inv.getObjId(player, Inv.EQUIPMENT, slot);
+			if (objId !== -1 && config.objUnlent(objId) != objId) {
+				inv.clearSlot(player, Inv.EQUIPMENT, slot);
+				return true;
+			}
+		}
+		for (slot=0; slot<inv.size(Inv.BACKPACK); slot++) {
+			objId = inv.getObjId(player, Inv.EQUIPMENT, slot);
+			if (objId !== -1 && config.objUnlent(objId) != objId) {
+				inv.clearSlot(player, Inv.BACKPACK, slot);
+				return true;
+			}
+		}
+		for (slot=0; slot<inv.size(Inv.BANK); slot++) {
+			objId = inv.getObjId(player, Inv.BANK, slot);
+			if (objId === -1) {
+				break;
+			}
+			if (config.objUnlent(objId) != objId) {
+				inv.clearSlot(player, Inv.BANK, slot);
+				return true;
+			}
+		}
+		return false;
 	}
 })();

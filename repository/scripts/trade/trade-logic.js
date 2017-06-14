@@ -119,10 +119,12 @@ module.exports = (function () {
 			var duration;
 			if (loanObj1 !== -1) {
 				duration = varbit(player1, 1046);
+				inv.take(player1, loanObj1, 1, Inv.LOAN_OFFER);
 				loan.lendItem(player1, player2, loanObj1, duration);
 			}
 			if (loanObj2 !== -1) {
 				duration = varbit(player2, 1046);
+				inv.take(player2, loanObj2, 1, Inv.LOAN_OFFER);
 				loan.lendItem(player2, player1, loanObj2, duration);
 			}
 			sendTrade(player1, player2);

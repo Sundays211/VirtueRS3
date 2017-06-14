@@ -303,57 +303,6 @@ public class EquipmentManager {
 		return true;
 	}
 	
-	public void returnBorrowedItem () {
-		if (player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER) != null
-				&& player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER) instanceof Player) {
-			Player owner = (Player) player.getVars().getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
-			if (owner.exists()) {
-				owner.getVars().setVarValueInt(VarKey.Player.LOAN_TO_PLAYER, -1);
-				owner.getDispatcher().sendGameMessage(player.getName()+" has returned the item "+(Gender.MALE.equals(player.getModel().getGender()) ? "he" : "she")+" borrowed from you.");
-				owner.getDispatcher().sendGameMessage("You may retrieve it from your Returned Items box by speaking to a banker.");
-			}
-		}		
-	}
-	
-	public boolean destroyBorrowedItems () {
-		Inventory equipment = player.getInvs().getContainer(ContainerState.EQUIPMENT);
-		for (int slot=0; slot<equipment.getSize(); slot++) {
-			Item item = equipment.get(slot);
-			if (item != null && item.getType().lenttemplate != -1) {
-				equipment.clearSlot(slot);
-				player.getInvs().updateContainer(ContainerState.EQUIPMENT, slot);
-				player.getModel().refresh();
-				return true;
-			}
-		}
-		Inventory backpack = player.getInvs().getContainer(ContainerState.BACKPACK);
-		for (int slot=0; slot<backpack.getSize(); slot++) {
-			Item item = backpack.get(slot);
-			if (item != null && item.getType().lenttemplate != -1) {
-				backpack.clearSlot(slot);
-				player.getInvs().updateContainer(ContainerState.BACKPACK, slot);
-				return true;
-			}
-		}
-		
-		Inventory bank = player.getInvs().getContainer(ContainerState.BANK);
-		if (bank == null){
-			return false;
-		}
-		for (int slot=0; slot<bank.getSize(); slot++) {
-			Item item = bank.get(slot);
-			if (item == null) {
-				break;
-			}
-			if (item.getType().lenttemplate != -1) {
-				bank.clearSlot(slot);
-				player.getInvs().updateContainer(ContainerState.BANK, slot);
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public void updateCapeOverrides () {
 		if (CUSTOMISABLE_CAPES.contains(getWornId(SLOT_CAPE))) {
 			short[] colours = new short[4];
