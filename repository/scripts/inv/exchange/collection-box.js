@@ -50,7 +50,7 @@ module.exports = (function () {
 			//Check script 654
 			//Container 540 for loaned items?
 			switch (ctx.component) {
-			case 20://Reclaim item
+			case 19://Reclaim item
 				if (ctx.button === 1) {
 					if (varp(player, 431) > 0) {
 						util.defaultHandler(ctx, "collection box");
@@ -61,7 +61,7 @@ module.exports = (function () {
 						util.defaultHandler(ctx, "collection box");
 						return;
 					} else {
-						if (inv.hasSpace(player, 1, Inv.BACKPACK)) {
+						if (!inv.hasSpace(player)) {
 							chat.sendMessage(player, "Not enough space.");
 							return;
 						}

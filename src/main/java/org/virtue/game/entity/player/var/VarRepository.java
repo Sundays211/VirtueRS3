@@ -146,39 +146,41 @@ public class VarRepository implements VarDomain {
 	 */
 	@Override
 	public void setVarValue(VarType varType, Object value) {
-		switch (varType.dataType.getVarBaseType()) {
-		case INTEGER:
-			switch (varType.dataType) {
-			case PLAYER_UID:
-				if ((value instanceof Player)) {
-					value = ((Entity) value).getIndex();
+		if (value != null) {
+			switch (varType.dataType.getVarBaseType()) {
+			case INTEGER:
+				switch (varType.dataType) {
+				case PLAYER_UID:
+					if ((value instanceof Player)) {
+						value = ((Entity) value).getIndex();
+					}
+					break;
+				case COORDGRID:
+					if ((value instanceof Tile)) {
+						value = ((Tile) value).getTileHash();
+					}
+					break;
+	 			default:
+					
+				}
+				if (!(value instanceof Integer)) {
+					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
 				}
 				break;
-			case COORDGRID:
-				if ((value instanceof Tile)) {
-					value = ((Tile) value).getTileHash();
+			case LONG:
+				if (!(value instanceof Long)) {
+					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected long, found "+value.getClass());
 				}
 				break;
- 			default:
-				
+			case STRING:
+				if (!(value instanceof String)) {
+					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected "+String.class+", found "+value.getClass());
+				}
+				break;		
 			}
-			if (!(value instanceof Integer)) {
-				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
+			if (value == varType.dataType.getDefaultValue()) {
+				value = null;
 			}
-			break;
-		case LONG:
-			if (!(value instanceof Long)) {
-				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected long, found "+value.getClass());
-			}
-			break;
-		case STRING:
-			if (!(value instanceof String)) {
-				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected "+String.class+", found "+value.getClass());
-			}
-			break;		
-		}
-		if (value == varType.dataType.getDefaultValue()) {
-			value = null;
 		}
 		setVarValue(varType.id, value);
 	}
@@ -197,10 +199,19 @@ public class VarRepository implements VarDomain {
 	 */
 	@Override
 	public Object getVarValue(VarType varType) {
-		Object value = getVarValue(varType.id);
-		if (value == null) {
-			return varType.dataType.getDefaultValue();
+		Object value;
+		if (!varValues.containsKey(varType.id)) {
+			value = varType.dataType.getDefaultValue();
+		} else {
+			value = translateValue(getVarValue(varType.id), varType);
+			if (value == null) {
+				value = varType.dataType.getDefaultValue();
+			}
 		}
+		return value;
+	}
+	
+	private Object translateValue (Object value, VarType varType) {
 		switch (varType.dataType) {
 		case PLAYER_UID:
 			return World.getInstance().getPlayers().get((Integer) value);

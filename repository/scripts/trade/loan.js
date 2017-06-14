@@ -49,7 +49,7 @@ module.exports = (function () {
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "testloan", function (ctx) {
 			var args = ctx.cmdArgs;
-			var objId = 4151, duration=1;
+			var objId = 4151, duration=0;
 			if (args.length > 0) {
 				objId = args[0];
 			}
@@ -63,7 +63,7 @@ module.exports = (function () {
 	function isBorrowing (player) {
 		if (varp(player, 430) > 0) {
 			return false;
-		} else if (varp(player, 428)) {
+		} else if (varp(player, 428) !== -1) {
 			return false;
 		} else {
 			return true;
@@ -89,7 +89,7 @@ module.exports = (function () {
 		}
 		chat.sendMessage(toPlayer, "The borrowed item will be returned to the owner's Returned Items box, "+
 				"immediately, if either you or "+util.textGender(toPlayer, "he", "she")+" logs out.");
-		chat.sendMessage(fromPlayer, "Your item has been lent to "+util.getName(toPlayer)+"."+
+		chat.sendMessage(fromPlayer, "Your item has been lent to "+util.getName(toPlayer)+". "+
 				"It will be sent to your Returned Items box if either you or "+util.getName(toPlayer)+" logs out.");
 		chat.sendMessage(fromPlayer, "Speak to a banker to view your returned item box.");
 	}
@@ -126,7 +126,7 @@ module.exports = (function () {
 	function processLogout (ctx) {
 		var player = ctx.player;
 		var lentFrom = varp(player, 428);
-		if (lentFrom) {
+		if (lentFrom !== -1) {
 			chat.sendMessage(lentFrom, util.getName(player)+" has returned the item "+util.textGender(player, "he", "she")+" borrowed from you.");
 			chat.sendMessage(lentFrom, "You may retrieve it from your Returned Items box by speaking to a banker.");
 			
@@ -135,7 +135,7 @@ module.exports = (function () {
 			varp(lentFrom, 429, null);
 		}
 		var loanTo = varp(player, 429);
-		if (loanTo) {
+		if (loanTo !== -1) {
 			chat.sendMessage(loanTo, "Your item has been returned.");
 			destroyBorrowedItems(loanTo);
 			varp(player, 429, null);
@@ -171,13 +171,13 @@ module.exports = (function () {
 	
 	function returnBorrowedItem (player) {
 		var lentFrom = varp(player, 428);
-		if (lentFrom) {
-			varp(player, 428, null);	
-			varp(player, 430, 0);
+		if (lentFrom !== -1) {
 			varp(lentFrom, 429, null);
 			chat.sendMessage(lentFrom, util.getName(player)+" has returned the item "+util.textGender(player, "he", "she")+" borrowed from you.");
 			chat.sendMessage(lentFrom, "You may retrieve it from your Returned Items box by speaking to a banker.");
-		}		
+		}
+		varp(player, 428, null);	
+		varp(player, 430, 0);	
 	}
 	
 	function destroyBorrowedItems (player) {
