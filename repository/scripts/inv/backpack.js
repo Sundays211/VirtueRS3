@@ -32,6 +32,8 @@ var chat = require('../chat');
 
 var moneyPouch = require('./money-pouch');
 var wornEquipment = require('./worn-equipment');
+var common = require('./common');
+var loan = require('../trade/loan');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -158,6 +160,7 @@ module.exports = (function() {
 	
 	function handleItemInteraction (player, item, ctx) {
 		var objId = util.getId(item);
+		var objCount = ENGINE.getCount(item);
 		var opString, eventType;
 		switch (ctx.button) {
 		case 1://Iop1
@@ -193,6 +196,7 @@ module.exports = (function() {
 					"player" : player,
 					"item" : item,
 					"objId" : objId,
+					"objCount" : objCount,
 					"slot" : ctx.slot
 			};
 			ENGINE.invokeEvent(eventType, objId, args);
@@ -202,11 +206,11 @@ module.exports = (function() {
 		} else if (eventType == EventType.OPHELD5 &&
 				(opString == "Drop" || opString == "Destroy" || opString == "Discard")) {
 			if (opString == "Drop") {
-				dropItem(player, item, ctx.slot);
+				dropItem(player, objId, objCount, ctx.slot);
 			} else if ("Destroy" == opString) {
-				destroyItem(player, item, ctx.slot);
+				destroyItem(player, objId, ctx.slot);
 			} else if ("Discard" == opString) {
-				discardItem(player, item, ctx.slot);
+				discardItem(player, objId, ctx.slot);
 			}
 		} else {
 			chat.sendDebugMessage(player, "Unhanded inventory item option: item="+item+", slot="+ctx.slot+", option="+opString+" ("+ctx.button+")");
@@ -351,29 +355,27 @@ module.exports = (function() {
 		}
 	}
 	
-	function dropItem (player, item, slot) {
+	function dropItem (player, objId, count, slot) {
 		//The item you are about to drop has high value.
 		//I wish to drop it.
 		//I wish to keep it.
-		if (item !== null) {
-			ENGINE.dropItem(map.getCoords(player), util.getId(item), ENGINE.getCount(item), player);
-			ENGINE.setInvSlot(player, Inv.BACKPACK, slot, null);
+		if (objId !== -1) {
+			map.dropObj(objId, map.getCoords(player), player, count);
+			common.clearSlot(player, Inv.BACKPACK, slot);
 		}
 	}
 	
-	function destroyItem (player, item, slot) {
+	function destroyItem (player, objId, slot) {
 		//Are you sure you want to destroy this object?
 		//You can get a new one from....
-		chat.sendDebugMessage(player, "Destroyed item: "+util.getId(item));
-		ENGINE.setInvSlot(player, Inv.BACKPACK, slot, null);
+		chat.sendDebugMessage(player, "Destroyed item: "+objId);
+		common.clearSlot(player, Inv.BACKPACK, slot);
 	}
 	
-	function discardItem (player, item, slot) {
+	function discardItem (player, objId, slot) {
 		var discard = function () {
-			ENGINE.delItem(player, Inv.BACKPACK, util.getId(item), 1, slot);
-			player.getEquipment().returnBorrowedItem();
-			varp(player, 428, -1);	
-			varp(player, 430, 0);
+			common.clearSlot(player, Inv.BACKPACK, slot);
+			loan.returnBorrowedItem(player);
 		};
 		
 		var timeRemaining = varp(player, 430);
@@ -382,12 +384,12 @@ module.exports = (function() {
 		if (timeRemaining > 0) {
 			message = "<center>~Loan expires in "+util.toFormattedTime(timeRemaining)+"~</center><br>";
 			message += "If you discard this item, it will disappear. You won't be able to pick it up again.";
-			dialog.mesbox(player, message).requestConfirm("Discard the item?").then(discard).finish();
+			dialog.mesbox(player, message).confirm("Discard the item?").then(discard).finish();
 		} else if (loanFrom !== null && loanFrom != -1) {
 			message = "<center>~Session-based loan~</center><br>";
 			message += "If you discard this item, it will return to its owner, "+util.getName(loanFrom);
 			message += ". You won't be able to pick it up again.";
-			dialog.mesbox(player, message).requestConfirm("Discard the item?").then(discard).finish();
+			dialog.mesbox(player, message).confirm("Discard the item?").then(discard).finish();
 		} else {
 			discard();//Destroy immediately, as the player should not still have the item.
 		}

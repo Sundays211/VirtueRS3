@@ -19,6 +19,7 @@ function getAllModules () {// jshint ignore:line
 		'clan',
 		'inv',
 		'shop',
+		'trade',
 		'map/commands',
 		'skill/agility',
 		'skill/prayer',
@@ -89,6 +90,7 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 	}
 	
 	registerLoginEvents(scriptManager, cwd);
+	registerLogoutEvents(scriptManager, cwd);
 	
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
@@ -103,7 +105,8 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 
 function registerLoginEvents (scriptManager, cwd) {
 	var loginModules = [
-		require(cwd+'/skill/farming/growth-cycle')
+		require(cwd+'/skill/farming/growth-cycle'),
+		require(cwd+'/trade/loan')
 	];
 	
 	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
@@ -115,4 +118,20 @@ function registerLoginEvents (scriptManager, cwd) {
 	});
 	
 	scriptManager.registerListener(EventType.PLAYER_LOGIN, new Listener());
+}
+
+function registerLogoutEvents (scriptManager, cwd) {
+	var logoutModules = [
+		require(cwd+'/trade/loan')
+	];
+	
+	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
+		invoke : function (eventType, trigger, args) {
+			for (var i in logoutModules) {
+				logoutModules[i].processLogout(args);
+			}
+		}
+	});
+	
+	scriptManager.registerListener(EventType.PLAYER_LOGOUT, new Listener());
 }

@@ -26,6 +26,7 @@ function init () {
 		toBase37Hash : toBase37Hash,
 		toFormattedString : toFormattedString,
 		toFormattedTime : toFormattedTime,
+		textGender : textGender,
 		delayFunction : delayFunction,
 		runClientScript : runClientScript,
 		getServerCycle : getServerCycle,
@@ -125,6 +126,10 @@ function init () {
 	
 	function toFormattedTime (time) {
 		return ENGINE.getFormattedTime(time);
+	}
+	
+	function textGender(player, male, female) {
+		return ENGINE.isFemale(player) ? female : male;
 	}
 	
 	/**

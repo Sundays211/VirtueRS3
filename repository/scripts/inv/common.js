@@ -27,6 +27,7 @@ function init() {
 			 * @param objId The item to remove
 			 * @param count The number of items to remove
 			 * @param invId The inventory to remove items from. Defaults to BACKPACK
+			 * @param slot The slot to remove from
 			 */
 			take : take,
 			
@@ -73,6 +74,15 @@ function init() {
 			 * @return The number of empty slots
 			 */
 			freeSpace : freeSpace,
+			
+			/**
+			 * Gets the number of slots currently used in the specified inventory
+			 * 
+			 * @param player The player to check
+			 * @param inv The inventory ID to check
+			 * @return The number of used slots
+			 */
+			usedSpace : usedSpace,
 			
 			/**
 			 * Replaces the item currently in the specified slot with the specified item 
@@ -129,8 +139,9 @@ function init() {
 	 * @param objId The item to remove
 	 * @param count The number of items to remove
 	 * @param invId The inventory to remove items from. Defaults to BACKPACK
+	 * @param slot The slot to remove from
 	 */
-	function take (player, objId, count, invId) {
+	function take (player, objId, count, invId, slot) {
 		invId = typeof invId !== "undefined" ? invId : Inv.BACKPACK;
 		
 		if (objId == COINS && invId == Inv.BACKPACK) {
@@ -138,7 +149,11 @@ function init() {
 			MoneyPouch.removeCoins(player, coinsToRemove);
 			count -= coinsToRemove;
 		}
-		ENGINE.delItem(player, invId, objId, count);
+		if (typeof(slot) !== "undefined") {
+			ENGINE.delItem(player, invId, objId, count, slot);
+		} else {
+			ENGINE.delItem(player, invId, objId, count);
+		}
 	}
 	
 	/**
@@ -231,11 +246,36 @@ function init() {
 		return ENGINE.freeSpaceTotal(player, inv);
 	}
 	
+	/**
+	 * Gets the number of slots currently used in the specified inventory
+	 * 
+	 * @param player The player to check
+	 * @param inv The inventory ID to check
+	 * @return The number of used slots
+	 */
+	function usedSpace(player, inv) {
+		return invSize(inv) - freeSpace(player, inv);
+	}
+	
+	/**
+	 * Gets the object ID at the given slot in the given inventory
+	 * Returns -1 if there is no item in the slot
+	 * @param player The player to check
+	 * @param inv The inventory to check
+	 * @param slot The slot to fetch from
+	 */
 	function getObjId (player, inv, slot) {
 		var item = ENGINE.getItem(player, inv, slot);
 		return item === null ? -1 : ENGINE.getId(item);
 	}
 	
+	/**
+	 * Gets the number of items in the given slot in the given inventory
+	 * Returns -1 if there is no item in the slot
+	 * @param player The player to check
+	 * @param inv The inventory to check
+	 * @param slot The slot to fetch from
+	 */
 	function getCount (player, inv, slot) {
 		var item = ENGINE.getItem(player, inv, slot);
 		return item === null ? 0 : ENGINE.getCount(item);

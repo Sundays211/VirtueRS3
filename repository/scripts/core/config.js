@@ -21,6 +21,9 @@ function init () {
 		objIop : objIop,
 		objCert : objCert,
 		objUncert : objUncert,
+		objLent : objLent,
+		objUnlent : objUnlent,
+		objTradable : objTradable,
 		objSellToGeneralStore : objSellToGeneralStore,
 		objParam : objParam,
 		lookupDbRowId : lookupDbRowId,
@@ -93,6 +96,18 @@ function init () {
 	
 	function objUncert (objId) {
 		return configApi.objUncert(objId);
+	}
+	
+	function objLent (objId) {
+		return configApi.objLent(objId);
+	}
+	
+	function objUnlent (objId) {
+		return configApi.objUnlent(objId);
+	}
+	
+	function objTradable (objId) {
+		return ENGINE.getItemType(objId).isTradable();
 	}
 	
 	function objSellToGeneralStore (objId) {
