@@ -3,7 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./player-moderator-room')
+		require('./lunar-isle')
 	];
 	
 	for (var i in modules) {

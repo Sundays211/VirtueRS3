@@ -22,14 +22,10 @@
 package org.virtue.game.entity.player.var;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.Virtue;
 import org.virtue.config.vartype.VarDomain;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
@@ -39,15 +35,12 @@ import org.virtue.config.vartype.bit.VarBitType;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.config.vartype.constants.VarLifetime;
-import org.virtue.engine.script.listeners.VarListener;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.game.world.region.Tile;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
-import org.virtue.utility.TimeUtility;
 
 /**
  * 
@@ -64,8 +57,6 @@ public class VarRepository implements VarDomain {
 
 	private Player player;
 	private Map<Integer, Object> varValues = new HashMap<>();
-	private int tick = -1;
-	private Set<VarListener> tickTasks = new HashSet<VarListener>();
 	
 	private VarTypeList varTypes;
 	
@@ -155,56 +146,51 @@ public class VarRepository implements VarDomain {
 	 */
 	@Override
 	public void setVarValue(VarType varType, Object value) {
-		switch (varType.dataType.getVarBaseType()) {
-		case INTEGER:
-			switch (varType.dataType) {
-			case PLAYER_UID:
-				if ((value instanceof Player)) {
-					value = ((Entity) value).getIndex();
+		if (value != null) {
+			switch (varType.dataType.getVarBaseType()) {
+			case INTEGER:
+				switch (varType.dataType) {
+				case PLAYER_UID:
+					if ((value instanceof Player)) {
+						value = ((Entity) value).getIndex();
+					}
+					break;
+				case COORDGRID:
+					if ((value instanceof Tile)) {
+						value = ((Tile) value).getTileHash();
+					}
+					break;
+	 			default:
+					
+				}
+				if (!(value instanceof Integer)) {
+					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
 				}
 				break;
-			case COORDGRID:
-				if ((value instanceof Tile)) {
-					value = ((Tile) value).getTileHash();
+			case LONG:
+				if (!(value instanceof Long)) {
+					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected long, found "+value.getClass());
 				}
 				break;
- 			default:
-				
+			case STRING:
+				if (!(value instanceof String)) {
+					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected "+String.class+", found "+value.getClass());
+				}
+				break;		
 			}
-			if (!(value instanceof Integer)) {
-				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
+			if (value == varType.dataType.getDefaultValue()) {
+				value = null;
 			}
-			break;
-		case LONG:
-			if (!(value instanceof Long)) {
-				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected long, found "+value.getClass());
-			}
-			break;
-		case STRING:
-			if (!(value instanceof String)) {
-				throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected "+String.class+", found "+value.getClass());
-			}
-			break;		
-		}
-		if (value == varType.dataType.getDefaultValue()) {
-			value = null;
 		}
 		setVarValue(varType.id, value);
 	}
 	
 	
 	private void setVarValue(int key, Object value) {
-		Object oldValue = varValues.get(key);
 		if (value == null) {
 			varValues.remove(key);
 		} else {
 			varValues.put(key, value);
-		}
-		VarListener listener = Virtue.getInstance().getScripts().forVarID(key);
-		if (listener != null && player.exists() && tick > 0) {
-			if (listener.onValueChange(player, key, oldValue, value)) {
-				tickTasks.add(listener);
-			}
 		}
 	}
 
@@ -213,10 +199,19 @@ public class VarRepository implements VarDomain {
 	 */
 	@Override
 	public Object getVarValue(VarType varType) {
-		Object value = getVarValue(varType.id);
-		if (value == null) {
-			return varType.dataType.getDefaultValue();
+		Object value;
+		if (!varValues.containsKey(varType.id)) {
+			value = varType.dataType.getDefaultValue();
+		} else {
+			value = translateValue(getVarValue(varType.id), varType);
+			if (value == null) {
+				value = varType.dataType.getDefaultValue();
+			}
 		}
+		return value;
+	}
+	
+	private Object translateValue (Object value, VarType varType) {
 		switch (varType.dataType) {
 		case PLAYER_UID:
 			return World.getInstance().getPlayers().get((Integer) value);
@@ -319,86 +314,6 @@ public class VarRepository implements VarDomain {
 	 * @param lastLoginTime The time, in milliseconds, of the last player login
 	 */
 	public void processLogin (long lastLoginTime) {
-		int tickDifference = (int) Math.abs(TimeUtility.getDifferenceInTicks(lastLoginTime, System.currentTimeMillis()));
 		player.getMovement().setRunning(getVarValueInt(VarKey.Player.RUN_STATUS) == 1);
-		
-		for (VarListener listener : Virtue.getInstance().getScripts().getVarListeners()) {
-			if (listener.onLogin(player, tickDifference)) {
-				tickTasks.add(listener);
-			}
-		}
-		
-		/*//Checks the item currently being loaned
-		if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING)-tickDifference < 0) {
-			setVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING, 0);
-			if (player.getEquipment().destroyBorrowedItems()) {
-				player.getActionSender().sendGameMessage("");
-			}
-		} else {
-			incrementVarp(VarKey.Player.LOAN_FROM_TIME_REMAINING, -tickDifference);
-		}
-		//Checks the item currently loaned out
-		if (getVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING)-tickDifference < 0) {
-			setVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING, 0);
-		} else {
-			incrementVarp(VarKey.Player.LOAN_TO_TIME_REMAINING, -tickDifference);
-		}*/
-		this.tick = 1;
-	}
-	
-	/**
-	 * Processes the variables and changes any that need to be changed.
-	 * This should be run once every tick. 
-	 */
-	public void process () {
-		if (tick < 1) {
-			return;//This means the login processes haven't run yet
-		}
-		Iterator<VarListener> iterator = tickTasks.iterator();
-		while (iterator.hasNext()) {
-			VarListener listener = iterator.next();
-			if (tick % listener.getProcessDelay() == 0) {
-				if (!listener.process(player, tick)) {
-					iterator.remove();
-				}
-			}
-		}
-		/*if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING) > 0) {
-			incrementVarp(VarKey.Player.LOAN_FROM_TIME_REMAINING, -1);
-			if (getVarValueInt(VarKey.Player.LOAN_FROM_TIME_REMAINING) == 0) {
-				player.getEquipment().destroyBorrowedItems();
-			}
-		}
-		if (getVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING) > 0) {
-			incrementVarp(VarKey.Player.LOAN_TO_TIME_REMAINING, -1);
-			if (getVarValueInt(VarKey.Player.LOAN_TO_TIME_REMAINING) == 0) {
-				player.getActionSender().sendGameMessage("Your item has been returned.");
-			}
-		}*/	
-		//Checks the player that the current item is loaned to
-		Object value = this.getVarValue(VarKey.Player.LOAN_TO_PLAYER);
-		if (value != null && value instanceof Player) {
-			if (!((Entity) value).exists()) {
-				Player p2 = (Player) value;
-				//().getEquipment().returnBorrowedItem();
-				player.getDispatcher().sendGameMessage(p2.getName()+" has returned the item "+(Gender.MALE.equals(p2.getModel().getGender()) ? "he" : "she")+" borrowed from you.");
-				player.getDispatcher().sendGameMessage("You may retrieve it from your Returned Items box by speaking to a banker.");
-				setVarValue(VarKey.Player.LOAN_TO_PLAYER, -1);
-			}
-		}
-		//Checks the player that the current item is loaned from
-		value = this.getVarValue(VarKey.Player.LOAN_FROM_PLAYER);
-		if (value != null && value instanceof Player) {
-			if (!((Entity) value).exists()) {
-				player.getDispatcher().sendGameMessage("Your item has been returned.");
-				setVarValue(VarKey.Player.LOAN_FROM_PLAYER, -1);
-				player.getEquipment().destroyBorrowedItems();
-			}
-		}
-		this.tick++;
-	}
-	
-	public int getTick () {
-		return tick;
 	}
 }
