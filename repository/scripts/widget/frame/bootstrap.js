@@ -3,7 +3,6 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	require('./JModToolBox'),
 	    require('./Lodestone'),
 	    require('./world-map'),
 	    require('./skill-tab'),

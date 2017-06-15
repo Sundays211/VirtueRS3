@@ -9,7 +9,6 @@ module.exports = function (scriptManager) {
 		require('./HolidayItems-TreasureHunterItems'),
 		require('./MusicBox'),
 		require('./Potions'),
-		require('./RottenPotato'),
 		require('./Teletabs')
 	];
 	

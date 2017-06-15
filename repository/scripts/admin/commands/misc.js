@@ -6,79 +6,38 @@ var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
 var Tile = Java.type('org.virtue.game.world.region.Tile');
 
 
-var Gender = Java.type('org.virtue.game.entity.player.PlayerModel.Gender');
 
-/** An better optimize way, instead having tons of seperate command files.
+/** 
  * @author Kayla
  * @date 11/28/2015
  */
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.COMMAND_ADMIN, "root", function (ctx) {
+			var parent = parseInt(args[0]);
+			player.getDispatcher().sendRootWidget(parent);
+		});
+		
+		var commands = [ "bc", "gfx", "graphic", "gender", "music", "inter",
+				"root", "widget", "if", "priceReload", "reloadPrice", "adr", "hair",
+				"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow", "spot", "spotanim",
+				"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
+				"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey","xtest"];
+		var listener = new EventListener();
+		for (var i in commands) {
+		}	
+	}
+})();
 
 var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, syntax, scriptArgs) {
 		var player = scriptArgs.player;
 		var args = scriptArgs.cmdArgs;
 		switch (syntax) {
-		case "bc":
-			if (args.length < 1) {
-				sendCommandResponse(player, "<col=0099CC>ERROR! Message is to short or needs a space</col>", scriptArgs.console);
-				return;
-			}
-			var message = args[0].charAt(0).toUpperCase() + args[0].substr(1).toLowerCase();
-			for (var i = 1; i < args.length; i++) {
-				message += " "+args[i];
-			}
-			World.getInstance().sendAdminBroadcast("[" + api.getName(player) + "]: " + message);
-			sendCommandResponse(player, "Sent Broadcast accross the server.", args.console);
-			return;
-		case "npc":
-			if (args.length == 0 || isNaN(args[0])) {
-				api.sendConsoleMessage(player, "Usage: "+syntax+" [posX] [posY] [posZ]");
-				return;
-			}
-			var npcID = parseInt(args[0]);
-			var npc = api.createNpc(npcID, api.getCoords(player));
-			api.spawnNpc(npc);
-			npc.getCombatSchedule().lock(player);
-			return;
-		case "anim":
-			if (args.length < 1 || isNaN(args[0])) {
-				sendCommandResponse(player, "Usage: "+syntax+" [id]", scriptArgs.console);
-				return;
-			}
-			var animId = parseInt(args[0]);
-			runAnimation(player, animId, function () {
-				api.sendMessage(player, "Finished animation "+animId);
-			});
-			sendCommandResponse(player, "Running animation "+animId, scriptArgs.console);
-			return;
-		case "spot":
-		case "spotanim":
-		case "gfx":
-		case "graphic":
-			if (args.length < 1 || isNaN(args[0])) {
-				api.sendConsoleMessage(player, "Usage: "+syntax+" [id] [type]");
-				return;
-			}
-			var gfxID = parseInt(args[0]);
-			var type = 1;
-			if (args.length > 1) {
-				type = parseInt(args[1]);
-			}
-			api.setSpotAnim(player, type, gfxID);
-			return;
-		case "gender":
-			if (args[0] == 0) {
-				player.getModel().setGender(Gender.MALE);
-				player.getModel().refresh();
-			} else if (args[0] == 1) {
-				player.getModel().setGender(Gender.FEMALE);
-				player.getModel().refresh();
-			}
-			return;
-		case "music":
-			api.sendMessage(player, api.getItemName(4151));
-			//player.getDispatcher().sendMusic(parseInt(args[0]), parseInt(args[1]));
-			return;
 		case "inter":
 		case "root":
 		case "if":
@@ -87,8 +46,7 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 				return;
 			}
 			if (syntax.equals("root")) {
-				var parent = parseInt(args[0]);
-				player.getDispatcher().sendRootWidget(parent);
+				
 				return;
 			}
 			if (args.length >= 3) {
@@ -115,50 +73,9 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 		case "adr":
 			player.getCombat().setAdrenaline(100);
 			return;
-		case "hair":
-		case "hairstyle":
-			player.getModel().setTempStyle(0, parseInt(args[0]));
-			player.getModel().refresh();
-			return;
 		case "reloadNPCDefs":
 			api.sendMessage(player, "NPC Combat Definitions has been reloaded!");
 			NpcDataParser.loadJsonNpcData();
-			return;
-		case "rls":
-			player.getViewport().moveToRegion(player.getCurrentTile(), org.virtue.game.entity.region.MapSize.DEFAULT, false);
-			player.getDispatcher().sendMessage("Scene graph reloaded!", ChannelType.GAME);
-			return;
-		case "rendanim":
-			if (args.length < 1) {
-				return false;
-			}
-			var animID = parseInt(args[0]);
-			player.getModel().setRenderAnimation(animID);
-			player.getModel().refresh();
-			return;
-		case "render":
-			if (args[0] == 0) {
-				player.getModel().setRender(Render.PLAYER);
-				player.getModel().refresh();
-			} else if (args[0] == 1) {
-				player.getModel().setRender(Render.NPC);
-				player.getModel().setNPCId(args[1]);
-				player.getModel().refresh();
-			} else if (args[0] == 2) {
-				player.getModel().setRender(Render.INVISIBLE);
-				player.getModel().refresh();
-			}
-			return;
-		case "glow":
-			if (args.length < 4)
-				return false;
-			
-			var iterate = Java.type('org.virtue.game.World').getInstance().getPlayers().iterator();
-			var players = null;
-			while (iterate.hasNext()) {
-				players = iterate.next();
-				players.queueUpdateBlock(new GlowColorBlock(args[0], args[1], args[2], args[3], 0, 100));
-			}
 			return;
 		case "adminroom":
 			api.teleportEntity(player, 2845, 5154, 0);
@@ -186,14 +103,6 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.resetStat(player, Stat.CONSTITUTION);
 			api.restoreLifePoints(player);
 			api.setRenderAnim(player, -1);
-			return;
-		case "devTitle":
-			player.getModel().setPrefixTitle("<col=33CCFF>");
-			player.getModel().refresh();
-			return;
-		case "removeTitle":
-			player.getModel().setPrefixTitle("");
-			player.getModel().refresh();
 			return;
 		case "uptime":
 			var ticks = api.getServerCycle();
@@ -282,24 +191,10 @@ var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.Ev
 			api.setVarc(player, 1800, player.getKeys() - 1);
 			api.sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
 			return;
-		case "xtest":
-			api.openCentralWidget(player, 1691, false);
-			api.setWidgetText(player, 1691, 7, "1,333,333,700"); //Total Bank Value
-			//player.getWidgets().openWidget(1477, 503, 1418, true);
 		}
 	}
 });
 
 /* Listen to the commands specified */
-var listen = function(scriptManager) {
-	var commands = [ "bc", "npc", "gfx", "graphic", "gender", "music", "inter",
-			"root", "widget", "if", "priceReload", "reloadPrice", "adr", "hair",
-			"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow", "spot", "spotanim",
-			"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
-			"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey","xtest"];
-	var listener = new EventListener();
-	for (var i in commands) {
-		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);
-	}	
-};
+
 

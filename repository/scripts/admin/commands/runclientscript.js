@@ -19,26 +19,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType */
+var chat = require('../../chat');
+var util = require('../../core/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
- * @author Sam Bartlett
  * @author Sundays211
  * @since 05/11/2014
  */
-
-var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, scriptArgs) {
-		var player = scriptArgs.player;
-		api.sendMessage(player, "Used item with location!");
-	},
-});
-
-/* Listen to the commands specified */
-var listen = function(scriptManager) {
-	var listener = new Listener();	
-	scriptManager.registerListener(EventType.OPLOCU, 38787, listener);
-};
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.COMMAND_ADMIN, ["cs2", "cscript"], function (ctx) {
+			var player = ctx.player;
+			var args = ctx.cmdArgs;
+			
+			if (ctx.length < 1 || isNaN(args[0])) {
+				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [args]", ctx.console);
+				return;
+			}
+			var scriptId = parseInt(args[0]);
+			var params = [];
+			for (var i = 1; i<args.length;i++) {
+				if (!args[i].trim()) {
+					continue;
+				}
+				try {
+					params[i-1] = parseInt(args[i]);
+				} catch (e) {
+					params[i-1] = args[i];
+				}
+				if (isNaN(params[i-1])) {
+					params[i-1] = args[i];
+				}
+			}
+			chat.sendCommandResponse(player, "Running client script "+scriptId+" with params "+JSON.stringify(params), ctx.console);
+			util.runClientScript(player, scriptId, params);
+		});
+	}
+})();

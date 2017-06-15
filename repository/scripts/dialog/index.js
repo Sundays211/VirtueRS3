@@ -6,6 +6,7 @@ var common = require('./common');
 var multiChoice = require('./multi-choice');
 var input = require('./input');
 var chat = require('./chat');
+var util = require('./util');
 
 module.exports = {
 	builder : builder,
@@ -25,5 +26,6 @@ module.exports = {
 	requestCount : input.requestCount,
 	requestName : input.requestName,
 	requestString : input.requestString,
-	requestItem : input.requestItem
+	requestItem : input.requestItem,
+	requestPlayer : util.requestPlayer
 };

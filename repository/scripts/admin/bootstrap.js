@@ -3,7 +3,9 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./test-commands')
+		require('./commands'),
+		require('./rotten-potato'),
+		require('./jmod-toolbox')
 	];
 	
 	for (var i in modules) {
