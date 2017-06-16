@@ -23,6 +23,8 @@
 var coords = require('../../map/coords');
 var BufferedWriter = Java.type('java.io.BufferedWriter');
 var FileWriter = Java.type('java.io.FileWriter');
+var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
+var NpcDataParser = Java.type('org.virtue.game.parser.impl.NpcDataParser');
 
 var map = require('../../map');
 var chat = require('../../chat');
@@ -90,6 +92,16 @@ module.exports = (function () {
 			var npc = ENGINE.createNpc(npcID, map.getCoords(player));
 			ENGINE.spawnNpc(npc);
 			npc.getCombatSchedule().lock(player);
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "reloadNPCDrops", function (ctx) {
+			chat.sendCommandResponse(ctx.player, "Reloaded Npc Drops.", ctx.console);
+			NpcDropParser.loadNpcDrops();
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "reloadNPCDefs", function (ctx) {
+			chat.sendCommandResponse(ctx.player, "NPC Combat Definitions has been reloaded!", ctx.console);
+			NpcDataParser.loadJsonNpcData();
 		});
 	}
 	

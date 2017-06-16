@@ -9,7 +9,7 @@ var anim = require('../../core/anim');
 var chat = require('../../chat');
 var dialog = require('../../dialog');
 var inv = require('../../inv');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 
 var variables = require('./variables');
 var resources = require('../makex/resources');

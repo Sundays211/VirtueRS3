@@ -25,7 +25,7 @@ var varbit = require('../../core/var/bit');
 var config = require('../../core/config');
 var inv = require('../../inv');
 var chat = require('../../chat');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

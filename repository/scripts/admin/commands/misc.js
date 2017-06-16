@@ -1,11 +1,36 @@
+/**
+ * Copyright (c) 2015 Virtue Studios
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+/* globals EventType, ENGINE, Java */
+var varc = require('../../core/var/client');
+var coords = require('../../map/coords');
+
 var Virtue = Java.type('org.virtue.Virtue');
 var World = Java.type('org.virtue.game.World');
 
-var NPC = Java.type('org.virtue.game.entity.npc.NPC');
-var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
-var Tile = Java.type('org.virtue.game.world.region.Tile');
-
-
+var anim = require('../../core/anim');
+var map = require('../../map');
+var util = require('../../core/util');
+var chat = require('../../chat');
+var widget = require('../../widget');
 
 /** 
  * @author Kayla
@@ -18,183 +43,87 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "root", function (ctx) {
-			var parent = parseInt(args[0]);
-			player.getDispatcher().sendRootWidget(parent);
+			var parent = parseInt(ctx.cmdArgs[0]);
+			ctx.player.getDispatcher().sendRootWidget(parent);
 		});
 		
-		var commands = [ "bc", "gfx", "graphic", "gender", "music", "inter",
-				"root", "widget", "if", "priceReload", "reloadPrice", "adr", "hair",
-				"hairstyle", "reloadNPCDefs", "rls", "rend", "render", "glow", "spot", "spotanim",
-				"adminroom", "god", "normal", "anim", "devTitle", "removeTitle", "uptime", "rendanim",
-				"loc", "location", "object", "reloadNPCDrops", "ring", "testRing", "setKey","xtest"];
-		var listener = new EventListener();
-		for (var i in commands) {
-		}	
-	}
-})();
-
-var EventListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, scriptArgs) {
-		var player = scriptArgs.player;
-		var args = scriptArgs.cmdArgs;
-		switch (syntax) {
-		case "inter":
-		case "root":
-		case "if":
-		case "widget":
-			if (args.length < 1) {
+		scriptManager.bind(EventType.COMMAND_ADMIN, [ "inter", "if", "widget" ], function (ctx) {
+			var player = ctx.player;
+			var args = ctx.cmdArgs;
+			
+			if (args.length < 1 || isNaN(args[0])) {
+				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id]", ctx.console);
 				return;
 			}
-			if (syntax.equals("root")) {
-				
-				return;
-			}
+			
 			if (args.length >= 3) {
 				var parent = parseInt(args[0]);
 				var slot = parseInt(args[1]);
 				var sub = parseInt(args[2]);
-				api.openWidget(player, parent, slot, sub, false);
+				widget.open(player, parent, slot, sub, false);
 			} else {
-				api.openCentralWidget(player, parseInt(args[0]), false);
+				widget.openCentral(player, parseInt(args[0]), false);
 			}
-			return;
-		case "priceReload":
-		case "reloadPrice":
-			Virtue.getInstance().getExchange().loadPrices();
-			return;
-		case "reloadNPCDrops":
-			api.sendMessage(player, "Reloaded Npc Drops.");
-			NpcDropParser.loadNpcDrops();
-			return;
-		case "duel":
-		case "challenge":
-			player.test(player);
-			return;
-		case "adr":
-			player.getCombat().setAdrenaline(100);
-			return;
-		case "reloadNPCDefs":
-			api.sendMessage(player, "NPC Combat Definitions has been reloaded!");
-			NpcDataParser.loadJsonNpcData();
-			return;
-		case "adminroom":
-			api.teleportEntity(player, 2845, 5154, 0);
-			api.setSpotAnim(player, 1, 4200);
-			api.runAnimation(player, 18007);
-			return;
-		case "god":
-			api.boostStat(player, Stat.STRENGTH, 255);
-			api.boostStat(player, Stat.ATTACK, 255);
-			api.boostStat(player, Stat.MAGIC, 255);
-			api.boostStat(player, Stat.RANGED, 255);
-			api.boostStat(player, Stat.DEFENCE, 255);
-			api.boostStat(player, Stat.PRAYER, 255);
-			api.boostStat(player, Stat.CONSTITUTION, 255);
-			api.restoreLifePoints(player);
-			api.setRenderAnim(player, 2987);
-			return;
-		case "normal":
-			api.resetStat(player, Stat.STRENGTH);
-			api.resetStat(player, Stat.ATTACK);
-			api.resetStat(player, Stat.MAGIC);
-			api.resetStat(player, Stat.RANGED);
-			api.resetStat(player, Stat.DEFENCE);
-			api.resetStat(player, Stat.PRAYER);
-			api.resetStat(player, Stat.CONSTITUTION);
-			api.restoreLifePoints(player);
-			api.setRenderAnim(player, -1);
-			return;
-		case "uptime":
-			var ticks = api.getServerCycle();
-			var time = api.getFormattedTime(ticks);
-			sendCommandResponse(player, "Server has been online for "+time+".", scriptArgs.console);
-			return;
-		case "loc":
-		case "location":
-		case "object"://It's not really an object, but so other people don't complain...
-			var locId = parseInt(args[0]);
-			if (args.length < 1 || isNaN(locId)) {
-				sendCommandResponse(player, "Usage: "+syntax+" [locationId]", scriptArgs.console);				
-				return;
-			}
-			var loc = api.createLocation(locId, api.getCoords(player), 10, 0);
-			api.spawnLocation(loc, 50);
-			sendCommandResponse(player, "Spawned location "+locId, scriptArgs.console);
-			return;
-		case "ring":
-			var locId = parseInt(args[0]);
-			var type = parseInt(args[1]);
-			var rotation = parseInt(args[2]);
-			if (args.length < 1 || isNaN(locId)) {
-				sendCommandResponse(player, "Usage: "+syntax+" [locationId]", scriptArgs.console);				
-				return;
-			}
-			var location = api.createLocation(locId, api.getCoords(player), type, rotation);
-			api.spawnLocation(location, 50);
-			sendCommandResponse(player, "Spawned location "+locId, scriptArgs.console);
-			return;
-		case "testRing":
-			var north = api.createLocation(13137, 3210, 3258, 0, 0, 3);
-			var north2 = api.createLocation(13137, 3211, 3258, 0, 0, 3);
-			var north3 = api.createLocation(13137, 3209, 3258, 0, 0, 3);
-			var northwest = api.createLocation(13137, 3208, 3257, 0, 0, 2);
-			var northwest2 = api.createLocation(13137, 3208, 3256, 0, 0, 2);
-			var northwest3 = api.createLocation(13137, 3208, 3255, 0, 0, 2);
-			var southwestCorner = api.createLocation(13137, 3208, 3254, 0, 3, 1);
-			var northwestCorner = api.createLocation(13137, 3208, 3258, 0, 3, 2);
-			var northeastCorner = api.createLocation(13137, 3212, 3258, 0, 3, 3);
-			var southCorner = api.createLocation(13137, 3212, 3254, 0, 3, 4);
-			var east = api.createLocation(13137, 3212, 3257, 0, 0, 0);
-			var east2 = api.createLocation(13137, 3212, 3256, 0, 0, 0);
-			var east3 = api.createLocation(13137, 3212, 3255, 0, 0, 0);
-			var south = api.createLocation(13137, 3211, 3254, 0, 0, 1);
-			var south2 = api.createLocation(13137, 3210, 3254, 0, 0, 1);
-			var south3 = api.createLocation(13137, 3209, 3254, 0, 0, 1);
-			var floor = api.createLocation(13140, 3211, 3257, 0, 22, 2);
-			var floor1 = api.createLocation(13140, 3210, 3257, 0, 22, 2);
-			var floor2 = api.createLocation(13140, 3209, 3257, 0, 22, 2);
-			var floor3 = api.createLocation(13140, 3211, 3256, 0, 22, 2);
-			var floor4 = api.createLocation(13140, 3210, 3256, 0, 22, 2);
-			var floor5 = api.createLocation(13140, 3209, 3256, 0, 22, 2);
-			var floor6 = api.createLocation(13140, 3209, 3255, 0, 22, 2);
-			var floor7 = api.createLocation(13140, 3210, 3255, 0, 22, 2);
-			var floor8 = api.createLocation(13140, 3211, 3255, 0, 22, 2);
-			api.spawnLocation(floor, 100);
-			api.spawnLocation(floor1, 100);
-			api.spawnLocation(floor2, 100);
-			api.spawnLocation(floor3, 100);
-			api.spawnLocation(floor4, 100);
-			api.spawnLocation(floor5, 100);
-			api.spawnLocation(floor6, 100);
-			api.spawnLocation(floor7, 100);
-			api.spawnLocation(floor8, 100);
-			api.spawnLocation(northwest, 100);
-			api.spawnLocation(northwest2, 100);
-			api.spawnLocation(northwest3, 100);
-			api.spawnLocation(southwestCorner, 100);
-			api.spawnLocation(northwestCorner, 100);
-			api.spawnLocation(northeastCorner, 100);
-			api.spawnLocation(southCorner, 100);
-			api.spawnLocation(north, 100);
-			api.spawnLocation(north3, 100);
-			api.spawnLocation(north2, 100);
-			api.spawnLocation(east, 100);
-			api.spawnLocation(east2, 100);
-			api.spawnLocation(east3, 100);
-			api.spawnLocation(south, 100);
-			api.spawnLocation(south2, 100);
-			api.spawnLocation(south3, 100);
-			return;
-		case "setKey":
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "uptime", function (ctx) {
+			var ticks = ENGINE.getServerCycle();
+			var time = util.toFormattedTime(ticks);
+			chat.sendCommandResponse(ctx.player, "Server has been online for "+time+".", ctx.console);
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "setKey", function (ctx) {
+			var player = ctx.player;
+			var args = ctx.cmdArgs;
+			
 			var amount = parseInt(args[0]);
 			player.setKeys(amount);
-			api.setVarc(player, 1800, player.getKeys() - 1);
-			api.sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
-			return;
-		}
+			varc(player, 1800, player.getKeys() - 1);
+			chat.sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, ["priceReload", "reloadPrice"], function () {
+			Virtue.getInstance().getExchange().loadPrices();
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, ["duel", "challenge"], function (ctx) {
+			ctx.player.test(ctx.player);
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "adr", function (ctx) {
+			ctx.player.getCombat().setAdrenaline(100);
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "adminroom", function (ctx) {
+			map.teleport(ctx.player, coords(2845, 5154, 0), 18007);
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "forcetalk", function (ctx) {
+			var player = ctx.player;
+			var args = ctx.cmdArgs;
+			
+			var message = "";
+			for (var i = 0; i < args.length; i++) {
+				message += (i === 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
+			}
+			
+			var iterate = World.getInstance().getPlayers().iterator();
+			var players = null;
+			while (iterate.hasNext()) {
+				players = iterate.next();
+				ENGINE.playerForceSay(player, message, false);
+			}
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "forcedance", function () {
+			var iterate = ENGINE.getPlayerIterator(ENGINE.getWorld());
+			var p2 = null;
+			while (iterate.hasNext()) {
+				p2 = iterate.next();
+				p2.getAppearance().setRenderAnimation(3171);
+				p2.getAppearance().refresh();
+				anim.run(p2, 7071);//7071					
+			}
+		});
 	}
-});
-
-/* Listen to the commands specified */
-
-
+})();

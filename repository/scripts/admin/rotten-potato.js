@@ -27,7 +27,7 @@ var map = require('../map');
 var entityMap = require('../map/entity');
 var widget = require('../widget');
 var util = require('../core/util');
-var stat = require('../skill/logic/stat');
+var stat = require('../skill');
 var chat = require('../chat');
 var dialog = require('../dialog');
 

@@ -21,6 +21,7 @@ function getAllModules () {// jshint ignore:line
 		'shop',
 		'trade',
 		'map/commands',
+		'skill/common',
 		'skill/agility',
 		'skill/prayer',
 		'skill/runecrafting',

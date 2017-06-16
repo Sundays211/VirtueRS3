@@ -9,7 +9,7 @@ module.exports.init = function (scriptManager) {
 		require('./freeze-player'),
 		require('./npc-spawns'),
 		require('./player-model'),
-		//require('./misc'),
+		require('./misc'),
 		require('./test')
 	];
 	
