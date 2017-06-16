@@ -4,7 +4,8 @@
 
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./commands')
+		require('./commands'),
+		require('./skill-tab')
 	];
 	
 	for (var i in modules) {

@@ -5,7 +5,6 @@ module.exports = function (scriptManager) {
 	var modules = [
 	    require('./Lodestone'),
 	    require('./world-map'),
-	    require('./skill-tab'),
 		require('./overlay'),
 		require('./ribbon'),
 		require('./minimap'),
