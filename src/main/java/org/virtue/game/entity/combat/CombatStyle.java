@@ -1,7 +1,7 @@
 package org.virtue.game.entity.combat;
 
 import org.virtue.game.entity.Entity;
-import org.virtue.game.entity.combat.hit.Hit.HitType;
+import org.virtue.game.entity.combat.hit.DamageType;
 import org.virtue.game.entity.combat.impl.AttackHandler;
 import org.virtue.game.entity.combat.impl.magic.MagicAttackEvent;
 import org.virtue.game.entity.combat.impl.melee.MeleeAttackEvent;
@@ -19,10 +19,10 @@ public enum CombatStyle {
 
 	//missing brighter hit marks for your view, these below are for seeing other player
 	//hit marks
-	MELEE(new MeleeAttackEvent(), HitType.MELEE_DAMAGE, HitType.MELEE_DAMAGE_2),
-	RANGE(new RangeAttackEvent(), HitType.RANGE_DAMAGE, HitType.RANGE_DAMAGE_2),
-	MAGIC(new MagicAttackEvent(), HitType.MAGIC_DAMAGE, HitType.MAGIC_DAMAGE_2),
-	DRAGONFIRE(null, HitType.MAGIC_DAMAGE, HitType.MAGIC_DAMAGE_2);
+	MELEE(new MeleeAttackEvent(), DamageType.MELEE, DamageType.MELEE_DAMAGE_2),
+	RANGE(new RangeAttackEvent(), DamageType.RANGE, DamageType.RANGE_DAMAGE_2),
+	MAGIC(new MagicAttackEvent(), DamageType.MAGIC, DamageType.MAGIC_DAMAGE_2),
+	DRAGONFIRE(null, DamageType.MAGIC, DamageType.MAGIC_DAMAGE_2);
 	
 	/**
 	 * The attack handler for this combat style.
@@ -32,19 +32,19 @@ public enum CombatStyle {
 	/**
 	 * The hit type.
 	 */
-	private final HitType hitType;
+	private final DamageType hitType;
 
 	/**
 	 * The default hit type.
 	 */
-	private HitType defaultHitType;
+	private DamageType defaultHitType;
 	
 	/**
 	 * Constructs a new {@code CombatStyle} {@code Object}.
 	 * @param attack The attack event.
 	 * @param hitType The hit type.
 	 */
-	private CombatStyle(AttackEvent attack, HitType defaultHitType, HitType hitType) {
+	private CombatStyle(AttackEvent attack, DamageType defaultHitType, DamageType hitType) {
 		this.attack = attack;
 		this.setDefaultHitType(defaultHitType);
 		this.hitType = hitType;
@@ -125,7 +125,7 @@ public enum CombatStyle {
 	 * Gets the hit type.
 	 * @return The hit type.
 	 */
-	public HitType getHitType() {
+	public DamageType getHitType() {
 		return hitType;
 	}
 
@@ -133,7 +133,7 @@ public enum CombatStyle {
 	 * Gets the defaultHitType value.
 	 * @return The defaultHitType.
 	 */
-	public HitType getDefaultHitType() {
+	public DamageType getDefaultHitType() {
 		return defaultHitType;
 	}
 
@@ -141,7 +141,7 @@ public enum CombatStyle {
 	 * Sets the defaultHitType value.
 	 * @param defaultHitType The defaultHitType to set.
 	 */
-	public void setDefaultHitType(HitType defaultHitType) {
+	public void setDefaultHitType(DamageType defaultHitType) {
 		this.defaultHitType = defaultHitType;
 	}
 	
