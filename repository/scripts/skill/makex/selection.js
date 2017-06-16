@@ -30,7 +30,7 @@ var config = require('../../core/config');
 var util = require('../../core/util');
 var inv = require('../../inv');
 var chat = require('../../chat');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 var quest = require('../../quest');
 
 var resources = require('./resources');

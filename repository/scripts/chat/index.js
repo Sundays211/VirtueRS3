@@ -1,34 +1,13 @@
 /**
  * Core functions for the chat system
  */
-/* globals ENGINE, MesType */
+var messages = require('./messages');
 
 module.exports = (function () {
 	return {
-		sendMessage : sendMessage,
-		sendSpamMessage : sendSpamMessage,
-		sendDebugMessage : sendDebugMessage,
-		sendCommandResponse : sendCommandResponse
+		sendMessage : messages.send,
+		sendSpamMessage : messages.sendSpam,
+		sendDebugMessage : messages.sendDebug,
+		sendCommandResponse : messages.sendCommandResponse
 	};
-	
-	function sendMessage(player, message, type) {
-		if (typeof(type) !== "undefined") {
-			ENGINE.sendMessage(player, message, type);
-		}  else {
-			ENGINE.sendMessage(player, message);
-		}
-	}
-	
-	function sendSpamMessage (player, message) {
-		ENGINE.sendFilterMessage(player, message);
-	}
-	
-	function sendDebugMessage (player, message) {
-		//For now just send a regular message, though ultimately this will be sent to admins only
-		ENGINE.sendMessage(player, message);
-	}
-
-	function sendCommandResponse (player, message, console) {
-		ENGINE.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
-	}
 })();

@@ -23,7 +23,7 @@
 var coords = require('../../map/coords');
 
 var util = require('../../core/util');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 var map = require('../../map');
 var anim = require('../../core/anim');
 

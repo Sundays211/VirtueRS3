@@ -23,7 +23,7 @@
 var util = require('../../core/util');
 var chat = require('../../chat');
 var dialog = require('../../dialog');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 
 var common = require('./common');
 var variables = require('./variables');
