@@ -2,11 +2,11 @@
  * 
  */
 /* globals ENGINE, Java */
+var component = require('./component');
 var varc = require('../core/var/client');
 
 module.exports = (function () {
 	return {
-		getHash : getHash,
 		open : open,
 		openCentral : openCentral,
 		openOverlaySub : openOverlaySub,
@@ -19,10 +19,6 @@ module.exports = (function () {
 		hide : hide,
 		inframeInput : inframeInput
 	};
-
-	function getHash (iface, comp) {
-		return (iface << 16) | comp;
-	}
 
 	function open (player, parentId, parentComp, id, alwaysOpen) {
 		ENGINE.openWidget(player, parentId, parentComp, id, !!alwaysOpen);
@@ -66,7 +62,7 @@ module.exports = (function () {
 	}
 	
 	function inframeInput(player, ifaceId, comp, callback, type, maxlen) {
-		varc(player, 2235, getHash(ifaceId, comp));
+		varc(player, 2235, component(ifaceId, comp));
 		varc(player, 2236, type);
 		varc(player, 2237, maxlen);
 		var Handler = Java.extend(Java.type('org.virtue.game.content.dialogues.InputEnteredHandler'), {

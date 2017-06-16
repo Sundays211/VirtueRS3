@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var component = require('../component');
 var varbit = require('../../core/var/bit');
 var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
@@ -88,16 +89,14 @@ module.exports = (function () {
 			}
 		});
 		
-		scriptManager.bind(EventType.IF_DRAG, [ comp(251), comp(89), comp(295),
-			comp(164), comp(186), comp(328), comp(118), comp(100), comp(127), comp(136),
-			comp(78), comp(154), comp(145), comp(262), comp(306), comp(219), comp(197),
-			comp(208), comp(230) ], function () {
+		scriptManager.bind(EventType.IF_DRAG, [ component(1477, 251), component(1477, 89), 
+			component(1477, 295), component(1477, 164), component(1477, 186), component(1477, 328), 
+			component(1477, 118), component(1477, 100), component(1477, 127), component(1477, 136),
+			component(1477, 78), component(1477, 154), component(1477, 145), component(1477, 262),
+			component(1477, 306), component(1477, 219), component(1477, 197), component(1477, 208), 
+			component(1477, 230) ], function () {
 				//Do nothing as this is handled on the client side
 		});
-	}
-	
-	function comp (id) {
-		return common.getHash(1477, id);
 	}
 	
 	function openOverlay (player, overlay) {

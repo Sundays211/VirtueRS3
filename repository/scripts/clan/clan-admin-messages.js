@@ -2,6 +2,7 @@
  * 
  */
 /* globals EventType, ENGINE */
+var component = require('../widget/component');
 var varp = require('../core/var/player');
 
 var util = require('../core/util');
@@ -20,20 +21,20 @@ module.exports = function (scriptManager) {
 		load(ctx.player);
 	});
 	
-	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 71), function (ctx) {
+	scriptManager.bind(EventType.IF_BUTTON1, component(573, 71), function (ctx) {
 		setAll(ctx.player, 1);//Enable all
 	});
 	
-	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 65), function (ctx) {
+	scriptManager.bind(EventType.IF_BUTTON1, component(573, 65), function (ctx) {
 		setAll(ctx.player, 0);//Disable all
 	});
 	
-	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 19), function (ctx) {
+	scriptManager.bind(EventType.IF_BUTTON1, component(573, 19), function (ctx) {
 		var category = config.enumValue(8661, ctx.slot);//Enable category
 		enableCategory(ctx.player, category);
 	});
 	
-	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 20), function (ctx) {
+	scriptManager.bind(EventType.IF_BUTTON1, component(573, 20), function (ctx) {
 		var messageType = config.enumValue(8659, ctx.slot);//Enable specific
 		if (messageType != -1) {
 			var enabled = broadcasts.isEnabled(ctx.player, messageType);
@@ -43,16 +44,16 @@ module.exports = function (scriptManager) {
 		}
 	});
 	
-	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 5), function (ctx) {
+	scriptManager.bind(EventType.IF_BUTTON1, component(573, 5), function (ctx) {
 		var rank = config.enumValue(8659, ctx.slot);//Select rank dropdown
 		varp(ctx.player, 4285, rank);
 	});
 	
-	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 59), function (ctx) {
+	scriptManager.bind(EventType.IF_BUTTON1, component(573, 59), function (ctx) {
 		broadcasts.setMinimumVisibleRank(ctx.player, varp(ctx.player, 4285), ctx.slot);//Select rank
 	});
 	
-	scriptManager.bind(EventType.IF_BUTTON1, widget.getHash(573, 47), function (ctx) {
+	scriptManager.bind(EventType.IF_BUTTON1, component(573, 47), function (ctx) {
 		save(ctx.player);//Confirm save
 		ENGINE.closeWidget(ctx.player, 1477, 326);
 		widget.open(ctx.player, 1477, 326, 573, false);

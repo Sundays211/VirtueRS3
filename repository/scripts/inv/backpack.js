@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv, Stat */
+var component = require('../widget/component');
 var varp = require('../core/var/player');
 var varbit = require('../core/var/bit');
 
@@ -113,7 +114,7 @@ module.exports = (function() {
 			}
 		});
 		
-		scriptManager.bind(EventType.IF_DRAG, widget.getHash(1473, 34), function (ctx) {
+		scriptManager.bind(EventType.IF_DRAG, component(1473, 34), function (ctx) {
 			var player = ctx.player;
 			var item = ENGINE.getItem(player, Inv.BACKPACK, ctx.fromslot);
 			if (item === null) {
@@ -152,10 +153,10 @@ module.exports = (function() {
 			}
 		});
 		
-		scriptManager.bind(EventType.IF_BUTTONT, widget.getHash(1473, 34), handleUseOnInterface);
-		scriptManager.bind(EventType.OPLOCT, widget.getHash(1473, 34), handleUseOnLoc);
-		scriptManager.bind(EventType.OPNPCT, widget.getHash(1473, 34), handleUseOnNpc);
-		scriptManager.bind(EventType.OPPLAYERT, widget.getHash(1473, 34), handleUseOnPlayer);
+		scriptManager.bind(EventType.IF_BUTTONT, component(1473, 34), handleUseOnInterface);
+		scriptManager.bind(EventType.OPLOCT, component(1473, 34), handleUseOnLoc);
+		scriptManager.bind(EventType.OPNPCT, component(1473, 34), handleUseOnNpc);
+		scriptManager.bind(EventType.OPPLAYERT, component(1473, 34), handleUseOnPlayer);
 	}
 	
 	function handleItemInteraction (player, item, ctx) {
