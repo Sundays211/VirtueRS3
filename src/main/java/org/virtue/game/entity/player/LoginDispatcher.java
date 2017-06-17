@@ -1701,7 +1701,7 @@ public class LoginDispatcher {
 			//Magic Abilities
 			player.getWidgets().openOverlaySub(5, 1461, true);
 			
-			//Combat Settings
+			//Melee Abilities
 			player.getWidgets().openOverlaySub(6, 1460, true);
 			
 			//Ranged Abilities
@@ -1709,13 +1709,6 @@ public class LoginDispatcher {
 			
 			//Defence Abilities
 			player.getWidgets().openOverlaySub(8, 1449, true);
-			
-			player.getDispatcher().sendWidgetEvents(1460, 1, 0, 187, 10320902);
-			player.getDispatcher().sendWidgetEvents(1452, 1, 0, 187, 10320902);
-			player.getDispatcher().sendWidgetEvents(1449, 1, 0, 187, 10320902);
-			player.getDispatcher().sendWidgetEvents(1460, 5, 7, 16, 2);
-			player.getDispatcher().sendWidgetEvents(1452, 7, 7, 16, 2);
-			player.getDispatcher().sendWidgetEvents(1449, 7, 7, 16, 2);
 		}
 		player.getDispatcher().sendCS2Script2(8862, 5, 1);
 		
@@ -1843,10 +1836,10 @@ public class LoginDispatcher {
 		player.getDispatcher().sendWidgetEvents(1504, 6, -1, -1, 8388608);
 		player.getDispatcher().sendWidgetEvents(1430, 19, -1, -1, 8388608);
 		player.getDispatcher().sendWidgetEvents(1506, 0, -1, -1, 8388608);
-		player.getDispatcher().sendWidgetEvents(1460, 1, 0, 187, 8485894);
-		player.getDispatcher().sendWidgetEvents(1452, 1, 0, 187, 8485894);
-		player.getDispatcher().sendWidgetEvents(1461, 1, 0, 187, 8485958);
-		player.getDispatcher().sendWidgetEvents(1449, 1, 0, 187, 8485894);
+		//player.getDispatcher().sendWidgetEvents(1460, 1, 0, 187, 8485894);
+		//player.getDispatcher().sendWidgetEvents(1452, 1, 0, 187, 8485894);
+		//player.getDispatcher().sendWidgetEvents(1461, 1, 0, 187, 8485958);
+		//player.getDispatcher().sendWidgetEvents(1449, 1, 0, 187, 8485894);
 		player.getDispatcher().sendWidgetEvents(590, 8, 0, 196, 8388614);
 		
 		//

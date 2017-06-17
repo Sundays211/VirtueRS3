@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Virtue Studios
+ * Copyright (c) 2014 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,29 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Java, Inv */
+/* globals EventType, Inv, Java */
 var component = require('../../widget/component');
-var varp = require('../../core/var/player');
 var varbit = require('../../core/var/bit');
 
 var Spellbook = Java.type('org.virtue.game.content.skills.magic.Spellbook');
 
-var inv = require('../../inv');
-var widget = require('../../widget');
-var chat = require('../../chat');
-var dialog = require('../../dialog');
 var config = require('../../core/config');
 var util = require('../../core/util');
+var chat = require('../../chat');
+var inv = require('../../inv');
+var widget = require('../../widget');
 
-var disassembly = require('../invention/disassembly');
-var makex = require('../makex');
+var spellbook = require('../../skill/magic/spellbook');
+var common = require('./common');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 04/04/2016
+ * @since 01/02/2015
  */
 module.exports = (function () {
 	return {
@@ -49,35 +47,56 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
+		//Script 8426 = ability book options
 		scriptManager.bind(EventType.IF_OPEN, 1461, function (ctx) {
 			widget.setEvents(ctx.player, 1461, 1, 0, 189, 97350);
-			widget.setEvents(ctx.player, 1461, 7, 7, 16, 2);
+			widget.setEvents(ctx.player, 1461, 7, 0, 16, 2);
+		});
+		
+		scriptManager.bind(EventType.IF_BUTTON1, component(1461, 7), function (ctx) {
+			//Save selected magic tab
+			varbit(ctx.player, 18791, common.tabIdFromSlot(ctx.slot));
+			//varbit 18791 = selected magic tab
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1461, 1), function (ctx) {
 			var player = ctx.player;
 			var spell = config.enumValue(6740, ctx.slot);
-			
-			switch (spell) {
-			case 14740://Enchant bolts
-				enchantCrossbowBolts(player);
-				return;
-			case 14875://Home teleport
-				widget.openCentral(player, 1092);
-				return;
-			default:
-				var hardCodedSpell = Spellbook.MODERN.get(ctx.slot);
+			//2880 = spell type (0=combat, 1=teleport, 2=skill, 4=?, 5=ability)
+			if (config.structParam(spell, 2880) === 5) {
+				common.runAbility(player, spell);
+			} else {
+				spellbook.cast(player, spell);
+			}
+		});
+		
+		scriptManager.bind(EventType.IF_BUTTON2, component(1461, 1), function (ctx) {
+			var player = ctx.player;
+			var spellId = config.enumValue(6740, ctx.slot);
+			if (config.structParam(spellId, 2874)) {
+				//TODO: Logic for off-hand autocast spells
+				//varbit 18050 = off-hand autocast spell
+				//varbits 21705, 21706 also used for auto-cast spells
+				if (varbit(player, 43) === config.structParam(spellId, 2793)) {
+					varbit(player, 43, 0);
+					chat.sendMessage(player, "Auto-cast spell cleared.");
+				} else {
+					varbit(player, 43, config.structParam(spellId, 2793));
+					//Main-hand spell set to: <spell>
+					chat.sendMessage(player, "Auto-cast spell set to: "+config.structParam(spellId, 2794));
+				}
+				var hardCodedSpell = Spellbook.MODERN.get(spellId);
 				if (hardCodedSpell !== null) {
 					if (player.getCombatSchedule().getAutocastSpell() !== null) {
 						player.getCombatSchedule().setAutocastSpell(null);
-						chat.sendMessage(player, "Auto-cast spell cleared.");
 					} else {
 						player.getCombatSchedule().setAutocastSpell(hardCodedSpell);
-						chat.sendMessage(player, "Main-hand spell set to: spell");
 					}
 				} else {
-					util.defaultHandler(ctx, "magic abilities");
+					chat.sendDebugMessage(player, "Spell not yet implemented: "+spellId);
 				}
+			} else {
+				util.defaultHandler(ctx, "magic abilities");
 			}
 		});
 				
@@ -93,31 +112,7 @@ module.exports = (function () {
 			if (objId === -1) {
 				return;//This means the spell wasn't used on an item. We'll just suppress the debug message.
 			}
-			switch (spell) {
-			case 32942://Analyse
-				disassembly.analyseItem(player, objId);
-				return;
-			case 32943://Disassemble
-				disassembly.start(player, objId, ctx.targetSlot);
-				return;
-			default:
-				util.defaultHandler(ctx, "magic abilities");
-				return;
-			}
-		});
-	}
-	
-	function enchantCrossbowBolts (player) {
-		makex.selectProduct(player, -1, -1, 6761, -1, "Enchant Bolts");
-		dialog.setResumeHandler(player, function () {
-			widget.closeAll(player);
-			var productId = varp(player, 1170);
-			var amount = varbit(player, 1003);
-			if (amount) {
-				varp(player, 1175, productId);
-				var text = "You enchant the bolts.";
-				makex.startCrafting(player, amount, 21670, text);
-			}
+			spellbook.castOnItem(player, spell, objId, ctx.targetSlot);
 		});
 	}
 })();

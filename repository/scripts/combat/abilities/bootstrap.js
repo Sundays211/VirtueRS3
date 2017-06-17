@@ -3,7 +3,11 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    require('./tab-widgets')
+	    require('./defence-book'),
+	    require('./magic-book'),
+	    require('./melee-book'),
+	    require('./prayer-book'),
+	    require('./ranged-book')
 	];
 	
 	for (var i in modules) {

@@ -19,11 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Java */
-var ActionBar = Java.type('org.virtue.game.entity.combat.impl.ability.ActionBar');
-
+/* globals EventType */
 var anim = require('../../core/anim');
-var widget = require('../../widget');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,21 +35,9 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.IF_OPEN, 1460, function (ctx) {
-			//Melee
-			widget.setEvents(ctx.player, 1460, 1, 0, 171, 97286);
-			widget.setEvents(ctx.player, 1460, 4, 6, 14, 2);
-		});
-		
-		scriptManager.bind(EventType.IF_BUTTON, 1460, function (ctx) {
-			var ability = ActionBar.getAbilities().get(1460 << 6 | ctx.component);
-			if (ability !== null) {
-				ctx.player.getCombatSchedule().run(ability);
-			}
-		});
-		
+		//Script 8426 = ability book options
 		scriptManager.bind(EventType.IF_BUTTON, 1458, function (ctx) {
-			var player = ctx.player;//Prayer
+			var player = ctx.player;
 			
 			if(!player.getCombat().getPrayer().usingPrayer) {
 				player.getCombat().getPrayer().activate(ctx.slot);
@@ -60,14 +45,6 @@ module.exports = (function () {
 			} else {
 				player.getCombat().getPrayer().deactivate(ctx.slot);
 			}
-		});
-		
-		scriptManager.bind(EventType.IF_BUTTON, 1452, function () {
-			//Ranged
-		});
-		
-		scriptManager.bind(EventType.IF_BUTTON, 1449, function () {
-			//Defence
 		});
 	}
 })();
