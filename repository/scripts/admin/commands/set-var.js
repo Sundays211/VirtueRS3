@@ -24,7 +24,7 @@ var varbit = require('../../core/var/bit');
 var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 
-var util = require('../../core/util');
+var chat = require('../../chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -44,7 +44,7 @@ module.exports = (function () {
 				var key = parseInt(ctx.cmdArgs[0]);
 				var value = parseInt(ctx.cmdArgs[1]);
 				varp(ctx.player, key, value);
-				util.sendCommandResponse(ctx.player, "Setting varp "+key+" to "+value, ctx.console);
+				chat.sendCommandResponse(ctx.player, "Setting varp "+key+" to "+value, ctx.console);
 			}
 		});
 		
@@ -54,9 +54,9 @@ module.exports = (function () {
 				var value = parseInt(ctx.cmdArgs[1]);
 				try {
 					varbit(ctx.player, key, value);
-					util.sendCommandResponse(ctx.player, "Setting varbit "+key+" to "+value, ctx.console);
+					chat.sendCommandResponse(ctx.player, "Setting varbit "+key+" to "+value, ctx.console);
 				} catch (e) {
-					util.sendCommandResponse(ctx.player, "Failed to set varbit "+key, ctx.console);
+					chat.sendCommandResponse(ctx.player, "Failed to set varbit "+key, ctx.console);
 				}
 			}
 		});
@@ -66,7 +66,7 @@ module.exports = (function () {
 				var key = parseInt(ctx.cmdArgs[0]);
 				var value = parseInt(ctx.cmdArgs[1]);
 				varc(ctx.player, key, value);
-				util.sendCommandResponse(ctx.player, "Setting varc "+key+" to "+value, ctx.console);
+				chat.sendCommandResponse(ctx.player, "Setting varc "+key+" to "+value, ctx.console);
 			}
 		});
 		
@@ -75,14 +75,14 @@ module.exports = (function () {
 				var key = parseInt(ctx.cmdArgs[0]);
 				var value = ctx.cmdArgs[1];
 				varc(ctx.player, key, value);
-				util.sendCommandResponse(ctx.player, "Setting varcstr "+key+" to "+value, ctx.console);
+				chat.sendCommandResponse(ctx.player, "Setting varcstr "+key+" to "+value, ctx.console);
 			}
 		});
 	}
 	
 	function checkArgs (ctx) {
 		if (ctx.cmdArgs.length < 2) {
-			util.sendCommandResponse(ctx.player, "Usage: "+ctx.syntax+" [id] [value]", ctx.console);
+			chat.sendCommandResponse(ctx.player, "Usage: "+ctx.syntax+" [id] [value]", ctx.console);
 			return false;
 		} else {
 			return true;
