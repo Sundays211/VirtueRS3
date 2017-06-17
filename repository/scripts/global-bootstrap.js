@@ -32,6 +32,7 @@ function getAllModules () {// jshint ignore:line
 		'skill/fletching',
 		'skill/farming',
 		'skill/herblore',
+		'skill/magic',
 		'skill/smithing',
 		'skill/summoning',
 		'skill/invention',

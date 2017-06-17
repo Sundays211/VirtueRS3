@@ -3,6 +3,7 @@
  */
 /* globals Inv, ENGINE, MoneyPouch, COINS, configApi */
 var util = require('../core/util');
+var config = require('../core/config');
 
 module.exports = init();
 
@@ -49,6 +50,14 @@ function init() {
 			 * @param invId The inventory to check. Defaults to BACKPACK if not specified
 			 */
 			total : invTotal,
+			
+			/**
+			 * Checks how many of items with the specified params the player holds.
+			 * @param player The player to check
+			 * @param paramId The object param to check for
+			 * @param invId The inventory to check. Defaults to BACKPACK if not specified
+			 */
+			totalparam : totalparam,
 			
 			/**
 			 * Gets the total capacity of the provided inventory
@@ -210,6 +219,24 @@ function init() {
 			held = util.checkOverflow(held, moneyHeld) ? util.INTEGER_MAX : held + moneyHeld;
 		}
 		return held;
+	}
+	
+	/**
+	 * Checks how many of items with the specified params the player holds.
+	 * @param player The player to check
+	 * @param paramId The object param to check for
+	 * @param invId The inventory to check. Defaults to BACKPACK if not specified
+	 */
+	function totalparam (player, paramId, invId) {
+		invId = typeof invId !== "undefined" ? invId : Inv.BACKPACK;
+		var count = 0;
+		for (var slot=0; slot<invSize(invId); slot++) {
+			var objId = getObjId(player, invId, slot);
+			if (config.objParam(objId, paramId)) {
+				count += getCount(player, invId, slot);
+			}
+		}
+		return count;
 	}
 	
 	/**
