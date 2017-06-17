@@ -11,6 +11,7 @@ module.exports = {
 	getCoordY : common.getCoordY,
 	getLevel : common.getLevel,
 	getCoords : common.getCoords,
+	teleport : entity.teleport,
 	setCoords : entity.setCoords,
 	
 	/**

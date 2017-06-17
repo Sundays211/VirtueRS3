@@ -7,4 +7,5 @@ module.exports = function (scriptManager) {
 	require('./friend-chat')(scriptManager);
 	require('./friend-chat-settings')(scriptManager);
 	require('./chat-settings')(scriptManager);
+	require('./broadcasts').init(scriptManager);
 };

@@ -28,7 +28,7 @@ var util = require('../../core/util');
 var chat = require('../../chat');
 var inv = require('../../inv');
 var widget = require('../../widget');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 var materials = require('./materials');
 var makexProgress = require('../makex/progress');
 

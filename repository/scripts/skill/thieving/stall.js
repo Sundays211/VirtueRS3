@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 var config = require('../../core/config');
 var util = require('../../core/util');
 var inv = require('../../inv');

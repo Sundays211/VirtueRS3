@@ -1,11 +1,11 @@
 /**
- * Module to initialise the admin system script bindings.
+ * Module to initialise the cooking script bindings.
  */
+
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./commands'),
-		require('./rotten-potato'),
-		require('./jmod-toolbox')
+		require('./skill-tab')
 	];
 	
 	for (var i in modules) {

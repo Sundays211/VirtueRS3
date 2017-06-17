@@ -19,32 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType */
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
- * @author Sam Bartlett
  * @author Sundays211
  * @since 05/11/2014
- */ 
-
-var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, scriptArgs) {
-		var player = scriptArgs.player;
+ */
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.COMMAND_ADMIN, ["title", "endtitle"], function (ctx) {
+			var player = ctx.player;
+			var args = ctx.cmdArgs;
+			
+			var message = "";
+			for (var i = 0; i < args.length; i++) {
+				message += (i === 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
+			}			
+			if (ctx.syntax.toLowerCase() == "title") {
+				player.getAppearance().setPrefixTitle(message + "");
+				player.getAppearance().refresh();
+			} else if (ctx.syntax.toLowerCase() == "endtitle") {
+				player.getAppearance().setSuffixTitle(message + "");
+				player.getAppearance().refresh();
+			}
+		});
 		
-		for (skill=0; skill < 27; skill++) {
-			api.addExperience(player, skill, 13034431, false);
-		}
-		api.restoreLifePoints(player);
-		return;
+		scriptManager.bind(EventType.COMMAND_ADMIN, "removeTitle", function (ctx) {
+			ctx.player.getModel().setPrefixTitle("");
+			ctx.player.getModel().refresh();
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "devTitle", function (ctx) {
+			ctx.player.getModel().setPrefixTitle("<col=33CCFF>");
+			ctx.player.getModel().refresh();
+		});
 	}
-});
-
-/* Listen to the commands specified */
-var listen = function(scriptManager) {
-	var listener = new CommandListener();
-	scriptManager.registerListener(EventType.COMMAND, "master", listener);
-	scriptManager.registerListener(EventType.COMMAND, "max", listener);
-};
+})();
