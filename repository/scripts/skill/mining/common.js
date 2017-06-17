@@ -23,7 +23,7 @@
 var chat = require('../../chat');
 var util = require('../../core/util');
 var anim = require('../../core/anim');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 var pickaxe = require('./pickaxe');
 
 /**

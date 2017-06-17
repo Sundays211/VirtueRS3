@@ -23,7 +23,6 @@
 var coords = require('../coords');
 
 var dialog = require('../../dialog');
-var util = require('../../core/util');
 var chat = require('../../chat');
 var entityMap = require('../entity');
 var common = require('../common');
@@ -74,35 +73,15 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teleto", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to:";
-			dialog.requestName(ctx.player, message).then(function (name) {
-				var hash = util.getUserHash(name);
-				if (hash) {
-					var targetPlayer = entityMap.getPlayer(hash);
-					if (targetPlayer) {
-						entityMap.setCoords(ctx.player, entityMap.getCoords(targetPlayer));
-					} else {
-						chat.sendMessage(ctx.player, name+" is not currently in the game world.");
-					}
-				} else {
-					chat.sendMessage(ctx.player, name+" is not registered on this server.");
-				}
+			dialog.requestPlayer(ctx.player, message, function (targetPlayer) {
+				entityMap.setCoords(ctx.player, entityMap.getCoords(targetPlayer));
 			});
 		});
 		
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teletome", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to you:";
-			dialog.requestName(ctx.player, message).then(function (name) {
-				var hash = util.getUserHash(name);
-				if (hash) {
-					var targetPlayer = entityMap.getPlayer(hash);
-					if (targetPlayer) {
-						entityMap.setCoords(targetPlayer,  entityMap.getCoords(ctx.player));
-					} else {
-						chat.sendMessage(ctx.player, name+" is not currently in the game world.");
-					}
-				} else {
-					chat.sendMessage(ctx.player, name+" is not registered on this server.");
-				}
+			dialog.requestPlayer(ctx.player, message, function (targetPlayer) {
+				entityMap.setCoords(targetPlayer, entityMap.getCoords(ctx.player));
 			});
 		});
 	}

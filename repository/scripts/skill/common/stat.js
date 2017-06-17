@@ -8,23 +8,40 @@ module.exports = init();
 function init () {
 	var xp = {
 		getLevel : getLevel,
+		setLevel : setLevel,
+		boost : boost,
+		reset : reset,
 		getBaseLevel : getBaseLevel,
 		giveXp : giveXp,
-		giveBonusXp : giveBonusXp
+		giveBonusXp : giveBonusXp,
+		lookup : lookupStat
 	};
 	
 	return xp;
 	
+	function boost (player, stat, amount) {
+		setLevel(player, stat, getLevel(player, stat)+amount);
+	}
+	
+	function reset (player, stat) {
+		setLevel(player, stat, getBaseLevel(player, stat));
+	}
+	
 	function getLevel (player, stat) {
 		return ENGINE.getStatLevel(player, stat);
+	}
+	
+	function setLevel (player, stat, level) {
+		ENGINE.setStatLevel(player, stat, level);
 	}
 	
 	function getBaseLevel (player, stat) {
 		return ENGINE.getBaseLevel(player, stat);
 	}
 	
-	function giveXp (player, stat, amount) {
-		ENGINE.addExperience(player, stat, amount, true);
+	function giveXp (player, stat, amount, isAward) {
+		isAward = typeof(isAward) === "undefined" ? true : isAward;
+		ENGINE.addExperience(player, stat, amount, isAward);
 	}
 
 	function giveBonusXp (player, skill, amount) {
@@ -109,5 +126,9 @@ function init () {
 			ENGINE.incrementVarp(player, 3836, amount);
 			return;
 		}
+	}
+	
+	function lookupStat (statName) {
+		return ENGINE.getStatByName(statName);
 	}
 }

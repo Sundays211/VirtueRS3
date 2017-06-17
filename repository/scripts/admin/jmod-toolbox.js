@@ -22,12 +22,12 @@
 /* globals EventType, ENGINE, Java */
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
-var coords = require('../../map/coords');
+var coords = require('../map/coords');
 
-var chat = require('../../chat');
-var common = require('../common');
-var util = require('../../core/util');
-var map = require('../../map');
+var chat = require('../chat');
+var widget = require('../widget');
+var util = require('../core/util');
+var map = require('../map');
 
 module.exports = (function () {
 	return {
@@ -43,7 +43,7 @@ module.exports = (function () {
 				chat.sendMessage(player, "You set your health to max.");
 				return;
 			case 115://Exit Button
-				common.closeAll(player);
+				widget.closeAll(player);
 				return;
 			case 145://invis
 				player.getModel().setRender(Render.INVISIBLE);
@@ -56,7 +56,7 @@ module.exports = (function () {
 				map.setCoords(player, coords(2908, 3332, 2));
 				return;
 			default:
-				util.defaultHandler(ctx, "JModToolBox");
+				util.defaultHandler(ctx, "JMod ToolBox");
 				return;
 			}
 		});

@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var component = require('../component');
 var varbit = require('../../core/var/bit');
 
 var util = require('../../core/util');
@@ -46,13 +47,13 @@ module.exports = (function () {
 			widget.setEvents(ctx.player, 1674, 68, 0, 8, 2);
 		});
 		
-		scriptManager.bind(EventType.IF_DRAG, widget.getHash(1674, 67), function (ctx) {
+		scriptManager.bind(EventType.IF_DRAG, component(1674, 67), function (ctx) {
 			if (ctx.toslot >= 0 && ctx.toslot < 8) {
 				varbit(ctx.player, 19011, ctx.toslot);
 			}
 		});
 		
-		scriptManager.bind(EventType.IF_DRAG, widget.getHash(1674, 91), function (ctx) {
+		scriptManager.bind(EventType.IF_DRAG, component(1674, 91), function (ctx) {
 			if (ctx.toslot >= 0 && ctx.toslot < 8) {
 				varbit(ctx.player, 19010, ctx.toslot);
 			}

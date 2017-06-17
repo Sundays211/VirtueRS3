@@ -27,7 +27,7 @@ var inv = require('../../inv');
 var map = require('../../map');
 var loc = require('../../map/location');
 
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 var mining = require('./common');
 
 /**

@@ -19,6 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType */
+var chat = require('../../chat');
+var util = require('../../core/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,37 +30,37 @@
  * @author Sundays211
  * @since 05/11/2014
  */
-
-var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, scriptArgs) {
-		var player = scriptArgs.player;
-		var args = scriptArgs.cmdArgs;
-		
-		var iterate = api.getPlayerIterator(api.getWorld());
-		var p2 = null;
-		while (iterate.hasNext()) {
-			var animID = parseInt(args[0]);
-			p2 = iterate.next();
-			if (syntax.toLowerCase() == "forcedance") {
-				p2.getAppearance().setRenderAnimation(3171);
-				p2.getAppearance().refresh();
-				api.runAnimation(p2, 7071);//7071
-			} else if (syntax.toLowerCase() == "toplayer") {
-				p2.getAppearance().setRender(Render.PLAYER);
-				p2.getAppearance().refresh();
-			} 
-				
-		}
-		
-		return true;
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.COMMAND_ADMIN, ["cs2", "cscript"], function (ctx) {
+			var player = ctx.player;
+			var args = ctx.cmdArgs;
+			
+			if (ctx.length < 1 || isNaN(args[0])) {
+				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [args]", ctx.console);
+				return;
+			}
+			var scriptId = parseInt(args[0]);
+			var params = [];
+			for (var i = 1; i<args.length;i++) {
+				if (!args[i].trim()) {
+					continue;
+				}
+				try {
+					params[i-1] = parseInt(args[i]);
+				} catch (e) {
+					params[i-1] = args[i];
+				}
+				if (isNaN(params[i-1])) {
+					params[i-1] = args[i];
+				}
+			}
+			chat.sendCommandResponse(player, "Running client script "+scriptId+" with params "+JSON.stringify(params), ctx.console);
+			util.runClientScript(player, scriptId, params);
+		});
 	}
-});
-
-/* Listen to the commands specified */
-var listen = function(scriptManager) {
-	var commands = [ "forcedance", "forcekick", "toplayer" ];
-	var listener = new CommandListener();
-	for (var i in commands) {
-		scriptManager.registerListener(EventType.COMMAND_ADMIN, commands[i], listener);
-	}
-};
+})();

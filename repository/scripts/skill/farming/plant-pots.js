@@ -31,7 +31,7 @@ var dialog = require('../../dialog');
 var widget = require('../../widget');
 
 var makex = require('../makex');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

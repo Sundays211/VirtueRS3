@@ -19,32 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType, Java */
+var World = Java.type('org.virtue.game.World');
+
+var messages = require('./messages');
+var util = require('../core/util');
 
 /**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Sundays211
- * @since 05/11/2014
+ * 
  */
-var CommandListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, syntax, scriptArgs) {
-		var player = scriptArgs.player;
-		var args = scriptArgs.cmdArgs;
-
-		var iterate = Java.type('org.virtue.game.World').getInstance().getPlayers().iterator();
-		var players = null;
-		while (iterate.hasNext()) {
-			players = iterate.next();
-			players.stopAll();
-		}
-		
-		return true;
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManger) {
+		scriptManger.bind(EventType.COMMAND_ADMIN, "bc", function (ctx) {
+			var player = ctx.player;
+			var args = ctx.cmdArgs;
+			
+			if (args.length < 1) {
+				messages.sendCommandResponse(player, "<col=0099CC>ERROR! Message is to short or needs a space</col>", ctx.console);
+				return;
+			}
+			var message = args[0].charAt(0).toUpperCase() + args[0].substr(1).toLowerCase();
+			for (var i = 1; i < args.length; i++) {
+				message += " "+args[i];
+			}
+			World.getInstance().sendAdminBroadcast("[" + util.getName(player) + "]: " + message);
+			messages.sendCommandResponse(player, "Sent Broadcast accross the server.", ctx.console);
+		});
 	}
-});
-
-/* Listen to the commands specified */
-var listen = function(scriptManager) {
-	var listener = new CommandListener();
-	scriptManager.registerListener(EventType.COMMAND_ADMIN, "clearall", listener);
-};
+})();

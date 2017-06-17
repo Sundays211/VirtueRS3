@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, ENGINE */
+var component = require('../../widget/component');
 var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 var varbit = require('../../core/var/bit');
@@ -29,7 +30,7 @@ var config = require('../../core/config');
 var util = require('../../core/util');
 var inv = require('../../inv');
 var chat = require('../../chat');
-var stat = require('../logic/stat');
+var stat = require('../common/stat');
 var quest = require('../../quest');
 
 var resources = require('./resources');
@@ -53,7 +54,7 @@ module.exports = (function () {
 			openDialog(ctx.player);
 		});
 		
-		scriptManager.bind(EventType.IF_DRAG, widget.getHash(1371, 36), function (ctx) {
+		scriptManager.bind(EventType.IF_DRAG, component(1371, 36), function (ctx) {
 			if (ctx.toslot < varbit(ctx.player, 1002) && ctx.toslot >= 0) {
 				varbit(ctx.player, 1003, ctx.toslot+1);
 			}
