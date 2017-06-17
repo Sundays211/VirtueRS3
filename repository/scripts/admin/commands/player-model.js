@@ -46,7 +46,7 @@ module.exports = (function () {
 				return;
 			}
 			var animId = parseInt(args[0]);
-			anim.runAnimation(player, animId, function () {
+			anim.run(player, animId, function () {
 				chat.sendMessage(player, "Finished animation "+animId);
 			});
 			chat.sendCommandResponse(player, "Running animation "+animId, ctx.console);
