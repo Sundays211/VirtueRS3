@@ -54,15 +54,19 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1461, 7), function (ctx) {
-			//Save selected magic tab
-			varbit(ctx.player, 18791, common.tabIdFromSlot(ctx.slot));
-			//varbit 18791 = selected magic tab
+			if (ctx.slot === 11) {
+				//Toggle hide
+				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
+			} else {
+				//Save selected magic tab
+				varbit(ctx.player, 18791, common.tabIdFromSlot(ctx.slot));
+			}
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1461, 1), function (ctx) {
 			var player = ctx.player;
 			var spell = config.enumValue(6740, ctx.slot);
-			//2880 = spell type (0=combat, 1=teleport, 2=skill, 4=?, 5=ability)
+			//2880 = category (0=combat, 1=teleport, 2=skill, 4=?, 5=ability)
 			if (config.structParam(spell, 2880) === 5) {
 				common.runAbility(player, spell);
 			} else {

@@ -50,18 +50,24 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 7), function (ctx) {
-			//Save selected melee tab
-			varbit(ctx.player, 18787, common.tabIdFromSlot(ctx.slot));
+			if (ctx.slot === 11) {
+				//Toggle hide
+				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
+			} else {
+				//Save selected melee tab
+				varbit(ctx.player, 18787, common.tabIdFromSlot(ctx.slot));
+			}
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 1), function (ctx) {
+			//Script 8437 = ability enums
 			var enumId = -1;
 			switch (varbit(ctx.player, 18787)) {
-			case 0://Defence
-				enumId = 6736;
+			case 0://Attack
+				enumId = 6734;
 				break;
-			case 1://Constitution
-				enumId = 6737;
+			case 1://Strength
+				enumId = 6735;
 				break;
 			default:
 				throw "Unsupported tab: "+varbit(ctx.player, 18787);

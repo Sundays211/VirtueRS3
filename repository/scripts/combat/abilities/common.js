@@ -1,8 +1,8 @@
 /**
  * 
  */
-
-//var ActionBar = Java.type('org.virtue.game.entity.combat.impl.ability.ActionBar');
+/* globals Java */
+var ActionBar = Java.type('org.virtue.game.entity.combat.impl.ability.ActionBar');
 
 var chat = require('../../chat');
 
@@ -15,10 +15,10 @@ module.exports = (function () {
 	
 	function runAbility (player, abilityId) {
 		chat.sendDebugMessage(player, "Running ability: "+abilityId);
-		//var ability = ActionBar.getAbilities().get(1460 << 6 | ctx.component);
-		//if (ability !== null) {
-		//	player.getCombatSchedule().run(ability);
-		//}
+		var ability = ActionBar.getAbilities().get(abilityId);
+		if (ability !== null) {
+			player.getCombatSchedule().run(ability);
+		}
 	}
 	
 	function tabIdFromSlot (slot) {

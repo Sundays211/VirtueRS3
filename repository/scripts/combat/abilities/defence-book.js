@@ -48,8 +48,13 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1449, 7), function (ctx) {
-			//Save selected defence tab
-			varbit(ctx.player, 18793, common.tabIdFromSlot(ctx.slot));
+			if (ctx.slot === 11) {
+				//Toggle hide
+				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
+			} else {
+				//Save selected defence tab
+				varbit(ctx.player, 18793, common.tabIdFromSlot(ctx.slot));
+			}
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1449, 1), function (ctx) {
