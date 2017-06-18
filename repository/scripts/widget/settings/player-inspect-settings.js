@@ -53,7 +53,7 @@ module.exports = (function () {
 			case 30://Close
 				return;
 			case 40://Clear message
-				varc(ctx.player, 4982, "");
+				varp(ctx.player, 4982, "");
 				varc(ctx.player, 4670, "");
 				return;
 			//case 35://Set status
