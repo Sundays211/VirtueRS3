@@ -19,8 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var anim = require('../core/anim');
+/* globals EventType, Inv */
 var inv = require('../../inv');
 var chat = require('../../chat');
 
@@ -30,15 +29,14 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.OPHELDU, 28617, function (ctx) {
-	if (ctx.useObjId == 33296) {
-	inv.setSlot(ctx.player, Inv.BACKPACK, ctx.slot, 33390, 1); 
-	inv.take(ctx.player, 33296, 1); 
-	chat.sendMessage(ctx.player, "You successfully place dye over the seismic wand."); 
-	return;
-	}
-	});
-	
+		scriptManager.bind(EventType.OPHELDU, 28617, function (ctx) {
+			if (ctx.useObjId == 33296) {
+				inv.setSlot(ctx.player, Inv.BACKPACK, ctx.slot, 33390, 1); 
+				inv.take(ctx.player, 33296, 1); 
+				chat.sendMessage(ctx.player, "You successfully place dye over the seismic wand."); 
+				return;
+			}
+		});
 	}
 
 })();

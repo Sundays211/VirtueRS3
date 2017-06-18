@@ -19,9 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var coords = require('../map/coords');
-var chat = require('../chat');
+/* globals EventType, ENGINE */
 var map = require('../map');
 var anim = require('../core/anim');
 
@@ -32,10 +30,10 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [65084,65086,65082,65076,65077,65079], function (ctx) {//Wildy Ditch
-		if(map.getCoordY(ctx.player) == 3520) {
-		anim.run(ctx.player, 6132);
-		ENGINE.teleportEntityBy(ctx.player, 0, 3, 0);
-		}	
+			if (map.getCoordY(ctx.player) == 3520) {
+				anim.run(ctx.player, 6132);
+				ENGINE.teleportEntityBy(ctx.player, 0, 3, 0);
+			}	
 		});
 
 	}
