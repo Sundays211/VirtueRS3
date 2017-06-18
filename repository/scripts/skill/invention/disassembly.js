@@ -68,6 +68,9 @@ module.exports = (function () {
 	}
 	
 	function lookupCategory (category) {
+		if (!_categoryLookup) {
+			init();
+		}
 		return _categoryLookup[category];
 	}
 	
@@ -157,7 +160,6 @@ module.exports = (function () {
 		var level = getItemLevel(objId);
 		return Math.max((categoryData.boosted ? 0.3 : 0.03)*level, 0.1);
 	}
-	
 	
 	function calculateJunkChance (itemId) {
 		var level = getItemLevel(itemId);

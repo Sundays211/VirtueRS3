@@ -19,9 +19,9 @@ import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 public abstract class Ability extends AttackEvent {
 
 	/**
-	 * The script id.
+	 * The struct id.
 	 */
-	private final int scriptId;
+	private final int structId;
 	
 	/**
 	 * The client id.
@@ -66,7 +66,7 @@ public abstract class Ability extends AttackEvent {
 		super(follower, null);
 		this.type = type;
 		this.style = style;
-		this.scriptId = scriptId;
+		this.structId = scriptId;
 		this.clientId = clientId;
 		this.cooldownId = cooldownId;
 		this.cooldown = cooldown;
@@ -88,7 +88,9 @@ public abstract class Ability extends AttackEvent {
 	/**
 	 * Registers the ability.
 	 */
-	public abstract void register();
+	public void register() {
+		ActionBar.getAbilities().put(structId, this);
+	}
 	
 	/**
 	 * Gets the impacts.
@@ -158,7 +160,7 @@ public abstract class Ability extends AttackEvent {
 	 * @return The scriptId.
 	 */
 	public int getScriptId() {
-		return scriptId;
+		return structId;
 	}
 
 	/**

@@ -49,6 +49,14 @@ module.exports = {
 		total : common.total,
 		
 		/**
+		 * Checks how many of items with the specified params the player holds.
+		 * @param player The player to check
+		 * @param paramId The object param to check for
+		 * @param invId The inventory to check. Defaults to BACKPACK if not specified
+		 */
+		totalparam : common.totalparam,
+		
+		/**
 		 * Gets the total capacity of the provided inventory
 		 * 
 		 * @param invId The ID of the inventory to check

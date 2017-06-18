@@ -41,7 +41,7 @@ public final class BackhandAbility extends Ability {
 
 	@Override
 	public void register() {
-		ActionBar.getAbilities().put(1460 << 16 | 6, this);
+		ActionBar.getAbilities().put(14682, this);
 	}
 
 }

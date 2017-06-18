@@ -11,7 +11,9 @@ module.exports = (function () {
 	return {
 		has : has,
 		getCount : getResourceCount,
-		take : takeResources
+		take : takeResources,
+		takeRunes : takeRunes,
+		getRuneCount : getRuneCount
 	};
 	
 	function has (player, resourceId) {
@@ -50,9 +52,8 @@ module.exports = (function () {
 			case 17789:
 			case 17790:
 			case 17791:
-				//amount = script_7165(a0);
-				//break;
-				throw "Unsupported resource: "+resourceId;
+				amount = getRuneCount(resourceId);
+				break;
 			case 5331://Watering can
 			case 5333://Watering can (1)
 			case 5334://Watering can (2)
@@ -203,9 +204,8 @@ module.exports = (function () {
 		case 17789:
 		case 17790:
 		case 17791:
-			//amount = script_7165(a0);
-			//break;
-			throw "Unsupported resource: "+resourceId;
+			takeRunes(resourceId);
+			return;
 		case 5331://Watering can
 		case 5333://Watering can (1)
 		case 5334://Watering can (2)
@@ -311,7 +311,7 @@ module.exports = (function () {
 	}
 	
 	function takeFromWeighted(player, totalAmount, weightedItems) {
-		for (var slot=0; slot<inv.size(player); slot++) {
+		for (var slot=0; slot<inv.size(Inv.BACKPACK); slot++) {
 			var objId = inv.getObjId(player, Inv.BACKPACK, slot);
 			var amount = weightedItems.indexOf(objId);
 			
@@ -333,15 +333,215 @@ module.exports = (function () {
 	}
 	
 	function takeFromMulti (player, totalAmount, items) {
-		for (var slot=0; slot<inv.size(player); slot++) {
+		for (var slot=0; slot<inv.size(Inv.BACKPACK); slot++) {
 			var objId = inv.getObjId(player, Inv.BACKPACK, slot);
 			if (items.indexOf(objId) !== -1) {
-				inv.clearSlot(player, Inv.BACKPACK, slot);
-				totalAmount--;
+				var count = inv.getCount(player, Inv.BACKPACK, slot);
+				if (count < totalAmount) {
+					inv.clearSlot(player, Inv.BACKPACK, slot);
+					totalAmount -= count;
+				} else {
+					inv.take(player, objId, totalAmount, Inv.BACKPACK, slot);
+				}
+				
 				if (totalAmount < 1) {
 					return;
 				}
 			}
+		}
+	}
+	
+	function takeRunes (player, runeId, amount) {
+		switch (runeId) {
+		case 17780://Air rune
+			if (!inv.totalparam(player, 972, Inv.EQUIPMENT)) {
+				takeFromMulti(player, amount, [ 17780, 16091 ]);
+			}
+			return;
+		case 17781://Water rune
+			if (!inv.totalparam(player, 973, Inv.EQUIPMENT)) {
+				takeFromMulti(player, amount, [ 17781, 16092 ]);
+			}
+			return;
+		case 17782://Earth rune
+			if (!inv.totalparam(player, 974, Inv.EQUIPMENT)) {
+				takeFromMulti(player, amount, [ 17782, 16093 ]);
+			}
+			return;
+		case 17783://Fire rune
+			if (!inv.totalparam(player, 975, Inv.EQUIPMENT)) {
+				takeFromMulti(player, amount, [ 17783, 16094 ]);
+			}
+			return;
+		case 17784://Mind rune
+			takeFromMulti(player, amount, [ 17784, 16095 ]);
+			return;
+		case 17785://Chaos rune
+			takeFromMulti(player, amount, [ 17785, 16096 ]);
+			return;
+		case 17786://Death rune
+			takeFromMulti(player, amount, [ 17786, 16097 ]);
+			return;
+		case 17787://Blood rune
+			takeFromMulti(player, amount, [ 17787, 16098 ]);
+			return;
+		case 17788://Body rune
+			takeFromMulti(player, amount, [ 17788, 16099 ]);
+			return;
+		case 17789://Cosmic rune
+			takeFromMulti(player, amount, [ 17789, 16100 ]);
+			return;
+		case 17790://Astral rune
+			takeFromMulti(player, amount, [ 17790, 16101 ]);
+			return;
+		case 17791://Nature rune
+			takeFromMulti(player, amount, [ 17791, 16102 ]);
+			return;
+		case 17792://Law rune
+			takeFromMulti(player, amount, [ 17792, 16103 ]);
+			return;
+		case 17793://Soul rune
+			takeFromMulti(player, amount, [ 17793, 16104 ]);
+			return;
+		case 556://Air rune
+			if (!inv.totalparam(player, 972, Inv.EQUIPMENT)) {
+				inv.take(player, 556, amount);
+			}
+			return;
+			//if (_map_members() == 1) 
+			//return inv.total(player, 556) + inv.total(player, 4697) + inv.total(player, 4695) + inv.total(player, 4696);
+		case 555://Water rune
+			if (!inv.totalparam(player, 973, Inv.EQUIPMENT)) {
+				inv.take(player, 555, amount);
+			}
+			return;
+			//if (_map_members() == 1) 
+			//return inv.total(player, 555) + inv.total(player, 4694) + inv.total(player, 4695) + inv.total(player, 4698);
+		case 554://Fire rune
+			if (!inv.totalparam(player, 975, Inv.EQUIPMENT)) {
+				inv.take(player, 554, amount);
+			}
+			return;
+			//if (_map_members() == 1) 
+			//return inv.total(player, 554) + inv.total(player, 4694) + inv.total(player, 4697) + inv.total(player, 4699);
+		case 557://Earth rune
+			if (!inv.totalparam(player, 974, Inv.EQUIPMENT)) {
+				inv.take(player, 557, amount);
+			}
+			return;
+			//if (_map_members() == 1) 
+			//return inv.total(player, 557) + inv.total(player, 4696) + inv.total(player, 4699) + inv.total(player, 4698);
+		case 563://Law rune
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18342) > 0) 
+			//	return domain_2['cfg2691'];
+			return inv.take(player, 563, amount);
+		case 561://Nature rune
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18341) > 0) 
+			//	return domain_2['cfg2691'];
+			return inv.take(player, 561, amount);
+		case 558://Mind rune
+		case 559://Body rune
+		case 560://Death rune
+		case 562://Chaos rune
+		case 9075://Astral rune
+		case 564://Cosmic rune
+		case 565://Blood rune
+		case 566://Soul rune
+			return inv.take(player, runeId, amount);
+		}
+	}
+	
+	function getRuneCount (player, runeId) {
+		switch (runeId) {
+		case 17780://Air rune
+			if (inv.totalparam(player, 972, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			return inv.total(player, 17780) + inv.total(player, 16091);
+		case 17781://Water rune
+			if (inv.totalparam(player, 973, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			return inv.total(player, 17781) + inv.total(player, 16092);
+		case 17782://Earth rune
+			if (inv.totalparam(player, 974, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			return inv.total(player, 17782) + inv.total(player, 16093);
+		case 17783://Fire rune
+			if (inv.totalparam(player, 975, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			return inv.total(player, 17783) + inv.total(player, 16094);
+		case 17784://Mind rune
+			return inv.total(player, 17784) + inv.total(player, 16095);
+		case 17785://Chaos rune
+			return inv.total(player, 17785) + inv.total(player, 16096);
+		case 17786://Death rune
+			return inv.total(player, 17786) + inv.total(player, 16097);
+		case 17787://Blood rune
+			return inv.total(player, 17787) + inv.total(player, 16098);
+		case 17788://Body rune
+			return inv.total(player, 17788) + inv.total(player, 16099);
+		case 17789://Cosmic rune
+			return inv.total(player, 17789) + inv.total(player, 16100);
+		case 17790://Astral rune
+			return inv.total(player, 17790) + inv.total(player, 16101);
+		case 17791://Nature rune
+			return inv.total(player, 17791) + inv.total(player, 16102);
+		case 17792://Law rune
+			return inv.total(player, 17792) + inv.total(player, 16103);
+		case 17793://Soul rune
+			return inv.total(player, 17793) + inv.total(player, 16104);
+		case 556://Air rune
+			if (inv.totalparam(player, 972, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			//if (_map_members() == 1) { 
+			//	return inv.total(player, 556) + inv.total(player, 4697) + inv.total(player, 4695) + inv.total(player, 4696);
+			//}
+			return inv.total(player, 556);
+		case 555://Water rune
+			if (inv.totalparam(player, 973, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			//if (_map_members() == 1) {
+			//	return inv.total(player, 555) + inv.total(player, 4694) + inv.total(player, 4695) + inv.total(player, 4698);
+			//}
+			return inv.total(player, 555);
+		case 554://Fire rune
+			if (inv.totalparam(player, 975, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			//if (_map_members() == 1) {
+			//	return inv.total(player, 554) + inv.total(player, 4694) + inv.total(player, 4697) + inv.total(player, 4699);
+			//}
+			return inv.total(player, 554);
+		case 557://Earth rune
+			if (inv.totalparam(player, 974, Inv.EQUIPMENT)) {
+				return -1;
+			}
+			//if (_map_members() == 1) {
+			//	return inv.total(player, 557) + inv.total(player, 4696) + inv.total(player, 4699) + inv.total(player, 4698);
+			//}
+			return inv.total(player, 557);
+		case 563://Law rune
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18342) > 0) 
+			//	return domain_2['cfg2691'];
+			return inv.total(player, 563);
+		case 561://Nature rune
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18341) > 0) 
+			//	return domain_2['cfg2691'];
+			return inv.total(player, 561);
+		case 558://Mind rune
+		case 559://Body rune
+		case 560://Death rune
+		case 562://Chaos rune
+		case 9075://Astral rune
+		case 564://Cosmic rune
+		case 565://Blood rune
+		case 566://Soul rune
+			return inv.total(player, runeId);
 		}
 	}
 })();

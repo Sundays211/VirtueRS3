@@ -6,8 +6,8 @@ import java.util.List;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.death.DeathHandler;
+import org.virtue.game.entity.combat.hit.DamageType;
 import org.virtue.game.entity.combat.hit.Hit;
-import org.virtue.game.entity.combat.hit.Hit.HitType;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.var.VarKey;
@@ -94,7 +94,7 @@ public class ImpactHandler {
 		}
 		updateLifepoints(amount + lifepoints);
 		if (showHeal && amount > 0) {
-			queuedHits.add(new Hit(amount, HitType.HEALED_DAMAGE));
+			queuedHits.add(new Hit(amount, DamageType.HEALED));
 			queuedBars.add(new Bar(Bar.HITPOINTS, current, lifepoints, 0));
 			scheduleBlock();
 		}
@@ -105,7 +105,7 @@ public class ImpactHandler {
 		if (hitAmount > lifepoints) {
 			hitAmount = lifepoints;
 		}
-		queuedHits.add(new Hit(hitAmount, 0, HitType.REGULAR_DAMAGE));
+		queuedHits.add(new Hit(hitAmount, 0, DamageType.REGULAR));
 		decrementLifepoints(hitAmount);
 		queuedBars.add(new Bar(Bar.HITPOINTS, last, lifepoints, 0));
 		scheduleBlock();

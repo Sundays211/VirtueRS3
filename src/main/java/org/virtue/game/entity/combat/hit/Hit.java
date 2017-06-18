@@ -29,43 +29,8 @@ import org.virtue.network.protocol.update.ref.Bar;
  */
 public class Hit {
 
-	public enum HitType {//141
-		REGULAR_DAMAGE(144/*0x3*/), REFLECTED_DAMAGE(146/*0x4*/), 
-		ABSORB_DAMAGE(148/*0x5*/), POISON_DAMAGE(147/*0x6*/), 
-		DESEASE_DAMAGE(0x7), MISSED(141/*0x8*/),
-		HEALED_DAMAGE(143/*0x9*/), CANNON_DAMAGE(145/*0xd*/), 
-		//Option 1: melee=132, ranged=135, mage=138
-		//Option 2: melee=149, ranged=152, mage=155
-		//Option 3: melee=150, ranged=153, mage=156
-		MELEE_DAMAGE(132/*0x30*/), RANGE_DAMAGE(135/*0x31*/),
-		MAGIC_DAMAGE(138/*0x32*/), INSTANT_KILL(0x36), 
-		HIDDEN_HIT(0x7ffe), DOUBLE_HIT(0x7fff),
-		MELEE_DAMAGE_2(150), MAGIC_DAMAGE_2(156), RANGE_DAMAGE_2(153);
-
-		private int hitMask;
-
-		/**
-		 * Constructs a new {@code HitType} instance.
-		 * 
-		 * @param hitMask
-		 *            The hit mask id.
-		 */
-		private HitType(int hitMask) {
-			this.hitMask = hitMask;
-		}
-
-		/**
-		 * Gets the hit mask id.
-		 * 
-		 * @return The hit mask id.
-		 */
-		public int getMask() {
-			return hitMask;
-		}
-	}
-
 	private Bar[] bars;
-	private HitType type;
+	private DamageType type;
 	private int damage;
 	private int customType;
 	private int secondaryDamage;
@@ -80,7 +45,7 @@ public class Hit {
 	 * @param type
 	 *            The {@code HitType} to send.
 	 */
-	public Hit(int damage, HitType type) {
+	public Hit(int damage, DamageType type) {
 		this(damage, 1, type);
 	}
 
@@ -92,7 +57,7 @@ public class Hit {
 	 * @param type
 	 *            The {@code HitType} instance to send.
 	 */
-	public Hit(int damage, int delay, HitType type, Bar... bars) {
+	public Hit(int damage, int delay, DamageType type, Bar... bars) {
 		this.damage = damage;
 		this.delay = delay;
 		this.type = type;
@@ -111,7 +76,7 @@ public class Hit {
 			int delay, Bar... bars) {
 		this.damage = damage;
 		this.delay = delay;
-		this.type = HitType.DOUBLE_HIT;
+		this.type = DamageType.DOUBLE_HIT;
 		this.customType = type;
 		this.secondaryType = secondaryType;
 		this.secondaryDamage = secondaryDamage;
@@ -128,7 +93,7 @@ public class Hit {
 	/**
 	 * @return the type
 	 */
-	public HitType getType() {
+	public DamageType getType() {
 		return type;
 	}
 
