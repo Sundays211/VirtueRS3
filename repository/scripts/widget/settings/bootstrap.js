@@ -11,7 +11,8 @@ module.exports = function (scriptManager) {
 		require('./house-settings'),
 		require('./interface-settings'),
 		require('./loot-settings'),
-		require('./misc-settings')
+		require('./misc-settings'),
+		require('./player-inspect-settings')
 	];
 	
 	for (var i in modules) {

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, ENGINE */
-var anim = require('../core/anim');
+var anim = require('../../core/anim');
 var inv = require('../../inv');
 var chat = require('../../chat');
 
