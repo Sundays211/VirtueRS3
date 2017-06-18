@@ -8,7 +8,8 @@
  */
 function getAllModules () {// jshint ignore:line
 	var modules = [
-		'items',
+	    'items',
+		'items/itemUse',
 		'admin',
 		'area',
 		'area/fremennik',

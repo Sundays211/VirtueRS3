@@ -56,23 +56,35 @@ module.exports = (function () {
 			switch (ctx.component) {
 			case 3://Filter 1
 			case 4:
-				chat.sendDebugMessage(player, "TODO: Find the right varbit for filter 1");
-				//var enabled = api.getVarBit(player, 318) == 1;
-				//api.setVarBit(player, 318, enabled ? 0 : 1);
-				return;
+			var enabled = varbit(player, 20864) == 1;
+			varbit(player, 20864, enabled ? 0 : 1);
+			return;
 			case 5://Filter 2
 			case 8:
-				var enabled = varbit(player, 316) == 1;
-				varbit(player, 316, enabled ? 0 : 1);
-				return;
+			var enabled = varbit(player, 316) == 1;
+			varbit(player, 316, enabled ? 0 : 1);
+			return;
 			case 9://Hide done
 			case 12:
-				chat.sendDebugMessage(player, "TODO: Find the right varbit for hide done");
-				//var enabled = api.getVarBit(player, 317) == 1;
-				//api.setVarBit(player, 317, enabled ? 0 : 1);
-				return;
+			var enabled = varbit(player, 318) == 1;
+			varbit(player, 318, enabled ? 0 : 1);
+			return;
 			case 40://Category
-				varbit(player, 315, ctx.slot);
+			varbit(player, 315, ctx.slot);
+			switch (ctx.slot) {
+			case 0:
+			var enabled = varbit(player, 317) == 1;
+			varbit(player, 317, enabled ? 0 : 1);
+			return;
+			case 1:
+            var enabled = varbit(player, 317) == 1;
+			varbit(player, 317, enabled ? 0 : 1); 
+			return;
+			case 2:
+            var enabled = varbit(player, 317) == 1;
+			varbit(player, 317, enabled ? 0 : 1);
+			return;
+			}	
 				return;
 			case 17:
 				switch (ctx.button) {

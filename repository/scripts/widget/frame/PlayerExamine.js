@@ -19,55 +19,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals EventType */
+var varc = require('../../core/var/client');
 
-/**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Kayla <skype:ashbysmith1996>
- * @author Sundays211
- * @since 16/01/2016
- */
-var ExamineSettingsListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, interfaceID, args) {
-		var player = args.player;
-		if (event == EventType.IF_OPEN) {
-			var messsage = api.getVarp(player, 4982);
-			api.setVarc(player, 4670, messsage);
+var util = require('../../core/util');
+var widget = require('../common');
+var anim = require('../../core/anim');
+
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+		scriptManager.bind(EventType.IF_OPEN, 1561, function (ctx) {
+			var messsage = varc(ctx.player, 4982);
+			varc(ctx.player, 4670, messsage);
 			//varcstr id=4670, value=
-			api.setWidgetEvents(player, 1561, 35, 0, 22, 2);
-		} else {
-			switch (args.component) {
+			widget.setEvents(ctx.player, 1561, 35, 0, 22, 2);
+		});
+		
+		scriptManager.bind(EventType.IF_BUTTON, 1561, function (ctx) {
+			switch (ctx.component) {
 			case 21://Enter new message
-				inframeInput(player, 1561, 18, function (value) {
+				widget.inframeInput(ctx.player, 1561, 18, function (value) {
 					if (value.length > 80) {
 						value = value.substring(0, 80);
 					}
-					api.setVarp(player, 4982, value);
-					api.setVarc(player, 4670, value);
+					varc(ctx.player, 4982, value);
+					varc(ctx.player, 4670, value);
 				}, 9, 80);
 				return;
 			case 30://Close
 				return;
 			case 40://Clear message
-				api.setVarp(player, 4982, "");
-				api.setVarc(player, 4670, "");
+				varc(ctx.player, 4982, "");
+				varc(ctx.player, 4670, "");
 				return;
 			case 35://Set status
-				api.setWidgetEvents(player, 1477, 867, 0, 10, 2);
+				widget.setEvents(ctx.player, 1477, 867, 0, 10, 2);
 				//IF events: if=1477, comp=867, from=0, to=11, events=2
 			case 45://Toggle privacy mode
 			default:
-				api.sendMessage(player, "Unhandled examine settings button: comp="+args.component+", slot="+args.slot+", button="+args.button);
+           util.defaultHandler(ctx, "examine settings");
 				return;
-			}		
-		}
+			}	
+		});
 	}
-});
-
-/* Listen to the interface ids specified */
-var listen = function(scriptManager) {
-	var listener = new ExamineSettingsListener();
-	scriptManager.registerListener(EventType.IF_OPEN, 1561, listener);
-	scriptManager.registerListener(EventType.IF_BUTTON, 1561, listener);
-};
+})();
