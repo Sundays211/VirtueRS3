@@ -1795,52 +1795,7 @@ public class LoginDispatcher {
 		
 		//Action Bar
 		player.getWidgets().openOverlaySub(1003, 1430, true);
-		player.getDispatcher().sendCS2Script2(8320, 1032);
-		player.getDispatcher().sendCS2Script2(8320, 1033);
-		player.getDispatcher().sendCS2Script2(8320, 1034);
-		player.getDispatcher().sendCS2Script2(8320, 1035);
 		player.getDispatcher().sendWidgetEvents(1477, 45, 1, 1, 4);
-		player.getDispatcher().sendWidgetEvents(1430, 57, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 62, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 70, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 75, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 83, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 88, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 96, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 101, -1, -1, 11108350);
-		player.getDispatcher().sendWidgetEvents(1430, 109, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 114, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 122, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 127, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 135, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 140, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 148, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 153, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 161, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 166, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 174, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 179, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 187, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 192, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 200, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 205, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 213, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 218, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 228, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1430, 233, -1, -1, 2098176);
-		player.getDispatcher().sendWidgetEvents(1458, 33, 0, 35, 8388610);
-		player.getDispatcher().sendWidgetEvents(1430, 14, -1, -1, 8388608);
-		player.getDispatcher().sendWidgetEvents(1505, 4, -1, -1, 8388608);
-		player.getDispatcher().sendWidgetEvents(1465, 49, -1, -1, 8388608);
-		player.getDispatcher().sendWidgetEvents(1430, 8, -1, -1, 8650758);
-		player.getDispatcher().sendWidgetEvents(1504, 6, -1, -1, 8388608);
-		player.getDispatcher().sendWidgetEvents(1430, 19, -1, -1, 8388608);
-		player.getDispatcher().sendWidgetEvents(1506, 0, -1, -1, 8388608);
-		//player.getDispatcher().sendWidgetEvents(1460, 1, 0, 187, 8485894);
-		//player.getDispatcher().sendWidgetEvents(1452, 1, 0, 187, 8485894);
-		//player.getDispatcher().sendWidgetEvents(1461, 1, 0, 187, 8485958);
-		//player.getDispatcher().sendWidgetEvents(1449, 1, 0, 187, 8485894);
-		player.getDispatcher().sendWidgetEvents(590, 8, 0, 196, 8388614);
 		
 		//
 		player.getWidgets().openWidget(1477, 580, 1433, true);

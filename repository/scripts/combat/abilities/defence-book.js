@@ -26,7 +26,7 @@ var varbit = require('../../core/var/bit');
 var config = require('../../core/config');
 var widget = require('../../widget');
 
-var common = require('./common');
+var logic = require('./logic');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -53,7 +53,7 @@ module.exports = (function () {
 				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
 			} else {
 				//Save selected defence tab
-				varbit(ctx.player, 18793, common.tabIdFromSlot(ctx.slot));
+				varbit(ctx.player, 18793, logic.tabIdFromSlot(ctx.slot));
 			}
 		});
 		
@@ -70,7 +70,7 @@ module.exports = (function () {
 				throw "Unsupported tab: "+varbit(ctx.player, 18793);
 			}
 			var abilityId = config.enumValue(enumId, ctx.slot);
-			common.runAbility(ctx.player, abilityId);
+			logic.runAbility(ctx.player, abilityId);
 		});
 	}
 })();

@@ -25,7 +25,7 @@ var component = require('../../widget/component');
 var config = require('../../core/config');
 var widget = require('../../widget');
 
-var common = require('./common');
+var logic = require('./logic');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -48,7 +48,7 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.IF_BUTTON1, component(1452, 1), function (ctx) {
 			var abilityId = config.enumValue(6738, ctx.slot);
-			common.runAbility(ctx.player, abilityId);
+			logic.runAbility(ctx.player, abilityId);
 		});
 	}
 })();

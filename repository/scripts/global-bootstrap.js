@@ -19,6 +19,7 @@ function getAllModules () {// jshint ignore:line
 		'chat',
 		'clan',
 		'combat/abilities',
+		'combat/action-bar',
 		'inv',
 		'shop',
 		'trade',

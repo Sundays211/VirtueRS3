@@ -71,10 +71,6 @@ public class ActionBarWidget extends Widget {
 	@Override
 	public boolean click(int widgetId, int buttonId, int slotId, int itemId, Player player, OptionButton option) {
 		switch (buttonId) {
-		case 49://Toggle auto-retaliate
-			boolean wasRetaliating = player.getCombatSchedule().isRetaliating();
-			player.getVars().setVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED, wasRetaliating ? 1 : 0);	
-			return true;
 		case 248:
 			player.getCombatSchedule().getActionBar().switchLocked();
 			break;

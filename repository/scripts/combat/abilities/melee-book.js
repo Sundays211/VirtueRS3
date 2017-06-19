@@ -26,7 +26,7 @@ var varbit = require('../../core/var/bit');
 var config = require('../../core/config');
 var widget = require('../../widget');
 
-var common = require('./common');
+var logic = require('./logic');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -49,13 +49,13 @@ module.exports = (function () {
 			widget.setEvents(ctx.player, 1460, 5, 0, 16, 2);
 		});
 		
-		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 7), function (ctx) {
+		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 5), function (ctx) {
 			if (ctx.slot === 11) {
 				//Toggle hide
 				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
 			} else {
 				//Save selected melee tab
-				varbit(ctx.player, 18787, common.tabIdFromSlot(ctx.slot));
+				varbit(ctx.player, 18787, logic.tabIdFromSlot(ctx.slot));
 			}
 		});
 		
@@ -73,7 +73,7 @@ module.exports = (function () {
 				throw "Unsupported tab: "+varbit(ctx.player, 18787);
 			}
 			var abilityId = config.enumValue(enumId, ctx.slot);
-			common.runAbility(ctx.player, abilityId);
+			logic.runAbility(ctx.player, abilityId);
 		});
 	}
 })();
