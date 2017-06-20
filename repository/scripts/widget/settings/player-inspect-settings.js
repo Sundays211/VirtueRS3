@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var varp = require('../../core/var/player');
 var varc = require('../../core/var/client');
 
 var util = require('../../core/util');
 var widget = require('../common');
-var anim = require('../../core/anim');
 
 module.exports = (function () {
 	return {
@@ -46,22 +46,22 @@ module.exports = (function () {
 					if (value.length > 80) {
 						value = value.substring(0, 80);
 					}
-					varc(ctx.player, 4982, value);
+					varp(ctx.player, 4982, value);
 					varc(ctx.player, 4670, value);
 				}, 9, 80);
 				return;
 			case 30://Close
 				return;
 			case 40://Clear message
-				varc(ctx.player, 4982, "");
+				varp(ctx.player, 4982, "");
 				varc(ctx.player, 4670, "");
 				return;
-			case 35://Set status
-				widget.setEvents(ctx.player, 1477, 867, 0, 10, 2);
+			//case 35://Set status
+			//	widget.setEvents(ctx.player, 1477, 867, 0, 10, 2);
 				//IF events: if=1477, comp=867, from=0, to=11, events=2
-			case 45://Toggle privacy mode
+			//case 45://Toggle privacy mode
 			default:
-           util.defaultHandler(ctx, "examine settings");
+				util.defaultHandler(ctx, "examine settings");
 				return;
 			}	
 		});

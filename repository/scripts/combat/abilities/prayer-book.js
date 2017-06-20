@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017 Virtue Studios
+ * Copyright (c) 2014 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,24 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Inv */
-var inv = require('../../inv');
-var chat = require('../../chat');
+/* globals EventType */
+var anim = require('../../core/anim');
 
+/** 
+ * @author Im Frizzy <skype:kfriz1998>
+ * @author Frosty Teh Snowman <skype:travis.mccorkle>
+ * @author Arthur <skype:arthur.behesnilian>
+ * @author Sundays211
+ * @since 01/02/2015
+ */
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPHELDU, 28617, function (ctx) {
-			if (ctx.useObjId == 33296) {
-				inv.setSlot(ctx.player, Inv.BACKPACK, ctx.slot, 33390, 1); 
-				inv.take(ctx.player, 33296, 1); 
-				chat.sendMessage(ctx.player, "You successfully place dye over the seismic wand."); 
-				return;
+		//Script 8426 = ability book options
+		scriptManager.bind(EventType.IF_BUTTON, 1458, function (ctx) {
+			var player = ctx.player;
+			
+			if(!player.getCombat().getPrayer().usingPrayer) {
+				player.getCombat().getPrayer().activate(ctx.slot);
+				anim.run(player, 18018);
+			} else {
+				player.getCombat().getPrayer().deactivate(ctx.slot);
 			}
 		});
 	}
-
 })();

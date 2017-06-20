@@ -63,5 +63,12 @@ public class WidgetSettingsEventContext implements GameEventContext {
 	public int getSettings() {
 		return settingsHash;
 	}
+
+	@Override
+	public String toString() {
+		return "WidgetSettingsEventContext [interfaceId=" + interfaceId
+				+ ", componentId=" + componentId + ", fromSlot=" + fromSlot
+				+ ", toSlot=" + toSlot + ", settingsHash=" + settingsHash + "]";
+	}
 	
 }

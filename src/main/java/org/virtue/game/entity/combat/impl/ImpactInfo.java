@@ -4,8 +4,8 @@ import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatEvent;
 import org.virtue.game.entity.combat.CombatStyle;
+import org.virtue.game.entity.combat.hit.DamageType;
 import org.virtue.game.entity.combat.hit.Hit;
-import org.virtue.game.entity.combat.hit.Hit.HitType;
 import org.virtue.game.world.region.zone.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
@@ -168,14 +168,14 @@ public class ImpactInfo {
 	 */
 	public Hit selectHitMark(int hit, int delay) {
 		if (hitMark == null) {
-			HitType type = null;
+			DamageType type = null;
 			if (style != null) {
 				type = ability ? style.getDefaultHitType() : style.getHitType();
 			}
 			if (hit <= 0) {
-				type = HitType.MISSED;
+				type = DamageType.MISSED;
 			} else if (type == null) {
-				type = HitType.REGULAR_DAMAGE;
+				type = DamageType.REGULAR;
 			}
 			hitMark = new Hit(hit, delay * 30, type);
 		}

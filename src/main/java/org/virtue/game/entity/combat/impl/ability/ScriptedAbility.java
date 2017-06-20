@@ -44,9 +44,4 @@ public final class ScriptedAbility extends Ability {
 		return listener.canActivate(entity, lock);
 	}
 
-	@Override
-	public void register() {
-		//TODO:
-	}
-
 }
