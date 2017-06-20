@@ -22,6 +22,7 @@
 /* globals EventType */
 var component = require('../../widget/component');
 var varp = require('../../core/var/player');
+var varbit = require('../../core/var/bit');
 
 var util = require('../../core/util');
 var widget = require('../../widget');
@@ -130,6 +131,14 @@ module.exports = (function () {
 				return;
 			case 228://Slot 14
 				logic.handleActionBarButton(player, 14, ctx.button);
+				return;
+			case 254://Lock action bar
+				varbit(player, 1892, varbit(player, 1892) ? 0 : 1);
+				refreshSlotEvents(player);
+				return;
+			case 256://Combat settings
+				varbit(player, 18997, 6);//Combat Settings tab
+				widget.openOverlay(player, 2);//Powers overlay
 				return;
 			default:
 				util.defaultHandler(ctx, "action bar");
@@ -266,13 +275,12 @@ module.exports = (function () {
 	}
 	
 	function getEvents(player, slot) {
-		return logic.hasAction(player, slot) ? 11108350 : 2098176;
+		return logic.hasAction(player, slot) ? (varbit(player, 1892) ? 2195454 : 11108350) : 2098176;
 	}
 	
 	function dragOnto (player, destHash, srcType, srcSlot) {
 		var destPos = slotFromComponent(destHash);
 		if (destPos !== -1) {
-			print(srcType+": "+srcSlot)
 			logic.setAction(player, destPos, srcType, srcSlot);
 			refreshSlotEvents(player);
 		}
