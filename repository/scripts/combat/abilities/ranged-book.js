@@ -26,6 +26,7 @@ var config = require('../../core/config');
 var widget = require('../../widget');
 
 var logic = require('./logic');
+var actionBar = require('../action-bar/widget');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -49,6 +50,13 @@ module.exports = (function () {
 		scriptManager.bind(EventType.IF_BUTTON1, component(1452, 1), function (ctx) {
 			var abilityId = config.enumValue(6738, ctx.slot);
 			logic.runAbility(ctx.player, abilityId);
+		});
+		
+		scriptManager.bind(EventType.IF_DRAG, component(1452, 1), function (ctx) {
+			var hash = ctx.toHash;
+			if (widget.getId(hash) == 1430) {
+				actionBar.dragOnto(ctx.player, hash, 5, ctx.fromslot);
+			}
 		});
 	}
 })();

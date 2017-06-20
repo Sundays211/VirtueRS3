@@ -27,6 +27,7 @@ var config = require('../../core/config');
 var widget = require('../../widget');
 
 var logic = require('./logic');
+var actionBar = require('../action-bar/widget');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -43,7 +44,7 @@ module.exports = (function () {
 	function init (scriptManager) {
 		//Script 8426 = ability book options
 		scriptManager.bind(EventType.IF_OPEN, 1449, function (ctx) {
-			widget.setEvents(ctx.player, 1449, 1, 0, 187, 10320902);
+			widget.setEvents(ctx.player, 1449, 1, 0, 189, 10320902);
 			widget.setEvents(ctx.player, 1449, 7, 0, 16, 2);
 		});
 		
@@ -71,6 +72,13 @@ module.exports = (function () {
 			}
 			var abilityId = config.enumValue(enumId, ctx.slot);
 			logic.runAbility(ctx.player, abilityId);
+		});
+		
+		scriptManager.bind(EventType.IF_DRAG, component(1449, 1), function (ctx) {
+			var hash = ctx.toHash;
+			if (widget.getId(hash) == 1430) {
+				actionBar.dragOnto(ctx.player, hash, varbit(ctx.player, 18793) ? 4 : 3, ctx.fromslot);
+			}
 		});
 	}
 })();

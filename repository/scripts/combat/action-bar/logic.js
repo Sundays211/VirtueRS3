@@ -33,7 +33,11 @@ var variables = require('./variables');
  */
 module.exports = (function () {
 	return {
-		handleActionBarButton : handleActionBarButton
+		handleActionBarButton : handleActionBarButton,
+		swapActions : swapActions,
+		clearAction : clearAction,
+		hasAction : hasAction,
+		setAction : setAction
 	};
 	
 	function handleActionBarButton (player, slot, button) {
@@ -83,5 +87,26 @@ module.exports = (function () {
 			}
 			chat.sendDebugMessage(player, 'Pressed action bar item '+slot+' option '+button+": "+actionId+" (type="+item.type+")");
 		}
+	}
+	
+	function hasAction (player, pos) {
+		var item = variables.getAction(player, varbit(player, 1893), pos);
+		return item.type !== 0 || item.objId !== -1;
+	}
+	
+	function swapActions (player, fromPos, toPos) {
+		var fromItem = variables.getAction(player, varbit(player, 1893), fromPos);
+		var toItem = variables.getAction(player, varbit(player, 1893), toPos);
+		
+		variables.setAction(player, varbit(player, 1893), toPos, fromItem.type, fromItem.slot, fromItem.objId);
+		variables.setAction(player, varbit(player, 1893), fromPos, toItem.type, toItem.slot, toItem.objId);
+	}
+	
+	function clearAction (player, pos) {
+		variables.setAction(player, varbit(player, 1893), pos, 0, 0, -1);
+	}
+	
+	function setAction (player, barPos, actionType, actionSlot) {
+		variables.setAction(player, varbit(player, 1893), barPos, actionType, actionSlot, -1);
 	}
 })();

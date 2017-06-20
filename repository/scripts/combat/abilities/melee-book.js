@@ -27,6 +27,7 @@ var config = require('../../core/config');
 var widget = require('../../widget');
 
 var logic = require('./logic');
+var actionBar = require('../action-bar/widget');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -74,6 +75,13 @@ module.exports = (function () {
 			}
 			var abilityId = config.enumValue(enumId, ctx.slot);
 			logic.runAbility(ctx.player, abilityId);
+		});
+		
+		scriptManager.bind(EventType.IF_DRAG, component(1460, 1), function (ctx) {
+			var hash = ctx.toHash;
+			if (widget.getId(hash) == 1430) {
+				actionBar.dragOnto(ctx.player, hash, varbit(ctx.player, 18787) ? 2 : 1, ctx.fromslot);
+			}
 		});
 	}
 })();

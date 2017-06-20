@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-//var component = require('../../widget/component');
+var component = require('../../widget/component');
 var varp = require('../../core/var/player');
 
 var util = require('../../core/util');
@@ -34,7 +34,8 @@ var logic = require('./logic');
  */
 module.exports = (function () {
 	return {
-		init : init
+		init : init,
+		dragOnto : dragOnto
 	};
 	
 	function init (scriptManager) {
@@ -134,63 +135,146 @@ module.exports = (function () {
 				util.defaultHandler(ctx, "action bar");
 			}
 		});
+		
+		scriptManager.bind(EventType.IF_DRAG, [ component(1430, 57), component(1430, 70), 
+				component(1430, 83), component(1430, 96), component(1430, 109), component(1430, 122), 
+				component(1430, 135), component(1430, 148), component(1430, 161), component(1430, 174), 
+				component(1430, 187), component(1430, 200), component(1430, 213), component(1430, 228)
+					], function (ctx) {
+			var srcSlot = slotFromComponent(ctx.fromHash);
+			var targetSlot = slotFromComponent(ctx.toHash);
+			if (srcSlot != -1 && targetSlot != -1) {
+				logic.swapActions(ctx.player, srcSlot, targetSlot);
+				refreshSlotEvents(ctx.player);
+			} else if (srcSlot != -1 && ctx.toHash === 96796685) {
+				logic.clearAction(ctx.player, srcSlot);
+				refreshSlotEvents(ctx.player);
+			}
+		});
+	}
+	
+	function slotFromComponent (hash) {
+		if (widget.getId(hash) != 1430) {
+			return -1;
+		}
+		switch (widget.getComponent(hash)) {
+		case 57://Slot 1
+			return 1;
+		case 70://Slot 2
+			return 2;
+		case 83://Slot 3
+			return 3;
+		case 96://Slot 4
+			return 4;
+		case 109://Slot 5
+			return 5;
+		case 122://Slot 6
+			return 6;
+		case 135://Slot 7
+			return 7;
+		case 148://Slot 8
+			return 8;
+		case 161://Slot 9
+			return 9;
+		case 174://Slot 10
+			return 10;
+		case 187://Slot 11
+			return 11;
+		case 200://Slot 12
+			return 12;
+		case 213://Slot 13
+			return 13;
+		case 228://Slot 14
+			return 14;
+		default:
+			return -1;
+		}
 	}
 	
 	function refreshSlotEvents (player) {
+		var events;
+		
 		//Slot 1
-		widget.setEvents(player, 1430, 57, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 62, -1, -1, 11108350);
+		events = getEvents(player, 1);
+		widget.setEvents(player, 1430, 57, -1, -1, events);
+		widget.setEvents(player, 1430, 62, -1, -1, events);
 		
 		//Slot 2
-		widget.setEvents(player, 1430, 70, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 75, -1, -1, 11108350);
+		events = getEvents(player, 2);
+		widget.setEvents(player, 1430, 70, -1, -1, events);
+		widget.setEvents(player, 1430, 75, -1, -1, events);
 		
 		//Slot 3
-		widget.setEvents(player, 1430, 83, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 88, -1, -1, 11108350);
+		events = getEvents(player, 3);
+		widget.setEvents(player, 1430, 83, -1, -1, events);
+		widget.setEvents(player, 1430, 88, -1, -1, events);
 		
 		//Slot 4
-		widget.setEvents(player, 1430, 96, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 101, -1, -1, 11108350);
+		events = getEvents(player, 4);
+		widget.setEvents(player, 1430, 96, -1, -1, events);
+		widget.setEvents(player, 1430, 101, -1, -1, events);
 		
 		//Slot 5
-		widget.setEvents(player, 1430, 109, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 114, -1, -1, 11108350);
+		events = getEvents(player, 5);
+		widget.setEvents(player, 1430, 109, -1, -1, events);
+		widget.setEvents(player, 1430, 114, -1, -1, events);
 		
 		//Slot 6
-		widget.setEvents(player, 1430, 122, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 127, -1, -1, 11108350);
+		events = getEvents(player, 6);
+		widget.setEvents(player, 1430, 122, -1, -1, events);
+		widget.setEvents(player, 1430, 127, -1, -1, events);
 		
 		//Slot 7
-		widget.setEvents(player, 1430, 135, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 140, -1, -1, 11108350);
+		events = getEvents(player, 7);
+		widget.setEvents(player, 1430, 135, -1, -1, events);
+		widget.setEvents(player, 1430, 140, -1, -1, events);
 		
 		//Slot 8
-		widget.setEvents(player, 1430, 148, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 153, -1, -1, 11108350);
+		events = getEvents(player, 8);
+		widget.setEvents(player, 1430, 148, -1, -1, events);
+		widget.setEvents(player, 1430, 153, -1, -1, events);
 		
 		//Slot 9
-		widget.setEvents(player, 1430, 161, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 166, -1, -1, 11108350);
+		events = getEvents(player, 9);
+		widget.setEvents(player, 1430, 161, -1, -1, events);
+		widget.setEvents(player, 1430, 166, -1, -1, events);
 		
 		//Slot 10
-		widget.setEvents(player, 1430, 174, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 179, -1, -1, 11108350);
+		events = getEvents(player, 10);
+		widget.setEvents(player, 1430, 174, -1, -1, events);
+		widget.setEvents(player, 1430, 179, -1, -1, events);
 		
 		//Slot 11
-		widget.setEvents(player, 1430, 187, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 192, -1, -1, 11108350);
+		events = getEvents(player, 11);
+		widget.setEvents(player, 1430, 187, -1, -1, events);
+		widget.setEvents(player, 1430, 192, -1, -1, events);
 		
 		//Slot 12
-		widget.setEvents(player, 1430, 200, -1, -1, 11108350);
-		widget.setEvents(player, 1430, 205, -1, -1, 11108350);
+		events = getEvents(player, 12);
+		widget.setEvents(player, 1430, 200, -1, -1, events);
+		widget.setEvents(player, 1430, 205, -1, -1, events);
 		
 		//Slot 13
-		widget.setEvents(player, 1430, 213, -1, -1, 2098176);
-		widget.setEvents(player, 1430, 218, -1, -1, 2098176);
+		events = getEvents(player, 13);
+		widget.setEvents(player, 1430, 213, -1, -1, events);
+		widget.setEvents(player, 1430, 218, -1, -1, events);
 		
 		//Slot 14
-		widget.setEvents(player, 1430, 228, -1, -1, 2098176);
-		widget.setEvents(player, 1430, 233, -1, -1, 2098176);
+		events = getEvents(player, 14);
+		widget.setEvents(player, 1430, 228, -1, -1, events);
+		widget.setEvents(player, 1430, 233, -1, -1, events);
+	}
+	
+	function getEvents(player, slot) {
+		return logic.hasAction(player, slot) ? 11108350 : 2098176;
+	}
+	
+	function dragOnto (player, destHash, srcType, srcSlot) {
+		var destPos = slotFromComponent(destHash);
+		if (destPos !== -1) {
+			print(srcType+": "+srcSlot)
+			logic.setAction(player, destPos, srcType, srcSlot);
+			refreshSlotEvents(player);
+		}
 	}
 })();
