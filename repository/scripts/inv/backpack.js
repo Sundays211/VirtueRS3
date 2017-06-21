@@ -35,6 +35,7 @@ var moneyPouch = require('./money-pouch');
 var wornEquipment = require('./worn-equipment');
 var common = require('./common');
 var loan = require('../trade/loan');
+var actionBar = require('../combat/widgets/action-bar');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -121,7 +122,11 @@ module.exports = (function() {
 				ENGINE.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 				return;
 			}
-			if (ctx.tointerface != 1473) {//Item dragged somewhere other than backpack
+			var hash = ctx.toHash;
+			if (widget.getId(hash) == 1430) {
+				actionBar.dragOnto(ctx.player, hash, 0, 0, util.getId(item));
+				return;
+			} else if (widget.getId(hash) != 1473) {//Item dragged somewhere other than backpack
 				util.defaultHandler(ctx, "backpack item");
 				return;
 			}

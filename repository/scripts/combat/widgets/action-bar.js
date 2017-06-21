@@ -290,10 +290,11 @@ module.exports = (function () {
 		return logic.hasAction(player, slot) ? (varbit(player, 1892) ? 2195454 : 11108350) : 2098176;
 	}
 	
-	function dragOnto (player, destHash, srcType, srcSlot) {
+	function dragOnto (player, destHash, srcType, srcSlot, srcObjId) {
+		srcObjId = typeof(srcObjId) === "undefined" ? -1 : srcObjId;
 		var destPos = slotFromComponent(destHash);
 		if (destPos !== -1) {
-			logic.setAction(player, destPos, srcType, srcSlot);
+			logic.setAction(player, destPos, srcType, srcSlot, srcObjId);
 			refreshSlotEvents(player);
 		}
 	}
