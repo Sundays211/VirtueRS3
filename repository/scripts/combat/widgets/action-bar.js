@@ -132,6 +132,18 @@ module.exports = (function () {
 			case 228://Slot 14
 				logic.handleActionBarButton(player, 14, ctx.button);
 				return;
+			case 246://Select action bar
+				logic.setSelectedBar(player, ctx.button);
+				refreshSlotEvents(player);
+				return;
+			case 250://Previous action bar
+				logic.previousBar(player);
+				refreshSlotEvents(player);
+				return;
+			case 251://Next action bar
+				logic.nextBar(player);
+				refreshSlotEvents(player);
+				return;
 			case 254://Lock action bar
 				varbit(player, 1892, varbit(player, 1892) ? 0 : 1);
 				refreshSlotEvents(player);

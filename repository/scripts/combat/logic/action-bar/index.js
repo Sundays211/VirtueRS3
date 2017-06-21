@@ -37,7 +37,11 @@ module.exports = (function () {
 		swapActions : swapActions,
 		clearAction : clearAction,
 		hasAction : hasAction,
-		setAction : setAction
+		setAction : setAction,
+		previousBar : previousBar,
+		nextBar : nextBar,
+		getSelectedBar : getSelectedBar,
+		setSelectedBar : setSelectedBar
 	};
 	
 	function handleActionBarButton (player, slot, button) {
@@ -108,5 +112,27 @@ module.exports = (function () {
 	
 	function setAction (player, barPos, actionType, actionSlot) {
 		variables.setAction(player, varbit(player, 1893), barPos, actionType, actionSlot, -1);
+	}
+	
+	function previousBar (player) {
+		var barId = getSelectedBar(player);
+		if (barId > 1) {
+			setSelectedBar(player, barId-1);
+		}
+	}
+	
+	function nextBar (player) {
+		var barId = getSelectedBar(player);
+		if (barId < 6) {
+			setSelectedBar(player, barId+1);
+		}
+	}
+	
+	function getSelectedBar (player) {
+		return varbit(player, 1893);
+	}
+	
+	function setSelectedBar (player, barId) {
+		varbit(player, 1893, barId);
 	}
 })();
