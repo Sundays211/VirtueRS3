@@ -32,8 +32,9 @@ var inv = require('../../inv');
 var widget = require('../../widget');
 
 var spellbook = require('../../skill/magic/spellbook');
-var logic = require('./logic');
-var actionBar = require('../action-bar/widget');
+var abilities = require('../logic/abilities');
+var actionBar = require('./action-bar');
+var common = require('./common');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -60,7 +61,7 @@ module.exports = (function () {
 				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
 			} else {
 				//Save selected magic tab
-				varbit(ctx.player, 18791, logic.tabIdFromSlot(ctx.slot));
+				varbit(ctx.player, 18791, common.tabIdFromSlot(ctx.slot));
 			}
 		});
 		
@@ -69,7 +70,7 @@ module.exports = (function () {
 			var spell = config.enumValue(6740, ctx.slot);
 			//2880 = category (0=combat, 1=teleport, 2=skill, 4=?, 5=ability)
 			if (config.structParam(spell, 2880) === 5) {
-				logic.runAbility(player, spell);
+				abilities.run(player, spell);
 			} else {
 				spellbook.cast(player, spell);
 			}

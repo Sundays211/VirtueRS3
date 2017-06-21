@@ -27,7 +27,7 @@ var varbit = require('../../core/var/bit');
 var util = require('../../core/util');
 var widget = require('../../widget');
 
-var logic = require('./logic');
+var logic = require('../logic/action-bar');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

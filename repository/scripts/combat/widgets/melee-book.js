@@ -21,12 +21,14 @@
  */
 /* globals EventType */
 var component = require('../../widget/component');
+var varbit = require('../../core/var/bit');
 
 var config = require('../../core/config');
 var widget = require('../../widget');
 
-var logic = require('./logic');
-var actionBar = require('../action-bar/widget');
+var abilities = require('../logic/abilities');
+var actionBar = require('./action-bar');
+var common = require('./common');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,20 +44,44 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		//Script 8426 = ability book options
-		scriptManager.bind(EventType.IF_OPEN, 1452, function (ctx) {
-			widget.setEvents(ctx.player, 1452, 1, 0, 187, 10320902);
-			widget.setEvents(ctx.player, 1452, 7, 0, 16, 2);
+		
+		//Melee ability book
+		scriptManager.bind(EventType.IF_OPEN, 1460, function (ctx) {
+			widget.setEvents(ctx.player, 1460, 1, 0, 187, 10320902);
+			widget.setEvents(ctx.player, 1460, 5, 0, 16, 2);
 		});
 		
-		scriptManager.bind(EventType.IF_BUTTON1, component(1452, 1), function (ctx) {
-			var abilityId = config.enumValue(6738, ctx.slot);
-			logic.runAbility(ctx.player, abilityId);
+		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 5), function (ctx) {
+			if (ctx.slot === 11) {
+				//Toggle hide
+				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
+			} else {
+				//Save selected melee tab
+				varbit(ctx.player, 18787, common.tabIdFromSlot(ctx.slot));
+			}
 		});
 		
-		scriptManager.bind(EventType.IF_DRAG, component(1452, 1), function (ctx) {
+		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 1), function (ctx) {
+			//Script 8437 = ability enums
+			var enumId = -1;
+			switch (varbit(ctx.player, 18787)) {
+			case 0://Attack
+				enumId = 6734;
+				break;
+			case 1://Strength
+				enumId = 6735;
+				break;
+			default:
+				throw "Unsupported tab: "+varbit(ctx.player, 18787);
+			}
+			var abilityId = config.enumValue(enumId, ctx.slot);
+			abilities.run(ctx.player, abilityId);
+		});
+		
+		scriptManager.bind(EventType.IF_DRAG, component(1460, 1), function (ctx) {
 			var hash = ctx.toHash;
 			if (widget.getId(hash) == 1430) {
-				actionBar.dragOnto(ctx.player, hash, 5, ctx.fromslot);
+				actionBar.dragOnto(ctx.player, hash, varbit(ctx.player, 18787) ? 2 : 1, ctx.fromslot);
 			}
 		});
 	}

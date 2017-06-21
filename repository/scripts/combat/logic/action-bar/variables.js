@@ -1,8 +1,8 @@
 /**
  * Functionality for getting & setting action bar slot statuses
  */
-var varbit = require('../../core/var/bit');
-var varp = require('../../core/var/player');
+var varbit = require('../../../core/var/bit');
+var varp = require('../../../core/var/player');
 
 module.exports = (function () {
 	return {

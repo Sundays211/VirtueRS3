@@ -19,12 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var varbit = require('../../core/var/bit');
+var varbit = require('../../../core/var/bit');
 
-var chat = require('../../chat');
-var config = require('../../core/config');
+var chat = require('../../../chat');
+var config = require('../../../core/config');
 
-var abilities = require('../abilities/logic');
+var abilities = require('../abilities');
 var variables = require('./variables');
 
 /**
@@ -49,26 +49,26 @@ module.exports = (function () {
 			var actionId;
 			switch (item.type) {
 			case 1://Attack
-				abilities.runAbility(player, config.enumValue(6734, item.slot));
+				abilities.run(player, config.enumValue(6734, item.slot));
 				return;
 			case 2://Strength
-				abilities.runAbility(player, config.enumValue(6735, item.slot));
+				abilities.run(player, config.enumValue(6735, item.slot));
 				return;
 			case 3://Defence
-				abilities.runAbility(player, config.enumValue(6736, item.slot));
+				abilities.run(player, config.enumValue(6736, item.slot));
 				return;
 			case 5://Ranged
-				abilities.runAbility(player, config.enumValue(6738, item.slot));
+				abilities.run(player, config.enumValue(6738, item.slot));
 				return;
 			case 4://Constitution
-				abilities.runAbility(player, config.enumValue(6737, item.slot));
+				abilities.run(player, config.enumValue(6737, item.slot));
 				return;
 			case 7://Prayer
 				actionId = config.enumValue(6739, item.slot);
 				break;
 			case 6:
 			case 11://Magic
-				abilities.runAbility(player, config.enumValue(6740, item.slot));
+				abilities.run(player, config.enumValue(6740, item.slot));
 				return;
 			case 8://Toggle run
 				actionId = 14722;
