@@ -18,7 +18,7 @@ function getAllModules () {// jshint ignore:line
 		'area/kandarin',
 		'chat',
 		'clan',
-		'combat/abilities',
+		'combat/widgets',
 		'inv',
 		'shop',
 		'trade',

@@ -7,6 +7,8 @@ var varc = require('../core/var/client');
 
 module.exports = (function () {
 	return {
+		getWidgetId : getWidgetId,
+		getComponentId : getComponentId,
 		open : open,
 		openCentral : openCentral,
 		openOverlaySub : openOverlaySub,
@@ -19,6 +21,14 @@ module.exports = (function () {
 		hide : hide,
 		inframeInput : inframeInput
 	};
+	
+	function getWidgetId (hash) {
+		return hash >> 16;
+	}
+	
+	function getComponentId (hash) {
+		return hash & 0xffff;
+	}
 
 	function open (player, parentId, parentComp, id, alwaysOpen) {
 		ENGINE.openWidget(player, parentId, parentComp, id, !!alwaysOpen);

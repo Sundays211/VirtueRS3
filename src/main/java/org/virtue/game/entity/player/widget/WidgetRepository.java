@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.impl.AccountCreationWidget;
-import org.virtue.game.entity.player.widget.impl.ActionBarWidget;
 import org.virtue.game.entity.player.widget.impl.BankWidget;
 import org.virtue.game.world.region.SceneLocation;
 import org.virtue.network.event.context.impl.in.OptionButton;
@@ -293,7 +292,6 @@ public final class WidgetRepository {
 	 * Loads all the game widgets into the repo
 	 */
 	public void load() {
-		registerWidget(ActionBarWidget.class);
 		registerWidget(BankWidget.class);
 		registerWidget(AccountCreationWidget.class);
 		logger.info("Registered " + WIDGETS.size() + " Game Widget(s).");
