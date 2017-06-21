@@ -5,6 +5,8 @@ var overlay = require('./frame/overlay');
 var common = require('./common');
 
 module.exports = {
+	getId : common.getWidgetId,
+	getComponent : common.getComponentId,
 	openCentral : common.openCentral,
 	openOverlaySub : common.openOverlaySub,
 	open : common.open,

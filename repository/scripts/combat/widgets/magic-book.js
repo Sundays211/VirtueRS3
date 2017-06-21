@@ -32,6 +32,8 @@ var inv = require('../../inv');
 var widget = require('../../widget');
 
 var spellbook = require('../../skill/magic/spellbook');
+var abilities = require('../logic/abilities');
+var actionBar = require('./action-bar');
 var common = require('./common');
 
 /** 
@@ -49,7 +51,7 @@ module.exports = (function () {
 	function init (scriptManager) {
 		//Script 8426 = ability book options
 		scriptManager.bind(EventType.IF_OPEN, 1461, function (ctx) {
-			widget.setEvents(ctx.player, 1461, 1, 0, 189, 97350);
+			widget.setEvents(ctx.player, 1461, 1, 0, 189, 10320902);
 			widget.setEvents(ctx.player, 1461, 7, 0, 16, 2);
 		});
 		
@@ -68,7 +70,7 @@ module.exports = (function () {
 			var spell = config.enumValue(6740, ctx.slot);
 			//2880 = category (0=combat, 1=teleport, 2=skill, 4=?, 5=ability)
 			if (config.structParam(spell, 2880) === 5) {
-				common.runAbility(player, spell);
+				abilities.run(player, spell);
 			} else {
 				spellbook.cast(player, spell);
 			}
@@ -117,6 +119,14 @@ module.exports = (function () {
 				return;//This means the spell wasn't used on an item. We'll just suppress the debug message.
 			}
 			spellbook.castOnItem(player, spell, objId, ctx.targetSlot);
+		});
+		
+		scriptManager.bind(EventType.IF_DRAG, component(1461, 1), function (ctx) {
+			var hash = ctx.toHash;
+			if (widget.getId(hash) == 1430) {
+				//TODO: Set type=6 for abilities, 11 for spells
+				actionBar.dragOnto(ctx.player, hash, 6, ctx.fromslot);
+			}
 		});
 	}
 })();

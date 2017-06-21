@@ -7,7 +7,8 @@ module.exports = function (scriptManager) {
 	    require('./magic-book'),
 	    require('./melee-book'),
 	    require('./prayer-book'),
-	    require('./ranged-book')
+	    require('./ranged-book'),
+	    require('./action-bar')
 	];
 	
 	for (var i in modules) {

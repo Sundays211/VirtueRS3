@@ -26,6 +26,8 @@ var varbit = require('../../core/var/bit');
 var config = require('../../core/config');
 var widget = require('../../widget');
 
+var abilities = require('../logic/abilities');
+var actionBar = require('./action-bar');
 var common = require('./common');
 
 /** 
@@ -49,7 +51,7 @@ module.exports = (function () {
 			widget.setEvents(ctx.player, 1460, 5, 0, 16, 2);
 		});
 		
-		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 7), function (ctx) {
+		scriptManager.bind(EventType.IF_BUTTON1, component(1460, 5), function (ctx) {
 			if (ctx.slot === 11) {
 				//Toggle hide
 				varbit(ctx.player, 27344, !varbit(ctx.player, 27344) ? 1 : 0);
@@ -73,7 +75,14 @@ module.exports = (function () {
 				throw "Unsupported tab: "+varbit(ctx.player, 18787);
 			}
 			var abilityId = config.enumValue(enumId, ctx.slot);
-			common.runAbility(ctx.player, abilityId);
+			abilities.run(ctx.player, abilityId);
+		});
+		
+		scriptManager.bind(EventType.IF_DRAG, component(1460, 1), function (ctx) {
+			var hash = ctx.toHash;
+			if (widget.getId(hash) == 1430) {
+				actionBar.dragOnto(ctx.player, hash, varbit(ctx.player, 18787) ? 2 : 1, ctx.fromslot);
+			}
 		});
 	}
 })();

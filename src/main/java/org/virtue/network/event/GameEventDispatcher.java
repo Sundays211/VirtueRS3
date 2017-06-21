@@ -182,7 +182,6 @@ public class GameEventDispatcher {
 			player.getExchangeOffers().init();
 			if (player.getMode() != CombatMode.LEGACY) {
 				player.getCombatSchedule().increaseAdrenaline(0);
-				player.getCombatSchedule().getActionBar().refresh();
 			}
 			player.getImpactHandler()
 					.setMaximumLifepoints(player.getSkills().getBaseLevel(Stat.CONSTITUTION) * 100);
