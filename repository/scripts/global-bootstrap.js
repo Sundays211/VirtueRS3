@@ -9,6 +9,7 @@
 function getAllModules () {// jshint ignore:line
 	var modules = [
 	    'items',
+		'items/degradables',
 		'items/itemUse',
 		'admin',
 		'area',
