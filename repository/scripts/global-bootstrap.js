@@ -16,7 +16,7 @@ function getAllModules () {// jshint ignore:line
 		'area/kandarin',
 		'chat',
 		'clan',
-		'combat/widgets',
+		'combat',
 		'inv',
 	    'items',
 		'items/item-use',
@@ -101,7 +101,7 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 		CraftProcess : require(cwd+'/skill/makex/progress'),
 		CraftDialog : require(cwd+'/skill/makex/selection'),
 		MoneyPouch : require(cwd+'/node_modules/inv/money-pouch'),
-		WornEquipment : require(cwd+'/node_modules/inv/worn-equipment'),
+		WornEquipment : require(cwd+'/node_modules/inv/equipment'),
 		Toolbelt : require(cwd+'/inv/toolbelt'),
 		Fletching : require(cwd+'/skill/fletching/fletch-log')
 	};

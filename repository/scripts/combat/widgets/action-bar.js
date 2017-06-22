@@ -27,7 +27,7 @@ var varbit = require('engine/var/bit');
 var util = require('util');
 var widget = require('widget');
 
-var logic = require('../logic/action-bar');
+var logic = require('combat/action-bar');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

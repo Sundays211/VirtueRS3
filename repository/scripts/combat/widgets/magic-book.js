@@ -32,7 +32,7 @@ var inv = require('inv');
 var widget = require('widget');
 
 var spellbook = require('../../skill/magic/spellbook');
-var abilities = require('../logic/abilities');
+var abilities = require('combat/abilities');
 var actionBar = require('./action-bar');
 var common = require('./common');
 

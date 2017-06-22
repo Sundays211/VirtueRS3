@@ -26,7 +26,7 @@ var varbit = require('engine/var/bit');
 var config = require('engine/config');
 var widget = require('widget');
 
-var abilities = require('../logic/abilities');
+var abilities = require('combat/abilities');
 var actionBar = require('./action-bar');
 var common = require('./common');
 
