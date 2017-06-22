@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Java */
-var varp = require('../core/var/player');
-var varc = require('../core/var/client');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
-var anim = require('../core/anim');
-var chat = require('../chat');
-var inv = require('../inv');
-var widget = require('../widget');
+var anim = require('anim');
+var chat = require('chat');
+var inv = require('inv');
+var widget = require('widget');
 
 module.exports = (function () {
 	return {

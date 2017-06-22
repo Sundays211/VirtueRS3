@@ -20,13 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varbit = require('../core/var/bit');
+var varbit = require('engine/var/bit');
+
+var util = require('util');
+var widget = require('widget');
+var dialog = require('dialog');
+var chat = require('chat');
 
 var filters = require('./chatbox-filters');
-var util = require('../core/util');
-var widget = require('../widget');
-var dialog = require('../dialog');
-var chat = require('../chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

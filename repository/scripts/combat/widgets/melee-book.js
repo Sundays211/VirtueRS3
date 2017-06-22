@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var component = require('../../widget/component');
-var varbit = require('../../core/var/bit');
+var component = require('widget/component');
+var varbit = require('engine/var/bit');
 
-var config = require('../../core/config');
-var widget = require('../../widget');
+var config = require('engine/config');
+var widget = require('widget');
 
 var abilities = require('../logic/abilities');
 var actionBar = require('./action-bar');

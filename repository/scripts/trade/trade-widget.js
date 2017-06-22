@@ -20,16 +20,16 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
-var varbit = require('../core/var/bit');
-var varc = require('../core/var/client');
-var CONST = require('../core/const');
+var varbit = require('engine/var/bit');
+var varc = require('engine/var/client');
+var CONST = require('const');
 
-var config = require('../core/config');
-var util = require('../core/util');
-var chat = require('../chat');
-var widget = require('../widget');
-var inv = require('../inv');
-var dialog = require('../dialog');
+var config = require('engine/config');
+var util = require('util');
+var chat = require('chat');
+var widget = require('widget');
+var inv = require('inv');
+var dialog = require('dialog');
 
 var logic = require('./trade-logic');
 

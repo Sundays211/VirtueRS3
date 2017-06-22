@@ -2,10 +2,10 @@
  * Manages the core functionality for clans
  */
 /* globals CLAN_ENGINE */
-var util = require('../../core/util');
-var dialog = require('../../dialog');
-var config = require('../../core/config');
-var chat = require('../../chat');
+var util = require('util');
+var dialog = require('dialog');
+var config = require('engine/config');
+var chat = require('chat');
 
 var broadcasts = require('./broadcasts');
 

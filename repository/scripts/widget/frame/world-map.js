@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varc = require('../../core/var/client');
+var varc = require('engine/var/client');
 
-var util = require('../../core/util');
-var widget = require('../common');
-var anim = require('../../core/anim');
+var util = require('util');
+var widget = require('widget');
+var anim = require('anim');
 
 module.exports = (function () {
 	return {

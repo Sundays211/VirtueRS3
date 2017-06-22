@@ -20,13 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, MesType, CLAN_ENGINE, ENGINE */
-var varp = require('../core/var/player');
-var varc = require('../core/var/client');
-var varbit = require('../core/var/bit');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
+var varbit = require('engine/var/bit');
 
-var util = require('../core/util');
-var widget = require('../widget');
-var chat = require('../chat');
+var util = require('util');
+var widget = require('widget');
+var chat = require('chat');
+
 var clan = require('./logic/core');
 var permissions = require('./logic/permissions');
 

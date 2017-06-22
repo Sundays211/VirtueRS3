@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var map = require('../map');
-var coords = require('../map/coords');
-var chat = require('../chat');
-var widget = require('../widget');
+var coords = require('map/coords');
+
+var map = require('map');
+var chat = require('chat');
+var widget = require('widget');
 
 module.exports = (function () {
 	return {

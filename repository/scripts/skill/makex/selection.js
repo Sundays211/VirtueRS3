@@ -20,17 +20,17 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, ENGINE */
-var component = require('../../widget/component');
-var varp = require('../../core/var/player');
-var varc = require('../../core/var/client');
-var varbit = require('../../core/var/bit');
+var component = require('widget/component');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
+var varbit = require('engine/var/bit');
 
-var widget = require('../../widget');
-var config = require('../../core/config');
-var util = require('../../core/util');
-var inv = require('../../inv');
-var chat = require('../../chat');
-var stat = require('../common/stat');
+var widget = require('widget');
+var config = require('engine/config');
+var util = require('util');
+var inv = require('inv');
+var chat = require('chat');
+var stat = require('stat');
 var quest = require('../../quest');
 
 var resources = require('./resources');

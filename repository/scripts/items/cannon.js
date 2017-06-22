@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var anim = require('../core/anim');
-var map = require('../map');
-var inv = require('../inv');
+var anim = require('anim');
+var map = require('map');
+var inv = require('inv');
 
 module.exports = (function () {
 	return {

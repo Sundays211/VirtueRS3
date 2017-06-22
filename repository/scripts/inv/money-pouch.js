@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv, MesType */
-var CONST = require('../core/const');
-var util = require('../core/util');
-var chat = require('../chat');
-var dialog = require('../dialog');
-var common = require('./common');
+var CONST = require('const');
+var util = require('util');
+var chat = require('chat');
+var dialog = require('dialog');
+var common = require('inv/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

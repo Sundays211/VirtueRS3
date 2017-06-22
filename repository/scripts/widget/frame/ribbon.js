@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('../../core/util');
+var util = require('util');
 
 var overlay = require('./overlay');
 

@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Exchange */
-var dialog = require('../dialog');
-var config = require('../core/config');
-var widget = require('../widget');
-var chat = require('../chat');
-var common = require('./common');
+var dialog = require('dialog');
+var config = require('engine/config');
+var widget = require('widget');
+var chat = require('chat');
+var common = require('inv/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

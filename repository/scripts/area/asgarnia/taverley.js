@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var map = require('../../map');
-var coords = require('../../map/coords');
+var map = require('map');
+var coords = require('map/coords');
 
 module.exports = (function () {
 	return {

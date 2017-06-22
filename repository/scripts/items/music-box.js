@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var anim = require('../core/anim');
-var chat = require('../chat');
-var map = require('../map');
-var inv = require('../inv');
+var anim = require('anim');
+var chat = require('chat');
+var map = require('map');
+var inv = require('inv');
 
 module.exports = (function () {
 	return {

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var varp = require('../../core/var/player');
+var varp = require('engine/var/player');
 
 var makex = require('../makex');
 var common = require('./common');

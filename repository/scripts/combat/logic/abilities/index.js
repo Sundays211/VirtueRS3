@@ -4,8 +4,8 @@
 /* globals Java */
 var ActionBar = Java.type('org.virtue.game.entity.combat.impl.ability.ActionBar');
 
-var chat = require('../../../chat');
-var config = require('../../../core/config');
+var chat = require('chat');
+var config = require('engine/config');
 
 module.exports = (function () {
 	return {

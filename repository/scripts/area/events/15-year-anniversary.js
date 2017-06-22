@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varbit = require('../../core/var/bit');
-var dialog = require('../../dialog');
+var varbit = require('engine/var/bit');
+var dialog = require('dialog');
 
 module.exports = (function () {
 	return {

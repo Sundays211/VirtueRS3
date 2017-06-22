@@ -2,9 +2,9 @@
  * 
  */
 /* globals EventType */
-var chat = require('../../chat');
-var CONST = require('../../core/const');
-var util = require('../../core/util');
+var chat = require('chat');
+var CONST = require('const');
+var util = require('util');
 
 module.exports = (function () {
 	

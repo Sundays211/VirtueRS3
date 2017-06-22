@@ -20,13 +20,13 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var coords = require('../../map/coords');
+var coords = require('map/coords');
 
-var util = require('../../core/util');
-var stat = require('../common/stat');
-var map = require('../../map');
-var anim = require('../../core/anim');
-var chat = require('../../chat');
+var util = require('util');
+var stat = require('stat');
+var map = require('map');
+var anim = require('anim');
+var chat = require('chat');
 
 /**
  * @author Titanium

@@ -21,10 +21,10 @@
  */
 /* globals EventType */
 var quest = require('../quest');
-var dialog = require('../dialog');
-var anim = require('../core/anim');
-var inv = require('../inv');
-var chat = require('../chat');
+var dialog = require('dialog');
+var anim = require('anim');
+var inv = require('inv');
+var chat = require('chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

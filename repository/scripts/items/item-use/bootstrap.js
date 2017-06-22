@@ -3,8 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./ChristmasCracker'),
-		require('./Dyes')
+		require('./christmas-cracker'),
+		require('./dyes')
 	];
 	
 	for (var i in modules) {

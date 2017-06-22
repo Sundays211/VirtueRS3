@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varp = require('../../core/var/player');
-var varbit = require('../../core/var/bit');
+var varp = require('engine/var/player');
+var varbit = require('engine/var/bit');
 
-var dialog = require('../../dialog');
-var widget = require('../../widget');
+var dialog = require('dialog');
+var widget = require('widget');
 var makex = require('../makex');
 
 /**

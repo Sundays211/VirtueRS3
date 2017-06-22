@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var varbit = require('../../../core/var/bit');
+var varbit = require('engine/var/bit');
 
-var chat = require('../../../chat');
-var config = require('../../../core/config');
+var chat = require('chat');
+var config = require('engine/config');
 
 var abilities = require('../abilities');
 var variables = require('./variables');

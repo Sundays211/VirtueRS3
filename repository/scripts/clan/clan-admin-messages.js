@@ -2,12 +2,13 @@
  * 
  */
 /* globals EventType, ENGINE */
-var component = require('../widget/component');
-var varp = require('../core/var/player');
+var component = require('widget/component');
+var varp = require('engine/var/player');
 
-var util = require('../core/util');
-var widget = require('../widget');
-var config = require('../core/config');
+var util = require('util');
+var widget = require('widget');
+var config = require('engine/config');
+
 var clan = require('./logic/core');
 var broadcasts = require('./logic/broadcasts');
 var permissions = require('./logic/permissions');

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var widget = require("../../widget");
+var widget = require("widget");
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

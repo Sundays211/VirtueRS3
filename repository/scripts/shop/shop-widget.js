@@ -20,15 +20,15 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
-var varc = require('../core/var/client');
-var varp = require('../core/var/player');
-var varbit = require('../core/var/bit');
+var varc = require('engine/var/client');
+var varp = require('engine/var/player');
+var varbit = require('engine/var/bit');
 
-var util = require('../core/util');
-var widget = require('../widget');
-var inv = require('../inv');
-var chat = require('../chat');
-var config = require('../core/config');
+var util = require('util');
+var widget = require('widget');
+var inv = require('inv');
+var chat = require('chat');
+var config = require('engine/config');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

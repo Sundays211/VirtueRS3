@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var component = require('../component');
-var varbit = require('../../core/var/bit');
+var component = require('widget/component');
+var varbit = require('engine/var/bit');
 
-var util = require('../../core/util');
-var widget = require('../common');
+var util = require('util');
+var widget = require('widget');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

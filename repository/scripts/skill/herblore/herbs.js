@@ -3,10 +3,11 @@
  * @since 12/20/2016
  */
 /* globals EventType */
-var varp = require('../../core/var/player');
+var varp = require('engine/var/player');
+
+var config = require('engine/config');
 
 var makex = require('../makex');
-var config = require('../../core/config');
 var common = require('./common.js');
 var CLEAN_HERBS = 6841;
 

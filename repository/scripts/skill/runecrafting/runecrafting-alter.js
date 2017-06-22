@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var stat = require('../common/stat');
-var inv = require('../../inv');
-var chat = require('../../chat');
-var anim = require('../../core/anim');
-var config = require('../../core/config');
+var stat = require('stat');
+var inv = require('inv');
+var chat = require('chat');
+var anim = require('anim');
+var config = require('engine/config');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

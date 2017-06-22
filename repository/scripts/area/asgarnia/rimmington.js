@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType, Expression */
-var dialog = require('../../dialog');
+var dialog = require('dialog');
 
 module.exports = (function () {
 	return {

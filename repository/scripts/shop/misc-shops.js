@@ -20,9 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv */
-var varp = require('../core/var/player');
-var varc = require('../core/var/client');
-var widget = require('../widget');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
+
+var widget = require('widget');
 
 /**
  * Contains shops which don't have their own file. 

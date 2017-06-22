@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var coords = require('../map/coords');
+var coords = require('map/coords');
 
-var anim = require('../core/anim');
-var map = require('../map');
-var inv = require('../inv');
+var anim = require('anim');
+var map = require('map');
+var inv = require('inv');
 
 module.exports = (function () {
 	var TeleTabs = {

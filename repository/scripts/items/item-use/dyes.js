@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv */
-var inv = require('../../inv');
-var chat = require('../../chat');
+var inv = require('inv');
+var chat = require('chat');
 
 module.exports = (function () {
 	return {

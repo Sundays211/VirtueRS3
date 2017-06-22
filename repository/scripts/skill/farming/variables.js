@@ -1,7 +1,7 @@
 /**
  * Functionality for getting & setting the status of farming patches
  */
-var varbit = require('../../core/var/bit');
+var varbit = require('engine/var/bit');
 
 module.exports = (function () {
 	return {
