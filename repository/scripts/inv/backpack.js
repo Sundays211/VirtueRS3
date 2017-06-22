@@ -23,6 +23,7 @@
 var component = require('widget/component');
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
+var CONST = require('const');
 
 var util = require('util');
 var config = require('engine/config');
@@ -32,7 +33,7 @@ var widget = require('widget');
 var chat = require('chat');
 var common = require('inv/common');
 
-var moneyPouch = require('./money-pouch');
+var moneyPouch = require('inv/money-pouch');
 var wornEquipment = require('inv/equipment');
 var loan = require('../trade/loan');
 var actionBar = require('../combat/widgets/action-bar');
@@ -156,6 +157,17 @@ module.exports = (function() {
 				util.defaultHandler(ctx, "backpack item");
 				return;
 			}
+		});
+
+		scriptManager.bind(EventType.OPHELD4, CONST.COINS, function (ctx) {
+			var amount = ENGINE.getCount(ctx.item);
+			
+			if (util.checkOverflow(moneyPouch.getCoinCount(ctx.player), amount)) {
+				chat.sendMessage(ctx.player, "You do not have enough space in your money pouch.");
+				return;
+			}
+			moneyPouch.addCoins(ctx.player, amount);
+			ENGINE.delItem(ctx.player, Inv.BACKPACK, CONST.COINS, amount);
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTONT, component(1473, 34), handleUseOnInterface);

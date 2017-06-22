@@ -29,7 +29,7 @@ var chat = require('chat');
 var widget = require('widget');
 var util = require('util');
 
-var moneyPouch = require('../../inv/money-pouch');
+var moneyPouch = require('inv/money-pouch');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
