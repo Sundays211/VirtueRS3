@@ -3,8 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./teleport'),
-		require('./region')
+		require('./commands/teleport'),
+		require('./commands/region')
 	];
 	
 	for (var i in modules) {

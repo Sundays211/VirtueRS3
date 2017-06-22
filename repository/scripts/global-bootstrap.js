@@ -20,7 +20,7 @@ function getAllModules () {// jshint ignore:line
 		'inv',
 	    'items',
 		'items/item-use',
-		'map/commands',
+		'map',
 		'quest',
 		'shop',
 		'skill/common',
