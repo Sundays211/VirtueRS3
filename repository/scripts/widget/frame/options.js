@@ -27,7 +27,7 @@ var varc = require('engine/var/client');
 var widget = require('widget');
 var util = require('util');
 
-var overlay = require('./overlay');
+var overlay = require('widget/overlay');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
