@@ -24,10 +24,10 @@ var varbit = require('engine/var/bit');
 var varc = require('engine/var/client');
 
 var util = require('util');
-var config = require('engine/config');
-var chat = require('chat');
 var widget = require('widget');
-var common = require('inv/common');
+var inv = require('inv');
+
+var logic = require('inv/equipment');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,10 +39,7 @@ var common = require('inv/common');
  */
 module.exports = (function () {
 	return {
-		init : init,
-		isWearing : isWearing,
-		wearItem : wearItem,
-		removeItem : removeItem
+		init : init
 	};
 	
 	function init (scriptManager) {
@@ -57,13 +54,13 @@ module.exports = (function () {
 			var player = ctx.player;
 			switch (ctx.component) {
 			case 15:
-				var item = ENGINE.getItem(player, Inv.EQUIPMENT, ctx.slot);			
-				if (item === null || util.getId(item) != ctx.itemId) {
+				var objId = inv.getObjId(player, Inv.EQUIPMENT, ctx.slot);			
+				if (objId === -1 || objId != ctx.itemId) {
 					//The client inventory must not be synchronised, so let's send it again
 					ENGINE.sentInv(player, Inv.EQUIPMENT);
 					return;
 				}
-				handleInteraction(player, util.getId(item), ctx.slot, ctx.button, ctx);
+				logic.handleInteraction(player, objId, ctx.slot, ctx.button, ctx);
 				return;
 			case 13:
 				switch (ctx.slot) {
@@ -91,61 +88,5 @@ module.exports = (function () {
 				return;
 			}
 		});
-	}
-	
-	function isWearing(player, objId) {
-		return common.has(player, objId, 1, Inv.EQUIPMENT);
-	}
-	
-	function wearItem (player, objId, slot) {
-		if (!player.getEquipment().meetsEquipRequirements(objId)) {
-			return;
-		}
-		if (!player.getEquipment().wearItem(slot)) {
-			chat.sendMessage(player, "You do not have enough space in your backpack to equip that item.");
-		}
-	}
-	
-	function removeItem (player, objId, slot) {
-		player.getEquipment().removeItem(slot, objId);
-	}
-	
-	function handleInteraction (player, objId, slot, button, ctx) {
-		var eventType = null;
-		switch (button) {
-		case 1://Remove
-			removeItem(player, objId, slot);
-			return;
-		case 2://Equipment op 1
-			eventType = EventType.OPWORN1;
-			break;
-		case 3://Equipment op 2
-			eventType = EventType.OPWORN2;
-			break;
-		case 4://Equipment op 3
-			eventType = EventType.OPWORN3;
-			break;
-		case 5://Equipment op 4
-			eventType = EventType.OPWORN4;
-			break;
-		case 6://Equipment op 5
-			eventType = EventType.OPWORN5;
-			break;
-		case 10://Examine
-			chat.sendMessage(player, config.objDesc(objId));
-			return;
-		default:
-			break;
-		}
-		if (eventType === null || ENGINE.hasEvent(eventType, objId)) {
-			var args = {
-					"player" : player,
-					"item" : objId,
-					"slot" : slot
-			};
-			ENGINE.invokeEvent(eventType, objId, args);
-		} else {
-			util.defaultHandler(ctx, "worn equipment");
-		}
 	}
 })();

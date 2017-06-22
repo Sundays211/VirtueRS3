@@ -101,7 +101,7 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 		CraftProcess : require(cwd+'/skill/makex/progress'),
 		CraftDialog : require(cwd+'/skill/makex/selection'),
 		MoneyPouch : require(cwd+'/inv/money-pouch'),
-		WornEquipment : require(cwd+'/inv/worn-equipment'),
+		WornEquipment : require(cwd+'/node_modules/inv/worn-equipment'),
 		Toolbelt : require(cwd+'/inv/toolbelt'),
 		Fletching : require(cwd+'/skill/fletching/fletch-log')
 	};

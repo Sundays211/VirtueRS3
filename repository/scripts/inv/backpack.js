@@ -33,7 +33,7 @@ var chat = require('chat');
 var common = require('inv/common');
 
 var moneyPouch = require('./money-pouch');
-var wornEquipment = require('./worn-equipment');
+var wornEquipment = require('inv/equipment');
 var loan = require('../trade/loan');
 var actionBar = require('../combat/widgets/action-bar');
 
