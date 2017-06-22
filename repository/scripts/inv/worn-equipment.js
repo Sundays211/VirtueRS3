@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
-var varbit = require('../core/var/bit');
-var varc = require('../core/var/client');
+var varbit = require('engine/var/bit');
+var varc = require('engine/var/client');
 
-var util = require('../core/util');
-var config = require('../core/config');
-var chat = require('../chat');
-var widget = require('../widget');
-var common = require('./common');
+var util = require('util');
+var config = require('engine/config');
+var chat = require('chat');
+var widget = require('widget');
+var common = require('inv/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

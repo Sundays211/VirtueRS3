@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var component = require('../component');
-var varbit = require('../../core/var/bit');
-var varp = require('../../core/var/player');
-var varc = require('../../core/var/client');
+var component = require('widget/component');
+var varbit = require('engine/var/bit');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
 
-var common = require('../common');
-var config = require('../../core/config');
-var util = require('../../core/util');
+var common = require('inv/common');
+var config = require('engine/config');
+var util = require('util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

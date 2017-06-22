@@ -25,8 +25,8 @@ var World = Java.type('org.virtue.game.World');
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 var GlowColorBlock = Java.type('org.virtue.network.protocol.update.block.GlowColorBlock');
 
-var chat = require('../../chat');
-var anim = require('../../core/anim');
+var chat = require('chat');
+var anim = require('anim');
 
 /**
  * 
