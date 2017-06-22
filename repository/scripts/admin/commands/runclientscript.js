@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var chat = require('../../chat');
-var util = require('../../core/util');
+var chat = require('chat');
+var util = require('util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

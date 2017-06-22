@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var dialog = require('../../dialog');
-var anim = require('../../core/anim');
-var inv = require('../../inv');
-var map = require('../../map');
-var coords = require('../../map/coords');
-var widget = require('../../widget');
+var dialog = require('dialog');
+var anim = require('anim');
+var inv = require('inv');
+var map = require('map');
+var coords = require('map/coords');
+var widget = require('widget');
 
 module.exports = (function () {
 	return {

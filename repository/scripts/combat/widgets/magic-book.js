@@ -20,19 +20,19 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, Java */
-var component = require('../../widget/component');
-var varbit = require('../../core/var/bit');
+var component = require('widget/component');
+var varbit = require('engine/var/bit');
 
 var Spellbook = Java.type('org.virtue.game.content.skills.magic.Spellbook');
 
-var config = require('../../core/config');
-var util = require('../../core/util');
-var chat = require('../../chat');
-var inv = require('../../inv');
-var widget = require('../../widget');
+var config = require('engine/config');
+var util = require('util');
+var chat = require('chat');
+var inv = require('inv');
+var widget = require('widget');
 
 var spellbook = require('../../skill/magic/spellbook');
-var abilities = require('../logic/abilities');
+var abilities = require('combat/abilities');
 var actionBar = require('./action-bar');
 var common = require('./common');
 

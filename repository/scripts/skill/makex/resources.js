@@ -2,10 +2,10 @@
  * Functionality related to checking & taking make-x resources
  */
 /* globals Inv */
-var varbit = require('../../core/var/bit');
-var varc = require('../../core/var/client');
+var varbit = require('engine/var/bit');
+var varc = require('engine/var/client');
 
-var inv = require('../../inv');
+var inv = require('inv');
 
 module.exports = (function () {
 	return {

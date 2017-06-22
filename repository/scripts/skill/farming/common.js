@@ -2,14 +2,14 @@
  * Common functionality for farming
  */
 /* globals Stat */
-var varbit = require('../../core/var/bit');
-var CONST = require('../../core/const');
+var varbit = require('engine/var/bit');
+var CONST = require('const');
 
-var anim = require('../../core/anim');
-var chat = require('../../chat');
-var dialog = require('../../dialog');
-var inv = require('../../inv');
-var stat = require('../common/stat');
+var anim = require('anim');
+var chat = require('chat');
+var dialog = require('dialog');
+var inv = require('inv');
+var stat = require('stat');
 
 var variables = require('./variables');
 var resources = require('../makex/resources');

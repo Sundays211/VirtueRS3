@@ -3,13 +3,14 @@
  * @since 12/10/2016
  */
 /* globals EventType */
-var varp = require('../../core/var/player');
-var varbit = require('../../core/var/bit');
+var varp = require('engine/var/player');
+var varbit = require('engine/var/bit');
+
+var dialog = require('dialog');
+var widget = require('widget');
+var anim = require('anim');
 
 var makex = require('../makex');
-var dialog = require('../../dialog');
-var widget = require('../../widget');
-var anim = require('../../core/anim');
 
 module.exports = (function () {
 	return {

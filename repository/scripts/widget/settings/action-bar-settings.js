@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('../../core/util');
+var util = require('util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

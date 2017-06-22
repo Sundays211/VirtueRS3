@@ -19,12 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var varp = require('../../core/var/player');
-var varbit = require('../../core/var/bit');
+var varp = require('engine/var/player');
+var varbit = require('engine/var/bit');
 
-var chat = require('../../chat');
-var dialog = require('../../dialog');
-var widget = require('../../widget');
+var chat = require('chat');
+var dialog = require('dialog');
+var widget = require('widget');
 
 var disassembly = require('../invention/disassembly');
 var makex = require('../makex');

@@ -20,20 +20,21 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv, Stat */
-var component = require('../widget/component');
-var varp = require('../core/var/player');
-var varbit = require('../core/var/bit');
+var component = require('widget/component');
+var varp = require('engine/var/player');
+var varbit = require('engine/var/bit');
+var CONST = require('const');
 
-var util = require('../core/util');
-var config = require('../core/config');
-var map = require('../map');
-var dialog = require('../dialog');
-var widget = require('../widget');
-var chat = require('../chat');
+var util = require('util');
+var config = require('engine/config');
+var map = require('map');
+var dialog = require('dialog');
+var widget = require('widget');
+var chat = require('chat');
+var common = require('inv/common');
 
-var moneyPouch = require('./money-pouch');
-var wornEquipment = require('./worn-equipment');
-var common = require('./common');
+var moneyPouch = require('inv/money-pouch');
+var wornEquipment = require('inv/equipment');
 var loan = require('../trade/loan');
 var actionBar = require('../combat/widgets/action-bar');
 
@@ -156,6 +157,17 @@ module.exports = (function() {
 				util.defaultHandler(ctx, "backpack item");
 				return;
 			}
+		});
+
+		scriptManager.bind(EventType.OPHELD4, CONST.COINS, function (ctx) {
+			var amount = ENGINE.getCount(ctx.item);
+			
+			if (util.checkOverflow(moneyPouch.getCoinCount(ctx.player), amount)) {
+				chat.sendMessage(ctx.player, "You do not have enough space in your money pouch.");
+				return;
+			}
+			moneyPouch.addCoins(ctx.player, amount);
+			ENGINE.delItem(ctx.player, Inv.BACKPACK, CONST.COINS, amount);
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTONT, component(1473, 34), handleUseOnInterface);

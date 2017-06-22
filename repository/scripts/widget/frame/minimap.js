@@ -20,16 +20,16 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varbit = require('../../core/var/bit');
-var varp = require('../../core/var/player');
-var varc = require('../../core/var/client');
+var varbit = require('engine/var/bit');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
 
-var anim = require('../../core/anim');
-var chat = require('../../chat');
-var common = require('../common');
-var util = require('../../core/util');
+var anim = require('anim');
+var chat = require('chat');
+var widget = require('widget');
+var util = require('util');
 
-var moneyPouch = require('../../inv/money-pouch');
+var moneyPouch = require('inv/money-pouch');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -49,7 +49,7 @@ module.exports = (function () {
 			switch (ctx.component) {
 			case 9://Logout
 				varp(player, 3813, 6);
-				common.open(player, 1477, 871, 26, true);
+				widget.open(player, 1477, 871, 26, true);
 				return;
 			case 22://Money pouch options
 				switch (ctx.button) {
@@ -58,7 +58,7 @@ module.exports = (function () {
 					varbit(player, 1192, wasOpen ? 0 : 1);
 					return;
 				case 2://Open Price Checker
-					common.openCentral(player, 206, false);
+					widget.openCentral(player, 206, false);
 					return;
 				case 3://Examine money pouch
 					moneyPouch.examine(player);
@@ -77,20 +77,20 @@ module.exports = (function () {
 				varp(player, 3926, 0);
 				varp(player, 3928, -1);
 				varp(player, 3929, -1);
-				common.open(player, 1477, 496, 669, true);
+				widget.open(player, 1477, 496, 669, true);
 				varc(player, 3838, 0);
 				varc(player, 3840, 0);
-				common.hide(player, 1477, 20, true);
-				common.hide(player, 1477, 21, true);
-				common.hide(player, 1477, 22, true);
-				common.hide(player, 1477, 506, true);
-				common.hide(player, 1477, 388, true);
+				widget.hide(player, 1477, 20, true);
+				widget.hide(player, 1477, 21, true);
+				widget.hide(player, 1477, 22, true);
+				widget.hide(player, 1477, 506, true);
+				widget.hide(player, 1477, 388, true);
 				//TODO: Find out the right varp for these
 				//varp(player, 622, api.getCoordHash(api.getCoords(player)));
 				//varp(player, 674, api.getCoordHash(api.getCoords(player)));
-				common.open(player, 1477, 16, 1421, true);
-				common.open(player, 1477, 15, 1422, false);
-				common.open(player, 1422, 107, 698, true);
+				widget.open(player, 1477, 16, 1421, true);
+				widget.open(player, 1477, 15, 1422, false);
+				widget.open(player, 1422, 107, 698, true);
 				/*player.getDispatcher().sendWidgetSettings(1422, 38, 2, 2, 2);
 				player.getDispatcher().sendWidgetSettings(1422, 39, 2, 2, 2);
 				player.getDispatcher().sendWidgetSettings(1422, 40, 2, 2, 2);
@@ -124,7 +124,7 @@ module.exports = (function () {
 				}
 				return;
 			case 57://Open lodestone interface
-				common.openCentral(player, 1092, false);
+				widget.openCentral(player, 1092, false);
 				return;
 			/*case 14://Legacy XP counter button
 			case 27://Open notes

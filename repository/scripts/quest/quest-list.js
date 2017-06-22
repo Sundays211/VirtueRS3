@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, QUEST_ENGINE */
-var varbit = require('../core/var/bit');
-var varp = require('../core/var/player');
-var varc = require('../core/var/client');
+var varbit = require('engine/var/bit');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
 
-var util = require('../core/util');
-var config = require('../core/config');
-var widget = require('../widget');
-var chat = require('../chat');
+var util = require('util');
+var config = require('engine/config');
+var widget = require('widget');
+var chat = require('chat');
 var quest = require('../quest');
 
 /**

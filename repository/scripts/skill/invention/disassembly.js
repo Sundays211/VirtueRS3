@@ -20,15 +20,16 @@
  * SOFTWARE.
  */
 /* globals ENGINE, Inv, Stat, Woodcutting */
-var varc = require('../../core/var/client');
+var varc = require('engine/var/client');
 
-var anim = require('../../core/anim');
-var config = require('../../core/config');
-var util = require('../../core/util');
-var chat = require('../../chat');
-var inv = require('../../inv');
-var widget = require('../../widget');
-var stat = require('../common/stat');
+var anim = require('anim');
+var config = require('engine/config');
+var util = require('util');
+var chat = require('chat');
+var inv = require('inv');
+var widget = require('widget');
+var stat = require('stat');
+
 var materials = require('./materials');
 var makexProgress = require('../makex/progress');
 

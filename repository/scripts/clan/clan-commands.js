@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, CLAN_ENGINE*/
-var widget = require('../widget');
-var dialog = require('../dialog');
+var widget = require('widget');
+var dialog = require('dialog');
+var chat = require('chat');
+
 var clan = require('./logic/core');
-var chat = require('../chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

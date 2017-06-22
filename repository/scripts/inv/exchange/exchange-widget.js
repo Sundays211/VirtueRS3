@@ -20,17 +20,17 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, ENGINE */
-var varp = require('../../core/var/player');
-var varc = require('../../core/var/client');
-var varbit = require('../../core/var/bit');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
+var varbit = require('engine/var/bit');
 
-var widget = require('../../widget');
-var dialog = require('../../dialog');
-var util = require('../../core/util');
-var config = require('../../core/config');
-var chat = require('../../chat');
-var common = require('../common');
-var CONST = require('../../core/const');
+var widget = require('widget');
+var dialog = require('dialog');
+var util = require('util');
+var config = require('engine/config');
+var chat = require('chat');
+var common = require('inv/common');
+var CONST = require('const');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

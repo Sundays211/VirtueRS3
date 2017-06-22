@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Java, WearPos, Inv */
-var component = require('../../widget/component');
+var component = require('widget/component');
 
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
-var util = require('../../core/util');
-var widget = require('../../widget');
-var chat = require('../../chat');
-var anim = require('../../core/anim');
-var inv = require('../../inv');
+var util = require('util');
+var widget = require('widget');
+var chat = require('chat');
+var anim = require('anim');
+var inv = require('inv');
 
 module.exports = (function () {
 	return {

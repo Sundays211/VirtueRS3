@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType, FriendChatData, ENGINE */
-var varc = require('../core/var/client');
-var config = require('../core/config');
-var util = require('../core/util');
-var dialog = require('../dialog');
-var widget = require('../widget');
-var chat = require('../chat');
+var varc = require('engine/var/client');
+var config = require('engine/config');
+var util = require('util');
+var dialog = require('dialog');
+var widget = require('widget');
+var chat = require('chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

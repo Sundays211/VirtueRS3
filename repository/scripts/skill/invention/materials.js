@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var varp = require('../../core/var/player');
+var varp = require('engine/var/player');
 
-var config = require('../../core/config');
-var util = require('../../core/util');
+var config = require('engine/config');
+var util = require('util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

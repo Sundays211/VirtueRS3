@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('../../core/util');
-var chat = require('../../chat');
+var util = require('util');
+var chat = require('chat');
 
 var common = require('./common');
 var variables = require('./variables');

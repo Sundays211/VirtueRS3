@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var chat = require('../chat');
-var anim = require('../core/anim');
-var map = require('../map');
+var chat = require('chat');
+var anim = require('anim');
+var map = require('map');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

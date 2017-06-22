@@ -20,15 +20,15 @@
  * SOFTWARE.
  */
 /* globals EventType, Java, ENGINE */
-var coords = require('../../map/coords');
+var coords = require('map/coords');
 var BufferedWriter = Java.type('java.io.BufferedWriter');
 var FileWriter = Java.type('java.io.FileWriter');
 var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
 var NpcDataParser = Java.type('org.virtue.game.parser.impl.NpcDataParser');
 
-var map = require('../../map');
-var chat = require('../../chat');
-var util = require('../../core/util');
+var map = require('map');
+var chat = require('chat');
+var util = require('util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

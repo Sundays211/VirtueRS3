@@ -15,6 +15,7 @@
  */
 // Since we intend to use the Function constructor.
 /* jshint evil: true */
+/* globals NativeRequire:true, java */
 
 module = (typeof module === 'undefined') ? {} : module;
 
@@ -49,8 +50,8 @@ module = (typeof module === 'undefined') ? {} : module;
 
     if (parent && parent.children) parent.children.push(this);
 
-    this.require = function (id) {
-      return Require(id, this);
+    this.require = function (id_inner) {
+      return Require(id_inner, this);
     }.bind(this);
   }
 
@@ -234,7 +235,7 @@ module = (typeof module === 'undefined') ? {} : module;
     }
   }
 
-  function resolveCoreModule (id, root) {
+  function resolveCoreModule (id) {
     var name = normalizeName(id);
     var classloader = java.lang.Thread.currentThread().getContextClassLoader();
     if (classloader.getResource(name)) {

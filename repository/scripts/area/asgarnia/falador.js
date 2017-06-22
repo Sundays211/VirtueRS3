@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var dialog = require('../../dialog');
-var anim = require('../../core/anim');
-var map = require('../../map');
-var loc = require('../../map/location');
+var dialog = require('dialog');
+var anim = require('anim');
+var map = require('map');
+var loc = require('map/location');
 
 module.exports = (function () {
 	return {

@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('../../core/util');
+var util = require('util');
 
-var overlay = require('./overlay');
+var overlay = require('widget/overlay');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals Inv, WearPos, Stat */
-var varbit = require('../../core/var/bit');
+var varbit = require('engine/var/bit');
 
-var config = require('../../core/config');
-var inv = require('../../inv');
-var chat = require('../../chat');
-var stat = require('../common/stat');
+var config = require('engine/config');
+var inv = require('inv');
+var chat = require('chat');
+var stat = require('stat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

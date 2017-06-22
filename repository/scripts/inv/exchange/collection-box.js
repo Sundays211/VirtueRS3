@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv */
-var varp = require('../../core/var/player');
+var varp = require('engine/var/player');
 
-var util = require('../../core/util');
-var config = require('../../core/config');
-var chat = require('../../chat');
-var inv = require('../../inv');
+var util = require('util');
+var config = require('engine/config');
+var chat = require('chat');
+var inv = require('inv');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

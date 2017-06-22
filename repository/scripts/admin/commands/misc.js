@@ -20,17 +20,17 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Java */
-var varc = require('../../core/var/client');
-var coords = require('../../map/coords');
+var varc = require('engine/var/client');
+var coords = require('map/coords');
 
 var Virtue = Java.type('org.virtue.Virtue');
 var World = Java.type('org.virtue.game.World');
 
-var anim = require('../../core/anim');
-var map = require('../../map');
-var util = require('../../core/util');
-var chat = require('../../chat');
-var widget = require('../../widget');
+var anim = require('anim');
+var map = require('map');
+var util = require('util');
+var chat = require('chat');
+var widget = require('widget');
 
 /** 
  * @author Kayla
