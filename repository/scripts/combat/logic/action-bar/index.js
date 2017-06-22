@@ -110,8 +110,8 @@ module.exports = (function () {
 		variables.setAction(player, varbit(player, 1893), pos, 0, 0, -1);
 	}
 	
-	function setAction (player, barPos, actionType, actionSlot) {
-		variables.setAction(player, varbit(player, 1893), barPos, actionType, actionSlot, -1);
+	function setAction (player, barPos, actionType, actionSlot, objId) {
+		variables.setAction(player, varbit(player, 1893), barPos, actionType, actionSlot, objId);
 	}
 	
 	function previousBar (player) {
