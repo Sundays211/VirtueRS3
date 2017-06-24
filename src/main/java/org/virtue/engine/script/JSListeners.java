@@ -47,6 +47,7 @@ import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.ChatOptionType;
 import org.virtue.game.content.dialogues.ChatheadEmoteType;
 import org.virtue.game.content.friendchats.FriendChatDataType;
+import org.virtue.game.entity.combat.hit.DamageType;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.WearPos;
@@ -211,6 +212,12 @@ public class JSListeners implements ScriptManager {
 		}
 		engine.put("Expression", map);
 		
+		map = new HashMap<>();
+		for (DamageType damageType : DamageType.values()) {
+			map.put(damageType.name(), damageType.getMask());
+		}
+		engine.put("DamageType", map);
+		
 		File generalFunctions = new File(legacyScriptDir, "GeneralFunctions.js");
 		if (generalFunctions.exists()) {
 			try {
@@ -371,6 +378,14 @@ public class JSListeners implements ScriptManager {
 
 	public void setQuestApi(QuestAPI questApi) {
 		this.questApi = questApi;
+	}
+
+	public EntityAPI getEntityApi() {
+		return entityApi;
+	}
+
+	public void setEntityApi(EntityAPI entityApi) {
+		this.entityApi = entityApi;
 	}
 
 	/**

@@ -23,6 +23,7 @@ package org.virtue.engine.script.api.impl;
 
 import org.virtue.engine.script.api.EntityAPI;
 import org.virtue.game.entity.Entity;
+import org.virtue.game.entity.combat.hit.DamageType;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.protocol.update.block.TalkBlock;
@@ -51,6 +52,17 @@ public class VirtueEntityAPI implements EntityAPI {
 	@Override
 	public void say(Entity entity, String message) {
 		entity.queueUpdateBlock(new TalkBlock(message));
+	}
+
+	@Override
+	public void hit(Entity entity, int damage, int hitmarkTypeId) {
+		DamageType damageType = DamageType.getById(hitmarkTypeId);
+		entity.getImpactHandler().hit(damage, damageType);
+	}
+
+	@Override
+	public void stun(Entity entity, int time) {
+		entity.setFreezeDuration(time);
 	}
 
 }

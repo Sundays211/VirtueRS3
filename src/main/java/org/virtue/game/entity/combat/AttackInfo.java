@@ -83,6 +83,16 @@ public final class AttackInfo {
 	public static AttackInfo create(Entity entity, AnimationBlock animation, SpotAnimationBlock graphics, int cooldown, ImpactInfo...impacts) {
 		return new AttackInfo(animation, graphics, cooldown, impacts);
 	}
+	
+	/**
+	 * Creates a new attack information object.
+	 * @param entity The attacking entity.
+	 * @param impacts The impact information array.
+	 * @return The {@code AttackInfo} {@code Object}.
+	 */
+	public static AttackInfo create(Entity entity, int cooldown, ImpactInfo...impacts) {
+		return new AttackInfo(null, null, cooldown, impacts);
+	}
 
 	/**
 	 * Sets the impacts value.

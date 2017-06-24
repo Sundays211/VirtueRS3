@@ -42,4 +42,12 @@ public enum DamageType {//141
 	public int getMask() {
 		return hitMask;
 	}
+	public static DamageType getById (int id) {
+		for (DamageType type : values()) {
+			if (type.hitMask == id) {
+				return type;
+			}
+		}
+		return null;
+	}
 }
