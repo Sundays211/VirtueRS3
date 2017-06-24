@@ -37,18 +37,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.engine.script.api.ClanAPI;
 import org.virtue.engine.script.api.ConfigAPI;
+import org.virtue.engine.script.api.EntityAPI;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.engine.script.api.QuestAPI;
 import org.virtue.engine.script.api.ScriptAPI;
-import org.virtue.engine.script.listeners.AbilityListener;
 import org.virtue.engine.script.listeners.CombatHandler;
 import org.virtue.engine.script.listeners.EventListener;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.ChatOptionType;
 import org.virtue.game.content.dialogues.ChatheadEmoteType;
 import org.virtue.game.content.friendchats.FriendChatDataType;
-import org.virtue.game.entity.combat.impl.ability.ActionBar;
-import org.virtue.game.entity.combat.impl.ability.ScriptedAbility;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.WearPos;
@@ -69,7 +67,7 @@ public class JSListeners implements ScriptManager {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(JSListeners.class);
 	
-	private static String[] LEGACY_CATEGORIES = {"abilities", "command", "interaction", "npcs",
+	private static String[] LEGACY_CATEGORIES = { "command", "interaction", "npcs",
 			"skill", "specials", "widget"};
 	
 	private static class EventBind {
@@ -136,6 +134,8 @@ public class JSListeners implements ScriptManager {
 	
 	private QuestAPI questApi;
 	
+	private EntityAPI entityApi;
+	
 	private ScriptEngine engine;
 	
 	private File scriptDir;
@@ -160,6 +160,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("MAP_ENGINE", mapApi);
 		engine.put("configApi", configApi);
 		engine.put("QUEST_ENGINE", questApi);
+		engine.put("ENTITY_ENGINE", entityApi);
 		engine.put("scriptEngine", this);
 		
 		Map<String, Integer> map = new HashMap<>();
@@ -436,10 +437,6 @@ public class JSListeners implements ScriptManager {
 	
 	public void registerCompListener(int eventTypeId, int iface, int comp, EventListener listener) {
 		registerListener(eventTypeId, iface << 16 | (comp & 0xffff), listener);
-	}
-	
-	public void registerAbilityListener(AbilityListener listener, int shortcut) {
-		ActionBar.getAbilities().put(listener.getAbilityID(), new ScriptedAbility(listener));
 	}
 	
 	public void registerAbstractNPC(AbstractNPC npc, int npcId) {
