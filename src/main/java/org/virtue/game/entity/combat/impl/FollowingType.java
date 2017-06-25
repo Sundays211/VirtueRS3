@@ -11,7 +11,6 @@ import org.virtue.game.map.movement.path.Point;
 import org.virtue.game.map.movement.path.impl.AbstractPathfinder;
 import org.virtue.game.map.movement.path.impl.DumbPathfinder;
 import org.virtue.game.map.movement.path.impl.SmartPathfinder;
-import org.virtue.game.map.square.RegionManager;
 import org.virtue.game.node.Node;
 
 /**
@@ -84,7 +83,7 @@ public abstract class FollowingType {
 	 * @return The location to walk to.
 	 */
 	private static CoordGrid findBorderLocation(Entity mover, Entity destination) {
-		int size = destination.getSize();
+		/*int size = destination.getSize();
 		CoordGrid centerDest = destination.getCurrentTile().copyNew(size >> 1, size >> 1, 0);
 		CoordGrid center = mover.getCurrentTile().copyNew(mover.getSize() >> 1, mover.getSize() >> 1, 0);
 		CompassPoint direction = CompassPoint.getLogicalDirection(centerDest, center);
@@ -141,7 +140,8 @@ public abstract class FollowingType {
 			}
 			CoordGrid location = mover.getCurrentTile().copyNew(direction, amount);
 			return location;
-		}
+		}*/
+		//TODO: This
 		return null;
 	}
 	
@@ -181,16 +181,16 @@ public abstract class FollowingType {
 	 * @return The destination location.
 	 */
 	public static CoordGrid getClosestTo(Entity mover, Node node, CoordGrid suggestion) {
-		CoordGrid nl = node.getCurrentTile();
+		/*CoordGrid nl = node.getCurrentTile();
 		int diffX = suggestion.getX() - nl.getX();
 		int diffY = suggestion.getY() - nl.getY();
-		CompassPoint moveDir = CompassPoint.NORTH;
+		CompassPoint moveDir = NORTH;
 		if (diffX < 0) {
-			moveDir = CompassPoint.EAST;
+			moveDir = EAST;
 		} else if (diffX >= node.getSize()) {
-			moveDir = CompassPoint.WEST;
+			moveDir = WEST;
 		} else if (diffY >= node.getSize()) {
-			moveDir = CompassPoint.SOUTH;
+			moveDir = SOUTH;
 		}
 		double distance = 9999.9;
 		CoordGrid destination = suggestion;
@@ -199,7 +199,7 @@ public abstract class FollowingType {
 				for (int j = 0; j < (i == 0 ? 1 : 2); j++) {
 					CompassPoint current = CompassPoint.get((moveDir.toInteger() + (j == 1 ? 3 : 1)) % 4);
 					CoordGrid loc = suggestion.copyNew(current.getDeltaX() * i, current.getDeltaY() * i, 0);
-					if (moveDir.toInteger() % 2 == 0) {
+					if (moveDir == NORTH || moveDir == SOUTH) {
 						if (loc.getX() < nl.getX() || loc.getX() > nl.getX() + node.getSize() - 1) {
 							continue;
 						}
@@ -220,13 +220,14 @@ public abstract class FollowingType {
 			moveDir = CompassPoint.get((moveDir.toInteger() + 1) % 4);
 			int offsetX = Math.abs(moveDir.getDeltaY() * (node.getSize() >> 1)); // Not a mixup between x & y!
 			int offsetY = Math.abs(moveDir.getDeltaX() * (node.getSize() >> 1));
-			if (moveDir.toInteger() < 2) {
+			if (moveDir == NORTH || moveDir == EAST) {
 				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() + offsetX, -moveDir.getDeltaY() + offsetY, 0);
 			} else {
 				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() * node.getSize() + offsetX, -moveDir.getDeltaY() * node.getSize() + offsetY, 0);
 			}
-		}
-		return destination;
+		}*/
+		//TODO: This
+		return suggestion;
 	}
 	
 	/**

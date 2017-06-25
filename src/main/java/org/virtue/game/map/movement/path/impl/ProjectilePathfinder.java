@@ -7,7 +7,6 @@ import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Point;
-import org.virtue.game.map.square.RegionManager;
 
 /**
  * A pathfinder implementation used for checking projectile paths.
@@ -54,11 +53,12 @@ public final class ProjectilePathfinder extends AbstractPathfinder {
 			}
 		}
 		if (!points.isEmpty()) {
-			CompassPoint last = null;
+			Point last = null;
 			for (int i = 0; i < points.size() - 1; i++) {
 				Point p = points.get(i);
-				if (p.getDirection() != last) {
+				if (!p.equals(last)) {
 					path.getPoints().add(p);
+					last = p;
 				}
 			}
 			path.getPoints().add(points.get(points.size() - 1));
@@ -76,70 +76,70 @@ public final class ProjectilePathfinder extends AbstractPathfinder {
 			found = true;
 			switch (dir) {
 			case NORTH:
-				if ((RegionManager.getProjectileFlag(z, x, y + 1) & 0x12c0120) != 0) {
+				if ((getProjectileFlag(z, x, y + 1) & 0x12c0120) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x, y + 1, dir));
+				points.add(new Point(x, y + 1));
 				y++;
 				break;
 			case NORTHEAST:
-				if ((RegionManager.getProjectileFlag(z, x + 1, y) & 0x12c0180) != 0 || (RegionManager.getProjectileFlag(z, x, y + 1) & 0x12c0120) != 0 || (RegionManager.getProjectileFlag(z, x + 1, y + 1) & 0x12c01e0) != 0) {
+				if ((getProjectileFlag(z, x + 1, y) & 0x12c0180) != 0 || (getProjectileFlag(z, x, y + 1) & 0x12c0120) != 0 || (getProjectileFlag(z, x + 1, y + 1) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y + 1, dir));
+				points.add(new Point(x + 1, y + 1));
 				x++;
 				y++;
 				break;
 			case EAST:
-				if ((RegionManager.getProjectileFlag(z, x + 1, y) & 0x12c0180) != 0) {
+				if ((getProjectileFlag(z, x + 1, y) & 0x12c0180) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y, dir));
+				points.add(new Point(x + 1, y));
 				x++;
 				break;
 			case SOUTHEAST:
-				if ((RegionManager.getProjectileFlag(z, x + 1, y) & 0x12c0180) != 0 || (RegionManager.getProjectileFlag(z, x, y - 1) & 0x12c0102) != 0 || (RegionManager.getProjectileFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
+				if ((getProjectileFlag(z, x + 1, y) & 0x12c0180) != 0 || (getProjectileFlag(z, x, y - 1) & 0x12c0102) != 0 || (getProjectileFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y - 1, dir));
+				points.add(new Point(x + 1, y - 1));
 				x++;
 				y--;
 				break;
 			case SOUTH:
-				if ((RegionManager.getProjectileFlag(z, x, y - 1) & 0x12c0102) != 0) {
+				if ((getProjectileFlag(z, x, y - 1) & 0x12c0102) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x, y - 1, dir));
+				points.add(new Point(x, y - 1));
 				y--;
 				break;
 			case SOUTHWEST:
-				if ((RegionManager.getProjectileFlag(z, x - 1, y) & 0x12c0108) != 0 || (RegionManager.getProjectileFlag(z, x, y - 1) & 0x12c0102) != 0 || (RegionManager.getProjectileFlag(z, x - 1, y - 1) & 0x12c010e) != 0) {
+				if ((getProjectileFlag(z, x - 1, y) & 0x12c0108) != 0 || (getProjectileFlag(z, x, y - 1) & 0x12c0102) != 0 || (getProjectileFlag(z, x - 1, y - 1) & 0x12c010e) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y - 1, dir));
+				points.add(new Point(x - 1, y - 1));
 				x--;
 				y--;
 				break;
 			case WEST:
-				if ((RegionManager.getProjectileFlag(z, x - 1, y) & 0x12c0108) != 0) {
+				if ((getProjectileFlag(z, x - 1, y) & 0x12c0108) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y, dir));
+				points.add(new Point(x - 1, y));
 				x--;
 				break;
 			case NORTHWEST:
-				if ((RegionManager.getProjectileFlag(z, x - 1, y) & 0x12c0108) != 0 || (RegionManager.getProjectileFlag(z, x, y + 1) & 0x12c0120) != 0 || (RegionManager.getProjectileFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
+				if ((getProjectileFlag(z, x - 1, y) & 0x12c0108) != 0 || (getProjectileFlag(z, x, y + 1) & 0x12c0120) != 0 || (getProjectileFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y + 1, dir));
+				points.add(new Point(x - 1, y + 1));
 				x--;
 				y++;
 				break;

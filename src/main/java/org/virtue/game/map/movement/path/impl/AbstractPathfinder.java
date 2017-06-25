@@ -1,11 +1,12 @@
 package org.virtue.game.map.movement.path.impl;
 
+import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Pathfinder;
-import org.virtue.game.map.square.RegionManager;
+import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.node.Node;
 
 /**
@@ -129,12 +130,18 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		return find(start, 1, destination, near, finder);
 	}
 	
+	public static Path find(Entity mover, CoordGrid destination, boolean near) {
+		return find(mover.getCurrentTile(), mover.getSize(), destination, near, SMART);
+	}
+	
 	public static Path find(Entity mover, CoordGrid destination, boolean near, Pathfinder finder) {
 		return find(mover.getCurrentTile(), mover.getSize(), destination, near, finder);
 	}
 	
 	public static Path find(CoordGrid start, int moverSize, CoordGrid destination, boolean near, Pathfinder finder) {
-		return finder.find(start, moverSize, destination, 1, 1, 0, 0, 0, near);
+		synchronized (finder) {
+			return finder.find(start, moverSize, destination, 0, 0, 0, 0, 0, near);
+		}
 	}
 
 	/**
@@ -168,22 +175,51 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		//TODO:	else if (destination instanceof GroundItem && !RegionManager.isTeleportPermitted(destination.getCurrentTile())) {
 		//			size = 1;
 		//		}
-		return finder.find(start, moverSize, destination.getCurrentTile(), size, size, 0, 0, 0, near);
+		synchronized (finder) {
+			return finder.find(start, moverSize, destination.getCurrentTile(), size, size, 0, 0, 0, near);
+		}
+	}
+
+	/**
+	 * Gets the clipping flag on the given location.
+	 * @param z The plane.
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @return The clipping flag.
+	 */
+	public static int getClippingFlag(int z, int x, int y) {
+		CoordGrid tile = new CoordGrid(x, y, z);
+		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
+		if (region == null || !region.isLoaded()) {
+			return Integer.MIN_VALUE;
+		}
+		return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), z);
+	}
+
+	/**
+	 * Gets the projectile mapping clipping flag.
+	 * @param z The plane.
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @return The projectile clipping flag.
+	 */
+	public static int getProjectileFlag(int z, int x, int y) {
+		return getClippingFlag(z, x, y); //TODO:
 	}
 
 	/**
 	 * Checks if interaction with decoration is possible.
-	 * @param curX The current x-coordinate in viewport.
-	 * @param curY The current y-coordinate in viewport.
+	 * @param curX The current x-position in viewport.
+	 * @param curY The current y-position in viewport.
 	 * @param size The mover size.
-	 * @param destX The destination x-coordinate in viewport.
-	 * @param destY The destination y-coordinate in viewport.
-	 * @param type The object type.
-	 * @param rotation The object rotation.
+	 * @param destX The destination x-position in viewport.
+	 * @param destY The destination y-position in viewport.
+	 * @param shape The location shape.
+	 * @param rotation The location rotation.
 	 * @param location The viewport location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean canDecorationInteract(int curX, int curY, int size, int destX, int destY, int rotation, int type, int z) {
+	public static boolean canDecorationInteract(int curX, int curY, int size, int destX, int destY, int rotation, int shape, int z) {
 		if (size != 1) {
 			if (destX >= curX && destX <= (curX + size) - 1 && destY >= destY && destY <= (destY + size) - 1) {
 				return true;
@@ -192,9 +228,9 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			return true;
 		}
 		if (size == 1) {
-			int flag = RegionManager.getClippingFlag(z, curX, curY);
-			if (type == 6 || type == 7) {
-				if (type == 7) {
+			int flag = getClippingFlag(z, curX, curY);
+			if (shape == 6 || shape == 7) {
+				if (shape == 7) {
 					rotation = rotation + 2 & 0x3;
 				}
 				if (rotation == 0) {
@@ -227,7 +263,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					}
 				}
 			}
-			if (type == 8) {
+			if (shape == 8) {
 				if (destX == curX && curY == destY + 1 && (flag & 0x20) == 0) {
 					return true;
 				}
@@ -244,51 +280,51 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		} else {
 			int cornerX = curX + size - 1;
 			int cornerY = curY + size - 1;
-			if (type == 6 || type == 7) {
-				if (type == 7) {
+			if (shape == 6 || shape == 7) {
+				if (shape == 7) {
 					rotation = 0x3 & 2 + rotation;
 				}
 				if (rotation == 0) {
-					if (destX + 1 == curX && destY >= curY && destY <= cornerY && (RegionManager.getClippingFlag(z, curX, destY) & 0x80) == 0) {
+					if (destX + 1 == curX && destY >= curY && destY <= cornerY && (getClippingFlag(z, curX, destY) & 0x80) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && destY - size == curY && (0x2 & RegionManager.getClippingFlag(z, destX, cornerY)) == 0) {
+					if (destX >= curX && destX <= cornerX && destY - size == curY && (0x2 & getClippingFlag(z, destX, cornerY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
-					if (-size + destX == curX && destY >= curY && cornerY >= destY && (RegionManager.getClippingFlag(z, cornerX, destY) & 0x8) == 0) {
+					if (-size + destX == curX && destY >= curY && cornerY >= destY && (getClippingFlag(z, cornerX, destY) & 0x8) == 0) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && -size + destY == curY && (RegionManager.getClippingFlag(z, destX, cornerY) & 0x2) == 0) {
+					if (curX <= destX && cornerX >= destX && -size + destY == curY && (getClippingFlag(z, destX, cornerY) & 0x2) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
-					if (curX == destX - size && curY <= destY && destY <= cornerY && (0x8 & RegionManager.getClippingFlag(z, cornerX, destY)) == 0) {
+					if (curX == destX - size && curY <= destY && destY <= cornerY && (0x8 & getClippingFlag(z, cornerX, destY)) == 0) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (0x20 & RegionManager.getClippingFlag(z, destX, curY)) == 0) {
+					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (0x20 & getClippingFlag(z, destX, curY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 3) {
-					if (1 + destX == curX && curY <= destY && destY <= cornerY && (0x80 & RegionManager.getClippingFlag(z, curX, destY)) == 0) {
+					if (1 + destX == curX && curY <= destY && destY <= cornerY && (0x80 & getClippingFlag(z, curX, destY)) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (RegionManager.getClippingFlag(z, destX, curY) & 0x20) == 0) {
+					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (getClippingFlag(z, destX, curY) & 0x20) == 0) {
 						return true;
 					}
 				}
 			}
-			if (type == 8) {
-				if (curX <= destX && destX <= cornerX && 1 + destY == curY && (RegionManager.getClippingFlag(z, destX, curY) & 0x20) == 0) {
+			if (shape == 8) {
+				if (curX <= destX && destX <= cornerX && 1 + destY == curY && (getClippingFlag(z, destX, curY) & 0x20) == 0) {
 					return true;
 				}
-				if (curX <= destX && destX <= cornerX && curY == -size + destY && (0x2 & RegionManager.getClippingFlag(z, destX, cornerY)) == 0) {
+				if (curX <= destX && destX <= cornerX && curY == -size + destY && (0x2 & getClippingFlag(z, destX, cornerY)) == 0) {
 					return true;
 				}
-				if (curX == -size + destX && destY >= curY && destY <= cornerY && (0x8 & RegionManager.getClippingFlag(z, cornerX, destY)) == 0) {
+				if (curX == -size + destX && destY >= curY && destY <= cornerY && (0x8 & getClippingFlag(z, cornerX, destY)) == 0) {
 					return true;
 				}
-				if (1 + destX == curX && curY <= destY && cornerY >= destY && (RegionManager.getClippingFlag(z, curX, destY) & 0x80) == 0) {
+				if (1 + destX == curX && curY <= destY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x80) == 0) {
 					return true;
 				}
 			}
@@ -298,17 +334,17 @@ public abstract class AbstractPathfinder implements Pathfinder {
 
 	/**
 	 * Checks if interaction with a door is possible.
-	 * @param curX The current x-coordinate in viewport.
-	 * @param curY The current y-coordinate in viewport.
+	 * @param curX The current x-position in viewport.
+	 * @param curY The current y-position in viewport.
 	 * @param size The mover size.
-	 * @param destX The destination x-coordinate in viewport.
-	 * @param destY The destination y-coordinate in viewport.
-	 * @param type The object type.
-	 * @param rotation The object rotation.
+	 * @param destX The destination x-position in viewport.
+	 * @param destY The destination y-position in viewport.
+	 * @param shape The location shape.
+	 * @param rotation The location rotation.
 	 * @param location The viewport location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean canDoorInteract(int curX, int curY, int size, int destX, int destY, int type, int rotation, int z) {
+	public static boolean canDoorInteract(int curX, int curY, int size, int destX, int destY, int shape, int rotation, int z) {
 		if (size != 1) {
 			if (destX >= curX && destX <= size + curX - 1 && destY >= destY && destY <= destY + size - 1) {
 				return true;
@@ -318,49 +354,49 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		}
 
 		if (size == 1) {
-			if (type == 0) {
+			if (shape == 0) {
 				if (rotation == 0) {
 					if (curX == destX - 1 && destY == curY) {
 						return true;
 					}
-					if (destX == curX && 1 + destY == curY && (0x12c0120 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == destX && destY - 1 == curY && (RegionManager.getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
 					if (curX == destX && destY + 1 == curY) {
 						return true;
 					}
-					if (curX == destX - 1 && curY == destY && (0x12c0108 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == destX - 1 && curY == destY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && destY == curY && (0x12c0180 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == 1 + destX && destY == curY && (0x12c0180 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
 					if (1 + destX == curX && destY == curY) {
 						return true;
 					}
-					if (destX == curX && 1 + destY == curY && (0x12c0120 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == destX && curY == destY - 1 && (RegionManager.getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && curY == destY - 1 && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 3) {
 					if (curX == destX && -1 + destY == curY) {
 						return true;
 					}
-					if (curX == -1 + destX && destY == curY && (0x12c0108 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == -1 + destX && destY == curY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && destY == curY && (RegionManager.getClippingFlag(z, curX, curY) & 0x12c0180) == 0) {
+					if (curX == 1 + destX && destY == curY && (getClippingFlag(z, curX, curY) & 0x12c0180) == 0) {
 						return true;
 					}
 				}
-			} else if (type == 2) {
+			} else if (shape == 2) {
 				if (rotation == 0) {
 					if (destX - 1 == curX && curY == destY) {
 						return true;
@@ -368,14 +404,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX == curX && curY == 1 + destY) {
 						return true;
 					}
-					if (curX == destX + 1 && curY == destY && (0x12c0180 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == destX + 1 && curY == destY && (0x12c0180 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == destX && destY - 1 == curY && (RegionManager.getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
-					if (curX == destX - 1 && curY == destY && (0x12c0108 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == destX - 1 && curY == destY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
 					if (curX == destX && curY == 1 + destY) {
@@ -384,14 +420,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (1 + destX == curX && curY == destY) {
 						return true;
 					}
-					if (curX == destX && destY - 1 == curY && (RegionManager.getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
-					if (destX - 1 == curX && destY == curY && (0x12c0108 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (destX - 1 == curX && destY == curY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (destX == curX && 1 + destY == curY && (0x12c0120 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
 					if (1 + destX == curX && curY == destY) {
@@ -404,77 +440,77 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX - 1 == curX && curY == destY) {
 						return true;
 					}
-					if (destX == curX && curY == destY + 1 && (0x12c0120 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && curY == destY + 1 && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && curY == destY && (RegionManager.getClippingFlag(z, curX, curY) & 0x12c0180) == 0) {
+					if (curX == 1 + destX && curY == destY && (getClippingFlag(z, curX, curY) & 0x12c0180) == 0) {
 						return true;
 					}
 					if (destX == curX && destY - 1 == curY) {
 						return true;
 					}
 				}
-			} else if (type == 9) {
-				if (curX == destX && curY == destY + 1 && (RegionManager.getClippingFlag(z, curX, curY) & 0x20) == 0) {
+			} else if (shape == 9) {
+				if (curX == destX && curY == destY + 1 && (getClippingFlag(z, curX, curY) & 0x20) == 0) {
 					return true;
 				}
-				if (curX == destX && curY == destY - 1 && (RegionManager.getClippingFlag(z, curX, curY) & 0x2) == 0) {
+				if (curX == destX && curY == destY - 1 && (getClippingFlag(z, curX, curY) & 0x2) == 0) {
 					return true;
 				}
-				if (curX == destX - 1 && curY == destY && (0x8 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+				if (curX == destX - 1 && curY == destY && (0x8 & getClippingFlag(z, curX, curY)) == 0) {
 					return true;
 				}
-				if (destX + 1 == curX && curY == destY && (0x80 & RegionManager.getClippingFlag(z, curX, curY)) == 0) {
+				if (destX + 1 == curX && curY == destY && (0x80 & getClippingFlag(z, curX, curY)) == 0) {
 					return true;
 				}
 			}
 		} else {
 			int cornerX = curX - (1 - size);
 			int cornerY = -1 + curY + size;
-			if (type == 0) {
+			if (shape == 0) {
 				if (rotation == 0) {
 					if (destX - size == curX && destY >= curY && destY <= cornerY) {
 						return true;
 					}
-					if (destX >= curX && cornerX >= destX && curY == 1 + destY && (RegionManager.getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
+					if (destX >= curX && cornerX >= destX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
 						return true;
 					}
-					if (destX >= curX && cornerX >= destX && destY - size == curY && (RegionManager.getClippingFlag(z, destX, cornerY) & 0x12c0102) == 0) {
+					if (destX >= curX && cornerX >= destX && destY - size == curY && (getClippingFlag(z, destX, cornerY) & 0x12c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
 					if (destX >= curX && cornerX >= destX && destY + 1 == curY) {
 						return true;
 					}
-					if (curX == -size + destX && destY >= curY && cornerY >= destY && (0x12c0108 & RegionManager.getClippingFlag(z, cornerX, destY)) == 0) {
+					if (curX == -size + destX && destY >= curY && cornerY >= destY && (0x12c0108 & getClippingFlag(z, cornerX, destY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && destY >= curY && cornerY >= destY && (RegionManager.getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
+					if (curX == 1 + destX && destY >= curY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
 					if (curX == 1 + destX && curY <= destY && destY <= cornerY) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (0x12c0120 & RegionManager.getClippingFlag(z, destX, curY)) == 0) {
+					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (0x12c0120 & getClippingFlag(z, destX, curY)) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && destY - size == curY && (0x12c0102 & RegionManager.getClippingFlag(z, destX, cornerY)) == 0) {
+					if (destX >= curX && destX <= cornerX && destY - size == curY && (0x12c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 3) {
 					if (curX <= destX && destX <= cornerX && curY == -size + destY) {
 						return true;
 					}
-					if (-size + destX == curX && curY <= destY && destY <= cornerY && (RegionManager.getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
+					if (-size + destX == curX && curY <= destY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
 						return true;
 					}
-					if (1 + destX == curX && curY <= destY && cornerY >= destY && (RegionManager.getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
+					if (1 + destX == curX && curY <= destY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
 						return true;
 					}
 				}
 			}
-			if (type == 2) {
+			if (shape == 2) {
 				if (rotation == 0) {
 					if (destX - size == curX && curY <= destY && destY <= cornerY) {
 						return true;
@@ -482,14 +518,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (curX <= destX && destX <= cornerX && curY == 1 + destY) {
 						return true;
 					}
-					if (curX == 1 + destX && curY <= destY && destY <= cornerY && (0x12c0180 & RegionManager.getClippingFlag(z, curX, destY)) == 0) {
+					if (curX == 1 + destX && curY <= destY && destY <= cornerY && (0x12c0180 & getClippingFlag(z, curX, destY)) == 0) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && -size + destY == curY && (RegionManager.getClippingFlag(z, destX, cornerY) & 0x12c0102) == 0) {
+					if (curX <= destX && cornerX >= destX && -size + destY == curY && (getClippingFlag(z, destX, cornerY) & 0x12c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
-					if (-size + destX == curX && destY >= curY && destY <= cornerY && (RegionManager.getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
+					if (-size + destX == curX && destY >= curY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
 						return true;
 					}
 					if (destX >= curX && cornerX >= destX && curY == 1 + destY) {
@@ -498,14 +534,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX + 1 == curX && curY <= destY && destY <= cornerY) {
 						return true;
 					}
-					if (destX >= curX && cornerX >= destX && destY + -size == curY && (0x12c0102 & RegionManager.getClippingFlag(z, destX, cornerY)) == 0) {
+					if (destX >= curX && cornerX >= destX && destY + -size == curY && (0x12c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
-					if (curX == destX - size && curY <= destY && cornerY >= destY && (RegionManager.getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
+					if (curX == destX - size && curY <= destY && cornerY >= destY && (getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (0x12c0120 & RegionManager.getClippingFlag(z, destX, curY)) == 0) {
+					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, destX, curY)) == 0) {
 						return true;
 					}
 					if (1 + destX == curX && destY >= curY && cornerY >= destY) {
@@ -518,10 +554,10 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX + -size == curX && destY >= curY && destY <= cornerY) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && curY == 1 + destY && (RegionManager.getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
+					if (curX <= destX && cornerX >= destX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
 						return true;
 					}
-					if (1 + destX == curX && destY >= curY && cornerY >= destY && (0x12c0180 & RegionManager.getClippingFlag(z, curX, destY)) == 0) {
+					if (1 + destX == curX && destY >= curY && cornerY >= destY && (0x12c0180 & getClippingFlag(z, curX, destY)) == 0) {
 						return true;
 					}
 					if (destX >= curX && destX <= cornerX && curY == -size + destY) {
@@ -529,17 +565,17 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					}
 				}
 			}
-			if (type == 9) {
-				if (destX >= curX && destX <= cornerX && curY == 1 + destY && (RegionManager.getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
+			if (shape == 9) {
+				if (destX >= curX && destX <= cornerX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
 					return true;
 				}
-				if (destX >= curX && cornerX >= destX && curY == -size + destY && (0x12c0102 & RegionManager.getClippingFlag(z, destX, cornerY)) == 0) {
+				if (destX >= curX && cornerX >= destX && curY == -size + destY && (0x12c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
 					return true;
 				}
-				if (-size + destX == curX && destY >= curY && cornerY >= destY && (0x12c0108 & RegionManager.getClippingFlag(z, cornerX, destY)) == 0) {
+				if (-size + destX == curX && destY >= curY && cornerY >= destY && (0x12c0108 & getClippingFlag(z, cornerX, destY)) == 0) {
 					return true;
 				}
-				if (curX == destX + 1 && destY >= curY && cornerY >= destY && (RegionManager.getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
+				if (curX == destX + 1 && destY >= curY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
 					return true;
 				}
 			}
@@ -549,12 +585,12 @@ public abstract class AbstractPathfinder implements Pathfinder {
 
 	/**
 	 * Checks if the mover is standing on the destination.
-	 * @param x The current x-location (in viewport).
-	 * @param y The current y-location (in viewport).
+	 * @param x The current x-position (in viewport).
+	 * @param y The current y-position (in viewport).
 	 * @param moverSizeX The mover x size.
 	 * @param moverSizeY The mover y size.
-	 * @param destX The destination x-location in viewport.
-	 * @param destY The destination y-location in viewport.
+	 * @param destX The destination x-position in viewport.
+	 * @param destY The destination y-position in viewport.
 	 * @param sizeX The destination node x-size.
 	 * @param sizeY The destination node y-size.
 	 * @return {@code True} if so.
@@ -570,12 +606,12 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	}
 
 	/**
-	 * Checks if interaction is possible from the current location.
-	 * @param x The current x-location (in viewport).
-	 * @param y The current y-location (in viewport).
+	 * Checks if interaction is possible from the current position.
+	 * @param x The current x-position (in viewport).
+	 * @param y The current y-position (in viewport).
 	 * @param moverSize The mover size.
-	 * @param destX The destination x-location in viewport.
-	 * @param destY The destination y-location in viewport.
+	 * @param destX The destination x-position in viewport.
+	 * @param destY The destination y-position in viewport.
 	 * @param sizeX The destination node x-size.
 	 * @param sizeY The destination node y-size.
 	 * @param walkFlag The walking flag.
@@ -590,7 +626,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			}
 			return canInteractSized(x, y, moverSize, moverSize, destX, destY, sizeX, sizeY, walkFlag, z);
 		}
-		int flag = RegionManager.getClippingFlag(z, x, y);
+		int flag = getClippingFlag(z, x, y);
 		int cornerX = destX + sizeX - 1;
 		int cornerY = destY + sizeY - 1;
 		if (destX <= x && cornerX >= x && y >= destY && y <= cornerY) {
@@ -634,14 +670,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			if (destY == fromCornerY && (walkingFlag & 0x4) == 0) {
 				int x = curX;
 				for (int endX = toCornerX < fromCornerX ? toCornerX : fromCornerX; endX > x; x++) {
-					if ((RegionManager.getClippingFlag(z, x, -1 + fromCornerY) & 0x2) == 0) {
+					if ((getClippingFlag(z, x, -1 + fromCornerY) & 0x2) == 0) {
 						return true;
 					}
 				}
 			} else if (toCornerY == curY && (walkingFlag & 0x1) == 0) {
 				int x = curX;
 				for (int endX = fromCornerX <= toCornerX ? fromCornerX : toCornerX; x < endX; x++) {
-					if ((RegionManager.getClippingFlag(z, x, curY) & 0x20) == 0) {
+					if ((getClippingFlag(z, x, curY) & 0x20) == 0) {
 						return true;
 					}
 				}
@@ -649,13 +685,13 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		} else if (destX < fromCornerX && toCornerX >= fromCornerX) {
 			if (fromCornerY == destY && (0x4 & walkingFlag) == 0) {
 				for (int x = destX; fromCornerX > x; x++) {
-					if ((RegionManager.getClippingFlag(z, x, -1 + (fromCornerY)) & 0x2) == 0) {
+					if ((getClippingFlag(z, x, -1 + (fromCornerY)) & 0x2) == 0) {
 						return true;
 					}
 				}
 			} else if (toCornerY == curY && (0x1 & walkingFlag) == 0) {
 				for (int x = destX; fromCornerX > x; x++) {
-					if ((RegionManager.getClippingFlag(z, x, curY) & 0x20) == 0) {
+					if ((getClippingFlag(z, x, curY) & 0x20) == 0) {
 						return true;
 					}
 				}
@@ -664,13 +700,13 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			if (fromCornerY > destY && toCornerY >= fromCornerY) {
 				if (fromCornerX == destX && (walkingFlag & 0x8) == 0) {
 					for (int y = destY; y < fromCornerY; y++) {
-						if ((RegionManager.getClippingFlag(z, -1 + fromCornerX, y) & 0x8) == 0) {
+						if ((getClippingFlag(z, -1 + fromCornerX, y) & 0x8) == 0) {
 							return true;
 						}
 					}
 				} else if (curX == toCornerX && (0x2 & walkingFlag) == 0) {
 					for (int y = destY; fromCornerY > y; y++) {
-						if ((RegionManager.getClippingFlag(z, curX, y) & 0x80) == 0) {
+						if ((getClippingFlag(z, curX, y) & 0x80) == 0) {
 							return true;
 						}
 					}
@@ -680,7 +716,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			if (curX == toCornerX && (walkingFlag & 0x2) == 0) {
 				int y = curY;
 				for (int endY = fromCornerY <= toCornerY ? fromCornerY : toCornerY; y < endY; y++) {
-					if ((0x80 & RegionManager.getClippingFlag(z, curX, y)) == 0) {
+					if ((0x80 & getClippingFlag(z, curX, y)) == 0) {
 						return true;
 					}
 				}
@@ -688,7 +724,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		} else {
 			int y = curY;
 			for (int endY = fromCornerY > toCornerY ? toCornerY : fromCornerY; endY > y; y++) {
-				if ((RegionManager.getClippingFlag(z, fromCornerX - 1, y) & 0x8) == 0) {
+				if ((getClippingFlag(z, fromCornerX - 1, y) & 0x8) == 0) {
 					return true;
 				}
 			}

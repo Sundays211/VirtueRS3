@@ -91,7 +91,7 @@ import org.virtue.network.event.encoder.impl.MessageEventEncoder;
 import org.virtue.network.event.encoder.impl.MusicEventEncoder;
 import org.virtue.network.event.encoder.impl.NpcUpdateEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
-import org.virtue.network.event.encoder.impl.PlayerUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
 import org.virtue.network.event.encoder.impl.RunEnergyEventEncoder;
 import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
@@ -443,7 +443,7 @@ public class GameEventDispatcher {
 	 * Sends the player update event
 	 */
 	public void sendPlayerUpdate() {
-		sendEvent(PlayerUpdateEventEncoder.class, player.getViewport());
+		sendEvent(PlayerInfoEventEncoder.class, player.getViewport());
 	}
 
 	/**

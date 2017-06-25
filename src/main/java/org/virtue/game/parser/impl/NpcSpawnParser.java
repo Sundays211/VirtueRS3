@@ -69,7 +69,7 @@ public class NpcSpawnParser {
 				}
 				NPC npc = NPC.create(npcID, new CoordGrid(Integer.valueOf(location[0]), Integer.valueOf(location[1]), Integer.valueOf(location[2])));
 				if (direction != -1) {
-					npc.setDirection(CompassPoint.forID(direction));
+					npc.setDirection(CompassPoint.getById(direction));
 				}
 				World.getInstance().addNPC(npc);
 			}

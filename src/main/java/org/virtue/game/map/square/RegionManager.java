@@ -256,33 +256,6 @@ public class RegionManager {
 	public static int getArchiveKey(int regionX, int regionY) {
 		return regionX | regionY << 7;
 	}
-
-	/**
-	 * Gets the clipping flag on the given location.
-	 * @param z The plane.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return The clipping flag.
-	 */
-	public static int getClippingFlag(int z, int x, int y) {
-		CoordGrid tile = new CoordGrid(x, y, z);
-		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return Integer.MIN_VALUE;
-		}
-		return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), z);
-	}
-
-	/**
-	 * Gets the projectile mapping clipping flag.
-	 * @param z The plane.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return The projectile clipping flag.
-	 */
-	public static int getProjectileFlag(int z, int x, int y) {
-		return getClippingFlag(z, x, y); //TODO:
-	}
 	
 	public static boolean checkDirection(CoordGrid currentTile, CompassPoint direction) {
 		return true;

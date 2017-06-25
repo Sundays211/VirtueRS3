@@ -31,29 +31,27 @@ import org.virtue.game.map.CoordGrid;
  * @since 14/11/2014
  */
 public enum CompassPoint {
-	NORTH(0, 0, 1, 0),
-	NORTHEAST(1, 1, 1, 4),
-	EAST(2, 1, 0, 1),
-	SOUTHEAST(3, 1, -1, 5),
-	SOUTH(4, 0, -1, 2),
-	SOUTHWEST(5, -1, -1, 6),
-	WEST(6, -1, 0, 3),
-	NORTHWEST(7, -1, 1, 7);
+	NORTH(0, 0, 1),
+	NORTHEAST(1, 1, 1),
+	EAST(2, 1, 0),
+	SOUTHEAST(3, 1, -1),
+	SOUTH(4, 0, -1),
+	SOUTHWEST(5, -1, -1),
+	WEST(6, -1, 0),
+	NORTHWEST(7, -1, 1);
 	
-	private int serialID;
+	private int id;
 	private int dx;
 	private int dy;
-	private int value;
 	
-	private CompassPoint (int id, int dx, int dy, int value) {
-		this.serialID = id;
+	private CompassPoint (int id, int dx, int dy) {
+		this.id = id;
 		this.dx = dx;
 		this.dy = dy;
-		this.value = value;
 	}
 	
 	public int getID () {
-		return serialID;
+		return id;
 	}
 	
 	public int getDeltaX () {
@@ -68,7 +66,15 @@ public enum CompassPoint {
 		return ((int) (Math.atan2(dx, dy) * 2607.5945876176133)) & 0x3fff;
 	}
 	
-	public static CompassPoint forID (int id) {
+	public boolean isDiagonal () {
+		return dx != 0 && dy != 0;
+	}
+	
+	public CompassPoint flip () {
+		return CompassPoint.getById((id + 4) % 8);
+	}
+	
+	public static CompassPoint getById (int id) {
 		switch (id) {
 		case 0:
 			return NORTH;
@@ -111,32 +117,6 @@ public enum CompassPoint {
 		} else {
 			return null;
 		}
-	}
-
-	public int toInteger() {
-		return value;
-	}
-
-	/**
-	 * Gets the direction.
-	 * @param rotation The int value.
-	 * @return The direction.
-	 */
-	public static CompassPoint get(int rotation) {
-		for (CompassPoint dir : CompassPoint.values()) {
-			if (dir.value == rotation) {
-				return dir;
-			}
-		}
-		throw new IllegalArgumentException("Invalid direction value - " + rotation);
-	}
-
-	/**
-	 * Gets the opposite dir.
-	 * @return the direction.
-	 */
-	public CompassPoint getOpposite() {
-		return CompassPoint.get(toInteger() + 2 & 3);
 	}
 
 	/**

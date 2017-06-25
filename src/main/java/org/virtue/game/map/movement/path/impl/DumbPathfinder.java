@@ -7,7 +7,6 @@ import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Point;
-import org.virtue.game.map.square.RegionManager;
 
 /**
  * A pathfinder implementation used for an easy path, where the pathfinder won't
@@ -90,11 +89,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 			}
 		}
 		if (!points.isEmpty()) {
-			CompassPoint last = null;
+			Point last = null;
 			for (int i = 0; i < points.size() - 1; i++) {
 				Point p = points.get(i);
-				if (p.getDirection() != last) {
+				if (!p.equals(last)) {
 					path.getPoints().add(p);
+					last = p;
 				}
 			}
 			path.getPoints().add(points.get(points.size() - 1));
@@ -112,70 +112,70 @@ public final class DumbPathfinder extends AbstractPathfinder {
 			found = true;
 			switch (dir) {
 			case NORTH:
-				if ((RegionManager.getClippingFlag(z, x, y + 1) & 0x12c0120) != 0) {
+				if ((getClippingFlag(z, x, y + 1) & 0x12c0120) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x, y + 1, dir));
+				points.add(new Point(x, y + 1));
 				y++;
 				break;
 			case NORTHEAST:
-				if ((RegionManager.getClippingFlag(z, x + 1, y) & 0x12c0180) != 0 || (RegionManager.getClippingFlag(z, x, y + 1) & 0x12c0120) != 0 || (RegionManager.getClippingFlag(z, x + 1, y + 1) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x + 1, y) & 0x12c0180) != 0 || (getClippingFlag(z, x, y + 1) & 0x12c0120) != 0 || (getClippingFlag(z, x + 1, y + 1) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y + 1, dir));
+				points.add(new Point(x + 1, y + 1));
 				x++;
 				y++;
 				break;
 			case EAST:
-				if ((RegionManager.getClippingFlag(z, x + 1, y) & 0x12c0180) != 0) {
+				if ((getClippingFlag(z, x + 1, y) & 0x12c0180) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y, dir));
+				points.add(new Point(x + 1, y));
 				x++;
 				break;
 			case SOUTHEAST:
-				if ((RegionManager.getClippingFlag(z, x + 1, y) & 0x12c0180) != 0 || (RegionManager.getClippingFlag(z, x, y - 1) & 0x12c0102) != 0 || (RegionManager.getClippingFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y) & 0x12c0180) != 0 || (getClippingFlag(z, x, y - 1) & 0x12c0102) != 0 || (getClippingFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y - 1, dir));
+				points.add(new Point(x + 1, y - 1));
 				x++;
 				y--;
 				break;
 			case SOUTH:
-				if ((RegionManager.getClippingFlag(z, x, y - 1) & 0x12c0102) != 0) {
+				if ((getClippingFlag(z, x, y - 1) & 0x12c0102) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x, y - 1, dir));
+				points.add(new Point(x, y - 1));
 				y--;
 				break;
 			case SOUTHWEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y) & 0x12c0108) != 0 || (RegionManager.getClippingFlag(z, x, y - 1) & 0x12c0102) != 0 || (RegionManager.getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & 0x12c0108) != 0 || (getClippingFlag(z, x, y - 1) & 0x12c0102) != 0 || (getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y - 1, dir));
+				points.add(new Point(x - 1, y - 1));
 				x--;
 				y--;
 				break;
 			case WEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y) & 0x12c0108) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & 0x12c0108) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y, dir));
+				points.add(new Point(x - 1, y));
 				x--;
 				break;
 			case NORTHWEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y) & 0x12c0108) != 0 || (RegionManager.getClippingFlag(z, x, y + 1) & 0x12c0120) != 0 || (RegionManager.getClippingFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & 0x12c0108) != 0 || (getClippingFlag(z, x, y + 1) & 0x12c0120) != 0 || (getClippingFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y + 1, dir));
+				points.add(new Point(x - 1, y + 1));
 				x--;
 				y++;
 				break;
@@ -196,70 +196,70 @@ public final class DumbPathfinder extends AbstractPathfinder {
 			found = true;
 			switch (dir) {
 			case NORTH:
-				if ((RegionManager.getClippingFlag(z, x, y + 2) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x + 1, y + 2) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x, y + 2) & 0x12c0138) != 0 || (getClippingFlag(z, x + 1, y + 2) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x, y + 1, dir));
+				points.add(new Point(x, y + 1));
 				y++;
 				break;
 			case NORTHEAST:
-				if ((RegionManager.getClippingFlag(z, x + 1, y + 2) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x + 2, y + 2) & 0x12c01e0) != 0 || (RegionManager.getClippingFlag(z, x + 2, y + 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y + 2) & 0x12c0138) != 0 || (getClippingFlag(z, x + 2, y + 2) & 0x12c01e0) != 0 || (getClippingFlag(z, x + 2, y + 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y + 1, dir));
+				points.add(new Point(x + 1, y + 1));
 				x++;
 				y++;
 				break;
 			case EAST:
-				if ((RegionManager.getClippingFlag(z, x + 2, y) & 0x12c0183) != 0 || (RegionManager.getClippingFlag(z, x + 2, y + 1) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x + 2, y) & 0x12c0183) != 0 || (getClippingFlag(z, x + 2, y + 1) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y, dir));
+				points.add(new Point(x + 1, y));
 				x++;
 				break;
 			case SOUTHEAST:
-				if ((RegionManager.getClippingFlag(z, x + 1, y - 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x + 2, y) & 0x12c01e0) != 0 || (RegionManager.getClippingFlag(z, x + 2, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + 2, y) & 0x12c01e0) != 0 || (getClippingFlag(z, x + 2, y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x + 1, y - 1, dir));
+				points.add(new Point(x + 1, y - 1));
 				x++;
 				y--;
 				break;
 			case SOUTH:
-				if ((RegionManager.getClippingFlag(z, x, y - 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x, y - 1, dir));
+				points.add(new Point(x, y - 1));
 				y--;
 				break;
 			case SOUTHWEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x - 1, y) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y) & 0x12c0138) != 0 || (getClippingFlag(z, x, y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y - 1, dir));
+				points.add(new Point(x - 1, y - 1));
 				x--;
 				y--;
 				break;
 			case WEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y, dir));
+				points.add(new Point(x - 1, y));
 				x--;
 				break;
 			case NORTHWEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y + 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x - 1, y + 2) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x, y + 2) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x - 1, y + 1) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + 2) & 0x12c0138) != 0 || (getClippingFlag(z, x, y + 2) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
-				points.add(new Point(x - 1, y + 1, dir));
+				points.add(new Point(x - 1, y + 1));
 				x--;
 				y++;
 				break;
@@ -281,118 +281,118 @@ public final class DumbPathfinder extends AbstractPathfinder {
 			found = true;
 			roar: switch (dir) {
 			case NORTH:
-				if ((RegionManager.getClippingFlag(z, x, y + size) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x + (size - 1), y + size) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x, y + size) & 0x12c0138) != 0 || (getClippingFlag(z, x + (size - 1), y + size) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x + i, y + size) & 0x12c01f8) != 0) {
+					if ((getClippingFlag(z, x + i, y + size) & 0x12c01f8) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x, y + 1, dir));
+				points.add(new Point(x, y + 1));
 				y++;
 				break;
 			case NORTHEAST:
-				if ((RegionManager.getClippingFlag(z, x + 1, y + size) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x + size, y + size) & 0x12c01e0) != 0 || (RegionManager.getClippingFlag(z, x + size, y + 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y + size) & 0x12c0138) != 0 || (getClippingFlag(z, x + size, y + size) & 0x12c01e0) != 0 || (getClippingFlag(z, x + size, y + 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x + (i + 1), y + size) & 0x12c01f8) != 0 || (RegionManager.getClippingFlag(z, x + size, y + (i + 1)) & 0x12c01e3) != 0) {
+					if ((getClippingFlag(z, x + (i + 1), y + size) & 0x12c01f8) != 0 || (getClippingFlag(z, x + size, y + (i + 1)) & 0x12c01e3) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x + 1, y + 1, dir));
+				points.add(new Point(x + 1, y + 1));
 				x++;
 				y++;
 				break;
 			case EAST:
-				if ((RegionManager.getClippingFlag(z, x + size, y) & 0x12c0183) != 0 || (RegionManager.getClippingFlag(z, x + size, y + (size - 1)) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x + size, y) & 0x12c0183) != 0 || (getClippingFlag(z, x + size, y + (size - 1)) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x + size, y + i) & 0x12c01e3) != 0) {
+					if ((getClippingFlag(z, x + size, y + i) & 0x12c01e3) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x + 1, y, dir));
+				points.add(new Point(x + 1, y));
 				x++;
 				break;
 			case SOUTHEAST:
-				if ((RegionManager.getClippingFlag(z, x + 1, y - 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x + size, y + (size - 2)) & 0x12c01e0) != 0 || (RegionManager.getClippingFlag(z, x + size, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + size, y + (size - 2)) & 0x12c01e0) != 0 || (getClippingFlag(z, x + size, y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x + size, y + (i - 1)) & 0x12c01e3) != 0 || (RegionManager.getClippingFlag(z, x + (i + 1), y - 1) & 0x12c018f) != 0) {
+					if ((getClippingFlag(z, x + size, y + (i - 1)) & 0x12c01e3) != 0 || (getClippingFlag(z, x + (i + 1), y - 1) & 0x12c018f) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x + 1, y - 1, dir));
+				points.add(new Point(x + 1, y - 1));
 				x++;
 				y--;
 				break;
 			case SOUTH:
-				if ((RegionManager.getClippingFlag(z, x, y - 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x + (size - 1), y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + (size - 1), y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x + i, y - 1) & 0x12c018f) != 0) {
+					if ((getClippingFlag(z, x + i, y - 1) & 0x12c018f) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x, y - 1, dir));
+				points.add(new Point(x, y - 1));
 				y--;
 				break;
 			case SOUTHWEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y + (size - 2)) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x + (size - 2), y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x - 1, y + (size - 2)) & 0x12c0138) != 0 || (getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + (size - 2), y - 1) & 0x12c0183) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x - 1, y + (i - 1)) & 0x12c013e) != 0 || (RegionManager.getClippingFlag(z, x + (i - 1), y - 1) & 0x12c018f) != 0) {
+					if ((getClippingFlag(z, x - 1, y + (i - 1)) & 0x12c013e) != 0 || (getClippingFlag(z, x + (i - 1), y - 1) & 0x12c018f) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x - 1, y - 1, dir));
+				points.add(new Point(x - 1, y - 1));
 				x--;
 				y--;
 				break;
 			case WEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x - 1, y + (size - 1)) & 0x12c0138) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + (size - 1)) & 0x12c0138) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x - 1, y + i) & 0x12c013e) != 0) {
+					if ((getClippingFlag(z, x - 1, y + i) & 0x12c013e) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x - 1, y, dir));
+				points.add(new Point(x - 1, y));
 				x--;
 				break;
 			case NORTHWEST:
-				if ((RegionManager.getClippingFlag(z, x - 1, y + 1) & 0x12c010e) != 0 || (RegionManager.getClippingFlag(z, x - 1, y + size) & 0x12c0138) != 0 || (RegionManager.getClippingFlag(z, x, y + size) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x - 1, y + 1) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + size) & 0x12c0138) != 0 || (getClippingFlag(z, x, y + size) & 0x12c01e0) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((RegionManager.getClippingFlag(z, x - 1, y + (i + 1)) & 0x12c013e) != 0 || (RegionManager.getClippingFlag(z, x + (i - 1), y + size) & 0x12c01f8) != 0) {
+					if ((getClippingFlag(z, x - 1, y + (i + 1)) & 0x12c013e) != 0 || (getClippingFlag(z, x + (i - 1), y + size) & 0x12c01f8) != 0) {
 						found = false;
 						break roar;
 					}
 				}
-				points.add(new Point(x - 1, y + 1, dir));
+				points.add(new Point(x - 1, y + 1));
 				x--;
 				y++;
 				break;

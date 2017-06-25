@@ -32,6 +32,7 @@ import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.AppearenceBlock;
 import org.virtue.network.protocol.update.block.HeadIconBlock;
+import org.virtue.network.protocol.update.ref.MoveSpeed;
 import org.virtue.network.protocol.update.ref.Viewport;
 import org.virtue.utility.DirectionUtility;
 
@@ -39,7 +40,7 @@ import org.virtue.utility.DirectionUtility;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 18, 2014
  */
-public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
+public class PlayerInfoEventEncoder implements EventEncoder<Viewport> {
 
 	private static final int MAX_PLAYER_ADD = 25;
 
@@ -68,17 +69,17 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		int skipCount = 0;
 
 		for (int index = 0; index < context.getLocalPlayerIndexCount(); index++) {
-			int playerIndex = context.getLocalPlayerIndicies()[index];
-			if (nsn0 ? (0x1 & context.getSlotFlags()[playerIndex]) != 0 : (0x1 & context.getSlotFlags()[playerIndex]) == 0) {
+			int uid = context.getLocalPlayerIndicies()[index];
+			if (nsn0 ? (0x1 & context.getSlotFlags()[uid]) != 0 : (0x1 & context.getSlotFlags()[uid]) == 0) {
 				continue;
 			}
 			if (skipCount > 0) {
 				skipCount--;
-				context.getSlotFlags()[playerIndex] = (byte) (context.getSlotFlags()[playerIndex] | 0x2);
+				context.getSlotFlags()[uid] = (byte) (context.getSlotFlags()[uid] | 0x2);
 				continue;
 			}
 
-			Player p = context.getLocalPlayers()[playerIndex];
+			Player p = context.getLocalPlayers()[uid];
 			if (needsRemove(player, p)) {
 				buffer.putBits(1, 1);
 				buffer.putBits(1, 0);
@@ -86,28 +87,29 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 				//context.getRegionHashes()[playerIndex] = p.getLastTile() == null ? p.getCurrentTile().getRegionHash() : p.getLastTile().getRegionHash();
 
 				int regionHash = p.getCurrentTile().getRegionHash();
-				if (regionHash == context.getRegionHashes()[playerIndex]) {
+				if (regionHash == context.getRegionHashes()[uid]) {
 					buffer.putBits(1, 0);
 				} else {
 					buffer.putBits(1, 1);
-					appendRegionHash(buffer, p, context.getRegionHashes()[playerIndex], regionHash);
-					context.getRegionHashes()[playerIndex] = regionHash;
+					appendRegionHash(buffer, p, context.getRegionHashes()[uid], regionHash);
+					context.getRegionHashes()[uid] = regionHash;
 				}
 
-				context.getLocalPlayers()[playerIndex] = null;
+				context.getLocalPlayers()[uid] = null;
 			} else {
 				//boolean appearanceUpdate = needsAppearanceUpdate(p.getIndex(), p.getAppearance().getHash(), context, block.offset());
 				//boolean headIconUpdate = needHeadIconUpdate(p.getIndex(), p.getAppearance().getHash(), context, block.offset());
-				context.getRegionHashes()[playerIndex] = p.getCurrentTile().getRegionHash();
-				boolean maskUpdate = needsMaskUpdate(p, context, block.offset());
-				if (maskUpdate) {
+				context.getRegionHashes()[uid] = p.getCurrentTile().getRegionHash();
+				boolean hasExtendedInfo = needsMaskUpdate(p, context, block.offset());
+				if (hasExtendedInfo) {
 					packUpdateBlock(p, block, context, false);
 				}
+				MoveSpeed speed = p.getMovement().getNextMoveSpeed();
 				int walkDir = p.getMovement().getNextWalkDirection();
 				int runDir = p.getMovement().getNextRunDirection();
-				if (p.getMovement().teleported()) {
+				if (speed == MoveSpeed.INSTANT) {
 					buffer.putBits(1, 1);
-					buffer.putBits(1, maskUpdate ? 1 : 0);
+					buffer.putBits(1, hasExtendedInfo ? 1 : 0);
 					buffer.putBits(2, 3);
 
 					int xOffset = p.getCurrentTile().getX() - p.getLastTile().getX();
@@ -147,8 +149,8 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 						opcode = DirectionUtility.getPlayerWalkingDirection(dx, dy);
 					}
 					buffer.putBits(1, 1);//Needs update
-					buffer.putBits(1, maskUpdate ? 1 : 0);//Mask update
-					if (needsMovementTypeUpdate(p, context)) {
+					buffer.putBits(1, hasExtendedInfo ? 1 : 0);//Mask update
+					if (speed.getId() != context.getMovementTypes()[uid]) {
 						buffer.putBits(2, 3);//Teleport update
 						buffer.putBits(1, 0);//Local
 						//System.out.println("dx="+dx+", dy="+dy);
@@ -159,8 +161,8 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 							dy += 32;
 						}
 						//System.out.println("New position: x="+p.getCurrentTile().getLocalX()+", y="+p.getCurrentTile().getLocalY());
-						buffer.putBits(15, dy + (dx << 5) + (0 << 10) + ((p.getMovement().getMoveSpeed().getId()+1) << 12));
-						context.getMovementTypes()[playerIndex] = p.getMovement().getMoveSpeed().getId();
+						buffer.putBits(15, dy + (dx << 5) + (0 << 10) + ((speed.getId()+1) << 12));
+						context.getMovementTypes()[uid] = speed.getId();
 					} else if ((dx == 0 && dy == 0)) {
 						buffer.putBits(2, 0);
 					} else {
@@ -173,7 +175,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 							buffer.putBits(1, 0);//Not sure but should be zero
 						}
 					}
-				} else if (maskUpdate) {
+				} else if (hasExtendedInfo) {
 					buffer.putBits(1, 1);//Needs update
 					buffer.putBits(1, 1);//Mask update
 					buffer.putBits(2, 0);//No other updates
@@ -192,7 +194,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 					}
 					//System.out.println((nsn0 ? "[NSN0]" : "[NSN1]") + "Skipping: "+skipCount);
 					putSkip(buffer, skipCount);
-					context.getSlotFlags()[playerIndex] = (byte) (context.getSlotFlags()[playerIndex] | 0x2);
+					context.getSlotFlags()[uid] = (byte) (context.getSlotFlags()[uid] | 0x2);
 				}
 			}
 		}
@@ -203,39 +205,39 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 		buffer.setBitAccess();
 		int skipCount = 0;
 		for (int index = 0; index < context.getOutPlayerIndexCount(); index++) {
-			int playerIndex = context.getOutPlayerIndicies()[index];
-			if (nsn2 ? (0x1 & context.getSlotFlags()[playerIndex]) == 0 : (0x1 & context.getSlotFlags()[playerIndex]) != 0) {
+			int uid = context.getOutPlayerIndicies()[index];
+			if (nsn2 ? (0x1 & context.getSlotFlags()[uid]) == 0 : (0x1 & context.getSlotFlags()[uid]) != 0) {
 				continue;
 			}
 			if (skipCount > 0) {
 				skipCount--;
-				context.getSlotFlags()[playerIndex] = (byte) (context.getSlotFlags()[playerIndex] | 2);
+				context.getSlotFlags()[uid] = (byte) (context.getSlotFlags()[uid] | 2);
 				continue;
 			}
-			Player p = World.getInstance().getPlayers().get(playerIndex);
+			Player p = World.getInstance().getPlayers().get(uid);
 			if (needsAdd(player, p, context)) {
 				buffer.putBits(1, 1);
 				buffer.putBits(2, 0);
 				int hash = p.getCurrentTile().getRegionHash();
-				if (hash == context.getRegionHashes()[playerIndex]) {
+				if (hash == context.getRegionHashes()[uid]) {
 					buffer.putBits(1, 0);
 				} else {
 					buffer.putBits(1, 1);
-					appendRegionHash(buffer, p, context.getRegionHashes()[playerIndex], hash);
-					context.getRegionHashes()[playerIndex] = hash;
+					appendRegionHash(buffer, p, context.getRegionHashes()[uid], hash);
+					context.getRegionHashes()[uid] = hash;
 				}
 				buffer.putBits(6, p.getCurrentTile().getXInRegion());
 				buffer.putBits(6, p.getCurrentTile().getYInRegion());
 				packUpdateBlock(p, block, context, true);
 				buffer.putBits(1, 1);
-				context.getLocalPlayers()[playerIndex] = p;
-				context.getSlotFlags()[playerIndex] = (byte) (context.getSlotFlags()[playerIndex] | 2);
+				context.getLocalPlayers()[uid] = p;
+				context.getSlotFlags()[uid] = (byte) (context.getSlotFlags()[uid] | 2);
 			} else {
-				int hash = p == null ? context.getRegionHashes()[playerIndex] : p.getCurrentTile().getRegionHash();
-				if (p != null && hash != context.getRegionHashes()[playerIndex]) {
+				int hash = p == null ? context.getRegionHashes()[uid] : p.getCurrentTile().getRegionHash();
+				if (p != null && hash != context.getRegionHashes()[uid]) {
 					buffer.putBits(1, 1);
-					appendRegionHash(buffer, p, context.getRegionHashes()[playerIndex], hash);
-					context.getRegionHashes()[playerIndex] = hash;
+					appendRegionHash(buffer, p, context.getRegionHashes()[uid], hash);
+					context.getRegionHashes()[uid] = hash;
 				} else {
 					buffer.putBits(1, 0);
 					for (int idx = index + 1; idx < context.getOutPlayerIndexCount(); idx++) {
@@ -251,7 +253,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 					}
 					//System.out.println((nsn2 ? "[NSN2]" : "[NSN3]") + "Skipping: "+skipCount);
 					putSkip(buffer, skipCount);
-					context.getSlotFlags()[playerIndex] = (byte) (context.getSlotFlags()[playerIndex] | 0x2);
+					context.getSlotFlags()[uid] = (byte) (context.getSlotFlags()[uid] | 0x2);
 				}
 			}
 		}
@@ -319,10 +321,6 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 			}
 			p.getUpdateBlocks()[pos].encodeBlock(block, p);
 		}
-	}
-
-	private boolean needsMovementTypeUpdate (Entity p2, Viewport context) {
-		return p2.getMovement().getMoveSpeed().getId() != context.getMovementTypes()[p2.getIndex()];
 	}
 
 	/**

@@ -527,7 +527,7 @@ public class CoordGrid {
 	 */
 	@Override
 	public String toString() {
-		return "X: " + x + ", Y: " + y + ", Z: " + plane + " (REGION: " + getRegionID() + ")";
+		return plane +"," + getRegionX() + "," + getRegionY() + "," + getXInRegion() + "," + getYInRegion();
 	}
 
 	/**

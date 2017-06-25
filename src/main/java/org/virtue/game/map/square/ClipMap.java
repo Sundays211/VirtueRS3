@@ -23,6 +23,8 @@ package org.virtue.game.map.square;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.game.World;
 import org.virtue.game.map.ClipFlag;
 import org.virtue.game.map.CoordGrid;
@@ -36,12 +38,17 @@ import org.virtue.game.map.SceneLocation;
  * @since 27/10/2014
  */
 public class ClipMap {
+
+	/**
+	 * The {@link Logger} Instance
+	 */
+	private static Logger logger = LoggerFactory.getLogger(ClipMap.class);
 	
-	private MapSquare region;
+	private MapSquare mapSquare;
 	private int[][][] clipFlags = new int[4][64][64];
 	
 	public ClipMap (MapSquare region) {
-		this.region = region;
+		this.mapSquare = region;
 	}
 	
 	/**
@@ -216,7 +223,7 @@ public class ClipMap {
 	
 	private void clipTile (int posX, int posY, int plane, int mask) {
 		if (posX >= 64 || posY >= 64 || posX < 0 || posY < 0) {
-			CoordGrid tile = new CoordGrid(region.getBaseTile().getX()+posX, region.getBaseTile().getY()+posY, plane);			
+			CoordGrid tile = new CoordGrid(mapSquare.getBaseTile().getX()+posX, mapSquare.getBaseTile().getY()+posY, plane);			
 			MapSquare region = World.getInstance().getRegions().getWithoutLoad(tile.getRegionID());
 			if (region != null) {				
 				region.getClipMap().clipTile(tile.getXInRegion(), tile.getYInRegion(), plane, mask);
@@ -257,7 +264,7 @@ public class ClipMap {
 	
 	private void unclipTile (int posX, int posY, int plane, int mask) {
 		if (posX >= 64 || posY >= 64 || posX < 0 || posY < 0) {
-			CoordGrid tile = new CoordGrid(region.getBaseTile().getX()+posX, region.getBaseTile().getY()+posY, plane);			
+			CoordGrid tile = new CoordGrid(mapSquare.getBaseTile().getX()+posX, mapSquare.getBaseTile().getY()+posY, plane);			
 			MapSquare region = World.getInstance().getRegions().getWithoutLoad(tile.getRegionID());
 			if (region != null) {				
 				region.getClipMap().unclipTile(tile.getXInRegion(), tile.getYInRegion(), plane, mask);
@@ -278,14 +285,14 @@ public class ClipMap {
 	 */
 	public int getClipFlags (int localX, int localY, int plane) {
 		if (localX >= 64 || localY >= 64 || localX < 0 || localY < 0) {
-			CoordGrid tile = new CoordGrid(region.getBaseTile().getX()+localX, region.getBaseTile().getY()+localY, plane);
-			if (!World.getInstance().getRegions().regionLoaded(tile.getRegionID())) {
+			CoordGrid coords = new CoordGrid(mapSquare.getBaseTile().getX()+localX, mapSquare.getBaseTile().getY()+localY, plane);
+			if (!World.getInstance().getRegions().regionLoaded(coords.getRegionID())) {
 				return Integer.MIN_VALUE;
 			}
-			MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
-			//System.out.println("WARNING: localX or localY is out of bounds - Needs to load new region. Tile="+tile);
+			MapSquare region = World.getInstance().getRegions().getRegionByID(coords.getRegionID());
+			logger.info("localX or localY is out of bounds - Needs to load new region. coords="+coords);
 			if (region != null && region.isLoaded()) {
-				return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), plane);
+				return region.getClipMap().getClipFlags(coords.getXInRegion(), coords.getYInRegion(), plane);
 			} else {
 				return Integer.MIN_VALUE;//Return all flags set if the clip could not be found
 			}
@@ -295,7 +302,7 @@ public class ClipMap {
 	}
 	
 	public void printMap () {
-		System.out.println("Clips for region "+region.mapSquareHash+": "+Arrays.deepToString(clipFlags));
+		logger.info("Clips for region "+mapSquare.mapSquareHash+": "+Arrays.deepToString(clipFlags));
 	}
 
 }

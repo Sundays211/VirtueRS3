@@ -1720,7 +1720,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void forceMovement(Entity entity, CoordGrid t1, int delay1, CoordGrid t2, int delay2, int direction) {
-		entity.queueUpdateBlock(new ForceMovementBlock(t1, delay1, CompassPoint.forID(direction), t2, delay2));
+		entity.queueUpdateBlock(new ForceMovementBlock(t1, delay1, CompassPoint.getById(direction), t2, delay2));
 	}
 
 	/* (non-Javadoc)

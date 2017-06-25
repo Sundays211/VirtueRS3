@@ -78,7 +78,7 @@ public class NPC extends Entity {
 	
 	private CoordGrid spawnCoords;
 	
-	private int walkRange = 5;
+	private int walkRange = 0;//default=5
 	
 	private int interactRange = 1;
 	
@@ -124,12 +124,12 @@ public class NPC extends Entity {
 		super.setLastTile(tile);
 		super.name = type.name;
 		super.setSize(type.size);
-		this.direction = CompassPoint.forID(this.type.respawnDirection);
+		this.direction = CompassPoint.getById(this.type.respawnDirection);
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
 		CustomNpcData customData = Virtue.getInstance().getConfigProvider().getNpcTypes().getCustomData(this.getID());
 		if (customData != null) {
-			this.walkRange = customData.getWalkRange();
+			//this.walkRange = customData.getWalkRange();
 			this.interactRange = customData.getInteractRange();
 		}
 
