@@ -112,7 +112,7 @@ public class PlayerUpdateEventEncoder implements EventEncoder<Viewport> {
 
 					int xOffset = p.getCurrentTile().getX() - p.getLastTile().getX();
 					int yOffset = p.getCurrentTile().getY() - p.getLastTile().getY();
-					int planeOffset = p.getCurrentTile().getPlane() - p.getLastTile().getPlane();
+					int planeOffset = p.getCurrentTile().getLevel() - p.getLastTile().getLevel();
 					if (Math.abs(p.getCurrentTile().getX() - p.getLastTile().getX()) <= 14 && Math.abs(p.getCurrentTile().getY() - p.getLastTile().getY()) <= 14) {
 						buffer.putBits(1, 0);
 						if (xOffset < 0) {

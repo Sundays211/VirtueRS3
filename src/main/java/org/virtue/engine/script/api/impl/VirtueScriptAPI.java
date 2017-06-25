@@ -67,15 +67,15 @@ import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarContainer;
 import org.virtue.game.entity.player.widget.WidgetManager;
+import org.virtue.game.map.GroundItem;
+import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.CompassPoint;
+import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
 import org.virtue.game.parser.AccountIndex;
 import org.virtue.game.parser.AccountInfo;
-import org.virtue.game.world.region.GroundItem;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.SceneLocation;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.CompassPoint;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
@@ -1701,7 +1701,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#faceDirection(org.virtue.game.entity.Entity, org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public void faceCoords(Entity entity, Tile target) {
+	public void faceCoords(Entity entity, CoordGrid target) {
 		entity.queueUpdateBlock(new FaceDirectionBlock(target));
 	}
 
@@ -1719,7 +1719,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#forceMovement(org.virtue.game.entity.Entity, org.virtue.game.entity.region.Tile, int, org.virtue.game.entity.region.Tile, int, int)
 	 */
 	@Override
-	public void forceMovement(Entity entity, Tile t1, int delay1, Tile t2, int delay2, int direction) {
+	public void forceMovement(Entity entity, CoordGrid t1, int delay1, CoordGrid t2, int delay2, int direction) {
 		entity.queueUpdateBlock(new ForceMovementBlock(t1, delay1, CompassPoint.forID(direction), t2, delay2));
 	}
 
@@ -1727,7 +1727,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#teleportEntity(org.virtue.game.entity.Entity, org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public boolean teleportEntity(Entity entity, Tile coords) {
+	public boolean teleportEntity(Entity entity, CoordGrid coords) {
 		return entity.getMovement().teleportTo(coords);
 	}
 
@@ -1745,7 +1745,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public boolean teleportEntity(Entity entity, int level, int squareX,
 			int squareY, int localX, int localY) {
-		Tile dest = new Tile(localX, localY, level, squareX, squareY);
+		CoordGrid dest = new CoordGrid(localX, localY, level, squareX, squareY);
 		return entity.getMovement().teleportTo(dest);
 	}
 
@@ -1754,8 +1754,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void teleportEntityBy(Entity entity, int xOff, int yOff, byte zOff) {
-		Tile currentTile = entity.getCurrentTile();
-		entity.getMovement().teleportTo(Tile.edit(currentTile, xOff, yOff, zOff));
+		CoordGrid currentTile = entity.getCurrentTile();
+		entity.getMovement().teleportTo(CoordGrid.edit(currentTile, xOff, yOff, zOff));
 	}
 
 	/* (non-Javadoc)
@@ -1824,7 +1824,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getCoords(org.virtue.game.Node)
 	 */
 	@Override
-	public Tile getCoords(Node node) {
+	public CoordGrid getCoords(Node node) {
 		return node.getCurrentTile();
 	}
 
@@ -1849,14 +1849,14 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getCoordLevel(Node node) {
-		return node.getCurrentTile().getPlane();
+		return node.getCurrentTile().getLevel();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getTile(org.virtue.game.entity.Entity)
 	 */
 	@Override
-	public Tile getTile(Entity entity) {
+	public CoordGrid getTile(Entity entity) {
 		return entity.getCurrentTile();
 	}
 
@@ -1864,7 +1864,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getTileX(org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public int getCoordX(Tile tile) {
+	public int getCoordX(CoordGrid tile) {
 		return tile.getX();
 	}
 
@@ -1872,7 +1872,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getTileY(org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public int getCoordY(Tile tile) {
+	public int getCoordY(CoordGrid tile) {
 		return tile.getY();
 	}
 
@@ -1880,15 +1880,15 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getTileLevel(org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public int getCoordLevel(Tile tile) {
-		return tile.getPlane();
+	public int getCoordLevel(CoordGrid tile) {
+		return tile.getLevel();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getSquareX(org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public int getSquareX(Tile tile) {
+	public int getSquareX(CoordGrid tile) {
 		return tile.getRegionX();
 	}
 
@@ -1896,12 +1896,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getSquareY(org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public int getSquareY(Tile tile) {
+	public int getSquareY(CoordGrid tile) {
 		return tile.getRegionY();
 	}
 
 	@Override
-	public int getCoordHash(Tile coords) {
+	public int getCoordHash(CoordGrid coords) {
 		return coords.getTileHash();
 	}
 
@@ -1909,23 +1909,23 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getCoord(int, int, int)
 	 */
 	@Override
-	public Tile getCoords(int x, int y, int level) {
-		return new Tile(x, y, level);
+	public CoordGrid getCoords(int x, int y, int level) {
+		return new CoordGrid(x, y, level);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.ScriptAPI#offsetCoords(org.virtue.game.world.region.Tile, int, int, int)
 	 */
 	@Override
-	public Tile offsetCoords(Tile coords, int xOff, int yOff, byte levelOff) {
-		return Tile.edit(coords, xOff, yOff, levelOff);
+	public CoordGrid offsetCoords(CoordGrid coords, int xOff, int yOff, byte levelOff) {
+		return CoordGrid.edit(coords, xOff, yOff, levelOff);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getRegionId(org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public int getRegionId(Tile tile) {
+	public int getRegionId(CoordGrid tile) {
 		return tile.getRegionID();
 	}
 
@@ -1933,7 +1933,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getRegion(int)
 	 */
 	@Override
-	public Region getRegion(int regionID) {
+	public MapSquare getRegion(int regionID) {
 		return World.getInstance().getRegions().getRegionByID(regionID);
 	}
 
@@ -1941,7 +1941,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getRegion(org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public Region getRegion(Tile coords) {
+	public MapSquare getRegion(CoordGrid coords) {
 		return World.getInstance().getRegions().getRegionByID(coords.getRegionID());
 	}
 
@@ -1949,7 +1949,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#dropItem(org.virtue.game.world.region.Tile, int, int)
 	 */
 	@Override
-	public void dropItem(Tile coords, int itemId, int amount) {
+	public void dropItem(CoordGrid coords, int itemId, int amount) {
 		this.dropItem(coords, itemId, amount, null, Constants.ITEM_REMOVAL_DELAY);
 	}
 
@@ -1957,7 +1957,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#dropItem(org.virtue.game.world.region.Tile, int, int, org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public void dropItem(Tile coords, int itemId, int amount, Player owner) {
+	public void dropItem(CoordGrid coords, int itemId, int amount, Player owner) {
 		this.dropItem(coords, itemId, amount, owner, Constants.ITEM_REMOVAL_DELAY);
 	}
 
@@ -1965,7 +1965,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#dropItem(org.virtue.game.entity.region.Tile, int, int, int)
 	 */
 	@Override
-	public void dropItem(Tile coords, int itemId, int amount, int removalDelay) {
+	public void dropItem(CoordGrid coords, int itemId, int amount, int removalDelay) {
 		this.dropItem(coords, itemId, amount, null, removalDelay);
 	}
 
@@ -1973,8 +1973,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#dropItem(org.virtue.game.world.region.Tile, int, int, org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public void dropItem(Tile coords, int itemId, int amount, Player owner, int removalDelay) {
-		Region region = getRegion(coords);
+	public void dropItem(CoordGrid coords, int itemId, int amount, Player owner, int removalDelay) {
+		MapSquare region = getRegion(coords);
 		if (region == null) {
 			throw new IllegalArgumentException("Invalid coords: "+coords);
 		}
@@ -1987,8 +1987,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#removeDroppedItem(org.virtue.game.entity.region.Tile, int)
 	 */
 	@Override
-	public int removeDroppedItem(Tile coords, int itemId) {
-		Region region = getRegion(coords);
+	public int removeDroppedItem(CoordGrid coords, int itemId) {
+		MapSquare region = getRegion(coords);
 		if (region == null) {
 			throw new IllegalArgumentException("Invalid coords: "+coords);
 		}
@@ -2010,7 +2010,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public SceneLocation createLocation(int id, int x, int y, int z, int type, int rotation) {
-		Tile tile = new Tile(x, y, z);
+		CoordGrid tile = new CoordGrid(x, y, z);
 		return createLocation(id, tile, type, rotation);
 	}
 
@@ -2018,7 +2018,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#createLocation(int, org.virtue.game.entity.region.Tile, int, int)
 	 */
 	@Override
-	public SceneLocation createLocation(int id, Tile tile, int type, int rotation) {
+	public SceneLocation createLocation(int id, CoordGrid tile, int type, int rotation) {
 		return SceneLocation.create(id, tile, type, rotation);
 	}
 
@@ -2039,12 +2039,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	@Override
-	public SceneLocation spawnLocation(int locTypeId, Tile coords, int removalDelay) {
+	public SceneLocation spawnLocation(int locTypeId, CoordGrid coords, int removalDelay) {
 		return spawnLocation(locTypeId, coords, 10, 0, removalDelay);
 	}
 
 	@Override
-	public SceneLocation spawnLocation(int locTypeId, Tile coords, int type,
+	public SceneLocation spawnLocation(int locTypeId, CoordGrid coords, int type,
 			int rotation, int removalDelay) {
 		SceneLocation loc = SceneLocation.create(locTypeId, coords, type, rotation);
 		spawnLocation(loc, removalDelay);
@@ -2055,8 +2055,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getLocationByNodeType(int, int, int, int)
 	 */
 	@Override
-	public SceneLocation getLocationByNodeType(Tile coords, int type) {
-		return getLocationByNodeType(coords.getX(), coords.getY(), coords.getPlane(), type);
+	public SceneLocation getLocationByNodeType(CoordGrid coords, int type) {
+		return getLocationByNodeType(coords.getX(), coords.getY(), coords.getLevel(), type);
 	}
 
 	/* (non-Javadoc)
@@ -2067,7 +2067,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (type < 0 || type > 22) {
 			return null;
 		}
-		Region region = World.getInstance().getRegions().getRegionByID(Tile.getMapSquareHash(posX, posY));
+		MapSquare region = World.getInstance().getRegions().getRegionByID(CoordGrid.getMapSquareHash(posX, posY));
 		if (region == null) {
 			return null;
 		}
@@ -2098,7 +2098,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.api.ScriptAPI#createNpc(int, org.virtue.game.world.region.Tile, boolean)
 	 */
 	@Override
-	public NPC createNpc(int id, Tile coords) {
+	public NPC createNpc(int id, CoordGrid coords) {
 		NPC npc = NPC.create(id, coords);
 		return npc;
 	}

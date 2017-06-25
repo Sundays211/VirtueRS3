@@ -4,14 +4,14 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.melee.MeleeFollower;
 import org.virtue.game.entity.combat.impl.range.RangeFollower;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.CompassPoint;
+import org.virtue.game.map.movement.path.Path;
+import org.virtue.game.map.movement.path.Point;
+import org.virtue.game.map.movement.path.impl.AbstractPathfinder;
+import org.virtue.game.map.movement.path.impl.DumbPathfinder;
+import org.virtue.game.map.movement.path.impl.SmartPathfinder;
 import org.virtue.game.node.Node;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.CompassPoint;
-import org.virtue.game.world.region.movement.path.Path;
-import org.virtue.game.world.region.movement.path.Point;
-import org.virtue.game.world.region.movement.path.impl.AbstractPathfinder;
-import org.virtue.game.world.region.movement.path.impl.DumbPathfinder;
-import org.virtue.game.world.region.movement.path.impl.SmartPathfinder;
 
 /**
  * Interface for combat following handlers.
@@ -51,7 +51,7 @@ public abstract class FollowingType {
 			entity.getMovement().reset();
 			return true;
 		}
-		Tile destination = getNextDestination(entity, lock);
+		CoordGrid destination = getNextDestination(entity, lock);
 		boolean inside = isInsideEntity(entity.getCurrentTile(), lock);
 		if (inside) {
 			destination = findBorderLocation(entity, lock);
@@ -69,7 +69,7 @@ public abstract class FollowingType {
 					Point step = path.getPoints().peek();
 					if (step != null) {
 						System.out.println("Roar");
-						entity.getMovement().move(CompassPoint.getLogicalDirection(entity.getCurrentTile(), new Tile(step.getX(), step.getY(), 0)));
+						entity.getMovement().move(CompassPoint.getLogicalDirection(entity.getCurrentTile(), new CoordGrid(step.getX(), step.getY(), 0)));
 					}
 				}
 			} else {
@@ -82,12 +82,12 @@ public abstract class FollowingType {
 	 * Finds the closest location next to the node.
 	 * @return The location to walk to.
 	 */
-	private static Tile findBorderLocation(Entity mover, Entity destination) {
+	private static CoordGrid findBorderLocation(Entity mover, Entity destination) {
 		int size = destination.getSize();
-		Tile centerDest = destination.getCurrentTile().copyNew(size >> 1, size >> 1, 0);
-		Tile center = mover.getCurrentTile().copyNew(mover.getSize() >> 1, mover.getSize() >> 1, 0);
+		CoordGrid centerDest = destination.getCurrentTile().copyNew(size >> 1, size >> 1, 0);
+		CoordGrid center = mover.getCurrentTile().copyNew(mover.getSize() >> 1, mover.getSize() >> 1, 0);
 		CompassPoint direction = CompassPoint.getLogicalDirection(centerDest, center);
-		Tile delta = Tile.getDelta(destination.getCurrentTile(), mover.getCurrentTile());
+		CoordGrid delta = CoordGrid.getDelta(destination.getCurrentTile(), mover.getCurrentTile());
 		main: for (int i = 0; i < 4; i++) {
 			int amount = 0;
 			switch (direction) {
@@ -138,7 +138,7 @@ public abstract class FollowingType {
 					}
 				}
 			}
-			Tile location = mover.getCurrentTile().copyNew(direction, amount);
+			CoordGrid location = mover.getCurrentTile().copyNew(direction, amount);
 			return location;
 		}
 		return null;
@@ -150,8 +150,8 @@ public abstract class FollowingType {
 	 * @param lock The target.
 	 * @return The next destination.
 	 */
-	public Tile getNextDestination(Entity entity, Entity lock) {
-		Tile l = getClosestTo(entity, lock, lock.getCurrentTile().copyNew(0, -1, 0));
+	public CoordGrid getNextDestination(Entity entity, Entity lock) {
+		CoordGrid l = getClosestTo(entity, lock, lock.getCurrentTile().copyNew(0, -1, 0));
 		if (entity.getSize() > 1) {
 			if (l.getX() < lock.getCurrentTile().getX()) {
 				l = l.copyNew(-(entity.getSize() - 1), 0, 0);
@@ -179,8 +179,8 @@ public abstract class FollowingType {
 	 * @param suggestion The suggested destination location.
 	 * @return The destination location.
 	 */
-	public static Tile getClosestTo(Entity mover, Node node, Tile suggestion) {
-		Tile nl = node.getCurrentTile();
+	public static CoordGrid getClosestTo(Entity mover, Node node, CoordGrid suggestion) {
+		CoordGrid nl = node.getCurrentTile();
 		int diffX = suggestion.getX() - nl.getX();
 		int diffY = suggestion.getY() - nl.getY();
 		CompassPoint moveDir = CompassPoint.NORTH;
@@ -192,12 +192,12 @@ public abstract class FollowingType {
 			moveDir = CompassPoint.SOUTH;
 		}
 		double distance = 9999.9;
-		Tile destination = suggestion;
+		CoordGrid destination = suggestion;
 		for (int c = 0; c < 4; c++) {
 			for (int i = 0; i < node.getSize() + 1; i++) {
 				for (int j = 0; j < (i == 0 ? 1 : 2); j++) {
 					CompassPoint current = CompassPoint.get((moveDir.toInteger() + (j == 1 ? 3 : 1)) % 4);
-					Tile loc = suggestion.copyNew(current.getDeltaX() * i, current.getDeltaY() * i, 0);
+					CoordGrid loc = suggestion.copyNew(current.getDeltaX() * i, current.getDeltaY() * i, 0);
 					if (moveDir.toInteger() % 2 == 0) {
 						if (loc.getX() < nl.getX() || loc.getX() > nl.getX() + node.getSize() - 1) {
 							continue;
@@ -234,7 +234,7 @@ public abstract class FollowingType {
 	 * @param dir The direction to move.
 	 * @return {@code True}.
 	 */
-	public static boolean checkTraversal(Tile l, CompassPoint dir) {
+	public static boolean checkTraversal(CoordGrid l, CompassPoint dir) {
 		return CompassPoint.get((dir.toInteger() + 2) % 4).canMove(l);
 	}
 	
@@ -243,11 +243,11 @@ public abstract class FollowingType {
 	 * @param l The location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean isInsideEntity(Tile l, Entity lock) {
+	public static boolean isInsideEntity(CoordGrid l, Entity lock) {
 		if (lock.getMovement().hasSteps()) {
 			return false;
 		}
-		Tile loc = lock.getCurrentTile();
+		CoordGrid loc = lock.getCurrentTile();
 		int size = lock.getSize();
 		if (l.getX() >= size + loc.getX() || lock.getSize() + l.getX() <= loc.getX()) {
 			return false;

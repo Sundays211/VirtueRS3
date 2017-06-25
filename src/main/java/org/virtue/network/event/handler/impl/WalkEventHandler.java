@@ -22,7 +22,7 @@
 package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.MoveEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -43,7 +43,7 @@ public class WalkEventHandler implements GameEventHandler<MoveEventContext> {
 		}
 		if (success) {
 			player.setPaused(false);
-			Tile target = player.getMovement().getDestination();
+			CoordGrid target = player.getMovement().getDestination();
 			if (target != null) {
 				player.getDispatcher().sendMapFlag(target.getLocalX(player.getViewport().getBaseTile()), target.getLocalY(player.getViewport().getBaseTile()));
 			}

@@ -25,8 +25,8 @@ import org.virtue.game.content.minigame.Controller;
 import org.virtue.game.content.minigame.Minigame;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.world.region.SceneLocation;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
 /**
@@ -41,15 +41,15 @@ public class ExampleController implements Controller {
 	@Override
 	public void initialize(Minigame minigame) {
 		/* TODO spawn based off dynamic region x/y coords */
-		NPC npc = NPC.create(0, new Tile(1212, 2121, 0));
+		NPC npc = NPC.create(0, new CoordGrid(1212, 2121, 0));
 		minigame.getNpcs().add(npc);
 		
 		for (int i = 0; i < minigame.getTeams().size(); i++) {
 			for (Entity player : minigame.getTeams().get(i).getPlayers()) {
 				if (i == 0)
-					player.getMovement().teleportTo(new Tile(1234, 4321, 0));
+					player.getMovement().teleportTo(new CoordGrid(1234, 4321, 0));
 				else
-					player.getMovement().teleportTo(new Tile(4321, 1234, 0));
+					player.getMovement().teleportTo(new CoordGrid(4321, 1234, 0));
 			}
 		}
 	}

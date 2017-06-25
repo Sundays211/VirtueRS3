@@ -4,19 +4,19 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.death.DeathEvent;
 import org.virtue.game.entity.combat.death.TransformDeathEvent;
 import org.virtue.game.entity.npc.AbstractNPC;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 
 public class PestPortal extends AbstractNPC {
 	
-	private final Tile pestSpawnLocation;
+	private final CoordGrid pestSpawnLocation;
 	
-	public PestPortal(int id, Tile tile, Tile pestSpawnLocation) {
+	public PestPortal(int id, CoordGrid tile, CoordGrid pestSpawnLocation) {
 		super(id, tile);
 		this.pestSpawnLocation = pestSpawnLocation;
 	}
 
 	@Override
-	public AbstractNPC newInstance(int id, Tile tile) {
+	public AbstractNPC newInstance(int id, CoordGrid tile) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -34,7 +34,7 @@ public class PestPortal extends AbstractNPC {
 		return new TransformDeathEvent(7, -1);
 	}
 
-	public Tile getPestSpawnLocation() {
+	public CoordGrid getPestSpawnLocation() {
 		return pestSpawnLocation;
 	}
 

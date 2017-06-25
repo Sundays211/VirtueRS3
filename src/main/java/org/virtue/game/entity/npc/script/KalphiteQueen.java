@@ -4,7 +4,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.death.DeathEvent;
 import org.virtue.game.entity.combat.death.TransformDeathEvent;
 import org.virtue.game.entity.npc.AbstractNPC;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 
 /**
  * Handles the kalphite queen.
@@ -25,12 +25,12 @@ public final class KalphiteQueen extends AbstractNPC {
 	 * @param id The NPC id.
 	 * @param tile The tile.
 	 */
-	public KalphiteQueen(int id, Tile tile) {
+	public KalphiteQueen(int id, CoordGrid tile) {
 		super(id, tile);
 	}
 
 	@Override
-	public AbstractNPC newInstance(int id, Tile tile) {
+	public AbstractNPC newInstance(int id, CoordGrid tile) {
 		return new KalphiteQueen(id, tile);
 	}
 	

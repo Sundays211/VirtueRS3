@@ -10,8 +10,8 @@ import org.virtue.game.entity.combat.impl.FollowingType;
 import org.virtue.game.entity.combat.impl.ImpactInfo;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.world.region.GroundItem;
-import org.virtue.game.world.region.Region;
+import org.virtue.game.map.GroundItem;
+import org.virtue.game.map.square.MapSquare;
 
 /**
  * Handles range attack events.
@@ -63,7 +63,7 @@ public class RangeAttackEvent extends AttackEvent {
 	public static void sendArrowDrop(Entity entity, AttackInfo info, ImpactInfo impact) {
 		Player player = (Player) entity;
 		Item ammo = player.getEquipment().getWorn(13);
-		Region region = World.getInstance().getRegions().getRegionByID(impact.getVictim().getCurrentTile().getRegionID());
+		MapSquare region = World.getInstance().getRegions().getRegionByID(impact.getVictim().getCurrentTile().getRegionID());
 		if (region != null && region.isLoaded()) {
 			if(ammo == null) {
 				return;

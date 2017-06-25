@@ -44,8 +44,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.Stat;
-import org.virtue.game.world.region.MapSize;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.MapSize;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.GameEventContext;
 import org.virtue.network.event.context.impl.EmptyEventContext;
@@ -323,7 +323,7 @@ public class GameEventDispatcher {
 		sendEvent(WorldListEventEncoder.class, context);
 	}
 
-	public void sendSceneGraph(int sceneRadius, Tile tile, MapSize mapSize, boolean init,
+	public void sendSceneGraph(int sceneRadius, CoordGrid tile, MapSize mapSize, boolean init,
 			boolean isStatic) {
 		sendEvent(SceneGraphEventEncoder.class, new SceneGraphEventContext(sceneRadius,
 				tile, mapSize, init, isStatic));

@@ -35,8 +35,8 @@ import org.virtue.engine.cycle.GameTick;
 import org.virtue.game.World;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.DynamicRegion;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.square.DynamicMapSquare;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -206,12 +206,12 @@ public class MinigameProcessor {
 	private final void initialize(Lobby lobby) {
 		MinigameType type = lobby.getMinigameType();
 
-		DynamicRegion region = World.getInstance().getRegions().createDynamicRegion();
+		DynamicMapSquare region = World.getInstance().getRegions().createDynamicRegion();
 		for (int xOffSet = 0; xOffSet < type.getXOffset(); xOffSet++) {
 			for (int yOffSet = 0; yOffSet < type.getYOffset(); yOffSet++) {
 				for (int plane = 0; plane < type.getZOffset(); plane++) {
 					region.updateChunk(xOffSet, yOffSet, plane,
-							new Tile(type.getXCoord() + (xOffSet << 3), 
+							new CoordGrid(type.getXCoord() + (xOffSet << 3), 
 									type.getYCoord() + (yOffSet << 3), 
 									plane), 0);
 				}

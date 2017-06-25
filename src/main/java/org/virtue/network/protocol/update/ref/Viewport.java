@@ -30,12 +30,12 @@ import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.DynamicRegion;
-import org.virtue.game.world.region.MapSize;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.routefinder.PlayerTraversalMap;
-import org.virtue.game.world.region.movement.routefinder.TraversalMap;
+import org.virtue.game.map.MapSize;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.routefinder.PlayerTraversalMap;
+import org.virtue.game.map.movement.routefinder.TraversalMap;
+import org.virtue.game.map.square.DynamicMapSquare;
+import org.virtue.game.map.square.MapSquare;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.GameEventContext;
 
@@ -123,12 +123,12 @@ public class Viewport implements GameEventContext {
 	/**
 	 * Represents the south-western tile of the last loaded map chunk
 	 */
-	private Tile baseTile;
+	private CoordGrid baseTile;
 	
 	/**
 	 * Represents the map regions currently used by the player
 	 */
-	private Set<Region> regions = new HashSet<Region>();
+	private Set<MapSquare> regions = new HashSet<MapSquare>();
 	
 	/**
 	 * The map used for finding paths for the player
@@ -206,25 +206,25 @@ public class Viewport implements GameEventContext {
 	 * @param mapSize The size of the map
 	 * @param sendUpdate Whether to send the update to the client
 	 */
-	public synchronized void moveToRegion (Tile tile, MapSize mapSize, boolean sendUpdate) {
+	public synchronized void moveToRegion (CoordGrid tile, MapSize mapSize, boolean sendUpdate) {
 		needsUpdate = false;
-		Set<Region> oldRegions = new HashSet<Region>(regions);
+		Set<MapSquare> oldRegions = new HashSet<MapSquare>(regions);
 		regions.clear();
 		int actualSize = mapSize.getTileCount();
 		boolean staticRegion = true;
-		for (int x = (tile.getChunkX() - (actualSize >> 4)) / 8; x <= (tile.getChunkX() + (actualSize >> 4)) / 8; x++) {
-			for (int y = (tile.getChunkY() - (actualSize >> 4)) / 8; y <= (tile.getChunkY() + (actualSize >> 4)) / 8; y++) {
-				Region region = World.getInstance().getRegions().getRegionByID(Tile.getMapSquareHash((x << 6), (y << 6)));
+		for (int x = (tile.getZoneX() - (actualSize >> 4)) / 8; x <= (tile.getZoneX() + (actualSize >> 4)) / 8; x++) {
+			for (int y = (tile.getZoneY() - (actualSize >> 4)) / 8; y <= (tile.getZoneY() + (actualSize >> 4)) / 8; y++) {
+				MapSquare region = World.getInstance().getRegions().getRegionByID(CoordGrid.getMapSquareHash((x << 6), (y << 6)));
 				if (region != null) {
 					regions.add(region);
-					if (region instanceof DynamicRegion) {
+					if (region instanceof DynamicMapSquare) {
 						staticRegion = false;
 					}
 				}
 			}
 		}
 		baseTile = tile;
-		for (Region r : oldRegions) {
+		for (MapSquare r : oldRegions) {
 			if (!regions.contains(r)) {
 				r.removePlayer(player);//Removes the player from any region they are no longer in
 			}
@@ -241,7 +241,7 @@ public class Viewport implements GameEventContext {
 	 * Runs cleanup tasks required on logout
 	 */
 	public synchronized void onLogout () {
-		for (Region r : regions) {
+		for (MapSquare r : regions) {
 			r.removePlayer(player);			
 		}
 	}
@@ -250,7 +250,7 @@ public class Viewport implements GameEventContext {
 	 * Performs tasks on map load, such as sending ground items
 	 */
 	public synchronized void onMapLoaded () {
-		for (Region r : regions) {
+		for (MapSquare r : regions) {
 			r.addPlayer(player);			
 		}
 	}
@@ -260,9 +260,9 @@ public class Viewport implements GameEventContext {
 	 * @return True if the map needs updating, false otherwise
 	 */
 	public boolean needsMapUpdate () {
-		int chunkDeltaX = Math.abs(baseTile.getChunkX() - player.getCurrentTile().getChunkX());
-		int chunkDeltaY = Math.abs(baseTile.getChunkY() - player.getCurrentTile().getChunkY());
-		int size = ((Tile.REGION_SIZES[0] >> 3) / 2) - 1;
+		int chunkDeltaX = Math.abs(baseTile.getZoneX() - player.getCurrentTile().getZoneX());
+		int chunkDeltaY = Math.abs(baseTile.getZoneY() - player.getCurrentTile().getZoneY());
+		int size = ((CoordGrid.REGION_SIZES[0] >> 3) / 2) - 1;
 		return needsUpdate || chunkDeltaX >= size || chunkDeltaY >= size;
 	}
 	
@@ -282,11 +282,11 @@ public class Viewport implements GameEventContext {
 	 * Gets the regions currently loaded in this viewport
 	 * @return A set of regions
 	 */
-	public Set<Region> getRegions () {
+	public Set<MapSquare> getRegions () {
 		return regions;
 	}
 	
-	public Tile getBaseTile () {
+	public CoordGrid getBaseTile () {
 		return baseTile;
 	}
 	

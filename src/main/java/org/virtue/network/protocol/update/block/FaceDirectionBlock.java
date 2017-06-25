@@ -24,7 +24,7 @@ package org.virtue.network.protocol.update.block;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.BlockType;
@@ -38,12 +38,12 @@ public class FaceDirectionBlock extends Block {
 	/**
 	 * The tile to face
 	 */
-	private Tile target;
+	private CoordGrid target;
 
 	/**
 	 * The {@link FaceDirectionBlock} constructor
 	 */
-	public FaceDirectionBlock(Tile target) {
+	public FaceDirectionBlock(CoordGrid target) {
 		super(BlockType.SET_FACING);
 		this.target = target;
 	}

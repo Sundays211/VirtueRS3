@@ -21,8 +21,8 @@
  */
 package org.virtue.network.event.context.impl.out;
 
-import org.virtue.game.world.region.MapSize;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.MapSize;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -33,7 +33,7 @@ public class SceneGraphEventContext implements GameEventContext {
 
 	private boolean render;
 	
-	private Tile baseTile;
+	private CoordGrid baseTile;
 	
 	private MapSize mapSize;
 	
@@ -41,7 +41,7 @@ public class SceneGraphEventContext implements GameEventContext {
 	
 	private boolean isStatic;
 
-	public SceneGraphEventContext(int sceneRadius, Tile tile, MapSize mapSize, boolean render, boolean isStatic) {
+	public SceneGraphEventContext(int sceneRadius, CoordGrid tile, MapSize mapSize, boolean render, boolean isStatic) {
 		this.sceneRadius = sceneRadius;
 		this.baseTile = tile;
 		this.mapSize = mapSize;
@@ -53,7 +53,7 @@ public class SceneGraphEventContext implements GameEventContext {
 		return isStatic;
 	}
 	
-	public Tile getBaseTile () {
+	public CoordGrid getBaseTile () {
 		return baseTile;
 	}
 	

@@ -22,11 +22,11 @@
 package org.virtue.engine.script.api;
 
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.square.DynamicMapSquare;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.node.Node;
-import org.virtue.game.world.region.DynamicRegion;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.SceneLocation;
-import org.virtue.game.world.region.Tile;
 
 /**
  * @author Sundays211
@@ -39,7 +39,7 @@ public interface MapAPI {
 	 * @param node The game node
 	 * @return The current coords of the node
 	 */
-	public Tile getCoords (Node node);
+	public CoordGrid getCoords (Node node);
 	
 	/**
 	 * Gets the coordinate from the specified components
@@ -48,7 +48,7 @@ public interface MapAPI {
 	 * @param level The level-component of the coordinate
 	 * @return The coordinate
 	 */
-	public Tile getCoords (int x, int y, int level);
+	public CoordGrid getCoords (int x, int y, int level);
 	
 	/**
 	 * Gets the coordinate from the specified components
@@ -59,29 +59,29 @@ public interface MapAPI {
 	 * @param localY The local y tile within the map square
 	 * @return The coordinate
 	 */
-	public Tile getCoords (int squareX, int squareY, int level, int localX, int localY);
+	public CoordGrid getCoords (int squareX, int squareY, int level, int localX, int localY);
 	
-	public DynamicRegion createArea();
+	public DynamicMapSquare createArea();
 	
-	public void destroyArea(DynamicRegion area);
+	public void destroyArea(DynamicMapSquare area);
 	
-	public void buildArea(DynamicRegion area);
+	public void buildArea(DynamicMapSquare area);
 	
-	public int getSquareX(DynamicRegion area);
+	public int getSquareX(DynamicMapSquare area);
 	
-	public int getSquareY(DynamicRegion area);
+	public int getSquareY(DynamicMapSquare area);
 	
-	public void rotateChunk(DynamicRegion area, int chunkX, int chunkY, int plane, int rotation);
+	public void rotateChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane, int rotation);
 	
-	public void setChunk(DynamicRegion area, int chunkX, int chunkY, int plane, 
+	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane, 
 			int staticChunkX, int staticChunkY, int staticPlane, int rotation);
 	
-	public void setChunk(DynamicRegion area, int chunkX, int chunkY, int plane, 
-			Tile staticCoords, int rotation);
+	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane, 
+			CoordGrid staticCoords, int rotation);
 	
-	public SceneLocation addLoc(Region area, int locTypeID, int localX, int localY, int level, int nodeType, int rotation);
+	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level, int nodeType, int rotation);
 	
-	public SceneLocation addLoc(Region area, int locTypeID, int localX, int localY, int level);
+	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level);
 
 	/**
 	 * Spawns a new location at the specified coords
@@ -91,7 +91,7 @@ public interface MapAPI {
 	 * @param rotation The rotation of the node (0-3, clockwise from the default position)
 	 * @return The newly created location
 	 */
-	public SceneLocation addLoc(int locTypeId, Tile coords, int shape, int rotation);
+	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int shape, int rotation);
 	
 	/**
 	 * Fetches a location at the specified coords of the specified type
@@ -99,7 +99,7 @@ public interface MapAPI {
 	 * @param shape The location shape to look for
 	 * @return The location at the specified coords, or null if none could be found
 	 */
-	public SceneLocation getLoc(Tile coords, int shape);
+	public SceneLocation getLoc(CoordGrid coords, int shape);
 	
 	/**
 	 * Removes the specified location from the map
@@ -145,7 +145,7 @@ public interface MapAPI {
 	 * @param player The player who 'owns' the object (ie. to whom the object is first visible)
 	 * @param amount The number of objects to drop (defaults to 1)
 	 */
-	public void addObj (int objTypeId, Tile coords, Player player, int amount);
+	public void addObj (int objTypeId, CoordGrid coords, Player player, int amount);
 	
 	/**
 	 * Adds an item to the map at the given coordinates.
@@ -156,5 +156,5 @@ public interface MapAPI {
 	 * @param amount The number of objects to drop (defaults to 1)
 	 * @param respawnDelay The time before the object disappears. Defaults to {@link org.virtue.Constants#ITEM_REMOVAL_DELAY}
 	 */
-	public void addObj (int objTypeId, Tile coords, Player player, int amount, int respawnDelay);
+	public void addObj (int objTypeId, CoordGrid coords, Player player, int amount, int respawnDelay);
 }

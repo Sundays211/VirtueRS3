@@ -9,8 +9,8 @@ import org.virtue.game.entity.combat.impl.combo.SwitchAttackEvent;
 import org.virtue.game.entity.combat.impl.magic.MagicAttackHandler;
 import org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler;
 import org.virtue.game.entity.npc.AbstractNPC;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.zone.Projectile;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.zone.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
@@ -27,12 +27,12 @@ public class AraxxorCombat extends AbstractNPC {
 		this(19462, null); 
 	}
 
-	public AraxxorCombat(int id, Tile tile) {
+	public AraxxorCombat(int id, CoordGrid tile) {
 		super(id, tile);
 	}
 
 	@Override
-	public AbstractNPC newInstance(int id, Tile tile) {
+	public AbstractNPC newInstance(int id, CoordGrid tile) {
 		return new AraxxorCombat(id, tile);
 	}
 

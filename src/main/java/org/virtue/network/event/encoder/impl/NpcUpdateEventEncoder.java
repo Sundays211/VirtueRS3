@@ -123,7 +123,7 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 			buffer.putBits(15, npc.getID());//NPC type
 			buffer.putBits(1, npc.getMovement().teleported() ? 1 : 0);
 			buffer.putBits(1, npc.needsMaskUpdate() ? 1 : 0);
-			buffer.putBits(2, npc.getCurrentTile().getPlane());
+			buffer.putBits(2, npc.getCurrentTile().getLevel());
 
 
 			if (npc.needsMaskUpdate()) {
