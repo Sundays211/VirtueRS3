@@ -30,10 +30,8 @@ import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.map.MapSize;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.routefinder.PlayerTraversalMap;
-import org.virtue.game.map.movement.routefinder.TraversalMap;
+import org.virtue.game.map.MapSize;
 import org.virtue.game.map.square.DynamicMapSquare;
 import org.virtue.game.map.square.MapSquare;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -130,11 +128,6 @@ public class Viewport implements GameEventContext {
 	 */
 	private Set<MapSquare> regions = new HashSet<MapSquare>();
 	
-	/**
-	 * The map used for finding paths for the player
-	 */
-	private PlayerTraversalMap traversalMap;
-	
 	private boolean needsUpdate;
 	
 	public Viewport(Player player) {
@@ -150,8 +143,6 @@ public class Viewport implements GameEventContext {
 		cachedAppearencesHashes = new byte[2048][];
 		cachedHeadIconsHashes = new byte[2048][];
 		cachedNPCHeadIconsHashes = new byte[32767][];
-		traversalMap = new PlayerTraversalMap(this);
-		player.getMovement().setTraversalMap(traversalMap);
 	}
 
 	/**
@@ -229,7 +220,6 @@ public class Viewport implements GameEventContext {
 				r.removePlayer(player);//Removes the player from any region they are no longer in
 			}
 		}
-		traversalMap.reload();
 		if (sendUpdate) {
 			sceneRadius = ((actualSize >> 3) / 2) - 1;//no fucking idea what this should be
 			player.getDispatcher().sendSceneGraph(sceneRadius, tile, mapSize, false, staticRegion);
@@ -268,14 +258,6 @@ public class Viewport implements GameEventContext {
 	
 	public void flagUpdate () {
 		needsUpdate = true;
-	}
-	
-	/**
-	 * Gets the map used for finding paths for the player
-	 * @return The {@link TraversalMap}
-	 */
-	public TraversalMap getTraversalMap () {
-		return traversalMap;
 	}
 	
 	/**

@@ -21,9 +21,7 @@
  */
 package org.virtue.game.map.movement;
 
-import org.virtue.game.World;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.square.RegionManager;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -131,47 +129,6 @@ public enum CompassPoint {
 			}
 		}
 		throw new IllegalArgumentException("Invalid direction value - " + rotation);
-	}
-
-	/**
-	 * Checks if traversal is permitted for this direction.
-	 * @param l The location.
-	 * @return {@code True} if so.
-	 */
-	public boolean canMove(CoordGrid l) {
-    	return canMove(l, 1);
-	}
-	
-	/**
-	 * Checks if traversal is permitted for this direction.
-	 * @param coords The start coords.
-	 * @param size The mover size.
-	 * @return {@code True} if so.
-	 */
-	public boolean canMove(CoordGrid coords, int size) {
-    	int plane = coords.getLevel();
-    	int x = coords.getX() + dx;
-    	int y = coords.getY() + dy;
-    	RegionManager map = World.getInstance().getRegions();
-    	switch (this) {
-		case EAST:
-			return map.isTraversableEast(plane, x, y, size);
-		case NORTH:
-			return map.isTraversableNorth(plane, x, y, size);
-		case NORTHEAST:
-			return map.isTraversableNorthEast(plane, x, y, size);
-		case NORTHWEST:
-			return map.isTraversableNorthWest(plane, x, y, size);
-		case SOUTH:
-			return map.isTraversableSouth(plane, x, y, size);
-		case SOUTHEAST:
-			return map.isTraversableSouthEast(plane, x, y, size);
-		case SOUTHWEST:
-			return map.isTraversableSouthWest(plane, x, y, size);
-		case WEST:
-			return map.isTraversableWest(plane, x, y, size);
-    	}
-    	return true;
 	}
 
 	/**

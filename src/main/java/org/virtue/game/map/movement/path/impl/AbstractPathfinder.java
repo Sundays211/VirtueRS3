@@ -1,11 +1,10 @@
 package org.virtue.game.map.movement.path.impl;
 
 import org.virtue.game.entity.Entity;
-import org.virtue.game.map.SceneLocation;
 import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.SceneLocation;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Pathfinder;
-import org.virtue.game.map.movement.routefinder.TraversalMap;
 import org.virtue.game.map.square.RegionManager;
 import org.virtue.game.node.Node;
 
@@ -70,11 +69,6 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * The north-east direction flag.
 	 */
 	public static final int NORTH_EAST_FLAG = NORTH_FLAG | EAST_FLAG;
-
-	/**
-	 * The traversal map.
-	 */
-	protected TraversalMap map;
 
 	/**
 	 * Finds a path from the location to the end location.

@@ -43,7 +43,6 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
-import org.virtue.game.map.movement.routefinder.NpcTraversalMap;
 import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.network.event.GameEventDispatcher;
@@ -126,7 +125,6 @@ public class NPC extends Entity {
 		super.name = type.name;
 		super.setSize(type.size);
 		this.direction = CompassPoint.forID(this.type.respawnDirection);
-		this.getMovement().setTraversalMap(new NpcTraversalMap(this, tile));
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
 		CustomNpcData customData = Virtue.getInstance().getConfigProvider().getNpcTypes().getCustomData(this.getID());

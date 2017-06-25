@@ -11,6 +11,7 @@ import org.virtue.game.map.movement.path.Point;
 import org.virtue.game.map.movement.path.impl.AbstractPathfinder;
 import org.virtue.game.map.movement.path.impl.DumbPathfinder;
 import org.virtue.game.map.movement.path.impl.SmartPathfinder;
+import org.virtue.game.map.square.RegionManager;
 import org.virtue.game.node.Node;
 
 /**
@@ -110,25 +111,25 @@ public abstract class FollowingType {
 				for (int s = 0; s < mover.getSize(); s++) {
 					switch (direction) {
 					case NORTH:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(s, j + mover.getSize(), 0))) {
+						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(s, j + mover.getSize(), 0), direction)) {
 							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
 							continue main;
 						}
 						break;
 					case EAST:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(j + mover.getSize(), s, 0))) {
+						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(j + mover.getSize(), s, 0), direction)) {
 							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
 							continue main;
 						}
 						break;
 					case SOUTH:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(s, -(j + 1), 0))) {
+						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(s, -(j + 1), 0), direction)) {
 							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
 							continue main;
 						}
 						break;
 					case WEST:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(-(j + 1), s, 0))) {
+						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(-(j + 1), s, 0), direction)) {
 							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
 							continue main;
 						}
@@ -207,7 +208,7 @@ public abstract class FollowingType {
 							continue;
 						}
 					}
-					if (checkTraversal(loc, moveDir)) {
+					if (RegionManager.checkDirection(loc, moveDir)) {
 						double dist = mover.getCurrentTile().getDistance(loc);
 						if (dist < distance) {
 							distance = dist;
@@ -226,16 +227,6 @@ public abstract class FollowingType {
 			}
 		}
 		return destination;
-	}
-	
-	/**
-	 * Checks if traversal is permitted.
-	 * @param l The location to check.
-	 * @param dir The direction to move.
-	 * @return {@code True}.
-	 */
-	public static boolean checkTraversal(CoordGrid l, CompassPoint dir) {
-		return CompassPoint.get((dir.toInteger() + 2) % 4).canMove(l);
 	}
 	
 	/**

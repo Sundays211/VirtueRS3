@@ -38,7 +38,6 @@ import org.virtue.config.Js5Archive;
 import org.virtue.game.World;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
-import org.virtue.game.map.movement.routefinder.TraversalMap;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -47,7 +46,7 @@ import org.virtue.game.map.movement.routefinder.TraversalMap;
  * @author Sundays211
  * @since 28/10/2014
  */
-public class RegionManager implements TraversalMap {
+public class RegionManager {
 
 	/**
 	 * The {@link Logger} Instance
@@ -258,150 +257,6 @@ public class RegionManager implements TraversalMap {
 		return regionX | regionY << 7;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableSouth(int,
-	 * int, int, int)
-	 */
-	@Override
-	public boolean isTraversableSouth(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableSouth(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableWest(int,
-	 * int, int, int)
-	 */
-	@Override
-	public boolean isTraversableWest(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableWest(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableNorth(int,
-	 * int, int, int)
-	 */
-	@Override
-	public boolean isTraversableNorth(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableNorth(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableEast(int,
-	 * int, int, int)
-	 */
-	@Override
-	public boolean isTraversableEast(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableEast(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableSouthWest
-	 * (int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableSouthWest(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableSouthWest(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableNorthWest
-	 * (int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableNorthWest(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableNorthWest(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableSouthEast
-	 * (int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableSouthEast(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableSouthEast(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableNorthEast
-	 * (int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableNorthEast(int plane, int x, int y, int size) {
-		CoordGrid tile = new CoordGrid(x, y, plane);
-		MapSquare region = getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return false;
-		}
-		return region.getClipMap().isTraversableNorthEast(plane,
-				tile.getXInRegion(), tile.getYInRegion(), size);
-	}
-
 	/**
 	 * Gets the clipping flag on the given location.
 	 * @param z The plane.
@@ -429,12 +284,15 @@ public class RegionManager implements TraversalMap {
 		return getClippingFlag(z, x, y); //TODO:
 	}
 	
-	public static boolean checkDirection(int level, int x, int y, CompassPoint direction) {
-		return direction.canMove(new CoordGrid(x, y, level), 1);
+	public static boolean checkDirection(CoordGrid currentTile, CompassPoint direction) {
+		return true;
+		//TODO: This...
+		//return direction.canMove(new CoordGrid(x, y, level), 1);
 	}
 
 	public static boolean checkDirection(CoordGrid currentTile, CompassPoint direction, int size) {
-		
-		return direction.canMove(currentTile, size);
+		return true;
+		//TODO: This...
+		//return direction.canMove(currentTile, size);
 	}
 }

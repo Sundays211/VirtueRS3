@@ -29,18 +29,16 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.MapSize;
 import org.virtue.game.map.SceneLocation;
-import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Pathfinder;
 import org.virtue.game.map.movement.path.Point;
 import org.virtue.game.map.movement.path.impl.AbstractPathfinder;
 import org.virtue.game.map.movement.path.impl.SmartPathfinder;
-import org.virtue.game.map.movement.routefinder.TraversalMap;
 import org.virtue.game.map.square.RegionManager;
 import org.virtue.game.node.Node;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
@@ -95,12 +93,7 @@ public class Movement {
 	
 	public Movement (Entity entity) {
 		this.entity = entity;
-		//this.pathFinder = new AStarPathFinder(World.getInstance().getRegions());
-		this.pathFinder = new SmartPathfinder(World.getInstance().getRegions());
-	}
-	
-	public void setTraversalMap (TraversalMap map) {
-		this.pathFinder = new SmartPathfinder(map);		
+		this.pathFinder = new SmartPathfinder();
 	}
 	
 	/**

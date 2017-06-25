@@ -3,12 +3,10 @@ package org.virtue.game.map.movement.path.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.virtue.game.World;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Point;
-import org.virtue.game.map.movement.routefinder.TraversalMap;
 import org.virtue.game.map.square.RegionManager;
 
 /**
@@ -43,15 +41,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 	 * Constructs a new {@code DumbPathfinder} {@code Object}.
 	 */
 	public DumbPathfinder() {
-		this(World.getInstance().getRegions());
-	}
-
-	/**
-	 * Constructs a new {@code DumbPathfinder} {@code Object}.
-	 * @param map The traversal map.
-	 */
-	public DumbPathfinder(TraversalMap map) {
-		super.map = map;
+		super();
 	}
 	
 	@Override

@@ -27,7 +27,6 @@ import org.virtue.game.World;
 import org.virtue.game.map.ClipFlag;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
-import org.virtue.game.map.movement.routefinder.TraversalMap;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -36,7 +35,7 @@ import org.virtue.game.map.movement.routefinder.TraversalMap;
  * @author Sundays211
  * @since 27/10/2014
  */
-public class ClipMap implements TraversalMap {
+public class ClipMap {
 	
 	private MapSquare region;
 	private int[][][] clipFlags = new int[4][64][64];
@@ -293,194 +292,6 @@ public class ClipMap implements TraversalMap {
 		} else {
 			return clipFlags[plane][localX][localY];
 		}
-	}
-	
-	/**
-	 * Returns true if an entity of the given size cannot traverse to the given position
-	 * @param blockFlag The flags that, if set, block the entity from moving in the direction
-	 * @param plane
-	 * @param x
-	 * @param y
-	 * @param size
-	 * @return
-	 */
-	private boolean isBlocked (int blockFlag, int plane, int x, int y, int size) {
-		for (int xoff = 0; xoff < size; xoff++) {
-			for (int yoff = 0; yoff < size; yoff++) {
-				if ((getClipFlags(x+xoff, y+yoff, plane) & blockFlag) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableSouth(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableSouth(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE);
-		//int mask = getClipFlags(x, y-1, plane);
-		return !isBlocked(blockFlag, plane, x, y-1, size);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableWest(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableWest(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);
-		//int mask = getClipFlags(x-1, y, plane);
-		return !isBlocked(blockFlag, plane, x-1, y, size);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableNorth(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableNorth(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE);
-		//int mask = getClipFlags(x, y+1, plane);
-		return !isBlocked(blockFlag, plane, x, y+1, size);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableEast(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableEast(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);
-		//int mask = getClipFlags(x+1, y, plane);
-		return !isBlocked(blockFlag, plane, x+1, y, size);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableSouthWest(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableSouthWest(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE 
-				| ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE | ClipFlag.CORNEROBJ_NORTHEAST_BLOCKSWALK_ALTERNATIVE);
-		if (isBlocked(blockFlag, plane, x-1, y-1, size)) {
-			return false;
-		}
-		if (!isTraversableWest(plane, x, y, size)) {
-			return false;
-		}
-		if (!isTraversableSouth(plane, x, y, size)) {
-			return false;
-		}
-		/*if ((getClipFlags(x-1, y-1, plane) & blockFlag) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x-1, y, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x, y-1, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}*/
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableNorthWest(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableNorthWest(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE 
-				| ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE | ClipFlag.CORNEROBJ_SOUTHEAST_BLOCKSWALK_ALTERNATIVE);
-		if (isBlocked(blockFlag, plane, x-1, y+1, size)) {
-			return false;
-		}
-		if (!isTraversableWest(plane, x, y, size)) {
-			return false;
-		}
-		if (!isTraversableNorth(plane, x, y, size)) {
-			return false;
-		}
-		/*if ((getClipFlags(x-1, y+1, plane) & blockFlag) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x-1, y, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x, y+1, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}*/
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableSouthEast(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableSouthEast(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE 
-				| ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE | ClipFlag.CORNEROBJ_NORTHWEST_BLOCKSWALK_ALTERNATIVE);
-		if (isBlocked(blockFlag, plane, x+1, y-1, size)) {
-			return false;
-		}
-		if (!isTraversableEast(plane, x, y, size)) {
-			return false;
-		}
-		if (!isTraversableSouth(plane, x, y, size)) {
-			return false;
-		}
-		/*if ((getClipFlags(x+1, y-1, plane) & blockFlag) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x+1, y, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x, y-1, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}*/
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.movement.routefinder.TraversalMap#isTraversableNorthEast(int, int, int, int)
-	 */
-	@Override
-	public boolean isTraversableNorthEast(int plane, int x, int y, int size) {
-		int blockFlag = (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE 
-				| ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE | ClipFlag.CORNEROBJ_SOUTHWEST_BLOCKSWALK_ALTERNATIVE);
-		if (isBlocked(blockFlag, plane, x+1, y+1, size)) {
-			return false;
-		}
-		if (!isTraversableEast(plane, x, y, size)) {
-			return false;
-		}
-		if (!isTraversableNorth(plane, x, y, size)) {
-			return false;
-		}
-		/*if ((getClipFlags(x+1, y+1, plane) & blockFlag) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x+1, y, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}
-		if ((getClipFlags(x, y+1, plane)  & (ClipFlag.FLOOR_BLOCKSWALK | ClipFlag.FLOORDECO_BLOCKSWALK 
-				| ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE)) != 0) {
-			return false;
-		}*/
-		return true;
 	}
 	
 	public void printMap () {
