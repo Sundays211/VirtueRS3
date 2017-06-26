@@ -78,7 +78,7 @@ public class NPC extends Entity {
 	
 	private CoordGrid spawnCoords;
 	
-	private int walkRange = 0;//default=5
+	private int walkRange = 5;//default=5
 	
 	private int interactRange = 1;
 	
@@ -129,7 +129,7 @@ public class NPC extends Entity {
 		getImpactHandler().restoreLifepoints();
 		CustomNpcData customData = Virtue.getInstance().getConfigProvider().getNpcTypes().getCustomData(this.getID());
 		if (customData != null) {
-			//this.walkRange = customData.getWalkRange();
+			this.walkRange = customData.getWalkRange();
 			this.interactRange = customData.getInteractRange();
 		}
 

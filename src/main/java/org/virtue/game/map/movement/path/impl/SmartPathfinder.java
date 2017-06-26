@@ -1,5 +1,7 @@
 package org.virtue.game.map.movement.path.impl;
 
+import static org.virtue.game.map.ClipFlag.*;
+
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Point;
@@ -206,12 +208,12 @@ public final class SmartPathfinder extends AbstractPathfinder {
 	 * @param end The destination location.
 	 * @param sizeX The x-size of the destination.
 	 * @param sizeY The y-size of the destination.
-	 * @param targetShape The location shape.
+	 * @param shape The location shape.
 	 * @param rotation The location rotation.
 	 * @param walkingFlag The walking flag.
 	 * @param coords The viewport coords.
 	 */
-	private void checkSingleTraversal(CoordGrid end, int sizeX, int sizeY, int targetShape, int rotation, int walkingFlag, CoordGrid coords) {
+	private void checkSingleTraversal(CoordGrid end, int sizeX, int sizeY, int shape, int rotation, int walkingFlag, CoordGrid coords) {
 		int readPosition = 0;
 		int level = coords.getLevel();
 		while (writePathPosition != readPosition) {
@@ -224,12 +226,12 @@ public final class SmartPathfinder extends AbstractPathfinder {
 			}
 			int absX = coords.getX() + curX;
 			int absY = coords.getY() + curY;
-			if (targetShape != 0) {
-				if ((targetShape < 5 || targetShape == 10) && canDoorInteract(absX, absY, 1, end.getX(), end.getY(), targetShape - 1, rotation, level)) {
+			if (shape != 0) {
+				if ((shape < 5 || shape == 10) && canDoorInteract(absX, absY, 1, end.getX(), end.getY(), shape - 1, rotation, level)) {
 					foundPath = true;
 					break;
 				}
-				if (targetShape < 10 && canDecorationInteract(absX, absY, 1, end.getX(), end.getY(), targetShape - 1, rotation, level)) {
+				if (shape < 10 && canDecorationInteract(absX, absY, 1, end.getX(), end.getY(), shape - 1, rotation, level)) {
 					foundPath = true;
 					break;
 				}
@@ -239,35 +241,35 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				break;
 			}
 			int thisCost = cost[curX][curY] + 1;
-			if (curY > 0 && via[curX][curY - 1] == 0 && (getClippingFlag(level, absX, absY - 1) & 0x12c0102) == 0) {
+			if (curY > 0 && via[curX][curY - 1] == 0 && (getClippingFlag(level, absX, absY - 1) & TRAVERSABLE_SOUTH) == 0) {
 				//(RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0
 				check(curX, curY - 1, SOUTH_FLAG, thisCost);
 			}
-			if (curX > 0 && via[curX - 1][curY] == 0 && (getClippingFlag(level, absX - 1, absY) & 0x12c0108) == 0) {
+			if (curX > 0 && via[curX - 1][curY] == 0 && (getClippingFlag(level, absX - 1, absY) & TRAVERSABLE_WEST) == 0) {
 				//(RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0
 				check(curX - 1, curY, WEST_FLAG, thisCost);
 			}
-			if (curY < 103 && via[curX][curY + 1] == 0 && (getClippingFlag(level, absX, absY + 1) & 0x12c0120) == 0) {
+			if (curY < 103 && via[curX][curY + 1] == 0 && (getClippingFlag(level, absX, absY + 1) & TRAVERSABLE_NORTH) == 0) {
 				//(RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0
 				check(curX, curY + 1, NORTH_FLAG, thisCost);
 			}
-			if (curX < 103 && via[curX + 1][curY] == 0 && (getClippingFlag(level, absX + 1, absY) & 0x12c0180) == 0) {
+			if (curX < 103 && via[curX + 1][curY] == 0 && (getClippingFlag(level, absX + 1, absY) & TRAVERSABLE_EAST) == 0) {
 				//(RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0
 				check(curX + 1, curY, EAST_FLAG, thisCost);
 			}
-			if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && (getClippingFlag(level, absX - 1, absY - 1) & 0x12c010e) == 0 && (getClippingFlag(level, absX - 1, absY) & 0x12c0108) == 0 && (getClippingFlag(level, absX, absY - 1) & 0x12c0102) == 0) {
+			if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && (getClippingFlag(level, absX - 1, absY - 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(level, absX - 1, absY) & TRAVERSABLE_WEST) == 0 && (getClippingFlag(level, absX, absY - 1) & TRAVERSABLE_SOUTH) == 0) {
 				// && (RegionManager.getClippingFlag(z, absX - 1, absY - 1) & 0x12c010e) == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0 && (RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0
 				check(curX - 1, curY - 1, SOUTH_WEST_FLAG, thisCost);
 			}
-			if (curX > 0 && curY < 103 && via[curX - 1][curY + 1] == 0 && (getClippingFlag(level, absX - 1, absY + 1) & 0x12c0138) == 0 && (getClippingFlag(level, absX - 1, absY) & 0x12c0108) == 0 && (getClippingFlag(level, absX, absY + 1) & 0x12c0120) == 0) {
+			if (curX > 0 && curY < 103 && via[curX - 1][curY + 1] == 0 && (getClippingFlag(level, absX - 1, absY + 1) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(level, absX - 1, absY) & TRAVERSABLE_WEST) == 0 && (getClippingFlag(level, absX, absY + 1) & TRAVERSABLE_NORTH) == 0) {
 				// (RegionManager.getClippingFlag(z, absX - 1, absY + 1) & 0x12c0138) == 0 && (RegionManager.getClippingFlag(z, absX - 1, absY) & 0x12c0108) == 0 && (RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0
 				check(curX - 1, curY + 1, NORTH_WEST_FLAG, thisCost);
 			}
-			if (curX < 103 && curY > 0 && via[curX + 1][curY - 1] == 0 && (getClippingFlag(level, absX + 1, absY - 1) & 0x12c0183) == 0 && (getClippingFlag(level, absX + 1, absY) & 0x12c0180) == 0 && (getClippingFlag(level, absX, absY - 1) & 0x12c0102) == 0) {
+			if (curX < 103 && curY > 0 && via[curX + 1][curY - 1] == 0 && (getClippingFlag(level, absX + 1, absY - 1) & TRAVERSABLE_SOUTH_EAST) == 0 && (getClippingFlag(level, absX + 1, absY) & TRAVERSABLE_EAST) == 0 && (getClippingFlag(level, absX, absY - 1) & TRAVERSABLE_SOUTH) == 0) {
 				// (RegionManager.getClippingFlag(z, absX + 1, absY - 1) & 0x12c0183) == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0 && (RegionManager.getClippingFlag(z, absX, absY - 1) & 0x12c0102) == 0
 				check(curX + 1, curY - 1, SOUTH_EAST_FLAG, thisCost);
 			}
-			if (curX < 103 && curY < 103 && via[curX + 1][curY + 1] == 0 && (getClippingFlag(level, absX + 1, absY + 1) & 0x12c01e0) == 0 && (getClippingFlag(level, absX + 1, absY) & 0x12c0180) == 0 && (getClippingFlag(level, absX, absY + 1) & 0x12c0120) == 0) {
+			if (curX < 103 && curY < 103 && via[curX + 1][curY + 1] == 0 && (getClippingFlag(level, absX + 1, absY + 1) & TRAVERSABLE_NORTH_EAST) == 0 && (getClippingFlag(level, absX + 1, absY) & TRAVERSABLE_EAST) == 0 && (getClippingFlag(level, absX, absY + 1) & TRAVERSABLE_NORTH) == 0) {
 				// (RegionManager.getClippingFlag(z, absX + 1, absY + 1) & 0x12c01e0) == 0 && (RegionManager.getClippingFlag(z, absX + 1, absY) & 0x12c0180) == 0 && (RegionManager.getClippingFlag(z, absX, absY + 1) & 0x12c0120) == 0
 				check(curX + 1, curY + 1, NORTH_EAST_FLAG, thisCost);
 			}
@@ -276,17 +278,17 @@ public final class SmartPathfinder extends AbstractPathfinder {
 
 	/**
 	 * Checks possible traversal for a size 2 entity.
-	 * @param end The destination location.
+	 * @param end The destination coordinates.
 	 * @param sizeX The x-size of the destination.
 	 * @param sizeY The y-size of the destination.
-	 * @param type The object type.
-	 * @param rotation The object rotation.
+	 * @param shape The location shape. 0 if the target is not a location
+	 * @param rotation The location rotation. 0 if the target is not a location
 	 * @param walkingFlag The walking flag.
 	 * @param location The viewport location.
 	 */
-	private void checkDoubleTraversal(CoordGrid end, int sizeX, int sizeY, int type, int rotation, int walkingFlag, CoordGrid location) {
+	private void checkDoubleTraversal(CoordGrid end, int sizeX, int sizeY, int shape, int rotation, int walkingFlag, CoordGrid location) {
 		int readPosition = 0;
-		int z = location.getLevel();
+		int level = location.getLevel();
 		while (writePathPosition != readPosition) {
 			curX = queueX[readPosition];
 			curY = queueY[readPosition];
@@ -297,43 +299,43 @@ public final class SmartPathfinder extends AbstractPathfinder {
 			}
 			int absX = location.getX() + curX;
 			int absY = location.getY() + curY;
-			if (type != 0) {
-				if ((type < 5 || type == 10) && canDoorInteract(absX, absY, 2, end.getX(), end.getY(), type - 1, rotation, z)) {
+			if (shape != 0) {
+				if ((shape < 5 || shape == 10) && canDoorInteract(absX, absY, 2, end.getX(), end.getY(), shape - 1, rotation, level)) {
 					foundPath = true;
 					break;
 				}
-				if (type < 10 && canDecorationInteract(absX, absY, 2, end.getX(), end.getY(), type - 1, rotation, z)) {
+				if (shape < 10 && canDecorationInteract(absX, absY, 2, end.getX(), end.getY(), shape - 1, rotation, level)) {
 					foundPath = true;
 					break;
 				}
 			}
-			if (sizeX != 0 && sizeY != 0 && canInteract(absX, absY, 2, end.getX(), end.getY(), sizeX, sizeY, walkingFlag, z)) {
+			if (sizeX != 0 && sizeY != 0 && canInteract(absX, absY, 2, end.getX(), end.getY(), sizeX, sizeY, walkingFlag, level)) {
 				foundPath = true;
 				break;
 			}
 			int thisCost = cost[curX][curY] + 1;
-			if (curY > 0 && via[curX][curY - 1] == 0 && (getClippingFlag(z, absX, absY - 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX + 1, absY - 1) & 0x12c0183) == 0) {
+			if (curY > 0 && via[curX][curY - 1] == 0 && (getClippingFlag(level, absX, absY - 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(level, absX + 1, absY - 1) & TRAVERSABLE_SOUTH_EAST) == 0) {
 				check(curX, curY - 1, SOUTH_FLAG, thisCost);
 			}
-			if (curX > 0 && via[curX - 1][curY] == 0 && (getClippingFlag(z, absX - 1, absY) & 0x12c010e) == 0 && (getClippingFlag(z, absX - 1, absY + 1) & 0x12c0138) == 0) {
+			if (curX > 0 && via[curX - 1][curY] == 0 && (getClippingFlag(level, absX - 1, absY) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(level, absX - 1, absY + 1) & TRAVERSABLE_NORTH_WEST) == 0) {
 				check(curX - 1, curY, WEST_FLAG, thisCost);
 			}
-			if (curY < 102 && via[curX][curY + 1] == 0 && (getClippingFlag(z, absX, absY + 2) & 0x12c0138) == 0 && (getClippingFlag(z, absX + 1, absY + 2) & 0x12c01e0) == 0) {
+			if (curY < 102 && via[curX][curY + 1] == 0 && (getClippingFlag(level, absX, absY + 2) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(level, absX + 1, absY + 2) & TRAVERSABLE_NORTH_EAST) == 0) {
 				check(curX, curY + 1, NORTH_FLAG, thisCost);
 			}
-			if (curX < 102 && via[curX + 1][curY] == 0 && (getClippingFlag(z, absX + 2, absY) & 0x12c0183) == 0 && (getClippingFlag(z, absX + 2, absY + 1) & 0x12c01e0) == 0) {
+			if (curX < 102 && via[curX + 1][curY] == 0 && (getClippingFlag(level, absX + 2, absY) & TRAVERSABLE_SOUTH_EAST) == 0 && (getClippingFlag(level, absX + 2, absY + 1) & TRAVERSABLE_NORTH_EAST) == 0) {
 				check(curX + 1, curY, EAST_FLAG, thisCost);
 			}
-			if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && (getClippingFlag(z, absX - 1, absY - 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX - 1, absY) & 0x12c0138) == 0 && (getClippingFlag(z, absX, absY - 1) & 0x12c0183) == 0) {
+			if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && (getClippingFlag(level, absX - 1, absY - 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(level, absX - 1, absY) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(level, absX, absY - 1) & TRAVERSABLE_SOUTH_EAST) == 0) {
 				check(curX - 1, curY - 1, SOUTH_WEST_FLAG, thisCost);
 			}
-			if (curX > 0 && curY < 102 && via[curX - 1][curY + 1] == 0 && (getClippingFlag(z, absX - 1, absY + 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX - 1, absY + 2) & 0x12c0138) == 0 && (getClippingFlag(z, absX, absY + 2) & 0x12c01e0) == 0) {
+			if (curX > 0 && curY < 102 && via[curX - 1][curY + 1] == 0 && (getClippingFlag(level, absX - 1, absY + 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(level, absX - 1, absY + 2) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(level, absX, absY + 2) & TRAVERSABLE_NORTH_EAST) == 0) {
 				check(curX - 1, curY + 1, NORTH_WEST_FLAG, thisCost);
 			}
-			if (curX < 102 && curY > 0 && via[curX + 1][curY - 1] == 0 && (getClippingFlag(z, absX + 1, absY - 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX + 2, absY) & 0x12c01e0) == 0 && (getClippingFlag(z, absX + 2, absY - 1) & 0x12c0183) == 0) {
+			if (curX < 102 && curY > 0 && via[curX + 1][curY - 1] == 0 && (getClippingFlag(level, absX + 1, absY - 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(level, absX + 2, absY) & TRAVERSABLE_NORTH_EAST) == 0 && (getClippingFlag(level, absX + 2, absY - 1) & TRAVERSABLE_SOUTH_EAST) == 0) {
 				check(curX + 1, curY - 1, SOUTH_EAST_FLAG, thisCost);
 			}
-			if (curX < 102 && curY < 102 && via[curX + 1][curY + 1] == 0 && (getClippingFlag(z, absX + 1, absY + 2) & 0x12c0138) == 0 && (getClippingFlag(z, absX + 2, absY + 2) & 0x12c01e0) == 0 && (getClippingFlag(z, absX + 2, absY + 1) & 0x12c0183) == 0) {
+			if (curX < 102 && curY < 102 && via[curX + 1][curY + 1] == 0 && (getClippingFlag(level, absX + 1, absY + 2) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(level, absX + 2, absY + 2) & TRAVERSABLE_NORTH_EAST) == 0 && (getClippingFlag(level, absX + 2, absY + 1) & TRAVERSABLE_SOUTH_EAST) == 0) {
 				check(curX + 1, curY + 1, NORTH_EAST_FLAG, thisCost);
 			}
 		}
@@ -379,9 +381,9 @@ public final class SmartPathfinder extends AbstractPathfinder {
 			}
 			int thisCost = cost[curX][curY] + 1;
 			south: do {
-				if (curY > 0 && via[curX][curY - 1] == 0 && (getClippingFlag(z, absX, absY - 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX + (size - 1), absY - 1) & 0x12c0183) == 0) {
+				if (curY > 0 && via[curX][curY - 1] == 0 && (getClippingFlag(z, absX, absY - 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(z, absX + (size - 1), absY - 1) & TRAVERSABLE_SOUTH_EAST) == 0) {
 					for (int i = 1; i < size - 1; i++) {
-						if ((getClippingFlag(z, absX + i, absY - 1) & 0x12c018f) != 0) {
+						if ((getClippingFlag(z, absX + i, absY - 1) & TRAVERSABLE_SOUTH_VARIABLE) != 0) {
 							break south;
 						}
 					}
@@ -389,9 +391,9 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				}
 			} while (false);
 			west: do {
-				if (curX > 0 && via[curX - 1][curY] == 0 && (getClippingFlag(z, absX - 1, absY) & 0x12c010e) == 0 && (getClippingFlag(z, absX - 1, absY + (size - 1)) & 0x12c0138) == 0) {
+				if (curX > 0 && via[curX - 1][curY] == 0 && (getClippingFlag(z, absX - 1, absY) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(z, absX - 1, absY + (size - 1)) & TRAVERSABLE_NORTH_WEST) == 0) {
 					for (int i = 1; i < size - 1; i++) {
-						if ((getClippingFlag(z, absX - 1, absY + i) & 0x12c013e) != 0) {
+						if ((getClippingFlag(z, absX - 1, absY + i) & TRAVERSABLE_WEST_VARIABLE) != 0) {
 							break west;
 						}
 					}
@@ -399,9 +401,9 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				}
 			} while (false);
 			north: do {
-				if (curY < 102 && via[curX][curY + 1] == 0 && (getClippingFlag(z, absX, absY + size) & 0x12c0138) == 0 && (getClippingFlag(z, absX + (size - 1), absY + size) & 0x12c01e0) == 0) {
+				if (curY < 102 && via[curX][curY + 1] == 0 && (getClippingFlag(z, absX, absY + size) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(z, absX + (size - 1), absY + size) & TRAVERSABLE_NORTH_EAST) == 0) {
 					for (int i = 1; i < size - 1; i++) {
-						if ((getClippingFlag(z, absX + i, absY + size) & 0x12c01f8) != 0) {
+						if ((getClippingFlag(z, absX + i, absY + size) & TRAVERSABLE_NORTH_VARIABLE) != 0) {
 							break north;
 						}
 					}
@@ -409,9 +411,9 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				}
 			} while (false);
 			east: do {
-				if (curX < 102 && via[curX + 1][curY] == 0 && (getClippingFlag(z, absX + size, absY) & 0x12c0183) == 0 && (getClippingFlag(z, absX + size, absY + (size - 1)) & 0x12c01e0) == 0) {
+				if (curX < 102 && via[curX + 1][curY] == 0 && (getClippingFlag(z, absX + size, absY) & TRAVERSABLE_SOUTH_EAST) == 0 && (getClippingFlag(z, absX + size, absY + (size - 1)) & TRAVERSABLE_NORTH_EAST) == 0) {
 					for (int i = 1; i < size - 1; i++) {
-						if ((getClippingFlag(z, absX + size, absY + i) & 0x12c01e3) != 0) {
+						if ((getClippingFlag(z, absX + size, absY + i) & TRAVERSABLE_EAST_VARIABLE) != 0) {
 							break east;
 						}
 					}
@@ -419,9 +421,9 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				}
 			} while (false);
 			southWest: do {
-				if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && (getClippingFlag(z, absX - 1, absY + (size - 2)) & 0x12c0138) == 0 && (getClippingFlag(z, absX - 1, absY - 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX + (size - 2), absY - 1) & 0x12c0183) == 0) {
+				if (curX > 0 && curY > 0 && via[curX - 1][curY - 1] == 0 && (getClippingFlag(z, absX - 1, absY + (size - 2)) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(z, absX - 1, absY - 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(z, absX + (size - 2), absY - 1) & TRAVERSABLE_SOUTH_EAST) == 0) {
 					for (int i = 1; i < size - 1; i++) {
-						if ((getClippingFlag(z, absX - 1, absY + (i - 1)) & 0x12c013e) != 0 || (getClippingFlag(z, absX + (i - 1), absY - 1) & 0x12c018f) != 0) {
+						if ((getClippingFlag(z, absX - 1, absY + (i - 1)) & TRAVERSABLE_WEST_VARIABLE) != 0 || (getClippingFlag(z, absX + (i - 1), absY - 1) & TRAVERSABLE_SOUTH_VARIABLE) != 0) {
 							break southWest;
 						}
 					}
@@ -429,9 +431,9 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				}
 			} while (false);
 			northWest: do {
-				if (curX > 0 && curY < 102 && via[curX - 1][curY + 1] == 0 && (getClippingFlag(z, absX - 1, absY + 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX - 1, absY + size) & 0x12c0138) == 0 && (getClippingFlag(z, absX, absY + size) & 0x12c01e0) == 0) {
+				if (curX > 0 && curY < 102 && via[curX - 1][curY + 1] == 0 && (getClippingFlag(z, absX - 1, absY + 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(z, absX - 1, absY + size) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(z, absX, absY + size) & TRAVERSABLE_NORTH_EAST) == 0) {
 					for (int i = 1; i < size - 1; i++) {
-						if ((getClippingFlag(z, absX - 1, absY + (i + 1)) & 0x12c013e) != 0 || (getClippingFlag(z, absX + (i - 1), absY + size) & 0x12c01f8) != 0) {
+						if ((getClippingFlag(z, absX - 1, absY + (i + 1)) & TRAVERSABLE_WEST_VARIABLE) != 0 || (getClippingFlag(z, absX + (i - 1), absY + size) & TRAVERSABLE_NORTH_VARIABLE) != 0) {
 							break northWest;
 						}
 					}
@@ -439,18 +441,18 @@ public final class SmartPathfinder extends AbstractPathfinder {
 				}
 			} while (false);
 			southEast: do {
-				if (curX < 102 && curY > 0 && via[curX + 1][curY - 1] == 0 && (getClippingFlag(z, absX + 1, absY - 1) & 0x12c010e) == 0 && (getClippingFlag(z, absX + size, absY - 1) & 0x12c0183) == 0 && (getClippingFlag(z, absX + size, absY + (size - 2)) & 0x12c01e0) == 0) {
+				if (curX < 102 && curY > 0 && via[curX + 1][curY - 1] == 0 && (getClippingFlag(z, absX + 1, absY - 1) & TRAVERSABLE_SOUTH_WEST) == 0 && (getClippingFlag(z, absX + size, absY - 1) & TRAVERSABLE_SOUTH_EAST) == 0 && (getClippingFlag(z, absX + size, absY + (size - 2)) & TRAVERSABLE_NORTH_EAST) == 0) {
 					for (int i = 1; i < size - 1; i++) {
-						if ((getClippingFlag(z, absX + size, absY + (i - 1)) & 0x12c01e3) != 0 || (getClippingFlag(z, absX + (i + 1), absY - 1) & 0x12c018f) != 0) {
+						if ((getClippingFlag(z, absX + size, absY + (i - 1)) & TRAVERSABLE_EAST_VARIABLE) != 0 || (getClippingFlag(z, absX + (i + 1), absY - 1) & TRAVERSABLE_SOUTH_VARIABLE) != 0) {
 							break southEast;
 						}
 					}
 					check(curX + 1, curY - 1, SOUTH_EAST_FLAG, thisCost);
 				}
 			} while (false);
-			if (curX < 102 && curY < 102 && via[curX + 1][curY + 1] == 0 && (getClippingFlag(z, absX + 1, absY + size) & 0x12c0138) == 0 && (getClippingFlag(z, absX + size, absY + size) & 0x12c01e0) == 0 && (getClippingFlag(z, absX + size, absY + 1) & 0x12c0183) == 0) {
+			if (curX < 102 && curY < 102 && via[curX + 1][curY + 1] == 0 && (getClippingFlag(z, absX + 1, absY + size) & TRAVERSABLE_NORTH_WEST) == 0 && (getClippingFlag(z, absX + size, absY + size) & TRAVERSABLE_NORTH_EAST) == 0 && (getClippingFlag(z, absX + size, absY + 1) & TRAVERSABLE_SOUTH_EAST) == 0) {
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, absX + (i + 1), absY + size) & 0x12c01f8) != 0 || (getClippingFlag(z, absX + size, absY + (i + 1)) & 0x12c01e3) != 0) {
+					if ((getClippingFlag(z, absX + (i + 1), absY + size) & TRAVERSABLE_NORTH_VARIABLE) != 0 || (getClippingFlag(z, absX + size, absY + (i + 1)) & 0x78e40000) != 0) {
 						continue main;
 					}
 				}

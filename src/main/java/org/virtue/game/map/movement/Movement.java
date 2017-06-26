@@ -142,14 +142,11 @@ public class Movement {
 			return false;
 		}
 		entity.stopAll();
-		if (entity.getCurrentTile().withinDistance(targetCoords, 0)) {
-			destination = entity.getCurrentTile();
-			return true;//Already on an adjacent tile
-		}
-		logger.info("Move from {} to {}", entity.getCurrentTile(), targetCoords);
-		logger.info("Target clip flags: {}", AbstractPathfinder.getClippingFlag(targetCoords.getLevel(), destX, destY));
+
+		logger.debug("Move from {} to {}", entity.getCurrentTile(), targetCoords);
+		logger.debug("Target clip flags: {}", AbstractPathfinder.getClippingFlag(targetCoords.getLevel(), destX, destY));
+		
 		Path path = AbstractPathfinder.find(entity, targetCoords, true);
-		logger.info("Path success={}, near={}", path.isSuccessful(), path.isMoveNear());
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
@@ -191,12 +188,9 @@ public class Movement {
 			return false;
 		}
 		entity.stopAll();
-		if (entity.getCurrentTile().withinDistance(new CoordGrid(target.getCurrentTile().getX(), target.getCurrentTile().getY(), entity.getCurrentTile().getLevel()), 0)) {
-			destination = entity.getCurrentTile();
-			return true;//Already on an adjacent tile
-		}
+
 		Path path = AbstractPathfinder.find(entity, target, false, AbstractPathfinder.SMART);
-		if (path == null) {
+		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
 		addWalkSteps(path.getPoints(), moveSpeed);
@@ -214,26 +208,10 @@ public class Movement {
 			return false;
 		}
 		entity.stopAll();
-		//int deltaX = Math.abs(entity.getCurrentTile().getX() - object.getTile().getX());
-		//int deltaY = Math.abs(entity.getCurrentTile().getY() - object.getTile().getY());
-		//if (entity.getCurrentTile().withinDistance(object.getTile(), 1)) {
-		if (location.isAdjacentTo(entity.getCurrentTile())) {
-			destination = entity.getCurrentTile();
-			entity.queueUpdateBlock(new FaceDirectionBlock(destination));
-			return true;//Already on an adjacent tile
-		} else if (location.isStandingOn(entity.getCurrentTile())) {
-			destination = entity.getCurrentTile();
-			entity.queueUpdateBlock(new FaceDirectionBlock(destination));
-			return true;//If the entity is standing on the location, they should still be able to interact
-		}
+
 		Path path = AbstractPathfinder.find(entity, location, false, AbstractPathfinder.SMART);
-		if (path == null) {
+		if (path == null || !path.isSuccessful()) {
 			return false;
-		}
-		if (path.getPoints().getLast().getX() == location.getTile().getX() 
-				&& path.getPoints().getLast().getY() == location.getTile().getY()) {
-			path.getPoints().pollLast();//Remove the last position if it's the same as the location's tile.
-			//Bit of a hack, but it'll do until someone can figure out how to make the pathfinder stop at an adjacent tile.
 		}
 		addWalkSteps(path.getPoints(), moveSpeed);
 		entity.queueUpdateBlock(new FaceDirectionBlock(destination));
@@ -286,7 +264,7 @@ public class Movement {
 			point = fillPath(step.getX(), step.getY(), point);
 		}
 		destination = new CoordGrid(point.getX(), point.getY(), entity.getCurrentTile().getLevel());
-		logger.info("Calculated destination: {}", destination);
+		logger.debug("Calculated destination: {}", destination);
 	}
 	
 	/**
@@ -452,10 +430,10 @@ public class Movement {
 				return;
 			}
 			entity.setLastTile(entity.getCurrentTile());
-			//entity.getLastTile().copy(entity.getCurrentTile());
+
 			CoordGrid next = new CoordGrid(nextStep.getX(), nextStep.getY(), entity.getCurrentTile().getLevel());
 			entity.setCurrentTile(next);
-			//entity.getCurrentTile().copy(next);
+
 			nextMoveSpeed = nextStep.getSpeed();
 			if (debug) {
 				System.out.println("Direction: "+nextWalkDirection+", x="+nextStep.getX()+", y="+nextStep.getY());

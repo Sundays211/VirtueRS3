@@ -1,5 +1,7 @@
 package org.virtue.game.map.movement.path.impl;
 
+import static org.virtue.game.map.ClipFlag.*;
+
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.CoordGrid;
@@ -234,46 +236,46 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					rotation = rotation + 2 & 0x3;
 				}
 				if (rotation == 0) {
-					if (curX == 1 + destX && curY == destY && (0x80 & flag) == 0) {
+					if (curX == 1 + destX && curY == destY && (WALL_WEST & flag) == 0) {
 						return true;
 					}
-					if (destX == curX && curY == destY - 1 && (flag & 0x2) == 0) {
+					if (destX == curX && curY == destY - 1 && (flag & WALL_NORTH) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
-					if (curX == destX - 1 && curY == destY && (0x8 & flag) == 0) {
+					if (curX == destX - 1 && curY == destY && (WALL_EAST & flag) == 0) {
 						return true;
 					}
-					if (curX == destX && curY == destY - 1 && (flag & 0x2) == 0) {
+					if (curX == destX && curY == destY - 1 && (flag & WALL_NORTH) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
-					if (destX - 1 == curX && destY == curY && (flag & 0x8) == 0) {
+					if (destX - 1 == curX && destY == curY && (flag & WALL_EAST) == 0) {
 						return true;
 					}
-					if (destX == curX && destY + 1 == curY && (0x20 & flag) == 0) {
+					if (destX == curX && destY + 1 == curY && (WALL_SOUTH & flag) == 0) {
 						return true;
 					}
 				} else if (rotation == 3) {
-					if (destX + 1== curX && curY == destY && (0x80 & flag) == 0) {
+					if (destX + 1== curX && curY == destY && (WALL_WEST & flag) == 0) {
 						return true;
 					}
-					if (destX == curX && curY == destY + 1 && (0x20 & flag) == 0) {
+					if (destX == curX && curY == destY + 1 && (WALL_SOUTH & flag) == 0) {
 						return true;
 					}
 				}
 			}
 			if (shape == 8) {
-				if (destX == curX && curY == destY + 1 && (flag & 0x20) == 0) {
+				if (destX == curX && curY == destY + 1 && (flag & WALL_SOUTH) == 0) {
 					return true;
 				}
-				if (destX == curX && -1 + destY == curY && (0x2 & flag) == 0) {
+				if (destX == curX && -1 + destY == curY && (WALL_NORTH & flag) == 0) {
 					return true;
 				}
-				if (curX == destX - 1 && curY == destY && (0x8 & flag) == 0) {
+				if (curX == destX - 1 && curY == destY && (WALL_EAST & flag) == 0) {
 					return true;
 				}
-				if (curX == destX + 1 && curY == destY && (flag & 0x80) == 0) {
+				if (curX == destX + 1 && curY == destY && (flag & WALL_WEST) == 0) {
 					return true;
 				}
 			}
@@ -285,46 +287,46 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					rotation = 0x3 & 2 + rotation;
 				}
 				if (rotation == 0) {
-					if (destX + 1 == curX && destY >= curY && destY <= cornerY && (getClippingFlag(z, curX, destY) & 0x80) == 0) {
+					if (destX + 1 == curX && destY >= curY && destY <= cornerY && (getClippingFlag(z, curX, destY) & WALL_WEST) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && destY - size == curY && (0x2 & getClippingFlag(z, destX, cornerY)) == 0) {
+					if (destX >= curX && destX <= cornerX && destY - size == curY && (getClippingFlag(z, destX, cornerY) & WALL_NORTH) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
-					if (-size + destX == curX && destY >= curY && cornerY >= destY && (getClippingFlag(z, cornerX, destY) & 0x8) == 0) {
+					if (-size + destX == curX && destY >= curY && cornerY >= destY && (getClippingFlag(z, cornerX, destY) & WALL_EAST) == 0) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && -size + destY == curY && (getClippingFlag(z, destX, cornerY) & 0x2) == 0) {
+					if (curX <= destX && cornerX >= destX && -size + destY == curY && (getClippingFlag(z, destX, cornerY) & WALL_NORTH) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
-					if (curX == destX - size && curY <= destY && destY <= cornerY && (0x8 & getClippingFlag(z, cornerX, destY)) == 0) {
+					if (curX == destX - size && curY <= destY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & WALL_EAST) == 0) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (0x20 & getClippingFlag(z, destX, curY)) == 0) {
+					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (getClippingFlag(z, destX, curY) & WALL_SOUTH) == 0) {
 						return true;
 					}
 				} else if (rotation == 3) {
-					if (1 + destX == curX && curY <= destY && destY <= cornerY && (0x80 & getClippingFlag(z, curX, destY)) == 0) {
+					if (1 + destX == curX && curY <= destY && destY <= cornerY && (getClippingFlag(z, curX, destY) & WALL_WEST) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (getClippingFlag(z, destX, curY) & 0x20) == 0) {
+					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (getClippingFlag(z, destX, curY) & WALL_SOUTH) == 0) {
 						return true;
 					}
 				}
 			}
 			if (shape == 8) {
-				if (curX <= destX && destX <= cornerX && 1 + destY == curY && (getClippingFlag(z, destX, curY) & 0x20) == 0) {
+				if (curX <= destX && destX <= cornerX && 1 + destY == curY && (getClippingFlag(z, destX, curY) & WALL_SOUTH) == 0) {
 					return true;
 				}
-				if (curX <= destX && destX <= cornerX && curY == -size + destY && (0x2 & getClippingFlag(z, destX, cornerY)) == 0) {
+				if (curX <= destX && destX <= cornerX && curY == -size + destY && (getClippingFlag(z, destX, cornerY) & WALL_NORTH) == 0) {
 					return true;
 				}
-				if (curX == -size + destX && destY >= curY && destY <= cornerY && (0x8 & getClippingFlag(z, cornerX, destY)) == 0) {
+				if (curX == -size + destX && destY >= curY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & WALL_EAST) == 0) {
 					return true;
 				}
-				if (1 + destX == curX && curY <= destY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x80) == 0) {
+				if (1 + destX == curX && curY <= destY && cornerY >= destY && (getClippingFlag(z, curX, destY) & WALL_WEST) == 0) {
 					return true;
 				}
 			}
@@ -359,40 +361,40 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (curX == destX - 1 && destY == curY) {
 						return true;
 					}
-					if (destX == curX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && 1 + destY == curY && (0x2c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x2c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
 					if (curX == destX && destY + 1 == curY) {
 						return true;
 					}
-					if (curX == destX - 1 && curY == destY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == destX - 1 && curY == destY && (0x2c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && destY == curY && (0x12c0180 & getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == 1 + destX && destY == curY && (0x2c0180 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
 					if (1 + destX == curX && destY == curY) {
 						return true;
 					}
-					if (destX == curX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && 1 + destY == curY && (0x2c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == destX && curY == destY - 1 && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && curY == destY - 1 && (getClippingFlag(z, curX, curY) & 0x2c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 3) {
 					if (curX == destX && -1 + destY == curY) {
 						return true;
 					}
-					if (curX == -1 + destX && destY == curY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == -1 + destX && destY == curY && (0x2c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && destY == curY && (getClippingFlag(z, curX, curY) & 0x12c0180) == 0) {
+					if (curX == 1 + destX && destY == curY && (getClippingFlag(z, curX, curY) & 0x2c0180) == 0) {
 						return true;
 					}
 				}
@@ -404,14 +406,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX == curX && curY == 1 + destY) {
 						return true;
 					}
-					if (curX == destX + 1 && curY == destY && (0x12c0180 & getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == destX + 1 && curY == destY && (0x2c0180 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x2c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
-					if (curX == destX - 1 && curY == destY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
+					if (curX == destX - 1 && curY == destY && (0x2c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
 					if (curX == destX && curY == 1 + destY) {
@@ -420,14 +422,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (1 + destX == curX && curY == destY) {
 						return true;
 					}
-					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x12c0102) == 0) {
+					if (curX == destX && destY - 1 == curY && (getClippingFlag(z, curX, curY) & 0x2c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
-					if (destX - 1 == curX && destY == curY && (0x12c0108 & getClippingFlag(z, curX, curY)) == 0) {
+					if (destX - 1 == curX && destY == curY && (0x2c0108 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (destX == curX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && 1 + destY == curY && (0x2c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
 					if (1 + destX == curX && curY == destY) {
@@ -440,10 +442,10 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX - 1 == curX && curY == destY) {
 						return true;
 					}
-					if (destX == curX && curY == destY + 1 && (0x12c0120 & getClippingFlag(z, curX, curY)) == 0) {
+					if (destX == curX && curY == destY + 1 && (0x2c0120 & getClippingFlag(z, curX, curY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && curY == destY && (getClippingFlag(z, curX, curY) & 0x12c0180) == 0) {
+					if (curX == 1 + destX && curY == destY && (getClippingFlag(z, curX, curY) & 0x2c0180) == 0) {
 						return true;
 					}
 					if (destX == curX && destY - 1 == curY) {
@@ -472,40 +474,40 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX - size == curX && destY >= curY && destY <= cornerY) {
 						return true;
 					}
-					if (destX >= curX && cornerX >= destX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
+					if (destX >= curX && cornerX >= destX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x2c0120) == 0) {
 						return true;
 					}
-					if (destX >= curX && cornerX >= destX && destY - size == curY && (getClippingFlag(z, destX, cornerY) & 0x12c0102) == 0) {
+					if (destX >= curX && cornerX >= destX && destY - size == curY && (getClippingFlag(z, destX, cornerY) & 0x2c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
 					if (destX >= curX && cornerX >= destX && destY + 1 == curY) {
 						return true;
 					}
-					if (curX == -size + destX && destY >= curY && cornerY >= destY && (0x12c0108 & getClippingFlag(z, cornerX, destY)) == 0) {
+					if (curX == -size + destX && destY >= curY && cornerY >= destY && (0x2c0108 & getClippingFlag(z, cornerX, destY)) == 0) {
 						return true;
 					}
-					if (curX == 1 + destX && destY >= curY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
+					if (curX == 1 + destX && destY >= curY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x2c0180) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
 					if (curX == 1 + destX && curY <= destY && destY <= cornerY) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (0x12c0120 & getClippingFlag(z, destX, curY)) == 0) {
+					if (curX <= destX && cornerX >= destX && destY + 1 == curY && (0x2c0120 & getClippingFlag(z, destX, curY)) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && destY - size == curY && (0x12c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
+					if (destX >= curX && destX <= cornerX && destY - size == curY && (0x2c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 3) {
 					if (curX <= destX && destX <= cornerX && curY == -size + destY) {
 						return true;
 					}
-					if (-size + destX == curX && curY <= destY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
+					if (-size + destX == curX && curY <= destY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & 0x2c0108) == 0) {
 						return true;
 					}
-					if (1 + destX == curX && curY <= destY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
+					if (1 + destX == curX && curY <= destY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x2c0180) == 0) {
 						return true;
 					}
 				}
@@ -518,14 +520,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (curX <= destX && destX <= cornerX && curY == 1 + destY) {
 						return true;
 					}
-					if (curX == 1 + destX && curY <= destY && destY <= cornerY && (0x12c0180 & getClippingFlag(z, curX, destY)) == 0) {
+					if (curX == 1 + destX && curY <= destY && destY <= cornerY && (0x2c0180 & getClippingFlag(z, curX, destY)) == 0) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && -size + destY == curY && (getClippingFlag(z, destX, cornerY) & 0x12c0102) == 0) {
+					if (curX <= destX && cornerX >= destX && -size + destY == curY && (getClippingFlag(z, destX, cornerY) & 0x2c0102) == 0) {
 						return true;
 					}
 				} else if (rotation == 1) {
-					if (-size + destX == curX && destY >= curY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
+					if (-size + destX == curX && destY >= curY && destY <= cornerY && (getClippingFlag(z, cornerX, destY) & 0x2c0108) == 0) {
 						return true;
 					}
 					if (destX >= curX && cornerX >= destX && curY == 1 + destY) {
@@ -534,14 +536,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX + 1 == curX && curY <= destY && destY <= cornerY) {
 						return true;
 					}
-					if (destX >= curX && cornerX >= destX && destY + -size == curY && (0x12c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
+					if (destX >= curX && cornerX >= destX && destY + -size == curY && (0x2c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
 						return true;
 					}
 				} else if (rotation == 2) {
-					if (curX == destX - size && curY <= destY && cornerY >= destY && (getClippingFlag(z, cornerX, destY) & 0x12c0108) == 0) {
+					if (curX == destX - size && curY <= destY && cornerY >= destY && (getClippingFlag(z, cornerX, destY) & 0x2c0108) == 0) {
 						return true;
 					}
-					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (0x12c0120 & getClippingFlag(z, destX, curY)) == 0) {
+					if (destX >= curX && destX <= cornerX && 1 + destY == curY && (0x2c0120 & getClippingFlag(z, destX, curY)) == 0) {
 						return true;
 					}
 					if (1 + destX == curX && destY >= curY && cornerY >= destY) {
@@ -554,10 +556,10 @@ public abstract class AbstractPathfinder implements Pathfinder {
 					if (destX + -size == curX && destY >= curY && destY <= cornerY) {
 						return true;
 					}
-					if (curX <= destX && cornerX >= destX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
+					if (curX <= destX && cornerX >= destX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x2c0120) == 0) {
 						return true;
 					}
-					if (1 + destX == curX && destY >= curY && cornerY >= destY && (0x12c0180 & getClippingFlag(z, curX, destY)) == 0) {
+					if (1 + destX == curX && destY >= curY && cornerY >= destY && (0x2c0180 & getClippingFlag(z, curX, destY)) == 0) {
 						return true;
 					}
 					if (destX >= curX && destX <= cornerX && curY == -size + destY) {
@@ -566,16 +568,16 @@ public abstract class AbstractPathfinder implements Pathfinder {
 				}
 			}
 			if (shape == 9) {
-				if (destX >= curX && destX <= cornerX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x12c0120) == 0) {
+				if (destX >= curX && destX <= cornerX && curY == 1 + destY && (getClippingFlag(z, destX, curY) & 0x2c0120) == 0) {
 					return true;
 				}
-				if (destX >= curX && cornerX >= destX && curY == -size + destY && (0x12c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
+				if (destX >= curX && cornerX >= destX && curY == -size + destY && (0x2c0102 & getClippingFlag(z, destX, cornerY)) == 0) {
 					return true;
 				}
-				if (-size + destX == curX && destY >= curY && cornerY >= destY && (0x12c0108 & getClippingFlag(z, cornerX, destY)) == 0) {
+				if (-size + destX == curX && destY >= curY && cornerY >= destY && (0x2c0108 & getClippingFlag(z, cornerX, destY)) == 0) {
 					return true;
 				}
-				if (curX == destX + 1 && destY >= curY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x12c0180) == 0) {
+				if (curX == destX + 1 && destY >= curY && cornerY >= destY && (getClippingFlag(z, curX, destY) & 0x2c0180) == 0) {
 					return true;
 				}
 			}
@@ -632,16 +634,16 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		if (destX <= x && cornerX >= x && y >= destY && y <= cornerY) {
 			return true;
 		}
-		if (x == destX - 1 && destY <= y && y <= cornerY && (0x8 & flag) == 0 && (0x8 & walkFlag) == 0) {
+		if (x == destX - 1 && destY <= y && y <= cornerY && (flag & WALL_EAST) == 0 && (walkFlag & 0x8) == 0) {
 			return true;
 		}
-		if (x == cornerX + 1 && destY <= y && cornerY >= y && (flag & 0x80) == 0 && (0x2 & walkFlag) == 0) {
+		if (x == cornerX + 1 && destY <= y && cornerY >= y && (flag & WALL_WEST) == 0 && (walkFlag & 0x2) == 0) {
 			return true;
 		}
-		if (y == destY - 1 && destX <= x && cornerX >= x && (0x2 & flag) == 0 && (0x4 & walkFlag) == 0) {
+		if (y == destY - 1 && destX <= x && cornerX >= x && (flag & WALL_NORTH) == 0 && (walkFlag & 0x4) == 0) {
 			return true;
 		}
-		if (y == cornerY + 1 && destX <= x && cornerX >= x && (flag & 0x20) == 0 && (0x1 & walkFlag) == 0) {
+		if (y == cornerY + 1 && destX <= x && cornerX >= x && (flag & WALL_SOUTH) == 0 && (walkFlag & 0x1) == 0) {
 			return true;
 		}
 		return false;
@@ -670,14 +672,14 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			if (destY == fromCornerY && (walkingFlag & 0x4) == 0) {
 				int x = curX;
 				for (int endX = toCornerX < fromCornerX ? toCornerX : fromCornerX; endX > x; x++) {
-					if ((getClippingFlag(z, x, -1 + fromCornerY) & 0x2) == 0) {
+					if ((getClippingFlag(z, x, -1 + fromCornerY) & WALL_NORTH) == 0) {
 						return true;
 					}
 				}
 			} else if (toCornerY == curY && (walkingFlag & 0x1) == 0) {
 				int x = curX;
 				for (int endX = fromCornerX <= toCornerX ? fromCornerX : toCornerX; x < endX; x++) {
-					if ((getClippingFlag(z, x, curY) & 0x20) == 0) {
+					if ((getClippingFlag(z, x, curY) & WALL_SOUTH) == 0) {
 						return true;
 					}
 				}
@@ -685,13 +687,13 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		} else if (destX < fromCornerX && toCornerX >= fromCornerX) {
 			if (fromCornerY == destY && (0x4 & walkingFlag) == 0) {
 				for (int x = destX; fromCornerX > x; x++) {
-					if ((getClippingFlag(z, x, -1 + (fromCornerY)) & 0x2) == 0) {
+					if ((getClippingFlag(z, x, -1 + (fromCornerY)) & WALL_NORTH) == 0) {
 						return true;
 					}
 				}
 			} else if (toCornerY == curY && (0x1 & walkingFlag) == 0) {
 				for (int x = destX; fromCornerX > x; x++) {
-					if ((getClippingFlag(z, x, curY) & 0x20) == 0) {
+					if ((getClippingFlag(z, x, curY) & WALL_SOUTH) == 0) {
 						return true;
 					}
 				}
@@ -700,13 +702,13 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			if (fromCornerY > destY && toCornerY >= fromCornerY) {
 				if (fromCornerX == destX && (walkingFlag & 0x8) == 0) {
 					for (int y = destY; y < fromCornerY; y++) {
-						if ((getClippingFlag(z, -1 + fromCornerX, y) & 0x8) == 0) {
+						if ((getClippingFlag(z, -1 + fromCornerX, y) & WALL_EAST) == 0) {
 							return true;
 						}
 					}
 				} else if (curX == toCornerX && (0x2 & walkingFlag) == 0) {
 					for (int y = destY; fromCornerY > y; y++) {
-						if ((getClippingFlag(z, curX, y) & 0x80) == 0) {
+						if ((getClippingFlag(z, curX, y) & WALL_WEST) == 0) {
 							return true;
 						}
 					}
@@ -716,7 +718,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			if (curX == toCornerX && (walkingFlag & 0x2) == 0) {
 				int y = curY;
 				for (int endY = fromCornerY <= toCornerY ? fromCornerY : toCornerY; y < endY; y++) {
-					if ((0x80 & getClippingFlag(z, curX, y)) == 0) {
+					if ((getClippingFlag(z, curX, y) & WALL_WEST) == 0) {
 						return true;
 					}
 				}
@@ -724,7 +726,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		} else {
 			int y = curY;
 			for (int endY = fromCornerY > toCornerY ? toCornerY : fromCornerY; endY > y; y++) {
-				if ((getClippingFlag(z, fromCornerX - 1, y) & 0x8) == 0) {
+				if ((getClippingFlag(z, fromCornerX - 1, y) & WALL_EAST) == 0) {
 					return true;
 				}
 			}

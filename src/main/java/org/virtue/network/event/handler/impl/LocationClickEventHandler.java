@@ -37,6 +37,7 @@ import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.LocationClickEventContext;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.handler.GameEventHandler;
+import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -81,6 +82,7 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 				player.getMovement().setOnTarget(new Runnable() {
 					@Override
 					public void run() {
+						player.queueUpdateBlock(new FaceDirectionBlock(tile));
 						handleInteraction(player, location, context);
 					}
 				});
