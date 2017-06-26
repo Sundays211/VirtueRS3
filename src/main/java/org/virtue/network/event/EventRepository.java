@@ -54,7 +54,7 @@ import org.virtue.network.event.encoder.impl.LogoutEventEncoder;
 import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.MessageEventEncoder;
 import org.virtue.network.event.encoder.impl.MusicEventEncoder;
-import org.virtue.network.event.encoder.impl.NpcUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.NpcInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
@@ -173,7 +173,7 @@ public class EventRepository {
 		registerWriteEvent(IgnoreListEventEncoder.class);
 		registerWriteEvent(SystemUpdateEventEncoder.class);
 		registerWriteEvent(PlayerInfoEventEncoder.class);
-		registerWriteEvent(NpcUpdateEventEncoder.class);
+		registerWriteEvent(NpcInfoEventEncoder.class);
 		registerWriteEvent(InvEventEncoder.class);
 		registerWriteEvent(ClientScriptEventEncoder.class);
 		registerWriteEvent(MapFlagEventEncoder.class);

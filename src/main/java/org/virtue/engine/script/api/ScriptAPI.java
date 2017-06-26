@@ -988,9 +988,8 @@ public interface ScriptAPI {
 	 * Moves the entity to the specified coordinates
 	 * @param entity The entity to teleport
 	 * @param coords The destination coordinates
-	 * @return True if the teleport was successful, false otherwise
 	 */
-	public boolean teleportEntity (Entity entity, CoordGrid coords);
+	public void teleportEntity (Entity entity, CoordGrid coords);
 	
 	/**
 	 * Moves the entity to the specified coordinates
@@ -998,9 +997,8 @@ public interface ScriptAPI {
 	 * @param x The new x-coordinate of the entity
 	 * @param y The new y-coordinate of the entity
 	 * @param z The new z-coordinate of the entity
-	 * @return True if the teleport was successful, false otherwise
 	 */
-	public boolean teleportEntity (Entity entity, int x, int y, int z);
+	public void teleportEntity (Entity entity, int x, int y, int z);
 	
 	/**
 	 * Moves the entity to the specified coordinates
@@ -1010,9 +1008,8 @@ public interface ScriptAPI {
 	 * @param squareY The y-coordinate of the map square to move onto
 	 * @param localX The local x tile within the map square to move onto
 	 * @param localY The local y tile within the map square to move onto
-	 * @return
 	 */
-	public boolean teleportEntity (Entity entity, int level, int squareX, int squareY, int localX, int localY);
+	public void teleportEntity (Entity entity, int level, int squareX, int squareY, int localX, int localY);
 	
 	/**
 	 * Shifts the entity by the specified amount

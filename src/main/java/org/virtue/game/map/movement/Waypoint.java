@@ -1,7 +1,6 @@
 package org.virtue.game.map.movement;
 
 import org.virtue.network.protocol.update.ref.MoveSpeed;
-import org.virtue.utility.DirectionUtility;
 
 /**
  * Represents a point.
@@ -65,8 +64,8 @@ public final class Waypoint {
 	 * @param oldY The y-coordinate of the old position
 	 * @return The direction
 	 */
-	public int getDirection (int oldX, int oldY) {
-		return DirectionUtility.getPlayerWalkingDirection(x - oldX, oldY - y);
+	public CompassPoint getDirection (int oldX, int oldY) {
+		return CompassPoint.forDelta(x - oldX, y - oldY);
 	}
 
 	/**

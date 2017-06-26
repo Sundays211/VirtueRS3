@@ -35,8 +35,8 @@ import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.MapSize;
 import org.virtue.game.map.SceneLocation;
 import org.virtue.game.map.movement.path.Path;
+import org.virtue.game.map.movement.path.PathfinderProvider;
 import org.virtue.game.map.movement.path.Point;
-import org.virtue.game.map.movement.path.impl.AbstractPathfinder;
 import org.virtue.game.map.square.RegionManager;
 import org.virtue.game.node.Node;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
@@ -59,11 +59,11 @@ public class Movement {
 	
 	private Entity entity;
 	
-	private Queue<Waypoint> walkSteps = new ConcurrentLinkedQueue<>();
+	private Queue<Waypoint> waypoints = new ConcurrentLinkedQueue<>();
 	
-	private int nextWalkDirection = -1;
+	private CompassPoint nextWalkDirection = null;
 	
-	private int nextRunDirection = -1;
+	private CompassPoint nextRunDirection = null;
 	
 	private MoveSpeed nextMoveSpeed = MoveSpeed.STATIONARY;
 	
@@ -76,7 +76,7 @@ public class Movement {
 	
 	private boolean teleported;
 	
-	private CoordGrid teleportDestination;
+	private CoordGrid instantMoveDestination;
 	
 	private MoveSpeed moveSpeed = MoveSpeed.WALK;
 	
@@ -92,37 +92,33 @@ public class Movement {
 	}
 	
 	/**
-	 * Teleports the entity to the specified coordinates
+	 * Instantly moves the entity to the specified coordinates
 	 * @param level The level/plane to teleport to
 	 * @param mapSquare The destination map square (region)
 	 * @param localX The x-coord within the map square
 	 * @param localY The y-coord within the map square
-	 * @return True if the teleport was successful, false otherwise
 	 */
-	public boolean teleportTo (int level, int mapSquare, int localX, int localY) {
-		return teleportTo(new CoordGrid(localX, localY, level, mapSquare));
+	public void setCoords (int level, int mapSquare, int localX, int localY) {
+		setCoords(new CoordGrid(localX, localY, level, mapSquare));
 	}
 	
 	/**
-	 * Teleports the entity to the specified coordinates
+	 * Instantly moves the entity to the specified coordinates
 	 * @param destX The x-coordinate of the destination
 	 * @param destY The y-coordinate of the destination
 	 * @param destZ The z-coordinate of the destination
-	 * @return True if the teleport was successful, false otherwise
 	 */
-	public boolean teleportTo (int destX, int destY, int destZ) {
-		return teleportTo(new CoordGrid(destX, destY, destZ));
+	public void setCoords (int destX, int destY, int destZ) {
+		setCoords(new CoordGrid(destX, destY, destZ));
 	}
 	
 	/**
-	 * Teleports the entity to the specified tile
+	 * Instantly moves the entity to the specified coordinates
 	 * @param destination The destination {@link CoordGrid}
-	 * @return True if the teleport was successful, false otherwise
 	 */
-	public synchronized boolean teleportTo (CoordGrid destination) {
-		this.teleportDestination = destination;
+	public synchronized void setCoords (CoordGrid destination) {
+		this.instantMoveDestination = destination;
 		stop();//Clear the current target and remove any walk steps		
-		return true;		
 	}
 	
 	public synchronized boolean moveTo (int destX, int destY) {
@@ -144,13 +140,11 @@ public class Movement {
 		entity.stopAll();
 
 		logger.debug("Move from {} to {}", entity.getCurrentTile(), targetCoords);
-		logger.debug("Target clip flags: {}", AbstractPathfinder.getClippingFlag(targetCoords.getLevel(), destX, destY));
 		
-		Path path = AbstractPathfinder.find(entity, targetCoords, true);
+		Path path = PathfinderProvider.find(entity, targetCoords, true);
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
-		//System.out.println("Path " + path.isSuccessful() + ", " + path.isMoveNear());
 		addWalkSteps(path.getPoints(), speed);
 		//entity.queueUpdateBlock(new FaceEntityBlock(null));
 		return true;
@@ -189,7 +183,7 @@ public class Movement {
 		}
 		entity.stopAll();
 
-		Path path = AbstractPathfinder.find(entity, target, false, AbstractPathfinder.SMART);
+		Path path = PathfinderProvider.find(entity, target, false, PathfinderProvider.SMART);
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
@@ -209,7 +203,7 @@ public class Movement {
 		}
 		entity.stopAll();
 
-		Path path = AbstractPathfinder.find(entity, location, false, AbstractPathfinder.SMART);
+		Path path = PathfinderProvider.find(entity, location, false, PathfinderProvider.SMART);
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
@@ -240,15 +234,14 @@ public class Movement {
 	 * @param step The {@link Waypoint.Step} to add
 	 */
 	private void addWalkStep (Waypoint step) {
-		//System.out.println(step);
-		walkSteps.add(step);		
+		waypoints.add(step);		
 	}
 
 	/**
 	 * Clears the current walking queue and sets a new one.
 	 * @param points The points of the path.
 	 */
-	public void setWalkSteps(Deque<Point> points) {
+	public void setWaypoints(Deque<Point> points) {
 		reset();
 		addWalkSteps(points, moveSpeed);
 	}
@@ -294,7 +287,7 @@ public class Movement {
 	private Waypoint addPoint(int x, int y, Waypoint last) {
 		Waypoint point = null;
 		int diffX = x - last.getX(), diffY = y - last.getY();
-		walkSteps.add(point = new Waypoint(x, y, last.getSpeed(), diffX, diffY));
+		waypoints.add(point = new Waypoint(x, y, last.getSpeed(), diffX, diffY));
 		return point;
 	}
 
@@ -303,14 +296,14 @@ public class Movement {
 	 * @return The next walk step
 	 */
 	private Waypoint getNextStep () {
-		return walkSteps.poll();
+		return waypoints.poll();
 	}
 	
 	/**
 	 * Gets the direction of the entitie's next walk step
 	 * @return The next walk direction
 	 */
-	public int getNextWalkDirection () {
+	public CompassPoint getNextWalkDirection () {
 		return nextWalkDirection;
 	}
 	
@@ -318,7 +311,7 @@ public class Movement {
 	 * Gets the direction of the entitie's next run step
 	 * @return The next run direction
 	 */
-	public int getNextRunDirection () {
+	public CompassPoint getNextRunDirection () {
 		return nextRunDirection;
 	}
 	
@@ -334,7 +327,7 @@ public class Movement {
 	 * Resets the walking queue.
 	 */
 	public void reset() {
-		walkSteps.clear();
+		waypoints.clear();
 	}
 	
 	/**
@@ -398,16 +391,16 @@ public class Movement {
 	 * Processes the movement, calculating the next walk/run steps and sending the viewport (if needed).
 	 */
 	public synchronized void process () {
-		if (teleportDestination != null) {
+		if (instantMoveDestination != null) {
 			nextMoveSpeed = MoveSpeed.INSTANT;
 			entity.setLastTile(entity.getCurrentTile());
 			//entity.getLastTile().copy(entity.getCurrentTile());
 			teleported = true;
-			if (teleportDestination.getRegionX() > 127 && entity instanceof Player
+			if (instantMoveDestination.getRegionX() > 127 && entity instanceof Player
 					&& entity.getCurrentTile().getRegionX() <= 127) {
 				((Player) entity).setLastStaticTile(entity.getCurrentTile());
 			}
-			entity.setCurrentTile(teleportDestination);
+			entity.setCurrentTile(instantMoveDestination);
 			//entity.getCurrentTile().copy(teleportDestination);
 			
 			if (entity instanceof Player) {
@@ -423,7 +416,7 @@ public class Movement {
 		Waypoint nextStep = getNextStep();
 		if (nextStep != null && (nextStep.getX() != entity.getCurrentTile().getX() || nextStep.getY() != entity.getCurrentTile().getY())) {
 			nextWalkDirection = nextStep.getDirection(entity.getCurrentTile().getX(), entity.getCurrentTile().getY());
-			if (nextWalkDirection == -1) {
+			if (nextWalkDirection == null) {
 				//changed this here - added line below, commented other
 				//nextWalkDirection = nextStep.getDirection(entity.getLastTile().getX(), entity.getLastTile().getY());
 				logger.warn("Next walk step is more than 1 tile away from the current position of the player! current="+entity.getCurrentTile()+", next={x="+nextStep.getX()+", y="+nextStep.getY()+"}");
@@ -435,26 +428,22 @@ public class Movement {
 			entity.setCurrentTile(next);
 
 			nextMoveSpeed = nextStep.getSpeed();
-			if (debug) {
-				System.out.println("Direction: "+nextWalkDirection+", x="+nextStep.getX()+", y="+nextStep.getY());
-			}
+			logger.debug("Direction: "+nextWalkDirection+", x="+nextStep.getX()+", y="+nextStep.getY());
 			if (nextMoveSpeed == MoveSpeed.RUN && entity instanceof Player && ((Player) entity).drainRunEnergy()) {
 				nextStep = getNextStep();
 				if (nextStep != null && (nextStep.getX() != entity.getCurrentTile().getX() || nextStep.getY() != entity.getCurrentTile().getY())) {
-					if (debug) {
-						System.out.println("Direction: "+nextRunDirection+", x="+nextStep.getX()+", y="+nextStep.getY());
-					}
+					logger.debug("Direction: "+nextRunDirection+", x="+nextStep.getX()+", y="+nextStep.getY());
 					nextRunDirection = nextStep.getDirection(entity.getCurrentTile().getX(), entity.getCurrentTile().getY());
-					if (nextRunDirection == -1) {
+					if (nextRunDirection == null) {
 						throw new RuntimeException("Next run step is more than 1 tile away from the current position of the player! current="+entity.getCurrentTile()+", next={x="+nextStep.getX()+", y="+nextStep.getY()+"}");
 					}
 					next = new CoordGrid(nextStep.getX(), nextStep.getY(), entity.getCurrentTile().getLevel());
 					entity.setCurrentTile(next);
 				} else {
-					nextRunDirection = -1;
+					nextRunDirection = null;
 				}
 			} else {
-				nextRunDirection = -1;
+				nextRunDirection = null;
 			}
 			if (entity instanceof Player) {
 				if (((Player) entity).getViewport().needsMapUpdate()) {
@@ -467,8 +456,8 @@ public class Movement {
 				destination = null;
 				onTarget = null;
 			}
-			nextWalkDirection = -1;
-			nextRunDirection = -1;
+			nextWalkDirection = null;
+			nextRunDirection = null;
 			nextMoveSpeed = MoveSpeed.STATIONARY;
 		}
 	}
@@ -478,7 +467,7 @@ public class Movement {
 	 */
 	public synchronized void moveAdjacent () {
 		
-		this.destination = AbstractPathfinder.findAdjacent(entity);
+		this.destination = PathfinderProvider.findAdjacent(entity);
 		final CoordGrid lastTile = entity.getCurrentTile();
 		if (destination != null) {
 			addWalkStep(new Waypoint(destination.getX(), destination.getY(), moveSpeed));
@@ -524,14 +513,13 @@ public class Movement {
 				//If the entity has teleported or no longer exists, remove them as a target
 				entity.stopAll();
 				stop();
-			} else if (targetEntity.getEntity().getCurrentTile().equals(entity.getCurrentTile())) {
-				moveAdjacent();
 			} else if (entity.getCurrentTile().withinDistance(
 					targetEntity.getEntity().getCurrentTile(), targetEntity.getRange())) {
 				if (targetEntity.onReachTarget()) {
 					stop();
 				}			
-			} else if (walkSteps.isEmpty()) {			
+			} else if (waypoints.isEmpty()) {
+				//TODO: Run on a different thread
 				if (!calculateTargetPath(targetEntity.getEntity())) {
 					stop();
 				}
@@ -553,30 +541,11 @@ public class Movement {
 	 * @return True if a path was successfully found, false otherwise
 	 */
 	private boolean calculateTargetPath (Entity target) {
-		if (!entity.isAdjacentTo(target.getCurrentTile(), true)) {
-			if (entity.getCurrentTile().equals(target.getCurrentTile())) {
-				//Both entities are on the same tile
-				this.destination = AbstractPathfinder.findAdjacent(target);
-				if (destination == null) {
-					return false;//Unable to find an adjacent tile
-				}
-				addWalkStep(new Waypoint(destination.getX(), destination.getY(), moveSpeed));
-			} else {
-				Path path = AbstractPathfinder.find(entity, target);
-				if (path == null) {
-					return false;//Unable to find a path to the target entity
-				}
-				if (path.getPoints().getLast().getX() == target.getCurrentTile().getX() 
-						&& path.getPoints().getLast().getY() == target.getCurrentTile().getY()) {
-					path.getPoints().pollLast();//Remove the last position if it's the same as the entity's current tile.
-					//Bit of a hack, but it'll do until someone can figure out how to make the pathfinder stop at an adjacent tile.
-				}
-				addWalkSteps(path.getPoints(), moveSpeed);
-				destination = new CoordGrid(path.getPoints().getLast().getX(), path.getPoints().getLast().getY(), entity.getCurrentTile().getLevel());
-			}
-		} else {
-			destination = entity.getCurrentTile();			
+		Path path = PathfinderProvider.find(entity, target);
+		if (path == null || !path.isSuccessful()) {
+			return false;//Unable to find a path to the target entity
 		}
+		addWalkSteps(path.getPoints(), moveSpeed);
 		return true;
 	}
 	
@@ -586,14 +555,14 @@ public class Movement {
 	 */
 	public synchronized void postSend () {
 		if (teleported) {
-			walkSteps.clear();//Just to make sure there's not any remaining steps from the old position
-			teleportDestination = null;
+			waypoints.clear();//Just to make sure there's not any remaining steps from the old position
+			instantMoveDestination = null;
 			this.teleported = false;
 		}
 	}
 	
 	public synchronized boolean hasSteps () {
-		return walkSteps.size() > 0;
+		return !waypoints.isEmpty();
 	}
 	
 	public void toggleDebug ()  {

@@ -29,7 +29,7 @@ public class BenchSitting implements PlayerActionHandler {
 	@Override
 	public boolean process(Player player) {
 		if (loop == 0) {
-			player.getMovement().teleportTo(location.getTile().getX(),
+			player.getMovement().setCoords(location.getTile().getX(),
 					location.getTile().getY(), location.getTile().getLevel());
 		} else if (loop == 1)
 			player.queueUpdateBlock(new FaceDirectionBlock(startTile));
@@ -43,7 +43,7 @@ public class BenchSitting implements PlayerActionHandler {
 
 	@Override
 	public void stop(Player player) {
-		player.getMovement().teleportTo(startTile);
+		player.getMovement().setCoords(startTile);
 		player.getModel().setBAS(player.getBASId());
 		player.getModel().refresh();
 	}

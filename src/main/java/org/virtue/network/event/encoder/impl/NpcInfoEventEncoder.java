@@ -28,6 +28,7 @@ import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.ServerProtocol;
@@ -42,7 +43,7 @@ import org.virtue.network.protocol.update.ref.Viewport;
  * @author Sundays211
  * @since 14/11/2014
  */
-public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
+public class NpcInfoEventEncoder implements EventEncoder<Viewport> {
 	
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
@@ -71,21 +72,21 @@ public class NpcUpdateEventEncoder implements EventEncoder<Viewport> {
 				iterator.remove();//Remove NPC from viewport
 				continue;
 			}
-			int walkDir = npc.getMovement().getNextWalkDirection();
-			int runDir = npc.getMovement().getNextRunDirection();
+			CompassPoint walkDir = npc.getMovement().getNextWalkDirection();
+			CompassPoint runDir = npc.getMovement().getNextRunDirection();
 			boolean needsUpdate = needsMaskUpdate(npc, context, block.offset());
 			if (needsUpdate) {
 				packUpdateBlock(npc, block, context);
 			}
-			buffer.putBits(1, (needsUpdate || walkDir != -1) ? 1 : 0);
-			if (walkDir != -1) {
-				buffer.putBits(2, runDir == -1 ? 1 : 2);
-				if (runDir != -1) {
+			buffer.putBits(1, (needsUpdate || walkDir != null) ? 1 : 0);
+			if (walkDir != null) {
+				buffer.putBits(2, runDir == null ? 1 : 2);
+				if (runDir != null) {
 					buffer.putBits(1, 1);
 				}
-				buffer.putBits(3, walkDir);
-				if (runDir != -1) {
-					buffer.putBits(3, runDir);
+				buffer.putBits(3, walkDir.getID());
+				if (runDir != null) {
+					buffer.putBits(3, runDir.getID());
 				}
 				buffer.putBits(1, needsUpdate ? 1 : 0);
 			} else if (needsUpdate) {

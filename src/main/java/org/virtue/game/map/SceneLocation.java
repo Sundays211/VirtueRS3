@@ -74,7 +74,6 @@ public class SceneLocation extends Node {
 		this.baseTile = tile;
 		this.shape = shape;
 		this.rotation = rotation;
-		super.name = getLocType().name;
 		if ((rotation & 2) == 0) {
 			super.setSizeX(getLocType().sizeX);
 			super.setSizeY(getLocType().sizeY);
@@ -82,6 +81,11 @@ public class SceneLocation extends Node {
 			super.setSizeX(getLocType().sizeY);
 			super.setSizeY(getLocType().sizeX);
 		}
+	}
+
+	@Override
+	public String getName() {
+		return getLocType().name;
 	}
 	
 	/**

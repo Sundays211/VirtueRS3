@@ -26,6 +26,7 @@ import java.security.MessageDigest;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.ServerProtocol;
@@ -105,8 +106,8 @@ public class PlayerInfoEventEncoder implements EventEncoder<Viewport> {
 					packUpdateBlock(p, block, context, false);
 				}
 				MoveSpeed speed = p.getMovement().getNextMoveSpeed();
-				int walkDir = p.getMovement().getNextWalkDirection();
-				int runDir = p.getMovement().getNextRunDirection();
+				CompassPoint walkDir = p.getMovement().getNextWalkDirection();
+				CompassPoint runDir = p.getMovement().getNextRunDirection();
 				if (speed == MoveSpeed.INSTANT) {
 					buffer.putBits(1, 1);
 					buffer.putBits(1, hasExtendedInfo ? 1 : 0);
@@ -129,14 +130,14 @@ public class PlayerInfoEventEncoder implements EventEncoder<Viewport> {
 						buffer.putBits(3, 4);
 						buffer.putBits(30, (yOffset & 0x3fff) + ((xOffset & 0x3fff) << 14) + ((planeOffset & 0x3) << 28));
 					}
-				} else if (walkDir != -1) {
-					boolean running = (runDir != -1);
-					int dx = DirectionUtility.DIRECTION_DELTA_X[walkDir];//running ? runDir : walkDir
-					int dy = DirectionUtility.DIRECTION_DELTA_Y[walkDir];//running ? runDir : walkDir
+				} else if (walkDir != null) {
+					boolean running = (runDir != null);
+					int dx = walkDir.getDeltaX();//running ? runDir : walkDir
+					int dy = walkDir.getDeltaY();//running ? runDir : walkDir
 					int opcode;
-					if (runDir != -1) {
-						dx += DirectionUtility.DIRECTION_DELTA_X[runDir];
-						dy += DirectionUtility.DIRECTION_DELTA_Y[runDir];
+					if (runDir != null) {
+						dx += runDir.getDeltaX();
+						dy += runDir.getDeltaY();
 						opcode = DirectionUtility.getPlayerRunningDirection(dx, dy);
 						if (opcode == -1) {
 							running = false;
@@ -187,7 +188,7 @@ public class PlayerInfoEventEncoder implements EventEncoder<Viewport> {
 							continue;
 						}
 						Player p2 = context.getLocalPlayers()[p2Index];
-						if (needsRemove(player, p2) || p2.getMovement().getNextWalkDirection() != -1 || p2.getMovement().teleported() || needsMaskUpdate(p2, context, block.offset())) {
+						if (needsRemove(player, p2) || p2.getMovement().getNextWalkDirection() != null || p2.getMovement().teleported() || needsMaskUpdate(p2, context, block.offset())) {
 							break;
 						}
 						skipCount++;

@@ -13,11 +13,6 @@ public abstract class Node {
 	 * The node id.
 	 */
 	protected int id;
-	
-	/**
-	 * The name.
-	 */
-	protected String name;
 
 	/**
 	 * The current location.
@@ -86,17 +81,7 @@ public abstract class Node {
 	 * Gets the name value.
 	 * @return The name.
 	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Sets the name value.
-	 * @param name The name to set.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+	public abstract String getName();
 
 	/**
 	 * Gets the currentTile value.

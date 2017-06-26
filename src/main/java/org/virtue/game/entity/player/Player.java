@@ -329,7 +329,6 @@ public class Player extends Entity {
 	public Player(Channel channel, String username, String password, CombatMode mode, ISAACCipher encoding,
 			ISAACCipher decoding) {
 		super(-1);
-		super.setName(username);
 		this.channel = channel;
 		this.ipAddress = channel.remoteAddress().toString().split(":")[0]
 				.replace("/", "");
@@ -562,9 +561,7 @@ public class Player extends Entity {
 		return display;
 	}
 
-	@Override
 	public void setName(String display) {
-		super.setName(display);
 		this.display = display;
 	}
 
@@ -1225,7 +1222,7 @@ public class Player extends Entity {
 		}
 		this.setFreezeDuration(3);
 		this.pvpDrops(this);
-		this.getMovement().teleportTo(Constants.START_TILE);
+		this.getMovement().setCoords(Constants.START_TILE);
 		getImpactHandler().restoreLifepoints();
 		this.getDispatcher().sendGameMessage("Oh dear, you have died.");
 		this.queueUpdateBlock(new AnimationBlock(-1));

@@ -122,7 +122,6 @@ public class NPC extends Entity {
 		this.type = Virtue.getInstance().getConfigProvider().getNpcTypes().list(typeID);
 		super.setCurrentTile(tile);
 		super.setLastTile(tile);
-		super.name = type.name;
 		super.setSize(type.size);
 		this.direction = CompassPoint.getById(this.type.respawnDirection);
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
@@ -163,6 +162,11 @@ public class NPC extends Entity {
 	 */
 	public NpcType getType () {
 		return type;
+	}
+
+	@Override
+	public String getName() {
+		return type.name;
 	}
 	
 	public NpcType getType (Player player) {

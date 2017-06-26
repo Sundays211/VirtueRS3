@@ -89,7 +89,7 @@ import org.virtue.network.event.encoder.impl.LogoutEventEncoder;
 import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.MessageEventEncoder;
 import org.virtue.network.event.encoder.impl.MusicEventEncoder;
-import org.virtue.network.event.encoder.impl.NpcUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.NpcInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
@@ -450,7 +450,7 @@ public class GameEventDispatcher {
 	 * Sends the npc update event
 	 */
 	public void sendNPCUpdate() {
-		sendEvent(NpcUpdateEventEncoder.class, player.getViewport());
+		sendEvent(NpcInfoEventEncoder.class, player.getViewport());
 	}
 
 	/**

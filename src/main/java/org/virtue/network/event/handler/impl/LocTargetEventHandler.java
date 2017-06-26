@@ -34,6 +34,7 @@ import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.LocTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
+import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -60,7 +61,10 @@ public class LocTargetEventHandler implements GameEventHandler<LocTargetEventCon
 				if (!player.getMovement().moveTo(location, context.getTargetCoordX(), context.getTargetCoordY())) {
 					return;//TODO: Add handing if the player cannot reach the location
 				}
-				player.getMovement().setOnTarget(() -> handle(player, context, location));
+				player.getMovement().setOnTarget(() -> {
+					player.queueUpdateBlock(new FaceDirectionBlock(coord));
+					handle(player, context, location);
+				});
 			}
 		}		
 	}

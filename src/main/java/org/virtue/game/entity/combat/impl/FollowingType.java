@@ -7,10 +7,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.path.Path;
+import org.virtue.game.map.movement.path.PathfinderProvider;
 import org.virtue.game.map.movement.path.Point;
-import org.virtue.game.map.movement.path.impl.AbstractPathfinder;
-import org.virtue.game.map.movement.path.impl.DumbPathfinder;
-import org.virtue.game.map.movement.path.impl.SmartPathfinder;
 import org.virtue.game.node.Node;
 
 /**
@@ -60,10 +58,10 @@ public abstract class FollowingType {
 			destination = lock.getCurrentTile();
 		}
 		if (!destination.equals(entity.getMovement().getDestination())) {
-			Path path = AbstractPathfinder.find(entity, destination, true, entity instanceof Player ? new SmartPathfinder() : new DumbPathfinder());
+			Path path = PathfinderProvider.find(entity, destination, true, entity instanceof Player ? PathfinderProvider.SMART : PathfinderProvider.DUMB);
 			if (entity.getMovement() != null && path != null) {
 				if (entity instanceof Player) {
-					entity.getMovement().setWalkSteps(path.getPoints());
+					entity.getMovement().setWaypoints(path.getPoints());
 					entity.getMovement().setDestination(destination);
 				} else {
 					Point step = path.getPoints().peek();

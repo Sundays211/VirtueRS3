@@ -35,7 +35,6 @@ import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
-import org.virtue.game.World;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
 

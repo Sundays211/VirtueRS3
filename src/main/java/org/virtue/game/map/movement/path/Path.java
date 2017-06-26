@@ -40,7 +40,7 @@ public class Path {
 	 * @param entity The entity.
 	 */
 	public void walk(Entity entity) {
-		entity.getMovement().setWalkSteps(points);
+		entity.getMovement().setWaypoints(points);
 	}
 
 	/**

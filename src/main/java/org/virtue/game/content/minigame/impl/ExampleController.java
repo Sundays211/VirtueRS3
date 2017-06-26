@@ -47,9 +47,9 @@ public class ExampleController implements Controller {
 		for (int i = 0; i < minigame.getTeams().size(); i++) {
 			for (Entity player : minigame.getTeams().get(i).getPlayers()) {
 				if (i == 0)
-					player.getMovement().teleportTo(new CoordGrid(1234, 4321, 0));
+					player.getMovement().setCoords(new CoordGrid(1234, 4321, 0));
 				else
-					player.getMovement().teleportTo(new CoordGrid(4321, 1234, 0));
+					player.getMovement().setCoords(new CoordGrid(4321, 1234, 0));
 			}
 		}
 	}

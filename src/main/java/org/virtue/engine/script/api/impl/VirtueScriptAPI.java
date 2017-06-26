@@ -1727,26 +1727,26 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#teleportEntity(org.virtue.game.entity.Entity, org.virtue.game.entity.region.Tile)
 	 */
 	@Override
-	public boolean teleportEntity(Entity entity, CoordGrid coords) {
-		return entity.getMovement().teleportTo(coords);
+	public void teleportEntity(Entity entity, CoordGrid coords) {
+		entity.getMovement().setCoords(coords);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#teleportEntity(org.virtue.game.entity.Entity, int, int, int)
 	 */
 	@Override
-	public boolean teleportEntity(Entity entity, int x, int y, int z) {
-		return entity.getMovement().teleportTo(x, y, z);
+	public void teleportEntity(Entity entity, int x, int y, int z) {
+		entity.getMovement().setCoords(x, y, z);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#teleportEntity(org.virtue.game.entity.Entity, int, int, int, int, int)
 	 */
 	@Override
-	public boolean teleportEntity(Entity entity, int level, int squareX,
+	public void teleportEntity(Entity entity, int level, int squareX,
 			int squareY, int localX, int localY) {
 		CoordGrid dest = new CoordGrid(localX, localY, level, squareX, squareY);
-		return entity.getMovement().teleportTo(dest);
+		entity.getMovement().setCoords(dest);
 	}
 
 	/* (non-Javadoc)
@@ -1755,7 +1755,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void teleportEntityBy(Entity entity, int xOff, int yOff, byte zOff) {
 		CoordGrid currentTile = entity.getCurrentTile();
-		entity.getMovement().teleportTo(CoordGrid.edit(currentTile, xOff, yOff, zOff));
+		entity.getMovement().setCoords(CoordGrid.edit(currentTile, xOff, yOff, zOff));
 	}
 
 	/* (non-Javadoc)

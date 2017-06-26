@@ -1,15 +1,14 @@
 package org.virtue.game.map.movement.path.impl;
 
-import static org.virtue.game.map.ClipFlag.*;
+import static org.virtue.game.map.ClipFlag.WALL_EAST;
+import static org.virtue.game.map.ClipFlag.WALL_NORTH;
+import static org.virtue.game.map.ClipFlag.WALL_SOUTH;
+import static org.virtue.game.map.ClipFlag.WALL_WEST;
 
 import org.virtue.game.World;
-import org.virtue.game.entity.Entity;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.SceneLocation;
-import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Pathfinder;
 import org.virtue.game.map.square.MapSquare;
-import org.virtue.game.node.Node;
 
 /**
  * Represents a pathfinder.
@@ -17,21 +16,6 @@ import org.virtue.game.node.Node;
  *
  */
 public abstract class AbstractPathfinder implements Pathfinder {
-
-	/**
-	 * The smart path finder.
-	 */
-	public static final Pathfinder SMART = new SmartPathfinder();
-
-	/**
-	 * The dumb path finder.
-	 */
-	public static final DumbPathfinder DUMB = new DumbPathfinder();
-
-	/**
-	 * The projectile path finder.
-	 */
-	public static final ProjectilePathfinder PROJECTILE = new ProjectilePathfinder();
 
 	/**
 	 * The south direction flag.
@@ -74,122 +58,13 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	public static final int NORTH_EAST_FLAG = NORTH_FLAG | EAST_FLAG;
 
 	/**
-	 * Finds a path from the location to the end location.
-	 * @param startCoords The start coordinates.
-	 * @param size The mover size.
-	 * @param end The end coords.
-	 * @param sizeX The x-size of the destination node.
-	 * @param sizeY The y-size of the destination node.
-	 * @param rotation The destination location rotation.
-	 * @param type The destination location type.
-	 * @param walkingFlag The  location walking flag.
-	 * @param near If we should find the nearest location if a path can't be found.
-	 * @return The path.
-	 */
-	public abstract Path find(CoordGrid startCoords, int size, CoordGrid end, int sizeX, int sizeY, int rotation, int type, int walkingFlag, boolean near);
-
-	/**
-	 * Finds a path from the start coords to the end coords.
-	 * @param mover The moving entity.
-	 * @param destination The destination node.
-	 * @return The path.
-	 */
-	public static Path find(Entity mover, Node destination) {
-		return find(mover, destination, true, SMART);
-	}
-
-	/**
-	 * Finds a path from the start coords to the end coords.
-	 * @param mover The moving entity.
-	 * @param destination The destination node.
-	 * @param near If we should move near the end location, if we can't reach it.
-	 * @param finder The pathfinder to use.
-	 * @return The path.
-	 */
-	public static Path find(Entity mover, Node destination, boolean near, Pathfinder finder) {
-		return find(mover.getCurrentTile(), mover.getSize(), destination, near, finder);
-	}
-
-	/**
-	 * Finds a path from the start coords to the end coords.
-	 * @param mover The moving entity.
-	 * @param destination The destination node.
-	 * @return The path.
-	 */
-	public static Path find(CoordGrid start, Node destination) {
-		return find(start, destination, true, SMART);
-	}
-
-	/**
-	 * Finds a path from the start coords to the end coords.
-	 * @param mover The moving entity.
-	 * @param destination The destination node.
-	 * @param near If we should move near the end coords, if we can't reach it.
-	 * @param finder The pathfinder to use.
-	 * @return The path.
-	 */
-	public static Path find(CoordGrid start, Node destination, boolean near, Pathfinder finder) {
-		return find(start, 1, destination, near, finder);
-	}
-	
-	public static Path find(Entity mover, CoordGrid destination, boolean near) {
-		return find(mover.getCurrentTile(), mover.getSize(), destination, near, SMART);
-	}
-	
-	public static Path find(Entity mover, CoordGrid destination, boolean near, Pathfinder finder) {
-		return find(mover.getCurrentTile(), mover.getSize(), destination, near, finder);
-	}
-	
-	public static Path find(CoordGrid start, int moverSize, CoordGrid destination, boolean near, Pathfinder finder) {
-		synchronized (finder) {
-			return finder.find(start, moverSize, destination, 0, 0, 0, 0, 0, near);
-		}
-	}
-
-	/**
-	 * Finds a path from the start coords to the end coords.
-	 * @param mover The moving entity.
-	 * @param destination The destination node.
-	 * @param near If we should move near the end coords, if we can't reach it.
-	 * @param finder The pathfinder to use.
-	 * @return The path.
-	 */
-	public static Path find(CoordGrid start, int moverSize, Node destination, boolean near, Pathfinder finder) {
-		if (destination instanceof SceneLocation) {
-			SceneLocation object = (SceneLocation) destination;
-			int shape = object.getShape();
-			int rotation = object.getRotation();
-			if (shape == 10 || shape == 11 || shape == 22) {
-				int sizeX = object.getSizeX();
-				int sizeY = object.getSizeY();
-				int walkingFlag = object.getLocType().walkingFlag;
-				if (rotation != 0) {
-					walkingFlag = (walkingFlag << rotation & 0xf) + (walkingFlag >> 4 - rotation);
-				}
-				return finder.find(start, moverSize, destination.getCurrentTile(), sizeX, sizeY, 0, 0, walkingFlag, near);
-			}
-			return finder.find(start, moverSize, destination.getCurrentTile(), 0, 0, rotation, 1 + shape, 0, near);
-		}
-		int size = 0;
-		if (destination instanceof Entity) {
-			size = destination.getSize();
-		}
-		//TODO:	else if (destination instanceof GroundItem && !RegionManager.isTeleportPermitted(destination.getCurrentTile())) {
-		//			size = 1;
-		//		}
-		synchronized (finder) {
-			return finder.find(start, moverSize, destination.getCurrentTile(), size, size, 0, 0, 0, near);
-		}
-	}
-
-	/**
 	 * Gets the clipping flag on the given location.
 	 * @param z The plane.
 	 * @param x The x-coordinate.
 	 * @param y The y-coordinate.
 	 * @return The clipping flag.
 	 */
-	public static int getClippingFlag(int z, int x, int y) {
+	public int getClippingFlag(int z, int x, int y) {
 		CoordGrid tile = new CoordGrid(x, y, z);
 		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
 		if (region == null || !region.isLoaded()) {
@@ -205,7 +80,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param y The y-coordinate.
 	 * @return The projectile clipping flag.
 	 */
-	public static int getProjectileFlag(int z, int x, int y) {
+	public int getProjectileFlag(int z, int x, int y) {
 		return getClippingFlag(z, x, y); //TODO:
 	}
 
@@ -221,7 +96,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param location The viewport location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean canDecorationInteract(int curX, int curY, int size, int destX, int destY, int rotation, int shape, int z) {
+	public boolean canDecorationInteract(int curX, int curY, int size, int destX, int destY, int rotation, int shape, int z) {
 		if (size != 1) {
 			if (destX >= curX && destX <= (curX + size) - 1 && destY >= destY && destY <= (destY + size) - 1) {
 				return true;
@@ -346,7 +221,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param location The viewport location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean canDoorInteract(int curX, int curY, int size, int destX, int destY, int shape, int rotation, int z) {
+	public boolean canDoorInteract(int curX, int curY, int size, int destX, int destY, int shape, int rotation, int z) {
 		if (size != 1) {
 			if (destX >= curX && destX <= size + curX - 1 && destY >= destY && destY <= destY + size - 1) {
 				return true;
@@ -597,7 +472,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param sizeY The destination node y-size.
 	 * @return {@code True} if so.
 	 */
-	public static boolean isStandingIn(int x, int y, int moverSizeX, int moverSizeY, int destX, int destY, int sizeX, int sizeY) {
+	public boolean isStandingIn(int x, int y, int moverSizeX, int moverSizeY, int destX, int destY, int sizeX, int sizeY) {
 		if (x >= sizeX + destX || moverSizeX + x <= destX) {
 			return false;
 		}
@@ -621,7 +496,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param location The viewport location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean canInteract(int x, int y, int moverSize, int destX, int destY, int sizeX, int sizeY, int walkFlag, int z) {
+	public boolean canInteract(int x, int y, int moverSize, int destX, int destY, int sizeX, int sizeY, int walkFlag, int z) {
 		if (moverSize > 1) {
 			if (isStandingIn(x, y, moverSize, moverSize, destX, destY, sizeX, sizeY)) {
 				return true;
@@ -663,7 +538,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param location The viewport location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean canInteractSized(int curX, int curY, int moverSizeX, int moverSizeY, int destX, int destY, int sizeX, int sizeY, int walkingFlag, int z) {
+	public boolean canInteractSized(int curX, int curY, int moverSizeX, int moverSizeY, int destX, int destY, int sizeX, int sizeY, int walkingFlag, int z) {
 		int fromCornerY = curY + moverSizeY;
 		int fromCornerX = curX + moverSizeX;
 		int toCornerX = sizeX + destX;
@@ -732,21 +607,5 @@ public abstract class AbstractPathfinder implements Pathfinder {
 			}
 		}
 		return false;
-	}
-
-	public static CoordGrid findAdjacent(Entity entity) {
-		if (find(entity, entity.getCurrentTile().copyNew(-1, 0, 0), false, AbstractPathfinder.DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(-1, 0, 0);
-		}
-		if (find(entity, entity.getCurrentTile().copyNew(0, -1, 0), false, AbstractPathfinder.DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(0, -1, 0);
-		}
-		if (find(entity, entity.getCurrentTile().copyNew(1, 0, 0), false, AbstractPathfinder.DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(1, 0, 0);
-		}
-		if (find(entity, entity.getCurrentTile().copyNew(0, 1, 0), false, AbstractPathfinder.DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(0, 1, 0);
-		}
-		return null;
 	}
 }

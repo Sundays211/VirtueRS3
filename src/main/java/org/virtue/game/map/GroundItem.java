@@ -227,6 +227,6 @@ public class GroundItem extends Item {
 	 */
 	@Override
 	public String toString() {
-		return "GroundItem [tile=" + tile + ", id=" + id + ", name=" + name + "]";
+		return "GroundItem [tile=" + tile + ", id=" + id + ", name=" + getName() + "]";
 	}
 }
