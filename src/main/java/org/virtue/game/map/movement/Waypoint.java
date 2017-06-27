@@ -103,5 +103,10 @@ public final class Waypoint {
 	public MoveSpeed getSpeed() {
 		return speed;
 	}
+	
+	@Override
+	public String toString() {
+		return (x >> 6) + "," + (y >> 6) + "," + (x & 0x3f) + "," + (y & 0x3f);
+	}
 
 }

@@ -38,7 +38,10 @@ public class WalkEventHandler implements GameEventHandler<MoveEventContext> {
 		if (player.getImpactHandler().isDead()) {
 			return;//No need for a dead player to move.
 		}
-		MoveSpeed speed = player.getMovement().getMoveSpeed() == MoveSpeed.RUN ? MoveSpeed.WALK : MoveSpeed.RUN;
+		MoveSpeed speed = player.getMovement().getMoveSpeed();
+		if (context.forceRun()) {
+			speed = speed == MoveSpeed.RUN ? MoveSpeed.WALK : MoveSpeed.RUN;
+		}		
 		boolean success = player.getMovement().moveTo(context.getBaseX(), context.getBaseY(), speed);
 		if (success) {
 			player.setPaused(false);

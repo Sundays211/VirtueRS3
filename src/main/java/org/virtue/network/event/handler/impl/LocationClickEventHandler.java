@@ -38,6 +38,7 @@ import org.virtue.network.event.context.impl.in.LocationClickEventContext;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
+import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -75,7 +76,11 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 				handleInteraction(player, location, context);				
 			} else {
 				player.setPaused(false);
-				if (!player.getMovement().moveTo(location, context.getBaseX(), context.getBaseY())) {
+				MoveSpeed speed = player.getMovement().getMoveSpeed();
+				if (context.forceRun()) {
+					speed = speed == MoveSpeed.RUN ? MoveSpeed.WALK : MoveSpeed.RUN;
+				}
+				if (!player.getMovement().moveTo(location, context.getBaseX(), context.getBaseY(), speed)) {
 					player.getDispatcher().sendGameMessage("You can't reach that.");
 					return;
 				}

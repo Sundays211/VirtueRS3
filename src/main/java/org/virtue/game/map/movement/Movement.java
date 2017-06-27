@@ -191,12 +191,16 @@ public class Movement {
 		return true;
 	}
 	
+	public synchronized boolean moveTo (SceneLocation location, int x, int y) {
+		return moveTo(location, x, y, moveSpeed);
+	}
+	
 	/**
 	 * Moves the entity to a tile adjacent to the specified object
 	 * @param object The {@link SceneLocation} to move towards
 	 * @return true if the movement was successful, false otherwise
 	 */
-	public synchronized boolean moveTo (SceneLocation location, int x, int y) {
+	public synchronized boolean moveTo (SceneLocation location, int x, int y, MoveSpeed speed) {
 		entity.interuptAction();
 		if (!entity.canMove()) {
 			return false;
@@ -207,7 +211,7 @@ public class Movement {
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
-		addWalkSteps(path.getPoints(), moveSpeed);
+		addWalkSteps(path.getPoints(), speed);
 		entity.queueUpdateBlock(new FaceDirectionBlock(destination));
 		return true;
 	}
