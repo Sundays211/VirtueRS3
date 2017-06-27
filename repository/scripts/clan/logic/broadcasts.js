@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals CLAN_ENGINE */
-var varbit = require('../../core/var/bit');
+var varbit = require('engine/var/bit');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

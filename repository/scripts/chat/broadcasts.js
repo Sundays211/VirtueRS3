@@ -22,8 +22,8 @@
 /* globals EventType, Java */
 var World = Java.type('org.virtue.game.World');
 
-var messages = require('./messages');
-var util = require('../core/util');
+var chat = require('chat');
+var util = require('util');
 
 /**
  * 
@@ -39,7 +39,7 @@ module.exports = (function () {
 			var args = ctx.cmdArgs;
 			
 			if (args.length < 1) {
-				messages.sendCommandResponse(player, "<col=0099CC>ERROR! Message is to short or needs a space</col>", ctx.console);
+				chat.sendCommandResponse(player, "<col=0099CC>ERROR! Message is to short or needs a space</col>", ctx.console);
 				return;
 			}
 			var message = args[0].charAt(0).toUpperCase() + args[0].substr(1).toLowerCase();
@@ -47,7 +47,7 @@ module.exports = (function () {
 				message += " "+args[i];
 			}
 			World.getInstance().sendAdminBroadcast("[" + util.getName(player) + "]: " + message);
-			messages.sendCommandResponse(player, "Sent Broadcast accross the server.", ctx.console);
+			chat.sendCommandResponse(player, "Sent Broadcast accross the server.", ctx.console);
 		});
 	}
 })();

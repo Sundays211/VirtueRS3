@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var map = require('../map');
-var anim = require('../core/anim');
+var map = require('map');
+var anim = require('anim');
 
 module.exports = (function () {
 	return {

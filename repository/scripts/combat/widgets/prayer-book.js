@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var anim = require('../../core/anim');
+var anim = require('anim');
 
 /** 
  * @author Im Frizzy <skype:kfriz1998>

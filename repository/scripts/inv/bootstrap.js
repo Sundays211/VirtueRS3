@@ -4,7 +4,6 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./toolbelt'),
-		require('./money-pouch'),
 		require('./worn-equipment'),
 		require('./bank'),
 		require('./backpack'),

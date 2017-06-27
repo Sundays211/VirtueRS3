@@ -20,18 +20,18 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, Stat */
-var varp = require('../../core/var/player');
-var varbit = require('../../core/var/bit');
+var varp = require('engine/var/player');
+var varbit = require('engine/var/bit');
 
-var anim = require('../../core/anim');
-var config = require('../../core/config');
-var util = require('../../core/util');
-var inv = require('../../inv');
-var dialog = require('../../dialog');
-var widget = require('../../widget');
+var anim = require('anim');
+var config = require('engine/config');
+var util = require('util');
+var inv = require('inv');
+var dialog = require('dialog');
+var widget = require('widget');
+var stat = require('stat');
 
 var makex = require('../makex');
-var stat = require('../common/stat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

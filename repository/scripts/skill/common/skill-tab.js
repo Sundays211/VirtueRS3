@@ -21,8 +21,8 @@
  */
 /* globals EventType */
 
-var util = require('../../core/util');
-var widget = require('../../widget');
+var util = require('util');
+var widget = require('widget');
 
 module.exports = (function () {
 	return {

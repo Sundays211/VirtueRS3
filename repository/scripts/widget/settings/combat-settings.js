@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varbit = require('../../core/var/bit');
-var util = require('../../core/util');
-var chat = require('../../chat');
+var varbit = require('engine/var/bit');
+var util = require('util');
+var chat = require('chat');
 
 module.exports = (function () {
 	return {

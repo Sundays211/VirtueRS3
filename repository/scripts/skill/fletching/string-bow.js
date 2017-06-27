@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varp = require('../../core/var/player');
+var varp = require('engine/var/player');
 
 var makex = require('../makex');
 var common = require('./common');

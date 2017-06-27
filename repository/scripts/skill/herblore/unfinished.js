@@ -3,11 +3,12 @@
  * @since 12/20/2016
  */
 /* globals EventType */
-var varp = require('../../core/var/player');
+var varp = require('engine/var/player');
+
+var config = require('engine/config');
+var util = require('util');
 
 var makex = require('../makex');
-var config = require('../../core/config');
-var util = require('../../core/util');
 var common = require('./common.js');
 var UNFINISHED_POTIONS = 6842;
 

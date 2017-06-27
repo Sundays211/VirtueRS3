@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varbit = require('../core/var/bit');
+var varbit = require('engine/var/bit');
 
-var util = require('../core/util');
-var config = require('../core/config');
-var chat = require('../chat');
-var common = require('./common');
+var util = require('util');
+var config = require('engine/config');
+var chat = require('chat');
+var common = require('inv/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

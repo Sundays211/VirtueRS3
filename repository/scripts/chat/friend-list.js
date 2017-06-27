@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, ChatListType */
-var widget = require('../widget');
-var util = require('../core/util');
-var dialog = require('../dialog');
-var chat = require('../chat');
+var widget = require('widget');
+var util = require('util');
+var dialog = require('dialog');
+var chat = require('chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

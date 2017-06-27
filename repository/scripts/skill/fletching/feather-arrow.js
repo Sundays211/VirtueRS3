@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var varp = require('../../core/var/player');
+var varp = require('engine/var/player');
 
-var util = require('../../core/util');
+var util = require('util');
 var makex = require('../makex');
 var common = require('./common');
 var FEATHER_ARROWS = 6966;

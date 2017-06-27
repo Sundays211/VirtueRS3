@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals MesType */
-var chat = require('../../chat');
-var varbit = require('../../core/var/bit');
+var chat = require('chat');
+var varbit = require('engine/var/bit');
 var clan = require('./core');
 
 /**

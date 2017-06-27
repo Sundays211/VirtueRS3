@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var config = require('../../core/config');
-var util = require('../../core/util');
-var chat = require('../../chat');
-var inv = require('../../inv');
-var map = require('../../map');
-var loc = require('../../map/location');
+var config = require('engine/config');
+var util = require('util');
+var chat = require('chat');
+var inv = require('inv');
+var map = require('map');
+var loc = require('map/location');
+var stat = require('stat');
 
-var stat = require('../common/stat');
 var mining = require('./common');
 
 /**

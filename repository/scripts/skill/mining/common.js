@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 /* globals Stat */
-var chat = require('../../chat');
-var util = require('../../core/util');
-var anim = require('../../core/anim');
-var stat = require('../common/stat');
+var chat = require('chat');
+var util = require('util');
+var anim = require('anim');
+var stat = require('stat');
+
 var pickaxe = require('./pickaxe');
 
 /**

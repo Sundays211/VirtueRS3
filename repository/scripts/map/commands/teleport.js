@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var coords = require('../coords');
+var coords = require('map/coords');
 
-var dialog = require('../../dialog');
-var chat = require('../../chat');
-var entityMap = require('../entity');
-var common = require('../common');
+var dialog = require('dialog');
+var chat = require('chat');
+var entityMap = require('map/entity');
+var common = require('map/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

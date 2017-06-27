@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat, Inv */
-var stat = require('../common/stat');
-var inv = require('../../inv');
-var chat = require('../../chat');
-var anim = require('../../core/anim');
+var stat = require('stat');
+var inv = require('inv');
+var chat = require('chat');
+var anim = require('anim');
 
 /**
  * @author Kayla

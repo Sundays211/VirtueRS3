@@ -22,12 +22,12 @@
 /* globals EventType, ENGINE, Java */
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
-var coords = require('../map/coords');
+var coords = require('map/coords');
 
-var chat = require('../chat');
-var widget = require('../widget');
-var util = require('../core/util');
-var map = require('../map');
+var chat = require('chat');
+var widget = require('widget');
+var util = require('util');
+var map = require('map');
 
 module.exports = (function () {
 	return {

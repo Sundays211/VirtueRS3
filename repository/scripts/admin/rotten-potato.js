@@ -22,14 +22,14 @@
 /* globals EventType, Java, ENGINE, Inv */
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
-var inv = require('../inv');
-var map = require('../map');
-var entityMap = require('../map/entity');
-var widget = require('../widget');
-var util = require('../core/util');
-var stat = require('../skill');
-var chat = require('../chat');
-var dialog = require('../dialog');
+var inv = require('inv');
+var map = require('map');
+var entityMap = require('map/entity');
+var widget = require('widget');
+var util = require('util');
+var stat = require('stat');
+var chat = require('chat');
+var dialog = require('dialog');
 
 module.exports = (function () {
 	return {

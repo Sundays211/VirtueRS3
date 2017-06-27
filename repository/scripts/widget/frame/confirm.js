@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Java */
-var varbit = require('../../core/var/bit');
-var varp = require('../../core/var/player');
-var varc = require('../../core/var/client');
+var varbit = require('engine/var/bit');
+var varp = require('engine/var/player');
+var varc = require('engine/var/client');
 
-var common = require('../common');
-var util = require('../../core/util');
+var widget = require('widget');
+var util = require('util');
 
 var CombatMode = Java.type('org.virtue.game.entity.combat.CombatMode');
 /**
@@ -39,7 +39,7 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 26, function (ctx) {
-			common.setEvents(ctx.player, 26, 22, -1, -1, 2);
+			widget.setEvents(ctx.player, 26, 22, -1, -1, 2);
 		});
 		
 		scriptManager.bind(EventType.IF_BUTTON, 26, function (ctx) {
@@ -56,7 +56,7 @@ module.exports = (function () {
 					} else {//EoC Mode
 						setLegacyCombatMode(player);
 					}
-					common.close(player, 1477, 871);
+					widget.close(player, 1477, 871);
 					return;
 				case 10://Switch between eoc and legacy interface mode
 					if (varbit(player, 27169) == 1) {//Legacy mode
@@ -64,7 +64,7 @@ module.exports = (function () {
 					} else {//EoC Mode
 						setLegacyInterfaceMode(player);
 					}
-					common.close(player, 1477, 871);
+					widget.close(player, 1477, 871);
 					return;
 				case 7://Reset keybinds
 				case 8://Delete friend
@@ -135,7 +135,7 @@ module.exports = (function () {
 		varp(player, 4012, 528982);
 		varp(player, 260, 0);
 		varc(player, 779, 124);
-		common.openOverlaySub(player, 6, 1503, true);
+		widget.openOverlaySub(player, 6, 1503, true);
 	}
 	
 	function setEocInterfaceMode (player) {
@@ -171,9 +171,9 @@ module.exports = (function () {
 		varp(player, 260, 0);
 		varc(player, 779, 2704);
 		
-		common.openOverlaySub(player, 6, 1460, true);
-		common.openOverlaySub(player, 7, 1452, true);
-		common.openOverlaySub(player, 8, 1449, true);
+		widget.openOverlaySub(player, 6, 1460, true);
+		widget.openOverlaySub(player, 7, 1452, true);
+		widget.openOverlaySub(player, 8, 1449, true);
 		util.runClientScript(player, 8862, [5, 1]);
 	}
 	

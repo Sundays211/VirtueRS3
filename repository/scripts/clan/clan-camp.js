@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv */
-var dialog = require('../dialog');
-var util = require('../core/util');
-var inv = require('../inv');
-var chat = require('../chat');
+var dialog = require('dialog');
+var util = require('util');
+var inv = require('inv');
+var chat = require('chat');
+
 var clan = require('./logic/core');
 
 /**

@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType, MAP_ENGINE */
-var coords = require('../coords');
+var coords = require('map/coords');
 
-var chat = require('../../chat');
-var entityMap = require('../entity');
-var common = require('../common');
-var location = require('../location');
+var chat = require('chat');
+var entityMap = require('map/entity');
+var common = require('map/common');
+var location = require('map/location');
 
 /**
  * @author Kayla

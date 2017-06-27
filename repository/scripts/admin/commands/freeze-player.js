@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var anim = require('../../core/anim');
-var dialog = require('../../dialog');
-var chat = require('../../chat');
-var util = require('../../core/util');
+var anim = require('anim');
+var dialog = require('dialog');
+var chat = require('chat');
+var util = require('util');
 
 /**
  * @Author Kayla

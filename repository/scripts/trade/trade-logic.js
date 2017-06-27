@@ -20,13 +20,13 @@
  * SOFTWARE.
  */
 /* globals Inv, ENGINE */
-var varbit = require('../core/var/bit');
-var CONST = require('../core/const');
+var varbit = require('engine/var/bit');
+var CONST = require('const');
 
-var config = require('../core/config');
-var util = require('../core/util');
-var inv = require('../inv');
-var chat = require('../chat');
+var config = require('engine/config');
+var util = require('util');
+var inv = require('inv');
+var chat = require('chat');
 
 var loan = require('./loan');
 
