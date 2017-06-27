@@ -8,9 +8,6 @@
  */
 function getAllModules () {// jshint ignore:line
 	var modules = [
-	    'items',
-		'items/degradables',
-		'items/itemUse',
 		'admin',
 		'area',
 		'area/fremennik',
@@ -19,30 +16,32 @@ function getAllModules () {// jshint ignore:line
 		'area/kandarin',
 		'chat',
 		'clan',
-		'combat/widgets',
+		'combat',
 		'inv',
+	    'items',
+		'items/item-use',
+		'map',
+		'quest',
 		'shop',
-		'trade',
-		'map/commands',
 		'skill/common',
 		'skill/agility',
-		'skill/prayer',
-		'skill/runecrafting',
-		'skill/mining',
-		'skill/thieving',
 		'skill/cooking',
 		'skill/crafting',
-		'skill/fletching',
 		'skill/farming',
+		'skill/fletching',
 		'skill/herblore',
+		'skill/invention',
 		'skill/magic',
+		'skill/makex',
+		'skill/mining',
+		'skill/prayer',
+		'skill/runecrafting',
 		'skill/smithing',
 		'skill/summoning',
-		'skill/invention',
-		'skill/makex',
-		'quest',
-		'widget/settings',
-		'widget/frame'
+		'skill/thieving',
+		'trade',
+		'widget/frame',
+		'widget/settings'
 	];
 	
 	var ArrayList = Java.type('java.util.ArrayList');
@@ -101,8 +100,8 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 	return {
 		CraftProcess : require(cwd+'/skill/makex/progress'),
 		CraftDialog : require(cwd+'/skill/makex/selection'),
-		MoneyPouch : require(cwd+'/inv/money-pouch'),
-		WornEquipment : require(cwd+'/inv/worn-equipment'),
+		MoneyPouch : require(cwd+'/node_modules/inv/money-pouch'),
+		WornEquipment : require(cwd+'/node_modules/inv/equipment'),
 		Toolbelt : require(cwd+'/inv/toolbelt'),
 		Fletching : require(cwd+'/skill/fletching/fletch-log')
 	};
