@@ -20,6 +20,7 @@ function getAllModules () {// jshint ignore:line
 		'inv',
 	    'items',
 		'items/item-use',
+		'items/degradables',
 		'map',
 		'quest',
 		'shop',

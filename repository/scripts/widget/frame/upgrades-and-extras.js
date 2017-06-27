@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('../../core/util');
-var widget = require('../common');
-var overlay = require('./overlay');
+var util = require('util');
+var widget = require('widget');
+var overlay = require('widget/overlay');
 
 module.exports = (function () {
 	return {

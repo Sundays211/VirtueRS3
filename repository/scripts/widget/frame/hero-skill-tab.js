@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('../../core/util');
-var widget = require('../common');
+var util = require('util');
+var widget = require('widget');
 
 module.exports = (function () {
 	return {
