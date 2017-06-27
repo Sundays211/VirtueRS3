@@ -1,5 +1,7 @@
 package org.virtue.game.map.movement.path.impl;
 
+import static org.virtue.game.map.ClipFlag.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +114,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 			found = true;
 			switch (dir) {
 			case NORTH:
-				if ((getClippingFlag(z, x, y + 1) & 0x12c0120) != 0) {
+				if ((getClippingFlag(z, x, y + 1) & TRAVERSABLE_NORTH) != 0) {
 					found = false;
 					break;
 				}
@@ -120,7 +122,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y++;
 				break;
 			case NORTHEAST:
-				if ((getClippingFlag(z, x + 1, y) & 0x12c0180) != 0 || (getClippingFlag(z, x, y + 1) & 0x12c0120) != 0 || (getClippingFlag(z, x + 1, y + 1) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x + 1, y) & TRAVERSABLE_EAST) != 0 || (getClippingFlag(z, x, y + 1) & TRAVERSABLE_NORTH) != 0 || (getClippingFlag(z, x + 1, y + 1) & TRAVERSABLE_NORTH_WEST) != 0) {
 					found = false;
 					break;
 				}
@@ -129,7 +131,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y++;
 				break;
 			case EAST:
-				if ((getClippingFlag(z, x + 1, y) & 0x12c0180) != 0) {
+				if ((getClippingFlag(z, x + 1, y) & TRAVERSABLE_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -137,7 +139,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				x++;
 				break;
 			case SOUTHEAST:
-				if ((getClippingFlag(z, x + 1, y) & 0x12c0180) != 0 || (getClippingFlag(z, x, y - 1) & 0x12c0102) != 0 || (getClippingFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y) & TRAVERSABLE_EAST) != 0 || (getClippingFlag(z, x, y - 1) & TRAVERSABLE_SOUTH) != 0 || (getClippingFlag(z, x + 1, y - 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -146,7 +148,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case SOUTH:
-				if ((getClippingFlag(z, x, y - 1) & 0x12c0102) != 0) {
+				if ((getClippingFlag(z, x, y - 1) & TRAVERSABLE_SOUTH) != 0) {
 					found = false;
 					break;
 				}
@@ -154,7 +156,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case SOUTHWEST:
-				if ((getClippingFlag(z, x - 1, y) & 0x12c0108) != 0 || (getClippingFlag(z, x, y - 1) & 0x12c0102) != 0 || (getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & TRAVERSABLE_WEST) != 0 || (getClippingFlag(z, x, y - 1) & TRAVERSABLE_SOUTH) != 0 || (getClippingFlag(z, x - 1, y - 1) & TRAVERSABLE_SOUTH_WEST) != 0) {
 					found = false;
 					break;
 				}
@@ -163,7 +165,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case WEST:
-				if ((getClippingFlag(z, x - 1, y) & 0x12c0108) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & TRAVERSABLE_WEST) != 0) {
 					found = false;
 					break;
 				}
@@ -171,7 +173,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				x--;
 				break;
 			case NORTHWEST:
-				if ((getClippingFlag(z, x - 1, y) & 0x12c0108) != 0 || (getClippingFlag(z, x, y + 1) & 0x12c0120) != 0 || (getClippingFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & TRAVERSABLE_WEST) != 0 || (getClippingFlag(z, x, y + 1) & TRAVERSABLE_NORTH) != 0 || (getClippingFlag(z, x - 1, y + 1) & TRAVERSABLE_NORTH_WEST) != 0) {
 					found = false;
 					break;
 				}
@@ -196,7 +198,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 			found = true;
 			switch (dir) {
 			case NORTH:
-				if ((getClippingFlag(z, x, y + 2) & 0x12c0138) != 0 || (getClippingFlag(z, x + 1, y + 2) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x, y + 2) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x + 1, y + 2) & TRAVERSABLE_NORTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -204,7 +206,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y++;
 				break;
 			case NORTHEAST:
-				if ((getClippingFlag(z, x + 1, y + 2) & 0x12c0138) != 0 || (getClippingFlag(z, x + 2, y + 2) & 0x12c01e0) != 0 || (getClippingFlag(z, x + 2, y + 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y + 2) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x + 2, y + 2) & TRAVERSABLE_NORTH_EAST) != 0 || (getClippingFlag(z, x + 2, y + 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -213,7 +215,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y++;
 				break;
 			case EAST:
-				if ((getClippingFlag(z, x + 2, y) & 0x12c0183) != 0 || (getClippingFlag(z, x + 2, y + 1) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x + 2, y) & TRAVERSABLE_SOUTH_EAST) != 0 || (getClippingFlag(z, x + 2, y + 1) & TRAVERSABLE_NORTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -221,7 +223,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				x++;
 				break;
 			case SOUTHEAST:
-				if ((getClippingFlag(z, x + 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + 2, y) & 0x12c01e0) != 0 || (getClippingFlag(z, x + 2, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y - 1) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x + 2, y) & TRAVERSABLE_NORTH_EAST) != 0 || (getClippingFlag(z, x + 2, y - 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -230,7 +232,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case SOUTH:
-				if ((getClippingFlag(z, x, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + 1, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x, y - 1) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x + 1, y - 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -238,7 +240,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case SOUTHWEST:
-				if ((getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y) & 0x12c0138) != 0 || (getClippingFlag(z, x, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x - 1, y - 1) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x - 1, y) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x, y - 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -247,7 +249,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case WEST:
-				if ((getClippingFlag(z, x - 1, y) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + 1) & 0x12c0138) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x - 1, y + 1) & TRAVERSABLE_NORTH_WEST) != 0) {
 					found = false;
 					break;
 				}
@@ -255,7 +257,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				x--;
 				break;
 			case NORTHWEST:
-				if ((getClippingFlag(z, x - 1, y + 1) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + 2) & 0x12c0138) != 0 || (getClippingFlag(z, x, y + 2) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x - 1, y + 1) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x - 1, y + 2) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x, y + 2) & TRAVERSABLE_NORTH_EAST) != 0) {
 					found = false;
 					break;
 				}
@@ -281,12 +283,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 			found = true;
 			roar: switch (dir) {
 			case NORTH:
-				if ((getClippingFlag(z, x, y + size) & 0x12c0138) != 0 || (getClippingFlag(z, x + (size - 1), y + size) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x, y + size) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x + (size - 1), y + size) & TRAVERSABLE_NORTH_EAST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x + i, y + size) & 0x12c01f8) != 0) {
+					if ((getClippingFlag(z, x + i, y + size) & TRAVERSABLE_NORTH_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
@@ -295,12 +297,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y++;
 				break;
 			case NORTHEAST:
-				if ((getClippingFlag(z, x + 1, y + size) & 0x12c0138) != 0 || (getClippingFlag(z, x + size, y + size) & 0x12c01e0) != 0 || (getClippingFlag(z, x + size, y + 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y + size) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x + size, y + size) & TRAVERSABLE_NORTH_EAST) != 0 || (getClippingFlag(z, x + size, y + 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x + (i + 1), y + size) & 0x12c01f8) != 0 || (getClippingFlag(z, x + size, y + (i + 1)) & 0x12c01e3) != 0) {
+					if ((getClippingFlag(z, x + (i + 1), y + size) & TRAVERSABLE_NORTH_VARIABLE) != 0 || (getClippingFlag(z, x + size, y + (i + 1)) & TRAVERSABLE_EAST_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
@@ -310,12 +312,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y++;
 				break;
 			case EAST:
-				if ((getClippingFlag(z, x + size, y) & 0x12c0183) != 0 || (getClippingFlag(z, x + size, y + (size - 1)) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x + size, y) & TRAVERSABLE_NORTH_EAST) != 0 || (getClippingFlag(z, x + size, y + (size - 1)) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x + size, y + i) & 0x12c01e3) != 0) {
+					if ((getClippingFlag(z, x + size, y + i) & TRAVERSABLE_EAST_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
@@ -324,12 +326,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				x++;
 				break;
 			case SOUTHEAST:
-				if ((getClippingFlag(z, x + 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + size, y + (size - 2)) & 0x12c01e0) != 0 || (getClippingFlag(z, x + size, y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x + 1, y - 1) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x + size, y + (size - 2)) & TRAVERSABLE_NORTH_EAST) != 0 || (getClippingFlag(z, x + size, y - 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x + size, y + (i - 1)) & 0x12c01e3) != 0 || (getClippingFlag(z, x + (i + 1), y - 1) & 0x12c018f) != 0) {
+					if ((getClippingFlag(z, x + size, y + (i - 1)) & TRAVERSABLE_EAST_VARIABLE) != 0 || (getClippingFlag(z, x + (i + 1), y - 1) & TRAVERSABLE_SOUTH_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
@@ -339,12 +341,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case SOUTH:
-				if ((getClippingFlag(z, x, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + (size - 1), y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x, y - 1) & TRAVERSABLE_SOUTH_EAST) != 0 || (getClippingFlag(z, x + (size - 1), y - 1) & TRAVERSABLE_NORTH_EAST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x + i, y - 1) & 0x12c018f) != 0) {
+					if ((getClippingFlag(z, x + i, y - 1) & TRAVERSABLE_SOUTH_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
@@ -353,12 +355,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case SOUTHWEST:
-				if ((getClippingFlag(z, x - 1, y + (size - 2)) & 0x12c0138) != 0 || (getClippingFlag(z, x - 1, y - 1) & 0x12c010e) != 0 || (getClippingFlag(z, x + (size - 2), y - 1) & 0x12c0183) != 0) {
+				if ((getClippingFlag(z, x - 1, y + (size - 2)) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x - 1, y - 1) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x + (size - 2), y - 1) & TRAVERSABLE_SOUTH_EAST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x - 1, y + (i - 1)) & 0x12c013e) != 0 || (getClippingFlag(z, x + (i - 1), y - 1) & 0x12c018f) != 0) {
+					if ((getClippingFlag(z, x - 1, y + (i - 1)) & TRAVERSABLE_WEST_VARIABLE) != 0 || (getClippingFlag(z, x + (i - 1), y - 1) & TRAVERSABLE_SOUTH_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
@@ -368,12 +370,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				y--;
 				break;
 			case WEST:
-				if ((getClippingFlag(z, x - 1, y) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + (size - 1)) & 0x12c0138) != 0) {
+				if ((getClippingFlag(z, x - 1, y) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x - 1, y + (size - 1)) & TRAVERSABLE_NORTH_WEST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x - 1, y + i) & 0x12c013e) != 0) {
+					if ((getClippingFlag(z, x - 1, y + i) & TRAVERSABLE_WEST_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
@@ -382,12 +384,12 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				x--;
 				break;
 			case NORTHWEST:
-				if ((getClippingFlag(z, x - 1, y + 1) & 0x12c010e) != 0 || (getClippingFlag(z, x - 1, y + size) & 0x12c0138) != 0 || (getClippingFlag(z, x, y + size) & 0x12c01e0) != 0) {
+				if ((getClippingFlag(z, x - 1, y + 1) & TRAVERSABLE_SOUTH_WEST) != 0 || (getClippingFlag(z, x - 1, y + size) & TRAVERSABLE_NORTH_WEST) != 0 || (getClippingFlag(z, x, y + size) & TRAVERSABLE_NORTH_EAST) != 0) {
 					found = false;
 					break;
 				}
 				for (int i = 1; i < size - 1; i++) {
-					if ((getClippingFlag(z, x - 1, y + (i + 1)) & 0x12c013e) != 0 || (getClippingFlag(z, x + (i - 1), y + size) & 0x12c01f8) != 0) {
+					if ((getClippingFlag(z, x - 1, y + (i + 1)) & TRAVERSABLE_WEST_VARIABLE) != 0 || (getClippingFlag(z, x + (i - 1), y + size) & TRAVERSABLE_NORTH_VARIABLE) != 0) {
 						found = false;
 						break roar;
 					}
