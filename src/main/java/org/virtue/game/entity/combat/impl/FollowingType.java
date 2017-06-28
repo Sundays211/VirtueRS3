@@ -5,11 +5,8 @@ import org.virtue.game.entity.combat.impl.melee.MeleeFollower;
 import org.virtue.game.entity.combat.impl.range.RangeFollower;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.PathfinderProvider;
-import org.virtue.game.map.movement.path.Point;
-import org.virtue.game.node.Node;
 
 /**
  * Interface for combat following handlers.
@@ -45,102 +42,19 @@ public abstract class FollowingType {
 			return false;
 		}
 		Interaction interaction = getInteraction(entity, lock);
-		if (getInteraction(entity, lock) == Interaction.STILL) {
+		if (interaction == Interaction.STILL) {
 			entity.getMovement().reset();
 			return true;
 		}
-		CoordGrid destination = getNextDestination(entity, lock);
-		boolean inside = isInsideEntity(entity.getCurrentTile(), lock);
-		if (inside) {
-			destination = findBorderLocation(entity, lock);
-		}
-		if (destination == null) {
-			destination = lock.getCurrentTile();
-		}
+		CoordGrid destination = lock.getCurrentTile();
 		if (!destination.equals(entity.getMovement().getDestination())) {
-			Path path = PathfinderProvider.find(entity, destination, true, entity instanceof Player ? PathfinderProvider.SMART : PathfinderProvider.DUMB);
-			if (entity.getMovement() != null && path != null) {
-				if (entity instanceof Player) {
-					entity.getMovement().setWaypoints(path.getPoints());
-					entity.getMovement().setDestination(destination);
-				} else {
-					Point step = path.getPoints().peek();
-					if (step != null) {
-						System.out.println("Roar");
-						entity.getMovement().move(CompassPoint.getLogicalDirection(entity.getCurrentTile(), new CoordGrid(step.getX(), step.getY(), 0)));
-					}
-				}
-			} else {
-				System.out.println("Hurr " + path);
+			Path path = PathfinderProvider.find(entity, destination, false, entity instanceof Player ? PathfinderProvider.SMART : PathfinderProvider.DUMB);
+			if (entity.getMovement() != null && path != null && path.isSuccessful()) {
+				entity.getMovement().setWaypoints(path.getPoints());
 			}
+			return false;
 		}
 		return interaction == Interaction.MOVING;
-	}
-	/**
-	 * Finds the closest location next to the node.
-	 * @return The location to walk to.
-	 */
-	private static CoordGrid findBorderLocation(Entity mover, Entity destination) {
-		/*int size = destination.getSize();
-		CoordGrid centerDest = destination.getCurrentTile().copyNew(size >> 1, size >> 1, 0);
-		CoordGrid center = mover.getCurrentTile().copyNew(mover.getSize() >> 1, mover.getSize() >> 1, 0);
-		CompassPoint direction = CompassPoint.getLogicalDirection(centerDest, center);
-		CoordGrid delta = CoordGrid.getDelta(destination.getCurrentTile(), mover.getCurrentTile());
-		main: for (int i = 0; i < 4; i++) {
-			int amount = 0;
-			switch (direction) {
-			case NORTH:
-				amount = size - delta.getY();
-				break;
-			case EAST:
-				amount = size - delta.getX();
-				break;
-			case SOUTH:
-				amount = mover.getSize() + delta.getY();
-				break;
-			case WEST:
-				amount = mover.getSize() + delta.getX();
-				break;
-			default:
-				return null;
-			}
-			for (int j = 0; j < amount; j++) {
-				for (int s = 0; s < mover.getSize(); s++) {
-					switch (direction) {
-					case NORTH:
-						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(s, j + mover.getSize(), 0), direction)) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					case EAST:
-						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(j + mover.getSize(), s, 0), direction)) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					case SOUTH:
-						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(s, -(j + 1), 0), direction)) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					case WEST:
-						if (!RegionManager.checkDirection(mover.getCurrentTile().copyNew(-(j + 1), s, 0), direction)) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					default:
-						return null;
-					}
-				}
-			}
-			CoordGrid location = mover.getCurrentTile().copyNew(direction, amount);
-			return location;
-		}*/
-		//TODO: This
-		return null;
 	}
 	
 	/**
@@ -150,16 +64,7 @@ public abstract class FollowingType {
 	 * @return The next destination.
 	 */
 	public CoordGrid getNextDestination(Entity entity, Entity lock) {
-		CoordGrid l = getClosestTo(entity, lock, lock.getCurrentTile().copyNew(0, -1, 0));
-		if (entity.getSize() > 1) {
-			if (l.getX() < lock.getCurrentTile().getX()) {
-				l = l.copyNew(-(entity.getSize() - 1), 0, 0);
-			}
-			if (l.getY() < lock.getCurrentTile().getY()) {
-				l = l.copyNew(0, -(entity.getSize() - 1), 0);
-			}
-		}
-		return l;
+		return lock.getCurrentTile();
 	}
 	
 	/**
@@ -169,64 +74,6 @@ public abstract class FollowingType {
 	 * @return {@code True} if so.
 	 */
 	public abstract Interaction getInteraction(Entity entity, Entity lock);
-	
-	/**
-	 * Gets the closest destination to the current destination, to reach the
-	 * node.
-	 * @param mover The moving entity.
-	 * @param node The node to move to.
-	 * @param suggestion The suggested destination location.
-	 * @return The destination location.
-	 */
-	public static CoordGrid getClosestTo(Entity mover, Node node, CoordGrid suggestion) {
-		/*CoordGrid nl = node.getCurrentTile();
-		int diffX = suggestion.getX() - nl.getX();
-		int diffY = suggestion.getY() - nl.getY();
-		CompassPoint moveDir = NORTH;
-		if (diffX < 0) {
-			moveDir = EAST;
-		} else if (diffX >= node.getSize()) {
-			moveDir = WEST;
-		} else if (diffY >= node.getSize()) {
-			moveDir = SOUTH;
-		}
-		double distance = 9999.9;
-		CoordGrid destination = suggestion;
-		for (int c = 0; c < 4; c++) {
-			for (int i = 0; i < node.getSize() + 1; i++) {
-				for (int j = 0; j < (i == 0 ? 1 : 2); j++) {
-					CompassPoint current = CompassPoint.get((moveDir.toInteger() + (j == 1 ? 3 : 1)) % 4);
-					CoordGrid loc = suggestion.copyNew(current.getDeltaX() * i, current.getDeltaY() * i, 0);
-					if (moveDir == NORTH || moveDir == SOUTH) {
-						if (loc.getX() < nl.getX() || loc.getX() > nl.getX() + node.getSize() - 1) {
-							continue;
-						}
-					} else {
-						if (loc.getY() < nl.getY() || loc.getY() > nl.getY() + node.getSize() - 1) {
-							continue;
-						}
-					}
-					if (RegionManager.checkDirection(loc, moveDir)) {
-						double dist = mover.getCurrentTile().getDistance(loc);
-						if (dist < distance) {
-							distance = dist;
-							destination = loc;
-						}
-					}
-				}
-			}
-			moveDir = CompassPoint.get((moveDir.toInteger() + 1) % 4);
-			int offsetX = Math.abs(moveDir.getDeltaY() * (node.getSize() >> 1)); // Not a mixup between x & y!
-			int offsetY = Math.abs(moveDir.getDeltaX() * (node.getSize() >> 1));
-			if (moveDir == NORTH || moveDir == EAST) {
-				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() + offsetX, -moveDir.getDeltaY() + offsetY, 0);
-			} else {
-				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() * node.getSize() + offsetX, -moveDir.getDeltaY() * node.getSize() + offsetY, 0);
-			}
-		}*/
-		//TODO: This
-		return suggestion;
-	}
 	
 	/**
 	 * Checks if the mover is standing on an invalid position.
