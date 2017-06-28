@@ -5,6 +5,8 @@ module.exports = function (scriptManager) {
 	var modules = [
 	    require('./emotes-tab'),
 		require('./hero-skill-tab'),
+		require('./hero-widget'),
+		require('./hop-worlds'),
 	    require('./lodestone'),
 	    require('./world-map'),
 		require('./overlay'),
