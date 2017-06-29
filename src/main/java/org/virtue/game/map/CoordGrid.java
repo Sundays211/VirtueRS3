@@ -310,16 +310,22 @@ public class CoordGrid {
 	}
 
 	/**
+	 * Checks if a given {@link CoordGrid} is adjacent to the current tile
+	 * @param tile The {@link CoordGrid} being checked
+	 * @return {@code True} if so; {@code False} otherwise.
+	 */
+	public boolean isAdjacent(CoordGrid tile) {
+		return withinDistance(tile, 1);
+	}
+
+	/**
 	 * Checks if a given {@link CoordGrid} is within a certain distance of this {@link CoordGrid}.
 	 * @param tile The {@link CoordGrid} being checked
 	 * @param distance The distance, in tiles, to check.
 	 * @return {@code True} if so; {@code False} otherwise.
 	 */
 	public boolean withinDistance(CoordGrid tile, int distance) {
-		if (tile.plane != plane)
-			return false;
-		int deltaX = tile.x - x, deltaY = tile.y - y;
-		return deltaX <= distance && deltaX >= -distance && deltaY <= distance && deltaY >= -distance;
+		return withinDistance(tile, distance, distance);
 	}
 
 	/**
@@ -332,19 +338,7 @@ public class CoordGrid {
 	public boolean withinDistance(CoordGrid tile, int distanceX, int distanceY) {
 		if (tile.plane != plane)
 			return false;
-		int deltaX = tile.x - x, deltaY = tile.y - y;
-		return deltaX <= distanceX && deltaX >= -distanceX && deltaY <= distanceY && deltaY >= -distanceY;
-	}
-
-	/**
-	 * Checks if a given {@link CoordGrid} is within a certain distance of this {@link CoordGrid}.
-	 * @param tile The {@link CoordGrid} being checked
-	 * @return {@code True} if so; {@code False} otherwise.
-	 */
-	public boolean withinDistance(CoordGrid tile) {
-		if (tile.plane != plane)
-			return false;
-		return Math.abs(tile.x - x) <= 14 && Math.abs(tile.y - y) <= 14;
+		return Math.abs(tile.x - x) <= distanceX && Math.abs(tile.y - y) <= distanceY;
 	}
 
 	/**
@@ -528,6 +522,17 @@ public class CoordGrid {
 	@Override
 	public String toString() {
 		return plane +"," + getRegionX() + "," + getRegionY() + "," + getXInRegion() + "," + getYInRegion();
+	}
+	
+	/**
+	 * Gets the tile offset in the given direction. Does not modify the coord itself
+	 * 
+	 * For example, if 3200,3200 was offset NORTH, the returned coordinate would be 3201,3200 
+	 * @param direction The direction to offset by
+	 * @return The offset coordinate.
+	 */
+	public CoordGrid offset (CompassPoint direction) {
+		return copyNew(direction.getDeltaX(), direction.getDeltaY(), 0);
 	}
 
 	/**

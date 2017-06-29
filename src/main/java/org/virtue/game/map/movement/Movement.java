@@ -23,6 +23,7 @@ package org.virtue.game.map.movement;
 
 import java.util.Collection;
 import java.util.Deque;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -470,18 +471,9 @@ public class Movement {
 	 * Forces the entity to move to an adjacent tile
 	 */
 	public synchronized void moveAdjacent () {
-		
-		this.destination = PathfinderProvider.findAdjacent(entity);
 		final CoordGrid lastTile = entity.getCurrentTile();
-		if (destination != null) {
-			addWalkStep(new Waypoint(destination.getX(), destination.getY(), moveSpeed));
-		}
-		onTarget = new Runnable () {
-			@Override
-			public void run() {
-				entity.queueUpdateBlock(new FaceDirectionBlock(lastTile));				
-			}			
-		};
+		PathfinderProvider.findAdjacent(entity).ifPresent(path -> setWaypoints(path.getPoints()));
+		onTarget = () -> entity.queueUpdateBlock(new FaceDirectionBlock(lastTile));
 	}
 	
 	/**
@@ -517,6 +509,13 @@ public class Movement {
 				//If the entity has teleported or no longer exists, remove them as a target
 				entity.stopAll();
 				stop();
+			} else if (entity.getCurrentTile().equals(targetEntity.getEntity().getCurrentTile())) {
+				Optional<Path> path = PathfinderProvider.findAdjacent(targetEntity.getEntity());
+				if (path.isPresent()) {
+					setWaypoints(path.get().getPoints());
+				} else {
+					stop();
+				}
 			} else if (entity.getCurrentTile().withinDistance(
 					targetEntity.getEntity().getCurrentTile(), targetEntity.getRange())) {
 				if (targetEntity.onReachTarget()) {

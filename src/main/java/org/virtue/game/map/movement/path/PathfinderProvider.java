@@ -1,8 +1,12 @@
 package org.virtue.game.map.movement.path;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.path.impl.DumbPathfinder;
 import org.virtue.game.map.movement.path.impl.ProjectilePathfinder;
 import org.virtue.game.map.movement.path.impl.SmartPathfinder;
@@ -49,28 +53,6 @@ public class PathfinderProvider {
 	 */
 	public static Path find(Entity mover, Node destination, boolean near, Pathfinder finder) {
 		return find(mover.getCurrentTile(), mover.getSize(), destination, near, finder);
-	}
-
-	/**
-	 * Finds a path from the start coords to the end coords.
-	 * @param mover The moving entity.
-	 * @param destination The destination node.
-	 * @return The path.
-	 */
-	public static Path find(CoordGrid start, Node destination) {
-		return find(start, destination, true, SMART);
-	}
-
-	/**
-	 * Finds a path from the start coords to the end coords.
-	 * @param mover The moving entity.
-	 * @param destination The destination node.
-	 * @param near If we should move near the end coords, if we can't reach it.
-	 * @param finder The pathfinder to use.
-	 * @return The path.
-	 */
-	public static Path find(CoordGrid start, Node destination, boolean near, Pathfinder finder) {
-		return find(start, 1, destination, near, finder);
 	}
 	
 	public static Path find(Entity mover, CoordGrid destination, boolean near) {
@@ -123,20 +105,10 @@ public class PathfinderProvider {
 		}
 	}
 
-	public static CoordGrid findAdjacent(Entity entity) {
-		if (find(entity, entity.getCurrentTile().copyNew(-1, 0, 0), false, DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(-1, 0, 0);
-		}
-		if (find(entity, entity.getCurrentTile().copyNew(0, -1, 0), false, DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(0, -1, 0);
-		}
-		if (find(entity, entity.getCurrentTile().copyNew(1, 0, 0), false, DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(1, 0, 0);
-		}
-		if (find(entity, entity.getCurrentTile().copyNew(0, 1, 0), false, DUMB).isSuccessful()) {
-			return entity.getCurrentTile().copyNew(0, 1, 0);
-		}
-		return null;
+	public static Optional<Path> findAdjacent(Entity entity) {
+		return Stream.of(CompassPoint.EAST, CompassPoint.NORTH, CompassPoint.WEST, CompassPoint.SOUTH)
+			.map(dir -> find(entity, entity.getCurrentTile().offset(dir), false, DUMB))
+			.filter(Path::isSuccessful).findFirst();
 	}
 
 }

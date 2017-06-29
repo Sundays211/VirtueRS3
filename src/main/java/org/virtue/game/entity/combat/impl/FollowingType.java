@@ -1,5 +1,7 @@
 package org.virtue.game.entity.combat.impl;
 
+import java.util.Optional;
+
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.melee.MeleeFollower;
 import org.virtue.game.entity.combat.impl.range.RangeFollower;
@@ -47,12 +49,23 @@ public abstract class FollowingType {
 			return true;
 		}
 		CoordGrid destination = lock.getCurrentTile();
-		if (!destination.equals(entity.getMovement().getDestination())) {
-			Path path = PathfinderProvider.find(entity, destination, false, entity instanceof Player ? PathfinderProvider.SMART : PathfinderProvider.DUMB);
+		if (entity.getCurrentTile().equals(destination)) {
+			Optional<Path> path = PathfinderProvider.findAdjacent(lock);
+			if (path.isPresent()) {
+				entity.getMovement().setWaypoints(path.get().getPoints());
+			} else {
+				entity.getCombatSchedule().releaseLock();
+				return false;
+			}
+		} else if (!entity.getMovement().hasSteps() ||
+				!destination.isAdjacent(entity.getMovement().getDestination())) {
+			Path path = PathfinderProvider.find(entity, lock, false, entity instanceof Player ? PathfinderProvider.SMART : PathfinderProvider.DUMB);
 			if (entity.getMovement() != null && path != null && path.isSuccessful()) {
 				entity.getMovement().setWaypoints(path.getPoints());
+			} else {
+				entity.getCombatSchedule().releaseLock();
+				return false;
 			}
-			return false;
 		}
 		return interaction == Interaction.MOVING;
 	}
