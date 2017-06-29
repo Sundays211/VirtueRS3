@@ -22,9 +22,10 @@
 package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.MoveEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
+import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -34,16 +35,17 @@ public class WalkEventHandler implements GameEventHandler<MoveEventContext> {
 
 	@Override
 	public void handle(Player player, MoveEventContext context) {
-		if (player.getImpactHandler().isDead())
+		if (player.getImpactHandler().isDead()) {
 			return;//No need for a dead player to move.
-		
-		boolean success = player.getMovement().moveTo(context.getBaseX(), context.getBaseY());
-		if (context.forceRun()) {
-			player.getMovement().forceRunToggle();
 		}
+		MoveSpeed speed = player.getMovement().getMoveSpeed();
+		if (context.forceRun()) {
+			speed = speed == MoveSpeed.RUN ? MoveSpeed.WALK : MoveSpeed.RUN;
+		}		
+		boolean success = player.getMovement().moveTo(context.getBaseX(), context.getBaseY(), speed);
 		if (success) {
 			player.setPaused(false);
-			Tile target = player.getMovement().getDestination();
+			CoordGrid target = player.getMovement().getDestination();
 			if (target != null) {
 				player.getDispatcher().sendMapFlag(target.getLocalX(player.getViewport().getBaseTile()), target.getLocalY(player.getViewport().getBaseTile()));
 			}

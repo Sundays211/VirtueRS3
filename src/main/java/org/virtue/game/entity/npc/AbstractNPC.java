@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.virtue.Virtue;
 import org.virtue.engine.script.listeners.CombatHandler;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 
 /**
  * Used for creating custom NPC handlers.
@@ -18,7 +18,7 @@ public abstract class AbstractNPC extends NPC {
 	 * @param id The NPC id.
 	 * @param tile The location.
 	 */
-	public AbstractNPC(int id, Tile tile) {
+	public AbstractNPC(int id, CoordGrid tile) {
 		super(id, tile);
 	}
 	
@@ -74,7 +74,7 @@ public abstract class AbstractNPC extends NPC {
 	 * @param tile The tile.
 	 * @return The instance.
 	 */
-	public abstract AbstractNPC newInstance(int id, Tile tile);
+	public abstract AbstractNPC newInstance(int id, CoordGrid tile);
 
 	/**
 	 * The NPC ids to handle.

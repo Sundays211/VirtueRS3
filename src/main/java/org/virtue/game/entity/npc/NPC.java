@@ -41,11 +41,10 @@ import org.virtue.game.entity.combat.AttackEvent;
 import org.virtue.game.entity.combat.CombatState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.CompassPoint;
+import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.parser.impl.NpcDropParser;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.CompassPoint;
-import org.virtue.game.world.region.movement.routefinder.NpcTraversalMap;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
@@ -77,9 +76,9 @@ public class NPC extends Entity {
 	
 	private int respawnTime = -1;
 	
-	private Tile spawnCoords;
+	private CoordGrid spawnCoords;
 	
-	private int walkRange = 5;
+	private int walkRange = 5;//default=5
 	
 	private int interactRange = 1;
 	
@@ -103,7 +102,7 @@ public class NPC extends Entity {
 	 * @param tile The tile.
 	 * @return The NPC object.
 	 */
-	public static NPC create(int id, Tile tile) {
+	public static NPC create(int id, CoordGrid tile) {
 		AbstractNPC npc = Virtue.getInstance().getScripts().getNPC(id);
 		if (npc != null) {
 			return npc.newInstance(id, tile);
@@ -116,17 +115,15 @@ public class NPC extends Entity {
 	 * @param typeID The NPC id.
 	 * @param tile The tile.
 	 */
-	protected NPC (int typeID, Tile tile) {
+	protected NPC (int typeID, CoordGrid tile) {
 		super(typeID);
 		this.spawnCoords = tile;
 		this.typeId = typeID;
 		this.type = Virtue.getInstance().getConfigProvider().getNpcTypes().list(typeID);
 		super.setCurrentTile(tile);
 		super.setLastTile(tile);
-		super.name = type.name;
 		super.setSize(type.size);
-		this.direction = CompassPoint.forID(this.type.respawnDirection);
-		this.getMovement().setTraversalMap(new NpcTraversalMap(this, tile));
+		this.direction = CompassPoint.getById(this.type.respawnDirection);
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
 		CustomNpcData customData = Virtue.getInstance().getConfigProvider().getNpcTypes().getCustomData(this.getID());
@@ -165,6 +162,11 @@ public class NPC extends Entity {
 	 */
 	public NpcType getType () {
 		return type;
+	}
+
+	@Override
+	public String getName() {
+		return type.name;
 	}
 	
 	public NpcType getType (Player player) {
@@ -445,7 +447,7 @@ public class NPC extends Entity {
 	 *            see them after a period of time)
 	 */
 	public void sendDrop(Entity killer) {
-		Region region = World.getInstance().getRegions().getRegionByID(this.getCurrentTile().getRegionID());
+		MapSquare region = World.getInstance().getRegions().getRegionByID(this.getCurrentTile().getRegionID());
 		if (region != null && region.isLoaded()) {
 			for (NpcDrops loot : NpcDropParser.forID(this.getID()).getLootChance(0)) {
 				if (itemDropCalls.contains(loot.getItemID())) {

@@ -29,11 +29,12 @@ import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.SceneLocation;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.LocTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
+import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -49,10 +50,10 @@ public class LocTargetEventHandler implements GameEventHandler<LocTargetEventCon
 	 */
 	@Override
 	public void handle(final Player player, final LocTargetEventContext context) {
-		Tile coord = new Tile(context.getTargetCoordX(), context.getTargetCoordY(), player.getCurrentTile().getPlane());
-		Region region = World.getInstance().getRegions().getRegionByID(coord.getRegionID());
+		CoordGrid coord = new CoordGrid(context.getTargetCoordX(), context.getTargetCoordY(), player.getCurrentTile().getLevel());
+		MapSquare region = World.getInstance().getRegions().getRegionByID(coord.getRegionID());
 		if (region != null) {
-			final SceneLocation location = region.getLocation(coord.getXInRegion(), coord.getYInRegion(), coord.getPlane(), context.getTargetTypeID());
+			final SceneLocation location = region.getLocation(coord.getXInRegion(), coord.getYInRegion(), coord.getLevel(), context.getTargetTypeID());
 			if (location == null) {
 				player.getDispatcher().sendGameMessage("<col=ff0000>Location "+context.getTargetTypeID()+" clicked at "+coord+" does not exist!");
 			} else {
@@ -60,7 +61,10 @@ public class LocTargetEventHandler implements GameEventHandler<LocTargetEventCon
 				if (!player.getMovement().moveTo(location, context.getTargetCoordX(), context.getTargetCoordY())) {
 					return;//TODO: Add handing if the player cannot reach the location
 				}
-				player.getMovement().setOnTarget(() -> handle(player, context, location));
+				player.getMovement().setOnTarget(() -> {
+					player.queueUpdateBlock(new FaceDirectionBlock(coord));
+					handle(player, context, location);
+				});
 			}
 		}		
 	}
@@ -68,8 +72,8 @@ public class LocTargetEventHandler implements GameEventHandler<LocTargetEventCon
 	private void handle(Player player, LocTargetEventContext context, SceneLocation location) {	
 		ScriptManager scripts = Virtue.getInstance().getScripts();
 		
-		int level = location.getCurrentTile().getPlane();
-		Tile clickCoords = new Tile(context.getTargetCoordX(), context.getTargetCoordY(), level);
+		int level = location.getCurrentTile().getLevel();
+		CoordGrid clickCoords = new CoordGrid(context.getTargetCoordX(), context.getTargetCoordY(), level);
 		
 		if (scripts.hasBinding(ScriptEventType.OPLOCT, context.getHash())) {
 			Map<String, Object> args = new HashMap<>();

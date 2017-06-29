@@ -11,7 +11,7 @@ import org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler;
 import org.virtue.game.entity.combat.impl.range.RangeAttackHandler;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 import org.virtue.utility.RandomExt;
@@ -41,12 +41,12 @@ public class KalphiteKing extends AbstractNPC {
 	 * @param tile
 	 *            The tile.
 	 */
-	public KalphiteKing(int id, Tile tile) {
+	public KalphiteKing(int id, CoordGrid tile) {
 		super(id, tile);
 	}
 
 	@Override
-	public AbstractNPC newInstance(int id, Tile tile) {
+	public AbstractNPC newInstance(int id, CoordGrid tile) {
 		return new KalphiteKing(id, tile);
 	}
 
@@ -89,11 +89,11 @@ public class KalphiteKing extends AbstractNPC {
 	}
 
 	public void spawnMinions() {
-		NPC npc = NPC.create(16700, new Tile(2968, 1767, 0));
+		NPC npc = NPC.create(16700, new CoordGrid(2968, 1767, 0));
 		addNpc(npc);
-		NPC npc1 = NPC.create(16700, new Tile(2968, 1753, 0));
+		NPC npc1 = NPC.create(16700, new CoordGrid(2968, 1753, 0));
 		addNpc(npc1);
-		NPC npc2 = NPC.create(16700, new Tile(2986, 1767, 0));
+		NPC npc2 = NPC.create(16700, new CoordGrid(2986, 1767, 0));
 		addNpc(npc2);
 	}
 	

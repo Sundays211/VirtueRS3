@@ -24,7 +24,7 @@ package org.virtue.network.event.handler.impl;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.movement.WidgetOnEntityTarget;
+import org.virtue.game.map.movement.WidgetOnEntityTarget;
 import org.virtue.network.event.context.impl.in.PlayerTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

@@ -22,7 +22,7 @@
 package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.MapSize;
+import org.virtue.game.map.MapSize;
 import org.virtue.network.event.context.impl.EmptyEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

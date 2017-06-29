@@ -1,17 +1,14 @@
 package org.virtue.game.entity.combat.impl;
 
+import java.util.Optional;
+
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.impl.melee.MeleeFollower;
 import org.virtue.game.entity.combat.impl.range.RangeFollower;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.node.Node;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.CompassPoint;
-import org.virtue.game.world.region.movement.path.Path;
-import org.virtue.game.world.region.movement.path.Point;
-import org.virtue.game.world.region.movement.path.impl.AbstractPathfinder;
-import org.virtue.game.world.region.movement.path.impl.DumbPathfinder;
-import org.virtue.game.world.region.movement.path.impl.SmartPathfinder;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.path.Path;
+import org.virtue.game.map.movement.path.PathfinderProvider;
 
 /**
  * Interface for combat following handlers.
@@ -47,101 +44,30 @@ public abstract class FollowingType {
 			return false;
 		}
 		Interaction interaction = getInteraction(entity, lock);
-		if (getInteraction(entity, lock) == Interaction.STILL) {
+		if (interaction == Interaction.STILL) {
 			entity.getMovement().reset();
 			return true;
 		}
-		Tile destination = getNextDestination(entity, lock);
-		boolean inside = isInsideEntity(entity.getCurrentTile(), lock);
-		if (inside) {
-			destination = findBorderLocation(entity, lock);
-		}
-		if (destination == null) {
-			destination = lock.getCurrentTile();
-		}
-		if (!destination.equals(entity.getMovement().getDestination())) {
-			Path path = AbstractPathfinder.find(entity, destination, true, entity instanceof Player ? new SmartPathfinder() : new DumbPathfinder());
-			if (entity.getMovement() != null && path != null) {
-				if (entity instanceof Player) {
-					entity.getMovement().setWalkSteps(path.getPoints());
-					entity.getMovement().setDestination(destination);
-				} else {
-					Point step = path.getPoints().peek();
-					if (step != null) {
-						System.out.println("Roar");
-						entity.getMovement().move(CompassPoint.getLogicalDirection(entity.getCurrentTile(), new Tile(step.getX(), step.getY(), 0)));
-					}
-				}
+		CoordGrid destination = lock.getCurrentTile();
+		if (entity.getCurrentTile().equals(destination)) {
+			Optional<Path> path = PathfinderProvider.findAdjacent(lock);
+			if (path.isPresent()) {
+				entity.getMovement().setWaypoints(path.get().getPoints());
 			} else {
-				System.out.println("Hurr " + path);
+				entity.getCombatSchedule().releaseLock();
+				return false;
+			}
+		} else if (!entity.getMovement().hasSteps() ||
+				!destination.isAdjacent(entity.getMovement().getDestination())) {
+			Path path = PathfinderProvider.find(entity, lock, false, entity instanceof Player ? PathfinderProvider.SMART : PathfinderProvider.DUMB);
+			if (entity.getMovement() != null && path != null && path.isSuccessful()) {
+				entity.getMovement().setWaypoints(path.getPoints());
+			} else {
+				entity.getCombatSchedule().releaseLock();
+				return false;
 			}
 		}
 		return interaction == Interaction.MOVING;
-	}
-	/**
-	 * Finds the closest location next to the node.
-	 * @return The location to walk to.
-	 */
-	private static Tile findBorderLocation(Entity mover, Entity destination) {
-		int size = destination.getSize();
-		Tile centerDest = destination.getCurrentTile().copyNew(size >> 1, size >> 1, 0);
-		Tile center = mover.getCurrentTile().copyNew(mover.getSize() >> 1, mover.getSize() >> 1, 0);
-		CompassPoint direction = CompassPoint.getLogicalDirection(centerDest, center);
-		Tile delta = Tile.getDelta(destination.getCurrentTile(), mover.getCurrentTile());
-		main: for (int i = 0; i < 4; i++) {
-			int amount = 0;
-			switch (direction) {
-			case NORTH:
-				amount = size - delta.getY();
-				break;
-			case EAST:
-				amount = size - delta.getX();
-				break;
-			case SOUTH:
-				amount = mover.getSize() + delta.getY();
-				break;
-			case WEST:
-				amount = mover.getSize() + delta.getX();
-				break;
-			default:
-				return null;
-			}
-			for (int j = 0; j < amount; j++) {
-				for (int s = 0; s < mover.getSize(); s++) {
-					switch (direction) {
-					case NORTH:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(s, j + mover.getSize(), 0))) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					case EAST:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(j + mover.getSize(), s, 0))) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					case SOUTH:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(s, -(j + 1), 0))) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					case WEST:
-						if (!direction.canMove(mover.getCurrentTile().copyNew(-(j + 1), s, 0))) {
-							direction = CompassPoint.get((direction.toInteger() + 1) & 3);
-							continue main;
-						}
-						break;
-					default:
-						return null;
-					}
-				}
-			}
-			Tile location = mover.getCurrentTile().copyNew(direction, amount);
-			return location;
-		}
-		return null;
 	}
 	
 	/**
@@ -150,17 +76,8 @@ public abstract class FollowingType {
 	 * @param lock The target.
 	 * @return The next destination.
 	 */
-	public Tile getNextDestination(Entity entity, Entity lock) {
-		Tile l = getClosestTo(entity, lock, lock.getCurrentTile().copyNew(0, -1, 0));
-		if (entity.getSize() > 1) {
-			if (l.getX() < lock.getCurrentTile().getX()) {
-				l = l.copyNew(-(entity.getSize() - 1), 0, 0);
-			}
-			if (l.getY() < lock.getCurrentTile().getY()) {
-				l = l.copyNew(0, -(entity.getSize() - 1), 0);
-			}
-		}
-		return l;
+	public CoordGrid getNextDestination(Entity entity, Entity lock) {
+		return lock.getCurrentTile();
 	}
 	
 	/**
@@ -172,82 +89,15 @@ public abstract class FollowingType {
 	public abstract Interaction getInteraction(Entity entity, Entity lock);
 	
 	/**
-	 * Gets the closest destination to the current destination, to reach the
-	 * node.
-	 * @param mover The moving entity.
-	 * @param node The node to move to.
-	 * @param suggestion The suggested destination location.
-	 * @return The destination location.
-	 */
-	public static Tile getClosestTo(Entity mover, Node node, Tile suggestion) {
-		Tile nl = node.getCurrentTile();
-		int diffX = suggestion.getX() - nl.getX();
-		int diffY = suggestion.getY() - nl.getY();
-		CompassPoint moveDir = CompassPoint.NORTH;
-		if (diffX < 0) {
-			moveDir = CompassPoint.EAST;
-		} else if (diffX >= node.getSize()) {
-			moveDir = CompassPoint.WEST;
-		} else if (diffY >= node.getSize()) {
-			moveDir = CompassPoint.SOUTH;
-		}
-		double distance = 9999.9;
-		Tile destination = suggestion;
-		for (int c = 0; c < 4; c++) {
-			for (int i = 0; i < node.getSize() + 1; i++) {
-				for (int j = 0; j < (i == 0 ? 1 : 2); j++) {
-					CompassPoint current = CompassPoint.get((moveDir.toInteger() + (j == 1 ? 3 : 1)) % 4);
-					Tile loc = suggestion.copyNew(current.getDeltaX() * i, current.getDeltaY() * i, 0);
-					if (moveDir.toInteger() % 2 == 0) {
-						if (loc.getX() < nl.getX() || loc.getX() > nl.getX() + node.getSize() - 1) {
-							continue;
-						}
-					} else {
-						if (loc.getY() < nl.getY() || loc.getY() > nl.getY() + node.getSize() - 1) {
-							continue;
-						}
-					}
-					if (checkTraversal(loc, moveDir)) {
-						double dist = mover.getCurrentTile().getDistance(loc);
-						if (dist < distance) {
-							distance = dist;
-							destination = loc;
-						}
-					}
-				}
-			}
-			moveDir = CompassPoint.get((moveDir.toInteger() + 1) % 4);
-			int offsetX = Math.abs(moveDir.getDeltaY() * (node.getSize() >> 1)); // Not a mixup between x & y!
-			int offsetY = Math.abs(moveDir.getDeltaX() * (node.getSize() >> 1));
-			if (moveDir.toInteger() < 2) {
-				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() + offsetX, -moveDir.getDeltaY() + offsetY, 0);
-			} else {
-				suggestion = node.getCurrentTile().copyNew(-moveDir.getDeltaX() * node.getSize() + offsetX, -moveDir.getDeltaY() * node.getSize() + offsetY, 0);
-			}
-		}
-		return destination;
-	}
-	
-	/**
-	 * Checks if traversal is permitted.
-	 * @param l The location to check.
-	 * @param dir The direction to move.
-	 * @return {@code True}.
-	 */
-	public static boolean checkTraversal(Tile l, CompassPoint dir) {
-		return CompassPoint.get((dir.toInteger() + 2) % 4).canMove(l);
-	}
-	
-	/**
 	 * Checks if the mover is standing on an invalid position.
 	 * @param l The location.
 	 * @return {@code True} if so.
 	 */
-	public static boolean isInsideEntity(Tile l, Entity lock) {
+	public static boolean isInsideEntity(CoordGrid l, Entity lock) {
 		if (lock.getMovement().hasSteps()) {
 			return false;
 		}
-		Tile loc = lock.getCurrentTile();
+		CoordGrid loc = lock.getCurrentTile();
 		int size = lock.getSize();
 		if (l.getX() >= size + loc.getX() || lock.getSize() + l.getX() <= loc.getX()) {
 			return false;

@@ -44,8 +44,8 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.Stat;
-import org.virtue.game.world.region.MapSize;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.MapSize;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.GameEventContext;
 import org.virtue.network.event.context.impl.EmptyEventContext;
@@ -89,9 +89,9 @@ import org.virtue.network.event.encoder.impl.LogoutEventEncoder;
 import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.MessageEventEncoder;
 import org.virtue.network.event.encoder.impl.MusicEventEncoder;
-import org.virtue.network.event.encoder.impl.NpcUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.NpcInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
-import org.virtue.network.event.encoder.impl.PlayerUpdateEventEncoder;
+import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
 import org.virtue.network.event.encoder.impl.RunEnergyEventEncoder;
 import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
@@ -323,7 +323,7 @@ public class GameEventDispatcher {
 		sendEvent(WorldListEventEncoder.class, context);
 	}
 
-	public void sendSceneGraph(int sceneRadius, Tile tile, MapSize mapSize, boolean init,
+	public void sendSceneGraph(int sceneRadius, CoordGrid tile, MapSize mapSize, boolean init,
 			boolean isStatic) {
 		sendEvent(SceneGraphEventEncoder.class, new SceneGraphEventContext(sceneRadius,
 				tile, mapSize, init, isStatic));
@@ -443,14 +443,14 @@ public class GameEventDispatcher {
 	 * Sends the player update event
 	 */
 	public void sendPlayerUpdate() {
-		sendEvent(PlayerUpdateEventEncoder.class, player.getViewport());
+		sendEvent(PlayerInfoEventEncoder.class, player.getViewport());
 	}
 
 	/**
 	 * Sends the npc update event
 	 */
 	public void sendNPCUpdate() {
-		sendEvent(NpcUpdateEventEncoder.class, player.getViewport());
+		sendEvent(NpcInfoEventEncoder.class, player.getViewport());
 	}
 
 	/**

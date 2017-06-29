@@ -22,7 +22,7 @@
 package org.virtue.network.event.encoder.impl;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.zone.ZoneUpdatePacket;
+import org.virtue.game.map.zone.ZoneUpdatePacket;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
@@ -48,7 +48,7 @@ public class ZoneUpdateEventEncoder implements EventEncoder<ZoneUpdateEventConte
 		int localY = context.getTile().getLocalY(player.getViewport().getBaseTile());
 		buffer.putA(localX >> 3);
 		buffer.putS(localY >> 3);
-		buffer.putA(context.getTile().getPlane());
+		buffer.putA(context.getTile().getLevel());
 		if (context.isSingle()) {
 			buffer.putPacket(context.getPacket().getType().getServerTransmitID(), player);
 			context.getPacket().encode(buffer, player);

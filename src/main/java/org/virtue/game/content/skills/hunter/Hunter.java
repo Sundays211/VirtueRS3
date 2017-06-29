@@ -3,7 +3,7 @@ package org.virtue.game.content.skills.hunter;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.InvRepository;
-import org.virtue.game.world.region.SceneLocation;
+import org.virtue.game.map.SceneLocation;
 
 /**
  * @author James

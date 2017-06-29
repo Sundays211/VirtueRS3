@@ -26,9 +26,9 @@ import java.util.Set;
 
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.DynamicRegion;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.square.DynamicMapSquare;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
@@ -52,16 +52,16 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 			player.getViewport().init(buffer);
 		} 
 		if (context.isStatic()) {
-			buffer.putLEShort(context.getBaseTile().getChunkY());//ChunkY
-			buffer.putShortA(context.getBaseTile().getChunkX());
+			buffer.putLEShort(context.getBaseTile().getZoneY());//ChunkY
+			buffer.putShortA(context.getBaseTile().getZoneX());
 			buffer.putA(5);
 			//buffer.putA(context.getSceneRadius());
 			buffer.putS(9);//Count
 			buffer.putS(context.isRender() ? 1 : 0);//Force
 			buffer.putS(context.getMapSize().getID());
 		} else {
-			int baseChunkX = context.getBaseTile().getChunkX();
-			int baseChunkY = context.getBaseTile().getChunkY();
+			int baseChunkX = context.getBaseTile().getZoneX();
+			int baseChunkY = context.getBaseTile().getZoneY();
 			buffer.putByte(5);
 			//buffer.putByte(context.getSceneRadius());
 			buffer.putC(1);//Type = 1 for dynamic region
@@ -71,21 +71,21 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 			buffer.putA(context.getMapSize().getID());
 
 			buffer.setBitAccess();
-			Region region = null;
+			MapSquare region = null;
 			//System.out.println("Base tile: "+context.getBaseTile());
 			int baseRegionCount = 0;
-			Set<Region> regions = new HashSet<Region>();
+			Set<MapSquare> regions = new HashSet<MapSquare>();
 			int tileCount = context.getMapSize().getTileCount()/2;
 			for (int plane = 0; plane < 4; plane++) {
 				for (int x = (baseChunkX - (tileCount >> 3)); x <= (baseChunkX + (tileCount >> 3)); x++) {
 					for (int y = (baseChunkY - (tileCount >> 3)); y <= (baseChunkY + (tileCount >> 3)); y++) {
-						int regionID = Tile.getMapSquareHash(x << 3, y << 3);
+						int regionID = CoordGrid.getMapSquareHash(x << 3, y << 3);
 						if (region == null || regionID != region.getID()) {
 							region = World.getInstance().getRegions().getRegionByID(regionID);
 							if (!regions.contains(region)) {
 								regions.add(region);
-								if (region instanceof DynamicRegion) {
-									baseRegionCount += ((DynamicRegion) region).getBaseRegionCount();
+								if (region instanceof DynamicMapSquare) {
+									baseRegionCount += ((DynamicMapSquare) region).getBaseRegionCount();
 								} else {
 									baseRegionCount++;
 								}
@@ -95,8 +95,8 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 							buffer.putBits(1, 0);
 						} else {
 							buffer.putBits(1, 1);
-							if (region instanceof DynamicRegion) {
-								buffer.putBits(26, ((DynamicRegion) region).getStaticChunk(plane, x, y));
+							if (region instanceof DynamicMapSquare) {
+								buffer.putBits(26, ((DynamicMapSquare) region).getStaticChunk(plane, x, y));
 							} else {
 								//Tile baseTile = region.getBaseTile();
 								//System.out.println("Chunk: x="+x+", y="+y+", z="+plane+", region="+baseTile);

@@ -29,7 +29,7 @@ import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.world.region.movement.WidgetOnEntityTarget;
+import org.virtue.game.map.movement.WidgetOnEntityTarget;
 import org.virtue.network.event.context.impl.in.NpcTargetEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

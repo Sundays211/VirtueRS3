@@ -23,9 +23,9 @@ package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.GroundItem;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.GroundItem;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.ItemClickEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 
@@ -43,11 +43,11 @@ public class ItemClickEventHandler implements GameEventHandler<ItemClickEventCon
 	 */
 	@Override
 	public void handle(final Player player, final ItemClickEventContext context) {
-		Tile tile = new Tile(context.getBaseX(), context.getBaseY(), player.getCurrentTile().getPlane());
-		Region region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
+		CoordGrid tile = new CoordGrid(context.getBaseX(), context.getBaseY(), player.getCurrentTile().getLevel());
+		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
 
 		if (region != null) {
-			final GroundItem item = region.getItem(tile.getXInRegion(), tile.getYInRegion(), tile.getPlane(), context.getItemID());
+			final GroundItem item = region.getItem(tile.getXInRegion(), tile.getYInRegion(), tile.getLevel(), context.getItemID());
 			if (item == null) {
 				player.getDispatcher().sendConsoleMessage("<col=ff0000>Ground item "+context.getItemID()+" clicked at "+tile+" does not exist!");
 			} else if (item.distanceOption(context.getButton()) || (player.getCurrentTile().getX() == context.getBaseX() && player.getCurrentTile().getY() == context.getBaseY())) {
@@ -55,7 +55,7 @@ public class ItemClickEventHandler implements GameEventHandler<ItemClickEventCon
 					player.getDispatcher().sendConsoleMessage("<col=ffff00>Unhandled ground item: " + context.getItemID() + ", baseX: " + context.getBaseX() + ", baseY: " + context.getBaseY() + ", forceRun: " + context.forceRun() + ", Button: "+context.getButton());
 				}
 			} else {
-                                if (!player.getMovement().moveTo(item.getTile())) { 
+                                if (!player.getMovement().moveTo(item)) { 
 					return;//TODO: Add handing if the player cannot reach the item 
 				} 
 				player.getMovement().setOnTarget(new Runnable() {

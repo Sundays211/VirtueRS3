@@ -23,8 +23,8 @@ package org.virtue.network.event.context.impl.out;
 
 import java.util.Collection;
 
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.zone.ZoneUpdatePacket;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.zone.ZoneUpdatePacket;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
@@ -40,9 +40,9 @@ public class ZoneUpdateEventContext implements GameEventContext {
 	
 	private ZoneUpdatePacket packet;
 	
-	private Tile tile;
+	private CoordGrid tile;
 	
-	public ZoneUpdateEventContext (Collection<ZoneUpdatePacket> packets, Tile tile) {
+	public ZoneUpdateEventContext (Collection<ZoneUpdatePacket> packets, CoordGrid tile) {
 		this.packets = packets;
 		this.tile = tile;
 	}
@@ -64,7 +64,7 @@ public class ZoneUpdateEventContext implements GameEventContext {
 		return packets == null;
 	}
 	
-	public Tile getTile () {
+	public CoordGrid getTile () {
 		return tile;
 	}
 }

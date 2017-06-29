@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var GroundItem = Java.type('org.virtue.game.world.region.GroundItem');
+var GroundItem = Java.type('org.virtue.game.map.GroundItem');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

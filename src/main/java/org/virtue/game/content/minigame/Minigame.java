@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.DynamicRegion;
+import org.virtue.game.map.square.DynamicMapSquare;
 
 /**
  * An encapsulation class for holding information
@@ -56,7 +56,7 @@ public class Minigame {
 	/**
 	 * The dynamic region this minigame is playing on
 	 */
-	private final DynamicRegion region;
+	private final DynamicMapSquare region;
 	
 	/**
 	 * The players participating in this minigame
@@ -82,7 +82,7 @@ public class Minigame {
 	 * @param npcs The npcs
 	 * @param teams The teams
 	 */
-	public Minigame(long start, long limit, DynamicRegion region, List<Player> players, List<NPC> npcs, Map<Integer, Team> teams) {
+	public Minigame(long start, long limit, DynamicMapSquare region, List<Player> players, List<NPC> npcs, Map<Integer, Team> teams) {
 		this.startTime = start;
 		this.timeLimit = limit;
 		this.region = region;
@@ -124,7 +124,7 @@ public class Minigame {
 	/**
 	 * @return the region
 	 */
-	public final DynamicRegion getRegion() {
+	public final DynamicMapSquare getRegion() {
 		return region;
 	}
 

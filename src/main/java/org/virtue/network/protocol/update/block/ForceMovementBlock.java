@@ -23,8 +23,8 @@ package org.virtue.network.protocol.update.block;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.CompassPoint;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.BlockType;
@@ -35,21 +35,21 @@ import org.virtue.network.protocol.update.BlockType;
  */
 public class ForceMovementBlock extends Block {
 
-	private Tile tile1;
+	private CoordGrid tile1;
 	private int delay1;
-	private Tile tile2;
+	private CoordGrid tile2;
 	private int delay2;
 
 	private CompassPoint direction;
 
-	public ForceMovementBlock(Tile tile1, int delay1, CompassPoint direction) {
+	public ForceMovementBlock(CoordGrid tile1, int delay1, CompassPoint direction) {
 		this(tile1, delay1, direction, tile1, delay1+1);
 	}
 
 	/**
 	 * The {@link ForceMovementBlock} constructor
 	 */
-	public ForceMovementBlock(Tile tile1, int delay1, CompassPoint direction, Tile tile2, int delay2) {
+	public ForceMovementBlock(CoordGrid tile1, int delay1, CompassPoint direction, CoordGrid tile2, int delay2) {
 		super(BlockType.MOVE);
 		this.tile1 = tile1;
 		this.delay1 = delay1;
@@ -68,8 +68,8 @@ public class ForceMovementBlock extends Block {
 			block.putA(tile1.getY() - entity.getCurrentTile().getY());
 			block.putC(tile2.getX() - entity.getCurrentTile().getX());
 			block.putA(tile2.getY() - entity.getCurrentTile().getY());
-			block.putA(tile1.getPlane() - entity.getCurrentTile().getPlane());
-			block.putA(tile2.getPlane() - entity.getCurrentTile().getPlane());
+			block.putA(tile1.getLevel() - entity.getCurrentTile().getLevel());
+			block.putA(tile2.getLevel() - entity.getCurrentTile().getLevel());
 			block.putShortA(delay1 * 30);
 			block.putLEShortA(delay2 * 30);
 			block.putLEShortA(this.direction.getID());
@@ -78,8 +78,8 @@ public class ForceMovementBlock extends Block {
 			block.putS(tile1.getY() - entity.getCurrentTile().getY());
 			block.putByte(tile2.getX() - entity.getCurrentTile().getX());
 			block.putA(tile2.getY() - entity.getCurrentTile().getY());
-			block.putS(tile1.getPlane() - entity.getCurrentTile().getPlane());
-			block.putA(tile2.getPlane() - entity.getCurrentTile().getPlane());
+			block.putS(tile1.getLevel() - entity.getCurrentTile().getLevel());
+			block.putA(tile2.getLevel() - entity.getCurrentTile().getLevel());
 			block.putShortA(delay1 * 30);
 			block.putShort(delay2 * 30);
 			block.putLEShort(this.direction.getID());

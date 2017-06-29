@@ -1,7 +1,7 @@
 package org.virtue.network.event.context.impl.out.widget;
 
 import org.virtue.game.entity.Entity;
-import org.virtue.game.world.region.SceneLocation;
+import org.virtue.game.map.SceneLocation;
 import org.virtue.network.event.context.GameEventContext;
 
 /**
