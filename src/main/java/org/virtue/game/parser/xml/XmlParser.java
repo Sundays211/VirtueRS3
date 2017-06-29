@@ -66,8 +66,8 @@ import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.var.VarContainer;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.parser.ParserType;
-import org.virtue.game.world.region.Tile;
 import org.virtue.network.protocol.message.ResponseTypeMessage;
 import org.virtue.network.protocol.message.login.LoginRequestMessage;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
@@ -154,11 +154,11 @@ public class XmlParser {
 					def.appendChild(posY);
 					
 					Element posZ = document.createElement("posZ");
-					posZ.appendChild(document.createTextNode(Integer.toString(player.getCurrentTile().getPlane())));
+					posZ.appendChild(document.createTextNode(Integer.toString(player.getCurrentTile().getLevel())));
 					def.appendChild(posZ);
 					
 					if (player.getLastStaticTile() != null) {
-						Tile lastStaticTile = player.getLastStaticTile();
+						CoordGrid lastStaticTile = player.getLastStaticTile();
 						Element lastStatic = document.createElement("lastStaticTile");
 						
 						Element x = document.createElement("x");
@@ -170,7 +170,7 @@ public class XmlParser {
 						lastStatic.appendChild(y);
 						
 						Element z = document.createElement("z");
-						z.appendChild(document.createTextNode(Integer.toString(lastStaticTile.getPlane())));
+						z.appendChild(document.createTextNode(Integer.toString(lastStaticTile.getLevel())));
 						lastStatic.appendChild(z);
 						def.appendChild(lastStatic);
 					}

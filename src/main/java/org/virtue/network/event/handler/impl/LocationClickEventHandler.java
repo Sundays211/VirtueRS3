@@ -31,12 +31,14 @@ import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.event.BenchSitting;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.SceneLocation;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.LocationClickEventContext;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.handler.GameEventHandler;
+import org.virtue.network.protocol.update.block.FaceDirectionBlock;
+import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -56,10 +58,10 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 	 */
 	@Override
 	public void handle(final Player player, final LocationClickEventContext context) {
-		Tile tile = new Tile(context.getBaseX(), context.getBaseY(), player.getCurrentTile().getPlane());
-		Region region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
+		CoordGrid tile = new CoordGrid(context.getBaseX(), context.getBaseY(), player.getCurrentTile().getLevel());
+		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
 		if (region != null) {
-			final SceneLocation location = region.getLocation(tile.getXInRegion(), tile.getYInRegion(), tile.getPlane(),
+			final SceneLocation location = region.getLocation(tile.getXInRegion(), tile.getYInRegion(), tile.getLevel(),
 					context.getLocationID());
 			if (location == null) {
 				player.getDispatcher().sendConsoleMessage(
@@ -74,13 +76,18 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 				handleInteraction(player, location, context);				
 			} else {
 				player.setPaused(false);
-				if (!player.getMovement().moveTo(location, context.getBaseX(), context.getBaseY())) {
+				MoveSpeed speed = player.getMovement().getMoveSpeed();
+				if (context.forceRun()) {
+					speed = speed == MoveSpeed.RUN ? MoveSpeed.WALK : MoveSpeed.RUN;
+				}
+				if (!player.getMovement().moveTo(location, context.getBaseX(), context.getBaseY(), speed)) {
 					player.getDispatcher().sendGameMessage("You can't reach that.");
 					return;
 				}
 				player.getMovement().setOnTarget(new Runnable() {
 					@Override
 					public void run() {
+						player.queueUpdateBlock(new FaceDirectionBlock(tile));
 						handleInteraction(player, location, context);
 					}
 				});
@@ -117,8 +124,8 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 			}
 			int clickX = context.getBaseX();
 			int clickY = context.getBaseY();
-			int level = location.getCurrentTile().getPlane();
-			Tile clickCoords = new Tile(clickX, clickY, level);
+			int level = location.getCurrentTile().getLevel();
+			CoordGrid clickCoords = new CoordGrid(clickX, clickY, level);
 			
 			if (scripts.hasBinding(type, location.getId())) {
 				Map<String, Object> args = new HashMap<>();

@@ -66,14 +66,14 @@ import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.game.entity.player.var.VarRepository;
 import org.virtue.game.entity.player.widget.WidgetManager;
+import org.virtue.game.map.GroundItem;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.CompassPoint;
+import org.virtue.game.map.square.DynamicMapSquare;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.zone.Projectile;
+import org.virtue.game.map.zone.ZoneUpdatePacket;
 import org.virtue.game.parser.ParserType;
-import org.virtue.game.world.region.DynamicRegion;
-import org.virtue.game.world.region.GroundItem;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.CompassPoint;
-import org.virtue.game.world.region.zone.Projectile;
-import org.virtue.game.world.region.zone.ZoneUpdatePacket;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
 import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
@@ -267,7 +267,7 @@ public class Player extends Entity {
 	/**
 	 * Represents the last tile the player was on in a non-dynamic region
 	 */
-	private Tile lastStaticTile;
+	private CoordGrid lastStaticTile;
 
 	/**
 	 * Represents the amount of run energy the player currently has
@@ -284,7 +284,7 @@ public class Player extends Entity {
 
 	private WidgetManager widgets;
 
-	private DynamicRegion house;
+	private DynamicMapSquare house;
 
 	private MinigameType minigameType;
 
@@ -329,7 +329,6 @@ public class Player extends Entity {
 	public Player(Channel channel, String username, String password, CombatMode mode, ISAACCipher encoding,
 			ISAACCipher decoding) {
 		super(-1);
-		super.setName(username);
 		this.channel = channel;
 		this.ipAddress = channel.remoteAddress().toString().split(":")[0]
 				.replace("/", "");
@@ -562,9 +561,7 @@ public class Player extends Entity {
 		return display;
 	}
 
-	@Override
 	public void setName(String display) {
-		super.setName(display);
 		this.display = display;
 	}
 
@@ -623,30 +620,30 @@ public class Player extends Entity {
 	/** Testing Only */
 	public void sendProject() {
 		ArrayList<ZoneUpdatePacket> list = new ArrayList<>();
-		list.add(new Projectile(getCurrentTile(), new Tile(
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() - 6, getLastTile().getY() - 7,
-				getLastTile().getPlane()), null, 2263, 70, 150, 30, 41, 0));
-		list.add(new Projectile(getCurrentTile(), new Tile(
+				getLastTile().getLevel()), null, 2263, 70, 150, 30, 41, 0));
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() - 4, getLastTile().getY() + 5,
-				getLastTile().getPlane()), null, 2263, 70, 150, 30, 41, 0));
-		list.add(new Projectile(getCurrentTile(), new Tile(
+				getLastTile().getLevel()), null, 2263, 70, 150, 30, 41, 0));
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() + 3, getLastTile().getY() - 2,
-				getLastTile().getPlane()), null, 2263, 70, 150, 30, 41, 0));
-		list.add(new Projectile(getCurrentTile(), new Tile(
+				getLastTile().getLevel()), null, 2263, 70, 150, 30, 41, 0));
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() + 2, getLastTile().getY(), getLastTile()
-						.getPlane()), null, 2263, 70, 150, 30, 41, 0));
-		list.add(new Projectile(getCurrentTile(), new Tile(
+						.getLevel()), null, 2263, 70, 150, 30, 41, 0));
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() + 6, getLastTile().getY() - 1,
-				getLastTile().getPlane()), null, 2263, 70, 150, 30, 41, 0));
-		list.add(new Projectile(getCurrentTile(), new Tile(
+				getLastTile().getLevel()), null, 2263, 70, 150, 30, 41, 0));
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() - 3, getLastTile().getY() + 6,
-				getLastTile().getPlane()), null, 2260, 70, 150, 30, 41, 0));
-		list.add(new Projectile(getCurrentTile(), new Tile(
+				getLastTile().getLevel()), null, 2260, 70, 150, 30, 41, 0));
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() - 5, getLastTile().getY() - 8,
-				getLastTile().getPlane()), null, 2215, 70, 150, 30, 41, 0));
-		list.add(new Projectile(getCurrentTile(), new Tile(
+				getLastTile().getLevel()), null, 2215, 70, 150, 30, 41, 0));
+		list.add(new Projectile(getCurrentTile(), new CoordGrid(
 				getLastTile().getX() + 7, getLastTile().getY() + 4,
-				getLastTile().getPlane()), null, 2231, 70, 150, 30, 41, 0));
+				getLastTile().getLevel()), null, 2231, 70, 150, 30, 41, 0));
 		getDispatcher().sendEvent(ZoneUpdateEventEncoder.class,
 				new ZoneUpdateEventContext(list, getLastTile()));
 	}
@@ -1160,11 +1157,11 @@ public class Player extends Entity {
 		this.clanHash = clanHash;
 	}
 
-	public void setLastStaticTile(Tile tile) {
+	public void setLastStaticTile(CoordGrid tile) {
 		this.lastStaticTile = tile;
 	}
 
-	public Tile getLastStaticTile() {
+	public CoordGrid getLastStaticTile() {
 		return lastStaticTile;
 	}
 
@@ -1172,11 +1169,11 @@ public class Player extends Entity {
 		return widgets;
 	}
 
-	public void setHouse(DynamicRegion house) {
+	public void setHouse(DynamicMapSquare house) {
 		this.house = house;
 	}
 
-	public DynamicRegion getHouse() {
+	public DynamicMapSquare getHouse() {
 		return house;
 	}
 
@@ -1225,7 +1222,7 @@ public class Player extends Entity {
 		}
 		this.setFreezeDuration(3);
 		this.pvpDrops(this);
-		this.getMovement().teleportTo(Constants.START_TILE);
+		this.getMovement().setCoords(Constants.START_TILE);
 		getImpactHandler().restoreLifepoints();
 		this.getDispatcher().sendGameMessage("Oh dear, you have died.");
 		this.queueUpdateBlock(new AnimationBlock(-1));
@@ -1240,7 +1237,7 @@ public class Player extends Entity {
 	}
 
 	public void pvpDrops(Entity player) {
-		Region region = World.getInstance().getRegions()
+		MapSquare region = World.getInstance().getRegions()
 				.getRegionByID(player.getCurrentTile().getRegionID());
 		if (region != null && region.isLoaded()) {
 			GroundItem groundItem = new GroundItem(526, 1,
@@ -1358,13 +1355,13 @@ public class Player extends Entity {
 		return animation;
 	}
 
-	private DynamicRegion armarRegion;// For testing
+	private DynamicMapSquare armarRegion;// For testing
 
-	public DynamicRegion getArmarDynamicRegion() {
+	public DynamicMapSquare getArmarDynamicRegion() {
 		return armarRegion;
 	}
 
-	public void setArmarDynamicRegion(DynamicRegion armarRegion) {
+	public void setArmarDynamicRegion(DynamicMapSquare armarRegion) {
 		this.armarRegion = armarRegion;
 	}
 

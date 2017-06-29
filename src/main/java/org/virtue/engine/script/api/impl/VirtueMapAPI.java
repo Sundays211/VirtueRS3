@@ -25,12 +25,12 @@ import org.virtue.Constants;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.GroundItem;
+import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.square.DynamicMapSquare;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.node.Node;
-import org.virtue.game.world.region.DynamicRegion;
-import org.virtue.game.world.region.GroundItem;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.SceneLocation;
-import org.virtue.game.world.region.Tile;
 
 /**
  * @author Sundays211
@@ -43,21 +43,21 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
-	public Tile getCoords(Node node) {
+	public CoordGrid getCoords(Node node) {
 		return node.getCurrentTile();
 	}
 
 	@Override
-	public Tile getCoords(int x, int y, int level) {
-		return new Tile(x, y, level);
+	public CoordGrid getCoords(int x, int y, int level) {
+		return new CoordGrid(x, y, level);
 	}
 
 	@Override
-	public Tile getCoords(int squareX, int squareY, int level, int localX, int localY) {
-		return new Tile(localX, localY, level, squareX, squareY);
+	public CoordGrid getCoords(int squareX, int squareY, int level, int localX, int localY) {
+		return new CoordGrid(localX, localY, level, squareX, squareY);
 	}
 	
-	private Region getRegion (Tile coords) {
+	private MapSquare getRegion (CoordGrid coords) {
 		return World.getInstance().getRegions().getRegionByID(coords.getRegionID());
 	}
 
@@ -65,7 +65,7 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#createArea()
 	 */
 	@Override
-	public DynamicRegion createArea() {
+	public DynamicMapSquare createArea() {
 		return World.getInstance().getRegions().createDynamicRegion();
 	}
 
@@ -73,7 +73,7 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#destroyArea(org.virtue.game.world.region.DynamicRegion)
 	 */
 	@Override
-	public void destroyArea(DynamicRegion area) {
+	public void destroyArea(DynamicMapSquare area) {
 		World.getInstance().getRegions().destroyDynamicRegion(area);
 	}
 
@@ -81,7 +81,7 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#buildArea(org.virtue.game.world.region.DynamicRegion)
 	 */
 	@Override
-	public void buildArea(DynamicRegion area) {
+	public void buildArea(DynamicMapSquare area) {
 		area.build();
 	}
 
@@ -89,7 +89,7 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#getSquareX(org.virtue.game.world.region.DynamicRegion)
 	 */
 	@Override
-	public int getSquareX(DynamicRegion area) {
+	public int getSquareX(DynamicMapSquare area) {
 		return area.getBaseTile().getRegionX();
 	}
 
@@ -97,7 +97,7 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#getSquareY(org.virtue.game.world.region.DynamicRegion)
 	 */
 	@Override
-	public int getSquareY(DynamicRegion area) {
+	public int getSquareY(DynamicMapSquare area) {
 		return area.getBaseTile().getRegionY();
 	}
 
@@ -105,7 +105,7 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#rotateChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int)
 	 */
 	@Override
-	public void rotateChunk(DynamicRegion area, int chunkX, int chunkY,
+	public void rotateChunk(DynamicMapSquare area, int chunkX, int chunkY,
 			int plane, int rotation) {
 		area.rotateChunk(chunkX, chunkY, plane, rotation);
 	}
@@ -114,9 +114,9 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#setChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int, int, int, int)
 	 */
 	@Override
-	public void setChunk(DynamicRegion area, int chunkX, int chunkY, int plane,
+	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane,
 			int staticChunkX, int staticChunkY, int staticPlane, int rotation) {
-		Tile staticCoords = new Tile(staticChunkX * 8, staticChunkY * 8, staticPlane);
+		CoordGrid staticCoords = new CoordGrid(staticChunkX * 8, staticChunkY * 8, staticPlane);
 		setChunk(area, chunkX, chunkY, plane, staticCoords, rotation);
 	}
 
@@ -124,8 +124,8 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#setChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, org.virtue.game.world.region.Tile, int)
 	 */
 	@Override
-	public void setChunk(DynamicRegion area, int chunkX, int chunkY, int plane,
-			Tile staticCoords, int rotation) {
+	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane,
+			CoordGrid staticCoords, int rotation) {
 		area.updateChunk(chunkX, chunkY, plane, staticCoords, rotation);
 	}
 
@@ -133,9 +133,9 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#addLoc(org.virtue.game.world.region.DynamicRegion, int, org.virtue.game.world.region.Tile, int, int)
 	 */
 	@Override
-	public SceneLocation addLoc(Region area, int locTypeID, int localX, int localY, int level,
+	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level,
 			int nodeType, int rotation) {
-		Tile coords = new Tile(localX, localY, level, area.getID());
+		CoordGrid coords = new CoordGrid(localX, localY, level, area.getID());
 		SceneLocation location = SceneLocation.create(locTypeID, coords, nodeType, rotation);
 		area.spawnTempLocation(location, -1);
 		return location;
@@ -145,27 +145,27 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#addLoc(org.virtue.game.world.region.DynamicRegion, int, org.virtue.game.world.region.Tile)
 	 */
 	@Override
-	public SceneLocation addLoc(Region area, int locTypeID, int localX, int localY, int level) {
+	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level) {
 		return addLoc(area, locTypeID, localX, localY, level, 10, 0);
 	}
 
 	@Override
-	public SceneLocation addLoc(int locTypeId, Tile coords, int nodeType, int rotation) {
+	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int nodeType, int rotation) {
 		SceneLocation location = SceneLocation.create(locTypeId, coords, nodeType, rotation);
 		getRegion(coords).spawnTempLocation(location, -1);
 		return location;
 	}
 
 	@Override
-	public SceneLocation getLoc(Tile coords, int shape) {
+	public SceneLocation getLoc(CoordGrid coords, int shape) {
 		if (shape < 0 || shape > 22) {
 			throw new IllegalArgumentException("Invalid location shape: "+shape);
 		}
-		Region region = getRegion(coords);
+		MapSquare region = getRegion(coords);
 		if (region == null) {
 			return null;
 		}
-		SceneLocation[] locs = region.getLocations(coords.getX(), coords.getY(), coords.getPlane());
+		SceneLocation[] locs = region.getLocations(coords.getX(), coords.getY(), coords.getLevel());
 		if (locs == null) {
 			return null;
 		}
@@ -198,13 +198,13 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
-	public void addObj(int objTypeId, Tile coords, Player player, int amount) {
+	public void addObj(int objTypeId, CoordGrid coords, Player player, int amount) {
 		addObj(objTypeId, coords, player, amount, Constants.ITEM_REMOVAL_DELAY);
 	}
 
 	@Override
-	public void addObj(int objTypeId, Tile coords, Player player, int amount, int respawnDelay) {
-		Region region = getRegion(coords);
+	public void addObj(int objTypeId, CoordGrid coords, Player player, int amount, int respawnDelay) {
+		MapSquare region = getRegion(coords);
 		if (region == null) {
 			throw new IllegalArgumentException("Invalid coords: "+coords);
 		}

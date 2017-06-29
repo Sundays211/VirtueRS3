@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.game.World;
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.CompassPoint;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.CompassPoint;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -67,9 +67,9 @@ public class NpcSpawnParser {
 						direction = -1;
 					}
 				}
-				NPC npc = NPC.create(npcID, new Tile(Integer.valueOf(location[0]), Integer.valueOf(location[1]), Integer.valueOf(location[2])));
+				NPC npc = NPC.create(npcID, new CoordGrid(Integer.valueOf(location[0]), Integer.valueOf(location[1]), Integer.valueOf(location[2])));
 				if (direction != -1) {
-					npc.setDirection(CompassPoint.forID(direction));
+					npc.setDirection(CompassPoint.getById(direction));
 				}
 				World.getInstance().addNPC(npc);
 			}

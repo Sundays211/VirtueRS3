@@ -100,15 +100,6 @@ public class Item extends Node {
 	public String getName() {
 		return getType().name;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.virtue.game.node.Node#setName(java.lang.String)
-	 */
-	@Override
-	public void setName(String name) {
-		throw new UnsupportedOperationException();
-	}
 
 	/**
 	 * @param count the amount to set

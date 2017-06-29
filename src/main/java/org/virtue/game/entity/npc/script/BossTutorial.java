@@ -10,8 +10,8 @@ import org.virtue.game.entity.combat.impl.magic.MagicAttackHandler;
 import org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler;
 import org.virtue.game.entity.combat.impl.range.RangeAttackHandler;
 import org.virtue.game.entity.npc.AbstractNPC;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.zone.Projectile;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.zone.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
@@ -34,12 +34,12 @@ public final class BossTutorial extends AbstractNPC {
 	 * @param id The NPC id.
 	 * @param tile The tile.
 	 */
-	public BossTutorial(int id, Tile tile) {
+	public BossTutorial(int id, CoordGrid tile) {
 		super(id, tile);
 	}
 
 	@Override
-	public AbstractNPC newInstance(int id, Tile tile) {
+	public AbstractNPC newInstance(int id, CoordGrid tile) {
 		return new BossTutorial(id, tile);
 	}
 	

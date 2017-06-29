@@ -24,7 +24,7 @@ package org.virtue;
 import java.io.File;
 import java.math.BigInteger;
 
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 
 
 /**
@@ -94,12 +94,12 @@ public class Constants {
 	/**
 	 * The Start spawn location
 	 */
-	public static final Tile START_TILE = new Tile(3210, 3256, 0);
+	public static final CoordGrid START_TILE = new CoordGrid(3210, 3256, 0);
 
 	/**
 	 * The Death Spawn Location
 	 */
-	public static final Tile RESPAWN_TILE = new Tile(3210, 3256, 0);
+	public static final CoordGrid RESPAWN_TILE = new CoordGrid(3210, 3256, 0);
 	
 	/**
 	 * The Cache Repository

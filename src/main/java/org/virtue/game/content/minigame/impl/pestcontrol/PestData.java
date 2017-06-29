@@ -1,15 +1,15 @@
 package org.virtue.game.content.minigame.impl.pestcontrol;
 
 import org.virtue.game.entity.npc.NPC;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 
 public enum PestData {
  
 	NOVICE(new Object[][] {
-			{new Tile(2628, 2591, 0), new Tile(2627, 2592, 0)}, //purple portal
-			{new Tile(2680, 2588, 0), new Tile(2677, 2588, 0)}, //blue portal
-			{new Tile(2669, 2570, 0), new Tile(2666, 2570, 0)}, //yellow portal
-			{new Tile(2645, 2569, 0), new Tile(2642, 2569, 0)} //red portal
+			{new CoordGrid(2628, 2591, 0), new CoordGrid(2627, 2592, 0)}, //purple portal
+			{new CoordGrid(2680, 2588, 0), new CoordGrid(2677, 2588, 0)}, //blue portal
+			{new CoordGrid(2669, 2570, 0), new CoordGrid(2666, 2570, 0)}, //yellow portal
+			{new CoordGrid(2645, 2569, 0), new CoordGrid(2642, 2569, 0)} //red portal
 		}, new int[] { 
 			/* Shifters */ 3732, 3733, 3734, 3735, 
 			/* Ravagers */ 3742, 3743, 3744, 

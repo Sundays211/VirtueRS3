@@ -38,7 +38,7 @@ import org.virtue.config.vartype.constants.VarLifetime;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
 
@@ -156,8 +156,8 @@ public class VarRepository implements VarDomain {
 					}
 					break;
 				case COORDGRID:
-					if ((value instanceof Tile)) {
-						value = ((Tile) value).getTileHash();
+					if ((value instanceof CoordGrid)) {
+						value = ((CoordGrid) value).getTileHash();
 					}
 					break;
 	 			default:

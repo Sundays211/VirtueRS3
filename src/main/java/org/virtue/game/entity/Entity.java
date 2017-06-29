@@ -40,10 +40,10 @@ import org.virtue.game.entity.combat.CombatSchedule;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.combat.ImpactHandler;
 import org.virtue.game.entity.combat.death.DeathEvent;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.movement.Movement;
+import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.node.Node;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.Tile;
-import org.virtue.game.world.region.movement.Movement;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.UpdateBlockQueue;
 import org.virtue.network.protocol.update.block.AnimationBlock;
@@ -75,7 +75,7 @@ public abstract class Entity extends Node {
 	/**
 	 * The entity's on the last tick
 	 */
-	private Tile lastTile;
+	private CoordGrid lastTile;
 	
 	/**
 	 * The movement handling system for the entity
@@ -199,7 +199,7 @@ public abstract class Entity extends Node {
 	 * Sets the entity's tile on the last tick
 	 * @param tile
 	 */
-	public void setLastTile(Tile tile) {
+	public void setLastTile(CoordGrid tile) {
 		this.lastTile = tile;
 	}
 	
@@ -210,7 +210,7 @@ public abstract class Entity extends Node {
 	 * @param z
 	 */
 	public void setLastTile(int x, int y, int z) {
-		this.lastTile = new Tile(x, y, z);
+		this.lastTile = new CoordGrid(x, y, z);
 	}
 	
 
@@ -218,7 +218,7 @@ public abstract class Entity extends Node {
 	 * Returns the entity's tile on the last tick
 	 * @return
 	 */
-	public Tile getLastTile() {
+	public CoordGrid getLastTile() {
 		return lastTile;
 	}
 	
@@ -232,7 +232,7 @@ public abstract class Entity extends Node {
 	 * @param z
 	 */
 	public void setCurrentTile(int x, int y, int z) {
-		setCurrentTile(new Tile(x, y, z));
+		setCurrentTile(new CoordGrid(x, y, z));
 	}
 	
 	/**
@@ -388,17 +388,17 @@ public abstract class Entity extends Node {
 	public abstract int getImpactAnimation();
 	
 	/**
-	 * Returns if this {@link Entity} is adjacent to the specified {@link Tile}
+	 * Returns if this {@link Entity} is adjacent to the specified {@link CoordGrid}
 	 * @param tile The tile to check
 	 * @param allowDiagonals Whether diagonal tiles count as adjacent
 	 * @return True if the entity is adjacent to the specified tile, false otherwise
 	 */
-	public boolean isAdjacentTo(Tile tile, boolean allowDiagonals) {
+	public boolean isAdjacentTo(CoordGrid tile, boolean allowDiagonals) {
 		return isAdjacentTo(tile, allowDiagonals, 1, 1);
 	}
 	
 	/**
-	 * Returns if this {@link Entity} is adjacent to the specified {@link Tile}
+	 * Returns if this {@link Entity} is adjacent to the specified {@link CoordGrid}
 	 * Note that for the purposes of this method, being on the same tile as the entity does not count as being adjacent
 	 * @param tile The tile to check
 	 * @param allowDiagonals Whether diagonal tiles count as adjacent
@@ -406,7 +406,7 @@ public abstract class Entity extends Node {
 	 * @param sizeY The y-dimension of the object size
 	 * @return True if the entity is adjacent to the specified tile, false otherwise
 	 */
-	public boolean isAdjacentTo(Tile tile, boolean allowDiagonals, int sizeX, int sizeY) {
+	public boolean isAdjacentTo(CoordGrid tile, boolean allowDiagonals, int sizeX, int sizeY) {
 		int dx = Math.abs(currentTile.getX() - tile.getX());
 		int dy = Math.abs(currentTile.getY() - tile.getY());
 		if (dx == 0 && dy == 0) {
@@ -483,7 +483,7 @@ public abstract class Entity extends Node {
 	 * Gets the region this entity is standing in.
 	 * @return The region.
 	 */
-	public Region getRegion() {
+	public MapSquare getRegion() {
 		return World.getInstance().getRegions().getRegionByID(this.getCurrentTile().getRegionID());
 	}
 	

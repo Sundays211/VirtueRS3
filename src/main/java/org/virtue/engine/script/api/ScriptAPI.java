@@ -40,11 +40,11 @@ import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.event.PlayerActionHandler;
 import org.virtue.game.entity.player.inv.Item;
+import org.virtue.game.map.SceneLocation;
+import org.virtue.game.map.square.MapSquare;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
-import org.virtue.game.world.region.Region;
-import org.virtue.game.world.region.SceneLocation;
-import org.virtue.game.world.region.Tile;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -967,7 +967,7 @@ public interface ScriptAPI {
 	 * @param entity The entity
 	 * @param coords The coords to face
 	 */
-	public void faceCoords (Entity entity, Tile coords);
+	public void faceCoords (Entity entity, CoordGrid coords);
 	
 	/**
 	 * Tells an entity to face the specified target entity
@@ -982,15 +982,14 @@ public interface ScriptAPI {
 	 */
 	public void clearFaceEntity (Entity entity);
 	
-	public void forceMovement (Entity entity, Tile t1, int delay1, Tile t2, int delay2, int direction);
+	public void forceMovement (Entity entity, CoordGrid t1, int delay1, CoordGrid t2, int delay2, int direction);
 	
 	/**
 	 * Moves the entity to the specified coordinates
 	 * @param entity The entity to teleport
 	 * @param coords The destination coordinates
-	 * @return True if the teleport was successful, false otherwise
 	 */
-	public boolean teleportEntity (Entity entity, Tile coords);
+	public void teleportEntity (Entity entity, CoordGrid coords);
 	
 	/**
 	 * Moves the entity to the specified coordinates
@@ -998,9 +997,8 @@ public interface ScriptAPI {
 	 * @param x The new x-coordinate of the entity
 	 * @param y The new y-coordinate of the entity
 	 * @param z The new z-coordinate of the entity
-	 * @return True if the teleport was successful, false otherwise
 	 */
-	public boolean teleportEntity (Entity entity, int x, int y, int z);
+	public void teleportEntity (Entity entity, int x, int y, int z);
 	
 	/**
 	 * Moves the entity to the specified coordinates
@@ -1010,9 +1008,8 @@ public interface ScriptAPI {
 	 * @param squareY The y-coordinate of the map square to move onto
 	 * @param localX The local x tile within the map square to move onto
 	 * @param localY The local y tile within the map square to move onto
-	 * @return
 	 */
-	public boolean teleportEntity (Entity entity, int level, int squareX, int squareY, int localX, int localY);
+	public void teleportEntity (Entity entity, int level, int squareX, int squareY, int localX, int localY);
 	
 	/**
 	 * Shifts the entity by the specified amount
@@ -1048,7 +1045,7 @@ public interface ScriptAPI {
 	 * @param node The game node
 	 * @return The current coords of the node
 	 */
-	public Tile getCoords (Node node);
+	public CoordGrid getCoords (Node node);
 	
 	/**
 	 * Gets the x-coord of the specified game node
@@ -1076,56 +1073,56 @@ public interface ScriptAPI {
 	 * @param entity The entity
 	 * @return The current tile of the entity
 	 */
-	public Tile getTile (Entity entity);
+	public CoordGrid getTile (Entity entity);
 	
 	/**
 	 * Gets the x-coord of the specified tile
 	 * @param tile The tile
 	 * @return The x-coord
 	 */
-	public int getCoordX (Tile tile);
+	public int getCoordX (CoordGrid tile);
 	
 	/**
 	 * Gets the y-coord of the specified tile
 	 * @param tile The tile
 	 * @return The y-coord
 	 */
-	public int getCoordY (Tile tile);
+	public int getCoordY (CoordGrid tile);
 	
 	/**
 	 * Gets the level of the specified tile
 	 * @param tile The tile
 	 * @return The level
 	 */
-	public int getCoordLevel (Tile tile);
+	public int getCoordLevel (CoordGrid tile);
 	
 	/**
 	 * Gets the map square x-coord of the specified tile
 	 * @param tile The tile
 	 * @return The map square x-coord
 	 */
-	public int getSquareX (Tile tile);
+	public int getSquareX (CoordGrid tile);
 	
 	/**
 	 * Gets the map square y-coord of the specified tile
 	 * @param tile The tile
 	 * @return The map square y-coord
 	 */
-	public int getSquareY (Tile tile);
+	public int getSquareY (CoordGrid tile);
 	
 	/**
 	 * Gets the region ID of the specified tile
 	 * @param tile The tile
 	 * @return The region ID
 	 */
-	public int getRegionId (Tile tile);
+	public int getRegionId (CoordGrid tile);
 	
 	/**
 	 * Gets the hash for the given coordinates
 	 * @param coords The coordinates
 	 * @return The coord hash (format: y | (x << 14) | (level << 28))
 	 */
-	public int getCoordHash(Tile coords);
+	public int getCoordHash(CoordGrid coords);
 	
 	/**
 	 * Gets the coordinate from the specified components
@@ -1134,7 +1131,7 @@ public interface ScriptAPI {
 	 * @param level The level-component of the coordinate
 	 * @return The coordinate
 	 */
-	public Tile getCoords (int x, int y, int level);
+	public CoordGrid getCoords (int x, int y, int level);
 	
 	/**
 	 * Gets the coordinate offset by the specified values
@@ -1144,16 +1141,16 @@ public interface ScriptAPI {
 	 * @param level The amount to offset the level-coord by
 	 * @return The new coordinate
 	 */
-	public Tile offsetCoords (Tile coords, int xOff, int yOff, byte levelOff);
+	public CoordGrid offsetCoords (CoordGrid coords, int xOff, int yOff, byte levelOff);
 	
-	public Region getRegion (int regionID);
+	public MapSquare getRegion (int regionID);
 	
 	/**
 	 * Gets the region in which the given coordinates lie
 	 * @param coords The coordinates
 	 * @return The region in which the coordinates lie
 	 */
-	public Region getRegion (Tile coords);
+	public MapSquare getRegion (CoordGrid coords);
 	
 	/**
 	 * Drops an item on the ground at the specified coordinates.
@@ -1162,7 +1159,7 @@ public interface ScriptAPI {
 	 * @param itemId The ID of the item to drop
 	 * @param amount The number of items to add to the drop pile
 	 */
-	public void dropItem (Tile coords, int itemId, int amount);
+	public void dropItem (CoordGrid coords, int itemId, int amount);
 	
 	/**
 	 * Drops an item on the ground at the specified coordinates.
@@ -1172,7 +1169,7 @@ public interface ScriptAPI {
 	 * @param amount The number of items to add to the drop pile
 	 * @param owner The player who can see the dropped item initially
 	 */
-	public void dropItem (Tile coords, int itemId, int amount, Player owner);
+	public void dropItem (CoordGrid coords, int itemId, int amount, Player owner);
 	
 	/**
 	 * Drops an item on the ground at the specified coordinates.
@@ -1181,7 +1178,7 @@ public interface ScriptAPI {
 	 * @param amount The number of items to add to the drop pile
 	 * @param removalDelay The number of game ticks before the item is removed.
 	 */
-	public void dropItem (Tile coords, int itemId, int amount, int removalDelay);
+	public void dropItem (CoordGrid coords, int itemId, int amount, int removalDelay);
 	
 	/**
 	 * Drops an item on the ground at the specified coordinates.
@@ -1191,7 +1188,7 @@ public interface ScriptAPI {
 	 * @param owner The player who can see the dropped item initially
 	 * @param removalDelay The number of game ticks before the item is removed.
 	 */
-	public void dropItem (Tile coords, int itemId, int amount, Player owner, int removalDelay);
+	public void dropItem (CoordGrid coords, int itemId, int amount, Player owner, int removalDelay);
 	
 	/**
 	 * Removes an item which was dropped on the ground
@@ -1199,7 +1196,7 @@ public interface ScriptAPI {
 	 * @param itemId The ID of the item to remove
 	 * @return The number of items in the removed stack
 	 */
-	public int removeDroppedItem (Tile coords, int itemId);
+	public int removeDroppedItem (CoordGrid coords, int itemId);
 	
 	public Object getRandomChoice (Object[] objects);
 	
@@ -1212,7 +1209,7 @@ public interface ScriptAPI {
 	 * @param rotation The rotation
 	 * @return The newly created SceneLocation.
 	 */
-	public SceneLocation createLocation (int id, Tile coords, int type, int rotation);
+	public SceneLocation createLocation (int id, CoordGrid coords, int type, int rotation);
 	
 	public SceneLocation createLocation (int id, int x, int y, int z, int type, int rotation);
 	
@@ -1230,9 +1227,9 @@ public interface ScriptAPI {
 	public void spawnLocation (SceneLocation loc, int removalDelay);
 	
 	
-	public SceneLocation spawnLocation (int locTypeId, Tile coords, int removalDelay);
+	public SceneLocation spawnLocation (int locTypeId, CoordGrid coords, int removalDelay);
 	
-	public SceneLocation spawnLocation (int locTypeId, Tile coords, int type, int rotation, int removalDelay);
+	public SceneLocation spawnLocation (int locTypeId, CoordGrid coords, int type, int rotation, int removalDelay);
 	
 	/**
 	 * Retrieves the location of the specified node type at the specified coordinates on the map
@@ -1240,7 +1237,7 @@ public interface ScriptAPI {
 	 * @param type The node type of the location
 	 * @return The {@link SceneLocation} of the specified type at the specified coordinates, or null if no location exists
 	 */
-	public SceneLocation getLocationByNodeType (Tile coords, int type);
+	public SceneLocation getLocationByNodeType (CoordGrid coords, int type);
 	
 	/**
 	 * Retrieves the location of the specified node type at the specified position on the map
@@ -1273,7 +1270,7 @@ public interface ScriptAPI {
 	 * @param coords The spawn coordinates
 	 * @return The new NPC instance
 	 */
-	public NPC createNpc (int id, Tile coords);
+	public NPC createNpc (int id, CoordGrid coords);
 	
 	/**
 	 * Transforms the specified NPC to another NPC of the provided type ID

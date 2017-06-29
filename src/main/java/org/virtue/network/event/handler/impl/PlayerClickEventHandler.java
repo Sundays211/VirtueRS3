@@ -23,7 +23,7 @@ package org.virtue.network.event.handler.impl;
 
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.world.region.movement.PlayerTarget;
+import org.virtue.game.map.movement.PlayerTarget;
 import org.virtue.network.event.context.impl.in.PlayerClickEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
 

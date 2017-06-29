@@ -1,6 +1,6 @@
 package org.virtue.game.node;
 
-import org.virtue.game.world.region.Tile;
+import org.virtue.game.map.CoordGrid;
 
 /**
  * Represents a game node (item, object, player, npc, ...).
@@ -13,16 +13,11 @@ public abstract class Node {
 	 * The node id.
 	 */
 	protected int id;
-	
-	/**
-	 * The name.
-	 */
-	protected String name;
 
 	/**
 	 * The current location.
 	 */
-	protected Tile currentTile;
+	protected CoordGrid currentTile;
 	
 	/**
 	 * The horizontal size.
@@ -46,7 +41,7 @@ public abstract class Node {
 	 * Gets the center tile of this node.
 	 * @return The tile in the center of the node (rather than the traditional south-west corner tile).
 	 */
-	public Tile getCenterTile() {
+	public CoordGrid getCenterTile() {
 		return currentTile.copyNew(sizeX >> 1, sizeY >> 1, 0);
 	}
 	
@@ -86,23 +81,13 @@ public abstract class Node {
 	 * Gets the name value.
 	 * @return The name.
 	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Sets the name value.
-	 * @param name The name to set.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+	public abstract String getName();
 
 	/**
 	 * Gets the currentTile value.
 	 * @return The currentTile.
 	 */
-	public Tile getCurrentTile() {
+	public CoordGrid getCurrentTile() {
 		return currentTile;
 	}
 
@@ -110,7 +95,7 @@ public abstract class Node {
 	 * Sets the currentTile value.
 	 * @param currentTile The currentTile to set.
 	 */
-	public void setCurrentTile(Tile currentTile) {
+	public void setCurrentTile(CoordGrid currentTile) {
 		this.currentTile = currentTile;
 	}
 
