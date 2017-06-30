@@ -10,10 +10,11 @@ function getAllModules () {// jshint ignore:line
 	var modules = [
 		'admin',
 		'area',
-		'area/fremennik',
 	    'area/asgarnia',
 		'area/events',
+		'area/fremennik',
 		'area/kandarin',
+		'area/misthalin',
 		'chat',
 		'clan',
 		'combat',
