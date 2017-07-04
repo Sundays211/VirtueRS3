@@ -85,7 +85,6 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 	
 	for (var i in modules) {
 		var module = modules[i];
-		logger.info('Loading module: '+module);
 		var start = new Date().getTime();
 		require(cwd+'/'+module+'/bootstrap')(scriptManagerWrapper);
 		var end = new Date().getTime();
