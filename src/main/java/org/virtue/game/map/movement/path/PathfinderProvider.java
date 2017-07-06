@@ -79,17 +79,17 @@ public class PathfinderProvider {
 	 */
 	public static Path find(CoordGrid start, int moverSize, Node destination, boolean near, Pathfinder finder) {
 		if (destination instanceof SceneLocation) {
-			SceneLocation object = (SceneLocation) destination;
-			int shape = object.getShape();
-			int rotation = object.getRotation();
+			SceneLocation loc = (SceneLocation) destination;
+			int shape = loc.getShape();
+			int rotation = loc.getRotation();
 			if (shape == 10 || shape == 11 || shape == 22) {
-				int sizeX = object.getSizeX();
-				int sizeY = object.getSizeY();
-				int walkingFlag = object.getLocType().walkingFlag;
+				int sizeX = loc.getSizeX();
+				int sizeY = loc.getSizeY();
+				int surroundings = loc.getLocType().surroundings;
 				if (rotation != 0) {
-					walkingFlag = (walkingFlag << rotation & 0xf) + (walkingFlag >> 4 - rotation);
+					surroundings = (surroundings << rotation & 0xf) + (surroundings >> 4 - rotation);
 				}
-				return finder.find(start, moverSize, destination.getCurrentTile(), sizeX, sizeY, 0, 0, walkingFlag, near);
+				return finder.find(start, moverSize, destination.getCurrentTile(), sizeX, sizeY, 0, 0, surroundings, near);
 			}
 			return finder.find(start, moverSize, destination.getCurrentTile(), 0, 0, rotation, 1 + shape, 0, near);
 		}

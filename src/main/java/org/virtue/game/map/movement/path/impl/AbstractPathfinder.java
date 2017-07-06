@@ -59,18 +59,18 @@ public abstract class AbstractPathfinder implements Pathfinder {
 
 	/**
 	 * Gets the clipping flag on the given location.
-	 * @param z The plane.
+	 * @param level The plane.
 	 * @param x The x-coordinate.
 	 * @param y The y-coordinate.
 	 * @return The clipping flag.
 	 */
-	public int getClippingFlag(int z, int x, int y) {
-		CoordGrid tile = new CoordGrid(x, y, z);
+	public int getClippingFlag(int level, int x, int y) {
+		CoordGrid tile = new CoordGrid(x, y, level);
 		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
 		if (region == null || !region.isLoaded()) {
 			return Integer.MIN_VALUE;
 		}
-		return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), z);
+		return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), level);
 	}
 
 	/**
@@ -491,34 +491,33 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @param destY The destination y-position in viewport.
 	 * @param sizeX The destination node x-size.
 	 * @param sizeY The destination node y-size.
-	 * @param walkFlag The walking flag.
-	 * @param flag The clipping flag.
-	 * @param location The viewport location.
+	 * @param surroundings The location surroundings.
+	 * @param level The clipping flag.
 	 * @return {@code True} if so.
 	 */
-	public boolean canInteract(int x, int y, int moverSize, int destX, int destY, int sizeX, int sizeY, int walkFlag, int z) {
+	public boolean canInteract(int x, int y, int moverSize, int destX, int destY, int sizeX, int sizeY, int surroundings, int level) {
 		if (moverSize > 1) {
 			if (isStandingIn(x, y, moverSize, moverSize, destX, destY, sizeX, sizeY)) {
 				return true;
 			}
-			return canInteractSized(x, y, moverSize, moverSize, destX, destY, sizeX, sizeY, walkFlag, z);
+			return canInteractSized(x, y, moverSize, moverSize, destX, destY, sizeX, sizeY, surroundings, level);
 		}
-		int flag = getClippingFlag(z, x, y);
+		int flag = getClippingFlag(level, x, y);
 		int cornerX = destX + sizeX - 1;
 		int cornerY = destY + sizeY - 1;
 		if (destX <= x && cornerX >= x && y >= destY && y <= cornerY) {
 			return true;
 		}
-		if (x == destX - 1 && destY <= y && y <= cornerY && (flag & WALL_EAST) == 0 && (walkFlag & 0x8) == 0) {
+		if (x == destX - 1 && destY <= y && y <= cornerY && (flag & WALL_EAST) == 0 && (surroundings & 0x8) == 0) {
 			return true;
 		}
-		if (x == cornerX + 1 && destY <= y && cornerY >= y && (flag & WALL_WEST) == 0 && (walkFlag & 0x2) == 0) {
+		if (x == cornerX + 1 && destY <= y && cornerY >= y && (flag & WALL_WEST) == 0 && (surroundings & 0x2) == 0) {
 			return true;
 		}
-		if (y == destY - 1 && destX <= x && cornerX >= x && (flag & WALL_NORTH) == 0 && (walkFlag & 0x4) == 0) {
+		if (y == destY - 1 && destX <= x && cornerX >= x && (flag & WALL_NORTH) == 0 && (surroundings & 0x4) == 0) {
 			return true;
 		}
-		if (y == cornerY + 1 && destX <= x && cornerX >= x && (flag & WALL_SOUTH) == 0 && (walkFlag & 0x1) == 0) {
+		if (y == cornerY + 1 && destX <= x && cornerX >= x && (flag & WALL_SOUTH) == 0 && (surroundings & 0x1) == 0) {
 			return true;
 		}
 		return false;

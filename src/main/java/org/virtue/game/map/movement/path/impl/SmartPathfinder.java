@@ -99,7 +99,7 @@ public final class SmartPathfinder extends AbstractPathfinder {
 	}
 
 	@Override
-	public Path find(CoordGrid start, int moverSize, CoordGrid end, int sizeX, int sizeY, int rotation, int type, int walkingFlag, boolean near) {
+	public Path find(CoordGrid start, int moverSize, CoordGrid end, int sizeX, int sizeY, int rotation, int shape, int surroundings, boolean near) {
 		reset();
 		Path path = new Path();
 		foundPath = false;
@@ -119,11 +119,11 @@ public final class SmartPathfinder extends AbstractPathfinder {
 		int readPosition = 0;
 		check(curX, curY, 99, 0);
 		if (moverSize < 2) {
-			checkSingleTraversal(end, sizeX, sizeY, type, rotation, walkingFlag, coords);
+			checkSingleTraversal(end, sizeX, sizeY, shape, rotation, surroundings, coords);
 		} else if (moverSize == 2) {
-			checkDoubleTraversal(end, sizeX, sizeY, type, rotation, walkingFlag, coords);
+			checkDoubleTraversal(end, sizeX, sizeY, shape, rotation, surroundings, coords);
 		} else {
-			checkVariableTraversal(end, moverSize, sizeX, sizeY, type, rotation, walkingFlag, coords);
+			checkVariableTraversal(end, moverSize, sizeX, sizeY, shape, rotation, surroundings, coords);
 		}
 		if (!foundPath) {
 			if (near) {
@@ -213,7 +213,7 @@ public final class SmartPathfinder extends AbstractPathfinder {
 	 * @param walkingFlag The walking flag.
 	 * @param coords The viewport coords.
 	 */
-	private void checkSingleTraversal(CoordGrid end, int sizeX, int sizeY, int shape, int rotation, int walkingFlag, CoordGrid coords) {
+	private void checkSingleTraversal(CoordGrid end, int sizeX, int sizeY, int shape, int rotation, int surroundings, CoordGrid coords) {
 		int readPosition = 0;
 		int level = coords.getLevel();
 		while (writePathPosition != readPosition) {
@@ -236,7 +236,7 @@ public final class SmartPathfinder extends AbstractPathfinder {
 					break;
 				}
 			}
-			if (sizeX != 0 && sizeY != 0 && canInteract(absX, absY, 1, end.getX(), end.getY(), sizeX, sizeY, walkingFlag, level)) {
+			if (sizeX != 0 && sizeY != 0 && canInteract(absX, absY, 1, end.getX(), end.getY(), sizeX, sizeY, surroundings, level)) {
 				foundPath = true;
 				break;
 			}

@@ -46,7 +46,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 	}
 	
 	@Override
-	public Path find(CoordGrid start, int size, CoordGrid end, int sizeX, int sizeY, int rotation, int type, int walkingFlag, boolean near) {
+	public Path find(CoordGrid start, int size, CoordGrid end, int sizeX, int sizeY, int rotation, int type, int surroundings, boolean near) {
 		Path path = new Path();
 		z = start.getLevel();
 		x = start.getX();
@@ -64,7 +64,7 @@ public final class DumbPathfinder extends AbstractPathfinder {
 				}
 			}
 			if (sizeX != 0 && sizeY != 0) {
-				if (canInteract(x, y, size, end.getX(), end.getY(), sizeX, sizeY, walkingFlag, z)) {
+				if (canInteract(x, y, size, end.getX(), end.getY(), sizeX, sizeY, surroundings, z)) {
 					break;
 				}
 				if (directions.length > 1) { // Ensures we approach the location
