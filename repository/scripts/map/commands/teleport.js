@@ -71,6 +71,22 @@ module.exports = (function () {
 			entityMap.setCoords(ctx.player, targetCoords);
 		});
 		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "up", function (ctx) {
+			var currentCoords = entityMap.getCoords(ctx.player);
+			var x = common.getCoordX(currentCoords);
+			var y = common.getCoordY(currentCoords);
+			var level = Math.min(common.getLevel(currentCoords)+1, 3);
+			entityMap.setCoords(ctx.player, coords(x, y, level));
+		});
+		
+		scriptManager.bind(EventType.COMMAND_ADMIN, "down", function (ctx) {
+			var currentCoords = entityMap.getCoords(ctx.player);
+			var x = common.getCoordX(currentCoords);
+			var y = common.getCoordY(currentCoords);
+			var level = Math.max(common.getLevel(currentCoords)-1, 0);
+			entityMap.setCoords(ctx.player, coords(x, y, level));
+		});
+		
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teleto", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to:";
 			dialog.requestPlayer(ctx.player, message, function (targetPlayer) {

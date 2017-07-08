@@ -139,6 +139,9 @@ public class NPC extends Entity {
 		if (script != null) {
 			defaultAttack = script.getAttackEvent();
 		}
+		if (!Virtue.getInstance().getProperty("debug.npc-random-movement", true)) {
+			this.walkRange = 0;
+		}
 		/* For testing */
 		//super.getHeadIcons().setMainIcon(440, 28);
 		//super.getHeadIcons().refresh();
