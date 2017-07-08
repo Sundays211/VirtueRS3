@@ -6,9 +6,7 @@ import static org.virtue.game.map.ClipFlag.WALL_SOUTH;
 import static org.virtue.game.map.ClipFlag.WALL_WEST;
 
 import org.virtue.game.World;
-import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.path.Pathfinder;
-import org.virtue.game.map.square.MapSquare;
 
 /**
  * Represents a pathfinder.
@@ -65,12 +63,7 @@ public abstract class AbstractPathfinder implements Pathfinder {
 	 * @return The clipping flag.
 	 */
 	public int getClippingFlag(int level, int x, int y) {
-		CoordGrid tile = new CoordGrid(x, y, level);
-		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
-		if (region == null || !region.isLoaded()) {
-			return Integer.MIN_VALUE;
-		}
-		return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), level);
+		return World.getInstance().getRegions().getClippingFlag(level, x, y);
 	}
 
 	/**

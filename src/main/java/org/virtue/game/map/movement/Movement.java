@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
@@ -146,8 +147,8 @@ public class Movement {
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
-		addWalkSteps(path.getPoints(), speed);
 		//entity.queueUpdateBlock(new FaceEntityBlock(null));
+		addWalkSteps(path.getPoints(), speed);
 		return true;
 	}
 	
@@ -188,8 +189,7 @@ public class Movement {
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
-		addWalkSteps(path.getPoints(), moveSpeed);
-		return true;
+		return addWalkSteps(path.getPoints(), moveSpeed);
 	}
 	
 	public synchronized boolean moveTo (SceneLocation location, int x, int y) {
@@ -212,9 +212,8 @@ public class Movement {
 		if (path == null || !path.isSuccessful()) {
 			return false;
 		}
-		addWalkSteps(path.getPoints(), speed);
-		entity.queueUpdateBlock(new FaceDirectionBlock(destination));
-		return true;
+		//entity.queueUpdateBlock(new FaceDirectionBlock(destination));
+		return addWalkSteps(path.getPoints(), speed);
 	}
 	
 	/**
@@ -246,33 +245,43 @@ public class Movement {
 	 * Clears the current walking queue and sets a new one.
 	 * @param points The points of the path.
 	 */
-	public void setWaypoints(Deque<Point> points) {
+	public boolean setWaypoints(Deque<Point> points) {
 		reset();
-		addWalkSteps(points, moveSpeed);
+		return addWalkSteps(points, moveSpeed);
 	}
 	
 	/**
 	 * Adds a series step to the entities walk queue
 	 * @param steps A Collection of {@link Waypoint.Step} to add
 	 */
-	public void addWalkSteps (Collection<Point> steps, MoveSpeed speed) {
+	public boolean addWalkSteps (Collection<Point> steps, MoveSpeed speed) {
+		boolean success = true;
 		Waypoint point = new Waypoint(entity.getCurrentTile().getX(), entity.getCurrentTile().getY(), speed);
 		for (Point step : steps) {
 			//logger.info("Point: {},{},{},{}", step.getX()>>6, step.getY()>>6, step.getX()&0x3F, step.getY()&0x3F);
 			point = fillPath(step.getX(), step.getY(), point);
+			if (point.getX() != step.getX() || point.getY() != step.getY()) {
+				success = false;
+				break;
+			}
 		}
 		destination = new CoordGrid(point.getX(), point.getY(), entity.getCurrentTile().getLevel());
 		logger.debug("Calculated destination: {}", destination);
+		return success;
 	}
 	
 	/**
-	 * Adds a path to the walking queue.
-	 * @param x The last x-coordinate of the path.
-	 * @param y The last y-coordinate of the path.
+	 * Adds all waypoints between (x,y) and last. 
+	 * If the full path cannot be constructed (because it's blocked), returns the last successful point
+	 * @param x The target x coordinate
+	 * @param y The target y coordinate
+	 * @param last The last position in the entities movement queue
+	 * @return The final point in the path, or the last point successfully added
 	 */
 	public Waypoint fillPath(int x, int y, Waypoint last) {
 		int diffX = x - last.getX(), diffY = y - last.getY();
 		int max = Math.max(Math.abs(diffX), Math.abs(diffY));
+		Waypoint next = last;
 		for (int i = 0; i < max; i++) {
 			if (diffX < 0) {
 				diffX++;
@@ -284,15 +293,33 @@ public class Movement {
 			} else if (diffY > 0) {
 				diffY--;
 			}
-			last = addPoint(x - diffX, y - diffY, last);
+			next = addPoint(x - diffX, y - diffY, last);
+			if (next.equals(last)) {
+				return last;
+			}
+			last = next;
 		}
-		return last;
+		return next;
 	}
 	
+	/**
+	 * Adds a waypoint to the entitie's movement queue.
+	 * Checks whether the path is blocked before adding the point - if so, returns imediately
+	 * @param x The x-coordinate of the point to add
+	 * @param y The y-coordinate of the point to add
+	 * @param last The previous waypoint of the entity
+	 * @return The added waypoint. If the point could not be added, due to blocking, returns {@code last}
+	 */
 	private Waypoint addPoint(int x, int y, Waypoint last) {
-		Waypoint point = null;
 		int diffX = x - last.getX(), diffY = y - last.getY();
-		waypoints.add(point = new Waypoint(x, y, last.getSpeed(), diffX, diffY));
+		if (Math.abs(diffX) > 1 || Math.abs(diffY) > 1) {
+			logger.warn("Bad diff: x={}, y={}, last={}, next={},{}", diffX, diffY, last, x, y);
+		}
+		Waypoint point = new Waypoint(x, y, last.getSpeed(), diffX, diffY);
+		if (!PathfinderProvider.checkStep(point, entity.getCurrentTile().getLevel(), entity.getSize())) {
+			return last;
+		}
+		waypoints.add(point);
 		return point;
 	}
 
@@ -472,7 +499,7 @@ public class Movement {
 	 */
 	public synchronized void moveAdjacent () {
 		final CoordGrid lastTile = entity.getCurrentTile();
-		PathfinderProvider.findAdjacent(entity).ifPresent(path -> setWaypoints(path.getPoints()));
+		PathfinderProvider.findAdjacent(entity).map(path -> setWaypoints(path.getPoints()));
 		onTarget = () -> entity.queueUpdateBlock(new FaceDirectionBlock(lastTile));
 	}
 	
@@ -511,9 +538,7 @@ public class Movement {
 				stop();
 			} else if (entity.getCurrentTile().equals(targetEntity.getEntity().getCurrentTile())) {
 				Optional<Path> path = PathfinderProvider.findAdjacent(targetEntity.getEntity());
-				if (path.isPresent()) {
-					setWaypoints(path.get().getPoints());
-				} else {
+				if (!path.isPresent() || !setWaypoints(path.get().getPoints())) {
 					stop();
 				}
 			} else if (entity.getCurrentTile().withinDistance(
@@ -548,8 +573,7 @@ public class Movement {
 		if (path == null || !path.isSuccessful()) {
 			return false;//Unable to find a path to the target entity
 		}
-		addWalkSteps(path.getPoints(), moveSpeed);
-		return true;
+		return addWalkSteps(path.getPoints(), moveSpeed);
 	}
 	
 	/**

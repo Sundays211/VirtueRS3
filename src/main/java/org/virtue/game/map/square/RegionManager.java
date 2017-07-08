@@ -256,10 +256,20 @@ public class RegionManager {
 		return regionX | regionY << 7;
 	}
 	
-	public static boolean checkDirection(CoordGrid currentTile, CompassPoint direction) {
-		return true;
-		//TODO: This...
-		//return direction.canMove(new CoordGrid(x, y, level), 1);
+	/**
+	 * Gets the clipping flag at the given coordinates.
+	 * @param level The plane.
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @return The clipping flag.
+	 */
+	public int getClippingFlag(int level, int x, int y) {
+		CoordGrid tile = new CoordGrid(x, y, level);
+		MapSquare region = getRegionByID(tile.getRegionID());
+		if (region == null || !region.isLoaded()) {
+			return -1;
+		}
+		return region.getClipMap().getClipFlags(tile.getXInRegion(), tile.getYInRegion(), level);
 	}
 
 	public static boolean checkDirection(CoordGrid currentTile, CompassPoint direction, int size) {
