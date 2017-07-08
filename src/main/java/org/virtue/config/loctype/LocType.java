@@ -39,7 +39,7 @@ public class LocType implements ConfigType {
     static final int MAX_OP_COUNT = 6;
     static final int anInt7353 = 127007;	
     byte aByte7346;
-    public byte[] nodeTypes;
+    public byte[] shapes;
     int[][] models;
     short[] recol_s;
     short[] recol_d;
@@ -92,7 +92,7 @@ public class LocType implements ConfigType {
     int anInt7356 = 0;
     int anInt7397 = 0;
     public boolean obstructsGround = false;
-    public boolean allowInteract = false;//aBool7399
+    public boolean gateway = false;
     public int supportItems = -1;
     public int anInt7425 = 0;
     public int multiLocVarbit = -1;
@@ -119,7 +119,7 @@ public class LocType implements ConfigType {
     //Interface8 anInterface8_7349;
     public String[] op;
 
-	public int walkingFlag;
+	public int surroundings = 0;
     
     public LocType(int id, LocTypeList list) {
 		this.myid = id;
@@ -138,10 +138,10 @@ public class LocType implements ConfigType {
     void decode(ByteBuffer buffer, int opcode) {
 		if (1 == opcode) {
 		    int typeCount = buffer.get() & 0xff;
-		    nodeTypes = new byte[typeCount];
+		    shapes = new byte[typeCount];
 		    models = new int[typeCount][];
 		    for (int typePos = 0; typePos < typeCount; typePos++) {
-		    	nodeTypes[typePos] = buffer.get();
+		    	shapes[typePos] = buffer.get();
 				int meshCount = buffer.get() & 0xff;
 				models[typePos] = new int[meshCount];
 				for (int meshPos = 0; meshPos < meshCount; meshPos++) {
@@ -247,7 +247,7 @@ public class LocType implements ConfigType {
 		    } else if (opcode == 67) {
 		    	scaleZ = buffer.getShort() & 0xffff;
 		    } else if (opcode == 69) {
-		    	walkingFlag = buffer.get() & 0xff;
+		    	surroundings = buffer.get() & 0xff;
 		    } else if (opcode == 70) {
 		    	offset_x = (buffer.getShort() << 2);
 		    } else if (71 == opcode) {
@@ -257,7 +257,7 @@ public class LocType implements ConfigType {
 		    } else if (73 == opcode) {
 		    	obstructsGround = true;
 		    } else if (opcode == 74) {
-		    	allowInteract = true;
+		    	gateway = true;
 		    } else if (opcode == 75) {
 		    	supportItems = buffer.get() & 0xff;
 		    } else if (77 == opcode || 92 == opcode) {
@@ -438,7 +438,7 @@ public class LocType implements ConfigType {
 	public void postDecode() {
 		if (interactable == -1) {
 			interactable = 0;
-		    if (nodeTypes != null && 1 == nodeTypes.length && (nodeTypes[0] == 10)) {
+		    if (shapes != null && 1 == shapes.length && (shapes[0] == 10)) {
 		    	interactable = 1;
 		    }
 		    for (int slot = 0; slot < 5; slot++) {
@@ -454,7 +454,7 @@ public class LocType implements ConfigType {
 		if (hasAnimation || multiLocs != null) {
 			aBool7421 = true;
 		}
-		if (allowInteract) {
+		if (gateway) {
 			clipType = 0;
 		}
 	}

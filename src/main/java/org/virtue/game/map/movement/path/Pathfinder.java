@@ -40,11 +40,11 @@ public interface Pathfinder {
 	 * @param end The end location.
 	 * @param sizeX The x-size of the destination node.
 	 * @param sizeY The y-size of the destination node.
-	 * @param rotation The object rotation.
-	 * @param type The object type.
-	 * @param walkingFlag The object walking flag.
-	 * @param near If we should find the nearest location if a path can't be found.
+	 * @param rotation The location rotation.
+	 * @param shape The location shape.
+	 * @param surroundings The location surroundings.
+	 * @param near If we should find the nearest tile if a path can't be found.
 	 * @return The path.
 	 */
-	public abstract Path find(CoordGrid startCoords, int size, CoordGrid end, int sizeX, int sizeY, int rotation, int type, int walkingFlag, boolean near);
+	public abstract Path find(CoordGrid startCoords, int size, CoordGrid end, int sizeX, int sizeY, int rotation, int shape, int surroundings, boolean near);
 }

@@ -51,18 +51,16 @@ public abstract class FollowingType {
 		CoordGrid destination = lock.getCurrentTile();
 		if (entity.getCurrentTile().equals(destination)) {
 			Optional<Path> path = PathfinderProvider.findAdjacent(lock);
-			if (path.isPresent()) {
-				entity.getMovement().setWaypoints(path.get().getPoints());
-			} else {
+			if (!path.isPresent() ||
+					!entity.getMovement().setWaypoints(path.get().getPoints())) {
 				entity.getCombatSchedule().releaseLock();
 				return false;
 			}
 		} else if (!entity.getMovement().hasSteps() ||
 				!destination.isAdjacent(entity.getMovement().getDestination())) {
 			Path path = PathfinderProvider.find(entity, lock, false, entity instanceof Player ? PathfinderProvider.SMART : PathfinderProvider.DUMB);
-			if (entity.getMovement() != null && path != null && path.isSuccessful()) {
-				entity.getMovement().setWaypoints(path.getPoints());
-			} else {
+			if (path == null || !path.isSuccessful() || 
+					!entity.getMovement().setWaypoints(path.getPoints())) {
 				entity.getCombatSchedule().releaseLock();
 				return false;
 			}

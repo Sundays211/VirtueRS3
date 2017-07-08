@@ -36,14 +36,6 @@ public class Path {
 	}
 
 	/**
-	 * Walks this path.
-	 * @param entity The entity.
-	 */
-	public void walk(Entity entity) {
-		entity.getMovement().setWaypoints(points);
-	}
-
-	/**
 	 * Gets the succesful.
 	 * @return The succesful.
 	 */
