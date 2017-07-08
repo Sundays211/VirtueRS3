@@ -498,6 +498,13 @@ public abstract class AbstractPathfinder implements Pathfinder {
 		int flag = getClippingFlag(level, x, y);
 		int cornerX = destX + sizeX - 1;
 		int cornerY = destY + sizeY - 1;
+		if (x == destX - 1 && destY <= y && y <= cornerY
+				|| x == cornerX + 1 && destY <= y && cornerY >= y
+				|| y == destY - 1 && destX <= x && cornerX >= x
+				|| y == cornerY + 1 && destX <= x && cornerX >= x) {
+			System.out.println("Clips: "+flag+", x="+(x & 0x3F)+", y="+(y & 0x3F)+", surroundings="+surroundings);
+		}
+		
 		if (destX <= x && cornerX >= x && y >= destY && y <= cornerY) {
 			return true;
 		}

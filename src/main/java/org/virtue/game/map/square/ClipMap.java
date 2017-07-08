@@ -57,7 +57,9 @@ public class ClipMap {
 	 */
 	public void addLocation (SceneLocation location) {
 		if (location.getShape() >= 0 && location.getShape() <= 3) {
-			addWall(location);
+			if (location.getLocType().clipType != 0 || location.getLocType().gateway) {
+				addWall(location);
+			}
 		} else if (location.getShape() >= 9 && location.getShape() <= 11) {//21
 			if (location.getLocType().clipType != 0 || location.getLocType().gateway) {
 				clipStandalone(location);
@@ -154,7 +156,7 @@ public class ClipMap {
 				clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
 			}
 		}
-		if (loc.getLocType().clipType != 0) {
+		if (!loc.getLocType().gateway) {
 			if (loc.getShape() == 0) {
 				if (loc.getRotation() == 0) {
 					clipTile(localX, localY, plane, ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20000000

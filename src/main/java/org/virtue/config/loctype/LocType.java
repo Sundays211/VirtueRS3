@@ -119,7 +119,7 @@ public class LocType implements ConfigType {
     //Interface8 anInterface8_7349;
     public String[] op;
 
-	public int surroundings = 0xf;
+	public int surroundings = 0;
     
     public LocType(int id, LocTypeList list) {
 		this.myid = id;
