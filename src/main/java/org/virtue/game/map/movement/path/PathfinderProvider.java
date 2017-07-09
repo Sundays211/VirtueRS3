@@ -3,6 +3,7 @@ package org.virtue.game.map.movement.path;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.virtue.config.loctype.LocShape;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.ClipFlag;
@@ -83,9 +84,11 @@ public class PathfinderProvider {
 	public static Path find(CoordGrid start, int moverSize, Node destination, boolean near, Pathfinder finder) {
 		if (destination instanceof SceneLocation) {
 			SceneLocation loc = (SceneLocation) destination;
-			int shape = loc.getShape();
+			LocShape shape = loc.getShape();
 			int rotation = loc.getRotation();
-			if (shape == 10 || shape == 11 || shape == 22) {
+			if (shape == LocShape.COMPLEX_GROUND_DECOR || 
+					shape == LocShape.GROUND_DEFAULT || 
+					shape == LocShape.GROUND_DECOR) {
 				int sizeX = loc.getSizeX();
 				int sizeY = loc.getSizeY();
 				int surroundings = loc.getLocType().surroundings;
@@ -94,7 +97,7 @@ public class PathfinderProvider {
 				}
 				return finder.find(start, moverSize, destination.getCurrentTile(), sizeX, sizeY, 0, 0, surroundings, near);
 			}
-			return finder.find(start, moverSize, destination.getCurrentTile(), 0, 0, rotation, 1 + shape, 0, near);
+			return finder.find(start, moverSize, destination.getCurrentTile(), 0, 0, rotation, 1 + shape.getId(), 0, near);
 		}
 		int size = 0;
 		if (destination instanceof Entity) {

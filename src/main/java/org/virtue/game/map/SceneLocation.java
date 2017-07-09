@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.virtue.Virtue;
+import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
 import org.virtue.game.World;
 import org.virtue.game.map.square.MapSquare;
@@ -45,8 +46,8 @@ public class SceneLocation extends Node {
 		private Runnable onFinish;		
 	}
 	
-	public static SceneLocation create (int id, CoordGrid tile, int type, int rotation) {
-		SceneLocation object = new SceneLocation(id, tile, type, rotation);
+	public static SceneLocation create (int id, CoordGrid tile, LocShape shape, int rotation) {
+		SceneLocation object = new SceneLocation(id, tile, shape, rotation);
 		return object;
 	}
 	
@@ -57,7 +58,7 @@ public class SceneLocation extends Node {
 	
 	private CoordGrid baseTile;
 	
-	private int shape;
+	private LocShape shape;
 	
 	private int rotation;
 	
@@ -67,7 +68,7 @@ public class SceneLocation extends Node {
 	
 	private Set<DelayTask> delayTasks = new HashSet<>();
 	
-	protected SceneLocation (int id, CoordGrid tile, int shape, int rotation) {
+	protected SceneLocation (int id, CoordGrid tile, LocShape shape, int rotation) {
 		super(id);
 		super.currentTile = tile;
 		this.originalID = id;
@@ -175,10 +176,10 @@ public class SceneLocation extends Node {
 	}
 
 	/**
-	 * Gets the integer representing the shape of this location (eg wall, door, stand-alone, etc)
+	 * Gets the shape of this location (eg wall, door, stand-alone, etc)
 	 * @return The shape
 	 */
-	public int getShape () {
+	public LocShape getShape () {
 		return shape;
 	}
 	

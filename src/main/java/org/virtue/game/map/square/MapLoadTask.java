@@ -30,6 +30,7 @@ import org.virtue.Virtue;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.config.Js5Archive;
+import org.virtue.config.loctype.LocShape;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
 import org.virtue.network.event.buffer.InboundBuffer;
@@ -104,7 +105,7 @@ public class MapLoadTask implements Runnable {
 				int localX = location >> 6 & 0x3f;
 				int plane = location >> 12;
 				int settings = buffer.getUnsignedByte();
-				int type = settings >> 2;
+				LocShape shape = LocShape.getById(settings >> 2);
 				int rotation = settings & 0x3;
 				if (terrainData != null && (terrainData[1][localX][localY] & 0x2) == 2) {
 					plane--;
@@ -112,7 +113,7 @@ public class MapLoadTask implements Runnable {
 				if (plane < 0 || plane >= 4) {
 					continue;
 				}
-				SceneLocation object = SceneLocation.create(nodeID, new CoordGrid(localX, localY, plane, regionID), type, rotation);
+				SceneLocation object = SceneLocation.create(nodeID, new CoordGrid(localX, localY, plane, regionID), shape, rotation);
 				region.addLocation(object, localX, localY, plane);
 		    }
 		}

@@ -33,6 +33,7 @@ import org.virtue.Constants;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.invtype.InvType;
+import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
@@ -2009,17 +2010,17 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#createLocation(int, int, int, int, int, int)
 	 */
 	@Override
-	public SceneLocation createLocation(int id, int x, int y, int z, int type, int rotation) {
+	public SceneLocation createLocation(int id, int x, int y, int z, int shapeId, int rotation) {
 		CoordGrid tile = new CoordGrid(x, y, z);
-		return createLocation(id, tile, type, rotation);
+		return createLocation(id, tile, shapeId, rotation);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#createLocation(int, org.virtue.game.entity.region.Tile, int, int)
 	 */
 	@Override
-	public SceneLocation createLocation(int id, CoordGrid tile, int type, int rotation) {
-		return SceneLocation.create(id, tile, type, rotation);
+	public SceneLocation createLocation(int id, CoordGrid tile, int shapeId, int rotation) {
+		return SceneLocation.create(id, tile, LocShape.getById(shapeId), rotation);
 	}
 
 	/* (non-Javadoc)
@@ -2044,9 +2045,9 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	@Override
-	public SceneLocation spawnLocation(int locTypeId, CoordGrid coords, int type,
+	public SceneLocation spawnLocation(int locTypeId, CoordGrid coords, int shapeId,
 			int rotation, int removalDelay) {
-		SceneLocation loc = SceneLocation.create(locTypeId, coords, type, rotation);
+		SceneLocation loc = SceneLocation.create(locTypeId, coords, LocShape.getById(shapeId), rotation);
 		spawnLocation(loc, removalDelay);
 		return loc;
 	}

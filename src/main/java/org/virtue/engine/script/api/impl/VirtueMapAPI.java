@@ -22,6 +22,7 @@
 package org.virtue.engine.script.api.impl;
 
 import org.virtue.Constants;
+import org.virtue.config.loctype.LocShape;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
@@ -134,9 +135,9 @@ public class VirtueMapAPI implements MapAPI {
 	 */
 	@Override
 	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level,
-			int nodeType, int rotation) {
+			int shapeId, int rotation) {
 		CoordGrid coords = new CoordGrid(localX, localY, level, area.getID());
-		SceneLocation location = SceneLocation.create(locTypeID, coords, nodeType, rotation);
+		SceneLocation location = SceneLocation.create(locTypeID, coords, LocShape.getById(shapeId), rotation);
 		area.spawnTempLocation(location, -1);
 		return location;
 	}
@@ -150,8 +151,8 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
-	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int nodeType, int rotation) {
-		SceneLocation location = SceneLocation.create(locTypeId, coords, nodeType, rotation);
+	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int shapeId, int rotation) {
+		SceneLocation location = SceneLocation.create(locTypeId, coords, LocShape.getById(shapeId), rotation);
 		getRegion(coords).spawnTempLocation(location, -1);
 		return location;
 	}
@@ -189,7 +190,7 @@ public class VirtueMapAPI implements MapAPI {
 
 	@Override
 	public int getLocShape(SceneLocation loc) {
-		return loc.getShape();
+		return loc.getShape().getId();
 	}
 
 	@Override
