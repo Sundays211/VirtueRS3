@@ -3,6 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
+	    require('./customisations'),
 	    require('./emotes-tab'),
 		require('./experience-counter'),
 		require('./hero-skill-tab'),
@@ -11,8 +12,10 @@ module.exports = function (scriptManager) {
 	    require('./lodestone'),
 	    require('./world-map'),
 		require('./overlay'),
+		require('./price-checker'),
 		require('./report'),
 		require('./ribbon'),
+		require('./skillcape-customiser'),
 		require('./minimap'),
 		require('./options'),
 		require('./treasure-hunter'),

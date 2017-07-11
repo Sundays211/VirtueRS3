@@ -3,8 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./draynormanor-and-village'),
-		require('./lumbridge-and-lumbridge-swamp')
+		require('./lumbridge-sage')
 	];
 	
 	for (var i in modules) {

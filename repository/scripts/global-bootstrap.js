@@ -23,6 +23,7 @@ function getAllModules () {// jshint ignore:line
 		'items/item-use',
 		'items/degradables',
 		'map',
+		'npcs/misthalin',
 		'quest',
 		'shop',
 		'skill/common',

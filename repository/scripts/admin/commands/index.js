@@ -10,6 +10,7 @@ module.exports.init = function (scriptManager) {
 		require('./npc-spawns'),
 		require('./player-model'),
 		require('./misc'),
+		require('./moderator'),
 		require('./test')
 	];
 	
