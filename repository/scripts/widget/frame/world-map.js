@@ -44,11 +44,11 @@ module.exports = (function () {
 			widget.setEvents(ctx.player, 1422, 45, 2, 2, 2);
 			widget.setEvents(ctx.player, 1422, 46, 2, 2, 2);
 			widget.setEvents(ctx.player, 1422, 47, 2, 2, 2);
-			varc(ctx.player, 622, ENGINE.getCoordHash(map.getCoords(ctx.player)));
+			varc(ctx.player, 622, map.getCoords(ctx.player));
 			widget.setEvents(ctx.player, 1422, 86, 0, 19, 2);
 			widget.hide(ctx.player, 1422, 49, true);
 			varc(ctx.player, 4197, -1);
-			varc(ctx.player, 674, ENGINE.getCoordHash(map.getCoords(ctx.player)));
+			varc(ctx.player, 674, map.getCoords(ctx.player));
 			anim.run(ctx.player, 22748);
 		});
 		
