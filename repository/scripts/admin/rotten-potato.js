@@ -122,7 +122,9 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPHELD3, 5733, function (ctx) {//Jmod-Tools
-			dialog.multi4(ctx.player, "CM-Tool", "Open Bank", function () {
+			dialog.multi5(ctx.player, "CM-Tool", "Open JMod Toolbox", function () {
+				widget.openCentral(ctx.player, 1610, false);
+				}, "Open Bank", function () {
 				widget.closeAll(ctx.player);
 				widget.openOverlaySub(ctx.player, 1017, 762, false);
 			}, "Max Stats", function () {

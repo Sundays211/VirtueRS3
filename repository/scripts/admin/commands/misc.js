@@ -47,6 +47,10 @@ module.exports = (function () {
 			ctx.player.getDispatcher().sendRootWidget(parent);
 		});
 		
+		scriptManager.bind(EventType.COMMAND_ADMIN, ["coords","pos","mypos"], function (ctx) {
+		chat.sendCommandResponse(ctx.player, util.getName(ctx.player) +" "+ map.getCoords(ctx.player), ctx.console);
+		});
+		
 		scriptManager.bind(EventType.COMMAND_ADMIN, [ "inter", "if", "widget" ], function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;

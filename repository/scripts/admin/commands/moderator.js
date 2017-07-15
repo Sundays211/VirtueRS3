@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Virtue Studios
+ * Copyright (c) 2015 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-/**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Sundays211
- * @since 28/03/2016
- */
-var UpgradesExtrasListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-	invoke : function (event, trigger, args) {
-		var player = args.player;
-		switch (args.component) {
-		case 34://Treasure Hunter
-			Overlay.closeOverlay(player);
-			api.openWidget(player, 1477, 749, 1252, true);
-			api.openWidget(player, 1477, 561, 1253, false);
-			return;
-		case 9://Membership
-		case 59://Bonds
-		case 85://Soloman's General Store
-		default:
-			api.sendMessage(player, "Unhandled upgrades & extras button: comp="+args.component+", slot="+args.slot+", button="+args.button);
-			return;
-		}		
+/* globals EventType, ENGINE, Java */
+var dialog = require('dialog');
+var chat = require('chat');
+var util = require('util');
+module.exports = (function () {
+	return {
+		init : init
+	};
+	
+	function init (scriptManager) {
+	scriptManager.bind(EventType.COMMAND_MOD, ["mute","muteplayer"], function (ctx) {
+	dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {	
+	chat.sendMessage(ctx.player, "Applying mute to "+util.getName(targetPlayer)+".");
+	targetPlayer.getChat().setMuted(true);
+	});
+	});
+	scriptManager.bind(EventType.COMMAND_MOD, ["unmute","unmuteplayer"], function (ctx) {
+	dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {	
+	chat.sendMessage(ctx.player, "Removing mute on player "+util.getName(targetPlayer)+".");
+	targetPlayer.getChat().setMuted(false);
+	});
+	});
 	}
-});
-
-/* Listen to the interface ids specified */
-var listen = function(scriptManager) {
-	var listener = new UpgradesExtrasListener();
-	scriptManager.registerListener(EventType.IF_BUTTON, 1607, listener);
-};
+})();
