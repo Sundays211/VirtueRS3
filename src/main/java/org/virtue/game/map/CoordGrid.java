@@ -499,23 +499,35 @@ public class CoordGrid {
 		return diffX == size && diffY == size;
 	}
 	
-	/**
-	 * (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (!(other instanceof CoordGrid)) {
-			return false;
-		}
-		CoordGrid t = (CoordGrid) other;
-		return x == t.x && y == t.y && plane == t.plane;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + plane;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
 	}
 
-	/**
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CoordGrid other = (CoordGrid) obj;
+		if (plane != other.plane)
+			return false;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		return true;
+	}
+
+	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
