@@ -56,7 +56,7 @@ module.exports = (function () {
 				var squareY = parseInt(args[2]);
 				var localX = parseInt(args[3]);
 				var localY = parseInt(args[4]);				
-				targetCoords = coords(squareX, squareY, level, localX, localY);
+				targetCoords = coords(level, squareX, squareY, localX, localY);
 			} else	if (args.length == 2) {
 				x = parseInt(args[0]);
 				y = parseInt(args[1]);
