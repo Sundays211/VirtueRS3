@@ -27,6 +27,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 import org.virtue.Constants;
+import org.virtue.game.World;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.message.login.LoginResponseMessage;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
@@ -103,10 +104,10 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 			packet.putByte(0);//Bypass world quickchat restriction (eg for jmods)
 			packet.putByte(0);
 			packet.putByte(0);//map_quickchat
-			packet.putShort(response.getPlayer().getIndex());//Player id
+			packet.putShort(response.getPlayer().getIndex());//Player uid
 			packet.putByte(1);//playerMember
 			packet.putTri(0);//Player DOB
-			packet.putByte(1);//map_members
+			packet.putByte(World.getInstance().isMembers() ? 1 : 0);//map_members
 			packet.putString(response.getPlayer().getName());
 			packet.put6ByteInteger(1412041454282L);
 		}
