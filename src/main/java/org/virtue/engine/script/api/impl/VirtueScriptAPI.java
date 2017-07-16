@@ -245,6 +245,11 @@ public class VirtueScriptAPI implements ScriptAPI {
 		Virtue.getInstance().getAccountIndex().setAccountType(userHash, type);
 	}
 
+	@Override
+	public boolean mapMembers() {
+		return getWorld().isMembers();
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#getWorld()
 	 */

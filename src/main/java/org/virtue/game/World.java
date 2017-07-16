@@ -23,6 +23,7 @@ package org.virtue.game;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Virtue;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.EntityList;
@@ -64,10 +65,17 @@ public class World extends ServerNode {
 	 */
 	private int cycleCount;
 	
-	private World () {
-		super(1, 2048);
+	private final boolean members;
+	
+	private World (int nodeId, boolean members) {
+		super(nodeId, 2048);
+		this.members = members;
 	}
 	
+	public boolean isMembers() {
+		return members;
+	}
+
 	/**
 	 * Adds a npc into the {@link EntityList} instance
 	 * @param npc - the npc to add
@@ -109,7 +117,9 @@ public class World extends ServerNode {
 	public static World getInstance() {
 		if (instance == null) {
 			try {
-				instance = new World();
+				boolean members = Virtue.getInstance().getProperty("world.members", true);
+				int nodeId = Virtue.getInstance().getProperty("world.node", 1);
+				instance = new World(nodeId, members);
 				new RegionUpdateTick(World.regionManager).start();
 			} catch (Exception e) {
 				logger.error("Error creating new World instance", e);
