@@ -149,6 +149,12 @@ public interface ScriptAPI {
 	public void setAccountType (Player changedBy, Long userHash, int type);
 	
 	/**
+	 * Checks whether this is a member's world
+	 * @return True if this is a members world, false otherwise
+	 */
+	public boolean mapMembers();
+	
+	/**
 	 * Gets the world instance
 	 * @return
 	 */

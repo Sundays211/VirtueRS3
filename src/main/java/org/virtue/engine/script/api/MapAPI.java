@@ -51,6 +51,16 @@ public interface MapAPI {
 	public CoordGrid getCoords (int x, int y, int level);
 	
 	/**
+	 * Gets the offset coordinates from the provided {@code coords}
+	 * @param coords The base coordinates to offset
+	 * @param levelOffset The level to offset by
+	 * @param xOff The number of x coords to offset by
+	 * @param yOff The number of y coords to offset by
+	 * @return
+	 */	
+	public CoordGrid getCoords (CoordGrid coords, int xOff, int yOff, byte levelOffset);
+	
+	/**
 	 * Gets the coordinate from the specified components
 	 * @param squareX The x-coordinate of the map square
 	 * @param squareY The y-coordinate of the map square
@@ -60,6 +70,28 @@ public interface MapAPI {
 	 * @return The coordinate
 	 */
 	public CoordGrid getCoords (int squareX, int squareY, int level, int localX, int localY);
+	
+	/**
+	 * Gets the offset coordinates from the provided {@code coords}
+	 * @param coords The base coordinates to offset
+	 * @param levelOffset The level to offset by
+	 * @param squareXoff The number of x map squares to offset by
+	 * @param squareYoff The number of y map squares to offset by
+	 * @param localXoff The number of x tiles within the map square to offset by
+	 * @param localYoffThe number of y tiles within the map square to offset by
+	 * @return
+	 */
+	public CoordGrid getCoords (CoordGrid coords, int levelOffset, int squareXoff, int squareYoff, 
+			int localXoff, int localYoff);
+	
+	/**
+	 * Checks whether the provided coordinates lie within the range given
+	 * @param from The start of the range to check
+	 * @param to The end of the range to check
+	 * @param coords The coordinates to check
+	 * @return True if {@code coords} lie between {@code from} and {@code to}
+	 */
+	public boolean inZone (CoordGrid from, CoordGrid to, CoordGrid coords);
 	
 	public DynamicMapSquare createArea();
 	

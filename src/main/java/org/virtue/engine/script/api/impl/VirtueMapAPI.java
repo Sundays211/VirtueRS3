@@ -53,8 +53,38 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
+	public CoordGrid getCoords(CoordGrid coords, int xOff, int yOff, byte levelOffset) {
+		return CoordGrid.edit(coords, xOff, yOff, levelOffset);
+	}
+
+	@Override
 	public CoordGrid getCoords(int squareX, int squareY, int level, int localX, int localY) {
 		return new CoordGrid(localX, localY, level, squareX, squareY);
+	}
+
+	@Override
+	public CoordGrid getCoords(CoordGrid coords, int levelOffset, int squareXoff, int squareYoff, 
+			int localXoff, int localYoff) {
+		int level = coords.getLevel() + levelOffset;
+		int squareX = coords.getRegionX() + squareXoff;
+		int squareY = coords.getRegionY() + squareYoff;
+		int localX = coords.getLocalX() + localXoff;
+		int localY = coords.getLocalY() + localYoff;
+		return new CoordGrid(localX, localY, level, squareX, squareY);
+	}
+
+	@Override
+	public boolean inZone(CoordGrid from, CoordGrid to, CoordGrid coords) {
+		if (coords.getLevel() <= from.getLevel() || coords.getLevel() >= to.getLevel()) {
+			return false;
+		}
+		if (coords.getX() <= from.getX() || coords.getX() >= to.getX()) {
+			return false;
+		}
+		if (coords.getY() <= from.getY() || coords.getY() >= to.getY()) {
+			return false;
+		}
+		return true;
 	}
 	
 	private MapSquare getRegion (CoordGrid coords) {
