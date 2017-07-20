@@ -33,65 +33,69 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_BUTTON, 1405, function (ctx) {//Bug report
-	switch (ctx.component) {
-	case 47://Selected main category
-	varbit(ctx.player, 18336, ctx.slot*10);
-	var subCats = config.enumValue(7427, ctx.slot);
-	if (subCats == -1) {
-	varbit(ctx.player, 18337, ctx.slot*10);
-	} else {
-	var size = config.enumSize(subCats);
-	widget.setEvents(ctx.player, 1405, 61, 0, size, 2);
- 	varbit(ctx.player, 18337, 0);
-	}
-	return;
-	case 61://Select sub category
-	if (ctx.slot != 0) {
-	varbit(ctx.player, 18337, varbit(ctx.player, 18336) + ctx.slot);
-	}
-	return;
-	case 91://Submit button.
-	return;
-    default:
-	util.defaultHandler(ctx, "report");
-	return;		
-	}		
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1406, function (ctx) {
-	switch (ctx.component) {
-	case 16://Report player
-	chat.sendMessage(ctx.player, "Player reporting is not yet available.");
-	widget.closeAll(ctx.player);
-	//widget.openCentral(ctx.player, 594, false);
-	return;
-	case 24://Report bug
-	widget.openCentral(ctx.player, 1405, false);
-	return;
-    default:
-	util.defaultHandler(ctx, "report");
-	return;		
-	}		
-	});
-	scriptManager.bind(EventType.IF_CLOSE, 1405, function (ctx) {//Bug report
-	varbit(ctx.player, 18336, 0);
-	varbit(ctx.player, 18337, 0);
-	});
-	scriptManager.bind(EventType.IF_OPEN, 594, function (ctx) {//Player report
-	varc(ctx.player, 2578, "");
-	widget.hide(ctx.player, 594, 18, false);//Set interface hidden: if=594, comp=18, hidden=0
-	varc(ctx.player, 790, 1);//Received varc: key=790, value=1
-	varc(ctx.player, 2579, "[My name]");
-	widget.hide(ctx.player, 594, 38, false);//Mute option on first screen
-	widget.hide(ctx.player, 594, 9, false);//Mute option on second screen
-	widget.hide(ctx.player, 594, 28, false);//Another mute option
-	util.runClientScript(ctx.player, 7674, []);
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1405, function (ctx) {//Bug report
-	varc(ctx.player, 2911, -1);
-	util.runClientScript(ctx.player, 187, [1, 4]);
-	util.runClientScript(ctx.player, 7657, []);
-	widget.setEvents(ctx.player, 1405, 47, 0, 10, 2);//Category select
-	});
+		scriptManager.bind(EventType.IF_BUTTON, 1405, function (ctx) {//Bug report
+			switch (ctx.component) {
+			case 47://Selected main category
+				varbit(ctx.player, 18336, ctx.slot*10);
+				var subCats = config.enumValue(7427, ctx.slot);
+				if (subCats == -1) {
+					varbit(ctx.player, 18337, ctx.slot*10);
+				} else {
+					var size = config.enumSize(subCats);
+					widget.setEvents(ctx.player, 1405, 61, 0, size, 2);
+				 	varbit(ctx.player, 18337, 0);
+				}
+				return;
+			case 61://Select sub category
+				if (ctx.slot !== 0) {
+					varbit(ctx.player, 18337, varbit(ctx.player, 18336) + ctx.slot);
+				}
+				return;
+			case 91://Submit button.
+				return;
+		    default:
+				util.defaultHandler(ctx, "report");
+				return;		
+			}
+		});
+		
+		scriptManager.bind(EventType.IF_BUTTON, 1406, function (ctx) {
+			switch (ctx.component) {
+			case 16://Report player
+				chat.sendMessage(ctx.player, "Player reporting is not yet available.");
+				widget.closeAll(ctx.player);
+				//widget.openCentral(ctx.player, 594, false);
+				return;
+			case 24://Report bug
+				widget.openCentral(ctx.player, 1405, false);
+				return;
+		    default:
+				util.defaultHandler(ctx, "report");
+				return;		
+			}
+		});
+		
+		scriptManager.bind(EventType.IF_CLOSE, 1405, function (ctx) {//Bug report
+			varbit(ctx.player, 18336, 0);
+			varbit(ctx.player, 18337, 0);
+		});
+		
+		scriptManager.bind(EventType.IF_OPEN, 594, function (ctx) {//Player report
+			varc(ctx.player, 2578, "");
+			widget.hide(ctx.player, 594, 18, false);//Set interface hidden: if=594, comp=18, hidden=0
+			varc(ctx.player, 790, 1);//Received varc: key=790, value=1
+			varc(ctx.player, 2579, "[My name]");
+			widget.hide(ctx.player, 594, 38, false);//Mute option on first screen
+			widget.hide(ctx.player, 594, 9, false);//Mute option on second screen
+			widget.hide(ctx.player, 594, 28, false);//Another mute option
+			util.runClientScript(ctx.player, 7674, []);
+		});
+		
+		scriptManager.bind(EventType.IF_OPEN, 1405, function (ctx) {//Bug report
+			varc(ctx.player, 2911, -1);
+			util.runClientScript(ctx.player, 187, [1, 4]);
+			util.runClientScript(ctx.player, 7657, []);
+			widget.setEvents(ctx.player, 1405, 47, 0, 10, 2);//Category select
+		});
 	}
 })();
