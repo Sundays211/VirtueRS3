@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.engine.script.api.ClanAPI;
 import org.virtue.engine.script.api.ConfigAPI;
+import org.virtue.engine.script.api.EntityAPI;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.engine.script.api.QuestAPI;
 import org.virtue.engine.script.api.ScriptAPI;
@@ -136,6 +137,8 @@ public class JSListeners implements ScriptManager {
 	
 	private QuestAPI questApi;
 	
+	private EntityAPI entityApi;
+	
 	private ScriptEngine engine;
 	
 	private File scriptDir;
@@ -160,6 +163,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("MAP_ENGINE", mapApi);
 		engine.put("configApi", configApi);
 		engine.put("QUEST_ENGINE", questApi);
+		engine.put("ENTITY_ENGINE", entityApi);
 		engine.put("scriptEngine", this);
 		
 		Map<String, Integer> map = new HashMap<>();
@@ -370,6 +374,14 @@ public class JSListeners implements ScriptManager {
 
 	public void setQuestApi(QuestAPI questApi) {
 		this.questApi = questApi;
+	}
+
+	public EntityAPI getEntityApi() {
+		return entityApi;
+	}
+
+	public void setEntityApi(EntityAPI entityApi) {
+		this.entityApi = entityApi;
 	}
 
 	/**

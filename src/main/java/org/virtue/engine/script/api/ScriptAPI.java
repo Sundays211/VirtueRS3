@@ -988,8 +988,6 @@ public interface ScriptAPI {
 	 */
 	public void clearFaceEntity (Entity entity);
 	
-	public void forceMovement (Entity entity, CoordGrid t1, int delay1, CoordGrid t2, int delay2, int direction);
-	
 	/**
 	 * Moves the entity to the specified coordinates
 	 * @param entity The entity to teleport

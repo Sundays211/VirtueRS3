@@ -21,8 +21,10 @@
  */
 /* globals EventType, ENGINE */
 var coords = require('map/coords');
+var _entity = require('engine/entity');
 
 var util = require('util');
+var anim = require('anim');
 var dialog = require('dialog');
 var chat = require('chat');
 var map = require('map');
@@ -44,7 +46,7 @@ module.exports = (function () {
 			var args = ctx.cmdArgs;
 			var player = ctx.player;
 			if (args.length < 1) {
-				util.sendCommandResponse(player, "Usage: test <type>", ctx.console);
+				chat.sendCommandResponse(player, "Usage: test <type>", ctx.console);
 			}
 			
 			switch (args[0]) {
@@ -60,6 +62,9 @@ module.exports = (function () {
 			case "mestype":
 				testMessageType(player, args, ctx);
 				return;
+			case "move":
+				testDelayedMovement(player, args, ctx);
+				return;
 			}
 		});
 		
@@ -70,7 +75,7 @@ module.exports = (function () {
 			player.getHeadIcons().setIcon(parseInt(args[3]), parseInt(args[1]), parseInt(args[2]));
 			player.getHeadIcons().refresh();
 		} else {
-			util.sendCommandResponse(player, "Usage: test icons <main_sprite> <sub_sprite> <slot>", ctx.console);
+			chat.sendCommandResponse(player, "Usage: test icons <main_sprite> <sub_sprite> <slot>", ctx.console);
 		}
 	}
 	
@@ -91,7 +96,7 @@ module.exports = (function () {
 	
 	function testLocAnim(player, args, ctx) {
 		if (args.length < 2 || isNaN(args[1])) {
-			util.sendCommandResponse(player, "Usage: test locanim <anim_id>", ctx.console);
+			chat.sendCommandResponse(player, "Usage: test locanim <anim_id>", ctx.console);
 			return;
 		}
 		var animId = parseInt(args[1]);
@@ -104,11 +109,20 @@ module.exports = (function () {
 	
 	function testMessageType(player, args, ctx) {
 		if (args.length < 2 || isNaN(args[1])) {
-			util.sendCommandResponse(player, "Usage: test mestype <channel_id>", ctx.console);
+			chat.sendCommandResponse(player, "Usage: test mestype <channel_id>", ctx.console);
 			return;
 		}
 		var mesType = args[1];
 		chat.sendMessage(player, "Test", mesType);
+	}
+	
+	function testDelayedMovement(player, args, ctx) {
+		testLocAnim(player, ["locanim", 497], ctx);
+		anim.run(player, 751);
+		var currentCoords = map.getCoords(player);
+		var targetCoords = coords(currentCoords, 0, -5, 0);
+		chat.sendCommandResponse(player, "Running foce move to: "+targetCoords, ctx.console);
+		_entity.forceMove(player, targetCoords, 105);
 	}
 })();
 
