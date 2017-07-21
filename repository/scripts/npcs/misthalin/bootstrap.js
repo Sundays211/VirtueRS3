@@ -3,7 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./lumbridge-sage')
+		require('./lumbridge-sage'),
+		require('./bob')
 	];
 	
 	for (var i in modules) {

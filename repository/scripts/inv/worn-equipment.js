@@ -69,11 +69,7 @@ module.exports = (function () {
 					widget.openOverlay(player, 0);
 					return;
 				case 7:
-					widget.openCentral(player, 17, false);
-					widget.setEvents(player, 17, 18, 1024, 14, 1024);
-					widget.setEvents(player, 17, 17, 1024, 47, 1024);
-					widget.setEvents(player, 17, 20, 1024, 47, 1024);
-					widget.setEvents(player, 17, 22, 1024, 47, 1024);
+					widget.open(player, 1477, 871, 1626, false);
 					return;
 				case 2:
 					widget.openCentral(player, 1178, false);

@@ -38,13 +38,6 @@ var widget = require('widget');
  */
 module.exports = function(scriptManager) {
 	
-	scriptManager.bind(EventType.OPNPC3, 519, function (ctx) {
-		varp(ctx.player, 304, Inv.BOBS_AXES);
-		varp(ctx.player, 305, Inv.BOBS_AXES_FREE_STOCK);
-		varc(ctx.player, 2360, "Bob's Brilliant Axes");
-		widget.openCentral(ctx.player, 1265);
-	});
-	
 	scriptManager.bind(EventType.OPNPC3, [520, 521], function (ctx) {
 		varp(ctx.player, 304, Inv.LUMBRIDGE_GEN_STORE);
 		varp(ctx.player, 305, Inv.LUMBRIDGE_GEN_STORE_FREE_STOCK);

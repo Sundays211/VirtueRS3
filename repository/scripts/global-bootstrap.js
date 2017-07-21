@@ -15,6 +15,7 @@ function getAllModules () {// jshint ignore:line
 		'area/fremennik',
 		'area/kandarin',
 		'area/misthalin',
+		'area/underground',
 		'chat',
 		'clan',
 		'combat',

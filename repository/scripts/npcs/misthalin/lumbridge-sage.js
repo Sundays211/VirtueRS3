@@ -26,11 +26,9 @@ var map = require('map');
 var coords = require('map/coords');
 var util = require('util');
 module.exports = (function () {
-	var cooksAssistant = {
-		init : init
+	return {
+	init : init
 	};
-	
-	return cooksAssistant;
 	
 	function init (scriptManager) {
 	scriptManager.bind(EventType.OPNPC1, 2244, function (ctx) {
