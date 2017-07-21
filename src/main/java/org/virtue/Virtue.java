@@ -47,6 +47,7 @@ import org.virtue.engine.cycle.ticks.SystemUpdateTick;
 import org.virtue.engine.script.JSListeners;
 import org.virtue.engine.script.api.impl.VirtueClanAPI;
 import org.virtue.engine.script.api.impl.VirtueConfigAPI;
+import org.virtue.engine.script.api.impl.VirtueEntityAPI;
 import org.virtue.engine.script.api.impl.VirtueMapAPI;
 import org.virtue.engine.script.api.impl.VirtueQuestAPI;
 import org.virtue.engine.script.api.impl.VirtueScriptAPI;
@@ -309,6 +310,7 @@ public class Virtue {
 		scripts.setMapApi(new VirtueMapAPI());
 		scripts.setConfigApi(new VirtueConfigAPI(configProvider));
 		scripts.setQuestApi(new VirtueQuestAPI(configProvider));
+		scripts.setEntityApi(new VirtueEntityAPI());
 		scripts.load();
 	}
 	

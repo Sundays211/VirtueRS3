@@ -24,7 +24,6 @@ package org.virtue.network.protocol.update.block;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.BlockType;
@@ -35,27 +34,23 @@ import org.virtue.network.protocol.update.BlockType;
  */
 public class ForceMovementBlock extends Block {
 
-	private CoordGrid tile1;
-	private int delay1;
-	private CoordGrid tile2;
-	private int delay2;
+	private CoordGrid intermediateCoords;
+	private int intermediateDelay;
+	private CoordGrid finalCoords;
+	private int finalDelay;
 
-	private CompassPoint direction;
-
-	public ForceMovementBlock(CoordGrid tile1, int delay1, CompassPoint direction) {
-		this(tile1, delay1, direction, tile1, delay1+1);
-	}
+	private CoordGrid facing;
 
 	/**
 	 * The {@link ForceMovementBlock} constructor
 	 */
-	public ForceMovementBlock(CoordGrid tile1, int delay1, CompassPoint direction, CoordGrid tile2, int delay2) {
+	public ForceMovementBlock(CoordGrid fromCoords, int delay, CoordGrid toCoords, int length, CoordGrid facing) {
 		super(BlockType.MOVE);
-		this.tile1 = tile1;
-		this.delay1 = delay1;
-		this.tile2 = tile2;
-		this.delay2 = delay2;
-		this.direction = direction;
+		this.intermediateCoords = fromCoords;
+		this.intermediateDelay = delay;
+		this.finalCoords = toCoords;
+		this.finalDelay = length;
+		this.facing = facing;
 	}
 
 	/* (non-Javadoc)
@@ -63,26 +58,27 @@ public class ForceMovementBlock extends Block {
 	 */
 	@Override
 	public void encodeBlock(OutboundBuffer block, Entity entity) {
+		int direction = ((int) (Math.atan2(entity.getCurrentTile().getX() - facing.getX(), entity.getCurrentTile().getY() - facing.getY()) * 2607.5945876176133)) & 0x3fff;
 		if (entity instanceof Player) {
-			block.putA(tile1.getX() - entity.getCurrentTile().getX());
-			block.putA(tile1.getY() - entity.getCurrentTile().getY());
-			block.putC(tile2.getX() - entity.getCurrentTile().getX());
-			block.putA(tile2.getY() - entity.getCurrentTile().getY());
-			block.putA(tile1.getLevel() - entity.getCurrentTile().getLevel());
-			block.putA(tile2.getLevel() - entity.getCurrentTile().getLevel());
-			block.putShortA(delay1 * 30);
-			block.putLEShortA(delay2 * 30);
-			block.putLEShortA(this.direction.getID());
+			block.putA(intermediateCoords.getX() - entity.getCurrentTile().getX());
+			block.putA(intermediateCoords.getY() - entity.getCurrentTile().getY());
+			block.putC(finalCoords.getX() - entity.getCurrentTile().getX());
+			block.putA(finalCoords.getY() - entity.getCurrentTile().getY());
+			block.putA(intermediateCoords.getLevel() - entity.getCurrentTile().getLevel());
+			block.putA(finalCoords.getLevel() - entity.getCurrentTile().getLevel());
+			block.putShortA(intermediateDelay);
+			block.putLEShortA(finalDelay);
+			block.putLEShortA(direction);
 		} else {
-			block.putC(tile1.getX() - entity.getCurrentTile().getX());
-			block.putS(tile1.getY() - entity.getCurrentTile().getY());
-			block.putByte(tile2.getX() - entity.getCurrentTile().getX());
-			block.putA(tile2.getY() - entity.getCurrentTile().getY());
-			block.putS(tile1.getLevel() - entity.getCurrentTile().getLevel());
-			block.putA(tile2.getLevel() - entity.getCurrentTile().getLevel());
-			block.putShortA(delay1 * 30);
-			block.putShort(delay2 * 30);
-			block.putLEShort(this.direction.getID());
+			block.putC(intermediateCoords.getX() - entity.getCurrentTile().getX());
+			block.putS(intermediateCoords.getY() - entity.getCurrentTile().getY());
+			block.putByte(finalCoords.getX() - entity.getCurrentTile().getX());
+			block.putA(finalCoords.getY() - entity.getCurrentTile().getY());
+			block.putS(intermediateCoords.getLevel() - entity.getCurrentTile().getLevel());
+			block.putA(finalCoords.getLevel() - entity.getCurrentTile().getLevel());
+			block.putShortA(intermediateDelay);
+			block.putShort(finalDelay);
+			block.putLEShort(direction);
 		}
 	}
 
