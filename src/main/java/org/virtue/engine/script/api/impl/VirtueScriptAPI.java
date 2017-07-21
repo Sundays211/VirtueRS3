@@ -67,10 +67,9 @@ import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarContainer;
 import org.virtue.game.entity.player.widget.WidgetManager;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.GroundItem;
 import org.virtue.game.map.SceneLocation;
-import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.node.Node;
 import org.virtue.game.node.ServerNode;
@@ -78,7 +77,6 @@ import org.virtue.game.parser.AccountIndex;
 import org.virtue.game.parser.AccountInfo;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
-import org.virtue.network.protocol.update.block.ForceMovementBlock;
 import org.virtue.network.protocol.update.block.ForceTalkBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 import org.virtue.network.protocol.update.block.TalkBlock;
@@ -1718,14 +1716,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 	@Override
 	public void clearFaceEntity(Entity entity) {
 		entity.queueUpdateBlock(new FaceEntityBlock(null));
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#forceMovement(org.virtue.game.entity.Entity, org.virtue.game.entity.region.Tile, int, org.virtue.game.entity.region.Tile, int, int)
-	 */
-	@Override
-	public void forceMovement(Entity entity, CoordGrid t1, int delay1, CoordGrid t2, int delay2, int direction) {
-		entity.queueUpdateBlock(new ForceMovementBlock(t1, delay1, CompassPoint.getById(direction), t2, delay2));
 	}
 
 	/* (non-Javadoc)
