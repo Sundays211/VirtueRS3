@@ -71,7 +71,7 @@ public class PlayerExamineHandler implements PlayerOptionHandler {
 			clan = "None";
 		}
 		player.getDispatcher().sendVarcString(VarKey.Client.PLAYER_INSPECT_CLAN, clan);
-		String message = (String) player.getVars().getVarValue(VarKey.Player.PLAYER_INSPECT_MESSAGE);
+		String message = (String) player.getVars().getVarValueLegacy(VarKey.Player.PLAYER_INSPECT_MESSAGE);
 		if (message != null) {
 			player.getDispatcher().sendVarcString(VarKey.Client.PLAYER_INSPECT_MESSAGE, message);
 		}
