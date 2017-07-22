@@ -28,49 +28,50 @@ var chat = require('chat');
 var widget = require('widget');
 var util = require('util');
 var map = require('map');
-var dialog = require('dialog');
+
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_BUTTON, 1610, function (ctx) {
-	var player = ctx.player;
-	switch (ctx.component) {
-	//for Deposit box
-	//dialog.requestCount(player, "How many minutes should this deposit box be available? (insert 999 for the duration of the scenario)")
-	//.then(function (time) {
-	//loc 8927 at player coords then time
-	//});
-	case 82://Heal
-	ENGINE.restoreLifePoints(player);
-	chat.sendMessage(player, "You set your health to max.");
-	return;
-	case 115://Exit Button
-	widget.closeAll(player);
-	return;
-	case 145://invis
-	player.getModel().setRender(Render.INVISIBLE);
-	player.getModel().refresh();
-	return;
-	case 185://Jmod Quick-Chat Option
-	return;
-	case 269://Panic!
-	ENGINE.restoreLifePoints(player);
-	map.setCoords(player, coords(2907, 3334, 3));
-	widget.closeAll(player);
-	chat.sendMessage(player, "Be healed!");
-	chat.sendMessage(player, "Don't Panic Mr Mainwaring!");
-	return;
-	case 291://Keep Max HP
-	chat.sendMessage(player, "Max HP timer toggled on.");
-	chat.sendMessage(player, "todo add the code");
-	return;	
-	default:
-	util.defaultHandler(ctx, "JMod ToolBox");
-	return;
-	}
-	});
+		
+		scriptManager.bind(EventType.IF_BUTTON, 1610, function (ctx) {
+			var player = ctx.player;
+			switch (ctx.component) {
+			//for Deposit box
+			//dialog.requestCount(player, "How many minutes should this deposit box be available? (insert 999 for the duration of the scenario)")
+			//.then(function (time) {
+			//loc 8927 at player coords then time
+			//});
+			case 82://Heal
+				ENGINE.restoreLifePoints(player);
+				chat.sendMessage(player, "You set your health to max.");
+				return;
+			case 115://Exit Button
+				widget.closeAll(player);
+				return;
+			case 145://invis
+				player.getModel().setRender(Render.INVISIBLE);
+				player.getModel().refresh();
+				return;
+			case 185://Jmod Quick-Chat Option
+				return;
+			case 269://Panic!
+				ENGINE.restoreLifePoints(player);
+				map.setCoords(player, coords(2907, 3334, 3));
+				widget.closeAll(player);
+				chat.sendMessage(player, "Be healed!");
+				chat.sendMessage(player, "Don't Panic Mr Mainwaring!");
+				return;
+			case 291://Keep Max HP
+				chat.sendMessage(player, "Max HP timer toggled on.");
+				chat.sendMessage(player, "todo add the code");
+				return;	
+			default:
+				util.defaultHandler(ctx, "JMod ToolBox");
+				return;
+			}
+		});
 	}
 })();
