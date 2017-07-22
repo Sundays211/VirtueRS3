@@ -120,13 +120,14 @@ public class ConfigProvider {
 		
 		enumTypeList = new EnumTypeList(cache);		
 
-		npcTypeList = new NpcTypeList(cache, Constants.NPC_DATA);
+		String npcData = properties.getProperty("config.npc.data", Constants.NPC_DATA_PATH);
+		npcTypeList = new NpcTypeList(cache, FileUtility.parseFilePath(npcData, properties));		
+		
+		String objDataFile = properties.getProperty("config.obj.data", Constants.OBJECT_DATA_PATH);
+		objTypeList = new ObjTypeList(cache, FileUtility.parseFilePath(objDataFile, properties));
 		
 		String npcDataFile = properties.getProperty("npc.data.file", "repository/npc/NPCData.json");
-		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile, properties), npcTypeList);		
-		
-		ObjTypeList.init(cache, Constants.ITEM_DATA);
-		objTypeList = ObjTypeList.getInstance();
+		NpcDataParser.loadJsonNpcData(FileUtility.parseFilePath(npcDataFile, properties), npcTypeList);
 		
 		Archive params = Archive.decode(cache.read(2, Js5ConfigGroup.PARAMTYPE.id).getData(), 
 				configTable.getEntry(Js5ConfigGroup.PARAMTYPE.id).size());

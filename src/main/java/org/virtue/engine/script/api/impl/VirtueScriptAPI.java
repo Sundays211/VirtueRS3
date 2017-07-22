@@ -570,7 +570,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean itemExists(int itemID) {
-		return ObjTypeList.getInstance().exists(itemID);
+		return configProvider.getObjTypes().exists(itemID);
 	}
 
 	/* (non-Javadoc)
@@ -578,7 +578,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public ObjType getItemType(int itemID) {
-		return ObjTypeList.getInstance().list(itemID);
+		return configProvider.getObjTypes().list(itemID);
 	}
 
 	/* (non-Javadoc)
@@ -631,7 +631,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public boolean itemStacks(int objTypeId) {
-		ObjType itemType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType itemType = configProvider.getObjTypes().list(objTypeId);
 		if (itemType == null) {
 			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
 		}
@@ -643,7 +643,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public Object getItemParam(int objTypeId, int paramTypeId) {
-		ObjType itemType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType itemType = configProvider.getObjTypes().list(objTypeId);
 		if (itemType == null) {
 			throw new IllegalArgumentException("Invalid objtype: "+objTypeId);
 		}
@@ -663,7 +663,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getExchangeCost(int itemId) {
-		return ObjTypeList.getInstance().list(itemId).getExchangeValue();
+		return configProvider.getObjTypes().list(itemId).getExchangeValue();
 	}
 
 	@Override

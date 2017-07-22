@@ -28,12 +28,10 @@ import java.util.Set;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.objtype.ObjTypeCustomisation;
-import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.clans.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PlayerModel;
-import org.virtue.game.entity.player.PlayerModel.Gender;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarKey;
 import org.virtue.utility.text.StringUtility;
@@ -217,7 +215,7 @@ public class EquipmentManager {
 	 * @return {@code True} if so.
 	 */
 	public boolean isWearing(int itemId) {
-		return isWearing(itemId, ObjTypeList.getInstance().list(itemId).wearpos);
+		return isWearing(itemId, Virtue.getInstance().getConfigProvider().getObjTypes().list(itemId).wearpos);
 	}
 	
 	/**

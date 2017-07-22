@@ -25,8 +25,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
@@ -38,11 +36,6 @@ import org.virtue.utility.text.StringUtility;
  * @since 22/10/2014
  */
 public class ObjType implements ConfigType {
-
-	/**
-	 * The {@link Logger} instance
-	 */
-	private static Logger logger = LoggerFactory.getLogger(ObjType.class);
 	
 	private static enum ItemTransform { SHARD, CERT, LENT, BOUGHT; }
 
@@ -53,33 +46,6 @@ public class ObjType implements ConfigType {
 	static final int MAX_IOP_COUNT = 5;
 	public static short[] aShortArray8082 = new short[256];
 	static String aString8101 = "</col>";
-	
-	public static ObjType load (int id, ByteBuffer buffer, ObjTypeList list) {
-		ObjType objType = new ObjType(id, list);
-		try {
-			objType.decode(buffer);
-		} catch (RuntimeException ex) {
-			logger.error("Failed to load objType "+id, ex);
-		}
-		return objType;
-	}
-	
-	/**
-	 * Retrieves the specified npc type definition from the cache, using extra data alongside cache data
-	 * @param id The item type ID
-	 * @param cacheData The buffer containing data from the cache
-	 * @param extraData The buffer containing extra data (such as descriptions and weights)
-	 * @return the ItemType config
-	 */
-	public static ObjType load (int id, ByteBuffer cacheData, ByteBuffer extraData, ObjTypeList list) {
-		ObjType objType = load(id, extraData, list);
-		try {
-			objType.decode(cacheData);
-		} catch (RuntimeException ex) {
-			logger.error("Failed to load objtype "+id, ex);
-		}
-		return objType;
-	}
 	
 	int model;
 	public String name = "null";
@@ -775,7 +741,7 @@ public class ObjType implements ConfigType {
 			return true;
 		}
 		if (certtemplate != -1) {
-			return ObjTypeList.getInstance().list(certlink).isTradable();
+			return myList.list(certlink).isTradable();
 		}
 		if (myid == 995) {
 			return true;//Coins should be tradable
@@ -815,7 +781,7 @@ public class ObjType implements ConfigType {
 			if (price != -1) {
 				return price;
 			} else if (certtemplate != -1) {
-				return ObjTypeList.getInstance().list(certlink).getExchangeValue();
+				return myList.list(certlink).getExchangeValue();
 			} else {
 				return cost;
 			}

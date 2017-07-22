@@ -98,7 +98,7 @@ public class NpcTypeList extends ExternalConfigDecoder<NpcType> {
 			reader.read(data);
 			ByteBuffer buffer = ByteBuffer.wrap(data);
 			npcDataArchive = Archive.decode(buffer, capacity);
-			logger.info("Loaded data for " + capacity + " npctypes.");
+			logger.info("Loaded custom data for " + capacity + " npctypes.");
 		}
 	}
 
