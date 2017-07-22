@@ -25,14 +25,11 @@ import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.virtue.cache.Archive;
 import org.virtue.cache.ReferenceTable;
 
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -42,12 +39,7 @@ import com.google.common.cache.LoadingCache;
  * @author Sundays211
  * @since 21/11/2015
  */
-public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<Integer, T> implements Iterable<T> {
-
-	/**
-	 * The {@link Logger} instance
-	 */
-	private static Logger logger = LoggerFactory.getLogger(ConfigDecoder.class);
+public abstract class ConfigDecoder<T extends ConfigType> implements Iterable<T> {
 	
 	private class ConfigIterator implements Iterator<T> {
 		
@@ -66,23 +58,25 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 		 */
 		@Override
 		public T next() {
-			pointer++;
+			do {
+				pointer++;
+			} while (!exists(pointer-1));
 			return list(pointer-1);
 		}
 	}
 	
-	private LoadingCache<Integer, T> configCache = CacheBuilder.newBuilder().softValues().build(this);
+	private Cache<Integer, T> configCache = CacheBuilder.newBuilder().softValues().build();
 	private int num;
-	private ReferenceTable referenceTable;
+	private ReferenceTable index;
 	private Archive dataArchive;
 	private Js5ConfigGroup configGroup;
 	private Class<? extends ConfigType> configClass;
 
-	public ConfigDecoder(ReferenceTable configTable, Archive archive, Js5ConfigGroup group, Class<? extends ConfigType> configClass) {
-		this.referenceTable = configTable;
+	public ConfigDecoder(ReferenceTable index, Archive archive, Js5ConfigGroup group, Class<? extends ConfigType> configClass) {
+		this.index = index;
 		this.dataArchive = archive;
 		this.configGroup = group;
-		this.num = configTable.getEntry(group.id).capacity();
+		this.num = index.getEntry(group.id).capacity();
 		this.configClass = configClass;
 	}
 	
@@ -90,35 +84,26 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 		return num;
 	}
 	
-	private boolean exists (int id) {
+	public boolean exists (int id) {
 		if (id < 0 || id >= num) {
 			return false;
 		}
-		return referenceTable.getEntry(configGroup.id, id) != null;
+		return index.getEntry(configGroup.id, id) != null;
 	}
 	
 	public T list (int id) {
-		if (!exists(id)) {
-			logger.warn("Tried to load "+configGroup.name().toLowerCase()+" "+id+" which does not exist!");
-			return null;
-		}
 		try {
-			return configCache.get(id);
+			return configCache.get(id, () -> load(id));
 		} catch (ExecutionException ex) {
-			logger.error("Error loading "+configGroup.name().toLowerCase()+" definition "+id, ex);
-			return null;
+			throw new RuntimeException("Error loading "+configGroup.name().toLowerCase()+" definition "+id, ex);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.google.common.cache.CacheLoader#load(java.lang.Object)
-	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public T load(Integer id) throws Exception {
+	protected T load(int id) throws Exception {
 		ByteBuffer data = getData(id);
 		if (data == null) {
-			return null;
+			throw new ConfigNotFoundException(configGroup, id);
 		}
 		ConfigType type = configClass.getDeclaredConstructor(Integer.TYPE, getClass()).newInstance(id, this);
 		type.decode(data);
@@ -127,7 +112,11 @@ public abstract class ConfigDecoder<T extends ConfigType> extends CacheLoader<In
 	}
 	
 	protected ByteBuffer getData (int id) {
-		return dataArchive.getEntry(referenceTable.getEntry(configGroup.id, id).index());
+		ReferenceTable.ChildEntry entry = index.getEntry(configGroup.id, id);
+		if (entry == null) {
+			throw new ConfigNotFoundException(configGroup, id);
+		}
+		return dataArchive.getEntry(entry.index());
 	}
 
 	/* (non-Javadoc)
