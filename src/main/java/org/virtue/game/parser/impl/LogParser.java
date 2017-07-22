@@ -63,7 +63,7 @@ public class LogParser {
 	}
 	
 	private int saveBugReports () throws IOException {
-		File file = new File(PATH, "day_"+Virtue.getInstance().getServerDay()+".log");
+		File file = new File(PATH, "day_"+Virtue.getInstance().getRuneday()+".log");
 		BugReport[] reports;
 		synchronized (bugReportQueue) {
 			reports = bugReportQueue.toArray(new BugReport[bugReportQueue.size()]);	

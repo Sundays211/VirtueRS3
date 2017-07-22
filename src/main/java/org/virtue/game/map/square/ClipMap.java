@@ -25,7 +25,6 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.game.World;
 import org.virtue.game.map.ClipFlag;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
@@ -45,10 +44,12 @@ public class ClipMap {
 	private static Logger logger = LoggerFactory.getLogger(ClipMap.class);
 	
 	private MapSquare mapSquare;
+	private RegionManager regionManager;
 	private int[][][] clipFlags = new int[4][64][64];
 	
-	public ClipMap (MapSquare region) {
+	public ClipMap (MapSquare region, RegionManager regionManager) {
 		this.mapSquare = region;
+		this.regionManager = regionManager;
 	}
 	
 	/**
@@ -230,7 +231,7 @@ public class ClipMap {
 	private void clipTile (int posX, int posY, int plane, int mask) {
 		if (posX >= 64 || posY >= 64 || posX < 0 || posY < 0) {
 			CoordGrid tile = new CoordGrid(mapSquare.getBaseTile().getX()+posX, mapSquare.getBaseTile().getY()+posY, plane);			
-			MapSquare region = World.getInstance().getRegions().getWithoutLoad(tile.getRegionID());
+			MapSquare region = regionManager.getWithoutLoad(tile.getRegionID());
 			if (region != null) {				
 				region.getClipMap().clipTile(tile.getXInRegion(), tile.getYInRegion(), plane, mask);
 			}
@@ -271,7 +272,7 @@ public class ClipMap {
 	private void unclipTile (int posX, int posY, int plane, int mask) {
 		if (posX >= 64 || posY >= 64 || posX < 0 || posY < 0) {
 			CoordGrid tile = new CoordGrid(mapSquare.getBaseTile().getX()+posX, mapSquare.getBaseTile().getY()+posY, plane);			
-			MapSquare region = World.getInstance().getRegions().getWithoutLoad(tile.getRegionID());
+			MapSquare region = regionManager.getWithoutLoad(tile.getRegionID());
 			if (region != null) {				
 				region.getClipMap().unclipTile(tile.getXInRegion(), tile.getYInRegion(), plane, mask);
 			}
@@ -292,10 +293,10 @@ public class ClipMap {
 	public int getClipFlags (int localX, int localY, int plane) {
 		if (localX >= 64 || localY >= 64 || localX < 0 || localY < 0) {
 			CoordGrid coords = new CoordGrid(mapSquare.getBaseTile().getX()+localX, mapSquare.getBaseTile().getY()+localY, plane);
-			if (!World.getInstance().getRegions().regionLoaded(coords.getRegionID())) {
+			if (!regionManager.regionLoaded(coords.getRegionID())) {
 				return Integer.MIN_VALUE;
 			}
-			MapSquare region = World.getInstance().getRegions().getRegionByID(coords.getRegionID());
+			MapSquare region = regionManager.getRegionByID(coords.getRegionID());
 			logger.info("localX or localY is out of bounds - Needs to load new region. coords="+coords);
 			if (region != null && region.isLoaded()) {
 				return region.getClipMap().getClipFlags(coords.getXInRegion(), coords.getYInRegion(), plane);

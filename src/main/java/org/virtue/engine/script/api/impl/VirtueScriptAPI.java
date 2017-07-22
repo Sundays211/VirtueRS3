@@ -2146,7 +2146,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getServerDay() {
-		return Virtue.getInstance().getServerDay();
+		return Virtue.getInstance().getRuneday();
 	}
 
 	/* (non-Javadoc)

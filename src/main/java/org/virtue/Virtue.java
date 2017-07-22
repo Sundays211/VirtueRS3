@@ -61,7 +61,6 @@ import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.WidgetRepository;
-import org.virtue.game.map.square.RegionManager;
 import org.virtue.game.parser.AccountIndex;
 import org.virtue.game.parser.CachingParser;
 import org.virtue.game.parser.ClanIndex;
@@ -175,6 +174,8 @@ public class Virtue {
 	
 	private boolean live = true;
 	
+	private boolean running = false;
+	
 	/**
 	 * Main entry point of Virtue
 	 * @param args - command line arguments
@@ -199,7 +200,8 @@ public class Virtue {
 			//new MaintananceThread().start();
 			logger.info("Virtue Loaded in " + TimeUnit.MILLISECONDS.toSeconds((System.currentTimeMillis() - start)) + " seconds.");
 			logger.info("Virtue is currently running a "+(instance.live ? "live" : "testing")+" instance on " + System.getProperty("os.name") + " on a(n) " + System.getProperty("os.arch") + " architecture.");
-			logger.info("Current server day: "+instance.getServerDay());
+			logger.info("Current runeday: "+instance.getRuneday());
+			instance.running = true;
 		} catch (Exception e) {
 			logger.error("Error launching server.", e);
 		}
@@ -321,7 +323,7 @@ public class Virtue {
 		configProvider.init(properties);
 		
 		QuickChatPhraseTypeList.init(cache);
-		RegionManager.init(cache);
+		World.getInstance();//TODO: Support for multiple different maps
 		
 		Huffman.setHuffman(new Huffman(cache.read(10, cache.getFileId(Js5Archive.BINARY.getArchiveId(), "huffman")).getData()));
 		DBIndexProvider.init(cache);
@@ -335,6 +337,14 @@ public class Virtue {
 		return live;
 	}
 	
+	/**
+	 * Returns true if the server is in the "running" state
+	 * @return
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+
 	/**
 	 * Return the engine
 	 */
@@ -466,7 +476,7 @@ public class Virtue {
 	 * Gets the current number of days since SERVER_DAY_0
 	 * @return The number of days
 	 */
-	public int getServerDay () {
+	public int getRuneday () {
 		return ((int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis())) - Constants.SERVER_DAY_INITIAL;
 	}
 	

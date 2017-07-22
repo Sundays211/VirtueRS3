@@ -50,7 +50,7 @@ public class DynamicMapSquare extends MapSquare {
 	 * @param id
 	 */
 	public DynamicMapSquare(int id, RegionManager regionManager) {
-		super(id);
+		super(id, regionManager);
 		this.regionManager = regionManager;
 		staticZones = new int[4][8][8];
 		for (int[][] a : staticZones) {

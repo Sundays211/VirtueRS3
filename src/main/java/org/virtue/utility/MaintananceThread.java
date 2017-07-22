@@ -53,6 +53,9 @@ public class MaintananceThread implements Runnable {
 	public void run() {
 		while (true) {
 			try {
+				if (!Virtue.getInstance().isRunning()) {
+					continue;
+				}
 				Virtue.getInstance().saveAll();
 				
 				//Saves all players who are in the lobby

@@ -24,7 +24,7 @@ public class InboundBuffer extends Buffer {
 		}
 	}
 
-	public int getByte() {
+	public byte getByte() {
 		return buffer[offset++];
 	}
 

@@ -110,6 +110,11 @@ public class NPC extends Entity {
 		return new NPC(id, tile);
 	}
 	
+	public NPC (int uid, NpcType type, CoordGrid coords) {
+		this(type.id, coords);
+		super.setIndex(uid);
+	}
+	
 	/**
 	 * Constructs a new {@code NPC} {@code Object}.
 	 * @param typeID The NPC id.
