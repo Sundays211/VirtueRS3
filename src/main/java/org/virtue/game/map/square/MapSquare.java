@@ -99,7 +99,7 @@ public class MapSquare {
 				if (!locations.containsKey(hash)) {
 					locations.put(hash, new SceneLocation[23]);
 				}
-				locations.get(hash)[loc.getShape()] = loc;
+				locations.get(hash)[loc.getShape().getId()] = loc;
 			}
 		}
 		
@@ -115,7 +115,7 @@ public class MapSquare {
 			if (wasTemp) {
 				tempLocs.remove(loc);
 				synchronized (locations) {
-					locations.get(hash)[loc.getShape()] = null;
+					locations.get(hash)[loc.getShape().getId()] = null;
 				}
 			} else {
 				tempLocs.add(loc);				
@@ -133,9 +133,9 @@ public class MapSquare {
 				if (!locations.containsKey(hash)) {
 					return null;
 				}
-				for (SceneLocation object : locations.get(hash)) {
-					if (object != null && object.getID() == objectID) {
-						return object;
+				for (SceneLocation loc : locations.get(hash)) {
+					if (loc != null && loc.getID() == objectID) {
+						return loc;
 					}
 				}
 			}
@@ -316,7 +316,7 @@ public class MapSquare {
 		}
 		CoordGrid coord = new CoordGrid(localX, localY, level, baseTile.getRegionX(), baseTile.getRegionY());
 
-		SceneLocation loc = SceneLocation.create(locType.myid, coord, shape.getId(), rotation);
+		SceneLocation loc = SceneLocation.create(locType.myid, coord, shape, rotation);
 		int zoneHash = getZoneHash(localX, localY, level);
 		synchronized (zones) {
 			if (zones.get(zoneHash) == null) {

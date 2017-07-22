@@ -29,7 +29,7 @@ public class LocationAnim implements ZoneUpdatePacket {
 	@Override
 	public void encode(OutboundBuffer buffer, Entity player) {
 		buffer.putByte(((location.getTile().getX() % 8) & 0x7) << 4 | (location.getTile().getY() % 8) & 0x7);
-		buffer.putByte((location.getRotation() & 0x3) | (location.getShape() << 2));
+		buffer.putByte((location.getRotation() & 0x3) | (location.getShape().getId() << 2));
 		buffer.putS(delay);
 		buffer.putLEInt(animId);
 	}

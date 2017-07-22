@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.config.loctype.LocShape;
 import org.virtue.game.map.ClipFlag;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
@@ -57,18 +58,32 @@ public class ClipMap {
 	 * @param location The location to add
 	 */
 	public void addLocation (SceneLocation location) {
-		if (location.getShape() >= 0 && location.getShape() <= 3) {
+		if (location.getShape().getLayer() == 0) {
 			if (location.getLocType().clipType != 0 || location.getLocType().gateway) {
-				addWall(location);
+				clipWall(location);
 			}
-		} else if (location.getShape() >= 9 && location.getShape() <= 11) {//21
+		} else if (location.getShape().getLayer() == 2) {//21
 			if (location.getLocType().clipType != 0 || location.getLocType().gateway) {
 				clipStandalone(location);
 			}
-		} else if (location.getShape() == 22) {
+		} else if (location.getShape().getLayer() == 3) {
 			if (location.getLocType().clipType == 1) {
-				clipFloorDeco(location.getTile().getXInRegion(), location.getTile().getYInRegion(), location.getTile().getLevel());
+				clipFloorDeco(location);
 			}
+		}
+	}
+	
+	/**
+	 * Removes the specified location from the clip map
+	 * @param location The location to remove
+	 */
+	public void removeLocation (SceneLocation location) {
+		if (location.getShape().getLayer() == 0) {
+			unclipWall(location);
+		} else if (location.getShape().getLayer() == 2) {
+			unclipStandalone(location);
+		} else if (location.getShape().getLayer() == 3) {
+			unclipFloorDeco(location);
 		}
 	}
 	
@@ -95,11 +110,34 @@ public class ClipMap {
 		}
 	}
 	
-	private void addWall (SceneLocation loc) {
+	private void unclipStandalone (SceneLocation location) {
+		int mask = ClipFlag.LOC;
+		int baseX = location.getTile().getXInRegion();
+		int baseY = location.getTile().getYInRegion();
+		int sizeX = 1;
+		int sizeY = 1;
+		if (location.getRotation() != 1 && location.getRotation() != 3) {
+			sizeX = location.getLocType().sizeX;
+			sizeY = location.getLocType().sizeY;
+		} else {
+			sizeX = location.getLocType().sizeY;
+			sizeY = location.getLocType().sizeX;
+		}
+		if (!location.getLocType().gateway) {
+			mask |= ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE;
+		}
+		for (int coordX = baseX; coordX < baseX + sizeX; coordX++) {
+			for (int coordY = baseY; coordY < baseY + sizeY; coordY++) {
+				unclipTile(coordX, coordY, location.getTile().getLevel(), mask);
+			}
+		}
+	}
+	
+	private void clipWall (SceneLocation loc) {
 		int localX = loc.getTile().getXInRegion();
 		int localY = loc.getTile().getYInRegion();
 		int plane = loc.getTile().getLevel();
-		if (loc.getShape() == 0) {//WALL
+		if (loc.getShape() == LocShape.WALL) {//WALL
 			if (loc.getRotation() == 0) {
 				clipTile(localX, localY, plane, ClipFlag.WALL_WEST);//128
 				clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
@@ -117,7 +155,7 @@ public class ClipMap {
 				clipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH);//2
 			}
 		}
-		if (loc.getShape() == 1 || loc.getShape() == 3) {
+		if (loc.getShape() == LocShape.WALL_CORNER || loc.getShape() == LocShape.WALL_CORNER_DIAG) {
 			if (loc.getRotation() == 0) {
 				clipTile(localX, localY, plane, ClipFlag.CORNERLOC_NORTHWEST);//1
 				clipTile(localX-1, localY+1, plane, ClipFlag.CORNERLOC_SOUTHEAST);//16
@@ -135,7 +173,7 @@ public class ClipMap {
 				clipTile(localX-1, localY-1, plane, ClipFlag.CORNERLOC_NORTHEAST);//4
 			}
 		}
-		if (loc.getShape() == 2) {//WALL_CORNER
+		if (loc.getShape() == LocShape.UNFINISHED_WALL) {//WALL_CORNER
 			if (loc.getRotation() == 0) {
 				clipTile(localX, localY, plane, ClipFlag.WALL_NORTH | ClipFlag.WALL_WEST);//130
 				clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
@@ -158,7 +196,7 @@ public class ClipMap {
 			}
 		}
 		if (!loc.getLocType().gateway) {
-			if (loc.getShape() == 0) {
+			if (loc.getShape() == LocShape.WALL) {
 				if (loc.getRotation() == 0) {
 					clipTile(localX, localY, plane, ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20000000
 					clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
@@ -176,7 +214,7 @@ public class ClipMap {
 					clipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE);//0x800000
 				}
 			}
-			if (loc.getShape() == 1 || loc.getShape() == 3) {
+			if (loc.getShape() == LocShape.WALL_CORNER || loc.getShape() == LocShape.WALL_CORNER_DIAG) {
 				if (loc.getRotation() == 0) {
 					clipTile(localX, localY, plane, ClipFlag.CORNERLOC_NORTHWEST_BLOCKSWALK_ALTERNATIVE);//0x400000
 					clipTile(localX-1, localY+1, plane, ClipFlag.CORNERLOC_SOUTHEAST_BLOCKSWALK_ALTERNATIVE);//0x4000000
@@ -194,7 +232,7 @@ public class ClipMap {
 					clipTile(localX-1, localY-1, plane, ClipFlag.CORNERLOC_NORTHEAST_BLOCKSWALK_ALTERNATIVE);//0x1000000
 				}
 			}
-			if (loc.getShape() == 2) {
+			if (loc.getShape() == LocShape.UNFINISHED_WALL) {
 				if (loc.getRotation() == 0) {
 					clipTile(localX, localY, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20800000
 					clipTile(localX-1, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
@@ -219,9 +257,136 @@ public class ClipMap {
 		}
 	}
 	
-	public void clipFloorDeco (int localX, int localY, int plane) {
-		//region.addItem(new GroundItem(Item.create(1044, 1), new Tile(localX, localY, plane, region.getID())));
-		clipTile(localX, localY, plane, ClipFlag.FLOORDECO_BLOCKSWALK);
+	private void unclipWall (SceneLocation loc) {
+		int localX = loc.getTile().getXInRegion();
+		int localY = loc.getTile().getYInRegion();
+		int plane = loc.getTile().getLevel();
+		if (loc.getShape() == LocShape.WALL) {//WALL
+			if (loc.getRotation() == 0) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_WEST);//128
+				unclipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
+			}
+			if (loc.getRotation() == 1) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_NORTH);//2
+				unclipTile(localX, localY+1, plane, ClipFlag.WALL_SOUTH);//32
+			}
+			if (loc.getRotation() == 2) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_EAST);//8
+				unclipTile(localX+1, localY, plane, ClipFlag.WALL_WEST);//128
+			}
+			if (loc.getRotation() == 3) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_SOUTH);//32
+				unclipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH);//2
+			}
+		}
+		if (loc.getShape() == LocShape.WALL_CORNER || loc.getShape() == LocShape.WALL_CORNER_DIAG) {
+			if (loc.getRotation() == 0) {
+				unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_NORTHWEST);//1
+				unclipTile(localX-1, localY+1, plane, ClipFlag.CORNERLOC_SOUTHEAST);//16
+			}
+			if (loc.getRotation() == 1) {
+				unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_NORTHEAST);//4
+				unclipTile(localX+1, localY+1, plane, ClipFlag.CORNERLOC_SOUTHWEST);//64
+			}
+			if (loc.getRotation() == 2) {
+				unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_SOUTHEAST);//16
+				unclipTile(localX+1, localY-1, plane, ClipFlag.CORNERLOC_NORTHWEST);//1
+			}
+			if (loc.getRotation() == 3) {
+				unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_SOUTHWEST);//64
+				unclipTile(localX-1, localY-1, plane, ClipFlag.CORNERLOC_NORTHEAST);//4
+			}
+		}
+		if (loc.getShape() == LocShape.UNFINISHED_WALL) {//WALL_CORNER
+			if (loc.getRotation() == 0) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_NORTH | ClipFlag.WALL_WEST);//130
+				unclipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
+				unclipTile(localX, localY+1, plane, ClipFlag.WALL_SOUTH);//32
+			}
+			if (loc.getRotation() == 1) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_NORTH | ClipFlag.WALL_EAST);//10
+				unclipTile(localX, localY+1, plane, ClipFlag.WALL_SOUTH);//32
+				unclipTile(localX+1, localY, plane, ClipFlag.WALL_WEST);//128
+			}
+			if (loc.getRotation() == 2) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_SOUTH | ClipFlag.WALL_EAST);//40
+				unclipTile(localX+1, localY, plane, ClipFlag.WALL_WEST);//128
+				unclipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH);//2
+			}
+			if (loc.getRotation() == 3) {
+				unclipTile(localX, localY, plane, ClipFlag.WALL_SOUTH | ClipFlag.WALL_WEST);//160
+				unclipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH);//2
+				unclipTile(localX-1, localY, plane, ClipFlag.WALL_EAST);//8
+			}
+		}
+		if (!loc.getLocType().gateway) {
+			if (loc.getShape() == LocShape.WALL) {
+				if (loc.getRotation() == 0) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20000000
+					unclipTile(localX-1, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
+				}
+				if (loc.getRotation() == 1) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE);//0x800000
+					unclipTile(localX, localY+1, plane, ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE);//0x8000000
+				}
+				if (loc.getRotation() == 2) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
+					unclipTile(localX+1, localY, plane, ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20000000
+				}
+				if (loc.getRotation() == 3) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE);//0x8000000
+					unclipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE);//0x800000
+				}
+			}
+			if (loc.getShape() == LocShape.WALL_CORNER || loc.getShape() == LocShape.WALL_CORNER_DIAG) {
+				if (loc.getRotation() == 0) {
+					unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_NORTHWEST_BLOCKSWALK_ALTERNATIVE);//0x400000
+					unclipTile(localX-1, localY+1, plane, ClipFlag.CORNERLOC_SOUTHEAST_BLOCKSWALK_ALTERNATIVE);//0x4000000
+				}
+				if (loc.getRotation() == 1) {
+					unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_NORTHEAST_BLOCKSWALK_ALTERNATIVE);//0x1000000
+					unclipTile(localX+1, localY+1, plane, ClipFlag.CORNERLOC_SOUTHWEST_BLOCKSWALK_ALTERNATIVE);//0x10000000
+				}
+				if (loc.getRotation() == 2) {
+					unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_SOUTHEAST_BLOCKSWALK_ALTERNATIVE);//0x4000000
+					unclipTile(localX+1, localY-1, plane, ClipFlag.CORNERLOC_NORTHWEST_BLOCKSWALK_ALTERNATIVE);//0x400000
+				}
+				if (loc.getRotation() == 3) {
+					unclipTile(localX, localY, plane, ClipFlag.CORNERLOC_SOUTHWEST_BLOCKSWALK_ALTERNATIVE);//0x10000000
+					unclipTile(localX-1, localY-1, plane, ClipFlag.CORNERLOC_NORTHEAST_BLOCKSWALK_ALTERNATIVE);//0x1000000
+				}
+			}
+			if (loc.getShape() == LocShape.UNFINISHED_WALL) {
+				if (loc.getRotation() == 0) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20800000
+					unclipTile(localX-1, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
+					unclipTile(localX, localY+1, plane, ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE);//0x8000000
+				}
+				if (loc.getRotation() == 1) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2800000
+					unclipTile(localX, localY+1, plane, ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE);//0x8000000
+					unclipTile(localX+1, localY, plane, ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20000000
+				}
+				if (loc.getRotation() == 2) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0xa000000
+					unclipTile(localX+1, localY, plane, ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x20000000
+					unclipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE);//0x800000
+				}
+				if (loc.getRotation() == 3) {
+					unclipTile(localX, localY, plane, ClipFlag.WALL_SOUTH_BLOCKSWALK_ALTERNATIVE | ClipFlag.WALL_WEST_BLOCKSWALK_ALTERNATIVE);//0x28000000
+					unclipTile(localX, localY-1, plane, ClipFlag.WALL_NORTH_BLOCKSWALK_ALTERNATIVE);//0x800000
+					unclipTile(localX-1, localY, plane, ClipFlag.WALL_EAST_BLOCKSWALK_ALTERNATIVE);//0x2000000
+				}
+			}
+		}
+	}
+	
+	public void clipFloorDeco (SceneLocation loc) {
+		clipTile(loc.getTile().getXInRegion(), loc.getTile().getYInRegion(), loc.getTile().getLevel(), ClipFlag.FLOORDECO_BLOCKSWALK);
+	}
+	
+	public void unclipFloorDeco (SceneLocation loc) {
+		unclipTile(loc.getTile().getXInRegion(), loc.getTile().getYInRegion(), loc.getTile().getLevel(), ClipFlag.FLOORDECO_BLOCKSWALK);
 	}
 	
 	public void clipFloor (int localX, int localY, int plane) {
@@ -236,36 +401,7 @@ public class ClipMap {
 				region.getClipMap().clipTile(tile.getXInRegion(), tile.getYInRegion(), plane, mask);
 			}
 		} else {
-			clipFlags[plane][posX][posY] = clipFlags[plane][posX][posY] | mask;
-		}
-	}
-	
-	public void removeLocation (SceneLocation loc) {
-		if (loc.getShape() >= 0 && loc.getShape() <= 3) {
-			//addWall(loc);
-		} else if (loc.getShape() >= 9 && loc.getShape() <= 21) {
-			int mask = ClipFlag.LOC;
-			int posX = loc.getTile().getXInRegion();
-			int posY = loc.getTile().getYInRegion();
-			int sizeX = 1;
-			int sizeY = 1;
-			if (loc.getLocType() != null) {
-				if (loc.getRotation() != 1 && loc.getRotation() != 3) {
-					sizeX = loc.getLocType().sizeX;
-					sizeY = loc.getLocType().sizeY;
-				} else {
-					sizeX = loc.getLocType().sizeY;
-					sizeY = loc.getLocType().sizeX;
-				}
-				if (loc.getLocType().clipType != 0) {
-					mask |= ClipFlag.LOC_BLOCKSWALK_ALTERNATIVE;
-				}
-			}
-			for (int tileX = posX; tileX < posX + sizeX; tileX++) {
-				for (int tileY = posY; tileY < posY + sizeY; tileY++) {
-					unclipTile(tileX, tileY, loc.getTile().getLevel(), mask);
-				}
-			}
+			clipFlags[plane][posX][posY] |= mask;
 		}
 	}
 	

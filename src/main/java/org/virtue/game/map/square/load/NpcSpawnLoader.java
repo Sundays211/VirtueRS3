@@ -17,6 +17,7 @@ public class NpcSpawnLoader {
 	public int loadNpcs(ByteBuffer data, MapSquare square) {
 		int npcCount = 0;
 		while (data.hasRemaining() && npcCount < 511) {
+			npcCount++;
 			int posHash = data.getShort() & 0xffff;
 			int level = posHash >> 14;
 			int localX = posHash >> 7 & 0x3f;

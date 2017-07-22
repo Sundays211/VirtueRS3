@@ -225,7 +225,6 @@ public class Virtue {
 		try {
 			properties.load(new FileReader(filePath));
 		} catch (IOException ex) {
-			ex.printStackTrace();
 			logger.error("Failed to load properties file", ex);
 		}
 		
