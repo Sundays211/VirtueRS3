@@ -35,7 +35,6 @@ import org.virtue.config.invtype.InvType;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
-import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.seqtype.SeqType;
 import org.virtue.config.structtype.StructType;
@@ -156,7 +155,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public String objName(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -168,7 +167,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public String objDesc(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -180,7 +179,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public String objIop(int objTypeId, int slot) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -192,7 +191,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public boolean objStackable(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -204,7 +203,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objCategory(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -216,7 +215,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public boolean objHasVar(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -228,7 +227,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objCert(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -244,7 +243,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objUncert(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -260,7 +259,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objLent(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -276,7 +275,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objUnlent(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -292,7 +291,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public int objWearpos(int objTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}
@@ -304,7 +303,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 	 */
 	@Override
 	public Object objParam(int objTypeId, int paramTypeId) {
-		ObjType objType = ObjTypeList.getInstance().list(objTypeId);
+		ObjType objType = configProvider.getObjTypes().list(objTypeId);
 		if (objType == null) {
 			throw new IllegalArgumentException("Invalid objTypeId: "+objTypeId);
 		}

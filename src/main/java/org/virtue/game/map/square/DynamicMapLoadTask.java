@@ -60,7 +60,7 @@ public class DynamicMapLoadTask implements Runnable {
 				}
 			}
 		}
-		region.loadStage = LoadStage.LOADED_NODES;
+		region.loadStage = LoadStage.LOADING_LOCS;
 		region.loadStage = LoadStage.COMPLETED;
 	}
 	
@@ -103,8 +103,9 @@ public class DynamicMapLoadTask implements Runnable {
 					finalX = (chunkX * 8) + getRotatedXPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
 					finalY = (chunkY * 8) + getRotatedYPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
 					tile = new CoordGrid(finalX, finalY, z, region.mapSquareHash);
-					loc = SceneLocation.create(loc.getID(), tile, loc.getShape(), rotation); 
-					region.addLocation(loc, finalX, finalY, z);
+					loc = SceneLocation.create(loc.getID(), tile, loc.getShape(), rotation);
+					//FIXME: Update to use new map loader
+					//region.addLocation(loc, finalX, finalY, z);
 				}
 			}
 		}

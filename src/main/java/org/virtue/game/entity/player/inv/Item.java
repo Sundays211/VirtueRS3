@@ -21,8 +21,8 @@
  */
 package org.virtue.game.entity.player.inv;
 
+import org.virtue.Virtue;
 import org.virtue.config.objtype.ObjType;
-import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.var.VarContainer;
 import org.virtue.game.node.Node;
@@ -67,7 +67,7 @@ public class Item extends Node {
 		if (amount < 0) {
 			throw new IllegalArgumentException("Item count must be a positive integer. Count supplied: "+amount);
 		}
-		if (!ObjTypeList.getInstance().exists(id)) {
+		if (getType() == null) {
 			throw new IllegalArgumentException("Invalid item ID: "+id);
 		}
 		if (getType().dummyitem != 0) {
@@ -133,7 +133,7 @@ public class Item extends Node {
 	 */
 	public ObjType getType () {
 		if (type == null) {
-			type = ObjTypeList.getInstance().list(id);
+			type = Virtue.getInstance().getConfigProvider().getObjTypes().list(id);
 		}
 		return type;
 	}

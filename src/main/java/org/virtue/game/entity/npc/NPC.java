@@ -110,6 +110,11 @@ public class NPC extends Entity {
 		return new NPC(id, tile);
 	}
 	
+	public NPC (int uid, NpcType type, CoordGrid coords) {
+		this(type.id, coords);
+		super.setIndex(uid);
+	}
+	
 	/**
 	 * Constructs a new {@code NPC} {@code Object}.
 	 * @param typeID The NPC id.
@@ -123,7 +128,7 @@ public class NPC extends Entity {
 		super.setCurrentTile(tile);
 		super.setLastTile(tile);
 		super.setSize(type.size);
-		this.direction = CompassPoint.getById(this.type.respawnDirection);
+		this.direction = this.type.respawnDirection;
 		getImpactHandler().setMaximumLifepoints(getMaxHitpoints());
 		getImpactHandler().restoreLifepoints();
 		CustomNpcData customData = Virtue.getInstance().getConfigProvider().getNpcTypes().getCustomData(this.getID());

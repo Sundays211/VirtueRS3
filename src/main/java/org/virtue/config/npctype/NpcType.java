@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
+import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.network.protocol.update.ref.MoveSpeed;
 import org.virtue.utility.text.StringUtility;
 
@@ -78,8 +79,7 @@ public class NpcType implements ConfigType {
     public short[] headIconSubSprites;
     public int anInt8465;
     public int anInt8466;
-    //public Direction respawnDirection;
-    public int respawnDirection;
+    public CompassPoint respawnDirection;
     public MoveSpeed speed;
     public int multiNPCVarbit;
     public int anInt8469;
@@ -162,7 +162,7 @@ public class NpcType implements ConfigType {
 		anInt8487 = 0;
 		anInt8488 = 2096998587;
 		anInt8443 = -1;
-		//respawnDirection = Direction.WEST;
+		respawnDirection = CompassPoint.SOUTH;
 		mapIcon = -1;
 		aByte8494 = (byte) -1;
 		anInt8495 = -1;
@@ -364,7 +364,7 @@ public class NpcType implements ConfigType {
 		    anInt8443 = buffer.getShort() & 0xffff;
 		} else if (125 == code) {
 		    //respawnDirection = Direction.forSerialID(buffer.get());
-			respawnDirection = buffer.get();
+			respawnDirection = CompassPoint.getById(buffer.get());
 		} else if (127 == code) {
 		    basTypeID = buffer.getShort() & 0xffff;
 		} else if (code == 128) {

@@ -25,6 +25,7 @@ import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.Virtue;
 import org.virtue.engine.cycle.Tick;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
@@ -48,6 +49,9 @@ public class EntityUpdate extends Tick {
 	 */
 	@Override
 	public void tick() {
+		if (!Virtue.getInstance().isRunning()) {
+			return;
+		}
 		for (int count = 0; count < 2; count++) {
 			synchronized (World.getInstance()) {
 				Iterator<Player> iterator = World.getInstance().getPlayers().iterator();

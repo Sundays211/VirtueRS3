@@ -87,7 +87,7 @@ public class ClanMember {
 	private final int joinDay;
 	
 	public ClanMember (long userhash) {
-		this(userhash, ClanRank.RECRUIT, 0, Virtue.getInstance().getServerDay());
+		this(userhash, ClanRank.RECRUIT, 0, Virtue.getInstance().getRuneday());
 	}
 	
 	public ClanMember (long userhash, ClanRank rank, int varClanMember, int joinDay) {

@@ -31,6 +31,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.virtue.Constants;
+import org.virtue.config.loctype.LocShape;
+import org.virtue.config.loctype.LocType;
+import org.virtue.config.npctype.NpcType;
+import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
@@ -86,8 +90,8 @@ public class MapSquare {
 		
 		private CoordGrid baseTile;
 		
-		private Zone (CoordGrid tile) {
-			this.baseTile = tile;
+		private Zone (CoordGrid coord) {
+			this.baseTile = coord;
 		}
 		
 		protected void addLocation (SceneLocation loc, int hash) {
@@ -95,7 +99,7 @@ public class MapSquare {
 				if (!locations.containsKey(hash)) {
 					locations.put(hash, new SceneLocation[23]);
 				}
-				locations.get(hash)[loc.getShape()] = loc;
+				locations.get(hash)[loc.getShape().getId()] = loc;
 			}
 		}
 		
@@ -111,7 +115,7 @@ public class MapSquare {
 			if (wasTemp) {
 				tempLocs.remove(loc);
 				synchronized (locations) {
-					locations.get(hash)[loc.getShape()] = null;
+					locations.get(hash)[loc.getShape().getId()] = null;
 				}
 			} else {
 				tempLocs.add(loc);				
@@ -129,9 +133,9 @@ public class MapSquare {
 				if (!locations.containsKey(hash)) {
 					return null;
 				}
-				for (SceneLocation object : locations.get(hash)) {
-					if (object != null && object.getID() == objectID) {
-						return object;
+				for (SceneLocation loc : locations.get(hash)) {
+					if (loc != null && loc.getID() == objectID) {
+						return loc;
 					}
 				}
 			}
@@ -252,10 +256,10 @@ public class MapSquare {
 	
 	private ClipMap clipMap;
 	
-	public MapSquare (int id) {
+	public MapSquare (int id, RegionManager regionManager) {
 		this.mapSquareHash = id;
 		this.baseTile = new CoordGrid(0, 0, 0, id);
-		this.clipMap = new ClipMap(this);
+		this.clipMap = new ClipMap(this, regionManager);
 	}
 	
 	/**
@@ -282,6 +286,14 @@ public class MapSquare {
 		return clipMap;
 	}
 	
+	public LoadStage getLoadStage() {
+		return loadStage;
+	}
+
+	public void setLoadStage(LoadStage loadStage) {
+		this.loadStage = loadStage;
+	}
+
 	/**
 	 * Gets whether or not the region is fully loaded
 	 * @return True if the region is fully loaded, false otherwise
@@ -298,22 +310,25 @@ public class MapSquare {
 	 * @param localY The local y-coordinate of the location
 	 * @param z The z-coordinate (plane) on which the location lies.
 	 */
-	protected void addLocation (SceneLocation loc, int localX, int localY, int z) {
-		if (loc.getLocType().hidden) {
+	public void addLocation (LocType locType, int localX, int localY, int level, LocShape shape, int rotation) {
+		if (locType.hidden) {
 			return;//
 		}
-		int hash = getZoneHash(localX, localY, z);
+		CoordGrid coord = new CoordGrid(localX, localY, level, baseTile.getRegionX(), baseTile.getRegionY());
+
+		SceneLocation loc = SceneLocation.create(locType.myid, coord, shape, rotation);
+		int zoneHash = getZoneHash(localX, localY, level);
 		synchronized (zones) {
-			if (zones.get(hash) == null) {
-				zones.put(hash, new Zone(loc.getTile()));				
+			if (zones.get(zoneHash) == null) {
+				zones.put(zoneHash, new Zone(coord));
 			}
-			zones.get(hash).addLocation(loc, getLocalHash(localX, localY, z));
+			zones.get(zoneHash).addLocation(loc, getLocalHash(localX, localY, level));
 			locationCount++;
 		}
 		clipMap.addLocation(loc);
 		//SceneUpdateEventContext update = new SceneUpdateEventContext(tileItems.values(), tileItems.get(0).getTile());
 	}
-	
+
 	/**
 	 * Spawns a temporary location, to be removed from the game scene after the specified delay
 	 * @param loc The location to spawn
@@ -448,7 +463,10 @@ public class MapSquare {
 	 * Adds the specified npc to the region
 	 * @param npc The npc to add
 	 */
-	public void addNpc (NPC npc) {
+	public void addNpc (NpcType npcType, int localX, int localY, int level) {
+		CoordGrid coord = new CoordGrid(localX, localY, level, mapSquareHash);
+		NPC npc = new NPC(-1, npcType, coord);
+		World.getInstance().addNPC(npc);
 		npcs.add(npc);
 	}
 	
@@ -590,5 +608,10 @@ public class MapSquare {
 	
 	protected static int getZoneHash (int x, int y, int z) {
 		return (x / 8) & 0x7 | (((y / 8) & 0x7) << 3) | z << 6;
+	}
+	
+	@Override
+	public String toString () {
+		return (mapSquareHash >> 8)+","+(mapSquareHash & 0xff);
 	}
 }

@@ -45,6 +45,16 @@ public class CoordGrid {
 	 * Represents the size Y of this {@link CoordGrid}.
 	 */
 	public static final int SIZE_Y = 0x1;
+	
+	public static CoordGrid parse (String coordString) {
+		String[] parts = coordString.split(",");
+		byte level = Byte.parseByte(parts[0]);
+		int squareX = Integer.parseInt(parts[1]);
+		int squareY = Integer.parseInt(parts[2]);
+		int localX = Integer.parseInt(parts[3]);
+		int localY = Integer.parseInt(parts[4]);
+		return new CoordGrid(localX, localY, level, squareX, squareY);
+	}
 
 	/**
 	 * Represents the X coordinate on the grid.

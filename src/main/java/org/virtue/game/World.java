@@ -31,6 +31,7 @@ import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.RegionUpdateTick;
 import org.virtue.game.map.square.RegionManager;
+import org.virtue.game.map.square.load.MapLoader;
 import org.virtue.game.node.ServerNode;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 
@@ -53,7 +54,7 @@ public class World extends ServerNode {
 	/**
 	 * The {@link RegionManager}
 	 */
-	private static RegionManager regionManager = new RegionManager();
+	private RegionManager regionManager;
 
 	/**
 	* The {@link World} instance
@@ -67,9 +68,10 @@ public class World extends ServerNode {
 	
 	private final boolean members;
 	
-	private World (int nodeId, boolean members) {
+	private World (int nodeId, boolean members, RegionManager regionManager) {
 		super(nodeId, 2048);
 		this.members = members;
+		this.regionManager = regionManager;
 	}
 	
 	public boolean isMembers() {
@@ -119,8 +121,9 @@ public class World extends ServerNode {
 			try {
 				boolean members = Virtue.getInstance().getProperty("world.members", true);
 				int nodeId = Virtue.getInstance().getProperty("world.node", 1);
-				instance = new World(nodeId, members);
-				new RegionUpdateTick(World.regionManager).start();
+				MapLoader mapLoader = new MapLoader(Virtue.getInstance().getCache(), Virtue.getInstance().getConfigProvider());
+				instance = new World(nodeId, members, new RegionManager(mapLoader));
+				new RegionUpdateTick(instance.regionManager).start();
 			} catch (Exception e) {
 				logger.error("Error creating new World instance", e);
 			}

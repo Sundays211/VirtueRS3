@@ -21,7 +21,6 @@
  */
 package org.virtue;
 
-import java.io.File;
 import java.math.BigInteger;
 
 import org.virtue.game.map.CoordGrid;
@@ -109,12 +108,12 @@ public class Constants {
 	/**
 	 * The packed npc extra data, which includes descriptions and animations
 	 */
-	public static final File NPC_DATA = new File("./repository/npc_data_861.dat");
+	public static final String NPC_DATA_PATH = "./data/npc_data_861.dat";
 	
 	/**
 	 * The packed item extra data, which includes descriptions and weights
 	 */
-	public static final File ITEM_DATA = new File("./repository/item_data_863.dat");
+	public static final String OBJECT_DATA_PATH = "./data/object_data_863.dat";
 	
 	/**
 	 * The OnDemand Delta Keys
