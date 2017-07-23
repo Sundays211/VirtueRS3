@@ -60,7 +60,7 @@ public class ItemDataPacker {
 	private static Logger logger = LoggerFactory.getLogger(ItemDataPacker.class);
 
 	public static File input = null;
-	public static File output = Constants.ITEM_DATA;
+	public static File output = new File(Constants.OBJECT_DATA_PATH);
 	
 	
 	public static void main (String... args) throws IOException {

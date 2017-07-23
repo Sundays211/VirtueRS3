@@ -1,3 +1,10 @@
 package org.virtue.game.map.square;
 
-enum LoadStage { IDLE, STARTING, LOADED_NODES, LOADED_TERRAIN, COMPLETED }
+public enum LoadStage {
+	IDLE,
+	STARTING,
+	LOADING_TERRAIN,
+	LOADING_LOCS,
+	LOADING_NPCS,
+	COMPLETED
+}

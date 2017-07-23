@@ -301,7 +301,6 @@ module.exports = (function () {
 			var locType = ENGINE.getLocType(player, dest.base);
 			chat.sendMessage(player, "You'll need to unlock the "+locType.name+" before you can Home Teleport there.");
 		}
-	} 
-
+	}
 	
 })();

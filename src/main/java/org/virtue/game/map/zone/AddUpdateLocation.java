@@ -64,7 +64,7 @@ public class AddUpdateLocation implements ZoneUpdatePacket {
 	public void encode(OutboundBuffer buffer, Entity player) {
 		buffer.putIntAlt2(locTypeID);
 		buffer.putS(((location.getTile().getX() % 8) & 0x7) << 4 | (location.getTile().getY() % 8) & 0x7);
-		buffer.putC((location.getRotation() & 0x3) | (location.getShape() << 2));
+		buffer.putC((location.getRotation() & 0x3) | (location.getShape().getId() << 2));
 	}
 
 	/* (non-Javadoc)

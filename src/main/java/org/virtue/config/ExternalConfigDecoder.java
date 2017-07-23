@@ -112,7 +112,7 @@ public abstract class ExternalConfigDecoder<T extends ConfigType> extends CacheL
 		return num;
 	}
 	
-	public boolean exists (int id) {
+	public final boolean exists (int id) {
 		if (id < 0 || id >= num) {
 			return false;
 		}
@@ -121,7 +121,7 @@ public abstract class ExternalConfigDecoder<T extends ConfigType> extends CacheL
 		return referenceTable.getEntry(groupId, fileId) != null;
 	}
 	
-	public T list (int id) {
+	public final T list (int id) {
 		if (!exists(id)) {
 			logger.warn("Tried to load "+configGroup.name().toLowerCase()+" "+id+" which does not exist!");
 			return null;

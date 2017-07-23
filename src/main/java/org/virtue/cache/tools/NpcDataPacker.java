@@ -58,7 +58,7 @@ public class NpcDataPacker {
 	private static Logger logger = LoggerFactory.getLogger(NpcDataPacker.class);
 
 	public static File directory = null;
-	public static File output = Constants.NPC_DATA;
+	public static File output = new File(Constants.NPC_DATA_PATH);
 	
 	
 	public static void main (String... args) throws IOException {

@@ -21,7 +21,6 @@
  */
 package org.virtue.game.map.square;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,12 +30,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
-import org.virtue.cache.Cache;
-import org.virtue.cache.Container;
-import org.virtue.cache.ReferenceTable;
-import org.virtue.config.Js5Archive;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.movement.CompassPoint;
+import org.virtue.game.map.square.load.MapLoader;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -50,9 +46,9 @@ public class RegionManager {
 	/**
 	 * The {@link Logger} Instance
 	 */
-	private static Logger logger = LoggerFactory.getLogger(RegionManager.class);
+	private static Logger LOG = LoggerFactory.getLogger(RegionManager.class);
 
-	protected static ReferenceTable mapsTable;
+	private MapLoader loader;
 
 	private static final int DYNAMIC_REGION_START_X = 0x80;
 
@@ -62,24 +58,14 @@ public class RegionManager {
 
 	private int nextDynamicY = 0;
 
-	/**
-	 * Initialises the cache data for the region manager
-	 * 
-	 * @param cache
-	 *            The game cache
-	 * @throws IOException
-	 *             If an error occurs while loading the cache
-	 */
-	public static void init(Cache cache) throws IOException {
-		mapsTable = ReferenceTable.decode(Container.decode(
-				cache.getStore().read(255, Js5Archive.MAPS.getArchiveId()))
-				.getData());
-	}
-
 	private Map<Integer, MapSquare> regions = new HashMap<Integer, MapSquare>();
 
 	private Set<MapSquare> emptyRegions = new HashSet<>();
 	private Set<MapSquare> removalQueue = new HashSet<>();
+	
+	public RegionManager (MapLoader loader) {
+		this.loader = loader;
+	}
 
 	public DynamicMapSquare createDynamicRegion() {
 		int regionID = (nextDynamicY * 2)
@@ -144,7 +130,7 @@ public class RegionManager {
 		synchronized (regions) {
 			region = regions.get(regionID);
 			if (region == null) {
-				region = new MapSquare(regionID);
+				region = new MapSquare(regionID, this);
 				regions.put(regionID, region);
 			}
 		}
@@ -184,8 +170,7 @@ public class RegionManager {
 				}
 			}
 			if (removalQueue.size() > 0) {
-				logger.info("Cleaned up " + removalQueue.size()
-						+ " empty regions.");
+				LOG.info("Cleaned up " + removalQueue.size() + " empty regions.");
 				removalQueue.clear();
 			}
 		}
@@ -212,15 +197,15 @@ public class RegionManager {
 		if (!regionDataExists(regionID)) {
 			return;// Region does not exist
 		}
-		MapSquare region = regions.containsKey(regionID) ? regions.get(regionID)
-				: new MapSquare(regionID);
-		if (!LoadStage.IDLE.equals(region.loadStage)) {
+		MapSquare square = regions.containsKey(regionID) ? regions.get(regionID)
+				: new MapSquare(regionID, this);
+		if (!LoadStage.IDLE.equals(square.loadStage)) {
 			return;// Region is already loading
 		}
+		square.loadStage = LoadStage.STARTING;
 		Virtue.getInstance().getEngine().getWorkerExecutor()
-				.execute(new MapLoadTask(regionID, region));
-		region.loadStage = LoadStage.STARTING;
-		regions.put(regionID, region);
+				.execute(() -> loader.loadMapSquare(square));
+		regions.put(regionID, square);
 
 	}
 
@@ -238,14 +223,12 @@ public class RegionManager {
 	}
 
 	public boolean regionDataExists(int regionID) {
-		int regionX = (regionID >> 8) & 0xff;
-		int regionY = regionID & 0xff;
-		if (regionX > 127) {
+		int squareX = (regionID >> 8) & 0xff;
+		int squareY = regionID & 0xff;
+		if (squareX > 127) {
 			return false;// 128-256 is reserved for dynamic regions
 		}
-		ReferenceTable.Entry entry = mapsTable.getEntry(getArchiveKey(
-				regionX, regionY));
-		return entry != null && entry.getEntry(0) != null;
+		return loader.mapExists(squareX, squareY);
 	}
 
 	public static int getArchiveKey(CoordGrid tile) {
