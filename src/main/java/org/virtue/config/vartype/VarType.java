@@ -133,4 +133,8 @@ public class VarType implements ConfigType {
 		
 	}
 
+	@Override
+	public String toString () {
+		return debugName != null ? debugName : Integer.toString(id);
+	}
 }

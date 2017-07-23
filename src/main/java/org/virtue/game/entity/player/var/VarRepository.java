@@ -23,6 +23,7 @@ package org.virtue.game.entity.player.var;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,10 +54,10 @@ public class VarRepository implements VarDomain {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(VarRepository.class);
-	private static int[] defaultVarps;
+	private static Object[] defaultVarps;
 
 	private Player player;
-	private Map<Integer, Object> varValues = new HashMap<>();
+	private Map<VarType, Object> varValues = new HashMap<>();
 	
 	private VarTypeList varTypes;
 	
@@ -64,16 +65,19 @@ public class VarRepository implements VarDomain {
 
 	public VarRepository(Player player, Map<Integer, Object> values, VarTypeList varpTypes, VarBitTypeList varBitTypeList) {
 		this.player = player;
-		this.varValues = values;
 		this.varTypes = varpTypes;
 		this.varBitTypeList = varBitTypeList;
 		if (defaultVarps == null) {
-			defaultVarps = new int[varTypes.getCapacity()];
+			defaultVarps = new Object[varTypes.getCapacity()];
 			DefaultVars.setDefaultVarps(defaultVarps);			
 		}
-		for (int key=0;key<defaultVarps.length;key++) {
-			if (!varValues.containsKey(key) && defaultVarps[key] != 0) {
-				varValues.put(key, defaultVarps[key]);
+		for (VarType type : varTypes) {
+			Object value = values.get(type.id);
+			Object defaultValue = defaultVarps[type.id];
+			if (value != null && !Objects.equals(value, type.dataType.getDefaultValue())) {
+				varValues.put(type, value);
+			} else if (defaultValue != null && !Objects.equals(defaultValue, type.dataType.getDefaultValue())) {
+				varValues.put(type, defaultValue);
 			}
 		}
 	}
@@ -99,7 +103,7 @@ public class VarRepository implements VarDomain {
 	@Override
 	public void setVarValueInt (VarType varType, int value) {
 		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(varType.id, value));
-		setVarValue(varType.id, Integer.valueOf(value));
+		setVarValueInner(varType, Integer.valueOf(value));
 	}
 	
 	public void setVarBitValue (int key, int value)  {
@@ -182,15 +186,15 @@ public class VarRepository implements VarDomain {
 				value = null;
 			}
 		}
-		setVarValue(varType.id, value);
+		setVarValueInner(varType, value);
 	}
 	
 	
-	private void setVarValue(int key, Object value) {
+	private void setVarValueInner(VarType varType, Object value) {
 		if (value == null) {
-			varValues.remove(key);
+			varValues.remove(varType);
 		} else {
-			varValues.put(key, value);
+			varValues.put(varType, value);
 		}
 	}
 
@@ -200,10 +204,10 @@ public class VarRepository implements VarDomain {
 	@Override
 	public Object getVarValue(VarType varType) {
 		Object value;
-		if (!varValues.containsKey(varType.id)) {
+		if (!varValues.containsKey(varType)) {
 			value = varType.dataType.getDefaultValue();
 		} else {
-			value = translateValue(getVarValue(varType.id), varType);
+			value = translateValue(varValues.get(varType), varType);
 			if (value == null) {
 				value = varType.dataType.getDefaultValue();
 			}
@@ -220,8 +224,13 @@ public class VarRepository implements VarDomain {
 		}
 	}
 	
-	public Object getVarValue(int key) {
-		return varValues.get(key);
+	@Deprecated
+	public Object getVarValueLegacy (int id) {
+		VarType varType = varTypes.list(id);
+		if (varType == null) {
+			throw new IllegalArgumentException("Invalid varp id: "+id);
+		}
+		return getVarValue(varType);
 	}
 	
 	@Deprecated
@@ -244,7 +253,7 @@ public class VarRepository implements VarDomain {
 	 */
 	@Override
 	public int getVarValueInt (VarType varType) {
-		Object value = getVarValue(varType.id);
+		Object value = getVarValue(varType);
 		if (value == null) {
 			return 0;
 		}
@@ -268,12 +277,12 @@ public class VarRepository implements VarDomain {
 	 */
 	@Override
 	public long getVarValueLong(VarType varType) {
-		Object value = getVarValue(varType.id);
+		Object value = getVarValue(varType);
 		if (value == null) {
 			return 0;
 		}
 		if (!(value instanceof Long)) {
-			throw new RuntimeException("Variable "+varType.id+" is not of type Long");
+			throw new RuntimeException("Variable "+varType+" is not of type Long");
 		}
 		return ((Long) value);
 	}
@@ -284,7 +293,7 @@ public class VarRepository implements VarDomain {
 			if (type == null) {
 				continue;
 			}
-			Object value = varValues.get(type.id);
+			Object value = varValues.get(type);
 
 			if (value != null && VarLifetime.PERMANENT.equals(type.lifeTime)) {
 				permVars.put(type.id, value);
@@ -298,10 +307,9 @@ public class VarRepository implements VarDomain {
 	 */
 	public void sendAll () {
 		player.getDispatcher().sendVarReset();
-		for (Map.Entry<Integer, Object> varp : varValues.entrySet()) {
-			VarType varType = varTypes.list(varp.getKey());
-			if (varType != null && varType.dataType.getVarBaseType() == BaseVarType.INTEGER) {
-				int value = ((Integer) varp.getValue()).intValue();
+		for (VarType varType : varTypes) {
+			if (varType.dataType.getVarBaseType() == BaseVarType.INTEGER) {
+				int value = getVarValueInt(varType);
 				if (value != 0) {
 					player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(varType.id, value));
 				}

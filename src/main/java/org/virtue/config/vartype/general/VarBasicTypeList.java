@@ -56,7 +56,7 @@ public class VarBasicTypeList extends VarTypeList {
 	 * @see org.virtue.config.ConfigDecoder#load(java.lang.Integer)
 	 */
 	@Override
-	public VarType load(Integer id) throws Exception {
+	protected VarType load(int id) throws Exception {
 		ByteBuffer data = getData(id);
 		if (data == null) {
 			return null;
