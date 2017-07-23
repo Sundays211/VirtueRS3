@@ -248,7 +248,7 @@ public class RegionManager {
 	 */
 	public int getClippingFlag(int level, int x, int y) {
 		CoordGrid tile = new CoordGrid(x, y, level);
-		MapSquare region = getRegionByID(tile.getRegionID());
+		MapSquare region = getWithoutLoad(tile.getRegionID());
 		if (region == null || !region.isLoaded()) {
 			return -1;
 		}
