@@ -24,14 +24,15 @@ package org.virtue.game.parser.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.game.World;
 import org.virtue.game.entity.npc.NPC;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -47,7 +48,28 @@ public class NpcSpawnParser {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(NpcSpawnParser.class);
 	
-	private static File PATH = new File("repository/npc/NPCSpawns.txt");
+	private static File OLD_PATH = new File("repository/npc/NPCSpawns.txt");
+	
+	private static File PATH = new File("data/npc-spawns.txt");
+	
+	public static void main(String[] args) throws Exception {
+		//Converts the old format of npc spawns into the new format
+		try (BufferedReader reader = new BufferedReader(new FileReader(OLD_PATH));
+				PrintWriter writer = new PrintWriter(new FileWriter(PATH, false))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (!line.startsWith("//") && !line.trim().isEmpty()) {
+					String[] split = line.split(" - ");
+					int npcID = Integer.valueOf(split[0]);
+					String[] location = split[1].split(" ");
+					CoordGrid coords = new CoordGrid(Integer.valueOf(location[0]), Integer.valueOf(location[1]), Integer.valueOf(location[2]));
+					line = npcID+" - "+coords;
+				}
+				
+				writer.write(line+"\n");
+			}
+		}
+	}
 	
 	public static void loadNpcs ()  {
 		try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {
@@ -58,19 +80,9 @@ public class NpcSpawnParser {
 				}
 				String[] split = line.split(" - ");
 				int npcID = Integer.valueOf(split[0]);
-				String[] location = split[1].split(" ");
-				int direction = -1;
-				if (location.length > 3 && !location[3].trim().isEmpty()) {
-					try {
-						direction = Integer.valueOf(location[3]);
-					} catch (NumberFormatException ex) {
-						direction = -1;
-					}
-				}
-				NPC npc = NPC.create(npcID, new CoordGrid(Integer.valueOf(location[0]), Integer.valueOf(location[1]), Integer.valueOf(location[2])));
-				if (direction != -1) {
-					npc.setDirection(CompassPoint.getById(direction));
-				}
+				CoordGrid coord = CoordGrid.parse(split[1]);
+				
+				NPC npc = NPC.create(npcID, coord);
 				World.getInstance().addNPC(npc);
 			}
 		} catch (IOException ex) {
