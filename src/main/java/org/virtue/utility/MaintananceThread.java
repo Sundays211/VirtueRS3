@@ -53,21 +53,21 @@ public class MaintananceThread implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				if (!Virtue.getInstance().isRunning()) {
-					continue;
+				if (Virtue.getInstance().isRunning()) {
+					Virtue.getInstance().saveAll();
+					
+					//Saves all players who are in the lobby
+					for (Player p : Lobby.getInstance().getPlayers()) {
+						p.save();
+					}
+					//Saves all players who are in a world
+					for (Player p : World.getInstance().getPlayers()) {
+						p.save();
+					}
+					logger.info("Auto-saved "+World.getInstance().getPlayerCount()+" World and "+Lobby.getInstance().getPlayerCount()+" Lobby accounts.");
+					LogParser.getInstance().saveAll();//Save reports
 				}
-				Virtue.getInstance().saveAll();
 				
-				//Saves all players who are in the lobby
-				for (Player p : Lobby.getInstance().getPlayers()) {
-					p.save();
-				}
-				//Saves all players who are in a world
-				for (Player p : World.getInstance().getPlayers()) {
-					p.save();
-				}
-				logger.info("Auto-saved "+World.getInstance().getPlayerCount()+" World and "+Lobby.getInstance().getPlayerCount()+" Lobby accounts.");
-				LogParser.getInstance().saveAll();//Save reports
 				long sleepTime = INTERVAL;
 				if (sleepTime <= 0) {
 					continue;
