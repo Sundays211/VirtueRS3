@@ -3,11 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	
-	    require('./bob'),
-	    require('./fred-the-farmer'),
-		require('./jambon'),
-		require('./lumbridge-sage')	
+		require('./al-kharid')
 	];
 	
 	for (var i in modules) {
