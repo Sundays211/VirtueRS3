@@ -256,7 +256,7 @@ public class RegionManager {
 	}
 
 	public static boolean checkDirection(CoordGrid currentTile, CompassPoint direction, int size) {
-		return true;
+		throw new UnsupportedOperationException();
 		//TODO: This...
 		//return direction.canMove(currentTile, size);
 	}

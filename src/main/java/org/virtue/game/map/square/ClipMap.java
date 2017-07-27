@@ -430,14 +430,14 @@ public class ClipMap {
 		if (localX >= 64 || localY >= 64 || localX < 0 || localY < 0) {
 			CoordGrid coords = new CoordGrid(mapSquare.getBaseTile().getX()+localX, mapSquare.getBaseTile().getY()+localY, plane);
 			if (!regionManager.regionLoaded(coords.getRegionID())) {
-				return Integer.MIN_VALUE;
+				return -1;
 			}
 			MapSquare region = regionManager.getRegionByID(coords.getRegionID());
 			logger.info("localX or localY is out of bounds - Needs to load new region. coords="+coords);
 			if (region != null && region.isLoaded()) {
 				return region.getClipMap().getClipFlags(coords.getXInRegion(), coords.getYInRegion(), plane);
 			} else {
-				return Integer.MIN_VALUE;//Return all flags set if the clip could not be found
+				return -1;//Return all flags set if the clip could not be found
 			}
 		} else {
 			return clipFlags[plane][localX][localY];
