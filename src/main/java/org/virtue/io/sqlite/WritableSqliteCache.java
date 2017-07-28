@@ -19,7 +19,6 @@ public class WritableSqliteCache extends SqliteCache {
 	public WritableSqliteCache(Path file) throws IOException {
 		super(file);
 		try {
-			conn.setReadOnly(false);
 			initDatabase();
 		} catch (SQLException ex) {
 			throw new IOException(ex);
@@ -48,20 +47,20 @@ public class WritableSqliteCache extends SqliteCache {
 		}
 
 		this.index = new ReferenceTable();
-		saveIndex();
+		storeIndex();
 	}
 
-	public void saveIndex() throws IOException {
+	public void storeIndex() throws IOException {
 		int version = getCurrentVersionStamp();
 		index.setVersion(version);
 
-		ByteBuffer compressedData = compressData(index.encode(), Container.COMPRESSION_LZMA);
+		ByteBuffer compressedData = compressData(index.encode(), Container.COMPRESSION_GZIP);
 		int crc = getChecksum(compressedData);
 		storeIndex(compressedData, version, crc);
 	}
 
 	public void putGroup (int groupId, Archive group, ReferenceTable.Entry indexEntry) throws IOException {
-		ByteBuffer compressedData = compressData(group.encode(), Container.COMPRESSION_GZIP);
+		ByteBuffer compressedData = compressData(group.encode(), Container.COMPRESSION_NONE);
 		int version = getCurrentVersionStamp();
 		int crc = getChecksum(compressedData);
 		storeGroup(groupId, compressedData, version, crc);
@@ -115,5 +114,11 @@ public class WritableSqliteCache extends SqliteCache {
 		CRC32 crc = new CRC32();
 		crc.update(data.array(), 0, data.limit() - 2);
 		return (int) crc.getValue();
+	}
+
+	@Override
+	public void close() throws Exception {
+		storeIndex();
+		super.close();
 	}
 }

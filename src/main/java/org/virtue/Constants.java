@@ -103,7 +103,7 @@ public class Constants {
 	/**
 	 * The Cache Repository
 	 */
-	public static final String CACHE_REPOSITORY = System.getProperty("user.home") + "/Desktop/865/";
+	public static final String CACHE_REPOSITORY = "repository/cache_865/";
 	
 	/**
 	 * The packed npc extra data, which includes descriptions and animations

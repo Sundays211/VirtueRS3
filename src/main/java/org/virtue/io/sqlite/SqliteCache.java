@@ -19,7 +19,7 @@ import org.virtue.io.ResourceProvider;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-public class SqliteCache implements ResourceProvider {
+public class SqliteCache implements ResourceProvider, AutoCloseable {
 
 	protected Connection conn;
 
@@ -29,8 +29,7 @@ public class SqliteCache implements ResourceProvider {
 
 	public SqliteCache(Path file) throws IOException {
 		try {
-			conn = DriverManager.getConnection(String.format("jdbc:sqlite:%1", file.toString()));
-			conn.setReadOnly(true);
+			conn = DriverManager.getConnection(String.format("jdbc:sqlite:%s", file.toString()));
 		} catch (SQLException ex) {
 			throw new IOException(ex);
 		}
@@ -67,7 +66,7 @@ public class SqliteCache implements ResourceProvider {
 		try (PreparedStatement statement = conn.prepareStatement("select data from cache where key = ?")) {
 			statement.setInt(1, groupId);
 			try (ResultSet res = statement.executeQuery()) {
-				data = ByteBuffer.wrap(res.getBytes(0));
+				data = ByteBuffer.wrap(res.getBytes(1));
 			}
 		} catch (SQLException ex) {
 			throw new IOException(ex);
@@ -90,11 +89,16 @@ public class SqliteCache implements ResourceProvider {
 		ByteBuffer data;
 		try (Statement statement = conn.createStatement();
 				ResultSet res = statement.executeQuery("select data from cache_index where key = 1")) {
-			data = ByteBuffer.wrap(res.getBytes(0));
+			data = ByteBuffer.wrap(res.getBytes(1));
 		} catch (SQLException ex) {
 			throw new IOException(ex);
 		}
 		return Container.decode(data).getData();
+	}
+
+	@Override
+	public void close() throws Exception {
+		conn.close();
 	}
 
 }

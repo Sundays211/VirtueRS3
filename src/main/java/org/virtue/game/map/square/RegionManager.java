@@ -230,14 +230,6 @@ public class RegionManager {
 		}
 		return loader.mapExists(squareX, squareY);
 	}
-
-	public static int getArchiveKey(CoordGrid tile) {
-		return getArchiveKey(tile.getRegionX(), tile.getRegionY());
-	}
-
-	public static int getArchiveKey(int regionX, int regionY) {
-		return regionX | regionY << 7;
-	}
 	
 	/**
 	 * Gets the clipping flag at the given coordinates.

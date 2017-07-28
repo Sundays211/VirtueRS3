@@ -65,7 +65,7 @@ public class NpcTypeList extends ExternalConfigDecoder<NpcType> {
 		logger.info("Found " + getCapacity() + " npctype definitions.");
 
 		nonCacheData = new CustomNpcData[getCapacity()];
-		if (customDataFile.exists()) {
+		if (customDataFile != null && customDataFile.exists()) {
 			try {
 				loadNpcData(customDataFile);
 			} catch (IOException ex) {
