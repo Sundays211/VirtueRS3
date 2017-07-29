@@ -1,4 +1,4 @@
-package org.virtue.io.sqlite;
+package org.virtue.cache.sqlite;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 import org.virtue.cache.Archive;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.io.ResourceProvider;
+import org.virtue.cache.ResourceProvider;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

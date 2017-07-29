@@ -1,4 +1,4 @@
-package org.virtue.io;
+package org.virtue.cache;
 
 public interface Js5FileType {
 

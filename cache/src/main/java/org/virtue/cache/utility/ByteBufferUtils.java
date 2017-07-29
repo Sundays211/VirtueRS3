@@ -21,6 +21,8 @@
  */
 package org.virtue.cache.utility;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.zip.CRC32;
@@ -243,8 +245,6 @@ public final class ByteBufferUtils {
 		return bytes;
 	}
 
-
-
 	public static int getSmartInt2(ByteBuffer buffer) {
 		int result = 0;
 		int bit = 0;
@@ -255,5 +255,16 @@ public final class ByteBufferUtils {
 			bit += 7;
 		} while (value > 127);
 		return result;
+	}
+
+	public static InputStream byteBufferInputStream (ByteBuffer buffer) {
+		return new InputStream() {
+
+			@Override
+			public int read() throws IOException {
+				return buffer.get() & 0xff;
+			}
+
+		};
 	}
 }

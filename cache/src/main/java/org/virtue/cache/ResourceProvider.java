@@ -1,9 +1,7 @@
-package org.virtue.io;
+package org.virtue.cache;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import org.virtue.cache.Archive;
 
 public interface ResourceProvider {
 

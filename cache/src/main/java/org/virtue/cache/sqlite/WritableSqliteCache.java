@@ -1,4 +1,4 @@
-package org.virtue.io.sqlite;
+package org.virtue.cache.sqlite;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,7 +12,7 @@ import java.util.zip.CRC32;
 import org.virtue.cache.Archive;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
-import org.virtue.utility.BufferUtility;
+import org.virtue.cache.utility.ByteBufferUtils;
 
 public class WritableSqliteCache extends SqliteCache {
 
@@ -81,7 +81,7 @@ public class WritableSqliteCache extends SqliteCache {
 	private void storeGroup (int groupId, ByteBuffer compressedData, int version, int crc) throws IOException {
 		try (PreparedStatement statement = conn.prepareStatement("REPLACE INTO cache (`key`, `data`, `version`, `crc`) VALUES (?, ?, ?, ?)")) {
 			statement.setInt(1, groupId);
-			statement.setBinaryStream(2, BufferUtility.byteBufferInputStream(compressedData), compressedData.limit());
+			statement.setBinaryStream(2, ByteBufferUtils.byteBufferInputStream(compressedData), compressedData.limit());
 			statement.setInt(3, version);
 			statement.setInt(4, crc);
 			statement.execute();
@@ -92,7 +92,7 @@ public class WritableSqliteCache extends SqliteCache {
 
 	private void storeIndex (ByteBuffer compressedData, int version, int crc) throws IOException {
 		try (PreparedStatement statement = conn.prepareStatement("REPLACE INTO cache_index (`key`, `data`, `version`, `crc`) VALUES (1, ?, ?, ?)")) {
-			statement.setBinaryStream(1, BufferUtility.byteBufferInputStream(compressedData), compressedData.limit());
+			statement.setBinaryStream(1, ByteBufferUtils.byteBufferInputStream(compressedData), compressedData.limit());
 			statement.setInt(2, version);
 			statement.setInt(3, crc);
 			statement.execute();
