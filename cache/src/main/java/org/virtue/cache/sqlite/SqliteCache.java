@@ -48,7 +48,7 @@ public class SqliteCache implements ResourceProvider, AutoCloseable {
 		} catch (ExecutionException e) {
 			throw (IOException) e.getCause();
 		}
-		return archive.getEntry(getIndex().getEntry(groupId, fileId).index());
+		return archive.getEntry(getIndex().getEntry(groupId, fileId).index()).asReadOnlyBuffer();
 	}
 
 	@Override
