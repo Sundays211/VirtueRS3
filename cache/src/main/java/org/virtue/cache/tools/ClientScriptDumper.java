@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.virtue.Constants;
 import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.FileStore;
@@ -75,7 +74,7 @@ public class ClientScriptDumper {
 	}
 
 	public static void main(String[] args) throws IOException {
-		try (Cache cache = new Cache(FileStore.open(Constants.CACHE_REPOSITORY))) {
+		try (Cache cache = new Cache(FileStore.open(System.getProperty("user.home") + "/Desktop/RSCD/data/"))) {
 			ReferenceTable rt = ReferenceTable.decode(Container.decode(cache.getStore().read(255, 12)).getData());
 			for (int id = 0; id < rt.capacity(); id++) {
 				Entry entry = rt.getEntry(id);
