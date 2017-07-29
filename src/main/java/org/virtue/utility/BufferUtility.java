@@ -23,6 +23,8 @@ package org.virtue.utility;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import io.netty.buffer.ByteBuf;
 
@@ -32,34 +34,34 @@ import io.netty.buffer.ByteBuf;
  */
 public class BufferUtility {
 
-    public static String readString(ByteBuf buf) {
-        StringBuilder bldr = new StringBuilder();
-        byte b;
-        while (buf.isReadable() && (b = buf.readByte()) != 0) {
-            bldr.append((char) b);
-        }
-        return bldr.toString();
-    }
+	public static String readString(ByteBuf buf) {
+		StringBuilder bldr = new StringBuilder();
+		byte b;
+		while (buf.isReadable() && (b = buf.readByte()) != 0) {
+			bldr.append((char) b);
+		}
+		return bldr.toString();
+	}
 
-    public static void writeString(DataOutputStream buf, String value) throws IOException {
+	public static void writeString(DataOutputStream buf, String value) throws IOException {
 		if (value.contains("\0")) {
 			throw new IllegalArgumentException("Null characters are not allowed in null-terminated strings.");
 		}
-        buf.writeBytes(value);
+		buf.writeBytes(value);
 		buf.writeByte((byte) 0);
-    }
-    
-    public static String readJagString(ByteBuf buf) {
-        StringBuilder bldr = new StringBuilder();
-        byte b;
-        buf.readByte();
-        while (buf.isReadable() && (b = buf.readByte()) != 0) {
-            bldr.append((char) b);
-        }
-        return bldr.toString();
-    }
-    
-    /**
+	}
+
+	public static String readJagString(ByteBuf buf) {
+		StringBuilder bldr = new StringBuilder();
+		byte b;
+		buf.readByte();
+		while (buf.isReadable() && (b = buf.readByte()) != 0) {
+			bldr.append((char) b);
+		}
+		return bldr.toString();
+	}
+
+	/**
 	 * Reads a 'tri-byte' from the specified buffer.
 	 * @param buf The buffer.
 	 * @return The value.
@@ -67,7 +69,7 @@ public class BufferUtility {
 	public static int getTriByte(ByteBuf buf) {
 		return ((buf.readByte() & 0xFF) << 16) | ((buf.readByte() & 0xFF) << 8) | (buf.readByte() & 0xFF);
 	}
-    
+
 	public static void writeInt(int val, int index, byte[] buffer) {
 		buffer[index++] = (byte) (val >> 24);
 		buffer[index++] = (byte) (val >> 16);
@@ -77,5 +79,16 @@ public class BufferUtility {
 
 	public static int readInt(int index, byte[] buffer) {
 		return ((buffer[index++] & 0xff) << 24) | ((buffer[index++] & 0xff) << 16) | ((buffer[index++] & 0xff) << 8) | (buffer[index++] & 0xff);
+	}
+
+	public static InputStream byteBufferInputStream (ByteBuffer buffer) {
+		return new InputStream() {
+
+			@Override
+			public int read() throws IOException {
+				return buffer.get() & 0xff;
+			}
+
+		};
 	}
 }

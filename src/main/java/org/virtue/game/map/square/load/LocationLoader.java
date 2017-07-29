@@ -24,10 +24,10 @@ public class LocationLoader {
 		for (int modifier = buffer.getSmart2(); modifier != 0; modifier = buffer.getSmart2()) {
 			locTypeId += modifier;
 			LocType locType = locTypeList.list(locTypeId);
-		    int posHash = 0;
-		    for (int posModifier = buffer.getUnsignedSmart(); posModifier != 0; posModifier = buffer.getUnsignedSmart()) {
-		    	count++;
-		    	posHash += posModifier - 1;
+			int posHash = 0;
+			for (int posModifier = buffer.getUnsignedSmart(); posModifier != 0; posModifier = buffer.getUnsignedSmart()) {
+				count++;
+				posHash += posModifier - 1;
 				int localY = posHash & 0x3f;
 				int localX = posHash >> 6 & 0x3f;
 				int level = posHash >> 12;

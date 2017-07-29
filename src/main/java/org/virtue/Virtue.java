@@ -62,6 +62,7 @@ import org.virtue.game.entity.combat.impl.ability.ActionBar;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.widget.WidgetRepository;
+import org.virtue.game.map.square.load.MapLoader;
 import org.virtue.game.parser.AccountIndex;
 import org.virtue.game.parser.CachingParser;
 import org.virtue.game.parser.ClanIndex;
@@ -168,7 +169,9 @@ public class Virtue {
 	private Properties properties = new Properties();
 	
 	private ConfigProvider configProvider;
-	
+
+	private MapLoader mapLoader;
+
 	private int updateTimer = -1;
 	
 	private boolean systemUpdate = false;
@@ -298,7 +301,7 @@ public class Virtue {
 		SpecialAttackHandler.init();
 		ActionBar.init();
 		AbstractNPC.init();
-		NpcSpawnParser.loadNpcs();
+		//NpcSpawnParser.loadNpcs();
 		NpcDropParser.loadNpcDrops();
 		DialogueHandler.handle();
 	}
@@ -322,14 +325,15 @@ public class Virtue {
 	private void loadConfig () throws IOException {
 		configProvider = new ConfigProvider(cache);
 		configProvider.init(properties);
-		
+
 		QuickChatPhraseTypeList.init(cache);
-		World.getInstance();//TODO: Support for multiple different maps
-		
+
+		mapLoader = new MapLoader(cache, configProvider, properties);
+
 		Huffman.setHuffman(new Huffman(cache.read(10, cache.getFileId(Js5Archive.BINARY.getArchiveId(), "huffman")).getData()));
 		DBIndexProvider.init(cache);
 	}
-	
+
 	/**
 	 * Returns true if the server is running in a "live" environment
 	 * @return True if the server is running live, false if running in development
@@ -373,7 +377,7 @@ public class Virtue {
 	public ByteBuffer getChecksumTable() {
 		return checksum;
 	}	
-	
+
 	/**
 	 * Returns the provided of cache configuration (objtypes, npctypes, enumtypes, vartypes, etc)
 	 */
@@ -382,12 +386,19 @@ public class Virtue {
 	}
 
 	/**
+	 * Returns the {@link MapLoader} instance for loading world regions
+	 */
+	public MapLoader getMapLoader() {
+		return mapLoader;
+	}
+
+	/**
 	 * Return the repo of accounts
 	 */
 	public AccountIndex getAccountIndex() {
 		return accountIndex;
 	}
-	
+
 	/**
 	 * Return the repo of encoders/decoders
 	 */

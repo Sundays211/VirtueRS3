@@ -4,6 +4,7 @@
 /repository/logs/
 /repository/character/
 /repository/clan/
+/data/packed/
 *~
 
 *.class

@@ -121,7 +121,7 @@ public class World extends ServerNode {
 			try {
 				boolean members = Virtue.getInstance().getProperty("world.members", true);
 				int nodeId = Virtue.getInstance().getProperty("world.node", 1);
-				MapLoader mapLoader = new MapLoader(Virtue.getInstance().getCache(), Virtue.getInstance().getConfigProvider());
+				MapLoader mapLoader = Virtue.getInstance().getMapLoader();
 				instance = new World(nodeId, members, new RegionManager(mapLoader));
 				new RegionUpdateTick(instance.regionManager).start();
 			} catch (Exception e) {
