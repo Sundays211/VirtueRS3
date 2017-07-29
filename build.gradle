@@ -32,8 +32,6 @@ dependencies {
 
 	testCompile "junit:junit:4.11"
 	testCompile "org.mockito:mockito-core:2.2.+"
-
-	runtime 'org.xerial:sqlite-jdbc:3.19.3'
 }
 
 task packMap(type:JavaExec) {
