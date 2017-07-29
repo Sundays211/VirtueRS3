@@ -25,8 +25,8 @@ import java.nio.ByteBuffer;
 
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
+import org.virtue.config.util.TextConvert;
 import org.virtue.config.vartype.constants.ScriptVarType;
-import org.virtue.utility.text.StringUtility;
 
 public class ParamType implements ConfigType {	
 	public int defaultint;
@@ -53,7 +53,7 @@ public class ParamType implements ConfigType {
 
 	private void decodeLine(ByteBuffer buffer, int code) {
 		if (1 == code) {
-			char c = StringUtility.cp1252ToChar(buffer.get());
+			char c = TextConvert.cp1252ToChar(buffer.get());
 			type = ScriptVarType.getByChar(c);
 		} else if (2 == code) {
 			defaultint = buffer.getInt();

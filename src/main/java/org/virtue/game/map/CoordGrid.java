@@ -21,7 +21,7 @@
  */
 package org.virtue.game.map;
 
-import org.virtue.game.map.movement.CompassPoint;
+import org.virtue.core.constants.CompassPoint;
 import org.virtue.game.map.square.ClipMap;
 import org.virtue.game.node.Node;
 

@@ -40,7 +40,6 @@ import org.virtue.config.vartype.VarDomain;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitType;
-import org.virtue.game.entity.npc.CustomNpcData;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

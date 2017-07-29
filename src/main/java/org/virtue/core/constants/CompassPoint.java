@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map.movement;
+package org.virtue.core.constants;
 
 import org.virtue.game.map.CoordGrid;
 

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.Virtue;
+import org.virtue.core.constants.MoveSpeed;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.World;
@@ -38,7 +39,6 @@ import org.virtue.network.event.context.impl.in.LocationClickEventContext;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
-import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

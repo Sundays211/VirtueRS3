@@ -30,7 +30,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.config.npctype.CustomNpcData;
 import org.virtue.config.npctype.NpcType;
+import org.virtue.core.constants.CompassPoint;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.engine.script.api.ScriptAPI;
@@ -42,13 +44,13 @@ import org.virtue.game.entity.combat.CombatState;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.NpcTypeBlock;
+import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -323,10 +325,13 @@ public class NPC extends Entity {
 		if (OptionButton.SIX.equals(option)) {
 			NpcType npcType = getType(player);
 			if (npcType != null) {
-				player.getDispatcher().sendGameMessage(npcType.getDescription());
-			} else {
-				player.getDispatcher().sendGameMessage(getType().getDescription());
+				String desc = npcType.desc;
+				if (desc == null) {
+					desc = "It's "+(StringUtility.startsWithVowel(npcType.name) ? "an" : "a")+" "+npcType.name;
+				}
+				player.getDispatcher().sendGameMessage(desc);
 			}
+
 			if (PrivilegeLevel.ADMINISTRATOR.equals(player.getPrivilegeLevel())) {
 				player.getDispatcher().sendGameMessage(this.toString());
 			}

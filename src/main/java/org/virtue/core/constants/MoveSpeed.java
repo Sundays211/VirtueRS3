@@ -1,4 +1,4 @@
-package org.virtue.network.protocol.update.ref;
+package org.virtue.core.constants;
 
 public enum MoveSpeed {
 	STATIONARY(0, (byte) -1),
