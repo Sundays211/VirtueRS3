@@ -94,7 +94,6 @@ public final class MapLoader {
 		} else if (extraData != null && extraData.fileExists(groupId, MapsFile.NPC_SPAWNS)) {
 			square.setLoadStage(LoadStage.LOADING_NPCS);
 			extraNpcCount = npcLoader.loadNpcs(extraData.getFile(groupId, MapsFile.NPC_SPAWNS), square);
-			LOGGER.info("Loaded {} extra NPCs from extra data", extraNpcCount);
 		}
 
 		square.setLoadStage(LoadStage.COMPLETED);

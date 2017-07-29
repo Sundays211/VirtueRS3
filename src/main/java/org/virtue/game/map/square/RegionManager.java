@@ -164,8 +164,8 @@ public class RegionManager {
 		synchronized (regions) {
 			for (MapSquare r : removalQueue) {
 				emptyRegions.remove(r);
-				if (r.canUnload()) {// Double check that nothing has spawned in
-									// the region since the last rotation
+				if (r.canUnload()) {// Double check that nothing has spawned in the region since the last rotation
+					r.unload();
 					regions.remove(r.getID());
 				}
 			}
