@@ -23,8 +23,6 @@ package org.virtue.utility;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 import io.netty.buffer.ByteBuf;
 
@@ -79,16 +77,5 @@ public class BufferUtility {
 
 	public static int readInt(int index, byte[] buffer) {
 		return ((buffer[index++] & 0xff) << 24) | ((buffer[index++] & 0xff) << 16) | ((buffer[index++] & 0xff) << 8) | (buffer[index++] & 0xff);
-	}
-
-	public static InputStream byteBufferInputStream (ByteBuffer buffer) {
-		return new InputStream() {
-
-			@Override
-			public int read() throws IOException {
-				return buffer.get() & 0xff;
-			}
-
-		};
 	}
 }

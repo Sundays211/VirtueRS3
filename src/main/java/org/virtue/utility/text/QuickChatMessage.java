@@ -22,7 +22,7 @@
 package org.virtue.utility.text;
 
 import org.virtue.ConfigProvider;
-import org.virtue.cache.def.impl.QuickChatPhraseType;
+import org.virtue.config.quickchatphrasetype.QuickChatPhraseType;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitType;

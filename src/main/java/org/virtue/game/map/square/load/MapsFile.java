@@ -1,6 +1,6 @@
 package org.virtue.game.map.square.load;
 
-import org.virtue.io.Js5FileType;
+import org.virtue.cache.Js5FileType;
 
 public enum MapsFile implements Js5FileType {
 	LOCATIONS(0, "locations.txt"),

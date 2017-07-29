@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	 compile('org.tukaani:xz:1.6')
+
+	runtime 'org.xerial:sqlite-jdbc:3.19.3'
+}
