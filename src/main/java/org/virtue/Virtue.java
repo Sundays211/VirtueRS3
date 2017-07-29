@@ -40,6 +40,7 @@ import org.virtue.cache.Cache;
 import org.virtue.cache.ChecksumTable;
 import org.virtue.cache.Container;
 import org.virtue.cache.FileStore;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.db.DBIndexProvider;
 import org.virtue.engine.GameEngine;
@@ -69,7 +70,6 @@ import org.virtue.game.parser.ClanIndex;
 import org.virtue.game.parser.ParserRepository;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.parser.impl.NpcDropParser;
-import org.virtue.game.parser.impl.NpcSpawnParser;
 import org.virtue.game.parser.xml.XMLAccountIndex;
 import org.virtue.game.parser.xml.XMLClanIndex;
 import org.virtue.network.Network;
@@ -168,7 +168,7 @@ public class Virtue {
 	
 	private Properties properties = new Properties();
 	
-	private ConfigProvider configProvider;
+	private VirtueConfigProvider configProvider;
 
 	private MapLoader mapLoader;
 
@@ -301,7 +301,6 @@ public class Virtue {
 		SpecialAttackHandler.init();
 		ActionBar.init();
 		AbstractNPC.init();
-		//NpcSpawnParser.loadNpcs();
 		NpcDropParser.loadNpcDrops();
 		DialogueHandler.handle();
 	}
@@ -323,7 +322,7 @@ public class Virtue {
 	 * @throws IOException If the decoders could not be loaded due to a cache read error
 	 */
 	private void loadConfig () throws IOException {
-		configProvider = new ConfigProvider(cache);
+		configProvider = new VirtueConfigProvider(cache);
 		configProvider.init(properties);
 
 		QuickChatPhraseTypeList.init(cache);

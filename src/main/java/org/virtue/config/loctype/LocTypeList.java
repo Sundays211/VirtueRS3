@@ -25,8 +25,8 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
 import org.virtue.cache.Cache;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.ExternalConfigDecoder;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.Js5ConfigGroup;

@@ -115,8 +115,8 @@ public class QuickChatPhraseType {
 	public QuickChatDynamicCommand getDynamicCommand (int pos) {
 		return dynamicCommands[pos];
 	}
-    
-    public int getParamKey(int paramSlot, int keySlot) {
+
+	public int getParamKey(int paramSlot, int keySlot) {
 		if (null == dynamicCommands || paramSlot < 0
 				|| paramSlot > dynamicCommands.length) {
 			return -1;
@@ -126,26 +126,26 @@ public class QuickChatPhraseType {
 			return -1;
 		}
 		return dynamicCommandConfigKeys[paramSlot][keySlot];
-    }
-	
+	}
+
 	public int getId () {
 		return myid;
 	}
-	
+
 	public int[] unpack(InboundBuffer buffer) {
 		int[] params = new int[0];
 		if (dynamicCommands != null) {
 			params = new int[dynamicCommands.length];
-		    for (int pos = 0; pos < dynamicCommands.length; pos++) {
+			for (int pos = 0; pos < dynamicCommands.length; pos++) {
 				int size = dynamicCommands[pos].clientTransmitSize;
 				if (size > 0) {
 					params[pos] = (int) buffer.getQuickchatParam(size);
 				}
-		    }
+			}
 		}
 		return params;
-    }
-	
+	}
+
 	public void pack(OutboundBuffer buffer, int[] params) {
 		if (dynamicCommands != null) {
 		    for (int pos = 0; pos < dynamicCommands.length && pos < params.length; pos++) {

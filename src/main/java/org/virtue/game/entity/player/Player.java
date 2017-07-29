@@ -31,9 +31,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
 import org.virtue.config.vartype.VarDomainType;
