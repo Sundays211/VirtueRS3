@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.cache.tools;
+package org.virtue.io.tools;
 
 import java.io.File;
 import java.io.FileReader;
