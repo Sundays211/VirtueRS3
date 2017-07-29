@@ -476,6 +476,7 @@ public class MapSquare {
 	 */
 	public void removeNpc (NPC npc) {
 		npcs.remove(npc);
+		World.getInstance().removeNPC(npc);
 	}
 	
 	/**
@@ -504,6 +505,13 @@ public class MapSquare {
 	
 	public boolean canUnload () {
 		return players.isEmpty();
+	}
+	
+	public void unload () {
+		for (NPC npc : npcs) {
+			World.getInstance().removeNPC(npc);
+		}
+		npcs.clear();
 	}
 	
 	public Set<Player> getPlayers () {
