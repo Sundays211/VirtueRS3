@@ -609,7 +609,7 @@ public class MapSquare {
 	protected static int getZoneHash (int x, int y, int z) {
 		return (x / 8) & 0x7 | (((y / 8) & 0x7) << 3) | z << 6;
 	}
-	
+
 	@Override
 	public String toString () {
 		return (mapSquareHash >> 8)+","+(mapSquareHash & 0xff);

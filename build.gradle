@@ -9,18 +9,26 @@ group='org.virtue'
 version='2.1.0-SNAPSHOT'
 
 repositories {
-    jcenter()
+	jcenter()
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'com.google.code.gson:gson:2.3'
-    compile 'com.google.guava:guava:22.0'
-    compile 'io.netty:netty-all:4.0.26.Final'
-    
-    testCompile "junit:junit:4.11"
-    testCompile "org.mockito:mockito-core:2.2.+"
-        
-    runtime 'org.slf4j:slf4j-log4j12:1.7.21'
-    runtime 'log4j:log4j:1.2.17'
+	compile 'org.slf4j:slf4j-api:1.7.21'
+	compile 'com.google.code.gson:gson:2.3'
+	compile 'com.google.guava:guava:22.0'
+	compile 'io.netty:netty-all:4.0.26.Final'
+
+	testCompile "junit:junit:4.11"
+	testCompile "org.mockito:mockito-core:2.2.+"
+
+	runtime 'org.slf4j:slf4j-log4j12:1.7.21'
+	runtime 'log4j:log4j:1.2.17'
+	runtime 'org.xerial:sqlite-jdbc:3.19.3'
 }
+
+task packMap(type:JavaExec) {
+	main = 'org.virtue.io.pack.MapDataPacker'
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+//run.dependsOn packMap

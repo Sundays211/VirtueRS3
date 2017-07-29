@@ -264,7 +264,7 @@ public class ReferenceTable {
 	 */
 	public static final int FLAG_WHIRLPOOL = 0x02;
 	
-	public static final int FLAG_UNKNOWN4 = 0x04;
+	public static final int FLAG_SIZES = 0x04;
 	
 	public static final int FLAG_UNKNOWN8 = 0x08;
 
@@ -336,7 +336,7 @@ public class ReferenceTable {
 		}
 		
 		/* unknown flag */
-		if ((table.flags & FLAG_UNKNOWN4) != 0) {
+		if ((table.flags & FLAG_SIZES) != 0) {
 			for (int id : ids) {
 				buffer.getInt();
 				buffer.getInt();
@@ -408,7 +408,7 @@ public class ReferenceTable {
 	/**
 	 * The format of this table.
 	 */
-	private int format;
+	private int format = 7;
 
 	/**
 	 * The version of this table.

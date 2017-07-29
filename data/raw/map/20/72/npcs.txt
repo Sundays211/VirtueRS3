@@ -1,0 +1,5 @@
+// NPC Spawns for map square 20,72
+// Format: npcTypeId - level,localX,localY
+20287 - 0,37,33
+7866 - 0,35,39
+1030 - 0,36,38
