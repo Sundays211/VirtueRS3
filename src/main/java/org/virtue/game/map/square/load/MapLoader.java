@@ -14,11 +14,11 @@ import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
+import org.virtue.cache.ResourceProvider;
+import org.virtue.cache.sqlite.SqliteCache;
 import org.virtue.config.Js5Archive;
 import org.virtue.game.map.square.LoadStage;
 import org.virtue.game.map.square.MapSquare;
-import org.virtue.io.ResourceProvider;
-import org.virtue.io.sqlite.SqliteCache;
 
 public final class MapLoader {
 

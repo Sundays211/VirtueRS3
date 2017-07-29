@@ -18,11 +18,11 @@ import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
 import org.virtue.cache.FileStore;
 import org.virtue.cache.ReferenceTable;
+import org.virtue.cache.sqlite.WritableSqliteCache;
 import org.virtue.config.npctype.NpcTypeList;
 import org.virtue.game.map.square.load.MapLoader;
 import org.virtue.game.map.square.load.MapsFile;
 import org.virtue.game.map.square.load.NpcSpawnLoader;
-import org.virtue.io.sqlite.WritableSqliteCache;
 
 public class MapDataPacker {
 	private static Logger LOGGER = LoggerFactory.getLogger(MapDataPacker.class);
