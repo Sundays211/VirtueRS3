@@ -29,9 +29,9 @@ import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.tukaani.xz.LZMAInputStream;
 import org.virtue.cache.utility.bzip2.CBZip2InputStream;
 import org.virtue.cache.utility.bzip2.CBZip2OutputStream;
-import org.virtue.cache.utility.tukaani.LZMAInputStream;
 
 /**
  * A class that contains methods to compress and uncompress BZIP2 and GZIP byte
