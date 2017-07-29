@@ -31,4 +31,4 @@ task packMap(type:JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-run.dependsOn packMap
+//run.dependsOn packMap

@@ -86,7 +86,7 @@ public class BufferUtility {
 
 			@Override
 			public int read() throws IOException {
-				return buffer.get();
+				return buffer.get() & 0xff;
 			}
 
 		};

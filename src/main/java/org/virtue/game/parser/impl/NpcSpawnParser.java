@@ -27,6 +27,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +58,45 @@ public class NpcSpawnParser {
 	
 	public static void main(String[] args) throws Exception {
 		//Converts the old format of npc spawns into the new format
+		splitSpawns();
+	}
+
+	public static void splitSpawns () throws IOException {
+		File root = new File("data/raw/map");
+		Map<Integer, List<String>> spawnsForSquare = new HashMap<>();
+		try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (!line.startsWith("//") && !line.trim().isEmpty()) {
+					String[] split = line.split(" - ");
+					int npcID = Integer.valueOf(split[0]);
+					CoordGrid coord = CoordGrid.parse(split[1]);
+					int mapSquareHash = coord.getRegionID();
+					if (!spawnsForSquare.containsKey(mapSquareHash)) {
+						spawnsForSquare.put(mapSquareHash, new ArrayList<>());
+					}
+					String spawnLine = npcID+" - "+coord.getLevel()+","+coord.getXInRegion()+","+coord.getYInRegion();//+" //"+line;
+					spawnsForSquare.get(mapSquareHash).add(spawnLine);
+				}
+			}
+		}
+		for (Map.Entry<Integer, List<String>> entry : spawnsForSquare.entrySet()) {
+			int squareX = entry.getKey() >> 8;
+			int squareY = entry.getKey() & 0xff;
+			File folder = new File(root, String.format("%d/%d", squareX, squareY));
+			folder.mkdirs();
+			try (PrintWriter writer = new PrintWriter(new FileWriter(new File(folder, "npcs.txt"), false))) {
+				writer.println("// NPC Spawns for map square "+squareX+","+squareY);
+				writer.println("// Format: npcTypeId - level,localX,localY");
+				for (String line : entry.getValue()) {
+					writer.println(line);
+				}
+			}
+			logger.info("Wrote {} npc spawns for map square {},{}", entry.getValue().size(), squareX, squareY);
+		}
+	}
+
+	public static void convertNpcs () throws IOException {
 		try (BufferedReader reader = new BufferedReader(new FileReader(OLD_PATH));
 				PrintWriter writer = new PrintWriter(new FileWriter(PATH, false))) {
 			String line;

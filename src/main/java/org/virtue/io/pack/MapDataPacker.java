@@ -60,7 +60,7 @@ public class MapDataPacker {
 					try {
 						int count = writeDataForFolder(dataStore, srcFolder.resolve(path), archiveKey);
 						LOGGER.info("Wrote {} file(s) for map square {},{}", count, squareX, squareY);
-					} catch (IOException ex) {
+					} catch (IOException | RuntimeException ex) {
 						throw new RuntimeException("Problem parsing map square "+squareX+","+squareY, ex);
 					}
 				});
@@ -69,7 +69,7 @@ public class MapDataPacker {
 
 	private int parseSquareCoord (String string) {
 		int value = Integer.parseInt(string);
-		if (value < 0 || value > 0x7f) {
+		if (value < 0 || value > 0xff) {
 			throw new IllegalArgumentException("Invalid square coord: "+value);
 		}
 		return value;
