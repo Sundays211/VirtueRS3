@@ -38,7 +38,7 @@ public enum ContainerState {
 	FALADOR_GEN_STORE(13, true, false),
 	LOST_CITY_DRAGON_SHOP(36, true, false),
 	HEROES_QUEST_DRAGON_SHOP(45, true, false),
-	
+	BRIANS_ARCHERY_SHOP(250, true, false),
 	/**
 	 * The player's current trade offer. Also used for the price checker screen.
 	 * Contains 28 slots.

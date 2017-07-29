@@ -134,48 +134,47 @@ module.exports = (function () {
 	}
 	
 	function wool (player, msg) {
-		if (varp(player, 2163) == 1) {
-			return msg = "20";
-		} else if (varp(player, 2163) == 2) {
-			return msg = "19";
-		} else if (varp(player, 2163) == 3) {
-			return msg = "18";	
-		} else if (varp(player, 2163) == 4) {
-			return msg = "17";	
-		} else if (varp(player, 2163) == 5) {
-			return msg = "16";	
-		} else if (varp(player, 2163) == 6) {
-			return msg = "15";	
-		} else if (varp(player, 2163) == 7) {
-			return msg = "14";
-		} else if (varp(player, 2163) == 8) {
-			return msg = "13";
-		} else if (varp(player, 2163) == 9) {
-			return msg = "12";
-		} else if (varp(player, 2163) == 10) {
-			return msg = "11";
-		} else if (varp(player, 2163) == 11) {
-			return msg = "10";
-		} else if (varp(player, 2163) == 12) {
-			return msg = "9";	
-		} else if (varp(player, 2163) == 13) {
-			return msg = "8";	
-		} else if (varp(player, 2163) == 14) {
-			return msg = "7";	
-		} else if (varp(player, 2163) == 15) {
-			return msg = "6";	
-		} else if (varp(player, 2163) == 16) {
-			return msg = "5";	
-		} else if (varp(player, 2163) == 17) {
-			return msg = "4";	
-		} else if (varp(player, 2163) == 18) {
-			return msg = "3";	
-		} else if (varp(player, 2163) == 19) {
-			return msg = "2";	
-		} else if (varp(player, 2163) == 20) {
-			return msg = "1";									
-		} else {
-            chat.sendMessage(player, "error");
+		switch(varp(player, 2163)) {
+		case 1:
+		return msg = "20";
+		case 2:
+		return msg = "19";
+		case 3:
+		return msg = "18";
+		case 4:
+		return msg = "17";
+		case 5:
+		return msg = "16";
+		case 6:
+		return msg = "15";
+		case 7:
+		return msg = "14";
+		case 8:
+		return msg = "13";
+		case 9:
+		return msg = "12";
+		case 10:
+		return msg = "11";
+		case 11:
+		return msg = "10";
+		case 12:
+		return msg = "9";
+		case 13:
+		return msg = "8";
+		case 14:
+		return msg = "7";
+		case 15:
+		return msg = "6";
+		case 16:
+		return msg = "5";
+		case 17:
+		return msg = "4";
+		case 18:
+		return msg = "3";
+		case 19:
+		return msg = "2";
+		case 20:
+		return msg = "1";
 		}
 	}
 	
