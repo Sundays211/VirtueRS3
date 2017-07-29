@@ -26,7 +26,9 @@ dependencies {
 	runtime 'org.xerial:sqlite-jdbc:3.19.3'
 }
 
-task packNpcs(type:JavaExec) {
+task packMap(type:JavaExec) {
 	main = 'org.virtue.io.pack.MapDataPacker'
 	classpath = sourceSets.main.runtimeClasspath
 }
+
+run.dependsOn packMap
