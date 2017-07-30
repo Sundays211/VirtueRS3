@@ -21,7 +21,7 @@
  */
 package org.virtue.engine.script.api.impl;
 
-import org.virtue.ConfigProvider;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.questtype.QuestType;
 import org.virtue.engine.script.api.QuestAPI;

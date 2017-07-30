@@ -23,17 +23,17 @@ package org.virtue.network.event.encoder.impl;
 
 import java.security.MessageDigest;
 
+import org.virtue.core.constants.CompassPoint;
+import org.virtue.core.constants.MoveSpeed;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.ServerProtocol;
 import org.virtue.network.protocol.update.Block;
 import org.virtue.network.protocol.update.block.AppearenceBlock;
 import org.virtue.network.protocol.update.block.HeadIconBlock;
-import org.virtue.network.protocol.update.ref.MoveSpeed;
 import org.virtue.network.protocol.update.ref.Viewport;
 import org.virtue.utility.DirectionUtility;
 

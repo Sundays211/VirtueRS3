@@ -21,7 +21,7 @@
  */
 package org.virtue.config.vartype.constants;
 
-import org.virtue.utility.text.StringUtility;
+import org.virtue.config.util.TextConvert;
 
 /**
  * 
@@ -195,13 +195,13 @@ public enum ScriptVarType {
 		if (null == varByLegacyChar) {
 		    varByLegacyChar = new ScriptVarType[256];
 		}
-		varByLegacyChar[StringUtility.charToCp1252(varType.legacyChar) & 0xff] = varType;
+		varByLegacyChar[TextConvert.charToCp1252(varType.legacyChar) & 0xff] = varType;
     }
     
     public static ScriptVarType getByChar(char c) {
 		if ('O' == c) {
 		    return OBJ;
 		}
-		return varByLegacyChar[StringUtility.charToCp1252(c) & 0xff];
+		return varByLegacyChar[TextConvert.charToCp1252(c) & 0xff];
     }
 }

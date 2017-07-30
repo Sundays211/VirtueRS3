@@ -30,9 +30,9 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
 import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.ExternalConfigDecoder;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.Js5ConfigGroup;
@@ -40,7 +40,6 @@ import org.virtue.config.vartype.VarDomain;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;
 import org.virtue.config.vartype.bit.VarBitType;
-import org.virtue.game.entity.npc.CustomNpcData;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

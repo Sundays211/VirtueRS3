@@ -9,13 +9,13 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
 import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
 import org.virtue.cache.ResourceProvider;
 import org.virtue.cache.sqlite.SqliteCache;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.Js5Archive;
 import org.virtue.game.map.square.LoadStage;
 import org.virtue.game.map.square.MapSquare;

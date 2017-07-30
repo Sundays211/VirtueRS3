@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Sundays211
@@ -469,12 +468,5 @@ public class LocType implements ConfigType {
     		}
     	}
     	return false;
-    }
-    
-    public String getDescription () {
-    	if (desc != null) {
-    		return desc;
-    	}
-    	return "It's "+(StringUtility.startsWithVowel(name) ? "an" : "a")+" "+name;
     }
 }

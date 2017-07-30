@@ -23,10 +23,10 @@ package org.virtue.game.entity.player.inv;
 
 import org.virtue.Virtue;
 import org.virtue.config.objtype.ObjType;
+import org.virtue.config.util.StringUtility;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.var.VarContainer;
 import org.virtue.game.node.Node;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * 
@@ -144,7 +144,7 @@ public class Item extends Node {
 	public void examine (Player player) {
 		String desc = getType().getDescription()+" (id="+id+", amount="+amount+")";
 		player.getDispatcher().sendGameMessage(desc);
-		int value = getType().getExchangeValue();
+		int value = Virtue.getInstance().getExchange().lookupPrice(id);
 		if (value != -1) {
 			player.getDispatcher().sendGameMessage("This item is worth: "+StringUtility.formatNumber(value)
 					+"gp on the Grand Exchange.");

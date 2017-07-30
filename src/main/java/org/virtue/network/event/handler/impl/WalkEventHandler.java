@@ -21,11 +21,11 @@
  */
 package org.virtue.network.event.handler.impl;
 
+import org.virtue.core.constants.MoveSpeed;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.context.impl.in.MoveEventContext;
 import org.virtue.network.event.handler.GameEventHandler;
-import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

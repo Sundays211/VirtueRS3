@@ -3,8 +3,8 @@ package org.virtue.game.map.movement.path.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.virtue.core.constants.CompassPoint;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.path.Path;
 import org.virtue.game.map.movement.path.Point;
 

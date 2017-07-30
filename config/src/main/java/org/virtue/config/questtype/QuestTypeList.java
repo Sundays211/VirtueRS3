@@ -19,7 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.entity.npc;
+package org.virtue.config.questtype;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.virtue.cache.Archive;
+import org.virtue.cache.ReferenceTable;
+import org.virtue.config.ConfigDecoder;
+import org.virtue.config.ConfigProvider;
+import org.virtue.config.Js5ConfigGroup;
+import org.virtue.config.vartype.VarDomain;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -27,35 +36,29 @@ package org.virtue.game.entity.npc;
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 29/01/2015
+ * @since 21/11/2015
  */
-public class CustomNpcData {
+public class QuestTypeList extends ConfigDecoder<QuestType> {
 
-	private int attackAnimation;
-	private int defendAnimation;
-	private int walkRange;
-	private int interactRange;
-	
-	public CustomNpcData (int att, int def, int range, int interact) {
-		this.attackAnimation = att;
-		this.defendAnimation = def;
-		this.walkRange = range;
-		this.interactRange = interact;
+	/**
+	 * The {@link Logger} instance
+	 */
+	private static Logger logger = LoggerFactory.getLogger(QuestTypeList.class);
+
+	public QuestTypeList(ReferenceTable configTable, Archive archive) {
+		super(configTable, archive, Js5ConfigGroup.QUESTTYPE, QuestType.class);
+		logger.info("Found "+getCapacity()+" questtype definitions.");
 	}
-	
-	public int getAttackAnimation () {
-		return attackAnimation;
-	}
-	
-	public int getDefendAnimation () {
-		return defendAnimation;
-	}
-	
-	public int getWalkRange () {
-		return walkRange;
-	}
-	
-	public int getInteractRange() {
-		return interactRange;
-	}
+
+    public int getTotalQuestPoints(VarDomain varDomain, ConfigProvider configProvider) {
+        int points = 0;
+        for (int id = 0; id < getCapacity(); id++) {
+            QuestType quest = list(id);
+            if (quest.isFinished(varDomain, configProvider)) {
+            	points += quest.questPoints;
+            }
+        }
+        return points;
+    }
+
 }

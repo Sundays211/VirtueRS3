@@ -23,8 +23,8 @@ package org.virtue.network.event.handler.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
 import org.virtue.Virtue;
+import org.virtue.config.ConfigProvider;
 import org.virtue.game.content.CommandManager;
 import org.virtue.game.entity.player.Player;
 import org.virtue.network.event.context.impl.in.InMessageEventContext;
