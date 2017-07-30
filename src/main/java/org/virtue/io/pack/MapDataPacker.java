@@ -5,10 +5,12 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -59,7 +61,13 @@ public class MapDataPacker {
 					int archiveKey = MapLoader.getArchiveKey(squareX, squareY);
 					try {
 						int count = writeDataForFolder(dataStore, srcFolder.resolve(path), archiveKey);
-						LOGGER.info("Wrote {} file(s) for map square {},{}", count, squareX, squareY);
+						if (count == 0) {
+							LOGGER.warn("No supported map files found in folder {},{}", squareX, squareY);
+						} else if (count == -1) {
+							LOGGER.debug("Skipping map square {},{} as archive is already up-to-date", squareX, squareY);
+						} else {
+							LOGGER.info("Wrote {} file(s) for map square {},{}", count, squareX, squareY);
+						}
 					} catch (IOException | RuntimeException ex) {
 						throw new RuntimeException("Problem parsing map square "+squareX+","+squareY, ex);
 					}
@@ -76,12 +84,31 @@ public class MapDataPacker {
 	}
 
 	private int writeDataForFolder(WritableSqliteCache dataStore, Path folder, int archiveKey) throws IOException {
-		ReferenceTable.Entry indexEntry = new ReferenceTable.Entry(-1);
+		ReferenceTable.Entry indexEntry = dataStore.getIndexEntry(archiveKey)
+				.orElse(new ReferenceTable.Entry(-1));
+		int newestVersion = dataWriters.keySet().stream()
+				.map(fileType -> folder.resolve(fileType.getFileName()))
+				.filter(Files::exists)
+				.map(file -> {
+					try {
+						return (int) Files.getLastModifiedTime(file).to(TimeUnit.SECONDS);
+					} catch (IOException ex) {
+						throw new RuntimeException(ex);
+					}
+				}).max(Integer::max).orElse(-1);
+
+		if (newestVersion == -1) {
+			return 0;
+		} else if (newestVersion < indexEntry.getVersion()) {
+			return -1;
+		}
+
 		SortedMap<Integer, ByteBuffer> files = new TreeMap<>();
 		for (Map.Entry<MapsFile, Js5DataWriter> entry : dataWriters.entrySet()) {
 			MapsFile fileType = entry.getKey();
 			Path file = folder.resolve(fileType.getFileName());
 			if (Files.exists(file)) {
+				Files.getLastModifiedTime(file);
 				indexEntry.putEntry(fileType.getJs5FileId(), new ReferenceTable.ChildEntry(-1));
 				files.put(fileType.getJs5FileId(), entry.getValue().packData(file));
 			}

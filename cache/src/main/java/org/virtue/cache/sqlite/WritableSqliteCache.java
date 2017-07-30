@@ -46,8 +46,11 @@ public class WritableSqliteCache extends SqliteCache {
 					+ ");");
 		}
 
-		this.index = new ReferenceTable();
-		storeIndex();
+		this.index = getIndex();
+		if (this.index == null) {
+			this.index = new ReferenceTable();
+			storeIndex();
+		}
 	}
 
 	public void storeIndex() throws IOException {
@@ -60,8 +63,11 @@ public class WritableSqliteCache extends SqliteCache {
 	}
 
 	public void putGroup (int groupId, Archive group, ReferenceTable.Entry indexEntry) throws IOException {
+		putGroup(groupId, group, indexEntry, getCurrentVersionStamp());
+	}
+
+	public void putGroup (int groupId, Archive group, ReferenceTable.Entry indexEntry, int version) throws IOException {
 		ByteBuffer compressedData = compressData(group.encode(), Container.COMPRESSION_NONE);
-		int version = getCurrentVersionStamp();
 		int crc = getChecksum(compressedData);
 		storeGroup(groupId, compressedData, version, crc);
 

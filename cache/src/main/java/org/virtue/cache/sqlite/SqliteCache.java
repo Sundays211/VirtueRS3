@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.virtue.cache.Archive;
@@ -59,6 +60,10 @@ public class SqliteCache implements ResourceProvider, AutoCloseable {
 	@Override
 	public boolean fileExists(int groupId, int fileId) {
 		return getIndex().getEntry(groupId, fileId) != null;
+	}
+
+	public Optional<ReferenceTable.Entry> getIndexEntry (int groupId) throws IOException {
+		return Optional.ofNullable(getIndex().getEntry(groupId));
 	}
 
 	private ByteBuffer fetchGroup (int groupId) throws IOException {

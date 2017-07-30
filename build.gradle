@@ -23,8 +23,6 @@ allprojects {
 	}
 }
 
-
-
 dependencies {
 	compile 'com.google.code.gson:gson:2.3'
 	compile 'io.netty:netty-all:4.0.26.Final'
@@ -36,8 +34,10 @@ dependencies {
 }
 
 task packMap(type:JavaExec) {
+	inputs.dir 'data/raw/map'
+	outputs.file 'data/packed/maps.js5'
 	main = 'org.virtue.io.pack.MapDataPacker'
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-//run.dependsOn packMap
+run.dependsOn packMap
