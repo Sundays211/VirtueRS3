@@ -2,8 +2,8 @@ package org.virtue.game.map.zone;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.GroundItem;
-import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.game.map.CoordGrid;
 
 public class RevealObject implements ZoneUpdatePacket {
 	

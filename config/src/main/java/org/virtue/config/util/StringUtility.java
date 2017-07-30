@@ -1,4 +1,4 @@
-package org.virtue.utility.text;
+package org.virtue.config.util;
 
 import java.text.NumberFormat;
 

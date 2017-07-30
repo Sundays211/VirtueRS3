@@ -662,7 +662,19 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getExchangeCost(int itemId) {
-		return configProvider.getObjTypes().list(itemId).getExchangeValue();
+		ObjType objType = configProvider.getObjTypes().list(itemId);
+		int cost = -1;
+		if (objType.stockmarket) {
+			if (objType.certtemplate != -1) {
+				cost = getExchangeCost(objType.certlink);
+			} else {
+				cost = Virtue.getInstance().getExchange().lookupPrice(itemId);
+				if (cost == -1) {
+					cost = objType.cost;
+				}
+			}
+		}
+		return cost;
 	}
 
 	@Override

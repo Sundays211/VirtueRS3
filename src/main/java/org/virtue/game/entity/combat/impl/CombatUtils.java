@@ -1,5 +1,8 @@
 package org.virtue.game.entity.combat.impl;
 
+import org.virtue.Virtue;
+import org.virtue.config.objtype.ObjType;
+import org.virtue.config.structtype.StructType;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.npc.NPC;
@@ -72,9 +75,9 @@ public final class CombatUtils {
 			Item item = player.getEquipment().getWorn(offhand ? 5 : 3);
 			if (item != null) {
 				if (legacy) {
-					animation = offhand ? item.getType().getOffhandEmoteLegacy() : item.getType().getMainhandEmoteLegacy();
+					animation = offhand ? getOffhandEmoteLegacy(item.getType()) : getMainhandEmoteLegacy(item.getType());
 				} else {
-					animation = offhand ? item.getType().getOffhandEmote() : item.getType().getMainhandEmote();
+					animation = offhand ? getOffhandEmote(item.getType()) : getMainhandEmote(item.getType());
 				}
 			}
 		} else {
@@ -86,7 +89,64 @@ public final class CombatUtils {
 		}
 		return new AnimationBlock(animation);
 	}
-	
+
+	/**
+	 * Spells uses this to draw the animation off the current weapon. Also
+	 * used for melee & range weapons.
+	 * @return
+	 */
+	public static int getMainhandEmote(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(2914, -1);
+	}
+
+	public static int getOffhandEmote(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(2831, -1);
+	}
+
+	/**
+	 * Uses Main hand animations for spells, range, and melee.
+	 * @return
+	 */
+	public static int getMainhandEmoteLegacy(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(4385, -1);
+	}
+
+	public static int getOffhandEmoteLegacy(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(4389, -1);
+	}
+
 	/**
 	 * Gets the entity's default attack animation.
 	 * @param entity The entity.
@@ -100,7 +160,7 @@ public final class CombatUtils {
 			Player player = (Player) entity;
 			Item item = player.getEquipment().getWorn(3);
 			if (item != null) {
-				animation = item.getType().getAggressiveRender();
+				animation = getAggressiveRender(item.getType());
 			}
 		}
 		if (animation == -1) {
@@ -108,7 +168,43 @@ public final class CombatUtils {
 		}
 		return new AnimationBlock(animation);
 	}
-	
+
+	public static int getAggressiveRender(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(2955, -1);
+	}
+
+	public static int getLegacyPassiveRender(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(4383, -1);
+	}
+
+	public static int getPassiveRender(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(2954, -1);
+	}
+
 	/**
 	 * Gets the entity's default spell animation.
 	 * @param entity The entity.
@@ -123,9 +219,9 @@ public final class CombatUtils {
 			Item item = player.getEquipment().getWorn(offhand ? 5 : 3);
 			if (item != null) {
 				if (legacy) {
-					animation = offhand ? item.getType().getMainhandSpellLegacy() : item.getType().getMainhandSpellLegacy();
+					animation = offhand ? getMainhandSpellLegacy(item.getType()) : getMainhandSpellLegacy(item.getType());
 				} else {
-					animation = offhand ? item.getType().getOffhandEmote() : item.getType().getMainhandEmote();
+					animation = offhand ? getOffhandEmote(item.getType()) : getMainhandEmote(item.getType());
 				}
 			}
 		} else {
@@ -136,5 +232,21 @@ public final class CombatUtils {
 			animation = 422;
 		}
 		return new AnimationBlock(animation);
+	}
+
+	/**
+	 * Uses Main hand animations for spells, range, and melee.
+	 * @return
+	 */
+	public static int getMainhandSpellLegacy(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(4390, -1);
 	}
 }

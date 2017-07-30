@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.virtue.Virtue;
+import org.virtue.config.util.StringUtility;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.chat.ChannelType;
@@ -41,7 +42,6 @@ import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.QuickMessageEventContext;
 import org.virtue.network.event.encoder.impl.FriendListEventEncoder;
 import org.virtue.utility.text.QuickChatMessage;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * 

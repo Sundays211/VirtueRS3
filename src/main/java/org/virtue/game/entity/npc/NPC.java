@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.config.npctype.CustomNpcData;
 import org.virtue.config.npctype.NpcType;
+import org.virtue.config.util.StringUtility;
 import org.virtue.core.constants.CompassPoint;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
@@ -50,7 +51,6 @@ import org.virtue.network.event.GameEventDispatcher;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
 import org.virtue.network.protocol.update.block.NpcTypeBlock;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

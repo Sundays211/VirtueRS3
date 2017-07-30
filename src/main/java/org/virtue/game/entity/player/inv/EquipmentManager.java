@@ -28,13 +28,13 @@ import java.util.Set;
 import org.virtue.Virtue;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.objtype.ObjTypeCustomisation;
+import org.virtue.config.util.StringUtility;
 import org.virtue.config.vartype.bit.VarBitTypeList;
 import org.virtue.game.content.clans.ClanSettingsAPI;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PlayerModel;
 import org.virtue.game.entity.player.stat.Stat;
 import org.virtue.game.entity.player.var.VarKey;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

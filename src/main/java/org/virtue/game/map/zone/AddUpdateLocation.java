@@ -23,8 +23,8 @@ package org.virtue.game.map.zone;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.SceneLocation;
-import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.game.map.CoordGrid;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
