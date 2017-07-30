@@ -33,11 +33,15 @@ dependencies {
 	testCompile "org.mockito:mockito-core:2.2.+"
 }
 
-task packMap(type:JavaExec) {
-	inputs.dir 'data/raw/map'
-	outputs.file 'data/packed/maps.js5'
+task packMap(type: JavaExec) {
+	def src = 'data/raw/map'
+	def dest = 'data/packed/maps.js5'
+
+	inputs.dir src
+	outputs.file dest
 	main = 'org.virtue.io.pack.MapDataPacker'
 	classpath = sourceSets.main.runtimeClasspath
+	args = [src, dest]
 }
 
 run.dependsOn packMap

@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -30,9 +29,13 @@ public class MapDataPacker {
 	private static Logger LOGGER = LoggerFactory.getLogger(MapDataPacker.class);
 
 	public static void main(String[] args) throws Exception {
+		if (args.length < 2) {
+			LOGGER.error("Usage: srcPath, destFile.");
+			return;
+		}
 		String cachePath = Constants.CACHE_REPOSITORY;
-		Path srcPath = Paths.get("data/raw/map");
-		Path destFile = Paths.get("data/packed/maps.js5");
+		Path srcPath = Paths.get(args[0]);
+		Path destFile = Paths.get(args[1]);
 		MapDataPacker packer = new MapDataPacker(cachePath);
 
 		packer.pack(srcPath, destFile);
