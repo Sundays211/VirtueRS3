@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+/* globals EventType, Inv */
 
 var dialog = require('dialog');
 var varc = require('engine/var/client');

@@ -32,27 +32,26 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		
-	   scriptManager.bind(EventType.OPNPC1, 1860, function (ctx) {
+	   scriptManager.bind(EventType.OPNPC1, 585, function (ctx) {
 	        var player = ctx.player;
-		    dialog.builder(player).chatnpc(ctx.npc, "Would you like to buy some archery equipment?")
-            .multi2("SELECT AN OPTION", "No thanks, I've got all the archery equipment I need.", function () {
-	            dialog.builder(player).chatplayer("No thanks, I've got all the archery equipment I need.")
+		    dialog.builder(player).chatnpc(ctx.npc, "Would you like to buy some Crafting equipment?")
+            .multi2("CHOOSE AN OPTION", "Let's see what you've got, then.", function () {
+	            openshop(player);  
+	        }, "No thanks, I've got all the crafting equipment I need.", function () {
+				dialog.builder(player).chatplayer("No thanks, I've got all the crafting equipment I need.")
 	            .chatnpc(ctx.npc, "Okay. Fare well on your travels.")
 				.finish();
-	        }, "Let's see what you've got, then.", function () {
-                openshop(player);
-	             
 	       });	
 	   });	
 	
-	   scriptManager.bind(EventType.OPNPC3, 1860, function (ctx) {
+	   scriptManager.bind(EventType.OPNPC3, 585, function (ctx) {
 	        openshop(ctx.player);
 	   });
 	}
 
 	function openshop (player) {
-        varp(player, 304, Inv.BRIANS_ARCHERY_SUPPLIES);
-	    varc(player, 2360, "Brian's Archery Supplies");
+        varp(player, 304, Inv.ROMMIKS_CRAFTY_SUPPLIES);
+	    varc(player, 2360, "Rommik's Crafty Supplies");
 	    widget.openCentral(player, 1265);
 	}
 	

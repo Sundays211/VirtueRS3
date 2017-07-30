@@ -3,7 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./brian')	
+		require('./brian'),
+        require('./rommik')			
 	];
 	
 	for (var i in modules) {
