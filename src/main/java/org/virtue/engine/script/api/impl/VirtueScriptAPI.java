@@ -28,16 +28,15 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.invtype.InvType;
 import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
-import org.virtue.config.objtype.ObjTypeList;
 import org.virtue.config.paramtype.ParamType;
 import org.virtue.config.structtype.StructType;
 import org.virtue.config.vartype.VarDomainType;
@@ -663,7 +662,19 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getExchangeCost(int itemId) {
-		return configProvider.getObjTypes().list(itemId).getExchangeValue();
+		ObjType objType = configProvider.getObjTypes().list(itemId);
+		int cost = -1;
+		if (objType.stockmarket) {
+			if (objType.certtemplate != -1) {
+				cost = getExchangeCost(objType.certlink);
+			} else {
+				cost = Virtue.getInstance().getExchange().lookupPrice(itemId);
+				if (cost == -1) {
+					cost = objType.cost;
+				}
+			}
+		}
+		return cost;
 	}
 
 	@Override

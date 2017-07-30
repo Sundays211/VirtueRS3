@@ -466,7 +466,7 @@ public final class CombatSchedule {
 			return ((Player) entity).getVars().getVarValueInt(VarKey.Player.AUTO_RETALIATE_DISABLED) == 0;
 		} else if (entity instanceof NPC) {//NPCs always retaliate
 			NPC npc = (NPC) entity;
-			return npc.getType().getCombatLevel() > 0 && npc.getType().hasAction("attack");
+			return npc.getType().level > 0 && npc.getType().hasAction("attack");
 		} else {
 			throw new RuntimeException("Invalid entity: "+entity.getClass());
 		}

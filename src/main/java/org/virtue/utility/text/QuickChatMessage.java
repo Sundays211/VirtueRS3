@@ -21,7 +21,7 @@
  */
 package org.virtue.utility.text;
 
-import org.virtue.ConfigProvider;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.quickchatphrasetype.QuickChatPhraseType;
 import org.virtue.config.vartype.VarDomainType;
 import org.virtue.config.vartype.VarType;

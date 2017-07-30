@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.virtue.Virtue;
+import org.virtue.config.util.StringUtility;
+import org.virtue.core.constants.MoveSpeed;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.World;
@@ -38,7 +40,6 @@ import org.virtue.network.event.context.impl.in.LocationClickEventContext;
 import org.virtue.network.event.context.impl.in.OptionButton;
 import org.virtue.network.event.handler.GameEventHandler;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
-import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -67,7 +68,10 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 				player.getDispatcher().sendConsoleMessage(
 						"<col=ff0000>Location " + context.getLocationID() + " clicked at " + tile + " does not exist!");
 			} else if (OptionButton.SIX.equals(context.getButton())) {
-				String desc = location.getLocType().getDescription();
+				String desc = location.getLocType().desc;
+				if (desc == null) {
+					desc = "It's "+(StringUtility.startsWithVowel(location.getName()) ? "an" : "a")+" "+location.getName();
+				}
 				player.getDispatcher().sendGameMessage(desc);
 				if (PrivilegeLevel.ADMINISTRATOR.equals(player.getPrivilegeLevel())) {
 					player.getDispatcher().sendGameMessage(location.toString());
@@ -95,7 +99,7 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 			}
 		}
 	}
-	
+
 	private void handleInteraction (Player player, SceneLocation location, LocationClickEventContext context) {
 
 		if (location.getLocType().name.equalsIgnoreCase("bench")) {

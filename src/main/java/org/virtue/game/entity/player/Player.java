@@ -31,12 +31,14 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.virtue.ConfigProvider;
 import org.virtue.Constants;
 import org.virtue.Virtue;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
+import org.virtue.config.structtype.StructType;
 import org.virtue.config.vartype.VarDomainType;
+import org.virtue.core.constants.CompassPoint;
 import org.virtue.engine.script.ScriptEventType;
 import org.virtue.engine.script.ScriptManager;
 import org.virtue.game.Lobby;
@@ -50,6 +52,7 @@ import org.virtue.game.content.treasure.TreasureHunter;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackEvent;
 import org.virtue.game.entity.combat.CombatMode;
+import org.virtue.game.entity.combat.impl.CombatUtils;
 import org.virtue.game.entity.combat.impl.SpecialAttackHandler;
 import org.virtue.game.entity.combat.impl.magic.MagicAttackEvent;
 import org.virtue.game.entity.player.PlayerModel.Render;
@@ -68,7 +71,6 @@ import org.virtue.game.entity.player.var.VarRepository;
 import org.virtue.game.entity.player.widget.WidgetManager;
 import org.virtue.game.map.GroundItem;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.square.DynamicMapSquare;
 import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.map.zone.Projectile;
@@ -664,10 +666,10 @@ public class Player extends Entity {
 			if (weapon != null) {
 				ObjType type = weapon.getType();
 				if (this.getImpactHandler().inCombat()) {
-					id = type.getAggressiveRender();
+					id = CombatUtils.getAggressiveRender(type);
 				} else {
 					if (getModel().isMale()) {
-						id = type.getPassiveRender();
+						id = CombatUtils.getPassiveRender(type);
 					} else {
 						if (type.name.contains("crossbow")
 								|| type.name.contains("bow")
@@ -680,11 +682,11 @@ public class Player extends Entity {
 								|| type.name.contains("whip"))
 							id = 2703;
 						else
-							id = type.getPassiveRender();
+							id = CombatUtils.getPassiveRender(type);
 					}
 				}
 				if (CombatMode.LEGACY.equals(combatMode)) {
-					id = type.getLegacyPassiveRender();
+					id = CombatUtils.getLegacyPassiveRender(type);
 				}
 			}
 		}
@@ -1342,17 +1344,39 @@ public class Player extends Entity {
 		int animation = -1;
 		boolean eoc = getMode() == CombatMode.EOC;
 		if (shield != null) {
-			animation = eoc ? shield.getType().getDefensiveAnimation() : shield
-					.getType().getDefensiveAnimationLegacy();
-		}
-		if ((eoc || animation == -1) && weapon != null) {
-			animation = eoc ? weapon.getType().getDefensiveAnimation() : weapon
-					.getType().getDefensiveAnimationLegacy();
+			animation = eoc ? getDefensiveAnimation(shield.getType()) : 
+				getDefensiveAnimationLegacy(shield.getType());
+			animation = eoc ? getDefensiveAnimation(weapon.getType()) : 
+				getDefensiveAnimationLegacy(weapon.getType());
 		}
 		if (animation == -1) {
 			animation = 424;
 		}
 		return animation;
+	}
+	
+	public int getDefensiveAnimationLegacy(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(4387, -1);
+	}
+	
+	public int getDefensiveAnimation(ObjType objType) {
+		int structID = objType.getParam(686, -1);
+		if (structID == -1) {
+			return -1;
+		}
+		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
+		if (type == null) {
+			return -1;
+		}
+		return type.getParam(2917, -1);
 	}
 
 	private DynamicMapSquare armarRegion;// For testing

@@ -22,6 +22,7 @@
 package org.virtue.game.content.chat;
 
 import org.virtue.Virtue;
+import org.virtue.config.util.StringUtility;
 import org.virtue.game.Lobby;
 import org.virtue.game.World;
 import org.virtue.game.content.friendchats.FriendChatAPI;
@@ -50,7 +51,6 @@ import org.virtue.network.event.encoder.impl.ClanSettingsDeltaEventEncoder;
 import org.virtue.network.event.encoder.impl.ClanSettingsEventEncoder;
 import org.virtue.network.event.encoder.impl.FriendChatEventEncoder;
 import org.virtue.utility.text.QuickChatMessage;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

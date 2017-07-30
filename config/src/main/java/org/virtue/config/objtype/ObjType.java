@@ -25,11 +25,9 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.virtue.Virtue;
 import org.virtue.cache.utility.ByteBufferUtils;
 import org.virtue.config.ConfigType;
-import org.virtue.config.structtype.StructType;
-import org.virtue.utility.text.StringUtility;
+import org.virtue.config.util.StringUtility;
 
 /**
  * @author Sundays211
@@ -557,151 +555,6 @@ public class ObjType implements ConfigType {
     public int getModelOnBackId() {
 		return getParam(2820, -1);
 	}
-
-    /**
-     * Spells uses this to draw the animation off the current weapon. Also
-     * used for melee & range weapons.
-     * @return
-     */
-	public int getMainhandEmote() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(2914, -1);
-	}
-	
-	/**
-	 * Uses Main hand animations for spells, range, and melee.
-	 * @return
-	 */
-	public int getMainhandEmoteLegacy() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(4385, -1);
-	}
-	
-	/**
-	 * Uses Main hand animations for spells, range, and melee.
-	 * @return
-	 */
-	public int getMainhandSpellLegacy() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(4390, -1);
-	}
-	
-	public int getOffhandEmoteLegacy() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(4389, -1);
-	}
-    
-	public int getOffhandEmote() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(2831, -1);
-	}
-	
-	public int getDefensiveAnimationLegacy() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(4387, -1);
-	}
-	
-	public int getDefensiveAnimation() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(2917, -1);
-	}
-	
-	public int getLegacyPassiveRender() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(4383, -1);
-	}
-	
-	public int getPassiveRender() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(2954, -1);
-	}
-
-	public int getAggressiveRender() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(2955, -1);
-	}
-	
-	public int getAggressiveEndRender() {
-		int structID = getParam(686, -1);
-		if (structID == -1) {
-			return -1;
-		}
-		StructType type = Virtue.getInstance().getConfigProvider().getStructTypes().list(structID);
-		if (type == null) {
-			return -1;
-		}
-		return type.getParam(2918, -1);
-	}
 	
 	public int getStageOnDeath() {
 		return getParam(1397, 0);
@@ -767,26 +620,6 @@ public class ObjType implements ConfigType {
 			return "Swap this note at any bank for the equivalent item.";
 		} else {
 			return "It's "+(StringUtility.startsWithVowel(name) ? "an" : "a")+" "+name+".";
-		}
-	}
-	
-	/**
-	 * Returns the grand exchange value of the item.
-	 * Currently, this just returns the shop value
-	 * @return The exchange value
-	 */
-	public int getExchangeValue () {
-		if (stockmarket) {
-			int price = Virtue.getInstance().getExchange().lookupPrice(myid);
-			if (price != -1) {
-				return price;
-			} else if (certtemplate != -1) {
-				return myList.list(certlink).getExchangeValue();
-			} else {
-				return cost;
-			}
-		} else {
-			return -1;
 		}
 	}
 	

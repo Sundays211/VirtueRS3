@@ -23,6 +23,7 @@ package org.virtue.utility.text;
 
 import java.nio.ByteBuffer;
 
+import org.virtue.config.util.TextConvert;
 import org.virtue.network.event.buffer.InboundBuffer;
 import org.virtue.network.event.buffer.OutboundBuffer;
 
@@ -45,7 +46,7 @@ public class Huffman {
 	 */
 	public static int compress(OutboundBuffer buffer, String message) {
 		int offset = buffer.offset();
-		byte[] msgData = StringUtility.getMessageData(message);
+		byte[] msgData = TextConvert.encodeCp1252(message);
 		buffer.putSmartS(msgData.length);
 		buffer.checkPosition(buffer.offset() + msgData.length*2);//Eh, there's not really any easier way...
 		//System.out.println("Checking position: "+(buffer.offset() + msgData.length)+", strlen="+message.length()+", blen="+msgData.length);
@@ -80,7 +81,7 @@ public class Huffman {
 		    byte[] decompressed = new byte[decompressedSize];
 		    buffer.offset(huffman.decode(buffer.buffer(),
 		    		buffer.offset(), decompressed, 0, decompressedSize) + buffer.offset());
-		    message = StringUtility.getMessageFromBytes(decompressed, 0, decompressedSize);
+		    message = TextConvert.decodeCp1252(decompressed, 0, decompressedSize);
 		} catch (Exception exception) {
 		    return "Cabbage";
 		}

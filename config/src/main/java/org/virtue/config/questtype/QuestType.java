@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.virtue.ConfigProvider;
 import org.virtue.cache.utility.ByteBufferUtils;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.ConfigType;
 import org.virtue.config.vartype.VarDomain;
 import org.virtue.config.vartype.VarDomainType;

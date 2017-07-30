@@ -29,6 +29,7 @@ dependencies {
 	compile 'com.google.code.gson:gson:2.3'
 	compile 'io.netty:netty-all:4.0.26.Final'
 	compile project('cache')
+	compile project('config')
 
 	testCompile "junit:junit:4.11"
 	testCompile "org.mockito:mockito-core:2.2.+"

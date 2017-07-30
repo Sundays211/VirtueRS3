@@ -3,8 +3,6 @@ package org.virtue.game.map.movement.path;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.virtue.game.entity.Entity;
-
 /**
  * Represents a path.
  * @author Emperor

@@ -30,8 +30,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.core.constants.CompassPoint;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.square.load.MapLoader;
 
 /**

@@ -30,6 +30,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
+import org.virtue.core.constants.CompassPoint;
+import org.virtue.core.constants.MoveSpeed;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
@@ -42,7 +44,6 @@ import org.virtue.game.map.square.RegionManager;
 import org.virtue.game.node.Node;
 import org.virtue.network.protocol.update.block.FaceDirectionBlock;
 import org.virtue.network.protocol.update.block.FaceEntityBlock;
-import org.virtue.network.protocol.update.ref.MoveSpeed;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

@@ -1,6 +1,7 @@
 package org.virtue.game.map.movement;
 
-import org.virtue.network.protocol.update.ref.MoveSpeed;
+import org.virtue.core.constants.CompassPoint;
+import org.virtue.core.constants.MoveSpeed;
 
 /**
  * Represents a point.

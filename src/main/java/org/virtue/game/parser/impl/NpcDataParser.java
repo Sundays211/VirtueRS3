@@ -28,8 +28,8 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virtue.config.npctype.CustomNpcData;
 import org.virtue.config.npctype.NpcTypeList;
-import org.virtue.game.entity.npc.CustomNpcData;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

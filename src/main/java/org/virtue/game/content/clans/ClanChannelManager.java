@@ -25,12 +25,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.virtue.config.util.StringUtility;
 import org.virtue.game.content.chat.ChannelType;
 import org.virtue.game.content.chat.SocialUser;
 import org.virtue.network.event.context.impl.out.MessageEventContext;
 import org.virtue.network.event.context.impl.out.QuickMessageEventContext;
 import org.virtue.utility.text.QuickChatMessage;
-import org.virtue.utility.text.StringUtility;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

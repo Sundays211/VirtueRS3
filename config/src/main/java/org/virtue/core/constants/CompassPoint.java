@@ -19,9 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map.movement;
-
-import org.virtue.game.map.CoordGrid;
+package org.virtue.core.constants;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -117,27 +115,6 @@ public enum CompassPoint {
 		} else {
 			return null;
 		}
-	}
-
-	/**
-	 * Gets the most logical direction.
-	 * @param location The start location.
-	 * @param l The end location.
-	 * @return The most logical direction.
-	 */
-	public static CompassPoint getLogicalDirection(CoordGrid location, CoordGrid l) {
-		int offsetX = Math.abs(l.getX() - location.getX());
-		int offsetY = Math.abs(l.getY() - location.getY());
-		if (offsetX > offsetY) {
-			if (l.getX() > location.getX()) {
-				return CompassPoint.EAST;
-			} else {
-				return CompassPoint.WEST;
-			}
-		} else if (l.getY() < location.getY()) {
-			return CompassPoint.SOUTH;
-		}
-		return CompassPoint.NORTH;
 	}
 
 }

@@ -4,12 +4,12 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.virtue.config.loctype.LocShape;
+import org.virtue.core.constants.CompassPoint;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.ClipFlag;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
-import org.virtue.game.map.movement.CompassPoint;
 import org.virtue.game.map.movement.Waypoint;
 import org.virtue.game.map.movement.path.impl.DumbPathfinder;
 import org.virtue.game.map.movement.path.impl.ProjectilePathfinder;

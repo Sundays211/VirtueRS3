@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.virtue.ConfigProvider;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.db.DBIndexProvider;
 import org.virtue.config.db.DBTableIndex;
 import org.virtue.config.db.dbrowtype.DBRowType;

@@ -30,6 +30,7 @@ import org.virtue.cache.Archive;
 import org.virtue.cache.Cache;
 import org.virtue.cache.Container;
 import org.virtue.cache.ReferenceTable;
+import org.virtue.config.ConfigProvider;
 import org.virtue.config.Js5Archive;
 import org.virtue.config.Js5ConfigGroup;
 import org.virtue.config.bastype.BASTypeList;
@@ -65,7 +66,7 @@ import org.virtue.utility.FileUtility;
  * @author Sundays211
  * @since 5/04/2016
  */
-public class ConfigProvider {
+public class VirtueConfigProvider implements ConfigProvider {
 	
 	private Cache cache;
 	private ReferenceTable configTable;
@@ -104,7 +105,7 @@ public class ConfigProvider {
 	
 	private SkillDefaults skillDefaults;
 
-	protected ConfigProvider(Cache cache) throws IOException {
+	protected VirtueConfigProvider(Cache cache) throws IOException {
 		this.cache = cache;
 		
 		Container container = Container.decode(cache.getStore().read(255, Js5Archive.CONFIG.getArchiveId()));
@@ -181,66 +182,82 @@ public class ConfigProvider {
 		wearposDefaults = new WearposDefaults(wearpos);
 	}
 	
+	@Override
 	public InvTypeList getInvTypes () {
 		return invTypeList;
 	}
 	
+	@Override
 	public LocTypeList getLocTypes () {
 		return locTypeList;
 	}
 	
+	@Override
 	public EnumTypeList getEnumTypes () {
 		return enumTypeList;
 	}
 	
+	@Override
 	public NpcTypeList getNpcTypes () {
 		return npcTypeList;
 	}
 	
+	@Override
 	public ObjTypeList getObjTypes () {
 		return objTypeList;
 	}
 	
+	@Override
 	public ParamTypeList getParamTypes () {
 		return paramTypeList;
 	}
 	
+	@Override
 	public SeqTypeList getSeqTypes () {
 		return seqTypeList;
 	}
 	
+	@Override
 	public StructTypeList getStructTypes () {
 		return structTypeList;
 	}
 	
+	@Override
 	public BASTypeList getBASTypes () {
 		return basTypeList;
 	}
 	
+	@Override
 	public QuestTypeList getQuestTypes () {
 		return questTypeList;
 	}
 	
+	@Override
 	public DBTableTypeList getDBTableTypes () {
 		return dbTableTypeList;
 	}
 	
+	@Override
 	public DBRowTypeList getDBRowTypes () {
 		return dbRowTypeList;
 	}
 	
+	@Override
 	public VarTypeList getVarTypes (VarDomainType domain) {
 		return varTypes.get(domain);
 	}
 	
+	@Override
 	public VarBitTypeList getVarBitTypes () {
 		return varBitTypeList;
 	}
 	
+	@Override
 	public WearposDefaults getWearposDefaults () {
 		return wearposDefaults;
 	}
 	
+	@Override
 	public SkillDefaults getSkillDefaults () {
 		return skillDefaults;
 	}
