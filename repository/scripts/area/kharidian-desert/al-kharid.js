@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2016 Virtue Studios
+ * Copyright (c) 2017 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions\:
+ * furnished to do so, subject to the following conditions:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -19,44 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('util');
-var widget = require('widget');
-
+/* globals EventType, Inv */
+var dialog = require('dialog');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1446, function (ctx) {
-	widget.setText(ctx.player, 1446, 94, util.getName(ctx.player));
-	widget.setText(ctx.player, 1446, 93, ctx.player.getModel().setPrefixTitle());		
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1560, function (ctx) {
-	widget.open(ctx.player, 1560, 16, 1558, true);//
-	widget.open(ctx.player, 1560, 18, 1557, true);//Skills
-	widget.open(ctx.player, 1560, 17, 1559, true);//Combat stats	
-	});	
-	scriptManager.bind(EventType.IF_BUTTON, 1446, function (ctx) {
-	switch (ctx.component) {
-	case 108:
-	widget.openCentral(ctx.player, 1561, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1560, function (ctx) {
-	switch (ctx.component) {
-	case 22:
-	widget.closeOverlaySub(ctx.player, 1024, true);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
+		
+		scriptManager.bind(EventType.OPLOC1, [76651,76652], function (ctx) {//danger sign
+			dialog.builder(ctx.player).mesbox("The warning signs in front of the huge stone gate state:")
+			.mesbox("<col=800000>The Kharidian Desert is a VERY dangerous place. Beware of high<br><col=800000> temperatures, sandstorms, quicksand, bandits, slavers, kalphites,<br><col=800000> monkeys, crocodiles, and acts of vengeful, goddesses bent on the total<br><col=800000> destruction of all life in the desert.")
+			.mesbox("No responsibility is taken by shantay if anything bad should happen to you<br> under any circumstances whatsoever.")
+			.finish();
+		});		
+		
 	}
 })();

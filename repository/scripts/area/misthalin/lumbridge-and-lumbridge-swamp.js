@@ -24,7 +24,10 @@ var dialog = require('dialog');
 var inv = require('inv');
 var chat = require('chat');
 var widget = require('widget');
-
+var coords = require('map/coords');
+var util = require('util');
+var anim = require('anim');
+var map = require('map');
 module.exports = (function () {
 	return {
 		init : init
@@ -99,5 +102,32 @@ module.exports = (function () {
 			widget.setText(ctx.player, 205, 55, "Current Winners");
 			widget.setText(ctx.player, 205, 52, "The Victorious Winners of<br>the 2015 jagex Clan Cup<br> <br> Combat - Wicked Fury<br>Skilling - Summit<br>Iron Skilling - Ceecs Clan");
 		});
+		
+		scriptManager.bind(EventType.OPLOC1, 47713, function (ctx) {//Rocks (Quest The Restless Ghost)
+            dialog.mesbox(ctx.player, "There's nothing there of any use to you."); 
+	    });	
+		
+	    scriptManager.bind(EventType.OPLOC1, 86431, function (ctx) {//Old mine entrance(Ham hidout)
+	        if(util.mapMembers()){
+	           dialog.mesbox(ctx.player, "not yet implemented.");
+            } else {
+               dialog.mesbox(ctx.player, "You need to be on a member's world to use this feature."); 
+            }
+	    });	
+		
+	    scriptManager.bind(EventType.OPLOC1, 91021, function (ctx) {//dark hole under tree
+	        if(util.mapMembers()){
+	           chat.sendMessage(ctx.player, "not yet implemented.");
+            } else {
+               dialog.mesbox(ctx.player, "You need to be on a member's world to use this feature."); 
+            }
+	     });	
+		 
+	    scriptManager.bind(EventType.OPLOC1, 36687, function (ctx) {//Trapdoor to lumbridge celler
+	         anim.run(ctx.player, 827, function () {
+             map.setCoords(ctx.player, coords(3208, 9616, 0));
+	         });	
+	    });
+		
 	}
 })();

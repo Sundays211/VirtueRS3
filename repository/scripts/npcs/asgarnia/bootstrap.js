@@ -3,10 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    require('./15-year-anniversary'),
-		require('./xmas-2005'),
-		require('./xmas-2006'),
-		require('./xmas-2011')
+		require('./brian'),
+        require('./rommik')			
 	];
 	
 	for (var i in modules) {

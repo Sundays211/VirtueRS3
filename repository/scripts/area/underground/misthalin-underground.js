@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2016 Virtue Studios
+ * Copyright (c) 2017 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions\:
+ * furnished to do so, subject to the following conditions:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -20,43 +20,22 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('util');
-var widget = require('widget');
-
+var coords = require('map/coords');
+var map = require('map');
+var anim = require('anim');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1446, function (ctx) {
-	widget.setText(ctx.player, 1446, 94, util.getName(ctx.player));
-	widget.setText(ctx.player, 1446, 93, ctx.player.getModel().setPrefixTitle());		
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1560, function (ctx) {
-	widget.open(ctx.player, 1560, 16, 1558, true);//
-	widget.open(ctx.player, 1560, 18, 1557, true);//Skills
-	widget.open(ctx.player, 1560, 17, 1559, true);//Combat stats	
-	});	
-	scriptManager.bind(EventType.IF_BUTTON, 1446, function (ctx) {
-	switch (ctx.component) {
-	case 108:
-	widget.openCentral(ctx.player, 1561, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1560, function (ctx) {
-	switch (ctx.component) {
-	case 22:
-	widget.closeOverlaySub(ctx.player, 1024, true);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
+		
+	   scriptManager.bind(EventType.OPLOC1, 29355, function (ctx) {//Ladder to lumbridge castle
+	       anim.run(ctx.player, 828, function () {
+           map.setCoords(ctx.player, coords(3210, 3216, 0));
+	       });	
+       });
+
 	}
+
 })();

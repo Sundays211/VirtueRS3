@@ -22,7 +22,8 @@
 /* globals EventType */
 var map = require('map');
 var coords = require('map/coords');
-
+var util = require('util');
+var dialog = require('dialog');
 module.exports = (function () {
 	return {
 		init : init
@@ -30,7 +31,11 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 66991, function (ctx) {//Traverley dungeon
-			map.setCoords(ctx.player, coords(2885, 9796, 0));	
-		});
+	        if (util.mapMembers()){
+	           map.setCoords(ctx.player, coords(2885, 9796, 0));
+            } else {
+               dialog.mesbox(ctx.player, "You need to be on a member's world to use this feature."); 
+            }
+        });
 	}
 })();

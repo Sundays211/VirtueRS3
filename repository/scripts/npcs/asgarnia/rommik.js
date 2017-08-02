@@ -19,44 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('util');
-var widget = require('widget');
+/* globals EventType, Inv */
 
+var dialog = require('dialog');
+var varc = require('engine/var/client');
+var varp = require('engine/var/player');
+var widget = require('widget');
 module.exports = (function () {
 	return {
-		init : init
+	init : init
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1446, function (ctx) {
-	widget.setText(ctx.player, 1446, 94, util.getName(ctx.player));
-	widget.setText(ctx.player, 1446, 93, ctx.player.getModel().setPrefixTitle());		
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1560, function (ctx) {
-	widget.open(ctx.player, 1560, 16, 1558, true);//
-	widget.open(ctx.player, 1560, 18, 1557, true);//Skills
-	widget.open(ctx.player, 1560, 17, 1559, true);//Combat stats	
-	});	
-	scriptManager.bind(EventType.IF_BUTTON, 1446, function (ctx) {
-	switch (ctx.component) {
-	case 108:
-	widget.openCentral(ctx.player, 1561, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1560, function (ctx) {
-	switch (ctx.component) {
-	case 22:
-	widget.closeOverlaySub(ctx.player, 1024, true);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
+		
+	   scriptManager.bind(EventType.OPNPC1, 585, function (ctx) {
+	        var player = ctx.player;
+		    dialog.builder(player).chatnpc(ctx.npc, "Would you like to buy some Crafting equipment?")
+            .multi2("CHOOSE AN OPTION", "Let's see what you've got, then.", function () {
+	            openshop(player);  
+	        }, "No thanks, I've got all the crafting equipment I need.", function () {
+				dialog.builder(player).chatplayer("No thanks, I've got all the crafting equipment I need.")
+	            .chatnpc(ctx.npc, "Okay. Fare well on your travels.")
+				.finish();
+	       });	
+	   });	
+	
+	   scriptManager.bind(EventType.OPNPC3, 585, function (ctx) {
+	        openshop(ctx.player);
+	   });
 	}
+
+	function openshop (player) {
+        varp(player, 304, Inv.ROMMIKS_CRAFTY_SUPPLIES);
+	    varc(player, 2360, "Rommik's Crafty Supplies");
+	    widget.openCentral(player, 1265);
+	}
+	
 })();

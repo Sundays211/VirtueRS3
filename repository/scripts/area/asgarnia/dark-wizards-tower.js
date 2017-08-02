@@ -23,32 +23,55 @@
 var chat = require('chat');
 var inv = require('inv');
 var dialog = require('dialog');
-
+var util = require('util');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 24842, function (ctx) {//Manhole (Quest Witch's House)
-			chat.sendMessage(ctx.player, "The cover won't budge. It seems to be locked.");
-		});
 		
-		scriptManager.bind(EventType.OPLOC1, 2867, function (ctx) {//Potted plant (Quest Witch's House)
-			if (inv.has(ctx.player, 2409)) {
-				chat.sendMessage(ctx.player, "You don't find anything interesting."); 
-			} else {
-				inv.give(ctx.player, 2409, 1);
-				dialog.mesbox(ctx.player, "You find a key hidden under the flower pot."); 	 
-			}	 
-		});
-		scriptManager.bind(EventType.OPLOC1, 2861, function (ctx) {//Door (Quest Witch's House)
-			if (inv.has(ctx.player, 2409)) {
-				dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL);
-			} else {
-				chat.sendMessage(ctx.player, "This door is locked."); 	 
-			}
-		});	
+	scriptManager.bind(EventType.OPLOC1, 24842, function (ctx) {//Manhole (Quest Witch's House)
+	  if (util.mapMembers()){
+	     chat.sendMessage(ctx.player, "The cover won't budge. It seems to be locked.");
+      } else {
+         chat.sendMessage(ctx.player, "You need to be on a member's world to use this feature."); 
+      }
+    });	
+	
+    scriptManager.bind(EventType.OPLOC1, 2867, function (ctx) {//Potted plant (Quest Witch's House)
+	  if (util.mapMembers()){
+	  if (inv.has(ctx.player, 2409)) {
+	     chat.sendMessage(ctx.player, "You don't find anything interesting."); 
+	  } else {
+	     inv.give(ctx.player, 2409, 1);
+	     dialog.mesbox(ctx.player, "You find a key hidden under the flower pot."); 	 
+	  }	
+      } else {
+         chat.sendMessage(ctx.player, "You need to be on a member's world to use this feature."); 
+      }
+	});
+	
+	scriptManager.bind(EventType.OPLOC1, 2861, function (ctx) {//Door (Quest Witch's House)
+	  if (util.mapMembers()){
+	  if (inv.has(ctx.player, 2409)) {
+	     dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL);
+	  } else {
+	     chat.sendMessage(ctx.player, "This door is locked."); 	 
+	  }
+      } else {
+         chat.sendMessage(ctx.player, "You need to be on a member's world to use this feature."); 
+      }
+	});	
+	
+	scriptManager.bind(EventType.OPLOCU, 2861, function (ctx) {
+	  switch (ctx.useObjId) {
+	   case 2409:	
+	     dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL);
+	   return;	
+	  }
+    });	
+	
 	}
 
 })();

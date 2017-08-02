@@ -45,7 +45,10 @@ module.exports = (function () {
 			var x, y, level;
 			var currentCoords = entityMap.getCoords(ctx.player);
 			var targetCoords;
-			
+			if (args[0] == "home") {	
+			    entityMap.setCoords(ctx.player, coords(0, 50, 50, 21, 19));
+			    return;
+			}
 			if (args.length < 2) {
 				chat.sendCommandResponse(ctx.player, "Usage: "+ctx.syntax+" [x-coord] [y-coord]", ctx.console);
 				return;

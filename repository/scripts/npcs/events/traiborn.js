@@ -19,44 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('util');
-var widget = require('widget');
+/* globals EventType, */
 
+var dialog = require('dialog');
+var util = require('util');
 module.exports = (function () {
 	return {
-		init : init
+	init : init
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1446, function (ctx) {
-	widget.setText(ctx.player, 1446, 94, util.getName(ctx.player));
-	widget.setText(ctx.player, 1446, 93, ctx.player.getModel().setPrefixTitle());		
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1560, function (ctx) {
-	widget.open(ctx.player, 1560, 16, 1558, true);//
-	widget.open(ctx.player, 1560, 18, 1557, true);//Skills
-	widget.open(ctx.player, 1560, 17, 1559, true);//Combat stats	
-	});	
-	scriptManager.bind(EventType.IF_BUTTON, 1446, function (ctx) {
-	switch (ctx.component) {
-	case 108:
-	widget.openCentral(ctx.player, 1561, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1560, function (ctx) {
-	switch (ctx.component) {
-	case 22:
-	widget.closeOverlaySub(ctx.player, 1024, true);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	}
+		
+	   scriptManager.bind(EventType.OPNPC1, 14743, function (ctx) {
+	        dialog.builder(ctx.player).chatplayer("Merry Christmas Traiborn!")
+			.chatnpc(ctx.npc, "Merry Christmas young thingummywut. Somebody has<br> stolen the eyes from the dragon bust in my room. Would<br> you know about that?")
+			.chatplayer("No...no idea. It must have been a thingummywut.")
+			.chatnpc(ctx.npc, "Interesting theory "+ util.getName(ctx.player)+".....I shall have to<br> investigate more; those blasted thingummywuts cause me<br> so much trouble!")
+			.chatplayer("Yeah... Tell me about it.....")
+			.finish();
+	   });	
+	   
+    }
+	
 })();

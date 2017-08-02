@@ -3,7 +3,14 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./lumbridge-sage')
+	    require('./bob'),
+		require('./diango'),
+	    require('./fred-the-farmer'),
+		require('./jambon'),
+		require('./lumbridge-guardsman'),
+		require('./lumbridge-sage'),	
+		require('./wardsman'),
+		require('./wizard-valina')	
 	];
 	
 	for (var i in modules) {
