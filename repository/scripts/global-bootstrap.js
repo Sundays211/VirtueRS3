@@ -26,6 +26,7 @@ function getAllModules () {// jshint ignore:line
 		'items/degradables',
 		'map',
 		'npcs/asgarnia',
+		'npcs/events',
 		'npcs/misthalin',
 		'quest',
 		'shop',

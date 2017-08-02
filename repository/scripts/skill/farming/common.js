@@ -182,7 +182,7 @@ module.exports = (function () {
 	 * @param wateredStatus The status to set this farming patch to once finished
 	 */
 	function water (player, patchId, wateredStatus) {
-		var animId;
+		var animId;//bucket of water anim 24912
 		if (inv.has(player, 18682) || inv.hasTool(player, 18682)) {
 			animId = 24925;
 		} else if (resources.has(player, 5338)) {
@@ -205,7 +205,7 @@ module.exports = (function () {
 	 * @param type The compost type (1=normal, 2=super)
 	 */
 	function applyCompost(player, patchId, type) {
-		anim.run(player, 24912, function () {
+		anim.run(player, 26116, function () {
 			if (type == 1) {//Regular compost
 				inv.take(player, 6032, 1);
 				stat.giveXp(player, Stat.FARMING, 18);

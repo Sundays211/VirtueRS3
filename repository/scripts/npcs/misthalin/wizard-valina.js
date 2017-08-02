@@ -19,44 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('util');
-var widget = require('widget');
+/* globals EventType, Inv */
 
+var dialog = require('dialog');
 module.exports = (function () {
 	return {
-		init : init
+	init : init
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1446, function (ctx) {
-	widget.setText(ctx.player, 1446, 94, util.getName(ctx.player));
-	widget.setText(ctx.player, 1446, 93, ctx.player.getModel().setPrefixTitle());		
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1560, function (ctx) {
-	widget.open(ctx.player, 1560, 16, 1558, true);//
-	widget.open(ctx.player, 1560, 18, 1557, true);//Skills
-	widget.open(ctx.player, 1560, 17, 1559, true);//Combat stats	
-	});	
-	scriptManager.bind(EventType.IF_BUTTON, 1446, function (ctx) {
-	switch (ctx.component) {
-	case 108:
-	widget.openCentral(ctx.player, 1561, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1560, function (ctx) {
-	switch (ctx.component) {
-	case 22:
-	widget.closeOverlaySub(ctx.player, 1024, true);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
+		
+	   scriptManager.bind(EventType.OPNPC1, 16186, function (ctx) {
+	        dialog.builder(ctx.player).chatnpc(ctx.npc, "Welcome to the Wizards' Tower, adventurer.")
+			.multi2("CHOOSE AN OPTION", "What can i do here?", function () {
+			    dialog.builder(ctx.player).chatnpc(ctx.npc, "It was wizards of the tower who discovered the Rune<br> Mysteries - the secret of creating runes out of rune<br> essence. Archmage Sedridor will teleport adventurers to<br> the essence mine. His office is on the second floor.")	  
+			    .chatnpc(ctx.npc, "Recently a wizard called Finix descovered an alternative<br> runecrafting method. Speak to him on the roof if you're<br> interested.")
+			    .chatnpc(ctx.npc, "If you'd like to practice combat magic, you might want to<br> attack the spellwisps outside the tower. I believe there's a<br> cluster of them to the west of here.") 
+			    .finish();
+			}, "I'm fine, thanks.", function () {	
+	        });
+	   });	
+
 	}
+	
 })();

@@ -28,6 +28,7 @@ var anim = require('anim');
 var chat = require('chat');
 var inv = require('inv');
 var widget = require('widget');
+var _entity = require('engine/entity');
 
 module.exports = (function () {
 	return {
@@ -50,6 +51,48 @@ module.exports = (function () {
 		    varc(ctx.player, 1727, 1);
 			widget.openOverlaySub(ctx.player, 1008, 375, false);	
 		});	
+		
+		scriptManager.bind(EventType.OPHELD1, 20722, function (ctx) {//Firecracker
+			anim.run(ctx.player, 12529);
+		    //anim.addSpotAnim(ctx.player, 3953);find gfx
+			inv.take(ctx.player, 20722, 1);
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 20718, function (ctx) {//Confetti
+			anim.run(ctx.player, 10952);
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 4613, function (ctx) {//Spinning plate
+			anim.run(ctx.player, 1902);
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 12844, function (ctx) {//Toy kite
+			anim.run(ctx.player, 8990);
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 2520, function (ctx) {//Toy horsy brown
+			anim.run(ctx.player, 918);
+			_entity.say(ctx.player, "Just say neigh to gambling!")
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 2522, function (ctx) {//Toy horsy white
+			anim.run(ctx.player, 919);
+			_entity.say(ctx.player, "Just say neigh to gambling!")
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 2524, function (ctx) {//Toy horsy black
+			anim.run(ctx.player, 920);
+			_entity.say(ctx.player, "Just say neigh to gambling!")
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 2526, function (ctx) {//Toy horsy grey
+			anim.run(ctx.player, 921);
+			_entity.say(ctx.player, "Just say neigh to gambling!")
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 20725, function (ctx) {//Souvenir mug
+			anim.run(ctx.player, 10942);
+		});
 		
 		scriptManager.bind(EventType.OPHELD1, 11950, function (ctx) {//Snow globe
 			widget.openCentral(ctx.player, 659, false);
@@ -93,8 +136,7 @@ module.exports = (function () {
 			ENGINE.playerForceSay(ctx.player, "Alas!", false);
 		    anim.run(ctx.player, 2840);
 		});
-		
-		
+			
 		scriptManager.bind(EventType.OPHELD2, 4565, function (ctx) {//basket of eggs
 			ENGINE.setRenderAnim(ctx.player, 594);
 		});
@@ -123,6 +165,10 @@ module.exports = (function () {
 		    anim.run(ctx.player, 2844);
 		});
 
+		scriptManager.bind(EventType.OPHELD3, 20720, function (ctx) {//Firework
+			anim.run(ctx.player, 733);//find gfx
+		});
+		
 		scriptManager.bind(EventType.OPHELD3, 14742, function (ctx) {//Lily of the valley
 			anim.run(ctx.player, 11622);
 		});
@@ -200,11 +246,27 @@ module.exports = (function () {
 			anim.addSpotAnim(ctx.player, 263);
 		});
 
+		scriptManager.bind(EventType.OPWORN1, 12844, function (ctx) {//Toy kite
+			anim.run(ctx.player, 8990);
+		});
+		
+		scriptManager.bind(EventType.OPWORN1, 24412, function (ctx) {//Diamond jubilee souvenir flag white
+			anim.run(ctx.player, 16917);
+		});
+		
+		scriptManager.bind(EventType.OPWORN1, 24414, function (ctx) {//Diamond jubilee souvenir flag red
+			anim.run(ctx.player, 16917);
+		});
+		
+		scriptManager.bind(EventType.OPWORN1, 24416, function (ctx) {//Diamond jubilee souvenir flag blue
+			anim.run(ctx.player, 16917);
+		});
+		
 		scriptManager.bind(EventType.OPWORN2, 20084, function (ctx) {//Golden hammer
 		    anim.run(ctx.player, 15149);
 			anim.addSpotAnim(ctx.player, 2953);
 		});
-		
+
 		scriptManager.bind(EventType.OPWORN2, 15673, function (ctx) {//Squirrel Ears juggle
 		    anim.run(ctx.player, 12265);
 			anim.addSpotAnim(ctx.player, 2145);

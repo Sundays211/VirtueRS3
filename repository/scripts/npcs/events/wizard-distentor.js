@@ -19,44 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('util');
-var widget = require('widget');
+/* globals EventType, */
 
+var dialog = require('dialog');
+var util = require('util');
 module.exports = (function () {
 	return {
-		init : init
+	init : init
 	};
 	
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1446, function (ctx) {
-	widget.setText(ctx.player, 1446, 94, util.getName(ctx.player));
-	widget.setText(ctx.player, 1446, 93, ctx.player.getModel().setPrefixTitle());		
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1560, function (ctx) {
-	widget.open(ctx.player, 1560, 16, 1558, true);//
-	widget.open(ctx.player, 1560, 18, 1557, true);//Skills
-	widget.open(ctx.player, 1560, 17, 1559, true);//Combat stats	
-	});	
-	scriptManager.bind(EventType.IF_BUTTON, 1446, function (ctx) {
-	switch (ctx.component) {
-	case 108:
-	widget.openCentral(ctx.player, 1561, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1560, function (ctx) {
-	switch (ctx.component) {
-	case 22:
-	widget.closeOverlaySub(ctx.player, 1024, true);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;	
-	}		
-	});
-	}
+		
+	   scriptManager.bind(EventType.OPNPC1, 14748, function (ctx) {
+	        dialog.builder(ctx.player).chatplayer("Merry Christmas Distentor!")
+			.chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"!")
+			.chatplayer("So, what do you think of the banquet?")
+			.chatnpc(ctx.npc, "It's okay, the turkey isn't dancing to the table but the<br> snow imps are good waiters.")
+			.chatplayer("Did you try any of the pudding?")
+			.chatnpc(ctx.npc, "I did! I may not be a big pudding fan, but anything cooked<br> in a cannon has to be tried!")
+			.chatplayer("You are braver then I am.")
+			.finish();
+	   });	
+	   
+    }
+	
 })();
