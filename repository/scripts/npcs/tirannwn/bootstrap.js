@@ -3,8 +3,10 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./fight-arena'),
-		require('./piscatoris-fishing-colony')
+		require('./clothears'),
+		require('./creakyknees'),	
+		require('./greasycheeks'),
+		require('./smellytoes')	
 	];
 	
 	for (var i in modules) {
