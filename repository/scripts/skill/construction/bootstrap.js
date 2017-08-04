@@ -1,10 +1,10 @@
 /**
- * Module to initialise the kandarin system script bindings.
+ * Module to initialise the cooking script bindings.
  */
+
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./fight-arena'),
-		require('./piscatoris-fishing-colony')
+		require('./house')
 	];
 	
 	for (var i in modules) {

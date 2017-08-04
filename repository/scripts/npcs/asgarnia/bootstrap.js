@@ -4,7 +4,8 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./brian'),
-        require('./rommik')			
+        require('./rommik'),
+		require('./stubthumb')
 	];
 	
 	for (var i in modules) {
