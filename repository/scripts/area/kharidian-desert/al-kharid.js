@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Inv */
+/* globals EventType */
 var dialog = require('dialog');
 module.exports = (function () {
 	return {
@@ -33,7 +33,7 @@ module.exports = (function () {
 			.mesbox("<col=800000>The Kharidian Desert is a VERY dangerous place. Beware of high<br><col=800000> temperatures, sandstorms, quicksand, bandits, slavers, kalphites,<br><col=800000> monkeys, crocodiles, and acts of vengeful, goddesses bent on the total<br><col=800000> destruction of all life in the desert.")
 			.mesbox("No responsibility is taken by shantay if anything bad should happen to you<br> under any circumstances whatsoever.")
 			.finish();
-		});		
+		});
 		
 	}
 })();

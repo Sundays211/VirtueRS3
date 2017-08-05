@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Expression */
+/* globals EventType */
 var dialog = require('dialog');
 
 module.exports = (function () {

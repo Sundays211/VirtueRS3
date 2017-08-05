@@ -39,7 +39,21 @@ public interface EntityAPI {
 	 * @param length The number of client cycles required to perform the move
 	 */
 	public void forceMove (Entity entity, CoordGrid coords, int length);
-	
+
+	/**
+	 * Gradually moves the entity from it's current coordinates to the final coords, via the intermediate coords.
+	 * Moves from start to intermediate over {@code intermediateDelay}, then to final over {@code totalLength}
+	 * @param entity The entity to move
+	 * @param intermediateCoords The intermediate coordinates to move to
+	 * @param intermediateDelay The time taken to move to the intermediate coords
+	 * @param finalCoords The final coordinates to move to
+	 * @param totalLength The total time taken to move from the current coords to the final coords
+	 */
+	public default void forceMove (Entity entity, CoordGrid intermediateCoords, int intermediateDelay, 
+			CoordGrid finalCoords, int totalLength) {
+		forceMove(entity, intermediateCoords, intermediateDelay, finalCoords, totalLength, finalCoords);
+	}
+
 	/**
 	 * Gradually moves the entity from it's current coordinates to the final coords, via the intermediate coords.
 	 * Moves from start to intermediate over {@code intermediateDelay}, then to final over {@code totalLength}
