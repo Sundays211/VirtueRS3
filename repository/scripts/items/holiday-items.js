@@ -35,26 +35,26 @@ module.exports = (function () {
 		init : init
 	};
 	
-	function init (scriptManager) {	 
-	    scriptManager.bind(EventType.OPHELD1, 36093, function (ctx) {//Large dungeoneering token box
-	    	chat.sendMessage(ctx.player, "<col=00ff00>You gain 3,970 dungeoneering tokens. You now have "+ varp(ctx.player, 1097) +" tokens.");	 
+	function init (scriptManager) {
+		scriptManager.bind(EventType.OPHELD1, 36093, function (ctx) {//Large dungeoneering token box
+			chat.sendMessage(ctx.player, "<col=00ff00>You gain 3,970 dungeoneering tokens. You now have "+ varp(ctx.player, 1097) +" tokens.");	 
 		});
-	    
+
 		scriptManager.bind(EventType.OPHELD1, 19832, function (ctx) {//Bone brooch
 			anim.addSpotAnim(ctx.player, 2838);
 			anim.run(ctx.player, 14870, function () {
 				ctx.player.getModel().setRender(Render.NPC);
 				ctx.player.getModel().setNPCId(12373);
 				ctx.player.getModel().refresh();
-				anim.run(ctx.player, 520);	
-		    });
-		    varc(ctx.player, 1727, 1);
-			widget.openOverlaySub(ctx.player, 1008, 375, false);	
-		});	
+				anim.run(ctx.player, 520);
+			});
+			varc(ctx.player, 1727, 1);
+			widget.openOverlaySub(ctx.player, 1008, 375, false);
+		});
 		
 		scriptManager.bind(EventType.OPHELD1, 20722, function (ctx) {//Firecracker
 			anim.run(ctx.player, 12529);
-		    //anim.addSpotAnim(ctx.player, 3953);find gfx
+			//anim.addSpotAnim(ctx.player, 3953);find gfx
 			inv.take(ctx.player, 20722, 1);
 		});
 		
@@ -72,22 +72,22 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.OPHELD1, 2520, function (ctx) {//Toy horsy brown
 			anim.run(ctx.player, 918);
-			_entity.say(ctx.player, "Just say neigh to gambling!")
+			_entity.say(ctx.player, "Just say neigh to gambling!");
 		});
 		
 		scriptManager.bind(EventType.OPHELD1, 2522, function (ctx) {//Toy horsy white
 			anim.run(ctx.player, 919);
-			_entity.say(ctx.player, "Just say neigh to gambling!")
+			_entity.say(ctx.player, "Just say neigh to gambling!");
 		});
 		
 		scriptManager.bind(EventType.OPHELD1, 2524, function (ctx) {//Toy horsy black
 			anim.run(ctx.player, 920);
-			_entity.say(ctx.player, "Just say neigh to gambling!")
+			_entity.say(ctx.player, "Just say neigh to gambling!");
 		});
 		
 		scriptManager.bind(EventType.OPHELD1, 2526, function (ctx) {//Toy horsy grey
 			anim.run(ctx.player, 921);
-			_entity.say(ctx.player, "Just say neigh to gambling!")
+			_entity.say(ctx.player, "Just say neigh to gambling!");
 		});
 		
 		scriptManager.bind(EventType.OPHELD1, 20725, function (ctx) {//Souvenir mug
@@ -108,23 +108,23 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPHELD1, 28134, function (ctx) {//sparkler
-		    anim.run(ctx.player, 20139);
+			anim.run(ctx.player, 20139);
 			anim.addSpotAnim(ctx.player, 3953);
 			inv.take(ctx.player, 28134, 1);
 		});
 		
-	    scriptManager.bind(EventType.OPHELD1, 6865, function (ctx) {//blue marionette jump
-		    anim.run(ctx.player, 3003);
+		scriptManager.bind(EventType.OPHELD1, 6865, function (ctx) {//blue marionette jump
+			anim.run(ctx.player, 3003);
 			anim.addSpotAnim(ctx.player, 511);
 		});
-	    
+
 		scriptManager.bind(EventType.OPHELD1, 6866, function (ctx) {//green marionette jump
-		    anim.run(ctx.player, 3003);
+			anim.run(ctx.player, 3003);
 			anim.addSpotAnim(ctx.player, 515);
 		});
 		
 		scriptManager.bind(EventType.OPHELD1, 6867, function (ctx) {//red marionette jump
-		    anim.run(ctx.player, 3003);
+			anim.run(ctx.player, 3003);
 			anim.addSpotAnim(ctx.player, 507);
 		});
 		
@@ -134,7 +134,7 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.OPHELD1, 6722, function (ctx) {//Zombie head talk at
 			ENGINE.playerForceSay(ctx.player, "Alas!", false);
-		    anim.run(ctx.player, 2840);
+			anim.run(ctx.player, 2840);
 		});
 			
 		scriptManager.bind(EventType.OPHELD2, 4565, function (ctx) {//basket of eggs
@@ -142,17 +142,17 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPHELD2, 6865, function (ctx) {//blue marionette walk
-		    anim.run(ctx.player, 3004);
+			anim.run(ctx.player, 3004);
 			anim.addSpotAnim(ctx.player, 512);
 		});
 		
 		scriptManager.bind(EventType.OPHELD2, 6866, function (ctx) {//green marionette walk
-		    anim.run(ctx.player, 3004);
+			anim.run(ctx.player, 3004);
 			anim.addSpotAnim(ctx.player, 516);
 		});
 		
 		scriptManager.bind(EventType.OPHELD2, 6867, function (ctx) {//red marionette walk
-		    anim.run(ctx.player, 3004);
+			anim.run(ctx.player, 3004);
 			anim.addSpotAnim(ctx.player, 508);
 		});
 		
@@ -162,7 +162,7 @@ module.exports = (function () {
 		
 		scriptManager.bind(EventType.OPHELD2, 6722, function (ctx) {//Zombie head Display
 			ENGINE.playerForceSay(ctx.player, "Mwuhahahaha!", false);
-		    anim.run(ctx.player, 2844);
+			anim.run(ctx.player, 2844);
 		});
 
 		scriptManager.bind(EventType.OPHELD3, 20720, function (ctx) {//Firework
@@ -174,17 +174,17 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPHELD3, 6865, function (ctx) {//blue marionette bow
-		    anim.run(ctx.player, 3005);
+			anim.run(ctx.player, 3005);
 			anim.addSpotAnim(ctx.player, 513);
 		});
 		
 		scriptManager.bind(EventType.OPHELD3, 6866, function (ctx) {//green marionette bow
-		    anim.run(ctx.player, 3005);
+			anim.run(ctx.player, 3005);
 			anim.addSpotAnim(ctx.player, 517);
 		});
 		
 		scriptManager.bind(EventType.OPHELD3, 6867, function (ctx) {//red marionette bow
-		    anim.run(ctx.player, 3005);
+			anim.run(ctx.player, 3005);
 			anim.addSpotAnim(ctx.player, 509);
 		});
 		
@@ -193,22 +193,22 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPHELD3, 15353, function (ctx) {//eek play
-		    anim.run(ctx.player, 12490);
+			anim.run(ctx.player, 12490);
 			anim.addSpotAnim(ctx.player, 2178);
 		});
 
 		scriptManager.bind(EventType.OPHELD4, 6865, function (ctx) {//blue marionette dance
-		    anim.run(ctx.player, 3006);
+			anim.run(ctx.player, 3006);
 			anim.addSpotAnim(ctx.player, 514);
 		});
 		
 		scriptManager.bind(EventType.OPHELD4, 6866, function (ctx) {//green marionette dance
-		    anim.run(ctx.player, 3006);
+			anim.run(ctx.player, 3006);
 			anim.addSpotAnim(ctx.player, 518);
 		});
 		
 		scriptManager.bind(EventType.OPHELD4, 6867, function (ctx) {//red marionette dance
-		    anim.run(ctx.player, 3006);
+			anim.run(ctx.player, 3006);
 			anim.addSpotAnim(ctx.player, 510);
 		});
 		
@@ -237,12 +237,12 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPWORN1, 12645, function (ctx) {//Chocatrice cape
-		    anim.run(ctx.player, 8903);
+			anim.run(ctx.player, 8903);
 			anim.addSpotAnim(ctx.player, 1566);
 		});
 		
 		scriptManager.bind(EventType.OPWORN1, 10507, function (ctx) {//Reindeer hat prance
-		    anim.run(ctx.player, 5059);
+			anim.run(ctx.player, 5059);
 			anim.addSpotAnim(ctx.player, 263);
 		});
 
@@ -263,12 +263,12 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.OPWORN2, 20084, function (ctx) {//Golden hammer
-		    anim.run(ctx.player, 15149);
+			anim.run(ctx.player, 15149);
 			anim.addSpotAnim(ctx.player, 2953);
 		});
 
 		scriptManager.bind(EventType.OPWORN2, 15673, function (ctx) {//Squirrel Ears juggle
-		    anim.run(ctx.player, 12265);
+			anim.run(ctx.player, 12265);
 			anim.addSpotAnim(ctx.player, 2145);
 		});
 	}

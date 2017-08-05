@@ -19,22 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Inv */
+/* globals EventType */
 
 var dialog = require('dialog');
 module.exports = (function () {
 	return {
-	init : init
+		init : init
 	};
 	
 	function init (scriptManager) {
-		
-	   scriptManager.bind(EventType.OPNPC1, 17486, function (ctx) {
-	        dialog.builder(ctx.player).chatnpc(17507, "Greetings, adventurer. I've been called by Duke Horacio to<br> strengthen the magical defences of the town and the<br> castle. I would love to chat, but bear in mind that this is a<br> very delicate magical operation. Please let me")
-            .chatnpc(17507, "concentrate.")
-	        .finish();	
-	   });	
-
+		scriptManager.bind(EventType.OPNPC1, 17486, function (ctx) {
+			dialog.builder(ctx.player).chatnpc(17507, "Greetings, adventurer. I've been called by Duke Horacio to<br> strengthen the magical defences of the town and the<br> castle. I would love to chat, but bear in mind that this is a<br> very delicate magical operation. Please let me")
+				.chatnpc(17507, "concentrate.").finish();	
+		});
 	}
 	
 })();

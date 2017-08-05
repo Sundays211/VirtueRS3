@@ -19,22 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Inv */
+/* globals EventType */
 
 var dialog = require('dialog');
 module.exports = (function () {
 	return {
-	init : init
+		init : init
 	};
-	
-	function init (scriptManager) {
-		
-	   scriptManager.bind(EventType.OPNPC1, 14936, function (ctx) {
-	        dialog.builder(ctx.player).chatnpc(ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actuall have")
-            .chatnpc(ctx.npc, "proper equipment and traning!")
-	        .finish();	
-	   });	
 
+	function init (scriptManager) {
+		scriptManager.bind(EventType.OPNPC1, 14936, function (ctx) {
+			dialog.builder(ctx.player).chatnpc(ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actuall have")
+			.chatnpc(ctx.npc, "proper equipment and traning!").finish();	
+		});	
 	}
-	
 })();

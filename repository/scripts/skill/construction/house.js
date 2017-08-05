@@ -20,114 +20,116 @@
  * SOFTWARE.
  */
  
-/* globals EventType */
+/* globals EventType, MAP_ENGINE */
 var entityMap = require('map/entity');
 var coords = require('map/coords');
 var chat = require('chat');
 var dialog = require('dialog');
+
 module.exports = (function () {
-	
 	var RoomTypes = {
-    DEFAULT : {
-        level : 1,
-        tile : api.getCoords(1864, 5056, 0),
-    },
-    GARDEN : {
-        level : 1,
-        tile : api.getCoords(1859, 5066, 0),
-    },
-    PARLOUR : {
-        level : 1,
-        tile : api.getCoords(1856, 5112, 0),
-    },
-    KITCEN : {
-        level : 5,
-        tile : api.getCoords(1872, 5112, 0),
-    },
-    DINING : {
-        level : 10,
-        tile : api.getCoords(1890, 5112, 0),
-    },
-    WORK_SHOP : {
-        level : 15,
-        tile : api.getCoords(1856, 5096, 0),
-    },
-    BEDROOM : {
-        level : 20,
-        tile : api.getCoords(1904, 5112, 0),
-    },
-    SKILL_HALL : {
-        level : 25,
-        tile : api.getCoords(1880, 5104, 0),
-    },
-    GAME : {
-        level : 30,
-        tile : api.getCoords(1864, 5104, 0),
-    },
-    COMBAT : {
-        level : 32,
-        tile : api.getCoords(1880, 5088, 0),
-    },
-    QUEST_HALL : {
-        level : 35,
-        tile : api.getCoords(1912, 5104, 0),
-    },
-    MENAGERIE : {
-        level : 37,
-        tile : api.getCoords(1912, 5072, 0),
-    },
-    STUDY : {
-        level : 40,
-        tile : api.getCoords(1888, 5096, 0),
-    },
-    COSTUME_ROOM : {
-        level : 42,
-        tile : api.getCoords(1904, 5064, 0),
-    },
-    CHAPEL : {
-        level : 45,
-        tile : api.getCoords(1872, 5096, 0),
-    },
-    PORTAL_CHAMBER : {
-        level : 50,
-        tile : api.getCoords(1864, 5088, 0),
-    },
-    FORMAL_GARDEN : {
-        level : 55,
-        tile : api.getCoords(1920, 5064, 0),
-    },
-    THRONE : {
-        level : 60,
-        tile : api.getCoords(1904, 5096, 0),
-    },
-    AQUARIUM : {
-        level : 63,
-        tile : api.getCoords(1912, 5058, 0),
-    },
-    OUBLIETTE : {
-        level : 65,
-        tile : api.getCoords(1904, 5080, 0),
-    },
-    DUNGEON : {
-        level : 70,
-        tile : api.getCoords(1873, 5081, 0),
-    },
-    PIT_DUNGEON : {
-        level : 70,
-        tile : api.getCoords(1897, 5073, 0),
-    },
-    TREASURE_ROOM : {
-        level : 75,
-        tile : api.getCoords(1913, 5089, 0),
-    },
-    FLOOR_2 : {
-        level : 1,
-        tile : api.getCoords(1903, 5095, 0),
-    },
-};
+		DEFAULT : {
+			level : 1,
+			tile : coords(1864, 5056, 0),
+		},
+	    GARDEN : {
+	        level : 1,
+	        tile : coords(1859, 5066, 0),
+	    },
+	    PARLOUR : {
+	        level : 1,
+	        tile : coords(1856, 5112, 0),
+	    },
+	    KITCEN : {
+	        level : 5,
+	        tile : coords(1872, 5112, 0),
+	    },
+	    DINING : {
+	        level : 10,
+	        tile : coords(1890, 5112, 0),
+	    },
+	    WORK_SHOP : {
+	        level : 15,
+	        tile : coords(1856, 5096, 0),
+	    },
+	    BEDROOM : {
+	        level : 20,
+	        tile : coords(1904, 5112, 0),
+	    },
+	    SKILL_HALL : {
+	        level : 25,
+	        tile : coords(1880, 5104, 0),
+	    },
+	    GAME : {
+	        level : 30,
+	        tile : coords(1864, 5104, 0),
+	    },
+	    COMBAT : {
+	        level : 32,
+	        tile : coords(1880, 5088, 0),
+	    },
+	    QUEST_HALL : {
+	        level : 35,
+	        tile : coords(1912, 5104, 0),
+	    },
+	    MENAGERIE : {
+	        level : 37,
+	        tile : coords(1912, 5072, 0),
+	    },
+	    STUDY : {
+	        level : 40,
+	        tile : coords(1888, 5096, 0),
+	    },
+	    COSTUME_ROOM : {
+	        level : 42,
+	        tile : coords(1904, 5064, 0),
+	    },
+	    CHAPEL : {
+	        level : 45,
+	        tile : coords(1872, 5096, 0),
+	    },
+	    PORTAL_CHAMBER : {
+	        level : 50,
+	        tile : coords(1864, 5088, 0),
+	    },
+	    FORMAL_GARDEN : {
+	        level : 55,
+	        tile : coords(1920, 5064, 0),
+	    },
+	    THRONE : {
+	        level : 60,
+	        tile : coords(1904, 5096, 0),
+	    },
+	    AQUARIUM : {
+	        level : 63,
+	        tile : coords(1912, 5058, 0),
+	    },
+	    OUBLIETTE : {
+	        level : 65,
+	        tile : coords(1904, 5080, 0),
+	    },
+	    DUNGEON : {
+	        level : 70,
+	        tile : coords(1873, 5081, 0),
+	    },
+	    PIT_DUNGEON : {
+	        level : 70,
+	        tile : coords(1897, 5073, 0),
+	    },
+	    TREASURE_ROOM : {
+	        level : 75,
+	        tile : coords(1913, 5089, 0),
+	    },
+	    FLOOR_2 : {
+	        level : 1,
+	        tile : coords(1903, 5095, 0),
+	    },
+	};
 	
 	return {
-		init : init
+		init : init,
+		enterHouse : enterHouse,
+		rooms : RoomTypes
 	};
 	
 	function init (scriptManager) {
@@ -142,7 +144,7 @@ module.exports = (function () {
 			}, "Go to a friend's house.", function () {
 				joinHouse(ctx.player);
 			}, "Never mind.", function () {
-            });	
+			});
 		});
 		
 		scriptManager.bind(EventType.OPLOC2, [ 15477, 15478, 15479, 15480, 15481, 15482, 93284, 98247], function (ctx) {//your house
@@ -199,23 +201,23 @@ module.exports = (function () {
 
 	function enterHouse (player) {
 		var house = MAP_ENGINE.createArea();
-	    for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
-		for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-			MAP_ENGINE.setChunk(house, xOffSet, yOffSet, 1, 232, 632, 0, 0);
+		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
+			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
+				MAP_ENGINE.setChunk(house, xOffSet, yOffSet, 1, 232, 632, 0, 0);
+			}
 		}
-	    }
-	    //MAP_ENGINE.setChunk(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
-	    //Format: region, housePosX, housePosY, houseLevel, originalPosX, originalPosY, originalLevel, rotation
-	    MAP_ENGINE.setChunk(house, 4, 4, 1, 232, 633, 0, 0);//Add a garden at 2,2
-	    MAP_ENGINE.setChunk(house, 4, 5, 1, 232, 639, 0, 0);//Add a parlor at 2,3
-	    MAP_ENGINE.setChunk(house, 4, 5, 2, 235, 634, 0, 0);//Add a parlor Roof
-	    MAP_ENGINE.setChunk(house, 5, 5, 1, 234, 637, 0, 0);//Add a parlor at 2,4
-	    MAP_ENGINE.buildArea(house);
-	    var squareX = MAP_ENGINE.getSquareX(house);
-	    var squareY = MAP_ENGINE.getSquareY(house);
+		//MAP_ENGINE.setChunk(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
+		//Format: region, housePosX, housePosY, houseLevel, originalPosX, originalPosY, originalLevel, rotation
+		MAP_ENGINE.setChunk(house, 4, 4, 1, 232, 633, 0, 0);//Add a garden at 2,2
+		MAP_ENGINE.setChunk(house, 4, 5, 1, 232, 639, 0, 0);//Add a parlor at 2,3
+		MAP_ENGINE.setChunk(house, 4, 5, 2, 235, 634, 0, 0);//Add a parlor Roof
+		MAP_ENGINE.setChunk(house, 5, 5, 1, 234, 637, 0, 0);//Add a parlor at 2,4
+		MAP_ENGINE.buildArea(house);
+		var squareX = MAP_ENGINE.getSquareX(house);
+		var squareY = MAP_ENGINE.getSquareY(house);
 		entityMap.setCoords(player, coords(squareX, squareY, 1, 10, 10));
-	    player.setHouse(house);
-	    chat.sendMessage(player, "Welcome to your house!");
+		player.setHouse(house);
+		chat.sendMessage(player, "Welcome to your house!");
 	}
 
 	
@@ -225,9 +227,7 @@ module.exports = (function () {
 			entityMap.setCoords(player, entityMap.getCoords(targetPlayer));
 			//chat.sendMessage(player, "They do not seem to be at home.");
 			//chat.sendMessage(player, "That player is offline, or has privacy mode enabled.");
-		    //chat.sendMessage(player, "They don't own a house.");
+			//chat.sendMessage(player, "They don't own a house.");
 		}); 
-    }
-	
-	
+	}
 })();

@@ -25,45 +25,44 @@ var dialog = require('dialog');
 var varp = require('engine/var/player');
 var inv = require('inv');
 var quest = require('../../quest');
+
 module.exports = (function () {
 	return {
-	init : init
+		init : init
 	};
-	
+
 	function init (scriptManager) {
 		//173{name=Sheep Shearer, progressVarps=[[2163, 1, 21]], questPoints=0, spriteId=26127}
-	   scriptManager.bind(EventType.OPNPC1, 758, function (ctx) {
-	        var player = ctx.player;
-	        var npc = ctx.npc;
-			var msg = ""
-		    dialog.builder(player).chatnpc(npc, "What are you doing on my land? You're not the one who<br> keeps leaving all my gates open and letting out all my<br> chickens are you?")
+		scriptManager.bind(EventType.OPNPC1, 758, function (ctx) {
+			var player = ctx.player;
+			var npc = ctx.npc;
+			dialog.builder(player).chatnpc(npc, "What are you doing on my land? You're not the one who<br> keeps leaving all my gates open and letting out all my<br> chickens are you?")
 			.then(function () {	
 			if(quest.hasFinished(player, 173)) {		
-			    dialog.builder(player).multi3("CHOOSE AN OPTION", "I'm looking for something to kill.", function () {
-	                somethingtokill(player,npc);
-	            }, "I'm lost.", function () { 
-			        imlost(player,npc); 
-		        }, "Can you tell me about the battlefield?", function () {   
-			        aboutbattlefield(player,npc); 
-	            });	
-			} else if(quest.hasStarted(player, 173)) {	
-			    if(inv.has(player, 15416)) {
+				dialog.builder(player).multi3("CHOOSE AN OPTION", "I'm looking for something to kill.", function () {
+					somethingtokill(player,npc);
+				}, "I'm lost.", function () { 
+					imlost(player,npc); 
+				}, "Can you tell me about the battlefield?", function () {
+					aboutbattlefield(player,npc); 
+				});
+			} else if(quest.hasStarted(player, 173)) {
+				if(inv.has(player, 15416)) {
 					dialog.builder(player).multi3("CHOOSE AN OPTION", "I have some balls of black wool for you.", function () {
-					dialog.builder(player).chatnpc(npc, "Give'em here then.") 	
-					.finish();
-				    }, "Can you remind me how to get balls of wool?", function () { 
-				        rememberhow(player,npc);
-		            }, "Can you tell me about the battlefield?", function () {   
-			            aboutbattlefield(player,npc); 
-	                });	
-			    } else {
-                    dialog.builder(player).multi3("CHOOSE AN OPTION", "How meny more balls of black wool do you need?", function () {
-					    dialog.builder(player).chatnpc(npc, "You need to collect "+ wool(player,msg) +" more balls of wool")
+						dialog.builder(player).chatnpc(npc, "Give'em here then.").finish();
+					}, "Can you remind me how to get balls of wool?", function () {
+						rememberhow(player,npc);
+					}, "Can you tell me about the battlefield?", function () {
+						aboutbattlefield(player,npc); 
+					});
+				} else {
+					dialog.builder(player).multi3("CHOOSE AN OPTION", "How meny more balls of black wool do you need?", function () {
+						dialog.builder(player).chatnpc(npc, "You need to collect "+ wool(player) +" more balls of wool")
 						.then(function () {
-						    if(inv.has(player, 15415)) {
+							if(inv.has(player, 15415)) {
 								dialog.builder(player).chatplayer("I've got some wool. I've not managed to make it into a<br> ball' though.")
-					            .chatnpc(npc, "Well, go find a spinning wheel then. You can find one on<br> the first floor of Lumbridge Castle; just turn right and<br> follow the path when leaving my house and you'll find<br> Lumbridge.") 
-					            .finish();  
+									.chatnpc(npc, "Well, go find a spinning wheel then. You can find one on<br> the first floor of Lumbridge Castle; just turn right and<br> follow the path when leaving my house and you'll find<br> Lumbridge.") 
+									.finish();
 							} else {	
 							    dialog.builder(player).chatplayer("I haven't got any at the moment.")
 					            .chatnpc(npc, "Ah, well, at least you haven't been eaten.")  
@@ -107,77 +106,36 @@ module.exports = (function () {
 			
 	   });	
 	}
-	
+
 	function startquest (player, npc) {
-	    dialog.builder(player).chatplayer("So is this a quest?") 
+		dialog.builder(player).chatplayer("So is this a quest?") 
 		.chatnpc(npc,"No, it isn't. It's work.<br> You do what I say, then you get paid.") 
 		.multi2("SELECT AN OPTION", "That doesn't sound very exciting.", function () {
-		    dialog.builder(player).chatnpc(npc,"Well, what do you expect if you ask a farmer?") 
-            .finish(); 	
+			dialog.builder(player).chatnpc(npc,"Well, what do you expect if you ask a farmer?") 
+			.finish(); 	
 		}, "I'll take the job.", function () { 
-		    dialog.builder(player).chatnpc(npc,"Good. Hopefully, you be safe from 'The Thing'! Do you<br> actually know how to shear sheep?") 
+			dialog.builder(player).chatnpc(npc,"Good. Hopefully, you be safe from 'The Thing'! Do you<br> actually know how to shear sheep?") 
 			.multi3("SELECT AN OPTION", "Of course!", function () {
 				shearsheepyes(player,npc);    
 			}, "Actually, no I don't.", function () { 
-			    shearsheepno(player,npc); 
-            }, "What do you mean, 'The Thing'?", function () {
+				shearsheepno(player,npc); 
+			}, "What do you mean, 'The Thing'?", function () {
 				dialog.builder(player).chatnpc(npc,"Well, now, no one has ever seen 'The Thing'. That's why we<br> call it 'The Thing', 'cos we don't know what it is.")  
 				.chatnpc(npc,"Some say it's a black-hearted shape-shifter, hungering for<br> the souls of decent, hardworking folk like me. Others say<br> it's just a sheep.") 
-			    .chatnpc(npc,"Well, I don't have all day to stand around and gossip. Did<br> you say you know how to shear sheep?") 
+				.chatnpc(npc,"Well, I don't have all day to stand around and gossip. Did<br> you say you know how to shear sheep?") 
 				.multi2("SELECT AN OPTION", "Of course!", function () {
-					shearsheepyes(player,npc);   
+					shearsheepyes(player,npc);
 				}, "Actually, no I don't.", function () { 
-                     shearsheepno(player,npc); 				
+					shearsheepno(player,npc); 
 				});
-			});		
-		});	
+			});
+		});
 	}
-	
-	function wool (player, msg) {
-		switch(varp(player, 2163)) {
-		case 1:
-		return msg = "20";
-		case 2:
-		return msg = "19";
-		case 3:
-		return msg = "18";
-		case 4:
-		return msg = "17";
-		case 5:
-		return msg = "16";
-		case 6:
-		return msg = "15";
-		case 7:
-		return msg = "14";
-		case 8:
-		return msg = "13";
-		case 9:
-		return msg = "12";
-		case 10:
-		return msg = "11";
-		case 11:
-		return msg = "10";
-		case 12:
-		return msg = "9";
-		case 13:
-		return msg = "8";
-		case 14:
-		return msg = "7";
-		case 15:
-		return msg = "6";
-		case 16:
-		return msg = "5";
-		case 17:
-		return msg = "4";
-		case 18:
-		return msg = "3";
-		case 19:
-		return msg = "2";
-		case 20:
-		return msg = "1";
-		}
+
+	function wool (player) {
+		return 21 - varp(player, 2163);
 	}
-	
+
 	function rememberhow (player, npc) {
 		dialog.builder(player).chatnpc(npc,"Sure.You need to shear sheep and then spin the wool on a<br> spinning wheel. Anything else?")   
 		.multi3("SELECT AN OPTION", "Can you tell me how to shear sheep?", function () {
@@ -190,28 +148,28 @@ module.exports = (function () {
 	
 	function shearsheepno (player, npc) {
 		//maby it cheaks if has shears
-	    dialog.builder(player).chatnpc(npc,"Well, you're halfway there already. You have some shears<br> in you inventory. Just use those on a sheep to shear it.")
+		dialog.builder(player).chatnpc(npc,"Well, you're halfway there already. You have some shears<br> in you inventory. Just use those on a sheep to shear it.")
 		.chatplayer("That's all I have to do?") 
 		.chatnpc(npc,"Well, once you've collected some wool you'll need to spin it<br> into balls.")
 		.chatnpc(npc,"Do you know to spin wool?")
 		.multi2("SELECT AN OPTION", "I don't know how to spin wool, sorry.", function () {  
-		    spinwoolno(player,npc);  
+			spinwoolno(player,npc);  
 		}, "I'm something of an expert, actually.", function () { 
-		    spinwoolyes(player,npc);  
+			spinwoolyes(player,npc);  
 		});  
 	}
-	
+
 	function shearsheepyes (player, npc) {
-	    dialog.builder(player).chatnpc(npc,"And you know how to spin wool into balls?")
+		dialog.builder(player).chatnpc(npc,"And you know how to spin wool into balls?")
 		.multi2("SELECT AN OPTION", "I'm something of an expert, actually.", function () {  
-		    spinwoolyes(player,npc);  
+			spinwoolyes(player,npc);  
 		}, "I don't know how to spin wool, sorry.", function () { 
-		    spinwoolno(player,npc);  
+			spinwoolno(player,npc);  
 		});
 	}
 	
 	function spinwoolno (player, npc) { 
-	    dialog.builder(player).chatnpc(npc,"Don't worry, it's quite simple.")
+		dialog.builder(player).chatnpc(npc,"Don't worry, it's quite simple.")
 		.chatnpc(npc,"The nearest spinning wheel can be found on the first floor<br> of Lumbridge Castle, South-east of here.")
 		.chatplayer("Thank you.") 
 		.finish(); 

@@ -22,22 +22,22 @@
 /* globals EventType, */
 
 var dialog = require('dialog');
-var util = require('util');
 var _entity = require('engine/entity');
+
 module.exports = (function () {
 	return {
 	init : init
 	};
 	
 	function init (scriptManager) {
-		
-	   scriptManager.bind(EventType.OPNPC1, 14758, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas Timmy!")
+
+		scriptManager.bind(EventType.OPNPC1, 14758, function (ctx) {
+		dialog.builder(ctx.player).chatplayer("Merry Christmas Timmy!")
 			.then(function () {
-			_entity.say(ctx.npc, "RAWR!!")
+				_entity.say(ctx.npc, "RAWR!!");
 			});
-	   });	
-	   
-    }
+		});
+
+	}
 	
 })();
