@@ -280,6 +280,40 @@ public class SceneLocation extends Node {
 	}
 	
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((baseTile == null) ? 0 : baseTile.hashCode());
+		result = prime * result + id;
+		result = prime * result + rotation;
+		result = prime * result + ((shape == null) ? 0 : shape.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SceneLocation other = (SceneLocation) obj;
+		if (baseTile == null) {
+			if (other.baseTile != null)
+				return false;
+		} else if (!baseTile.equals(other.baseTile))
+			return false;
+		if (id != other.id)
+			return false;
+		if (rotation != other.rotation)
+			return false;
+		if (shape != other.shape)
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString () {
 		return "Location[type="+id+", shape="+shape+", rotation="+rotation+", name="+getLocType().name+", tile="+baseTile+"]";
 	}
