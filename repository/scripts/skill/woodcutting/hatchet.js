@@ -22,7 +22,7 @@
 /* globals Inv, WearPos, Stat */
 var varbit = require('engine/var/bit');
 
-var config = require('engine/config');
+var _config = require('engine/config');
 var inv = require('inv');
 var chat = require('chat');
 var stat = require('stat');
@@ -40,46 +40,55 @@ module.exports = (function () {
 		BRONZE : {
 			objId : 1351,
 			level : 1,
+			bonus : 1,
 			anim : 21668
 		},
 		IRON : {
 			objId : 1349,
 			level : 1,
+			bonus : 2,
 			anim : 21667
 		},
 		STEEL : {
 			objId : 1353,
 			level : 6,
+			bonus : 3,
 			anim : 21666
 		},
 		BLACK : {
 			objId : 1361,
 			level : 11,
+			bonus : 4,
 			anim : 21665
 		},
 		MITHRIL : {
 			objId : 1355,
 			level : 21,
+			bonus : 5,
 			anim : 21664
 		},
 		ADAMANT : {
 			objId : 1357,
 			level : 31,
+			bonus : 7,
 			anim : 21663
 		},
 		RUNE : {
 			objId : 1359,
 			level : 41,
+			bonus : 10,
 			anim : 21662
 		},
 		DRAGON : {
 			objId : 6739,
 			level : 61,
+			bonus : 13,
 			anim : 21669
 		},
 		CRYSTAL : {
 			objId : 32645,
 			level : 71,
+			bonus : 16,
 			anim : 25003 //25182 for canoe ?
 		}
 	};
@@ -106,7 +115,7 @@ module.exports = (function () {
 		var playerLevel = stat.getLevel(player, Stat.WOODCUTTING);
 		var objId = inv.getObjId(player, Inv.EQUIPMENT, WearPos.WEAPON);
 		var hatchet;
-		if (objId !== -1 && config.objCategory(objId) === 35) {
+		if (objId !== -1 && _config.objCategory(objId) === 35) {
 			hatchet = lookupHatchet(objId);
 			if (typeof(hatchet) === "undefined") {
 				chat.sendDebugMessage(player, "Worn item "+objId+" is categorised as a hatchet but is not yet supported.");
@@ -116,7 +125,7 @@ module.exports = (function () {
 		}
 		var bestHatchet = null;
 		if (inv.hasTool(player, 1265)) {
-			bestHatchet = lookupHatchet(config.enumValue(7503, varbit(player, 18522)));
+			bestHatchet = lookupHatchet(_config.enumValue(7503, varbit(player, 18522)));
 			if (playerLevel < bestHatchet.level) {
 				return getNextLowestHatchet(playerLevel);
 			}
@@ -124,7 +133,7 @@ module.exports = (function () {
 
 		for (var slot=0; slot<28; slot++) {
 			objId = inv.getObjId(player, Inv.BACKPACK, slot);
-			if (objId !== -1 && config.objCategory(objId) === 35) {
+			if (objId !== -1 && _config.objCategory(objId) === 35) {
 				hatchet = lookupHatchet(objId);
 				if (typeof(hatchet) === "undefined") {
 					chat.sendDebugMessage(player, "Item "+objId+" found in backpack slot "+slot+" is categorised as a hatchet but is not yet supported.");
