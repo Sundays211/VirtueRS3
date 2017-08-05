@@ -66,57 +66,37 @@ module.exports = (function () {
 			logId : 1521,
 			respawnDelay : 15
 		},
-	    WILLOW : {
-	        level : 30,
-	        xp : 67.5,
-	        logId : 1519,
-	        baseTime : 60,
-	        randomTime : 4,
-	        stumpID : 1341,
-	        respawnDelay : 51,
-	        randomLife : 15
-	    },
-	    MAPLE : {
-	        level : 45,
-	        xp : 100,
-	        logId : 1517,
-	        baseTime : 83,
-	        randomTime : 16,
-	        stumpID : 51843,
-	        respawnDelay : 72,
-	        randomLife : 10
-	    },
-	    YEW : {
-	        level : 60,
-	        xp : 175,
-	        logId : 1515,
-	        baseTime : 120,
-	        randomTime : 17,
-	        stumpID : 1341,
-	        respawnDelay : 94,
-	        randomLife : 10
-	    },
-	    IVY : {
+		WILLOW : {
+			level : 30,
+			xp : 67.5,
+			logId : 1519,
+			respawnDelay : 51
+		},
+		MAPLE : {
+			level : 45,
+			xp : 100,
+			logId : 1517,
+			respawnDelay : 72
+		},
+		YEW : {
+			level : 60,
+			xp : 175,
+			logId : 1515,
+			respawnDelay : 94
+		},
+		/*IVY : {//TODO: Ivy needs to go in it's own script as it has custom logic
 	        level : 68,
 	        xp : 332.5,
-	        logId : -1,
-	        baseTime : 120,
-	        randomTime : 17,
-	        stumpID : 46319,
-	        respawnDelay : 58,
-	        randomLife : 10
-	    },
-	    MAGIC : {
-	        level : 75,
-	        xp : 250,
-	        logId : 1513,
-	        baseTime : 150,
-	        randomTime : 21,
-	        stumpID : 37824,
-	        respawnDelay : 121,
-	        randomLife : 10
-	    },
-	    CURSED_MAGIC : {
+	        logId : -1
+	        respawnDelay : 58
+	    },*/
+		MAGIC : {
+			level : 75,
+			xp : 250,
+			logId : 1513,
+			baseTime : 150
+		},
+		/*CURSED_MAGIC : {//TODO: These all need to go in their own scripts as they have custom logic
 	        level : 82,
 	        xp : 250,
 	        logId : 1513,
@@ -145,7 +125,7 @@ module.exports = (function () {
 			stumpID : -1,
 			respawnDelay : 130,
 			randomLife : 15
-		}
+		}*/
 	};
 
 	return {
@@ -154,6 +134,7 @@ module.exports = (function () {
 	};
 
 	function init (scriptManager) {
+		//Regular trees
 		scriptManager.bind(EventType.OPLOC1, 38760, function (ctx) {
 				chopTree(ctx.player, ctx.location, TreeType.NORMAL, 40350);
 		});
@@ -189,53 +170,137 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 38789, function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 40358);
 		});
-		
-		/*this.registerTree(TreeType.NORMAL, 1276, 1342);
-		this.registerTree(TreeType.NORMAL, 93384, 40352);
-		this.registerTree(TreeType.NORMAL, 79813, 79814);			
-		
-		this.registerTree(TreeType.SWAMP, 9387, 10951);
-		this.registerTree(TreeType.SWAMP, 9354, 11059);
-		this.registerTree(TreeType.SWAMP, 9366, 11864);
-		this.registerTree(TreeType.SWAMP, 9355, 11862);
-		this.registerTree(TreeType.SWAMP, 3300, 11865);
-		
-		this.registerTree(TreeType.DEAD, 68903, 68906 );
-		this.registerTree(TreeType.DEAD, 68901, 68904);
-		this.registerTree(TreeType.DEAD, 68902, 68905 );
-		this.registerTree(TreeType.DEAD, 11866, 9389);
-		this.registerTree(TreeType.DEAD, 1286, 1351);
-		this.registerTree(TreeType.DEAD, 1283, 1347);
-		this.registerTree(TreeType.DEAD, 1282, 1347);
-		this.registerTree(TreeType.DEAD, 1383, 1358);
-		this.registerTree(TreeType.DEAD, 47600, 47601);
-		this.registerTree(TreeType.DEAD, 47594, 47595);
-		this.registerTree(TreeType.DEAD, 47598, 47599);
-		this.registerTree(TreeType.DEAD, 47596, 47597);
-		this.registerTree(TreeType.DEAD, 1289, 1353);
-		this.registerTree(TreeType.DEAD, 69144, 69146);
-		this.registerTree(TreeType.DEAD, 24168, 24169);//dying tree
-		
-		this.registerTree(TreeType.DEAD, 4820, 4821);//Jungle tree
-		this.registerTree(TreeType.DEAD, 4818, 4819);//Jungle tree
-		
-		this.registerTree(TreeType.ACHEY, 69554, 69555);//achey tree
-		
-		this.registerTree(TreeType.EUCALYPTUS, 70071, 70073);//EUCALYPTUS tree needs fix
-		this.registerTree(TreeType.EUCALYPTUS, 70068, 70070);//EUCALYPTUS tree needs fix
-		
-		this.registerTree(TreeType.OAK, 38732, 38754);
-		this.registerTree(TreeType.OAK, 38731, 38741);
-		
-		this.registerTree(TreeType.WILLOW, 38616, 38725);
-        this.registerTree(TreeType.WILLOW, 38627, 38725);
-		this.registerTree(TreeType.WILLOW, 58006, 38725);
-		
-		this.registerTree(TreeType.MAPLE, 51843, 54766);
-		
-		this.registerTree(TreeType.YEW, 38755, 38759);
-		
-		this.registerTree(TreeType.MAGIC, 63176, 63179);*/
+
+		//Swamp trees
+		scriptManager.bind(EventType.OPLOC1, 9387, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 10951);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 9354, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 11059);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 9366, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 11864);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 9355, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 11862);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 3300, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 11865);
+		});
+
+		//Dead trees
+		scriptManager.bind(EventType.OPLOC1, 47594, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 47595);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 47596, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 47597);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 47598, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 47599);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 47600, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 47601);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 68901, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 68904);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 68902, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 68905);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 68903, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 68906);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 69144, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 69146);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 11866, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 9389);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 1282, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 1347);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 1383, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 1358);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 1286, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 1351);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 1289, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 1353);
+		});
+
+		//Dying tree
+		scriptManager.bind(EventType.OPLOC1, 24168, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 24169);
+		});
+
+		//Jungle tree
+		scriptManager.bind(EventType.OPLOC1, 4818, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 4819);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 4820, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 4821);
+		});
+
+		//Alchey tree
+		scriptManager.bind(EventType.OPLOC1, 69554, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.ACHEY, 69555);
+		});
+
+		//Eucalyptus
+		scriptManager.bind(EventType.OPLOC1, 70068, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.EUCALYPTUS, 70070);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 70071, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.EUCALYPTUS, 70073);
+		});
+
+		//Oak
+		scriptManager.bind(EventType.OPLOC1, 38731, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.OAK, 38741);
+		});
+
+		scriptManager.bind(EventType.OPLOC1, 38732, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.OAK, 38754);
+		});
+
+		//Willow
+		scriptManager.bind(EventType.OPLOC1, [ 38616, 38627, 58006 ] , function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.WILLOW, 38725);
+		});
+
+		//Maple
+		scriptManager.bind(EventType.OPLOC1, 51843 , function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.MAPLE, 54766);
+		});
+
+		//Yew
+		scriptManager.bind(EventType.OPLOC1, 38755 , function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.YEW, 38759);
+		});
+
+		//Magic
+		scriptManager.bind(EventType.OPLOC1, 63176 , function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.MAGIC, 63179);
+		});
 	}
 
 	function chopTree(player, location, treeType, stumpId) {
