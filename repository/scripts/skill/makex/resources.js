@@ -6,6 +6,7 @@ var varbit = require('engine/var/bit');
 var varc = require('engine/var/client');
 
 var inv = require('inv');
+var inventionMaterials = require('../invention/materials');
 
 module.exports = (function () {
 	return {
@@ -20,7 +21,7 @@ module.exports = (function () {
 		return getResourceCount(player, resourceId) > 0;
 	}
 	
-	function getResourceCount (player, resourceId, hasBeastOfBurden) {
+	function getResourceCount (player, resourceId, inventionMaterialId, hasBeastOfBurden) {
 		//See clientscript 7115
 		var amount = 0;
 		switch (resourceId) {
@@ -155,8 +156,8 @@ module.exports = (function () {
 				}
 				break;
 			case 36365://Invention material
-				//amount = script_12054(a2);
-				throw "Invention materials are not yet supported!";
+				amount = inventionMaterials.getTotal(player, inventionMaterialId);
+				break;
 			default:
 				//if (_map_members() == 0 && _oc_members(resourceId) == 1) {
 				//	amount = 0; 
@@ -174,7 +175,7 @@ module.exports = (function () {
 		return amount;
 	}
 	
-	function takeResources (player, resourceId, amount) {
+	function takeResources (player, resourceId, amount, inventionMaterialId) {
 		switch (resourceId) {
 		case 17792:
 		case 17793:
@@ -298,8 +299,8 @@ module.exports = (function () {
 			//}
 			break;
 		case 36365://Invention material
-			//amount = script_12054(a2);
-			throw "Invention materials are not yet supported!";
+			inventionMaterials.take(player, inventionMaterialId, amount);
+			return;
 		default:
 			inv.take(player, resourceId);
 			//if (hasBeastOfBurden) { 
@@ -307,7 +308,7 @@ module.exports = (function () {
 			//} else { 
 			//	amount = inv.total(player, resourceId);
 			//}
-	}
+		}
 	}
 	
 	function takeFromWeighted(player, totalAmount, weightedItems) {

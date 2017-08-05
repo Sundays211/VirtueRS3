@@ -204,14 +204,15 @@ module.exports = (function () {
 	 * @return True if the player meets all the requirements, false otherwise
 	 */
 	function canCraft (player, productId) {
-		 if (!checkTools(player, productId)) {
-			 return false;
-		 }
-		 
-		 var key = config.objParam(productId, 2640);
-		 var value = config.objParam(productId, 2645);
-		 var reqID = 1;
-		 while (key > 0) {
+		//See clientscript 7105
+		if (!checkTools(player, productId)) {
+			return false;
+		}
+		
+		var key = config.objParam(productId, 2640);
+		var value = config.objParam(productId, 2645);
+		var reqID = 1;
+		while (key > 0) {
 			if (!checkRequirement(player, key, value, config.objParam(productId, 317), config.objParam(productId, 3649) == 1, reqID)) {
 				return false;
 			}
@@ -241,6 +242,7 @@ module.exports = (function () {
 	}
 	
 	function checkRequirement (player, key, value, unk1, boostable) {
+		//See clientscript 7106
 		if (key > 0 && key < 61) {//Stat
 			if (boostable) {
 				if (stat.getLevel(player, config.enumValue(681, key)) >= value) {
@@ -252,20 +254,39 @@ module.exports = (function () {
 			}
 			return false;
 		}
-		if (key == 61) {//Quest
+		switch (key) {
+		case 61://Quest
 			var questId = config.enumValue(812, value);
 			return quest.hasFinished(player, questId);
-		}
-		if (key == 62) {
+		case 62:
+			chat.sendDebugMessage(player, "Unsupported misc requirement: "+value);
 			return false;
 			//return script_7163(value);//TODO: Implement misc requirements
+		case 63:
+			return hasUnlockedInvention(player, value);
 		}
 		return true;
 	}
-	
+
+	function hasUnlockedInvention (player, id) {
+		if (id < 0) {
+			return true;
+		}
+		switch (Math.floor(id/32)) {
+		case 0:
+			return util.testBit(varp(player, 5981), id % 32);
+		case 1:
+			return util.testBit(varp(player, 5982), id % 32);
+		case 2:
+			return util.testBit(varp(player, 5983), id % 32);
+		}
+		return false;
+	}
+
 	function checkTools (player, productId) {
-		var toolId = config.objParam(productId, 2655);
-		var structId = config.objParam(productId, 2675);
+		//See clientscript 7113
+		var toolId = config.objParam(productId, 2650);
+		var structId = config.objParam(productId, 2990);
 		var param = 1;
 		while (toolId != -1 || structId != -1) {
 			if (structId != -1) {
@@ -380,18 +401,18 @@ module.exports = (function () {
 	
 	function getMaxAmount (player, productId) {
 		//See clientscript 7108
-		var materialId = config.objParam(productId, 2655);
+		var resourceId = config.objParam(productId, 2655);
 		var matCountReq = config.objParam(productId, 2665);
 		//int v11 = config.objParam(productId, 4134);
 		var separateAmount = config.objParam(productId, 2686) == 1;
 		var structId = config.objParam(productId, 2675);
-		//int v1 = config.objParam(productId, 5456);
+		var inventionMaterialId = config.objParam(productId, 5456);
 		var maxAmount = 2147483647;
 		var materialCount;
 		var createPerCycle = config.objParam(productId, 2653);
 		var maxMakeSets = config.objParam(productId, 2995);
 		var param = 1;
-		while ((materialId != -1 || structId != -1) && maxAmount > 0) {
+		while ((resourceId != -1 || structId != -1) && maxAmount > 0) {
 			if (structId != -1) {
 				materialCount = getStructMaxAmount(player, structId, createPerCycle);
 				if (materialCount < maxAmount) {
@@ -399,92 +420,92 @@ module.exports = (function () {
 				}
 			} else {
 				if (matCountReq !== 0) {
-					materialCount = resources.getCount(player, materialId);
+					materialCount = resources.getCount(player, resourceId, inventionMaterialId);
 					if (materialCount != -1) {
 						if (separateAmount) {
 							maxAmount = Math.min(maxAmount, materialCount / matCountReq);
 						} else {
 							maxAmount = Math.min(maxAmount, (materialCount + ((matCountReq * createPerCycle) - 1)) / (matCountReq * createPerCycle));
 						}
-					}					
+					}
 				}
 			}
 			param++;
 			switch(param) {
 			case 2:
-				materialId = config.objParam(productId, 2656);
+				resourceId = config.objParam(productId, 2656);
 				matCountReq = config.objParam(productId, 2666);
 				//v11 = config.objParam(productId, 4135);
 				separateAmount = config.objParam(productId, 2687) == 1;
 				structId = config.objParam(productId, 2676);
-				//v1 = config.objParam(productId, 5457);
+				inventionMaterialId = config.objParam(productId, 5457);
 				break;
 			case 3:
-				materialId = config.objParam(productId, 2657);
+				resourceId = config.objParam(productId, 2657);
 				matCountReq = config.objParam(productId, 2667);
 				//v11 = config.objParam(productId, 4136);
 				separateAmount = config.objParam(productId, 2688) == 1;
 				structId = config.objParam(productId, 2677);
-				//v1 = config.objParam(productId, 5458);
+				inventionMaterialId = config.objParam(productId, 5458);
 				break;
 			case 4:
-				materialId = config.objParam(productId, 2658);
+				resourceId = config.objParam(productId, 2658);
 				matCountReq = config.objParam(productId, 2668);
 				//v11 = config.objParam(productId, 4137);
 				separateAmount = config.objParam(productId, 2689);
 				structId = config.objParam(productId, 2678);
-				//v1 = config.objParam(productId, 5459);
+				inventionMaterialId = config.objParam(productId, 5459);
 				break;
 			case 5:
-				materialId = config.objParam(productId, 2659);
+				resourceId = config.objParam(productId, 2659);
 				matCountReq = config.objParam(productId, 2669);
 				//v11 = config.objParam(productId, 4138);
 				separateAmount = config.objParam(productId, 2690);
 				structId = config.objParam(productId, 2679);
-				//v1 = config.objParam(productId, 5460);
+				inventionMaterialId = config.objParam(productId, 5460);
 				break;
 			case 6:
-				materialId = config.objParam(productId, 2660);
+				resourceId = config.objParam(productId, 2660);
 				matCountReq = config.objParam(productId, 2670);
 				//v11 = config.objParam(productId, 4139);
 				separateAmount = config.objParam(productId, 2691);
 				structId = config.objParam(productId, 2680);
-				//v1 = config.objParam(productId, 5461);
+				inventionMaterialId = config.objParam(productId, 5461);
 				break;
 			case 7:
-				materialId = config.objParam(productId, 2661);
+				resourceId = config.objParam(productId, 2661);
 				matCountReq = config.objParam(productId, 2671);
 				//v11 = config.objParam(productId, 4140);
 				separateAmount = config.objParam(productId, 2692);
 				structId = config.objParam(productId, 2681);
-				//v1 = config.objParam(productId, 5462);
+				inventionMaterialId = config.objParam(productId, 5462);
 				break;
 			case 8:
-				materialId = config.objParam(productId, 2662);
+				resourceId = config.objParam(productId, 2662);
 				matCountReq = config.objParam(productId, 2672);
 				//v11 = config.objParam(productId, 4141);
 				separateAmount = config.objParam(productId, 2693);
 				structId = config.objParam(productId, 2682);
-				//v1 = config.objParam(productId, 5463);
+				inventionMaterialId = config.objParam(productId, 5463);
 				break;
 			case 9:
-				materialId = config.objParam(productId, 2663);
+				resourceId = config.objParam(productId, 2663);
 				matCountReq = config.objParam(productId, 2673);
 				//v11 = config.objParam(productId, 4142);
 				separateAmount = config.objParam(productId, 2694);
 				structId = config.objParam(productId, 2683);
-				//v1 = config.objParam(productId, 5464);
+				inventionMaterialId = config.objParam(productId, 5464);
 				break;
 			case 10:
-				materialId = config.objParam(productId, 2664);
+				resourceId = config.objParam(productId, 2664);
 				matCountReq = config.objParam(productId, 2674);
 				//v11 = config.objParam(productId, 4143);
 				separateAmount = config.objParam(productId, 2695);
 				structId = config.objParam(productId, 2684);
-				//v1 = config.objParam(productId, 5465);
+				inventionMaterialId = config.objParam(productId, 5465);
 				break;
 			default:
-				materialId = -1;
+				resourceId = -1;
 				structId = -1;
 				break;
 			}
@@ -499,16 +520,18 @@ module.exports = (function () {
 	}
 	
 	function getStructMaxAmount (player, structId, productAmount) {
+		//See clientscript 7109
 		var id = config.structParam(structId, 2655);
 		var matCountReq = config.structParam(structId, 2665);
 		var separateAmount = config.structParam(structId, 2686) == 1;
+		var inventionMaterialId = config.structParam(structId, 5456);
 		var total = 0;
 		var v1 = 0;
 		var v9 = 0;
 		var loop = 1;
 		var numberOf;
 		while (id != -1) {
-			numberOf = inv.total(player, id);
+			numberOf = resources.getCount(player, id, inventionMaterialId);
 			if (numberOf == -1) {
 				total = 2147483647;
 				loop = 2147483647;
@@ -525,46 +548,85 @@ module.exports = (function () {
 				id = config.structParam(structId, 2656);
 				matCountReq = config.structParam(structId, 2666);
 				separateAmount = config.structParam(structId, 2687) == 1;
+				inventionMaterialId = config.structParam(structId, 5457);
 				break;
 			case 3:
 				id = config.structParam(structId, 2657);
 				matCountReq = config.structParam(structId, 2667);
 				separateAmount = config.structParam(structId, 2688) == 1;
+				inventionMaterialId = config.structParam(structId, 5458);
 				break;
 			case 4:
 				id = config.structParam(structId, 2658);
 				matCountReq = config.structParam(structId, 2668);
 				separateAmount = config.structParam(structId, 2689) == 1;
+				inventionMaterialId = config.structParam(structId, 5459);
 				break;
 			case 5:
 				id = config.structParam(structId, 2659);
 				matCountReq = config.structParam(structId, 2669);
 				separateAmount = config.structParam(structId, 2690) == 1;
+				inventionMaterialId = config.structParam(structId, 5460);
 				break;
 			case 6:
 				id = config.structParam(structId, 2660);
 				matCountReq = config.structParam(structId, 2670);
 				separateAmount = config.structParam(structId, 2691) == 1;
+				inventionMaterialId = config.structParam(structId, 5461);
 				break;
 			case 7:
 				id = config.structParam(structId, 2661);
 				matCountReq = config.structParam(structId, 2671);
 				separateAmount = config.structParam(structId, 2692) == 1;
+				inventionMaterialId = config.structParam(structId, 5462);
 				break;
 			case 8:
 				id = config.structParam(structId, 2662);
 				matCountReq = config.structParam(structId, 2672);
 				separateAmount = config.structParam(structId, 2693) == 1;
+				inventionMaterialId = config.structParam(structId, 5463);
 				break;
 			case 9:
 				id = config.structParam(structId, 2663);
 				matCountReq = config.structParam(structId, 2673);
 				separateAmount = config.structParam(structId, 2694) == 1;
+				inventionMaterialId = config.structParam(structId, 5464);
 				break;
 			case 10:
 				id = config.structParam(structId, 2664);
 				matCountReq = config.structParam(structId, 2674);
 				separateAmount = config.structParam(structId, 2695) == 1;
+				inventionMaterialId = config.structParam(structId, 5465);
+				break;
+			case 11:
+				id = config.structParam(structId, 5451);
+				matCountReq = config.structParam(structId, 5471);
+				separateAmount = config.structParam(structId, 5476);
+				inventionMaterialId = config.structParam(structId, 5466);
+				break;
+			case 12:
+				id = config.structParam(structId, 5452);
+				matCountReq = config.structParam(structId, 5472);
+				separateAmount = config.structParam(structId, 5477);
+				inventionMaterialId = config.structParam(structId, 5467);
+				break;
+			case 13:
+				id = config.structParam(structId, 5453);
+				matCountReq = config.structParam(structId, 5473);
+				separateAmount = config.structParam(structId, 5478);
+				inventionMaterialId = config.structParam(structId, 5468);
+				break;
+			case 14:
+				id = config.structParam(structId, 5454);
+				matCountReq = config.structParam(structId, 5474);
+				separateAmount = config.structParam(structId, 5479);
+				inventionMaterialId = config.structParam(structId, 5469);
+				break;
+			case 15:
+				id = config.structParam(structId, 5455);
+				matCountReq = config.structParam(structId, 5475);
+				separateAmount = config.structParam(structId, 5480);
+				inventionMaterialId = config.structParam(structId, 5470);
 				break;
 			default:
 				id = -1;
