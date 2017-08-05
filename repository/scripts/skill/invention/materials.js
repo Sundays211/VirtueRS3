@@ -111,7 +111,8 @@ module.exports = (function () {
 		take : takeMaterials,
 		give : giveMaterials,
 		getName : getName,
-		getCategory : getCategory
+		getCategory : getCategory,
+		getTotal : getTotal
 	};
 	
 	function takeMaterials (player, materialId, amount) {

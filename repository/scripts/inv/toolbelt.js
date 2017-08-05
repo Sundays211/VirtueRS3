@@ -81,6 +81,10 @@ module.exports = (function () {
 			addSingleLevelTool(ctx.player, util.getId(ctx.item));
 		});
 		
+		scriptManager.bind(EventType.OPHELD1, 36389, function (ctx) {
+			addSingleLevelTool(ctx.player, 36389);
+		});
+		
 		scriptManager.bind(EventType.OPHELD1, 20565, function (ctx) {
 			addSingleLevelTool(ctx.player, 20565);
 		});
@@ -491,6 +495,9 @@ module.exports = (function () {
 			return true;
 		case 21451://Ouroboros pouch
 			varbit(player, 28230, 1);
+			return true;
+		case 36389://Charge Pack
+			varbit(player, 30225, 1);
 			return true;
 		default:
 			return false;
