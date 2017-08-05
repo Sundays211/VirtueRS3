@@ -34,53 +34,6 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 69776, function (ctx) {
-			chat.sendMessage(ctx.player, "North to the Chsmpions' Guild and Varrock.");
-		});	
-		
-		scriptManager.bind(EventType.OPLOC1, 69778, function (ctx) {
-			chat.sendMessage(ctx.player, "West to Lumbridge's mill.");
-		});
-		
-	    scriptManager.bind(EventType.OPLOC1, 69780, function (ctx) {
-	    	chat.sendMessage(ctx.player, "East to Lumbridge.");
-		});
-	    
-		scriptManager.bind(EventType.OPLOC1, 69782, function (ctx) {
-			chat.sendMessage(ctx.player, "North to Lumbridge farms.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, 69783, function (ctx) {
-			chat.sendMessage(ctx.player, "South to Lumbridge.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, 69784, function (ctx) {
-			chat.sendMessage(ctx.player, "West to Draynow and Wizards' Tower.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, [69785,69790], function (ctx) {
-			chat.sendMessage(ctx.player, "East to Al Kharid.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, 69786, function (ctx) {
-			chat.sendMessage(ctx.player, "South to Lumbridge's graveyard/swamp and boat to Daemonheim.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, 69787, function (ctx) {
-			chat.sendMessage(ctx.player, "South-west into Lumbridge Castle.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, 69788, function (ctx) {
-			chat.sendMessage(ctx.player, "North-west to Lumbridge farms.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, 69789, function (ctx) {
-			chat.sendMessage(ctx.player, "North to Varrock.");
-		});
-		
-		scriptManager.bind(EventType.OPLOC1, 69791, function (ctx) {
-			chat.sendMessage(ctx.player, "West into Lumbridge.");
-		});
 		
 		scriptManager.bind(EventType.OPLOC1, 15468, function (ctx) {
 			if(inv.total(ctx.player, 2347, Inv.BACKPACK)) {

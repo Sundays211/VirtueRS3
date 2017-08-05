@@ -55,6 +55,26 @@ module.exports = (function () {
         map.setCoords(ctx.player, coords(414, 652, 0));
 	    });	
 	});
+	
+	scriptManager.bind(EventType.OPLOC1, 10041, function (ctx) {//tree next to bank
+        anim.run(ctx.player, 21189, function () { 
+		    anim.run(ctx.player, -1);
+	        dialog.builder(ctx.player).chatnpc(2574, "Qw! That really hurt!")
+	    });	
+	});
+	
+	scriptManager.bind(EventType.OPLOC2, 10041, function (ctx) {//tree next to bank
+	    dialog.builder(ctx.player).chatplayer("Hello?")
+		.chatnpc(2574, "Ssshhh! What do you want?")
+		.chatplayer("Well, it's not every day you see a man up a tree.")
+		.chatnpc(2574, "I'm trying to observe a suspect. Leave me alone!")
+		.multi3("WHAT WOUlD YOU LIKE TO SAY?", "This is about the bank robbery, right?", function () {
+		}, "You're not being very subtle up there.", function () {
+	    }, "Can I do anything to help?", function () {
+		   // dialog.builder(ctx.player).chatplayer("Can I do anything to help?")
+		});	
+	});
+	
 	//dog kennel 
 	//varp 3468 1246925975 all blue draynor
 	//interface 1383

@@ -4,9 +4,7 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./draynormanor-and-village'),
-		require('./edgeville-and-barbarian-village'),
-		require('./lumbridge-and-lumbridge-swamp'),
-		require('./varrock')
+		require('./lumbridge-and-lumbridge-swamp')
 	];
 	
 	for (var i in modules) {

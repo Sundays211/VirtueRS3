@@ -4,6 +4,7 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./player-moderator-room'),
+		require('./sign-posts'),
 		require('./wilderness')
 	];
 	
