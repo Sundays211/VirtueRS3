@@ -282,7 +282,6 @@ module.exports = (function () {
 		var treeStump = locMap.add(stumpId, treeCoords, shape, rotation);
 		
 		locMap.delay(treeStump, respawnDelay, function () {
-			print("Adding back tree "+treeId+" at "+treeCoords)
 			locMap.add(treeId, treeCoords, shape, rotation);
 			if (treeTop) {
 				locMap.add(util.getId(treeTop), map.getCoords(treeTop), shape, locMap.getRotation(treeTop));
