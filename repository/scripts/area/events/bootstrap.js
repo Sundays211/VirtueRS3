@@ -4,6 +4,8 @@
 module.exports = function (scriptManager) {
 	var modules = [
 	    require('./15-year-anniversary'),
+		require('./beach'),
+		require('./halloween-2007'),
 		require('./xmas-2005'),
 		require('./xmas-2006'),
 		require('./xmas-2011')
