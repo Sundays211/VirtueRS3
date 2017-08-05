@@ -86,7 +86,7 @@ public class MapSquare {
 		/**
 		 * Represents the locations which need to be updated when a player enters the region
 		 */
-		private final Set<SceneLocation> tempLocs = new HashSet<SceneLocation>();
+		private final Map<Integer, SceneLocation> tempLocs = new HashMap<>();
 		
 		private CoordGrid baseTile;
 		
@@ -105,20 +105,20 @@ public class MapSquare {
 		
 		protected void updateLocation (SceneLocation loc, int hash, boolean isTemp) {
 			if (isTemp) {
-				tempLocs.add(loc);
+				tempLocs.put(hash, loc);
 			} else {
-				tempLocs.remove(loc);
-			}			
+				tempLocs.remove(hash);
+			}
 		}
 		
 		protected void removeLocation (SceneLocation loc, int hash, boolean wasTemp) {
 			if (wasTemp) {
-				tempLocs.remove(loc);
+				tempLocs.remove(hash);
 				synchronized (locations) {
 					locations.get(hash)[loc.getShape().getId()] = null;
 				}
 			} else {
-				tempLocs.add(loc);				
+				tempLocs.put(hash, loc);
 			}
 		}
 		
@@ -186,7 +186,7 @@ public class MapSquare {
 		}
 		
 		protected void updateBlock () {
-			Iterator<SceneLocation> locIterator = tempLocs.iterator();
+			Iterator<SceneLocation> locIterator = tempLocs.values().iterator();
 			while (locIterator.hasNext()) {
 				SceneLocation loc = locIterator.next();
 				if (loc.processTick()) {
@@ -221,7 +221,7 @@ public class MapSquare {
 					}
 				}
 			}
-			for (SceneLocation loc : tempLocs) {
+			for (SceneLocation loc : tempLocs.values()) {
 				if (loc != null) {
 					if (loc.getID() < 0) {
 						packets.add(new DeleteLocation(loc));
