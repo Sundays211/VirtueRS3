@@ -182,63 +182,6 @@ var TreeType = {
 	}
 };
 
-var Hatchet = {
-	BRONZE : {
-		level : 1,
-		time : 1,
-		anim : 21668,
-		itemID : 1351
-	},
-	IRON : {
-		level : 1,
-		time : 2,
-		anim : 21667,
-		itemID : 1349
-	},
-	STEEL : {
-		level : 6,
-		time : 3,
-		anim : 21666,
-		itemID : 1353
-	},
-	BLACK : {
-		level : 11,
-		time : 4,
-		anim : 21665,
-		itemID : 1361
-	},
-	MITHRIL : {
-		level : 21,
-		time : 5,
-		anim : 21664,
-		itemID : 1355
-	},
-	ADAMANT : {
-		level : 31,
-		time : 7,
-		anim : 21663,
-		itemID : 1357
-	},
-	RUNE : {
-		level : 41,
-		time : 10,
-		anim : 21662,
-		itemID : 1359
-	},
-	DRAGON : {
-		level : 61,
-		time : 13,
-		anim : 21669,
-		itemID : 6739
-	},
-	CRYSTAL : {
-		level : 71,
-		time : 16,
-		anim : 25003, //25182 for canoe ?
-		itemID : 32645
-	}
-};
-
 var TreeListener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
 	invoke : function (event, locTypeId, args) {
 		var player = args.player;
