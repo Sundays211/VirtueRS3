@@ -19,25 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType*/
-var coords = require('map/coords');
-var _entity = require('engine/entity');
-var anim = require('anim');;
-var map = require('map');
+/* globals EventType */
+var chat = require('chat');
 module.exports = (function () {
 	return {
 		init : init
 	};
-	//halloween 2007   0,25,75,42,25
+	
 	function init (scriptManager) {
 		
-	    scriptManager.bind(EventType.OPLOC1, 27218, function (ctx) {//Slide
-		var currentCoords = map.getCoords(ctx.player);
-		var targetCoords = coords(0,25,75,42,19);
-	    anim.run(ctx.player, 7274);
-	    _entity.forceMove(ctx.player, currentCoords, 220, targetCoords, 300);
-	    });
-		
+		scriptManager.bind(EventType.OPLOC1, 69805, function (ctx) {
+			chat.sendMessage(ctx.player, "North to port Khazard and Ardougne."); 
+		});
 	}
-
 })();

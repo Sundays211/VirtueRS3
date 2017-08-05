@@ -19,25 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType*/
-var coords = require('map/coords');
-var _entity = require('engine/entity');
-var anim = require('anim');;
-var map = require('map');
+/* globals EventType */
+var chat = require('chat');
 module.exports = (function () {
 	return {
 		init : init
 	};
-	//halloween 2007   0,25,75,42,25
+	
 	function init (scriptManager) {
 		
-	    scriptManager.bind(EventType.OPLOC1, 27218, function (ctx) {//Slide
-		var currentCoords = map.getCoords(ctx.player);
-		var targetCoords = coords(0,25,75,42,19);
-	    anim.run(ctx.player, 7274);
-	    _entity.forceMove(ctx.player, currentCoords, 220, targetCoords, 300);
-	    });
+		scriptManager.bind(EventType.OPLOC1, 69735, function (ctx) {
+			chat.sendMessage(ctx.player, "North-east to Ardougne Zoo."); 
+		});
 		
+		scriptManager.bind(EventType.OPLOC1, 69736, function (ctx) {
+			chat.sendMessage(ctx.player, "South-east to Ardougne Monastery, Tower of Life, Port Khazard and Yanille."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69737, function (ctx) {
+			chat.sendMessage(ctx.player, "West to the Clocktower."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69738, function (ctx) {
+			chat.sendMessage(ctx.player, "East to the Tower of Life."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69739, function (ctx) {
+			chat.sendMessage(ctx.player, "South to Ardougne Monastery."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69740, function (ctx) {
+			chat.sendMessage(ctx.player, "North-west to the Clocktower and Ardougne."); 
+		});
 	}
-
 })();

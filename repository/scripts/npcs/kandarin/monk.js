@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2017 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * furnished to do so, subject to the following conditions\:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -19,25 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType*/
-var coords = require('map/coords');
+/* globals EventType, */
+
+var dialog = require('dialog');
 var _entity = require('engine/entity');
-var anim = require('anim');;
-var map = require('map');
+
 module.exports = (function () {
 	return {
-		init : init
+	init : init
 	};
-	//halloween 2007   0,25,75,42,25
+	
 	function init (scriptManager) {
-		
-	    scriptManager.bind(EventType.OPLOC1, 27218, function (ctx) {//Slide
-		var currentCoords = map.getCoords(ctx.player);
-		var targetCoords = coords(0,25,75,42,19);
-	    anim.run(ctx.player, 7274);
-	    _entity.forceMove(ctx.player, currentCoords, 220, targetCoords, 300);
-	    });
-		
-	}
 
+		scriptManager.bind(EventType.OPNPC1, 281, function (ctx) {
+			_entity.say(ctx.npc, "Peace brother");
+		});
+
+	}
+	
 })();

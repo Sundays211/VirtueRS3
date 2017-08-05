@@ -38,6 +38,7 @@ public enum ContainerState {
     DAGAS_SHOP(251, true, false),
     DEALGAS_SHOP(579, true, false),
     DIANGOS_TOY_STORE(137, true, false),
+    DIANGOS_TOY_STORE_MEMBERS(609, true, false),
     DOMMIKS_CRAFTING_STORE_P2P(27, true, false),
     FALADOR_GEN_STORE(13, true, false),
     GAIUS_TWOHANDED_SHOP(39, true, false),
