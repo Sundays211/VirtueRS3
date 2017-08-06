@@ -230,8 +230,7 @@ public class JSListeners implements ScriptManager {
 		setConstants(engine);
 		try {
 			initModuleBootstrap(engine);
-			modules = initModuleBootstrap(engine);			
-			logger.info("Found modules: {}", modules);
+			modules = initModuleBootstrap(engine);
 			
 			loadModules(engine, modules);
 		} catch (Exception ex) {

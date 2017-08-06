@@ -3,6 +3,7 @@ package org.virtue.engine.script.api.impl;
 import org.virtue.engine.script.api.EntityAPI;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.SceneLocation;
 import org.virtue.network.protocol.update.block.ForceMovementBlock;
 import org.virtue.network.protocol.update.block.TalkBlock;
 
@@ -13,8 +14,20 @@ public class VirtueEntityAPI implements EntityAPI {
 	}
 
 	@Override
-	public void moveTo(Entity entity, CoordGrid coords) {
-		entity.getMovement().moveTo(coords.getX(), coords.getY());
+	public boolean moveTo(Entity entity, CoordGrid coords, Runnable onReachedTarget) {
+		entity.getMovement().setOnTarget(onReachedTarget);
+		return entity.getMovement().moveTo(coords.getX(), coords.getY());
+	}
+
+	@Override
+	public boolean moveTo(Entity entity, SceneLocation loc, Runnable onReachedTarget) {
+		entity.getMovement().setOnTarget(onReachedTarget);
+		return entity.getMovement().moveTo(loc, loc.getCenterTile().getX(), loc.getCenterTile().getY());
+	}
+
+	@Override
+	public void moveAdjacent(Entity entity) {
+		entity.getMovement().moveAdjacent();
 	}
 
 	@Override
