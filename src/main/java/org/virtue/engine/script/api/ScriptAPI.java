@@ -1203,71 +1203,7 @@ public interface ScriptAPI {
 	public int removeDroppedItem (CoordGrid coords, int itemId);
 	
 	public Object getRandomChoice (Object[] objects);
-	
-	/**
-	 * Creates a new {@link SceneLocation} at the provided tile with the specified data.
-	 * Note that this method does not add the location to the region; this must be done separately
-	 * @param id The locType ID of the new location
-	 * @param coords The coordinates on which to spawn the location
-	 * @param type The node type of the location
-	 * @param rotation The rotation
-	 * @return The newly created SceneLocation.
-	 */
-	public SceneLocation createLocation (int id, CoordGrid coords, int type, int rotation);
-	
-	public SceneLocation createLocation (int id, int x, int y, int z, int type, int rotation);
-	
-	/**
-	 * Adds the specified location to the map. The location will not be removed until either the server restarts or it is manually removed.
-	 * @param loc The location to add
-	 */
-	public void spawnLocation (SceneLocation loc);
-	
-	/**
-	 * Adds the specified location to the map
-	 * @param loc The location to add
-	 * @param removalDelay The number of ticks before the location is destroyed
-	 */
-	public void spawnLocation (SceneLocation loc, int removalDelay);
-	
-	
-	public SceneLocation spawnLocation (int locTypeId, CoordGrid coords, int removalDelay);
-	
-	public SceneLocation spawnLocation (int locTypeId, CoordGrid coords, int type, int rotation, int removalDelay);
-	
-	/**
-	 * Retrieves the location of the specified node type at the specified coordinates on the map
-	 * @param coords The coordinates of the location
-	 * @param type The node type of the location
-	 * @return The {@link SceneLocation} of the specified type at the specified coordinates, or null if no location exists
-	 */
-	public SceneLocation getLocationByNodeType (CoordGrid coords, int type);
-	
-	/**
-	 * Retrieves the location of the specified node type at the specified position on the map
-	 * @param posX The x-tile of the location
-	 * @param posY The y-tile of the location
-	 * @param plane The plane of the location
-	 * @param type The node type of the location
-	 * @return The {@link SceneLocation} of the specified type at the specified coordinates, or null if no location exists
-	 */
-	public SceneLocation getLocationByNodeType (int posX, int posY, int plane, int type);
-	
-	/**
-	 * Transforms the specified location to another location with the specified ID.
-	 * NB: "Location" was previously known as "Object", but was changed for consistency with the proper naming scheme
-	 * @param loc The location to transform
-	 * @param newID The locType ID of the new location
-	 * @param revertDelay The number of game ticks before the location reverts
-	 */
-	public void transformLoc (SceneLocation loc, int newID, int revertDelay);
-	
-	/**
-	 * Removes the specified location from the map.
-	 * @param loc The location to destroy
-	 */
-	public void destroyLoc (SceneLocation loc);
-	
+
 	/**
 	 * Creates a new NPC. NOTE: This method doesn't add the NPC to the world: to add the NPC, use {@link #spawnNpc(NPC)}
 	 * @param id The NPC type ID
