@@ -21,12 +21,111 @@
  */
 /* globals EventType */
 var chat = require('chat');
+var dialog = require('dialog');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
+		
+		scriptManager.bind(EventType.OPLOC1, 2371, function (ctx) {
+	        chat.sendMessage(ctx.player, "Digsite infomation and exam centre.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 4066, function (ctx) {
+	        dialog.mesbox(ctx.player, "You inspect the signpost more closely. You see nothing wrong with it<br> initially, but after some time you notice teeth marks in the wood. It looks<br> like people have tried eating the post.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 5164, function (ctx) {
+	        dialog.mesbox(ctx.player, "The sinepost has a note pinned onto it. The note says:<br> '----Braindead Butler Wanted----<br> Gravedigging skills essential - Hunchback advantageous<br> See Dr Fenkenstrain at the castle NE of Canifis'");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 25397, function (ctx) {
+	        dialog.builder(ctx.player).mesbox(" The Observatory `<br> Step ahead to the reception if you wish to explore RuneScape's most<br> magnificent invention.")
+			.chatplayer("Magnificent invention? I've seen some pretty<br> magnificent things in my time. It'll have to be pretty<br> impressive.") 
+			.finish();
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69620, function (ctx) {
+	        chat.sendMessage(ctx.player, "North-east to Rellekka and the province of the Fremennik.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69621, function (ctx) {
+	        chat.sendMessage(ctx.player, "South to Seers' Village and Camelot Castle.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69622, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to the Lighthouse.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69623, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to Rellekka.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69624, function (ctx) {
+	        chat.sendMessage(ctx.player, "East to Mountain Camp and Fremennik Slayer Dungeon.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69625, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-west to Seers' Village and Hemenster.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69626, function (ctx) {
+	        chat.sendMessage(ctx.player, "North-east to Seers' Village, Camelot and Sinclair Mansion.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69627, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-east to Hemenster and Ardougne.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69628, function (ctx) {
+	        chat.sendMessage(ctx.player, "North-west to McGrubor's Wood and the coal trucks.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69629, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to Sinclair Mansion and the Fremennik Province.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69630, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-east to Camelot Castle, Catherby and White Wolf Mountain.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69631, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to Seers' Village and McGrubor's Wood.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69632, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to Sinclair Mansion.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69633, function (ctx) {
+	        chat.sendMessage(ctx.player, "South to Seers' Village and Camelot Castle.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69634, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to Fremennik Province.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69635, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to Camelot Castle.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69636, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-east to Catherby and White Wolf Mountain.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69637, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to Seers's Village and McGrubor's Wood.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69638, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to Burthorpe Castle and Death Plateau.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69639, function (ctx) {
+	        chat.sendMessage(ctx.player, "South to Taverley and White Wolf Mountain.");
+	    });
 		
 		scriptManager.bind(EventType.OPLOC1, 69640, function (ctx) {
 	        chat.sendMessage(ctx.player, "North to Burthorpe and Death Plateau.");
@@ -68,6 +167,86 @@ module.exports = (function () {
 	        chat.sendMessage(ctx.player, "South-west to Varrock.");
 	    });
 		
+		scriptManager.bind(EventType.OPLOC1, 69652, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to the limestone mine and the 'Rag and Bone' man.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69653, function (ctx) {
+	        chat.sendMessage(ctx.player, "East to Paterdomus and Morytania.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69654, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to the Lumber Yard and Varrock.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69655, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to the Slayer Tower.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69656, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-east to Canifis.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69657, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to Paterdomus and Misthalin.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69658, function (ctx) {
+	        chat.sendMessage(ctx.player, "North-east to Fenkenstrain's Castle and Port Phasmatys.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69659, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-west to Mort Myre Swamp and Paterdomus.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69660, function (ctx) {
+	        chat.sendMessage(ctx.player, "East to Port Phasmatys.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69661, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to Canifis and the Slayer Tower.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69662, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to the Slayer Tower and Canifis.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69663, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to the Tree Gnome Stronghold.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69664, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-east to Ardougne.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69666, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to Baxtorian Falls, Barbarian Assault and Barbarian Outpost.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69667, function (ctx) {
+	        chat.sendMessage(ctx.player, "East to the Fishing Guild.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69668, function (ctx) {
+	        chat.sendMessage(ctx.player, "South-east to Ardougne.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69669, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to the Tree Gnome Stronghold.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69670, function (ctx) {
+	        chat.sendMessage(ctx.player, "East to the Fishing Guild.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69671, function (ctx) {
+	        chat.sendMessage(ctx.player, "South to Ardougne.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69672, function (ctx) {
+	        chat.sendMessage(ctx.player, "North-west to Baxtorian Falls and the Tree Gnome Stronghold.");
+	    });
+		
 		scriptManager.bind(EventType.OPLOC1, 69673, function (ctx) {
 	        chat.sendMessage(ctx.player, "East to the Exam Centre and Digsite.");
 	    });
@@ -80,6 +259,18 @@ module.exports = (function () {
 	        chat.sendMessage(ctx.player, "West to Lumbridge and Varrock.");
 	    });
 		
+		scriptManager.bind(EventType.OPLOC1, 69676, function (ctx) {
+	        chat.sendMessage(ctx.player, "North to the Fishing Guild.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69677, function (ctx) {
+	        chat.sendMessage(ctx.player, "South to Ardougne.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69678, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to Baxtorian Falls and the Tree Gnome Stronghold.");
+	    });
+		
 		scriptManager.bind(EventType.OPLOC1, 69679, function (ctx) {
 			chat.sendMessage(ctx.player, "North to the Fishing Guild and Hemenster."); 
 		})
@@ -87,6 +278,38 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 69680, function (ctx) {
 			chat.sendMessage(ctx.player, "North to Ardougne's mill."); 
 		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69681, function (ctx) {
+			chat.sendMessage(ctx.player, "East to Hemenster and Seers' Village."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69682, function (ctx) {
+			chat.sendMessage(ctx.player, "South to Ardougne."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69683, function (ctx) {
+			chat.sendMessage(ctx.player, "North-east to Seers' Village and Camelot Castle."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69684, function (ctx) {
+			chat.sendMessage(ctx.player, "South-east to the Ranging Guild."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69685, function (ctx) {
+			chat.sendMessage(ctx.player, "South to Ardougne and Witchaven."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69686, function (ctx) {
+			chat.sendMessage(ctx.player, "East into Catherby."); //had to macke up sinepost not there
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69687, function (ctx) {
+	        chat.sendMessage(ctx.player, "West to the Legends' Guild and Ardougne.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69688, function (ctx) {
+	        chat.sendMessage(ctx.player, "North-west to Camelot Castle and Seers' Village.");//had to macke up sinepost not there
+	    });
 		
 		scriptManager.bind(EventType.OPLOC1, 69689, function (ctx) {
 	        chat.sendMessage(ctx.player, "North to Goblin village.");
@@ -180,6 +403,26 @@ module.exports = (function () {
 	        chat.sendMessage(ctx.player, "West to Varrock.");
 	    });
 		
+		scriptManager.bind(EventType.OPLOC1, 69727, function (ctx) {
+			chat.sendMessage(ctx.player, "North-east to the limestone mine, Paterdomus and Morytania."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69728, function (ctx) {
+			chat.sendMessage(ctx.player, "South to the Exam Centre."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69729, function (ctx) {
+			chat.sendMessage(ctx.player, "West to Varrock."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69730, function (ctx) {
+			chat.sendMessage(ctx.player, "North to the Digsite."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69731, function (ctx) {
+			chat.sendMessage(ctx.player, "South to Al Kharid and Lumbridge."); 
+		});
+		
 		scriptManager.bind(EventType.OPLOC1, 69735, function (ctx) {
 			chat.sendMessage(ctx.player, "North-east to Ardougne Zoo."); 
 		});
@@ -240,6 +483,18 @@ module.exports = (function () {
 			chat.sendMessage(ctx.player, "West to Melzar's Maze and the chemist."); 
 		});
 		
+		scriptManager.bind(EventType.OPLOC1, 69750, function (ctx) {
+			chat.sendMessage(ctx.player, "North to the Clan Camp and Falador."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69751, function (ctx) {
+			chat.sendMessage(ctx.player, "East to the quarry."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69752, function (ctx) {
+			chat.sendMessage(ctx.player, "South to Rimmington."); 
+		});
+		
 		scriptManager.bind(EventType.OPLOC1, 69758, function (ctx) {
 			chat.sendMessage(ctx.player, "East to Draynor and Lumbridge."); 
 		});
@@ -287,6 +542,18 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 69769, function (ctx) {
 			chat.sendMessage(ctx.player, "West to Falador, Port Sarim and the Clan Camp."); 
 		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69770, function (ctx) {
+			chat.sendMessage(ctx.player, "North-east to Lumbridge.");
+		});	
+		
+		scriptManager.bind(EventType.OPLOC1, 69771, function (ctx) {
+			chat.sendMessage(ctx.player, "South to the Wizards' Tower.");
+		});	
+		
+		scriptManager.bind(EventType.OPLOC1, 69772, function (ctx) {
+			chat.sendMessage(ctx.player, "North-west to Draynor.");
+		});	
 		
 		scriptManager.bind(EventType.OPLOC1, 69776, function (ctx) {
 			chat.sendMessage(ctx.player, "North to the Chsmpions' Guild and Varrock.");
@@ -339,6 +606,26 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 69791, function (ctx) {
 			chat.sendMessage(ctx.player, "West into Lumbridge.");
 		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69797, function (ctx) {
+			chat.sendMessage(ctx.player, "East to the Barrows and Meiyerditch.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69798, function (ctx) {
+			chat.sendMessage(ctx.player, "South to Burgh de Rott.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69799, function (ctx) {
+			chat.sendMessage(ctx.player, "North-west to Myre Swamp.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69803, function (ctx) {
+			chat.sendMessage(ctx.player, "North to the Observatory and Ardougne."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69804, function (ctx) {
+			chat.sendMessage(ctx.player, "West to Castle Wars."); 
+		});
 
 		scriptManager.bind(EventType.OPLOC1, 69805, function (ctx) {
 			chat.sendMessage(ctx.player, "North to port Khazard and Ardougne."); 
@@ -364,6 +651,14 @@ module.exports = (function () {
 			chat.sendMessage(ctx.player, "South to Mobilising Armies.");
 		});
 		
+		scriptManager.bind(EventType.OPLOC1, 69815, function (ctx) {
+			chat.sendMessage(ctx.player, "North to the Feldip Hills, Gu'Tanoth and Yanille.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69816, function (ctx) {
+			chat.sendMessage(ctx.player, "West to Mobilising Armies.");
+		});
+		
 		scriptManager.bind(EventType.OPLOC1, 69817, function (ctx) {
 			chat.sendMessage(ctx.player, "North to Burthorpe and Death Plateau.");
 		})
@@ -376,6 +671,14 @@ module.exports = (function () {
 			chat.sendMessage(ctx.player, "South-west to the boat to Daemonheim.");
 		});
 		
+		scriptManager.bind(EventType.OPLOC1, 69820, function (ctx) {
+	        chat.sendMessage(ctx.player, "North-east over White Wolf Mountain to Taverley and Burthorpe.");
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 69821, function (ctx) {
+	        chat.sendMessage(ctx.player, "West into Catherby.");
+	    });
+		
 		scriptManager.bind(EventType.OPLOC1, 69822, function (ctx) {
 	        chat.sendMessage(ctx.player, "North to the Cook's Guild and on to the Grand Exchange.");
 	    });	
@@ -387,8 +690,7 @@ module.exports = (function () {
 	    scriptManager.bind(EventType.OPLOC1, 69824, function (ctx) {
 	        chat.sendMessage(ctx.player, "West to Barbarian Village and Falador.");
 	    });
-		
-		
+
 	}
 
 })();

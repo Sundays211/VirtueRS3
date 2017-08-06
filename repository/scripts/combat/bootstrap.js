@@ -3,6 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
+	    require('./instance-system'),
 	    require('./widgets')
 	];
 	

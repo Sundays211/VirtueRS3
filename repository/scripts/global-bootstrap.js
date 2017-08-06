@@ -17,6 +17,7 @@ function getAllModules () {// jshint ignore:line
 		'area/kandarin',
 		'area/kharidian-desert',
 		'area/misthalin',
+		'area/morytania',
 		'area/underground',
 		'chat',
 		'clan',

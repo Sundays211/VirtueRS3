@@ -66,10 +66,13 @@ module.exports = (function () {
 	case 4://Withdraw money pouch
 	moneyPouch.requestWithdrawCoins(player);
 	return;
-	case 6://Bond pouch
-	return;//This is client-sided
 	//case 5://Wealth evaluator
 	//player.getWidgets().openWidget(1477, 380, 566, false);
+	case 6://Bond pouch
+	return;//This is client-sided
+	case 7://Invention materials
+	widget.openCentral(player, 1709, false);
+	return;
 	}	
 	util.defaultHandler(ctx, "minimap");
 	return;		

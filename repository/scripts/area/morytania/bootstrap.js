@@ -3,10 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    require('./araxyte-lair'),
-		require('./barrows-graveyard'),
-		require('./misthalin-underground'),
-		require('./paterdomus')
+		require('./mort-myre-swamp'),
+		require('./mortton')
 	];
 	
 	for (var i in modules) {
