@@ -243,4 +243,23 @@ public class VirtueMapAPI implements MapAPI {
 		item.setSpawnTime(respawnDelay);
 		region.addItem(item);
 	}
+
+	@Override
+	public boolean hasObject(int objTypeId, CoordGrid coords) {
+		MapSquare square = getRegion(coords);
+		if (square == null) {
+			throw new IllegalArgumentException("Invalid coords: "+coords);
+		}
+		return square.getItem(coords.getX(), coords.getY(), coords.getLevel(), objTypeId) != null;
+	}
+
+	@Override
+	public int delObj(int objTypeId, CoordGrid coords) {
+		MapSquare square = getRegion(coords);
+		if (square == null) {
+			throw new IllegalArgumentException("Invalid coords: "+coords);
+		}
+		GroundItem item = square.removeItem(coords, objTypeId);
+		return item.getAmount();
+	}
 }

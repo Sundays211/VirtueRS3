@@ -4,7 +4,8 @@
 
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./bonfire')
+		require('./bonfire'),
+		require('./logs')
 	];
 
 	for (var i in modules) {

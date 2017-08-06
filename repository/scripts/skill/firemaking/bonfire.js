@@ -45,13 +45,18 @@ var FireType = require('./fire');
 module.exports = (function () {
 	return {
 		init : init,
-		findBonfire : findBonfire,
-		moveToBonfire : moveToBonfire
+		find : findBonfire,
+		moveTo : moveToBonfire
 	};
 
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC5, [ 70755, 70757, 70758, 70759, 
 				70761, 70762, 70763, 70764, 70765, 87548 ], function (ctx) {
+			openFireToolDialog(ctx.player, ctx.location);
+		});
+
+		//Bonfires
+		scriptManager.bind(EventType.OPLOC1, [ 92885, 92903 ], function (ctx) {
 			openFireToolDialog(ctx.player, ctx.location);
 		});
 	}
