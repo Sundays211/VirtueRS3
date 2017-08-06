@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 /* globals Stat, Inv */
+var _entity = require('engine/entity');
+
 var stat = require('stat');
 var chat = require('chat');
 var map = require('map');
@@ -77,7 +79,7 @@ module.exports = (function () {
 		map.delayLoc(loc, logType.duration, function () {
 			map.delLoc(loc);
 		});
-		//api.moveAdjacent(player);//TODO:
+		_entity.moveAdjacent(player);
 		stat.giveXp(player, Stat.FIREMAKING, logType.xp);//Add firemaking xp
 		chat.sendSpamMessage(player, "The fire catches and the logs begin to burn.");
 	}
