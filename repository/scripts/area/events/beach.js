@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var coords = require('map/coords');
-
 var chat = require('chat');
 var map = require('map');
 var coords = require('map/coords');

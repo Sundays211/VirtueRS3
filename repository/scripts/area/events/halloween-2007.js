@@ -22,7 +22,7 @@
 /* globals EventType*/
 var coords = require('map/coords');
 var _entity = require('engine/entity');
-var anim = require('anim');;
+var anim = require('anim');
 var map = require('map');
 module.exports = (function () {
 	return {
@@ -37,7 +37,7 @@ module.exports = (function () {
 	    anim.run(ctx.player, 7274);
 	    _entity.forceMove(ctx.player, currentCoords, 220, targetCoords, 300);
 	    });
-		
+
 	}
 
 })();
