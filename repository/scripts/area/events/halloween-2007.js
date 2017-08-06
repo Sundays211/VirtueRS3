@@ -22,7 +22,7 @@
 /* globals EventType*/
 var coords = require('map/coords');
 var _entity = require('engine/entity');
-var anim = require('anim');;
+var anim = require('anim');
 var map = require('map');
 module.exports = (function () {
 	return {
@@ -31,12 +31,12 @@ module.exports = (function () {
 	//halloween 2007   0,25,75,42,25
 	function init (scriptManager) {
 		
-	    scriptManager.bind(EventType.OPLOC1, 27218, function (ctx) {//Slide
-		var currentCoords = map.getCoords(ctx.player);
-		var targetCoords = coords(currentCoords, 0, -6, 0);
-	    anim.run(ctx.player, 7274);
-		_entity.forceMove(ctx.player, targetCoords, 380);
-	    });
+		scriptManager.bind(EventType.OPLOC1, 27218, function (ctx) {//Slide
+			var currentCoords = map.getCoords(ctx.player);
+			var targetCoords = coords(currentCoords, 0, -6, 0);
+			anim.run(ctx.player, 7274);
+			_entity.forceMove(ctx.player, targetCoords, 380);
+		});
 	}
 
 })();
