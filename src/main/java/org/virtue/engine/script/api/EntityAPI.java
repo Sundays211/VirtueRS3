@@ -2,10 +2,13 @@ package org.virtue.engine.script.api;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.SceneLocation;
 
 public interface EntityAPI {
 
 	public void moveTo (Entity entity, CoordGrid coords);
+	
+	public boolean moveTo (Entity entity, SceneLocation loc, Runnable onReachedTarget);
 	
 	public void setCoords(Entity entity, CoordGrid coords);
 	
