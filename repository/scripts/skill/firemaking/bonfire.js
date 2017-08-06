@@ -117,7 +117,6 @@ module.exports = (function () {
 	}
 
 	function runBonfireAction (player, logType, fire) {
-		print("Run bonfire: logs="+JSON.stringify(logType)+", fire="+fire);
 		if (stat.getLevel(player, Stat.FIREMAKING) < logType.level) {
 			chat.sendMessage(player, "You need a firemaking level of at least "+logType.level+" to add these logs to a bonfire.");
 			return;
