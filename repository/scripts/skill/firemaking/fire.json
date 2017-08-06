@@ -1,0 +1,92 @@
+{
+	"NORMAL" : {
+		"logId" : 1511,
+		"level" : 1,
+		"fireId" : 70755,
+		"duration" : 200,
+		"lightXp" : 40,
+		"addLogXp" : 50,
+		"addLogSpotAnim" : 3098
+	},
+	"OAK" : {
+		"logId" : 1521,
+		"level" : 15,
+		"fireId" : 70757,
+		"duration" : 230,
+		"lightXp" : 60,
+		"addLogXp" : 85,
+		"addLogSpotAnim" : 3099
+	},
+	"WILLOW" : {
+		"logId" : 1519,
+		"level" : 30,
+		"fireId" : 70758,
+		"duration" : 280,
+		"lightXp" : 90,
+		"addLogXp" : 105,
+		"addLogSpotAnim" : 3101
+	},
+	"TEAK" : {
+		"logId" : 6333,
+		"level" : 35,
+		"fireId" : 70759,
+		"duration" : 320,
+		"lightXp" : 105,
+		"addLogXp" : 120,
+		"addLogSpotAnim" : 3110
+	},
+	"MAPLE" : {
+		"logId" : 1517,
+		"level" : 45,
+		"fireId" : 70761,
+		"duration" : 350,
+		"lightXp" : 141,
+		"addLogXp" : 135,
+		"addLogSpotAnim" : 3100
+	},
+	"MAHOGANY" : {
+		"logId" : 6332,
+		"level" : 50,
+		"fireId" : 70762,
+		"duration" : 400,
+		"lightXp" : 157.5,
+		"addLogXp" : 180,
+		"addLogSpotAnim" : 3109
+	},
+	"EUCALYPTUS" : {
+		"logId" : 12581,
+		"level" : 58,
+		"fireId" : 70763,
+		"duration" : 450,
+		"lightXp" : 193.5,
+		"addLogXp" : 195,
+		"addLogSpotAnim" : 3113
+	},
+	"YEW" : {
+		"logId" : 1515,
+		"level" : 60,
+		"fireId" : 70764,
+		"duration" : 500,
+		"lightXp" : 202.5,
+		"addLogXp" : 260,
+		"addLogSpotAnim" : 3114
+	},
+	"MAGIC" : {
+		"logId" : 1513,
+		"level" : 75,
+		"fireId" : 70765,
+		"duration" : 550,
+		"lightXp" : 303.8,
+		"addLogXp" : 309.5,
+		"addLogSpotAnim" : 3115
+	},
+	"ELDER" : {
+		"logId" : 29556,
+		"level" : 90,
+		"fireId" : 87548,
+		"duration" : 600,
+		"lightXp" : 450,
+		"addLogXp" : 449,
+		"addLogSpotAnim" : -1
+	}
+}

@@ -2,13 +2,56 @@ package org.virtue.engine.script.api;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.CoordGrid;
+import org.virtue.game.map.SceneLocation;
 
 public interface EntityAPI {
 
-	public void moveTo (Entity entity, CoordGrid coords);
+	/**
+	 * Moves the entity to the specified coordinates
+	 * @param entity The entity to move
+	 * @param coords The target coordinates
+	 * @return True if a path was found, false if one could not be found
+	 */
+	public default boolean moveTo (Entity entity, CoordGrid coords) {
+		return moveTo(entity, coords, null);
+	}
+
+	/**
+	 * Moves the entity to the specified coordinates
+	 * @param entity The entity to move
+	 * @param coords The target coordinates
+	 * @param onReachedTarget The function to run when the entity has reached the target coords
+	 * @return True if a path was found, false if one could not be found
+	 */
+	public boolean moveTo (Entity entity, CoordGrid coords, Runnable onReachedTarget);
+
+	/**
+	 * Moves the entity to a tile adjacent to the specified location
+	 * @param entity The entity to move
+	 * @param coords The target location
+	 * @return True if a path was found, false if one could not be found
+	 */
+	public default boolean moveTo (Entity entity, SceneLocation loc) {
+		return moveTo(entity, loc, null);
+	}
+
+	/**
+	 * Moves the entity to a tile adjacent to the specified location
+	 * @param entity The entity to move
+	 * @param coords The target location
+	 * @param onReachedTarget The function to run when the entity has reached the target location
+	 * @return True if a path was found, false if one could not be found
+	 */
+	public boolean moveTo (Entity entity, SceneLocation loc, Runnable onReachedTarget);
+
+	/**
+	 * Forces the entity to move onto an adjacent tile
+	 * @param entity The entity to move
+	 */
+	public void moveAdjacent (Entity entity);
 	
 	public void setCoords(Entity entity, CoordGrid coords);
-	
+
 	/**
 	 * Retrieves the current coordinates of the specified entity
 	 * @param entity The entity to check

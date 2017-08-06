@@ -189,4 +189,20 @@ public interface MapAPI {
 	 * @param respawnDelay The time before the object disappears. Defaults to {@link org.virtue.Constants#ITEM_REMOVAL_DELAY}
 	 */
 	public void addObj (int objTypeId, CoordGrid coords, Player player, int amount, int respawnDelay);
+
+	/**
+	 * Checks if the specified object exists in the specified coordinates
+	 * @param objTypeId The object ID to check
+	 * @param coords The coordinates to check
+	 * @return True if an object exists, false otherwise
+	 */
+	public boolean hasObject (int objTypeId, CoordGrid coords);
+	
+	/**
+	 * Removes an object from the map
+	 * @param objTypeId The object ID to remove
+	 * @param coords The coordinates to remove the object from
+	 * @return The number of objects in the stack removed
+	 */
+	public int delObj (int objTypeId, CoordGrid coords);
 }
