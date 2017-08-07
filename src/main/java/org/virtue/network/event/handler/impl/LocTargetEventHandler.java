@@ -53,7 +53,7 @@ public class LocTargetEventHandler implements GameEventHandler<LocTargetEventCon
 		CoordGrid coord = new CoordGrid(context.getTargetCoordX(), context.getTargetCoordY(), player.getCurrentTile().getLevel());
 		MapSquare region = World.getInstance().getRegions().getRegionByID(coord.getRegionID());
 		if (region != null) {
-			final SceneLocation location = region.getLocation(coord.getXInRegion(), coord.getYInRegion(), coord.getLevel(), context.getTargetTypeID());
+			final SceneLocation location = region.getLocation(coord, context.getTargetTypeID());
 			if (location == null) {
 				player.getDispatcher().sendGameMessage("<col=ff0000>Location "+context.getTargetTypeID()+" clicked at "+coord+" does not exist!");
 			} else {

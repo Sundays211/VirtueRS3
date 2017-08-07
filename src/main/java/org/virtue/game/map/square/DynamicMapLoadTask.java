@@ -88,7 +88,7 @@ public class DynamicMapLoadTask implements Runnable {
 			CoordGrid tile;
 			int rotation, sizeX, sizeY;
 			int finalX, finalY;
-			for (SceneLocation[] locations : zone.locations.values()) {
+			for (SceneLocation[] locations : zone.baseLocations.values()) {
 				for (SceneLocation loc : locations) {
 					if (loc == null) {
 						continue;

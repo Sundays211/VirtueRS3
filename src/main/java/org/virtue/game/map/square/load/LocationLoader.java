@@ -40,7 +40,7 @@ public class LocationLoader {
 				if (level < 0 || level >= 4) {
 					continue;
 				}
-				mapSquare.addLocation(locType, localX, localY, level, shape, rotation);
+				mapSquare.addBaseLocation(locType, localX, localY, level, shape, rotation);
 		    }
 		}
 		return count;

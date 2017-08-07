@@ -168,7 +168,7 @@ public class VirtueMapAPI implements MapAPI {
 			int shapeId, int rotation) {
 		CoordGrid coords = new CoordGrid(localX, localY, level, area.getID());
 		SceneLocation location = SceneLocation.create(locTypeID, coords, LocShape.getById(shapeId), rotation);
-		area.spawnTempLocation(location, -1);
+		area.addChangeLocation(location);
 		return location;
 	}
 
@@ -183,7 +183,7 @@ public class VirtueMapAPI implements MapAPI {
 	@Override
 	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int shapeId, int rotation) {
 		SceneLocation location = SceneLocation.create(locTypeId, coords, LocShape.getById(shapeId), rotation);
-		getRegion(coords).spawnTempLocation(location, -1);
+		getRegion(coords).addChangeLocation(location);
 		return location;
 	}
 
@@ -196,7 +196,7 @@ public class VirtueMapAPI implements MapAPI {
 		if (region == null) {
 			return null;
 		}
-		SceneLocation[] locs = region.getLocations(coords.getX(), coords.getY(), coords.getLevel());
+		SceneLocation[] locs = region.getLocations(coords);
 		if (locs == null) {
 			return null;
 		}
@@ -205,7 +205,7 @@ public class VirtueMapAPI implements MapAPI {
 
 	@Override
 	public void delLoc(SceneLocation loc) {
-		getRegion(loc.getTile()).removeLocation(loc, loc.isTemporary());
+		getRegion(loc.getTile()).removeLocation(loc);
 	}
 
 	@Override
@@ -250,7 +250,7 @@ public class VirtueMapAPI implements MapAPI {
 		if (square == null) {
 			throw new IllegalArgumentException("Invalid coords: "+coords);
 		}
-		return square.getItem(coords.getX(), coords.getY(), coords.getLevel(), objTypeId) != null;
+		return square.getItem(coords, objTypeId) != null;
 	}
 
 	@Override

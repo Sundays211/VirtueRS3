@@ -27,8 +27,6 @@ import java.util.Set;
 import org.virtue.Virtue;
 import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
-import org.virtue.game.World;
-import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.node.Node;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
@@ -40,38 +38,30 @@ import org.virtue.network.event.context.impl.in.OptionButton;
  * @since 27/10/2014
  */
 public class SceneLocation extends Node {
-	
+
 	private static class DelayTask {
 		private int delayTime;
 		private Runnable onFinish;		
 	}
-	
+
 	public static SceneLocation create (int id, CoordGrid tile, LocShape shape, int rotation) {
 		SceneLocation object = new SceneLocation(id, tile, shape, rotation);
 		return object;
 	}
-	
-	
-	private int originalID;
-	
-	private int respawnTime = -1;
-	
+
 	private CoordGrid baseTile;
-	
+
 	private LocShape shape;
-	
+
 	private int rotation;
-	
+
 	private LocType locType;
-	
-	private boolean exists = true;
-	
+
 	private Set<DelayTask> delayTasks = new HashSet<>();
-	
+
 	protected SceneLocation (int id, CoordGrid tile, LocShape shape, int rotation) {
 		super(id);
 		super.currentTile = tile;
-		this.originalID = id;
 		this.baseTile = tile;
 		this.shape = shape;
 		this.rotation = rotation;
@@ -90,18 +80,6 @@ public class SceneLocation extends Node {
 	}
 	
 	/**
-	 * Sets this location as a temporary location
-	 */
-	public void setTemporary (int removalDelay) {
-		this.originalID = -1;
-		this.respawnTime = removalDelay;
-	}
-	
-	public boolean isTemporary () {
-		return originalID != -1;
-	}
-	
-	/**
 	 * Gets the id for this scene location
 	 * @return The id
 	 */
@@ -109,7 +87,7 @@ public class SceneLocation extends Node {
 		return id;
 	}
 	
-	public synchronized boolean processTick () {
+	public synchronized void processTick () {
 		Set<DelayTask> tasks = delayTasks;
 		delayTasks = new HashSet<>();
 		for (DelayTask task : tasks) {
@@ -123,44 +101,8 @@ public class SceneLocation extends Node {
 				delayTasks.remove(task);
 			}
 		}
-		
-		if (respawnTime < 0) {
-			respawnTime = -1;
-			return false;
-		}
-		
-		respawnTime--;
-		if (respawnTime == 0) {
-			return true;
-		} else {
-			return false;
-		}
 	}
-	
-	public void revert () {
-		transform(originalID, -1);
-	}
-	
-	/**
-	 * Transforms this object to another location for the specified period of time
-	 * @param newID The ID of the new location
-	 * @param revertDelay The time until the location reverts to the original ID. Set to -1 if the location never reverts
-	 */
-	public void transform (int newID, int revertDelay) {
-		this.id = newID;
-		this.locType = null;
-		this.respawnTime = revertDelay;
-		MapSquare region = World.getInstance().getRegions().getRegionByID(baseTile.getRegionID());
-		if (region != null) {
-			if (id < 0) {
-				region.removeLocation(this, originalID < 0);
-				exists = (originalID >= 0);
-			} else {
-				region.updateLocation(this, id != originalID);
-			}
-		}
-	}
-	
+
 	/**
 	 * Gets the {@link CoordGrid} on which this scene object sits
 	 * @return The tile
@@ -168,7 +110,7 @@ public class SceneLocation extends Node {
 	public CoordGrid getTile () {
 		return baseTile;
 	}
-	
+
 	public CoordGrid getMiddleTile () {
 		int x = (baseTile.getX()*2 + getLocType().sizeX)/2;
 		int y = (baseTile.getY()*2 + getLocType().sizeY)/2;
@@ -202,15 +144,7 @@ public class SceneLocation extends Node {
 	public int getRotation () {
 		return rotation;
 	}
-	
-	/**
-	 * Returns whether the location exists or not
-	 * @return True if the location exists, false otherwise
-	 */
-	public boolean exists () {
-		return exists;
-	}
-	
+
 	/**
 	 * Checks whether or not the specified option can be handled from a distance
 	 * @param option The option to check
@@ -219,7 +153,7 @@ public class SceneLocation extends Node {
 	public boolean distanceOption (OptionButton option) {
 		return OptionButton.SIX.equals(option);
 	}
-	
+
 	/**
 	 * Returns whether the coords are directly adjacent to this location
 	 * @param coords The coords to check
@@ -256,7 +190,7 @@ public class SceneLocation extends Node {
 			return false;
 		}
 	}
-	
+
 	public boolean isStandingOn (CoordGrid coords) {
 		int coordX = coords.getX();
 		int minX = baseTile.getX();
@@ -271,14 +205,14 @@ public class SceneLocation extends Node {
 			return false;
 		}
 	}
-	
+
 	public synchronized void addDelayTask (Runnable onFinish, int delay) {
 		DelayTask task = new DelayTask();
 		task.onFinish = onFinish;
 		task.delayTime = delay;
 		delayTasks.add(task);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
