@@ -23,7 +23,6 @@ package org.virtue.game.map.square;
 
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
-import org.virtue.game.map.square.MapSquare.Zone;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

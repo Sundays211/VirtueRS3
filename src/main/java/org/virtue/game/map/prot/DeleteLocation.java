@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map.zone;
+package org.virtue.game.map.prot;
 
 import org.virtue.game.entity.Entity;
-import org.virtue.game.map.GroundItem;
+import org.virtue.game.map.SceneLocation;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.game.map.CoordGrid;
 
@@ -31,14 +31,16 @@ import org.virtue.game.map.CoordGrid;
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 31/10/2014
+ * @since 4/11/2014
  */
-public class AddObject implements ZoneUpdatePacket {
+public class DeleteLocation implements ZoneUpdatePacket {
 	
-	private GroundItem item;
+	private int flags;
+	private CoordGrid coord;
 	
-	public AddObject (GroundItem item) {
-		this.item = item;
+	public DeleteLocation (SceneLocation object) {
+		this.flags = (object.getRotation() & 0x3) | (object.getShape().getId() << 2);
+		this.coord = object.getTile();
 	}
 
 	/* (non-Javadoc)
@@ -46,7 +48,7 @@ public class AddObject implements ZoneUpdatePacket {
 	 */
 	@Override
 	public ZoneProtocol getType() {
-		return ZoneProtocol.OBJ_ADD;
+		return ZoneProtocol.LOC_DEL;
 	}
 
 	/* (non-Javadoc)
@@ -54,9 +56,8 @@ public class AddObject implements ZoneUpdatePacket {
 	 */
 	@Override
 	public void encode(OutboundBuffer buffer, Entity player) {
-		buffer.putLEShortA(item.getAmount() & 0x7fff);
-		buffer.putA((item.getOffsetX() & 0x7) << 4 | item.getOffsetY() & 0x7);
-		buffer.putShortA(item.getId());
+		buffer.putByte(((coord.getX() % 8) & 0x7) << 4 | (coord.getY() % 8) & 0x7);
+		buffer.putS(flags);
 	}
 
 	/* (non-Javadoc)
@@ -64,7 +65,7 @@ public class AddObject implements ZoneUpdatePacket {
 	 */
 	@Override
 	public CoordGrid getTile() {
-		return item.getTile();
+		return coord;
 	}
 
 }
