@@ -87,25 +87,23 @@ public class DynamicMapLoadTask implements Runnable {
 			CoordGrid tile;
 			int rotation, sizeX, sizeY;
 			int finalX, finalY;
-			for (SceneLocation[] locations : zone.baseLocations.values()) {
-				for (SceneLocation loc : locations) {
-					if (loc == null) {
-						continue;
-					}
-					localX = loc.getTile().getLocalX() & 0x7;
-					localY = loc.getTile().getLocalY() & 0x7;
-					z = loc.getTile().getLevel();	
-					sizeX = loc.getLocType().sizeX;
-					sizeY = loc.getLocType().sizeY;
-					rotation = loc.getRotation();
-					
-					finalX = (chunkX * 8) + getRotatedXPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
-					finalY = (chunkY * 8) + getRotatedYPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
-					tile = new CoordGrid(finalX, finalY, z, region.mapSquareHash);
-					loc = SceneLocation.create(loc.getID(), tile, loc.getShape(), rotation);
-					//FIXME: Update to use new map loader
-					//region.addLocation(loc, finalX, finalY, z);
+			for (SceneLocation loc : zone.replacedLocations.values()) {
+				if (loc == null) {
+					continue;
 				}
+				localX = loc.getTile().getLocalX() & 0x7;
+				localY = loc.getTile().getLocalY() & 0x7;
+				z = loc.getTile().getLevel();
+				sizeX = loc.getLocType().sizeX;
+				sizeY = loc.getLocType().sizeY;
+				rotation = loc.getRotation();
+
+				finalX = (chunkX * 8) + getRotatedXPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
+				finalY = (chunkY * 8) + getRotatedYPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
+				tile = new CoordGrid(finalX, finalY, z, region.mapSquareHash);
+				loc = SceneLocation.create(loc.getID(), tile, loc.getShape(), rotation);
+				//FIXME: Update to use new map loader
+				//region.addLocation(loc, finalX, finalY, z);
 			}
 		}
 	}

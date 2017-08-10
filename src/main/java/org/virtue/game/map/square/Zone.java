@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.virtue.config.loctype.LocShape;
@@ -20,11 +21,9 @@ import org.virtue.game.map.prot.ZoneUpdatePacket;
 import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
 import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
 
-import com.google.common.base.Objects;
-
 /**
- * Represents an 8x8 block of tiles within the Region.
- * All items and objects within this block can be updated simultaneously, saving bandwidth when updating.
+ * Represents an 8x8 zone within the Region.
+ * All items and locations within this zone can be updated simultaneously, saving bandwidth when updating.
  * 
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -34,9 +33,9 @@ import com.google.common.base.Objects;
  */
 public class Zone {
 	/**
-	 * Represents the static (permanent) locations in this block.
+	 * Base locations which have been replaced
 	 */
-	protected final Map<Integer, SceneLocation[]> baseLocations = new HashMap<Integer, SceneLocation[]>();
+	protected final Map<Integer, SceneLocation> replacedLocations = new HashMap<>();
 
 	/**
 	 * Represents the ground items located within this block
@@ -44,9 +43,9 @@ public class Zone {
 	private final Map<Integer, List<GroundItem>> items = new HashMap<Integer, List<GroundItem>>();
 
 	/**
-	 * Represents the locations which need to be updated when a player enters the region
+	 * Locations currently active in the zone
 	 */
-	private final Map<Integer, SceneLocation> replacementLocations = new HashMap<>();
+	private final Map<Integer, SceneLocation> locations = new HashMap<>();
 
 	private CoordGrid coord;
 
@@ -55,58 +54,54 @@ public class Zone {
 	}
 
 	protected void addBaseLocation (SceneLocation loc) {
-		int hash = getLocalHash(loc.getTile());
-		synchronized (baseLocations) {
-			if (!baseLocations.containsKey(hash)) {
-				baseLocations.put(hash, new SceneLocation[23]);
-			}
-			baseLocations.get(hash)[loc.getShape().getId()] = loc;
-		}
+		int hash = getLocationHash(loc);
+		locations.put(hash, loc);
 	}
 
 	protected void updateLocation (SceneLocation loc) {
-		int hash = getLocalHash(loc.getTile());
-		if (baseLocations.containsKey(hash)
-				&& Objects.equal(baseLocations.get(hash)[loc.getShape().getId()], loc)) {
-			replacementLocations.remove(hash);
+		int hash = getLocationHash(loc);
+		if (replacedLocations.containsKey(hash)) {
+			if (Objects.equals(replacedLocations.get(hash), loc)) {
+				//We already have a base location at the same coords.
+				//Add it instead so we don't keep trying to send it to clients
+				locations.put(hash, replacedLocations.remove(hash));
+			} else {
+				//Otherwise, we're replacing another replacement.
+				//Don't worry about keeping the reference to it
+				locations.put(hash, loc);
+			}
 		} else {
-			replacementLocations.put(hash, loc);
+			SceneLocation oldLoc = locations.put(hash, loc);
+			if (oldLoc != null && !oldLoc.isReplacement()) {
+				//Store the base location so it can be retrieved later
+				replacedLocations.put(hash, oldLoc);
+			}
 		}
 	}
 
 	protected void removeLocation (CoordGrid coord, LocShape shape, int rotation) {
-		SceneLocation loc = SceneLocation.create(-1, coord, shape, rotation);
-		
-		int hash = getLocalHash(coord);
-		if (baseLocations.containsKey(hash)
-				&& Objects.equal(baseLocations.get(hash)[loc.getShape().getId()], loc)) {
-			replacementLocations.remove(hash);
+		int hash = getLocationHash(coord, shape, rotation);
+		if (replacedLocations.containsKey(hash)) {
+			//This change removed a base location, so we need to send the removal to new players
+			locations.put(hash, SceneLocation.create(-1, coord, shape, rotation));
 		} else {
-			replacementLocations.put(hash, loc);
+			SceneLocation oldLoc = locations.remove(hash);
+			if (oldLoc != null && !oldLoc.isReplacement()) {
+				//Store the old base location & send removal to new players
+				locations.put(hash, SceneLocation.create(-1, coord, shape, rotation));
+				replacedLocations.put(hash, oldLoc);
+			}
 		}
 	}
 
 	protected Optional<SceneLocation> getLocation (CoordGrid coord, LocShape shape) {
-		int hash = getLocalHash(coord);
-		if (baseLocations.containsKey(hash)) {
-			return Optional.ofNullable(baseLocations.get(hash)[shape.getId()]);
-		}
-		return Optional.empty();
+		return locations.values().stream()
+				.filter(loc -> loc.getTile().equals(coord) && loc.getShape() == shape).findAny();
 	}
 
 	protected Optional<SceneLocation> getLocation (CoordGrid coord, int locTypeId) {
-		int hash = getLocalHash(coord);
-		synchronized (baseLocations) {
-			if (!baseLocations.containsKey(hash)) {
-				return Optional.empty();
-			}
-			for (SceneLocation loc : baseLocations.get(hash)) {
-				if (loc != null && loc.getID() == locTypeId) {
-					return Optional.of(loc);
-				}
-			}
-		}
-		return Optional.empty();
+		return locations.values().stream()
+				.filter(loc -> loc.getTile().equals(coord) && loc.getId() == locTypeId).findAny();
 	}
 
 	protected void addItem (GroundItem item) {
@@ -154,9 +149,9 @@ public class Zone {
 		}
 		return selected;
 	}
-	
+
 	protected void updateBlock (Iterable<Player> players) {
-		Iterator<SceneLocation> locIterator = replacementLocations.values().iterator();
+		Iterator<SceneLocation> locIterator = locations.values().iterator();
 		while (locIterator.hasNext()) {
 			SceneLocation loc = locIterator.next();
 			loc.processTick();
@@ -178,7 +173,7 @@ public class Zone {
 			}
 		}
 	}
-	
+
 	protected void sendUpdate (Player player) {
 		List<ZoneUpdatePacket> packets = new ArrayList<ZoneUpdatePacket>();
 		for (List<GroundItem> tileItems : items.values()) {
@@ -188,18 +183,26 @@ public class Zone {
 				}
 			}
 		}
-		for (SceneLocation loc : replacementLocations.values()) {
-			if (loc != null) {
+		locations.values().stream()
+			.filter(SceneLocation::isReplacement)
+			.forEach(loc -> {
 				if (loc.getId() < 0) {
 					packets.add(new DeleteLocation(loc));
 				} else {
 					packets.add(new AddUpdateLocation(loc));
 				}
-			}
-		}
+			});
 		if (!packets.isEmpty()) {
 			player.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(packets, coord));
 		}
+	}
+
+	public int getLocationHash (SceneLocation loc) {
+		return getLocationHash(loc.getTile(), loc.getShape(), loc.getRotation());
+	}
+
+	public int getLocationHash (CoordGrid coord, LocShape shape, int rotation) {
+		return getLocalHash(coord) | rotation << 10 | shape.getId() << 12;
 	}
 
 	private int getLocalHash (CoordGrid coord) {
@@ -214,6 +217,6 @@ public class Zone {
 	 * @return The hash
 	 */
 	private int getLocalHash (int x, int y, int z) {
-		return x & 0x3F | ((y & 0x3F) << 6) | z << 12;
+		return x & 0x3F | ((y & 0x3F) << 4) | z << 8;
 	}
 }
