@@ -62,8 +62,7 @@ public class LocationClickEventHandler implements GameEventHandler<LocationClick
 		CoordGrid tile = new CoordGrid(context.getBaseX(), context.getBaseY(), player.getCurrentTile().getLevel());
 		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
 		if (region != null) {
-			final SceneLocation location = region.getLocation(tile.getXInRegion(), tile.getYInRegion(), tile.getLevel(),
-					context.getLocationID());
+			final SceneLocation location = region.getLocation(tile, context.getLocationID()).orElse(null);
 			if (location == null) {
 				player.getDispatcher().sendConsoleMessage(
 						"<col=ff0000>Location " + context.getLocationID() + " clicked at " + tile + " does not exist!");

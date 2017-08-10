@@ -19,24 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map.zone;
+package org.virtue.game.map.prot;
 
-import org.virtue.game.entity.Entity;
-import org.virtue.game.map.CoordGrid;
-import org.virtue.network.event.buffer.OutboundBuffer;
+import org.virtue.network.event.encoder.ServerProtocol;
 
-/**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Sundays211
- * @since 31/10/2014
- */
-public interface ZoneUpdatePacket {
+public enum ZoneProtocol { 
+	LOC_ADD_CHANGE(0, 6, ServerProtocol.LOC_ADD_CHANGE),
+	LOC_DEL(1, 2, ServerProtocol.LOC_DEL),
+	OBJ_ADD(4, 5, ServerProtocol.OBJ_ADD),
+	LOC_ANIM(6, 7, ServerProtocol.LOC_ANIM),
+	OBJ_REVEAL(9, 7, ServerProtocol.OBJ_REVEAL),
+	OBJ_DEL(10, 3, ServerProtocol.OBJ_DEL),
+	MAP_PROJANIM(13, 18, ServerProtocol.MAP_PROJECTILE);
 	
-	public ZoneProtocol getType ();
+	private int serialID;
+	private ServerProtocol packetID;
 	
-	public void encode (OutboundBuffer buffer, Entity player);
+	ZoneProtocol (int serialID, int size, ServerProtocol packetID) {
+		this.serialID = serialID;
+		this.packetID = packetID;
+	}
 	
-	public CoordGrid getTile ();
+	public int getSerialID () {
+		return serialID;
+	}
+	
+	public ServerProtocol getServerTransmitID () {
+		return packetID;
+	}
 }

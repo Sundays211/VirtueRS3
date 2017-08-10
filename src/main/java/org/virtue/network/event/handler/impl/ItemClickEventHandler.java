@@ -47,7 +47,7 @@ public class ItemClickEventHandler implements GameEventHandler<ItemClickEventCon
 		MapSquare region = World.getInstance().getRegions().getRegionByID(tile.getRegionID());
 
 		if (region != null) {
-			final GroundItem item = region.getItem(tile.getXInRegion(), tile.getYInRegion(), tile.getLevel(), context.getItemID());
+			final GroundItem item = region.getItem(tile, context.getItemID());
 			if (item == null) {
 				player.getDispatcher().sendConsoleMessage("<col=ff0000>Ground item "+context.getItemID()+" clicked at "+tile+" does not exist!");
 			} else if (item.distanceOption(context.getButton()) || (player.getCurrentTile().getX() == context.getBaseX() && player.getCurrentTile().getY() == context.getBaseY())) {

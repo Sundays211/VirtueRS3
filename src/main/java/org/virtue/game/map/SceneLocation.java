@@ -27,8 +27,6 @@ import java.util.Set;
 import org.virtue.Virtue;
 import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
-import org.virtue.game.World;
-import org.virtue.game.map.square.MapSquare;
 import org.virtue.game.node.Node;
 import org.virtue.network.event.context.impl.in.OptionButton;
 
@@ -40,65 +38,52 @@ import org.virtue.network.event.context.impl.in.OptionButton;
  * @since 27/10/2014
  */
 public class SceneLocation extends Node {
-	
+
 	private static class DelayTask {
 		private int delayTime;
 		private Runnable onFinish;		
 	}
-	
-	public static SceneLocation create (int id, CoordGrid tile, LocShape shape, int rotation) {
-		SceneLocation object = new SceneLocation(id, tile, shape, rotation);
-		return object;
+
+	public static SceneLocation createBase (int id, CoordGrid tile, LocShape shape, int rotation) {
+		SceneLocation location = new SceneLocation(id, tile, shape, rotation);
+		location.replacement = false;
+		return location;
 	}
-	
-	
-	private int originalID;
-	
-	private int respawnTime = -1;
-	
-	private CoordGrid baseTile;
-	
-	private LocShape shape;
-	
-	private int rotation;
-	
+
+	public static SceneLocation create (int id, CoordGrid tile, LocShape shape, int rotation) {
+		SceneLocation location = new SceneLocation(id, tile, shape, rotation);
+		return location;
+	}
+
+	private final LocShape shape;
+
+	private final int rotation;
+
+	private boolean replacement = true;
+
 	private LocType locType;
-	
-	private boolean exists = true;
-	
+
 	private Set<DelayTask> delayTasks = new HashSet<>();
-	
+
 	protected SceneLocation (int id, CoordGrid tile, LocShape shape, int rotation) {
 		super(id);
 		super.currentTile = tile;
-		this.originalID = id;
-		this.baseTile = tile;
 		this.shape = shape;
 		this.rotation = rotation;
-		if ((rotation & 2) == 0) {
-			super.setSizeX(getLocType().sizeX);
-			super.setSizeY(getLocType().sizeY);
-		} else {
-			super.setSizeX(getLocType().sizeY);
-			super.setSizeY(getLocType().sizeX);
+		if (id >= 0) {
+			if ((rotation & 2) == 0) {
+				super.setSizeX(getLocType().sizeX);
+				super.setSizeY(getLocType().sizeY);
+			} else {
+				super.setSizeX(getLocType().sizeY);
+				super.setSizeY(getLocType().sizeX);
+			}
 		}
 	}
 
 	@Override
 	public String getName() {
 		return getLocType().name;
-	}
-	
-	/**
-	 * Sets this location as a temporary location
-	 */
-	public void setTemporary (int removalDelay) {
-		this.originalID = -1;
-		this.respawnTime = removalDelay;
-	}
-	
-	public boolean isTemporary () {
-		return originalID != -1;
 	}
 	
 	/**
@@ -109,7 +94,7 @@ public class SceneLocation extends Node {
 		return id;
 	}
 	
-	public synchronized boolean processTick () {
+	public synchronized void processTick () {
 		Set<DelayTask> tasks = delayTasks;
 		delayTasks = new HashSet<>();
 		for (DelayTask task : tasks) {
@@ -123,56 +108,29 @@ public class SceneLocation extends Node {
 				delayTasks.remove(task);
 			}
 		}
-		
-		if (respawnTime < 0) {
-			respawnTime = -1;
-			return false;
-		}
-		
-		respawnTime--;
-		if (respawnTime == 0) {
-			return true;
-		} else {
-			return false;
-		}
 	}
-	
-	public void revert () {
-		transform(originalID, -1);
-	}
-	
+
 	/**
-	 * Transforms this object to another location for the specified period of time
-	 * @param newID The ID of the new location
-	 * @param revertDelay The time until the location reverts to the original ID. Set to -1 if the location never reverts
+	 * Checks whether this location is a replacement for a static location on the map
+	 * If true, the location will be sent to new players as they enter the map square
+	 * @return True if the location is a replacement, false if it is from the map archive
 	 */
-	public void transform (int newID, int revertDelay) {
-		this.id = newID;
-		this.locType = null;
-		this.respawnTime = revertDelay;
-		MapSquare region = World.getInstance().getRegions().getRegionByID(baseTile.getRegionID());
-		if (region != null) {
-			if (id < 0) {
-				region.removeLocation(this, originalID < 0);
-				exists = (originalID >= 0);
-			} else {
-				region.updateLocation(this, id != originalID);
-			}
-		}
+	public boolean isReplacement() {
+		return replacement;
 	}
-	
+
 	/**
-	 * Gets the {@link CoordGrid} on which this scene object sits
+	 * Gets the {@link CoordGrid} on which this location sits
 	 * @return The tile
 	 */
 	public CoordGrid getTile () {
-		return baseTile;
+		return currentTile;
 	}
-	
+
 	public CoordGrid getMiddleTile () {
-		int x = (baseTile.getX()*2 + getLocType().sizeX)/2;
-		int y = (baseTile.getY()*2 + getLocType().sizeY)/2;
-		return new CoordGrid(x, y, baseTile.getLevel());
+		int x = (currentTile.getX()*2 + getLocType().sizeX)/2;
+		int y = (currentTile.getY()*2 + getLocType().sizeY)/2;
+		return new CoordGrid(x, y, currentTile.getLevel());
 	}
 
 	/**
@@ -202,15 +160,7 @@ public class SceneLocation extends Node {
 	public int getRotation () {
 		return rotation;
 	}
-	
-	/**
-	 * Returns whether the location exists or not
-	 * @return True if the location exists, false otherwise
-	 */
-	public boolean exists () {
-		return exists;
-	}
-	
+
 	/**
 	 * Checks whether or not the specified option can be handled from a distance
 	 * @param option The option to check
@@ -219,7 +169,7 @@ public class SceneLocation extends Node {
 	public boolean distanceOption (OptionButton option) {
 		return OptionButton.SIX.equals(option);
 	}
-	
+
 	/**
 	 * Returns whether the coords are directly adjacent to this location
 	 * @param coords The coords to check
@@ -227,7 +177,7 @@ public class SceneLocation extends Node {
 	 */
 	public boolean isAdjacentTo (CoordGrid coords) {
 		int tileX = coords.getX();
-		int minX = baseTile.getX();
+		int minX = currentTile.getX();
 		int maxX = minX + getLocType().sizeX - 1;
 		int dx;
 		if (tileX < minX) {
@@ -238,7 +188,7 @@ public class SceneLocation extends Node {
 			dx = 0;
 		}
 		int tileY = coords.getY();
-		int minY = baseTile.getY();
+		int minY = currentTile.getY();
 		int maxY = minY + getLocType().sizeY - 1;
 		int dy;
 		if (tileY < minY) {
@@ -256,13 +206,13 @@ public class SceneLocation extends Node {
 			return false;
 		}
 	}
-	
+
 	public boolean isStandingOn (CoordGrid coords) {
 		int coordX = coords.getX();
-		int minX = baseTile.getX();
+		int minX = currentTile.getX();
 		int maxX = minX + getLocType().sizeX - 1;
 		int coordY = coords.getY();
-		int minY = baseTile.getY();
+		int minY = currentTile.getY();
 		int maxY = minY + getLocType().sizeY - 1;
 		if (coordX >= minX && coordX <= maxX 
 				&& coordY >= minY && coordY <= maxY) {
@@ -271,19 +221,19 @@ public class SceneLocation extends Node {
 			return false;
 		}
 	}
-	
+
 	public synchronized void addDelayTask (Runnable onFinish, int delay) {
 		DelayTask task = new DelayTask();
 		task.onFinish = onFinish;
 		task.delayTime = delay;
 		delayTasks.add(task);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((baseTile == null) ? 0 : baseTile.hashCode());
+		result = prime * result + ((currentTile == null) ? 0 : currentTile.hashCode());
 		result = prime * result + id;
 		result = prime * result + rotation;
 		result = prime * result + ((shape == null) ? 0 : shape.hashCode());
@@ -299,10 +249,10 @@ public class SceneLocation extends Node {
 		if (getClass() != obj.getClass())
 			return false;
 		SceneLocation other = (SceneLocation) obj;
-		if (baseTile == null) {
-			if (other.baseTile != null)
+		if (currentTile == null) {
+			if (other.currentTile != null)
 				return false;
-		} else if (!baseTile.equals(other.baseTile))
+		} else if (!currentTile.equals(other.currentTile))
 			return false;
 		if (id != other.id)
 			return false;
@@ -315,6 +265,6 @@ public class SceneLocation extends Node {
 
 	@Override
 	public String toString () {
-		return "Location[type="+id+", shape="+shape+", rotation="+rotation+", name="+getLocType().name+", tile="+baseTile+"]";
+		return "Location[type="+id+", shape="+shape+", rotation="+rotation+", name="+getLocType().name+", coord="+currentTile+"]";
 	}
 }

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map.zone;
+package org.virtue.game.map.prot;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.player.Player;

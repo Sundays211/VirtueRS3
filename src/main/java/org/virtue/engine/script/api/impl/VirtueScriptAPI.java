@@ -33,7 +33,6 @@ import org.virtue.Virtue;
 import org.virtue.config.ConfigProvider;
 import org.virtue.config.enumtype.EnumType;
 import org.virtue.config.invtype.InvType;
-import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.npctype.NpcType;
 import org.virtue.config.objtype.ObjType;
@@ -2010,95 +2009,6 @@ public class VirtueScriptAPI implements ScriptAPI {
 	public Object getRandomChoice(Object[] objects) {
 		int choice = (int) Math.floor(Math.random()*objects.length);
 		return objects[choice];
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#createLocation(int, int, int, int, int, int)
-	 */
-	@Override
-	public SceneLocation createLocation(int id, int x, int y, int z, int shapeId, int rotation) {
-		CoordGrid tile = new CoordGrid(x, y, z);
-		return createLocation(id, tile, shapeId, rotation);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#createLocation(int, org.virtue.game.entity.region.Tile, int, int)
-	 */
-	@Override
-	public SceneLocation createLocation(int id, CoordGrid tile, int shapeId, int rotation) {
-		return SceneLocation.create(id, tile, LocShape.getById(shapeId), rotation);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#spawnLocation(org.virtue.game.entity.region.SceneLocation)
-	 */
-	@Override
-	public void spawnLocation(SceneLocation loc) {
-		spawnLocation(loc, -1);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#spawnLocation(org.virtue.game.entity.region.SceneLocation, int)
-	 */
-	@Override
-	public void spawnLocation(SceneLocation loc, int removalDelay) {
-		World.getInstance().getRegions().getRegionByID(loc.getTile().getRegionID()).spawnTempLocation(loc, removalDelay);		
-	}
-
-	@Override
-	public SceneLocation spawnLocation(int locTypeId, CoordGrid coords, int removalDelay) {
-		return spawnLocation(locTypeId, coords, 10, 0, removalDelay);
-	}
-
-	@Override
-	public SceneLocation spawnLocation(int locTypeId, CoordGrid coords, int shapeId,
-			int rotation, int removalDelay) {
-		SceneLocation loc = SceneLocation.create(locTypeId, coords, LocShape.getById(shapeId), rotation);
-		spawnLocation(loc, removalDelay);
-		return loc;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getLocationByNodeType(int, int, int, int)
-	 */
-	@Override
-	public SceneLocation getLocationByNodeType(CoordGrid coords, int type) {
-		return getLocationByNodeType(coords.getX(), coords.getY(), coords.getLevel(), type);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#getLocationByNodeType(int, int, int, int)
-	 */
-	@Override
-	public SceneLocation getLocationByNodeType(int posX, int posY, int plane, int type) {
-		if (type < 0 || type > 22) {
-			return null;
-		}
-		MapSquare region = World.getInstance().getRegions().getRegionByID(CoordGrid.getMapSquareHash(posX, posY));
-		if (region == null) {
-			return null;
-		}
-		SceneLocation[] locs = region.getLocations(posX, posY, plane);
-		if (locs == null) {
-			return null;
-		}
-		return locs[type];
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#transformLoc(org.virtue.game.entity.region.SceneLocation, int, int)
-	 */
-	@Override
-	public void transformLoc(SceneLocation loc, int newID, int revertDelay) {
-		loc.transform(newID, revertDelay);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.ScriptAPI#destroyLoc(org.virtue.game.entity.region.SceneLocation)
-	 */
-	@Override
-	public void destroyLoc(SceneLocation loc) {
-		World.getInstance().getRegions().getRegionByID(loc.getTile().getRegionID()).removeLocation(loc, loc.isTemporary());
 	}
 
 	/* (non-Javadoc)

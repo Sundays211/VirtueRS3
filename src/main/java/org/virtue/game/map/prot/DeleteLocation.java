@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map.zone;
+package org.virtue.game.map.prot;
 
+import org.virtue.config.loctype.LocShape;
 import org.virtue.game.entity.Entity;
-import org.virtue.game.map.GroundItem;
+import org.virtue.game.map.SceneLocation;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.game.map.CoordGrid;
 
@@ -31,14 +32,20 @@ import org.virtue.game.map.CoordGrid;
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 2/11/2014
+ * @since 4/11/2014
  */
-public class DeleteObject implements ZoneUpdatePacket {
+public final class DeleteLocation implements ZoneUpdatePacket {
+
+	private final int flags;
+	private final CoordGrid coord;
 	
-	private GroundItem object;
+	public DeleteLocation (SceneLocation loc) {
+		this(loc.getTile(), loc.getShape(), loc.getRotation());
+	}
 	
-	public DeleteObject (GroundItem object) {
-		this.object = object;
+	public DeleteLocation (CoordGrid coord, LocShape shape, int rotation) {
+		this.flags = (rotation & 0x3) | (shape.getId() << 2);
+		this.coord = coord;
 	}
 
 	/* (non-Javadoc)
@@ -46,7 +53,7 @@ public class DeleteObject implements ZoneUpdatePacket {
 	 */
 	@Override
 	public ZoneProtocol getType() {
-		return ZoneProtocol.OBJ_DEL;
+		return ZoneProtocol.LOC_DEL;
 	}
 
 	/* (non-Javadoc)
@@ -54,8 +61,8 @@ public class DeleteObject implements ZoneUpdatePacket {
 	 */
 	@Override
 	public void encode(OutboundBuffer buffer, Entity player) {
-		buffer.putLEShort(object.getId());
-		buffer.putC((object.getOffsetX() & 0x7) << 4 | object.getOffsetY() & 0x7);
+		buffer.putByte(((coord.getX() % 8) & 0x7) << 4 | (coord.getY() % 8) & 0x7);
+		buffer.putS(flags);
 	}
 
 	/* (non-Javadoc)
@@ -63,7 +70,7 @@ public class DeleteObject implements ZoneUpdatePacket {
 	 */
 	@Override
 	public CoordGrid getTile() {
-		return object.getTile();
+		return coord;
 	}
 
 }

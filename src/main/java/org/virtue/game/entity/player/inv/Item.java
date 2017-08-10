@@ -73,13 +73,11 @@ public class Item extends Node {
 		if (getType().dummyitem != 0) {
 			throw new IllegalArgumentException("Can't instantiate a dummy item! Item ID: "+id);
 		}
-		this.id = id;
 		this.amount = count;
 	}
 	
 	public Item (Item item) {
 		super(item.id);
-		this.id = item.id;
 		this.amount = item.amount;
 		this.type = item.type;
 		this.varValues = item.varValues;
