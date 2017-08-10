@@ -21,6 +21,7 @@
  */
 package org.virtue.game.map.prot;
 
+import org.virtue.config.loctype.LocShape;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.SceneLocation;
 import org.virtue.network.event.buffer.OutboundBuffer;
@@ -33,14 +34,18 @@ import org.virtue.game.map.CoordGrid;
  * @author Sundays211
  * @since 4/11/2014
  */
-public class DeleteLocation implements ZoneUpdatePacket {
+public final class DeleteLocation implements ZoneUpdatePacket {
+
+	private final int flags;
+	private final CoordGrid coord;
 	
-	private int flags;
-	private CoordGrid coord;
+	public DeleteLocation (SceneLocation loc) {
+		this(loc.getTile(), loc.getShape(), loc.getRotation());
+	}
 	
-	public DeleteLocation (SceneLocation object) {
-		this.flags = (object.getRotation() & 0x3) | (object.getShape().getId() << 2);
-		this.coord = object.getTile();
+	public DeleteLocation (CoordGrid coord, LocShape shape, int rotation) {
+		this.flags = (rotation & 0x3) | (shape.getId() << 2);
+		this.coord = coord;
 	}
 
 	/* (non-Javadoc)

@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.virtue.Constants;
@@ -138,7 +139,7 @@ public class MapSquare {
 		}
 		CoordGrid coord = new CoordGrid(localX, localY, level, baseTile.getRegionX(), baseTile.getRegionY());
 
-		SceneLocation loc = SceneLocation.create(locType.myid, coord, shape, rotation);
+		SceneLocation loc = SceneLocation.createBase(locType.myid, coord, shape, rotation);
 		int zoneHash = getZoneHash(localX, localY, level);
 		synchronized (zones) {
 			if (zones.get(zoneHash) == null) {
@@ -157,7 +158,7 @@ public class MapSquare {
 	public void addChangeLocation (SceneLocation loc) {
 		int hash = getZoneHash(loc.getTile());
 		synchronized (zones) {
-			if (zones.get(hash) == null) {
+			if (!zones.containsKey(hash)) {
 				zones.put(hash, new Zone(loc.getTile()));
 			}
 			zones.get(hash).updateLocation(loc);
@@ -166,20 +167,20 @@ public class MapSquare {
 			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new AddUpdateLocation(loc)));
 		}
 	}
-	
-	public void removeLocation (SceneLocation loc) {
-		int hash = getZoneHash(loc.getTile());
+
+	public void removeLocation (CoordGrid coord, LocShape shape, int rotation) {
+		int hash = getZoneHash(coord);
 		synchronized (zones) {
-			if (zones.get(hash) == null) {
-				return;
+			if (!zones.containsKey(hash)) {
+				throw new IllegalStateException("No locations exist at "+coord);
 			}
-			zones.get(hash).removeLocation(loc);
+			zones.get(hash).removeLocation(coord, shape, rotation);
 		}
 		for (Player p : players) {
-			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new DeleteLocation(loc)));
+			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new DeleteLocation(coord, shape, rotation)));
 		}
 	}
-	
+
 	public void locationAnim(SceneLocation loc, int animId) {
 		for (Player p : players) {
 			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(new LocationAnim(loc, animId)));
@@ -327,42 +328,38 @@ public class MapSquare {
 	}
 	
 	/**
-	 * Gets the location of the specified ID at the specified coordinates
+	 * Gets the location of the specified ID at the specified coordinates.
 	 * @param coord The coordinates
 	 * @param locTypeID the ID of the location to get
-	 * @return The {@link SceneLocation} at the specified coordinates, or null if no location exists
+	 * @return The {@link SceneLocation} at the specified coordinates, or Optional.empty() if no location exists
 	 */
-	public SceneLocation getLocation (CoordGrid coord, int locTypeID) {
+	public Optional<SceneLocation> getLocation (CoordGrid coord, int locTypeID) {
 		int hash = getZoneHash(coord);
 		synchronized (zones) {
 			if (!zones.containsKey(hash)) {
-				return null;
-			}		
-			return zones.get(hash).getLocation(locTypeID, coord);
+				return Optional.empty();
+			}
+			return zones.get(hash).getLocation(coord, locTypeID);
 		}
 	}
-	
+
 	/**
-	 * Gets all the locations at the specified coordinates
+	 * Gets a location with the given shape at the given coords.
+	 * Returns Optional.empty() if none exists
 	 * @param coords The coordinates
-	 * @return A {@link SceneLocation} array for locations at the specified coordinates, or null if no locations exists
+	 * @param shape The location shape
+	 * @return A {@link SceneLocation} array for locations at the specified coordinates
 	 */
-	public SceneLocation[] getLocations (CoordGrid coords) {
-		int hash = getZoneHash(coords);
+	public Optional<SceneLocation> getLocation (CoordGrid coord, LocShape shape) {
+		int hash = getZoneHash(coord);
 		synchronized (zones) {
 			if (!zones.containsKey(hash)) {
-				return null;
-			}		
-			SceneLocation[] locations = zones.get(hash).getLocations(coords);
-			if (locations == null) {
-				return null;
-			} else {
-				System.arraycopy(locations, 0, locations = new SceneLocation[locations.length], 0, locations.length);
-				return locations;
+				return Optional.empty();
 			}
+			return zones.get(hash).getLocation(coord, shape);
 		}
 	}
-	
+
 	/**
 	 * Gets the item of the specified ID located at the specified coordinates
 	 * @param coords The coordinates

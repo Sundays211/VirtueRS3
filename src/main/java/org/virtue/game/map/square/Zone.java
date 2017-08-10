@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.virtue.config.loctype.LocShape;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.GroundItem;
@@ -35,12 +37,12 @@ public class Zone {
 	 * Represents the static (permanent) locations in this block.
 	 */
 	protected final Map<Integer, SceneLocation[]> baseLocations = new HashMap<Integer, SceneLocation[]>();
-	
+
 	/**
 	 * Represents the ground items located within this block
 	 */
 	private final Map<Integer, List<GroundItem>> items = new HashMap<Integer, List<GroundItem>>();
-	
+
 	/**
 	 * Represents the locations which need to be updated when a player enters the region
 	 */
@@ -72,8 +74,10 @@ public class Zone {
 		}
 	}
 
-	protected void removeLocation (SceneLocation loc) {
-		int hash = getLocalHash(loc.getTile());
+	protected void removeLocation (CoordGrid coord, LocShape shape, int rotation) {
+		SceneLocation loc = SceneLocation.create(-1, coord, shape, rotation);
+		
+		int hash = getLocalHash(coord);
 		if (baseLocations.containsKey(hash)
 				&& Objects.equal(baseLocations.get(hash)[loc.getShape().getId()], loc)) {
 			replacementLocations.remove(hash);
@@ -82,26 +86,27 @@ public class Zone {
 		}
 	}
 
-	protected SceneLocation[] getLocations (CoordGrid coord) {
+	protected Optional<SceneLocation> getLocation (CoordGrid coord, LocShape shape) {
 		int hash = getLocalHash(coord);
-		synchronized (baseLocations) {
-			return baseLocations.get(hash);
+		if (baseLocations.containsKey(hash)) {
+			return Optional.ofNullable(baseLocations.get(hash)[shape.getId()]);
 		}
+		return Optional.empty();
 	}
 
-	protected SceneLocation getLocation (int locTypeId, CoordGrid coord) {
+	protected Optional<SceneLocation> getLocation (CoordGrid coord, int locTypeId) {
 		int hash = getLocalHash(coord);
 		synchronized (baseLocations) {
 			if (!baseLocations.containsKey(hash)) {
-				return null;
+				return Optional.empty();
 			}
 			for (SceneLocation loc : baseLocations.get(hash)) {
 				if (loc != null && loc.getID() == locTypeId) {
-					return loc;
+					return Optional.of(loc);
 				}
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	protected void addItem (GroundItem item) {

@@ -44,16 +44,22 @@ public class SceneLocation extends Node {
 		private Runnable onFinish;		
 	}
 
-	public static SceneLocation create (int id, CoordGrid tile, LocShape shape, int rotation) {
-		SceneLocation object = new SceneLocation(id, tile, shape, rotation);
-		return object;
+	public static SceneLocation createBase (int id, CoordGrid tile, LocShape shape, int rotation) {
+		SceneLocation location = new SceneLocation(id, tile, shape, rotation);
+		location.replacement = false;
+		return location;
 	}
 
-	private CoordGrid baseTile;
+	public static SceneLocation create (int id, CoordGrid tile, LocShape shape, int rotation) {
+		SceneLocation location = new SceneLocation(id, tile, shape, rotation);
+		return location;
+	}
 
-	private LocShape shape;
+	private final LocShape shape;
 
-	private int rotation;
+	private final int rotation;
+
+	private boolean replacement = true;
 
 	private LocType locType;
 
@@ -62,15 +68,16 @@ public class SceneLocation extends Node {
 	protected SceneLocation (int id, CoordGrid tile, LocShape shape, int rotation) {
 		super(id);
 		super.currentTile = tile;
-		this.baseTile = tile;
 		this.shape = shape;
 		this.rotation = rotation;
-		if ((rotation & 2) == 0) {
-			super.setSizeX(getLocType().sizeX);
-			super.setSizeY(getLocType().sizeY);
-		} else {
-			super.setSizeX(getLocType().sizeY);
-			super.setSizeY(getLocType().sizeX);
+		if (id >= 0) {
+			if ((rotation & 2) == 0) {
+				super.setSizeX(getLocType().sizeX);
+				super.setSizeY(getLocType().sizeY);
+			} else {
+				super.setSizeX(getLocType().sizeY);
+				super.setSizeY(getLocType().sizeX);
+			}
 		}
 	}
 
@@ -104,17 +111,26 @@ public class SceneLocation extends Node {
 	}
 
 	/**
-	 * Gets the {@link CoordGrid} on which this scene object sits
+	 * Checks whether this location is a replacement for a static location on the map
+	 * If true, the location will be sent to new players as they enter the map square
+	 * @return True if the location is a replacement, false if it is from the map archive
+	 */
+	public boolean isReplacement() {
+		return replacement;
+	}
+
+	/**
+	 * Gets the {@link CoordGrid} on which this location sits
 	 * @return The tile
 	 */
 	public CoordGrid getTile () {
-		return baseTile;
+		return currentTile;
 	}
 
 	public CoordGrid getMiddleTile () {
-		int x = (baseTile.getX()*2 + getLocType().sizeX)/2;
-		int y = (baseTile.getY()*2 + getLocType().sizeY)/2;
-		return new CoordGrid(x, y, baseTile.getLevel());
+		int x = (currentTile.getX()*2 + getLocType().sizeX)/2;
+		int y = (currentTile.getY()*2 + getLocType().sizeY)/2;
+		return new CoordGrid(x, y, currentTile.getLevel());
 	}
 
 	/**
@@ -161,7 +177,7 @@ public class SceneLocation extends Node {
 	 */
 	public boolean isAdjacentTo (CoordGrid coords) {
 		int tileX = coords.getX();
-		int minX = baseTile.getX();
+		int minX = currentTile.getX();
 		int maxX = minX + getLocType().sizeX - 1;
 		int dx;
 		if (tileX < minX) {
@@ -172,7 +188,7 @@ public class SceneLocation extends Node {
 			dx = 0;
 		}
 		int tileY = coords.getY();
-		int minY = baseTile.getY();
+		int minY = currentTile.getY();
 		int maxY = minY + getLocType().sizeY - 1;
 		int dy;
 		if (tileY < minY) {
@@ -193,10 +209,10 @@ public class SceneLocation extends Node {
 
 	public boolean isStandingOn (CoordGrid coords) {
 		int coordX = coords.getX();
-		int minX = baseTile.getX();
+		int minX = currentTile.getX();
 		int maxX = minX + getLocType().sizeX - 1;
 		int coordY = coords.getY();
-		int minY = baseTile.getY();
+		int minY = currentTile.getY();
 		int maxY = minY + getLocType().sizeY - 1;
 		if (coordX >= minX && coordX <= maxX 
 				&& coordY >= minY && coordY <= maxY) {
@@ -217,7 +233,7 @@ public class SceneLocation extends Node {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((baseTile == null) ? 0 : baseTile.hashCode());
+		result = prime * result + ((currentTile == null) ? 0 : currentTile.hashCode());
 		result = prime * result + id;
 		result = prime * result + rotation;
 		result = prime * result + ((shape == null) ? 0 : shape.hashCode());
@@ -233,10 +249,10 @@ public class SceneLocation extends Node {
 		if (getClass() != obj.getClass())
 			return false;
 		SceneLocation other = (SceneLocation) obj;
-		if (baseTile == null) {
-			if (other.baseTile != null)
+		if (currentTile == null) {
+			if (other.currentTile != null)
 				return false;
-		} else if (!baseTile.equals(other.baseTile))
+		} else if (!currentTile.equals(other.currentTile))
 			return false;
 		if (id != other.id)
 			return false;
@@ -249,6 +265,6 @@ public class SceneLocation extends Node {
 
 	@Override
 	public String toString () {
-		return "Location[type="+id+", shape="+shape+", rotation="+rotation+", name="+getLocType().name+", tile="+baseTile+"]";
+		return "Location[type="+id+", shape="+shape+", rotation="+rotation+", name="+getLocType().name+", coord="+currentTile+"]";
 	}
 }

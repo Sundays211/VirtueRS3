@@ -12,7 +12,7 @@ public abstract class Node {
 	/**
 	 * The node id.
 	 */
-	protected int id;
+	protected final int id;
 
 	/**
 	 * The current location.

@@ -26,11 +26,11 @@ import org.virtue.config.loctype.LocShape;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.GroundItem;
 import org.virtue.game.map.SceneLocation;
 import org.virtue.game.map.square.DynamicMapSquare;
 import org.virtue.game.map.square.MapSquare;
-import org.virtue.game.map.CoordGrid;
 import org.virtue.game.node.Node;
 
 /**
@@ -188,24 +188,18 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
-	public SceneLocation getLoc(CoordGrid coords, int shape) {
-		if (shape < 0 || shape > 22) {
-			throw new IllegalArgumentException("Invalid location shape: "+shape);
-		}
+	public SceneLocation getLoc(CoordGrid coords, int shapeId) {
+		LocShape shape = LocShape.getById(shapeId);
 		MapSquare region = getRegion(coords);
 		if (region == null) {
 			return null;
 		}
-		SceneLocation[] locs = region.getLocations(coords);
-		if (locs == null) {
-			return null;
-		}
-		return locs[shape];
+		return region.getLocation(coords, shape).orElse(null);
 	}
 
 	@Override
 	public void delLoc(SceneLocation loc) {
-		getRegion(loc.getTile()).removeLocation(loc);
+		getRegion(loc.getTile()).removeLocation(loc.getTile(), loc.getShape(), loc.getRotation());
 	}
 
 	@Override
