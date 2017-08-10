@@ -11,7 +11,7 @@ var SwitchAttackEvent = Java.type('org.virtue.game.entity.combat.impl.combo.Swit
 var MeleeAttackHandler = Java.extend(Java.type('org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler'));
 var CombatStyle = Java.type('org.virtue.game.entity.combat.CombatStyle');
 var AbstractNPC = Java.type('org.virtue.game.entity.npc.AbstractNPC');
-var Projectile = Java.type('org.virtue.game.map.zone.Projectile');
+var Projectile = Java.type('org.virtue.game.map.prot.Projectile');
 var AnimationBlock = Java.type('org.virtue.network.protocol.update.block.AnimationBlock');
 
 var meleeAttack1 = new MeleeAttackHandler(500, 1000) {

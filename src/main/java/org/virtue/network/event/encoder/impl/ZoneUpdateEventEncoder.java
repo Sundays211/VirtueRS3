@@ -22,7 +22,7 @@
 package org.virtue.network.event.encoder.impl;
 
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.map.zone.ZoneUpdatePacket;
+import org.virtue.game.map.prot.ZoneUpdatePacket;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
 import org.virtue.network.event.encoder.EventEncoder;

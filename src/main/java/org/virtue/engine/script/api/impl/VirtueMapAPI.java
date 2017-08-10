@@ -26,11 +26,11 @@ import org.virtue.config.loctype.LocShape;
 import org.virtue.engine.script.api.MapAPI;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.GroundItem;
 import org.virtue.game.map.SceneLocation;
 import org.virtue.game.map.square.DynamicMapSquare;
 import org.virtue.game.map.square.MapSquare;
-import org.virtue.game.map.CoordGrid;
 import org.virtue.game.node.Node;
 
 /**
@@ -168,7 +168,7 @@ public class VirtueMapAPI implements MapAPI {
 			int shapeId, int rotation) {
 		CoordGrid coords = new CoordGrid(localX, localY, level, area.getID());
 		SceneLocation location = SceneLocation.create(locTypeID, coords, LocShape.getById(shapeId), rotation);
-		area.spawnTempLocation(location, -1);
+		area.addChangeLocation(location);
 		return location;
 	}
 
@@ -183,29 +183,23 @@ public class VirtueMapAPI implements MapAPI {
 	@Override
 	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int shapeId, int rotation) {
 		SceneLocation location = SceneLocation.create(locTypeId, coords, LocShape.getById(shapeId), rotation);
-		getRegion(coords).spawnTempLocation(location, -1);
+		getRegion(coords).addChangeLocation(location);
 		return location;
 	}
 
 	@Override
-	public SceneLocation getLoc(CoordGrid coords, int shape) {
-		if (shape < 0 || shape > 22) {
-			throw new IllegalArgumentException("Invalid location shape: "+shape);
-		}
+	public SceneLocation getLoc(CoordGrid coords, int shapeId) {
+		LocShape shape = LocShape.getById(shapeId);
 		MapSquare region = getRegion(coords);
 		if (region == null) {
 			return null;
 		}
-		SceneLocation[] locs = region.getLocations(coords.getX(), coords.getY(), coords.getLevel());
-		if (locs == null) {
-			return null;
-		}
-		return locs[shape];
+		return region.getLocation(coords, shape).orElse(null);
 	}
 
 	@Override
 	public void delLoc(SceneLocation loc) {
-		getRegion(loc.getTile()).removeLocation(loc, loc.isTemporary());
+		getRegion(loc.getTile()).removeLocation(loc.getTile(), loc.getShape(), loc.getRotation());
 	}
 
 	@Override
@@ -250,7 +244,7 @@ public class VirtueMapAPI implements MapAPI {
 		if (square == null) {
 			throw new IllegalArgumentException("Invalid coords: "+coords);
 		}
-		return square.getItem(coords.getX(), coords.getY(), coords.getLevel(), objTypeId) != null;
+		return square.getItem(coords, objTypeId) != null;
 	}
 
 	@Override

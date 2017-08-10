@@ -24,7 +24,7 @@ package org.virtue.network.event.context.impl.out;
 import java.util.Collection;
 
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.zone.ZoneUpdatePacket;
+import org.virtue.game.map.prot.ZoneUpdatePacket;
 import org.virtue.network.event.context.GameEventContext;
 
 /**

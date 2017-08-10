@@ -10,7 +10,7 @@ import org.virtue.game.entity.combat.impl.magic.MagicAttackHandler;
 import org.virtue.game.entity.combat.impl.melee.MeleeAttackHandler;
 import org.virtue.game.entity.npc.AbstractNPC;
 import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.zone.Projectile;
+import org.virtue.game.map.prot.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 

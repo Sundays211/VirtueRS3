@@ -1,4 +1,4 @@
-package org.virtue.game.map.zone;
+package org.virtue.game.map.prot;
 
 import org.virtue.game.entity.Entity;
 import org.virtue.game.map.GroundItem;

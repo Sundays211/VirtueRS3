@@ -19,60 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map.zone;
+package org.virtue.game.map.prot;
 
 import org.virtue.game.entity.Entity;
-import org.virtue.game.map.SceneLocation;
-import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.game.map.CoordGrid;
+import org.virtue.network.event.buffer.OutboundBuffer;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
- * @since 4/11/2014
+ * @since 31/10/2014
  */
-public class AddUpdateLocation implements ZoneUpdatePacket {
+public interface ZoneUpdatePacket {
 	
-	private SceneLocation location;
+	public ZoneProtocol getType ();
 	
-	private int locTypeID;
+	public void encode (OutboundBuffer buffer, Entity player);
 	
-	public AddUpdateLocation (SceneLocation location, int newID) {
-		this.location = location;
-		this.locTypeID = newID;
-	}
-	
-	public AddUpdateLocation (SceneLocation location) {
-		this.location = location;
-		this.locTypeID = location.getID();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getType()
-	 */
-	@Override
-	public ZoneProtocol getType() {
-		return ZoneProtocol.LOC_ADD_CHANGE;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#encode(org.virtue.network.event.buffer.OutboundBuffer, org.virtue.game.entity.player.Player)
-	 */
-	@Override
-	public void encode(OutboundBuffer buffer, Entity player) {
-		buffer.putIntAlt2(locTypeID);
-		buffer.putS(((location.getTile().getX() % 8) & 0x7) << 4 | (location.getTile().getY() % 8) & 0x7);
-		buffer.putC((location.getRotation() & 0x3) | (location.getShape().getId() << 2));
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.game.entity.region.packets.SceneUpdatePacket#getTile()
-	 */
-	@Override
-	public CoordGrid getTile() {
-		return location.getTile();
-	}
-
+	public CoordGrid getTile ();
 }

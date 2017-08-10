@@ -5,7 +5,7 @@ import org.virtue.game.content.skills.magic.Spellbook;
 import org.virtue.game.entity.combat.impl.magic.CombatSpell;
 import org.virtue.game.entity.combat.impl.magic.SpellAttackHandler;
 import org.virtue.game.entity.player.inv.Item;
-import org.virtue.game.map.zone.Projectile;
+import org.virtue.game.map.prot.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 

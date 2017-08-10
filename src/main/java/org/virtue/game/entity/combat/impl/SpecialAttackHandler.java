@@ -9,7 +9,7 @@ import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.combat.AttackInfo;
 import org.virtue.game.entity.combat.CombatStyle;
 import org.virtue.game.entity.player.Player;
-import org.virtue.game.map.zone.Projectile;
+import org.virtue.game.map.prot.Projectile;
 import org.virtue.network.protocol.update.block.AnimationBlock;
 import org.virtue.network.protocol.update.block.SpotAnimationBlock;
 
