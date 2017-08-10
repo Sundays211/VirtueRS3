@@ -116,7 +116,7 @@ module.exports = (function () {
 			showQuestOverview(player, questStructId);
 		} else {
 			varp(player, 3936, slot);
-			showQuestJournal(player, slot);
+			showQuestJournal(player, questId);
 		}			
 		chat.sendDebugMessage(player, "Selected quest: id="+questId+", slot="+slot+", name="+QUEST_ENGINE.getName(questId));
 	}
@@ -132,6 +132,23 @@ module.exports = (function () {
 			quest.openJournal(player, questId, questJournal);
 		} else {
 			setJournalLine(player, 1, "Quest not implemented.");
+            setJournalLine(player, 2, "");
+			setJournalLine(player, 3, "");
+			setJournalLine(player, 4, "");
+			setJournalLine(player, 5, "");
+			setJournalLine(player, 6, "");
+			setJournalLine(player, 7, "");
+			setJournalLine(player, 8, "");
+			setJournalLine(player, 9, "");
+			setJournalLine(player, 10, "");
+			setJournalLine(player, 11, "");
+			setJournalLine(player, 12, "");
+			setJournalLine(player, 13, "");
+			setJournalLine(player, 14, "");
+			setJournalLine(player, 15, "");
+			setJournalLine(player, 16, "");
+			setJournalLine(player, 17, "");
+			setJournalLine(player, 18, "");	
 		}
 		widget.hide(player, 1500, 4, false);
 		widget.hide(player, 1500, 5, true);

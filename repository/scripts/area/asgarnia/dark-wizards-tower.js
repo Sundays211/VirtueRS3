@@ -31,6 +31,10 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		
+	scriptManager.bind(EventType.OPLOC1, 24882, function (ctx) {//Gramophone in Witch's House
+         chat.sendMessage(ctx.player, "The gramophone doesn't have a record on it."); 
+    });		
+		
 	scriptManager.bind(EventType.OPLOC1, 24842, function (ctx) {//Manhole (Quest Witch's House)
 	  if (util.mapMembers()){
 	     chat.sendMessage(ctx.player, "The cover won't budge. It seems to be locked.");

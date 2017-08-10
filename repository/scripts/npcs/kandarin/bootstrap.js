@@ -3,7 +3,8 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./monk')
+		require('./monk'),
+		require('./wizard-cromperty')
 	];
 	
 	for (var i in modules) {

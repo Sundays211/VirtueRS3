@@ -22,6 +22,7 @@
 /* globals EventType */
 var chat = require('chat');
 var dialog = require('dialog');
+var quest = require('../quest');
 module.exports = (function () {
 	return {
 		init : init
@@ -42,8 +43,8 @@ module.exports = (function () {
 	    });
 		
 		scriptManager.bind(EventType.OPLOC1, 25397, function (ctx) {
-	        dialog.builder(ctx.player).mesbox(" The Observatory `<br> Step ahead to the reception if you wish to explore RuneScape's most<br> magnificent invention.")
-			.chatplayer("Magnificent invention? I've seen some pretty<br> magnificent things in my time. It'll have to be pretty<br> impressive.") 
+	        dialog.builder(ctx.player).mesbox("~ The Observatory ~<br> Step ahead to the reception if you wish to explore RuneScape's most<br> magnificent invention.")
+			.chatplayer("Magnificent invention? I've seen some pretty magnificent<br> things in my time. It'll have to be pretty impressive.") 
 			.finish();
 	    });
 		
@@ -148,7 +149,11 @@ module.exports = (function () {
 	    });
 		
 	    scriptManager.bind(EventType.OPLOC1, 69645, function (ctx) {
-	        chat.sendMessage(ctx.player, "South to Barbarian Village and Draynor.");
+			if(quest.hasFinished(ctx.player, 179)) {
+			    chat.sendMessage(ctx.player, "South to Gunnarsgrunn and Draynor.");
+			} else {
+	            chat.sendMessage(ctx.player, "South to Barbarian Village and Draynor.");
+			}
 	    });
 	   
 	    scriptManager.bind(EventType.OPLOC1, 69648, function (ctx) {
@@ -320,7 +325,11 @@ module.exports = (function () {
 	    });
 		
 		scriptManager.bind(EventType.OPLOC1, 69691, function (ctx) {
-	        chat.sendMessage(ctx.player, "Eeast to Barbarian Village and Varrock.");
+			if(quest.hasFinished(ctx.player, 179)) {
+			    chat.sendMessage(ctx.player, "East to Gunnarsgrunn and Varrock.");
+			} else {	
+	            chat.sendMessage(ctx.player, "East to Barbarian Village and Varrock.");
+		}
 	    });
 		
 		scriptManager.bind(EventType.OPLOC1, 69694, function (ctx) {
@@ -336,7 +345,11 @@ module.exports = (function () {
 	    });
 		
 		scriptManager.bind(EventType.OPLOC1, 69697, function (ctx) {
-	        chat.sendMessage(ctx.player, "East to Barbarian Village and Varrock.");
+			if(quest.hasFinished(ctx.player, 179)) {
+				chat.sendMessage(ctx.player, "East to Gunnarsgrunn and Varrock.");
+			} else {	
+	            chat.sendMessage(ctx.player, "East to Barbarian Village and Varrock.");
+			}	
 	    });	
 		
 		scriptManager.bind(EventType.OPLOC1, 69700, function (ctx) {
@@ -348,7 +361,11 @@ module.exports = (function () {
 	    });	
 	
 	    scriptManager.bind(EventType.OPLOC1, 69702, function (ctx) {
-	        chat.sendMessage(ctx.player, "West to Barbarian Village and Falador.");
+			if(quest.hasFinished(ctx.player, 179)) {
+				chat.sendMessage(ctx.player, "West to Gunnarsgrunn and Falador.");
+			} else {
+			    chat.sendMessage(ctx.player, "West to Barbarian Village and Falador.");
+			}			
 	    });	
 
 		scriptManager.bind(EventType.OPLOC1, 69709, function (ctx) {
@@ -360,7 +377,11 @@ module.exports = (function () {
 	    });	
 	
 	    scriptManager.bind(EventType.OPLOC1, 69711, function (ctx) {
-	        chat.sendMessage(ctx.player, "West to Barbarian Village.");
+			if(quest.hasFinished(ctx.player, 179)) {
+				chat.sendMessage(ctx.player, "West to Gunnarsgrunn.");
+			} else {
+	            chat.sendMessage(ctx.player, "West to Barbarian Village.");
+			}	
 	    });	
 	
 	    scriptManager.bind(EventType.OPLOC1, 69714, function (ctx) {
@@ -643,6 +664,18 @@ module.exports = (function () {
 			chat.sendMessage(ctx.player, "South to Yanille and Feldip Hills."); 
 		});
 		
+		scriptManager.bind(EventType.OPLOC1, 69810, function (ctx) {
+			chat.sendMessage(ctx.player, "North to the Duel Arena and Mage Training Arena.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69811, function (ctx) {
+			chat.sendMessage(ctx.player, "East to the Abbey of St. Elspeth.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 69812, function (ctx) {
+			chat.sendMessage(ctx.player, "South-west to Shantay Pass, beyond which lies the Kharidian Desert");
+		});
+		
 		scriptManager.bind(EventType.OPLOC1, 69813, function (ctx) {
 			chat.sendMessage(ctx.player, "East to the Oo'glog Spa Resort.");
 		});
@@ -688,7 +721,11 @@ module.exports = (function () {
 	    });	
 	
 	    scriptManager.bind(EventType.OPLOC1, 69824, function (ctx) {
-	        chat.sendMessage(ctx.player, "West to Barbarian Village and Falador.");
+			if(quest.hasFinished(ctx.player, 179)) {
+				chat.sendMessage(ctx.player, "West to Gunnarsgrunn and Falador.");
+			} else {
+	            chat.sendMessage(ctx.player, "West to Barbarian Village and Falador.");
+			}	
 	    });
 
 	}

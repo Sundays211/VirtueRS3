@@ -623,7 +623,7 @@ public class DefaultVars {
 		varps[2581] = -1585597003;
 		varps[2582] = 60;
 		varps[2584] = 20590;
-		varps[2585] = 1621579088;
+		varps[2585] = 0;
 		varps[2586] = 1275068466;
 		//varps[2595] = 15;
 		varps[2596] = 106403;
