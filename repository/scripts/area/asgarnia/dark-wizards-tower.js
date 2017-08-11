@@ -24,12 +24,36 @@ var chat = require('chat');
 var inv = require('inv');
 var dialog = require('dialog');
 var util = require('util');
+var anim = require('anim');
+var map = require('map');
+var coords = require('map/coords');
+var loc = require('map/location');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
+		
+		
+	scriptManager.bind(EventType.OPLOC1, 24681, function (ctx) {//Drawers in Witch's House
+        loc.add(24682, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)); 
+    });		
+		
+	scriptManager.bind(EventType.OPLOC2, 24682, function (ctx) {//Drawers in Witch's House
+        chat.sendMessage(ctx.player, "The drawers are empty.");
+    });		
+		
+	scriptManager.bind(EventType.OPLOC3, 24682, function (ctx) {//Drawers in Witch's House
+        loc.add(24681, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)); 
+		chat.sendMessage(ctx.player, "You shut the drawers.");
+    });		
+		
+	scriptManager.bind(EventType.OPLOC1, 24718, function (ctx) {//Ladder in Witch's House
+        anim.run(ctx.player, 828, function () {
+			map.setCoords(ctx.player, coords(2774, 9759, 0)); 
+		});	 
+    });		
 		
 	scriptManager.bind(EventType.OPLOC1, 24882, function (ctx) {//Gramophone in Witch's House
          chat.sendMessage(ctx.player, "The gramophone doesn't have a record on it."); 

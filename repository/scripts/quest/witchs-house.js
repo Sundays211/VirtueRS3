@@ -21,10 +21,6 @@
  */
 /* globals EventType */
 var quest = require('../quest');
-var dialog = require('dialog');
-var anim = require('anim');
-var inv = require('inv');
-var chat = require('chat');
 module.exports = (function () {
 	var witchshouse = {
 		init : init,
@@ -47,10 +43,14 @@ module.exports = (function () {
 			questLog.setJournalLine(player, 6, "<col=999999>my help");
 			questLog.setJournalLine(player, 7, "");
 			questLog.setJournalLine(player, 8, "<col=FFFFFF>QUEST COMPLETE!");
-	
+	    } else if(quest.hasStarted(player, 7)) {
+			questLog.setJournalLine(player, 1, "");
+			questLog.setJournalLine(player, 2, "<col=999999>A small boy kicked his ball over the fence into the neaby garden, and I have");
+		    questLog.setJournalLine(player, 3, "<col=999999>agreed to retrieve it for him.");
+			questLog.setJournalLine(player, 4, "<col=EB981F>I should find a way into the <col=EBE076>garden <col=EB981F>where the <col=EBE076>ball <col=EB981F>is.");
 		} else {
 			questLog.setJournalLine(player, 1, "");
-			questLog.setJournalLine(player, 2, "<col=EB981F>I can start this quest by speaking to the <col=EBE076>little boy<col=EB981F> standing by the long garden");
+			questLog.setJournalLine(player, 2, "<col=EB981F>I can start this quest by speaking to the <col=EBE076>little boy <col=EB981F>standing by the long garden");
 			questLog.setJournalLine(player, 3, "<col=EBE076>West of Falador");
 			questLog.setJournalLine(player, 4, "<col=EB981F>I must be able to defeat a <col=EBE076>level 49 enemy");
 		}
