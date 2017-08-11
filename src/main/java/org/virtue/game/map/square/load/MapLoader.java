@@ -30,7 +30,7 @@ public final class MapLoader {
 	private ReferenceTable index;
 
 	private Cache cache;
-	
+
 	private ResourceProvider extraData;
 
 	private TerrainLoader terrainLoader;
@@ -82,6 +82,7 @@ public final class MapLoader {
 		//Load terrain
 		square.setLoadStage(LoadStage.LOADING_TERRAIN);
 		byte[][][] terrainData = terrainLoader.loadTerrain(fetchData(archive, entry, MapsFile.TERRAIN));
+		terrainLoader.applyTerrain(terrainData, square.getClipMap());
 
 		//Load locations
 		square.setLoadStage(LoadStage.LOADING_LOCS);
