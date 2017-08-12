@@ -10,7 +10,7 @@ import org.virtue.game.map.square.MapSquare;
 import org.virtue.network.event.buffer.InboundBuffer;
 
 public class LocationLoader {
-	
+
 	private LocTypeList locTypeList;
 
 	public LocationLoader(LocTypeList locTypeList) {
@@ -41,8 +41,85 @@ public class LocationLoader {
 					continue;
 				}
 				mapSquare.addBaseLocation(locType, localX, localY, level, shape, rotation);
+			}
+		}
+		return count;
+	}
+
+	public int loadDynamicLocations(ByteBuffer data, int srcX, int srcY, int srcLevel, int mapRotation,
+			byte[][][] terrainData, MapSquare mapSquare,
+			int destX, int destY, int destLevel) {
+		InboundBuffer buffer = new InboundBuffer(data);
+		int locTypeId = -1;
+		int count = 0;
+		for (int modifier = buffer.getSmart2(); modifier != 0; modifier = buffer.getSmart2()) {
+			locTypeId += modifier;
+			int posHash = 0;
+			for (int posModifier = buffer.getUnsignedSmart(); posModifier != 0; posModifier = buffer.getUnsignedSmart()) {
+				posHash += posModifier - 1;
+				int locPosY = posHash & 0x3f;
+				int locPosX = posHash >> 6 & 0x3f;
+				int locLevel = posHash >> 12;
+				int settings = buffer.getUnsignedByte();
+				if (srcLevel == locLevel
+						&& locPosX >= srcX && locPosX < srcX + 8
+						&& locPosY >= srcY && locPosY < srcY + 8) {
+					if (terrainData != null && (terrainData[1][locPosX][locPosY] & 0x2) == 2) {
+						locLevel--;
+					}
+					if (locLevel >= 0 && locLevel < 4) {
+						count++;
+						LocType locType = locTypeList.list(locTypeId);
+						LocShape shape = LocShape.getById(settings >> 2);
+						int locRotation = settings & 0x3;
+
+						int x = destX + getRotatedXPos(locPosX & 0x7, locPosY & 0x7, mapRotation, locType.sizeX, locType.sizeY, locRotation);
+						int y = destY + getRotatedYPos(locPosX & 0x7, locPosY & 0x7, mapRotation, locType.sizeX, locType.sizeY, locRotation);
+
+						mapSquare.addBaseLocation(locType, x, y, locLevel, shape, locRotation);
+					}
+				}
+				
 		    }
 		}
 		return count;
+	}
+
+	public static int getRotatedXPos(int x, int y, int mapRotation, int sizeX, int sizeY, int locRotation) {
+		if (1 == (locRotation & 0x1)) {
+			int tmp = sizeX;
+			sizeX = sizeY;
+			sizeY = tmp;
+		}
+		mapRotation &= 0x3;
+		if (0 == mapRotation) {
+			return x;
+		}
+		if (1 == mapRotation) {
+			return y;
+		}
+		if (2 == mapRotation) {
+			return 7 - x - (sizeX - 1);
+		}
+		return 7 - y - (sizeY - 1);
+	}
+
+	public static int getRotatedYPos(int x, int y, int mapRotation, int sizeX, int sizeY, int locRotation) {
+		if (1 == (locRotation & 0x1)) {
+			int tmp = sizeX;
+			sizeX = sizeY;
+			sizeY = tmp;
+		}
+		mapRotation &= 0x3;
+		if (mapRotation == 0) {
+			return y;
+		}
+		if (mapRotation == 1) {
+			return 7 - x - (sizeX - 1);
+		}
+		if (2 == mapRotation) {
+			return 7 - y - (sizeY - 1);
+		}
+		return x;
 	}
 }

@@ -97,7 +97,7 @@ public class MapSquare {
 	 * Gets the south-western tile of this region
 	 * @return The base tile
 	 */
-	public CoordGrid getBaseTile() {
+	public CoordGrid getBaseCoords() {
 		return baseTile;
 	}
 	

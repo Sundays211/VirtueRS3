@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.virtue.cache.ResourceProvider;
 import org.virtue.cache.sqlite.SqliteCache;
 import org.virtue.config.ConfigProvider;
 import org.virtue.config.Js5Archive;
+import org.virtue.game.map.square.DynamicMapSquare;
 import org.virtue.game.map.square.LoadStage;
 import org.virtue.game.map.square.MapSquare;
 
@@ -44,7 +47,7 @@ public final class MapLoader {
 		this.terrainLoader = new TerrainLoader();
 		this.locLoader = new LocationLoader(configProvider.getLocTypes());
 		this.npcLoader = new NpcSpawnLoader(configProvider.getNpcTypes());
-		
+
 		String extraDataFilename = properties.getProperty("map.data.file");
 		if (extraDataFilename != null) {
 			Path extraDataFile = Paths.get(extraDataFilename);
@@ -70,12 +73,12 @@ public final class MapLoader {
 
 	public void loadSquareChecked (MapSquare square) throws IOException {
 		square.setLoadStage(LoadStage.STARTING);
-		int groupId = getArchiveKey(square.getBaseTile().getRegionX(), square.getBaseTile().getRegionY());
+		int groupId = getArchiveKey(square.getBaseCoords().getRegionX(), square.getBaseCoords().getRegionY());
 		ReferenceTable.Entry entry = index.getEntry(groupId);
 		if (entry == null || entry.getEntry(0) == null) {
 			throw new IllegalArgumentException("Unable to load map square "+square+": Invalid groupId "+groupId);
 		}
-		Archive archive = Archive.decode(cache.read(Js5Archive.MAPS.getArchiveId(), groupId).getData(), entry.size());
+		Archive archive = fetchMapSquare(groupId);
 
 		int locCount=0, npcCount=0, extraNpcCount=0;
 
@@ -101,11 +104,106 @@ public final class MapLoader {
 		LOGGER.info("Found {} locations, {} stored npcs, and {} extra npcs in map square {}", locCount, npcCount, extraNpcCount, square);
 	}
 
+	public void loadDynamicMapSquareUnchecked (DynamicMapSquare square) {
+		try {
+			loadDynamicMapSquare(square);
+		} catch (Exception ex) {
+			LOGGER.warn("Failed loading dynamic map square {}", square, ex);
+		}
+	}
+
+	public void loadDynamicMapSquare (DynamicMapSquare square) throws IOException {
+		square.setLoadStage(LoadStage.STARTING);
+		long start = System.currentTimeMillis();
+		
+		int[][][] allZoneData = square.getZoneData();
+		Map<Integer, Archive> baseSquareData = new HashMap<>();
+		for (int destLevel = 0; destLevel < 4; destLevel++) {
+			for (int destZoneX = 0; destZoneX < 8; destZoneX++) {
+				for (int destZoneY = 0; destZoneY < 8; destZoneY++) {
+					int zoneData = allZoneData[destLevel][destZoneX][destZoneY];
+					if (zoneData != -1) {
+						LOGGER.debug("Data for zone {}, {}, {}: {}", destLevel, destZoneX, destZoneY, zoneData);
+						int srcZoneX = (zoneData >> 14) & 0x3ff;
+						int srcZoneY = (zoneData >> 3) & 0x7ff;
+						int groupId = getArchiveKey(srcZoneX / 8, srcZoneY / 8);
+						if (!baseSquareData.containsKey(groupId)) {
+							baseSquareData.put(groupId, fetchMapSquare(groupId));
+						}
+					}
+				}
+			}
+		}
+
+		square.setLoadStage(LoadStage.LOADING_TERRAIN);
+		byte[][][] terrainData = new byte[4][64][64];
+		for (byte destLevel = 0; destLevel < 4; destLevel++) {
+			for (int destZoneX = 0; destZoneX < 8; destZoneX++) {
+				for (int destZoneY = 0; destZoneY < 8; destZoneY++) {
+					int zoneData = allZoneData[destLevel][destZoneX][destZoneY];
+					if (zoneData != -1) {
+						int srcZoneLevel = (zoneData >> 24) & 0x3;
+						int srcZoneX = (zoneData >> 14) & 0x3ff;
+						int srcZoneY = (zoneData >> 3) & 0x7ff;
+						int mapRotation = (zoneData >> 1) & 0x3;
+						int groupId = getArchiveKey(srcZoneX / 8, srcZoneY / 8);
+						Archive archive = baseSquareData.get(groupId);
+						terrainLoader.loadDynamicTerrain(
+								fetchData(archive, index.getEntry(groupId), MapsFile.TERRAIN),
+								srcZoneX * 8, srcZoneY * 8, srcZoneLevel, mapRotation,
+								terrainData, destZoneX, destZoneY, destLevel);
+					} else {
+						for (int localX = 0; localX < 8; localX++) {
+							for (int localY = 0; localY < 8; localY++) {
+								terrainData[destLevel][destZoneX+localX][destZoneY+localY] = 0x1;
+							}
+						}
+					}
+				}
+			}
+		}
+		terrainLoader.applyTerrain(terrainData, square.getClipMap());
+
+		int locCount = 0;
+		square.setLoadStage(LoadStage.LOADING_LOCS);
+		for (byte destLevel = 0; destLevel < 4; destLevel++) {
+			for (int destZoneX = 0; destZoneX < 8; destZoneX++) {
+				for (int destZoneY = 0; destZoneY < 8; destZoneY++) {
+					int zoneData = allZoneData[destLevel][destZoneX][destZoneY];
+					if (zoneData != -1) {
+						int srcZoneLevel = (zoneData >> 24) & 0x3;
+						int srcZoneX = (zoneData >> 14) & 0x3ff;
+						int srcZoneY = (zoneData >> 3) & 0x7ff;
+						int mapRotation = (zoneData >> 1) & 0x3;
+						int groupId = getArchiveKey(srcZoneX / 8, srcZoneY / 8);
+						Archive archive = baseSquareData.get(groupId);
+						locCount += locLoader.loadDynamicLocations(
+								fetchData(archive, index.getEntry(groupId), MapsFile.TERRAIN),
+								srcZoneX * 8, srcZoneY * 8, srcZoneLevel, mapRotation,
+								terrainData, square, destZoneX, destZoneY, destLevel);
+					}
+				}
+			}
+		}
+
+		long loadTime = System.currentTimeMillis() - start;
+		LOGGER.info("Finished loading dynamic map square {}. Source square count: {}, location count: {}, load time: {} ms.", square, baseSquareData.size(), locCount, loadTime);
+		square.setLoadStage(LoadStage.COMPLETED);
+	}
+
 	public boolean mapExists (int squareX, int squareY) {
 		ReferenceTable.Entry entry = index.getEntry(getArchiveKey(squareX, squareY)) ;
 		return entry != null && entry.getEntry(0) != null;
 	}
 
+	private Archive fetchMapSquare (int groupId) throws IOException {
+		ReferenceTable.Entry entry = index.getEntry(groupId);
+		if (entry == null || entry.getEntry(0) == null) {
+			throw new IllegalArgumentException("Invalid groupId "+groupId+" for square "+(groupId & 0x7f)+", "+(groupId >> 7));
+		}
+		return Archive.decode(cache.read(Js5Archive.MAPS.getArchiveId(), groupId).getData(), entry.size());
+	}
+	
 	private ByteBuffer fetchData (Archive archive, ReferenceTable.Entry groupEntry, MapsFile file) {
 		return archive.getEntry(groupEntry.getEntry(file.getJs5FileId()).index());
 	}

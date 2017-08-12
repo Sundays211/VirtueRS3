@@ -1,5 +1,7 @@
 package org.virtue.network.event.buffer;
 
+import java.nio.ByteBuffer;
+
 /**
  * @author Tom
  * @author Emperor
@@ -9,6 +11,11 @@ public class InboundBuffer extends Buffer {
 
 	public InboundBuffer(int capacity) {
 		this.buffer = new byte[capacity];
+	}
+
+	public InboundBuffer(ByteBuffer buffer) {
+		this.buffer = buffer.array();
+		this.length = buffer.limit();
 	}
 
 	public InboundBuffer(byte[] buffer) {

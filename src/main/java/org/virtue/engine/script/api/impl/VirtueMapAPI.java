@@ -75,6 +75,11 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
+	public CoordGrid getCoords(MapSquare square) {
+		return square.getBaseCoords();
+	}
+
+	@Override
 	public boolean inZone(CoordGrid from, CoordGrid to, CoordGrid coords) {
 		if (coords.getLevel() <= from.getLevel() || coords.getLevel() >= to.getLevel()) {
 			return false;
@@ -97,7 +102,7 @@ public class VirtueMapAPI implements MapAPI {
 	 */
 	@Override
 	public DynamicMapSquare createArea() {
-		return World.getInstance().getRegions().createDynamicRegion();
+		return World.getInstance().getRegions().createDynamicMapSquare();
 	}
 
 	/* (non-Javadoc)
@@ -113,51 +118,25 @@ public class VirtueMapAPI implements MapAPI {
 	 */
 	@Override
 	public void buildArea(DynamicMapSquare area) {
-		area.build();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.api.MapAPI#getSquareX(org.virtue.game.world.region.DynamicRegion)
-	 */
-	@Override
-	public int getSquareX(DynamicMapSquare area) {
-		return area.getBaseTile().getRegionX();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.api.MapAPI#getSquareY(org.virtue.game.world.region.DynamicRegion)
-	 */
-	@Override
-	public int getSquareY(DynamicMapSquare area) {
-		return area.getBaseTile().getRegionY();
+		World.getInstance().getRegions().rebuildDynamicMapSquare(area);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.MapAPI#rotateChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int)
 	 */
 	@Override
-	public void rotateChunk(DynamicMapSquare area, int chunkX, int chunkY,
-			int plane, int rotation) {
-		area.rotateChunk(chunkX, chunkY, plane, rotation);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.api.MapAPI#setChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int, int, int, int)
-	 */
-	@Override
-	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane,
-			int staticChunkX, int staticChunkY, int staticPlane, int rotation) {
-		CoordGrid staticCoords = new CoordGrid(staticChunkX * 8, staticChunkY * 8, staticPlane);
-		setChunk(area, chunkX, chunkY, plane, staticCoords, rotation);
+	public void rotateZone(DynamicMapSquare area, int zoneX, int zoneY,
+			int level, int rotation) {
+		area.rotateZone(zoneX, zoneY, level, rotation);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.MapAPI#setChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, org.virtue.game.world.region.Tile, int)
 	 */
 	@Override
-	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane,
-			CoordGrid staticCoords, int rotation) {
-		area.updateChunk(chunkX, chunkY, plane, staticCoords, rotation);
+	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel,
+			CoordGrid srcCoord, int rotation) {
+		area.updateZone(destZoneX, destZoneY, destLevel, srcCoord, rotation);
 	}
 
 	/* (non-Javadoc)
