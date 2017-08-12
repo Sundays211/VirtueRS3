@@ -40,6 +40,13 @@ public interface MapAPI {
 	 * @return The current coords of the node
 	 */
 	public CoordGrid getCoords (Node node);
+
+	/**
+	 * Gets the base coordinates of the specified map square
+	 * @param square The map square to check
+	 * @return The base coordinates, with the local coords and level set to zero
+	 */
+	public CoordGrid getCoords (MapSquare square);
 	
 	/**
 	 * Gets the coordinate from the specified components
@@ -98,21 +105,14 @@ public interface MapAPI {
 	public void destroyArea(DynamicMapSquare area);
 	
 	public void buildArea(DynamicMapSquare area);
-	
-	public int getSquareX(DynamicMapSquare area);
-	
-	public int getSquareY(DynamicMapSquare area);
-	
+
 	public void rotateZone(DynamicMapSquare area, int zoneX, int zoneY, int level, int rotation);
-	
-	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel, 
-			int srcZoneX, int srcZoneY, int srcLevel, int rotation);
-	
+
 	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel, 
 			CoordGrid srcCoord, int rotation);
-	
+
 	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level, int nodeType, int rotation);
-	
+
 	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level);
 
 	/**

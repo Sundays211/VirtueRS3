@@ -75,6 +75,11 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
+	public CoordGrid getCoords(MapSquare square) {
+		return square.getBaseCoords();
+	}
+
+	@Override
 	public boolean inZone(CoordGrid from, CoordGrid to, CoordGrid coords) {
 		if (coords.getLevel() <= from.getLevel() || coords.getLevel() >= to.getLevel()) {
 			return false;
@@ -117,38 +122,12 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.api.MapAPI#getSquareX(org.virtue.game.world.region.DynamicRegion)
-	 */
-	@Override
-	public int getSquareX(DynamicMapSquare area) {
-		return area.getBaseTile().getRegionX();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.api.MapAPI#getSquareY(org.virtue.game.world.region.DynamicRegion)
-	 */
-	@Override
-	public int getSquareY(DynamicMapSquare area) {
-		return area.getBaseTile().getRegionY();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.MapAPI#rotateChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int)
 	 */
 	@Override
 	public void rotateZone(DynamicMapSquare area, int zoneX, int zoneY,
 			int level, int rotation) {
 		area.rotateZone(zoneX, zoneY, level, rotation);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.virtue.engine.script.api.MapAPI#setChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int, int, int, int)
-	 */
-	@Override
-	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel,
-			int srcZoneX, int srcZoneY, int srcLevel, int rotation) {
-		CoordGrid srcCoord = new CoordGrid(srcZoneX * 8, srcZoneY * 8, srcLevel);
-		setZone(area, destZoneX, destZoneY, destLevel, srcCoord, rotation);
 	}
 
 	/* (non-Javadoc)

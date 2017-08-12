@@ -73,7 +73,7 @@ public final class MapLoader {
 
 	public void loadSquareChecked (MapSquare square) throws IOException {
 		square.setLoadStage(LoadStage.STARTING);
-		int groupId = getArchiveKey(square.getBaseTile().getRegionX(), square.getBaseTile().getRegionY());
+		int groupId = getArchiveKey(square.getBaseCoords().getRegionX(), square.getBaseCoords().getRegionY());
 		ReferenceTable.Entry entry = index.getEntry(groupId);
 		if (entry == null || entry.getEntry(0) == null) {
 			throw new IllegalArgumentException("Unable to load map square "+square+": Invalid groupId "+groupId);

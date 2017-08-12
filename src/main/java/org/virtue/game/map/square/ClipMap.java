@@ -395,7 +395,7 @@ public class ClipMap {
 	
 	private void clipTile (int posX, int posY, int plane, int mask) {
 		if (posX >= 64 || posY >= 64 || posX < 0 || posY < 0) {
-			CoordGrid tile = new CoordGrid(mapSquare.getBaseTile().getX()+posX, mapSquare.getBaseTile().getY()+posY, plane);			
+			CoordGrid tile = new CoordGrid(mapSquare.getBaseCoords().getX()+posX, mapSquare.getBaseCoords().getY()+posY, plane);
 			MapSquare region = regionManager.getWithoutLoad(tile.getRegionID());
 			if (region != null) {				
 				region.getClipMap().clipTile(tile.getXInRegion(), tile.getYInRegion(), plane, mask);
@@ -407,7 +407,7 @@ public class ClipMap {
 	
 	private void unclipTile (int posX, int posY, int plane, int mask) {
 		if (posX >= 64 || posY >= 64 || posX < 0 || posY < 0) {
-			CoordGrid tile = new CoordGrid(mapSquare.getBaseTile().getX()+posX, mapSquare.getBaseTile().getY()+posY, plane);			
+			CoordGrid tile = new CoordGrid(mapSquare.getBaseCoords().getX()+posX, mapSquare.getBaseCoords().getY()+posY, plane);
 			MapSquare region = regionManager.getWithoutLoad(tile.getRegionID());
 			if (region != null) {				
 				region.getClipMap().unclipTile(tile.getXInRegion(), tile.getYInRegion(), plane, mask);
@@ -428,7 +428,7 @@ public class ClipMap {
 	 */
 	public int getClipFlags (int localX, int localY, int plane) {
 		if (localX >= 64 || localY >= 64 || localX < 0 || localY < 0) {
-			CoordGrid coords = new CoordGrid(mapSquare.getBaseTile().getX()+localX, mapSquare.getBaseTile().getY()+localY, plane);
+			CoordGrid coords = new CoordGrid(mapSquare.getBaseCoords().getX()+localX, mapSquare.getBaseCoords().getY()+localY, plane);
 			if (!regionManager.regionLoaded(coords.getRegionID())) {
 				return -1;
 			}

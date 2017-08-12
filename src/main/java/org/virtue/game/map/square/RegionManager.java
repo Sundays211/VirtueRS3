@@ -97,8 +97,8 @@ public class RegionManager {
 	}
 
 	public void destroyDynamicRegion(DynamicMapSquare region) {
-		int dynamicX = (region.getBaseTile().getRegionX() - DYNAMIC_REGION_START_X) / 2;
-		int dynamicY = region.getBaseTile().getRegionY() / 2;
+		int dynamicX = (region.getBaseCoords().getRegionX() - DYNAMIC_REGION_START_X) / 2;
+		int dynamicY = region.getBaseCoords().getRegionY() / 2;
 		synchronized (regions) {
 			regions.remove(region);
 			nextDynamicY = dynamicY;
