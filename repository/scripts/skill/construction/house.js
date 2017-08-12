@@ -30,7 +30,7 @@ module.exports = (function () {
 	var RoomTypes = {
 		DEFAULT : {
 			level : 1,
-			tile : coords(1864, 5056, 0),
+			tile : coords(0,29,79,0,0),
 		},
 	    GARDEN : {
 	        level : 1,
@@ -137,7 +137,7 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, [ 15477, 15478, 15479, 15480, 15481, 15482, 93284, 98247], function (ctx) {
 			dialog.multi4(ctx.player, "SELECT AN OPTION", "Go to your house.", function () {
 				chat.sendMessage(ctx.player, "You should talk to the estate agent to get a house first.");
-				//enterHouse(ctx.player);
+				enterHouse(ctx.player);
 			}, "Go to your house (building mode).", function () {
 				chat.sendMessage(ctx.player, "You should talk to the estate agent to get a house first.");
 				chat.sendMessage(ctx.player, "Build mode is not yet supported.");
@@ -201,21 +201,24 @@ module.exports = (function () {
 
 	function enterHouse (player) {
 		var house = MAP_ENGINE.createArea();
+		var grassCoord = coords(0,29,79,0,0);
 		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-				MAP_ENGINE.setChunk(house, xOffSet, yOffSet, 1, 232, 632, 0, 0);
+				MAP_ENGINE.setZone(house, xOffSet, yOffSet, 1, grassCoord, 0);
 			}
 		}
-		//MAP_ENGINE.setChunk(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
+		//MAP_ENGINE.setZone(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
 		//Format: region, housePosX, housePosY, houseLevel, originalPosX, originalPosY, originalLevel, rotation
-		MAP_ENGINE.setChunk(house, 4, 4, 1, 232, 633, 0, 0);//Add a garden at 2,2
-		MAP_ENGINE.setChunk(house, 4, 5, 1, 232, 639, 0, 0);//Add a parlor at 2,3
-		MAP_ENGINE.setChunk(house, 4, 5, 2, 235, 634, 0, 0);//Add a parlor Roof
-		MAP_ENGINE.setChunk(house, 5, 5, 1, 234, 637, 0, 0);//Add a parlor at 2,4
+		//MAP_ENGINE.setZone(house, 4, 4, 1, 232, 633, 0, 0);//Add a garden at 2,2
+		//MAP_ENGINE.setZone(house, 4, 5, 1, 232, 639, 0, 0);//Add a parlor at 2,3
+		//MAP_ENGINE.setZone(house, 4, 5, 2, 235, 634, 0, 0);//Add a parlor Roof
+		//MAP_ENGINE.setZone(house, 5, 5, 1, 234, 637, 0, 0);//Add a parlor at 2,4
 		MAP_ENGINE.buildArea(house);
 		var squareX = MAP_ENGINE.getSquareX(house);
 		var squareY = MAP_ENGINE.getSquareY(house);
-		entityMap.setCoords(player, coords(squareX, squareY, 1, 10, 10));
+		var destCoords = coords(0, squareX, squareY, 0, 0);
+		print(destCoords+": coordX="+squareX+", coordY="+squareY);
+		entityMap.setCoords(player, destCoords);
 		player.setHouse(house);
 		chat.sendMessage(player, "Welcome to your house!");
 	}

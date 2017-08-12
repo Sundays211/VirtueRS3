@@ -29,7 +29,7 @@ import org.virtue.network.event.context.GameEventContext;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 3, 2014
  */
-public class SceneGraphEventContext implements GameEventContext {
+public class MapRebuildEventContext implements GameEventContext {
 
 	private boolean render;
 	
@@ -41,7 +41,7 @@ public class SceneGraphEventContext implements GameEventContext {
 	
 	private boolean isStatic;
 
-	public SceneGraphEventContext(int sceneRadius, CoordGrid coord, MapSize mapSize, boolean render, boolean isStatic) {
+	public MapRebuildEventContext(int sceneRadius, CoordGrid coord, MapSize mapSize, boolean render, boolean isStatic) {
 		this.sceneRadius = sceneRadius;
 		this.baseCoord = coord;
 		this.mapSize = mapSize;

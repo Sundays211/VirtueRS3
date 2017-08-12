@@ -60,7 +60,7 @@ import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
 import org.virtue.network.event.encoder.impl.RunEnergyEventEncoder;
 import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
-import org.virtue.network.event.encoder.impl.SceneGraphEventEncoder;
+import org.virtue.network.event.encoder.impl.MapRebuildEventEncoder;
 import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
 import org.virtue.network.event.encoder.impl.SkillEventEncoder;
 import org.virtue.network.event.encoder.impl.SystemUpdateEventEncoder;
@@ -157,7 +157,7 @@ public class EventRepository {
 		registerWriteEvent(WidgetTopEventEncoder.class);
 		registerWriteEvent(WidgetSubEventEncoder.class);
 		registerWriteEvent(WidgetEventsEventEncoder.class);
-		registerWriteEvent(SceneGraphEventEncoder.class);
+		registerWriteEvent(MapRebuildEventEncoder.class);
 		registerWriteEvent(WidgetHttpSpriteEventEncoder.class);
 		registerWriteEvent(ResetVarEventEncoder.class);
 		registerWriteEvent(LogoutEventEncoder.class);

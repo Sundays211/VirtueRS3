@@ -103,13 +103,13 @@ public interface MapAPI {
 	
 	public int getSquareY(DynamicMapSquare area);
 	
-	public void rotateChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane, int rotation);
+	public void rotateZone(DynamicMapSquare area, int zoneX, int zoneY, int level, int rotation);
 	
-	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane, 
-			int staticChunkX, int staticChunkY, int staticPlane, int rotation);
+	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel, 
+			int srcZoneX, int srcZoneY, int srcLevel, int rotation);
 	
-	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane, 
-			CoordGrid staticCoords, int rotation);
+	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel, 
+			CoordGrid srcCoord, int rotation);
 	
 	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level, int nodeType, int rotation);
 	

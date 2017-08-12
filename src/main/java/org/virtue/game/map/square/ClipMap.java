@@ -448,4 +448,11 @@ public class ClipMap {
 		logger.info("Clips for region "+mapSquare.mapSquareHash+": "+Arrays.deepToString(clipFlags));
 	}
 
+	public void reset () {
+		for (int[][] a : clipFlags) {
+			for (int[] b : a) {
+				Arrays.fill(b, 0);
+			}
+		}
+	}
 }

@@ -32,7 +32,7 @@ import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.square.DynamicMapSquare;
 import org.virtue.game.map.square.MapSquare;
 import org.virtue.network.event.buffer.OutboundBuffer;
-import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
+import org.virtue.network.event.context.impl.out.MapRebuildEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
 import org.virtue.network.event.encoder.ServerProtocol;
 
@@ -40,15 +40,15 @@ import org.virtue.network.event.encoder.ServerProtocol;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 3, 2014
  */
-public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventContext> {
+public class MapRebuildEventEncoder implements EventEncoder<MapRebuildEventContext> {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(SceneGraphEventEncoder.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(MapRebuildEventEncoder.class);
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public OutboundBuffer encode(Player player, SceneGraphEventContext context) {
+	public OutboundBuffer encode(Player player, MapRebuildEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
 		buffer.putVarShort(context.isStatic() ? ServerProtocol.REBUILD_NORMAL : ServerProtocol.REBUILD_DYNAMIC, player);
 
@@ -88,7 +88,7 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 							if (!regions.contains(mapSquare)) {
 								regions.add(mapSquare);
 								if (mapSquare instanceof DynamicMapSquare) {
-									baseSquareCount += ((DynamicMapSquare) mapSquare).getBaseRegionCount();
+									baseSquareCount += ((DynamicMapSquare) mapSquare).getBaseSquareCount();
 								} else {
 									baseSquareCount++;
 								}

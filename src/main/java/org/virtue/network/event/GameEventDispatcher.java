@@ -63,7 +63,7 @@ import org.virtue.network.event.context.impl.out.MusicEventContext;
 import org.virtue.network.event.context.impl.out.PlayerOptionEventContext;
 import org.virtue.network.event.context.impl.out.RunEnergyEventContext;
 import org.virtue.network.event.context.impl.out.RunWeightEventContext;
-import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
+import org.virtue.network.event.context.impl.out.MapRebuildEventContext;
 import org.virtue.network.event.context.impl.out.SystemUpdateEventContext;
 import org.virtue.network.event.context.impl.out.VarcEventContext;
 import org.virtue.network.event.context.impl.out.VarcStringEventContext;
@@ -95,7 +95,7 @@ import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.ResetVarEventEncoder;
 import org.virtue.network.event.encoder.impl.RunEnergyEventEncoder;
 import org.virtue.network.event.encoder.impl.RunWeightEventEncoder;
-import org.virtue.network.event.encoder.impl.SceneGraphEventEncoder;
+import org.virtue.network.event.encoder.impl.MapRebuildEventEncoder;
 import org.virtue.network.event.encoder.impl.SkillEventEncoder;
 import org.virtue.network.event.encoder.impl.SystemUpdateEventEncoder;
 import org.virtue.network.event.encoder.impl.UnlockFriendsEventEncoder;
@@ -325,7 +325,7 @@ public class GameEventDispatcher {
 
 	public void sendSceneGraph(int sceneRadius, CoordGrid tile, MapSize mapSize, boolean init,
 			boolean isStatic) {
-		sendEvent(SceneGraphEventEncoder.class, new SceneGraphEventContext(sceneRadius,
+		sendEvent(MapRebuildEventEncoder.class, new MapRebuildEventContext(sceneRadius,
 				tile, mapSize, init, isStatic));
 	}
 

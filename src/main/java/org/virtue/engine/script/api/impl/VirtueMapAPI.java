@@ -97,7 +97,7 @@ public class VirtueMapAPI implements MapAPI {
 	 */
 	@Override
 	public DynamicMapSquare createArea() {
-		return World.getInstance().getRegions().createDynamicRegion();
+		return World.getInstance().getRegions().createDynamicMapSquare();
 	}
 
 	/* (non-Javadoc)
@@ -113,7 +113,7 @@ public class VirtueMapAPI implements MapAPI {
 	 */
 	@Override
 	public void buildArea(DynamicMapSquare area) {
-		area.build();
+		World.getInstance().getRegions().rebuildDynamicMapSquare(area);
 	}
 
 	/* (non-Javadoc)
@@ -136,28 +136,28 @@ public class VirtueMapAPI implements MapAPI {
 	 * @see org.virtue.engine.script.api.MapAPI#rotateChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int)
 	 */
 	@Override
-	public void rotateChunk(DynamicMapSquare area, int chunkX, int chunkY,
-			int plane, int rotation) {
-		area.rotateChunk(chunkX, chunkY, plane, rotation);
+	public void rotateZone(DynamicMapSquare area, int zoneX, int zoneY,
+			int level, int rotation) {
+		area.rotateZone(zoneX, zoneY, level, rotation);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.MapAPI#setChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, int, int, int, int)
 	 */
 	@Override
-	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane,
-			int staticChunkX, int staticChunkY, int staticPlane, int rotation) {
-		CoordGrid staticCoords = new CoordGrid(staticChunkX * 8, staticChunkY * 8, staticPlane);
-		setChunk(area, chunkX, chunkY, plane, staticCoords, rotation);
+	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel,
+			int srcZoneX, int srcZoneY, int srcLevel, int rotation) {
+		CoordGrid srcCoord = new CoordGrid(srcZoneX * 8, srcZoneY * 8, srcLevel);
+		setZone(area, destZoneX, destZoneY, destLevel, srcCoord, rotation);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.MapAPI#setChunk(org.virtue.game.world.region.DynamicRegion, int, int, int, org.virtue.game.world.region.Tile, int)
 	 */
 	@Override
-	public void setChunk(DynamicMapSquare area, int chunkX, int chunkY, int plane,
-			CoordGrid staticCoords, int rotation) {
-		area.updateChunk(chunkX, chunkY, plane, staticCoords, rotation);
+	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel,
+			CoordGrid srcCoord, int rotation) {
+		area.updateZone(destZoneX, destZoneY, destLevel, srcCoord, rotation);
 	}
 
 	/* (non-Javadoc)
