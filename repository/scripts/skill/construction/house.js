@@ -31,7 +31,10 @@ var dialog = require('dialog');
 //397 = Furnature creation (flatpacks)
 //402 = (Possibly) Room creation
 //1306 = Furnature creation #2
-
+//1665 = house settings 
+//879 = pet house
+//399 = there's no place like home
+//1613 = aquarium planning
 module.exports = (function () {
 	return {
 		init : init,
