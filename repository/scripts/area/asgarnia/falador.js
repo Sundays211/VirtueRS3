@@ -32,13 +32,12 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 26194, function (ctx) {//party room lever
-			anim.run(ctx.player, 6933);
-			// object.anim(6934)
+		    map.locAnim(ctx.location, 6934);
+			anim.run(ctx.player, 6933, function () {
 			dialog.multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", function () { 
 			}, "Nightly Dance (500 coins).", function () {
-				
 			}, "No action.", function () {
-			
+			});
 			});
 		});
 	 

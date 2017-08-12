@@ -56,7 +56,7 @@ module.exports = (function () {
 					} else {//EoC Mode
 						setLegacyCombatMode(player);
 					}
-					widget.close(player, 1477, 871);
+					widget.closeSub(player, 1477, 871);
 					return;
 				case 10://Switch between eoc and legacy interface mode
 					if (varbit(player, 27169) == 1) {//Legacy mode
@@ -64,7 +64,7 @@ module.exports = (function () {
 					} else {//EoC Mode
 						setLegacyInterfaceMode(player);
 					}
-					widget.close(player, 1477, 871);
+					widget.closeSub(player, 1477, 871);
 					return;
 				case 7://Reset keybinds
 				case 8://Delete friend

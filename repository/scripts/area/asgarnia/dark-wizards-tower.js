@@ -34,8 +34,39 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
+				
+	scriptManager.bind(EventType.OPLOC1, 34246, function (ctx) {//Wardrobe in Witch's House
+        loc.add(34247, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));  
+    });	
+
+    scriptManager.bind(EventType.OPLOC2, 34247, function (ctx) {//Wardrobe in Witch's House
+        chat.sendMessage(ctx.player, "The wardobe is empty.");  
+    });		
 		
+	scriptManager.bind(EventType.OPLOC3, 34247, function (ctx) {//Wardrobe in Witch's House
+        loc.add(34246, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));  
+    });	
 		
+	scriptManager.bind(EventType.OPLOC1, 24670, function (ctx) {//Wardrobe in Witch's House
+        loc.add(24671, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));  
+    });	
+	
+	scriptManager.bind(EventType.OPLOC2, 24671, function (ctx) {//Wardrobe in Witch's House
+        chat.sendMessage(ctx.player, "The wardobe is empty."); 
+    });	
+		
+	scriptManager.bind(EventType.OPLOC3, 24671, function (ctx) {//Wardrobe in Witch's House
+        loc.add(24670, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));  
+    });		
+		
+	scriptManager.bind(EventType.OPLOC1, 24672, function (ctx) {//Staircase in Witch's House
+        map.setCoords(ctx.player, coords(1, 45, 52, 18, 44));  
+    });		
+	
+    scriptManager.bind(EventType.OPLOC1, 24673, function (ctx) {//Staircase in Witch's House
+        map.setCoords(ctx.player, coords(0, 45, 52, 18, 40));  
+    });	
+	
 	scriptManager.bind(EventType.OPLOC1, 24681, function (ctx) {//Drawers in Witch's House
         loc.add(24682, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)); 
     });		

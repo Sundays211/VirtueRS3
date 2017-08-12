@@ -19,16 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+/* globals EventType, ENGINE */
 var coords = require('map/coords');
 var map = require('map');
 var anim = require('anim');
+var dialog = require('dialog');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
+	   
+	    scriptManager.bind(EventType.OPLOC1, 2866, function (ctx) {//Gate
+	        dialog.builder(ctx.player).mesbox("As your bare hands touch the gate you feel a shock.")
+			.then(function () {
+			ENGINE.hitEntity(ctx.player, 200);
+			});
+        });
 	   
 	    scriptManager.bind(EventType.OPLOC1, 24717, function (ctx) {//Ladder
 	        anim.run(ctx.player, 828, function () {
