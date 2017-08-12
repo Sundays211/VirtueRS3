@@ -36,7 +36,7 @@ module.exports = {
 			[ 8322, 8323, 8324 ]//Curtains
 		]
 	},
-	KITCEN : {
+	KITCHEN : {
 		id : 8396,
 		srcCoord : coords(0,29,79,16,56),
 		hotspots : [

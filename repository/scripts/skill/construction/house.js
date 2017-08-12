@@ -22,6 +22,8 @@
  
 /* globals EventType */
 var _map = require('engine/map');
+var _varp = require('engine/var/player');
+var _varbit = require('engine/var/bit');
 
 var entityMap = require('map/entity');
 var coords = require('map/coords');
@@ -35,6 +37,8 @@ var dialog = require('dialog');
 //879 = pet house
 //399 = there's no place like home
 //1613 = aquarium planning
+var RoomType = require('./room');
+
 module.exports = (function () {
 	return {
 		init : init,
@@ -110,24 +114,83 @@ module.exports = (function () {
 
 	function enterHouse (player) {
 		var house = _map.createDynamicSquare();
-		var grassCoord = coords(0,29,79,8,0);
+		/*var grassCoord = coords(0,29,79,8,0);
 		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
 				_map.setZone(house, 1, xOffSet, yOffSet, grassCoord, 0);
 			}
-		}
+		}*/
 		//MAP_ENGINE.setZone(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
 		//Format: region, houseLevel, houseZoneX, houseZoneY, sourceCoords, rotation
-		_map.setZone(house, 1, 3, 3, coords(0,29,79,0,8), 0);//Add a garden at 2,2
-		_map.setZone(house, 1, 3, 4, coords(0,29,79,0,56), 0);//Add a parlor at 2,3
-		_map.setZone(house, 2, 3, 4, coords(0,29,79,24,16), 0);//Add a parlor Roof
-		_map.setZone(house, 1, 4, 4, coords(0,29,79,0,56), 0);//Add a parlor at 2,4
-		_map.build(house);
+		//_map.setZone(house, 1, 2, 2, coords(0,29,79,0,8), 0);//Add a garden at 2,2
+		//_map.setZone(house, 1, 2, 3, coords(0,29,79,0,56), 0);//Add a parlor at 2,3
+		//_map.setZone(house, 2, 2, 3, coords(0,29,79,24,16), 0);//Add a parlor Roof
+		//_map.setZone(house, 1, 3, 3, coords(0,29,79,0,56), 0);//Add a parlor at 2,4
+		_varp(player, 485, 1362);
+		buildHouse(player, house);
 		var houseCoords = _map.getCoords(house);
-		var destCoords = coords(houseCoords, 24, 24, 1);
+		var destCoords = coords(houseCoords, 8, 8, 1);
 		entityMap.setCoords(player, destCoords);
 		player.setHouse(house);
 		chat.sendMessage(player, "Welcome to your house!");
+	}
+
+	function buildHouse (player, mapSquare) {
+		var grassCoord = coords(0,29,79,8,0);
+		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
+			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
+				_map.setZone(mapSquare, 1, xOffSet, yOffSet, grassCoord, 0);
+			}
+		}
+
+		for (var i=0; i<5; i++) {
+			loadRoomData(player, i);
+			var roomType = _varbit(player, 1528);
+			if (roomType !== 0) {
+				var zoneX = _varbit(player, 1524);
+				var zoneY = _varbit(player, 1525);
+				var level = _varbit(player, 1526);
+				var rotation = _varbit(player, 1527);
+				var room = lookupRoomType(roomType);
+				_map.setZone(mapSquare, level, zoneX, zoneY, room.srcCoord, rotation);
+			}
+		}
+
+		_map.setZone(mapSquare, 1, 3, 2, coords(0,29,79,0,8), 0);//Add a garden at 2,2
+		_map.build(mapSquare);
+	}
+
+	function lookupRoomType (roomType) {
+		switch (roomType) {
+		case 1:
+			return RoomType.PARLOUR;
+		case 2:
+			return RoomType.GARDEN;
+		case 3:
+			return RoomType.KITCHEN;
+		default:
+			throw "Unsupported room type: "+roomType;
+		}
+	}
+
+	function loadRoomData (player, roomId) {
+		switch (roomId) {
+		case 0:
+			_varp(player, 482, _varp(player, 485));
+			return;
+		case 1:
+			_varp(player, 482, _varp(player, 486));
+			return;
+		case 2:
+			_varp(player, 482, _varp(player, 487));
+			return;
+		case 3:
+			_varp(player, 482, _varp(player, 488));
+			return;
+		case 4:
+			_varp(player, 482, _varp(player, 489));
+			return;
+		}
 	}
 
 	function joinHouse(player) {
