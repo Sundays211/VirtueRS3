@@ -292,7 +292,7 @@ public enum ServerProtocol {
 	/**
 	 * Represents a dynamic map update
 	 */
-	REBUILD_DYNAMIC(121, -2),
+	REBUILD_REGION(121, -2),
 
 	/**
 	 * Sets the base tile for map updates

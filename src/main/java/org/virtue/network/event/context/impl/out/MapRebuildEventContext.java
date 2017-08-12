@@ -6,7 +6,7 @@
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions\:
+ * furnished to do so, subject to the following conditions:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -19,34 +19,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.game.map;
+package org.virtue.network.event.context.impl.out;
+
+import org.virtue.game.map.MapSize;
+import org.virtue.game.map.CoordGrid;
+import org.virtue.network.event.context.GameEventContext;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Sundays211
- * @since 2/01/2015
+ * @since Oct 3, 2014
  */
-public enum MapSize {
-	DEFAULT(0, 104),
-	LARGE(1, 120),
-	HUGE(3, 168),
-	SMALL(4, 72);
+public class MapRebuildEventContext implements GameEventContext {
+
+	private boolean render;
 	
-	private int serialID;
-	private int tiles;
+	private CoordGrid baseCoord;
 	
-	MapSize (int id, int tiles) {
-		this.serialID = id;
-		this.tiles = tiles;
+	private MapSize mapSize;
+	
+	private int sceneRadius;
+	
+	private boolean isStatic;
+
+	public MapRebuildEventContext(int sceneRadius, CoordGrid coord, MapSize mapSize, boolean render, boolean isStatic) {
+		this.sceneRadius = sceneRadius;
+		this.baseCoord = coord;
+		this.mapSize = mapSize;
+		this.render = render;
+		this.isStatic = isStatic;
 	}
 	
-	public int getId () {
-		return serialID;
+	public boolean isStatic () {
+		return isStatic;
 	}
 	
-	public int getTileCount () {
-		return tiles;
+	public CoordGrid getBaseCoord () {
+		return baseCoord;
+	}
+	
+	public MapSize getMapSize () {
+		return mapSize;
+	}
+	
+	public int getSceneRadius () {
+		return sceneRadius;
+	}
+
+	public boolean isRender() {
+		return render;
 	}
 }

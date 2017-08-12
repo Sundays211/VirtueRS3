@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.Virtue;
 import org.virtue.core.constants.CompassPoint;
+import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.square.load.MapLoader;
 
@@ -62,12 +63,12 @@ public class RegionManager {
 
 	private Set<MapSquare> emptyRegions = new HashSet<>();
 	private Set<MapSquare> removalQueue = new HashSet<>();
-	
+
 	public RegionManager (MapLoader loader) {
 		this.loader = loader;
 	}
 
-	public DynamicMapSquare createDynamicRegion() {
+	public DynamicMapSquare createDynamicMapSquare() {
 		int regionID = (nextDynamicY * 2)
 				| ((DYNAMIC_REGION_START_X + (nextDynamicX * 2)) << 8);
 		DynamicMapSquare region;
@@ -94,10 +95,10 @@ public class RegionManager {
 		}
 		return region;
 	}
-	
+
 	public void destroyDynamicRegion(DynamicMapSquare region) {
-		int dynamicX = (region.getBaseTile().getRegionX() - DYNAMIC_REGION_START_X) / 2;
-		int dynamicY = region.getBaseTile().getRegionY() / 2;
+		int dynamicX = (region.getBaseCoords().getRegionX() - DYNAMIC_REGION_START_X) / 2;
+		int dynamicY = region.getBaseCoords().getRegionY() / 2;
 		synchronized (regions) {
 			regions.remove(region);
 			nextDynamicY = dynamicY;
@@ -106,11 +107,29 @@ public class RegionManager {
 		}
 	}
 
+	public void rebuildDynamicMapSquare (DynamicMapSquare square) {
+		synchronized (square) {
+			if (square.getLoadStage() != LoadStage.IDLE && square.getLoadStage() != LoadStage.COMPLETED) {
+				return;//Rebuild already in progress
+			}
+			square.setLoadStage(LoadStage.QUEUED);
+			Virtue.getInstance().getEngine().getWorkerExecutor()
+					.execute(() -> loader.loadDynamicMapSquareUnchecked(square));
+			LOG.info("Queued rebuild for dynamic map square {}", square);
+			for (Player p : square.getPlayers()) {
+				p.getViewport().flagUpdate();//Informs all players in the region that it is being updated
+			}
+		}
+	}
+
+	public MapSquare getMapSquare (int squareX, int squareY) {
+		return getRegionByID(squareX << 8 | squareY);
+	}
+
 	/**
 	 * Gets the region with the associated ID
 	 * 
-	 * @param regionID
-	 *            The ID of the region
+	 * @param regionID The ID of the region
 	 * @return The region
 	 */
 	public MapSquare getRegionByID(int regionID) {
@@ -190,8 +209,7 @@ public class RegionManager {
 	 * only submits the load task; the region will not be fully loaded
 	 * immediately following this.
 	 * 
-	 * @param regionID
-	 *            The ID of the region to load
+	 * @param regionID The ID of the region to load
 	 */
 	private void loadRegion(int regionID) {
 		if (!regionDataExists(regionID)) {
@@ -230,7 +248,7 @@ public class RegionManager {
 		}
 		return loader.mapExists(squareX, squareY);
 	}
-	
+
 	/**
 	 * Gets the clipping flag at the given coordinates.
 	 * @param level The plane.

@@ -35,7 +35,7 @@ public class Zone {
 	/**
 	 * Base locations which have been replaced
 	 */
-	protected final Map<Integer, SceneLocation> replacedLocations = new HashMap<>();
+	private final Map<Integer, SceneLocation> replacedLocations = new HashMap<>();
 
 	/**
 	 * Represents the ground items located within this block
@@ -45,7 +45,7 @@ public class Zone {
 	/**
 	 * Locations currently active in the zone
 	 */
-	private final Map<Integer, SceneLocation> locations = new HashMap<>();
+	protected final Map<Integer, SceneLocation> locations = new HashMap<>();
 
 	private CoordGrid coord;
 

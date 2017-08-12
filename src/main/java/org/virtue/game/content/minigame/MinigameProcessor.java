@@ -206,18 +206,18 @@ public class MinigameProcessor {
 	private final void initialize(Lobby lobby) {
 		MinigameType type = lobby.getMinigameType();
 
-		DynamicMapSquare region = World.getInstance().getRegions().createDynamicRegion();
+		DynamicMapSquare region = World.getInstance().getRegions().createDynamicMapSquare();
 		for (int xOffSet = 0; xOffSet < type.getXOffset(); xOffSet++) {
 			for (int yOffSet = 0; yOffSet < type.getYOffset(); yOffSet++) {
 				for (int plane = 0; plane < type.getZOffset(); plane++) {
-					region.updateChunk(xOffSet, yOffSet, plane,
+					region.updateZone(xOffSet, yOffSet, plane,
 							new CoordGrid(type.getXCoord() + (xOffSet << 3), 
 									type.getYCoord() + (yOffSet << 3), 
 									plane), 0);
 				}
 			}
 		}
-		region.build();
+		World.getInstance().getRegions().rebuildDynamicMapSquare(region);
 
 		List<Player> players = Lists.newArrayList(lobby.getPlayers());
 		Map<Integer, Team> teams = Maps.newHashMap(lobby.getTeams());

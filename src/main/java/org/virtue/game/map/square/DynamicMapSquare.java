@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.virtue.Virtue;
-import org.virtue.game.entity.player.Player;
 import org.virtue.game.map.CoordGrid;
 
 /**
@@ -42,9 +40,7 @@ public class DynamicMapSquare extends MapSquare {
 	
 	protected RegionManager regionManager;
 	
-	private Set<MapSquare> baseRegions = new HashSet<MapSquare>();
-	
-	private boolean buildReady = false;
+	private Set<Integer> baseSquares = new HashSet<>();
 
 	/**
 	 * @param id
@@ -59,72 +55,42 @@ public class DynamicMapSquare extends MapSquare {
 			}
 		}
 	}
-	
-	protected void load () {
-		for (MapSquare r : baseRegions) {
-			//System.out.println("Checking region "+r.getID());
-			if (!r.isLoaded()) {
-				return;
-			}
-		}
-		if (!LoadStage.IDLE.equals(loadStage)) {
-			return;//Region is already loading
-		}
-		loadStage = LoadStage.STARTING;
-		Virtue.getInstance().getEngine().getWorkerExecutor().execute(new DynamicMapLoadTask(this, regionManager));
-	}
-	
+
 	/**
-	 * Rebuilds the region, sending the updated region to the players, reloading all locations and the clip map
-	 * WARNING: Calling this method will cause all dropped items and temporary locations to be destroyed! 
+	 * Clears all locations, objects, and terrain clipping from the map square in preparation for a rebuild
 	 */
-	public void build () {
+	public void reset () {
 		synchronized (zones) {
 			zones.clear();
 		}
-		buildReady = true;
-		loadStage = LoadStage.IDLE;
-		for (Player p : getPlayers()) {
-			p.getViewport().flagUpdate();//Informs all players in the region that it is being updated
-		}
-	}
-	
-	public void rotateChunk (int chunkX, int chunkY, int chunkPlane, int rotation) {
-		staticZones[chunkPlane][chunkX][chunkY] &= ~(0x3 << 1);
-		staticZones[chunkPlane][chunkX][chunkY] |= ((rotation & 0x3) << 1);
-		buildReady = false;
-	}
-	
-	public void updateChunk (int chunkX, int chunkY, int chunkPlane, CoordGrid staticTile, int rotation) {
-		if (!regionManager.regionDataExists(staticTile.getRegionID())) {
-			throw new IllegalArgumentException("Invalid map square: data for static map square "+staticTile.getRegionID()+" does not exist!");
-		}
-		staticZones[chunkPlane][chunkX][chunkY] = ((rotation & 0x3) << 1) | ((staticTile.getZoneY() & 0x7ff) << 3) | ((staticTile.getZoneX() & 0x3ff) << 14) | ((staticTile.getLevel() & 0x3) << 24);
-		baseRegions.add(regionManager.getRegionByID(staticTile.getRegionID()));//Load the region this is based on
-		buildReady = false;
+		getClipMap().reset();
 	}
 
-	public int[][][] getRegionChunks () {
+	public void rotateZone (int zoneX, int zoneY, int level, int rotation) {
+		staticZones[level][zoneX][zoneY] &= ~(0x3 << 1);
+		staticZones[level][zoneX][zoneY] |= ((rotation & 0x3) << 1);
+	}
+
+	public void updateZone (int destZoneX, int destZoneY, int destLevel, CoordGrid srcCoord, int rotation) {
+		if (!regionManager.regionDataExists(srcCoord.getRegionID())) {
+			throw new IllegalArgumentException("Invalid map square: data for static map square "+srcCoord.getRegionID()+" does not exist!");
+		}
+		staticZones[destLevel][destZoneX][destZoneY] = ((rotation & 0x3) << 1) 
+				| ((srcCoord.getZoneY() & 0x7ff) << 3) 
+				| ((srcCoord.getZoneX() & 0x3ff) << 14) 
+				| ((srcCoord.getLevel() & 0x3) << 24);
+		baseSquares.add(srcCoord.getRegionID());//Load the region this is based on
+	}
+
+	public int[][][] getZoneData () {
 		return staticZones;
 	}
-	
-	public int getBaseRegionCount () {
-		return baseRegions.size();
+
+	public int getBaseSquareCount () {
+		return baseSquares.size();
 	}
-	
-	public int getStaticChunk (int plane, int chunkX, int chunkY) {
+
+	public int getStaticZone (int plane, int chunkX, int chunkY) {
 		return staticZones[plane][chunkX - baseTile.getZoneX()][chunkY - baseTile.getZoneY()];
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.virtue.game.entity.region.Region#updateRegion()
-	 */
-	@Override
-	protected void updateRegion () {
-		if (buildReady && LoadStage.IDLE.equals(loadStage)) {
-			load();
-		}
-		super.updateRegion();
 	}
 }
