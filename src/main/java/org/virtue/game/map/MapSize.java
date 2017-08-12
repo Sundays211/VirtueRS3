@@ -42,7 +42,7 @@ public enum MapSize {
 		this.tiles = tiles;
 	}
 	
-	public int getID () {
+	public int getId () {
 		return serialID;
 	}
 	

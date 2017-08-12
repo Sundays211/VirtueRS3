@@ -24,11 +24,13 @@ package org.virtue.network.event.encoder.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.game.World;
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.square.DynamicMapSquare;
 import org.virtue.game.map.square.MapSquare;
-import org.virtue.game.map.CoordGrid;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.SceneGraphEventContext;
 import org.virtue.network.event.encoder.EventEncoder;
@@ -39,6 +41,8 @@ import org.virtue.network.event.encoder.ServerProtocol;
  * @since Oct 3, 2014
  */
 public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventContext> {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(SceneGraphEventEncoder.class);
 
 	/* (non-Javadoc)
 	 * @see org.virtue.network.event.encoder.EventEncoder#encode(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
@@ -52,66 +56,63 @@ public class SceneGraphEventEncoder implements EventEncoder<SceneGraphEventConte
 			player.getViewport().init(buffer);
 		} 
 		if (context.isStatic()) {
-			buffer.putLEShort(context.getBaseTile().getZoneY());//ChunkY
-			buffer.putShortA(context.getBaseTile().getZoneX());
+			buffer.putLEShort(context.getBaseCoord().getZoneY());
+			buffer.putShortA(context.getBaseCoord().getZoneX());
 			buffer.putA(5);
 			//buffer.putA(context.getSceneRadius());
 			buffer.putS(9);//Count
 			buffer.putS(context.isRender() ? 1 : 0);//Force
-			buffer.putS(context.getMapSize().getID());
+			buffer.putS(context.getMapSize().getId());
 		} else {
-			int baseChunkX = context.getBaseTile().getZoneX();
-			int baseChunkY = context.getBaseTile().getZoneY();
+			int baseZoneX = context.getBaseCoord().getZoneX();
+			int baseZoneY = context.getBaseCoord().getZoneY();
 			buffer.putByte(5);
 			//buffer.putByte(context.getSceneRadius());
 			buffer.putC(1);//Type = 1 for dynamic region
-			buffer.putShort(baseChunkY);
+			buffer.putShort(baseZoneY);
 			buffer.putA(context.isRender() ? 1 : 0);//Force refresh
-			buffer.putShortA(baseChunkX);
-			buffer.putA(context.getMapSize().getID());
+			buffer.putShortA(baseZoneX);
+			buffer.putA(context.getMapSize().getId());
 
 			buffer.setBitAccess();
-			MapSquare region = null;
-			//System.out.println("Base tile: "+context.getBaseTile());
-			int baseRegionCount = 0;
+			MapSquare mapSquare = null;
+			int baseSquareCount = 0;
 			Set<MapSquare> regions = new HashSet<MapSquare>();
 			int tileCount = context.getMapSize().getTileCount()/2;
-			for (int plane = 0; plane < 4; plane++) {
-				for (int x = (baseChunkX - (tileCount >> 3)); x <= (baseChunkX + (tileCount >> 3)); x++) {
-					for (int y = (baseChunkY - (tileCount >> 3)); y <= (baseChunkY + (tileCount >> 3)); y++) {
-						int regionID = CoordGrid.getMapSquareHash(x << 3, y << 3);
-						if (region == null || regionID != region.getID()) {
-							region = World.getInstance().getRegions().getRegionByID(regionID);
-							if (!regions.contains(region)) {
-								regions.add(region);
-								if (region instanceof DynamicMapSquare) {
-									baseRegionCount += ((DynamicMapSquare) region).getBaseRegionCount();
+			for (int level = 0; level < 4; level++) {
+				for (int zoneX = (baseZoneX - (tileCount >> 3)); zoneX <= (baseZoneX + (tileCount >> 3)); zoneX++) {
+					for (int zoneY = (baseZoneY - (tileCount >> 3)); zoneY <= (baseZoneY + (tileCount >> 3)); zoneY++) {
+						int mapSquareHash = CoordGrid.getMapSquareHash(zoneX << 3, zoneY << 3);
+						if (mapSquare == null || mapSquareHash != mapSquare.getID()) {
+							mapSquare = World.getInstance().getRegions().getRegionByID(mapSquareHash);
+							if (!regions.contains(mapSquare)) {
+								regions.add(mapSquare);
+								if (mapSquare instanceof DynamicMapSquare) {
+									baseSquareCount += ((DynamicMapSquare) mapSquare).getBaseRegionCount();
 								} else {
-									baseRegionCount++;
+									baseSquareCount++;
 								}
 							}
 						}
-						if (region == null) {
+						if (mapSquare == null) {
 							buffer.putBits(1, 0);
 						} else {
 							buffer.putBits(1, 1);
-							if (region instanceof DynamicMapSquare) {
-								buffer.putBits(26, ((DynamicMapSquare) region).getStaticChunk(plane, x, y));
+							if (mapSquare instanceof DynamicMapSquare) {
+								buffer.putBits(26, ((DynamicMapSquare) mapSquare).getStaticZone(level, zoneX, zoneY));
 							} else {
-								//Tile baseTile = region.getBaseTile();
-								//System.out.println("Chunk: x="+x+", y="+y+", z="+plane+", region="+baseTile);
-								buffer.putBits(26, ((y & 0x7ff) << 3) | ((x & 0x3ff) << 14) | ((plane & 0x3) << 24));
+								LOGGER.debug("Sending static square in dynamic rebuild. x={},y={},z={}", zoneX, zoneY, level);
+								buffer.putBits(26, ((zoneY & 0x7ff) << 3) | ((zoneX & 0x3ff) << 14) | ((level & 0x3) << 24));
 							}
 						}
 					}
 				}
 			}
 			buffer.setByteAccess();
-			buffer.putByte(baseRegionCount);//Number of actual regions			
+			buffer.putByte(baseSquareCount);//Number of actual regions			
 		}
 		
 		buffer.finishVarShort();
-		//System.out.println("Sent scene graph: "+Arrays.toString(buffer.buffer()));
 		return buffer;
 	}
 

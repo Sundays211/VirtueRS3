@@ -23,7 +23,7 @@ public class TerrainLoader {
 						buffer.getUnsignedSmart();
 					}
 					if ((flags & 0x2) != 0) {
-						terrainData[plane][localX][localY] = buffer.getByte();						
+						terrainData[plane][localX][localY] = buffer.getByte();
 					}
 					if ((flags & 0x4) != 0) {
 						buffer.getUnsignedSmart();
@@ -36,7 +36,7 @@ public class TerrainLoader {
 		}
 		return terrainData;
 	}
-	
+
 	public void applyTerrain (byte[][][] terrainData, ClipMap clipMap) {
 		for (int plane = 0; plane < 4; plane++) {
 			for (int localX = 0; localX < 64; localX++) {
@@ -45,7 +45,7 @@ public class TerrainLoader {
 						int z = plane;
 						if ((terrainData[1][localX][localY] & 0x2) == 2) {
 							z--;
-						}						
+						}
 						if (z >= 0 && z <= 3) {
 							clipMap.clipFloor(localX, localY, z);
 						}

@@ -33,7 +33,7 @@ public class SceneGraphEventContext implements GameEventContext {
 
 	private boolean render;
 	
-	private CoordGrid baseTile;
+	private CoordGrid baseCoord;
 	
 	private MapSize mapSize;
 	
@@ -41,9 +41,9 @@ public class SceneGraphEventContext implements GameEventContext {
 	
 	private boolean isStatic;
 
-	public SceneGraphEventContext(int sceneRadius, CoordGrid tile, MapSize mapSize, boolean render, boolean isStatic) {
+	public SceneGraphEventContext(int sceneRadius, CoordGrid coord, MapSize mapSize, boolean render, boolean isStatic) {
 		this.sceneRadius = sceneRadius;
-		this.baseTile = tile;
+		this.baseCoord = coord;
 		this.mapSize = mapSize;
 		this.render = render;
 		this.isStatic = isStatic;
@@ -53,8 +53,8 @@ public class SceneGraphEventContext implements GameEventContext {
 		return isStatic;
 	}
 	
-	public CoordGrid getBaseTile () {
-		return baseTile;
+	public CoordGrid getBaseCoord () {
+		return baseCoord;
 	}
 	
 	public MapSize getMapSize () {

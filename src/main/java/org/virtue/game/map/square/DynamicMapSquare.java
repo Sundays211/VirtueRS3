@@ -112,7 +112,7 @@ public class DynamicMapSquare extends MapSquare {
 		return baseRegions.size();
 	}
 	
-	public int getStaticChunk (int plane, int chunkX, int chunkY) {
+	public int getStaticZone (int plane, int chunkX, int chunkY) {
 		return staticZones[plane][chunkX - baseTile.getZoneX()][chunkY - baseTile.getZoneY()];
 	}
 	

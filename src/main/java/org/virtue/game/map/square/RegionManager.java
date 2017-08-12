@@ -106,6 +106,10 @@ public class RegionManager {
 		}
 	}
 
+	public MapSquare getMapSquare (int squareX, int squareY) {
+		return getRegionByID(squareX << 8 | squareY);
+	}
+	
 	/**
 	 * Gets the region with the associated ID
 	 * 

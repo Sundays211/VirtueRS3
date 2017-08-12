@@ -30,7 +30,7 @@ public final class MapLoader {
 	private ReferenceTable index;
 
 	private Cache cache;
-	
+
 	private ResourceProvider extraData;
 
 	private TerrainLoader terrainLoader;
@@ -44,7 +44,7 @@ public final class MapLoader {
 		this.terrainLoader = new TerrainLoader();
 		this.locLoader = new LocationLoader(configProvider.getLocTypes());
 		this.npcLoader = new NpcSpawnLoader(configProvider.getNpcTypes());
-		
+
 		String extraDataFilename = properties.getProperty("map.data.file");
 		if (extraDataFilename != null) {
 			Path extraDataFile = Paths.get(extraDataFilename);

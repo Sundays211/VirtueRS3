@@ -21,7 +21,6 @@
  */
 package org.virtue.game.map.square;
 
-import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.SceneLocation;
 
 /**
@@ -32,12 +31,12 @@ import org.virtue.game.map.SceneLocation;
  * @since 5/01/2015
  */
 public class DynamicMapLoadTask implements Runnable {
-	
-	private DynamicMapSquare region;	
+
+	private DynamicMapSquare mapSquare;
 	private RegionManager regionManager;
-	
-	public DynamicMapLoadTask (DynamicMapSquare region, RegionManager regionManager) {
-		this.region = region;
+
+	public DynamicMapLoadTask (DynamicMapSquare mapSquare, RegionManager regionManager) {
+		this.mapSquare = mapSquare;
 		this.regionManager = regionManager;
 	}
 
@@ -46,27 +45,27 @@ public class DynamicMapLoadTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		int[][][] baseChunks = region.getRegionChunks();
-		for (int plane = 0; plane<4; plane++) {
-			for (int chunkX = 0; chunkX < 8; chunkX++) {
-				for (int chunkY = 0; chunkY < 8; chunkY++) {
-					int chunkData = baseChunks[plane][chunkX][chunkY];
-					if (chunkData == -1) {
-						clipChunk(chunkX, chunkY, plane);
-						continue;
+		int[][][] baseZones = mapSquare.getRegionChunks();
+		for (int destLevel = 0; destLevel<4; destLevel++) {
+			for (int destZoneX = 0; destZoneX < 8; destZoneX++) {
+				for (int destZoneY = 0; destZoneY < 8; destZoneY++) {
+					int zoneData = baseZones[destLevel][destZoneX][destZoneY];
+					if (zoneData == -1) {
+						clipZone(destZoneX, destZoneY, destLevel);
+					} else {
+						addLocationNodes(destLevel, destZoneX, destZoneY, zoneData);
 					}
-					addLocationNodes(plane, chunkX, chunkY, chunkData);
 				}
 			}
 		}
-		region.loadStage = LoadStage.LOADING_LOCS;
-		region.loadStage = LoadStage.COMPLETED;
+		mapSquare.loadStage = LoadStage.LOADING_LOCS;
+		mapSquare.loadStage = LoadStage.COMPLETED;
 	}
 	
-	private void clipChunk (int chunkX, int chunkY, int plane) {
+	private void clipZone (int zoneX, int zoneY, int level) {
 		for (int localX = 0; localX < 8; localX++) {
 			for (int localY = 0; localY < 8; localY++) {
-				region.getClipMap().clipFloor(localX, localY, plane);
+				mapSquare.getClipMap().clipFloor(zoneX+localX, zoneY+localY, level);
 			}
 		}
 	}
@@ -78,70 +77,92 @@ public class DynamicMapLoadTask implements Runnable {
 		int chunkRotation = (chunkData >> 1) & 0x3;
 		int regionID = ((cacheChunkX / 8) << 8) | (cacheChunkY / 8);
 		MapSquare cacheRegion = regionManager.getRegionByID(regionID);
-		if (region == null) {
-			return;
-		}
 		Zone zone = cacheRegion.zones.get(MapSquare.getZoneHash(cacheChunkX * 8, cacheChunkY * 8, cacheChunkZ));
 		if (zone != null) {
-			int localX, localY, z;
-			CoordGrid tile;
+			int localX, localY, level;
 			int rotation, sizeX, sizeY;
 			int finalX, finalY;
-			for (SceneLocation loc : zone.replacedLocations.values()) {
+			for (SceneLocation loc : zone.locations.values()) {
 				if (loc == null) {
 					continue;
 				}
 				localX = loc.getTile().getLocalX() & 0x7;
 				localY = loc.getTile().getLocalY() & 0x7;
-				z = loc.getTile().getLevel();
+				level = loc.getTile().getLevel();
 				sizeX = loc.getLocType().sizeX;
 				sizeY = loc.getLocType().sizeY;
 				rotation = loc.getRotation();
 
 				finalX = (chunkX * 8) + getRotatedXPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
 				finalY = (chunkY * 8) + getRotatedYPos(localX, localY, chunkRotation, sizeX, sizeY, rotation);
-				tile = new CoordGrid(finalX, finalY, z, region.mapSquareHash);
-				loc = SceneLocation.create(loc.getID(), tile, loc.getShape(), rotation);
-				//FIXME: Update to use new map loader
-				//region.addLocation(loc, finalX, finalY, z);
+
+				mapSquare.addBaseLocation(loc.getLocType(), finalX, finalY, level, loc.getShape(), rotation);
 			}
 		}
 	}
 	
+	public static int getRotatedXPos(int x, int y, int rotation) {
+		rotation &= 0x3;
+		if (0 == rotation) {
+			return x;
+		}
+		if (1 == rotation) {
+			return y;
+		}
+		if (2 == rotation) {
+			return 7 - x;
+		}
+		return 7 - y;
+	}
+
+	public static int getRotatedYPos(int x, int y, int rotation) {
+		rotation &= 0x3;
+		if (rotation == 0) {
+			return y;
+		}
+		if (rotation == 1) {
+			return 7 - x;
+		}
+		if (rotation == 2) {
+			return 7 - y;
+		}
+		return x;
+	}
+
 	public static int getRotatedXPos(int localX, int localY, int chunkRotation, int sizeX, int sizeY, int rotation) {
 		if (1 == (rotation & 0x1)) {
-		    int i_236_ = sizeX;
-		    sizeX = sizeY;
-		    sizeY = i_236_;
+			int i_236_ = sizeX;
+			sizeX = sizeY;
+			sizeY = i_236_;
 		}
 		chunkRotation &= 0x3;
 		if (0 == chunkRotation) {
-		    return localX;
+			return localX;
 		}
 		if (1 == chunkRotation) {
-		    return localY;
+			return localY;
 		}
 		if (2 == chunkRotation) {
-		    return 7 - localX - (sizeX - 1);
+			return 7 - localX - (sizeX - 1);
 		}
 		return 7 - localY - (sizeY - 1);
 	}
 
 	public static int getRotatedYPos(int localX, int localY, int chunkRotation, int sizeX, int sizeY, int rotation) {
 		if (1 == (rotation & 0x1)) {
-		    int i_6_ = sizeX;
-		    sizeX = sizeY;
-		    sizeY = i_6_;
+			int i_6_ = sizeX;
+			sizeX = sizeY;
+			sizeY = i_6_;
 		}
 		chunkRotation &= 0x3;
 		if (chunkRotation == 0) {
-		    return localY;
+			return localY;
 		}
 		if (chunkRotation == 1) {
-		    return 7 - localX - (sizeX - 1);
+			return 7 - localX - (sizeX - 1);
 		}
 		if (2 == chunkRotation) {
-		    return 7 - localY - (sizeY - 1);
+			return 7 - localY - (sizeY - 1);
 		}
 		return localX;
 	}
