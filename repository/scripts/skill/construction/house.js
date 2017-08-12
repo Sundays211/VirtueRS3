@@ -28,110 +28,14 @@ var coords = require('map/coords');
 var chat = require('chat');
 var dialog = require('dialog');
 
+//397 = Furnature creation (flatpacks)
+//402 = (Possibly) Room creation
+//1306 = Furnature creation #2
+
 module.exports = (function () {
-	var RoomTypes = {
-		DEFAULT : {
-			level : 1,
-			tile : coords(0,29,79,0,0),
-		},
-	    GARDEN : {
-	        level : 1,
-	        tile : coords(1859, 5066, 0),
-	    },
-	    PARLOUR : {
-	        level : 1,
-	        tile : coords(1856, 5112, 0),
-	    },
-	    KITCEN : {
-	        level : 5,
-	        tile : coords(1872, 5112, 0),
-	    },
-	    DINING : {
-	        level : 10,
-	        tile : coords(1890, 5112, 0),
-	    },
-	    WORK_SHOP : {
-	        level : 15,
-	        tile : coords(1856, 5096, 0),
-	    },
-	    BEDROOM : {
-	        level : 20,
-	        tile : coords(1904, 5112, 0),
-	    },
-	    SKILL_HALL : {
-	        level : 25,
-	        tile : coords(1880, 5104, 0),
-	    },
-	    GAME : {
-	        level : 30,
-	        tile : coords(1864, 5104, 0),
-	    },
-	    COMBAT : {
-	        level : 32,
-	        tile : coords(1880, 5088, 0),
-	    },
-	    QUEST_HALL : {
-	        level : 35,
-	        tile : coords(1912, 5104, 0),
-	    },
-	    MENAGERIE : {
-	        level : 37,
-	        tile : coords(1912, 5072, 0),
-	    },
-	    STUDY : {
-	        level : 40,
-	        tile : coords(1888, 5096, 0),
-	    },
-	    COSTUME_ROOM : {
-	        level : 42,
-	        tile : coords(1904, 5064, 0),
-	    },
-	    CHAPEL : {
-	        level : 45,
-	        tile : coords(1872, 5096, 0),
-	    },
-	    PORTAL_CHAMBER : {
-	        level : 50,
-	        tile : coords(1864, 5088, 0),
-	    },
-	    FORMAL_GARDEN : {
-	        level : 55,
-	        tile : coords(1920, 5064, 0),
-	    },
-	    THRONE : {
-	        level : 60,
-	        tile : coords(1904, 5096, 0),
-	    },
-	    AQUARIUM : {
-	        level : 63,
-	        tile : coords(1912, 5058, 0),
-	    },
-	    OUBLIETTE : {
-	        level : 65,
-	        tile : coords(1904, 5080, 0),
-	    },
-	    DUNGEON : {
-	        level : 70,
-	        tile : coords(1873, 5081, 0),
-	    },
-	    PIT_DUNGEON : {
-	        level : 70,
-	        tile : coords(1897, 5073, 0),
-	    },
-	    TREASURE_ROOM : {
-	        level : 75,
-	        tile : coords(1913, 5089, 0),
-	    },
-	    FLOOR_2 : {
-	        level : 1,
-	        tile : coords(1903, 5095, 0),
-	    },
-	};
-	
 	return {
 		init : init,
-		enterHouse : enterHouse,
-		rooms : RoomTypes
+		enterHouse : enterHouse
 	};
 	
 	function init (scriptManager) {
@@ -203,7 +107,7 @@ module.exports = (function () {
 
 	function enterHouse (player) {
 		var house = _map.createDynamicSquare();
-		var grassCoord = coords(0,29,79,0,0);
+		var grassCoord = coords(0,29,79,8,0);
 		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
 				_map.setZone(house, 1, xOffSet, yOffSet, grassCoord, 0);
