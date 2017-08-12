@@ -50,11 +50,11 @@ public class MapRebuildEventEncoder implements EventEncoder<MapRebuildEventConte
 	@Override
 	public OutboundBuffer encode(Player player, MapRebuildEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putVarShort(context.isStatic() ? ServerProtocol.REBUILD_NORMAL : ServerProtocol.REBUILD_DYNAMIC, player);
+		buffer.putVarShort(context.isStatic() ? ServerProtocol.REBUILD_NORMAL : ServerProtocol.REBUILD_REGION, player);
 
 		if (context.isRender()) { 
 			player.getViewport().init(buffer);
-		} 
+		}
 		if (context.isStatic()) {
 			buffer.putLEShort(context.getBaseCoord().getZoneY());
 			buffer.putShortA(context.getBaseCoord().getZoneX());

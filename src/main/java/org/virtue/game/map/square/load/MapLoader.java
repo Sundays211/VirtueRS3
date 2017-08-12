@@ -133,7 +133,6 @@ public final class MapLoader {
 				}
 			}
 		}
-		LOGGER.info("Dynamic square {} uses {} static source squares.", square, baseSquareData.size());
 
 		square.setLoadStage(LoadStage.LOADING_TERRAIN);
 		byte[][][] terrainData = new byte[4][64][64];
@@ -187,7 +186,7 @@ public final class MapLoader {
 		}
 
 		long loadTime = System.currentTimeMillis() - start;
-		LOGGER.info("Finished loading dynamic map square {} with {} locations in {} ms.", square, locCount, loadTime);
+		LOGGER.info("Finished loading dynamic map square {}. Source square count: {}, location count: {}, load time: {} ms.", square, baseSquareData.size(), locCount, loadTime);
 		square.setLoadStage(LoadStage.COMPLETED);
 	}
 

@@ -4,6 +4,7 @@
 
 module.exports = function (scriptManager) {
 	var modules = [
+		require('./commands'),
 		require('./house')
 	];
 	

@@ -61,7 +61,7 @@ public class NpcInfoEventEncoder implements EventEncoder<Viewport> {
 		buffer.finishVarShort();
 		return buffer;
 	}
-	
+
 	private void packNpcMovement (Entity player, OutboundBuffer buffer, OutboundBuffer block, Viewport context) {
 		buffer.putBits(8, context.getLocalNpcs().size());
 		for (Iterator<NPC> iterator = context.getLocalNpcs().iterator(); iterator.hasNext();) {

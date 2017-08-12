@@ -127,7 +127,9 @@ public class Viewport implements GameEventContext {
 	 * Represents the map regions currently used by the player
 	 */
 	private Set<MapSquare> regions = new HashSet<MapSquare>();
-	
+
+	private boolean dynamicUpdate = false;
+
 	private boolean needsUpdate;
 	
 	public Viewport(Player player) {
@@ -202,18 +204,23 @@ public class Viewport implements GameEventContext {
 		Set<MapSquare> oldRegions = new HashSet<MapSquare>(regions);
 		regions.clear();
 		int actualSize = mapSize.getTileCount();
-		boolean staticRegion = true;
+		boolean containsDynamicRegion = false;
 		for (int x = (tile.getZoneX() - (actualSize >> 4)) / 8; x <= (tile.getZoneX() + (actualSize >> 4)) / 8; x++) {
 			for (int y = (tile.getZoneY() - (actualSize >> 4)) / 8; y <= (tile.getZoneY() + (actualSize >> 4)) / 8; y++) {
 				MapSquare region = World.getInstance().getRegions().getRegionByID(CoordGrid.getMapSquareHash((x << 6), (y << 6)));
 				if (region != null) {
 					regions.add(region);
 					if (region instanceof DynamicMapSquare) {
-						staticRegion = false;
+						containsDynamicRegion = true;
 					}
 				}
 			}
 		}
+		if (dynamicUpdate != containsDynamicRegion) {
+			dynamicUpdate = containsDynamicRegion;
+			localNpcs.clear();
+		}
+		
 		baseTile = tile;
 		for (MapSquare r : oldRegions) {
 			if (!regions.contains(r)) {
@@ -222,7 +229,7 @@ public class Viewport implements GameEventContext {
 		}
 		if (sendUpdate) {
 			sceneRadius = ((actualSize >> 3) / 2) - 1;//no fucking idea what this should be
-			player.getDispatcher().sendSceneGraph(sceneRadius, tile, mapSize, false, staticRegion);
+			player.getDispatcher().sendSceneGraph(sceneRadius, tile, mapSize, false, !containsDynamicRegion);
 			onMapLoaded();
 		}
 	}

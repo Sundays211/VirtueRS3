@@ -216,8 +216,7 @@ module.exports = (function () {
 		MAP_ENGINE.buildArea(house);
 		var squareX = MAP_ENGINE.getSquareX(house);
 		var squareY = MAP_ENGINE.getSquareY(house);
-		var destCoords = coords(0, squareX, squareY, 0, 0);
-		print(destCoords+": coordX="+squareX+", coordY="+squareY);
+		var destCoords = coords(1, squareX, squareY, 0, 0);
 		entityMap.setCoords(player, destCoords);
 		player.setHouse(house);
 		chat.sendMessage(player, "Welcome to your house!");
