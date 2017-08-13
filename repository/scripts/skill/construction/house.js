@@ -42,10 +42,13 @@ var util = require('util');
 var RoomType = require('./room');
 
 module.exports = (function () {
+	var grassCoord = coords(0,29,79,8,0);
+
 	return {
 		init : init,
 		enterHouse : enterHouse,
-		addRoom : addRoom
+		addRoom : addRoom,
+		removeRoom : removeRoom
 	};
 	
 	function init (scriptManager) {
@@ -136,11 +139,10 @@ module.exports = (function () {
 		chat.sendMessage(player, "Welcome to your house!");
 	}
 
-	function buildHouse (player, mapSquare) {
-		var grassCoord = coords(0,29,79,8,0);
+	function buildHouse (player, houseSquare) {
 		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
 			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-				_map.setZone(mapSquare, 1, xOffSet, yOffSet, grassCoord, 0);
+				_map.setZone(houseSquare, 1, xOffSet, yOffSet, grassCoord, 0);
 			}
 		}
 
@@ -156,12 +158,11 @@ module.exports = (function () {
 				if (!room) {
 					throw "Unsupported room: "+room+" at "+zoneX+", "+zoneY;
 				}
-				_map.setZone(mapSquare, level, zoneX, zoneY, room.srcCoord, rotation);
+				_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
 			}
 		}
 
-		_map.setZone(mapSquare, 1, 3, 2, coords(0,29,79,0,8), 0);//Add a garden at 2,2
-		_map.build(mapSquare);
+		_map.build(houseSquare);
 	}
 
 	function addRoom (player, roomObjId, zoneX, zoneY, level, rotation) {
@@ -170,13 +171,15 @@ module.exports = (function () {
 		}
 
 		var roomId;
-		for (roomId=0; roomId<5; roomId++) {
+		var found = false;
+		for (roomId=0; roomId<8; roomId++) {
 			loadRoomData(player, roomId);
 			if (_varbit(player, 1528) === 0) {
+				found = true;
 				break;
 			}
 		}
-		if (roomId === 5) {
+		if (!found) {
 			throw "No empty room slots available!";
 		}
 
@@ -194,6 +197,30 @@ module.exports = (function () {
 
 		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
 		_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
+		_map.build(houseSquare);
+	}
+
+	function removeRoom (player, zoneX, zoneY, level) {
+		var roomId;
+		var found = false;
+		for (roomId=0; roomId<8; roomId++) {
+			loadRoomData(player, roomId);
+			if (_varbit(player, 1524) === zoneX &&
+					_varbit(player, 1525) === zoneY &&
+					_varbit(player, 1526) === level) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			throw "No room exists at "+zoneX+", "+zoneY+", "+level;
+		}
+		_varbit(player, 1528, 0);
+		storeRoomData(player, roomId);
+
+		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
+		_map.setZone(houseSquare, level, zoneX, zoneY, grassCoord, 0);
+		_map.build(houseSquare);
 	}
 
 	function loadRoomData (player, roomId) {
@@ -213,6 +240,15 @@ module.exports = (function () {
 		case 4:
 			_varp(player, 482, _varp(player, 489));
 			return;
+		case 5:
+			_varp(player, 482, _varp(player, 490));
+			return;
+		case 6:
+			_varp(player, 482, _varp(player, 491));
+			return;
+		case 7:
+			_varp(player, 482, _varp(player, 492));
+			return;
 		}
 	}
 
@@ -231,7 +267,16 @@ module.exports = (function () {
 			_varp(player, 488, _varp(player, 482));
 			return;
 		case 4:
-			_varp(player, 489, _varp(player, 489));
+			_varp(player, 489, _varp(player, 482));
+			return;
+		case 5:
+			_varp(player, 490, _varp(player, 482));
+			return;
+		case 6:
+			_varp(player, 491, _varp(player, 482));
+			return;
+		case 7:
+			_varp(player, 492, _varp(player, 482));
 			return;
 		}
 	}

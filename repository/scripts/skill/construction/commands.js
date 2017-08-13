@@ -56,5 +56,14 @@ module.exports = (function () {
 			house.addRoom(ctx.player, roomObjId, zoneX, zoneY, level, 0);
 			chat.sendCommandResponse(ctx.player, "Added "+_config.objName(roomObjId)+" at "+zoneX+", "+zoneY, ctx.console);
 		});
+
+		scriptManager.bind(EventType.COMMAND, "delroom", function (ctx) {
+			var zoneX = Math.floor(_map.getLocalX(ctx.player) / 8);
+			var zoneY = Math.floor(_map.getLocalY(ctx.player) / 8);
+			var level = _map.getLevel(ctx.player);
+
+			house.removeRoom(ctx.player, zoneX, zoneY, level);
+			chat.sendCommandResponse(ctx.player, "Removed room at "+zoneX+", "+zoneY+", "+level, ctx.console);
+		});
 	}
 })();

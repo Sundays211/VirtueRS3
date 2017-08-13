@@ -63,28 +63,33 @@ module.exports = {
 		srcCoord : coords(0,29,79,48,56),
 	},
 	GAME : {
-		id : 8399,
+		objId : 8399,
+		typeId : 6,
 		srcCoord : coords(0,29,79,40,32),
+	},
+	SKILL_HALL_DOWNSTAIRS : {
+		objId : 8401,
+		typeId : 7,
+		srcCoord : coords(0,29,79,8,48),
+	},
+	SKILL_HALL_UPSTAIRS : {
+		objId : 8402,
+		typeId : 8,
+		srcCoord : coords(0,29,79,24,48),
+	},
+	QUEST_HALL_DOWNSTAIRS : {
+		objId : 8403,
+		typeId : 9,
+		srcCoord : coords(0,29,79,40,48),
+	},
+	QUEST_HALL_UPSTAIRS : {
+		objId : 8404,
+		typeId : 10,
+		srcCoord : coords(0,29,79,56,48),
 	},
 	COMBAT : {
 		id : 8400,
 		srcCoord : coords(0,29,79,24,32),
-	},
-	SKILL_HALL_DOWNSTAIRS : {
-		id : 8401,
-		srcCoord : coords(0,29,79,8,48),
-	},
-	SKILL_HALL_UPSTAIRS : {
-		id : 8402,
-		srcCoord : coords(0,29,79,24,48),
-	},
-	QUEST_HALL_DOWNSTAIRS : {
-		id : 8403,
-		srcCoord : coords(0,29,79,40,48),
-	},
-	QUEST_HALL_UPSTAIRS : {
-		id : 8404,
-		srcCoord : coords(0,29,79,56,48),
 	},
 	CHAPEL : {
 		id : 8405,

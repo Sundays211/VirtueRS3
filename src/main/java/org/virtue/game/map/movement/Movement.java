@@ -477,11 +477,6 @@ public class Movement {
 			} else {
 				nextRunDirection = null;
 			}
-			if (entity instanceof Player) {
-				if (((Player) entity).getViewport().needsMapUpdate()) {
-					((Player) entity).getViewport().moveToRegion(entity.getCurrentTile(), MapSize.DEFAULT, true);
-				}
-			}
 		} else {
 			if (onTarget != null && entity.getCurrentTile().equals(destination)) {
 				Virtue.getInstance().getEngine().getWorkerExecutor().execute(onTarget);
@@ -491,6 +486,11 @@ public class Movement {
 			nextWalkDirection = null;
 			nextRunDirection = null;
 			nextMoveSpeed = MoveSpeed.STATIONARY;
+		}
+		if (entity instanceof Player) {
+			if (((Player) entity).getViewport().needsMapUpdate()) {
+				((Player) entity).getViewport().moveToRegion(entity.getCurrentTile(), MapSize.DEFAULT, true);
+			}
 		}
 	}
 	
