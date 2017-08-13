@@ -150,8 +150,9 @@ public final class MapLoader {
 						Archive archive = baseSquareData.get(groupId);
 						terrainLoader.loadDynamicTerrain(
 								fetchData(archive, index.getEntry(groupId), MapsFile.TERRAIN),
-								srcZoneX * 8, srcZoneY * 8, srcZoneLevel, mapRotation,
-								terrainData, destZoneX, destZoneY, destLevel);
+								(srcZoneX << 3) & 0x3f, (srcZoneY << 3) & 0x3f, srcZoneLevel, 
+								mapRotation, terrainData, 
+								(destZoneX << 3), (destZoneY << 3), destLevel);
 					} else {
 						for (int localX = 0; localX < 8; localX++) {
 							for (int localY = 0; localY < 8; localY++) {
@@ -178,9 +179,10 @@ public final class MapLoader {
 						int groupId = getArchiveKey(srcZoneX / 8, srcZoneY / 8);
 						Archive archive = baseSquareData.get(groupId);
 						locCount += locLoader.loadDynamicLocations(
-								fetchData(archive, index.getEntry(groupId), MapsFile.TERRAIN),
-								srcZoneX * 8, srcZoneY * 8, srcZoneLevel, mapRotation,
-								terrainData, square, destZoneX, destZoneY, destLevel);
+								fetchData(archive, index.getEntry(groupId), MapsFile.LOCATIONS),
+								(srcZoneX << 3) & 0x3f, (srcZoneY << 3) & 0x3f, srcZoneLevel, 
+								mapRotation, terrainData, square, 
+								(destZoneX << 3), (destZoneY << 3), destLevel);
 					}
 				}
 			}
