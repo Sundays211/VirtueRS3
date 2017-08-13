@@ -31,6 +31,7 @@ var RoomType = require('./room');
 
 module.exports = (function () {
 	var grassCoord = coords(0,29,79,8,0);
+	var maxRooms = 10;
 
 	return {
 		buildHouse : buildHouse,
@@ -45,7 +46,7 @@ module.exports = (function () {
 			}
 		}
 
-		for (var i=0; i<5; i++) {
+		for (var i=0; i<maxRooms; i++) {
 			loadRoomData(player, i);
 			var roomType = _varbit(player, 1528);
 			if (roomType !== 0) {
@@ -71,9 +72,12 @@ module.exports = (function () {
 
 		var roomId;
 		var found = false;
-		for (roomId=0; roomId<10; roomId++) {
+		for (roomId=0; roomId<maxRooms; roomId++) {
 			loadRoomData(player, roomId);
-			if (_varbit(player, 1528) === 0) {
+			if (_varbit(player, 1528) === 0 || (
+					_varbit(player, 1524) === zoneX &&
+					_varbit(player, 1525) === zoneY &&
+					_varbit(player, 1526) === level)) {
 				found = true;
 				break;
 			}
@@ -102,7 +106,7 @@ module.exports = (function () {
 	function removeRoom (player, zoneX, zoneY, level) {
 		var roomId;
 		var found = false;
-		for (roomId=0; roomId<10; roomId++) {
+		for (roomId=0; roomId<maxRooms; roomId++) {
 			loadRoomData(player, roomId);
 			if (_varbit(player, 1524) === zoneX &&
 					_varbit(player, 1525) === zoneY &&
@@ -111,7 +115,7 @@ module.exports = (function () {
 				break;
 			}
 		}
-		if (!found) {
+		if (!found || _varbit(player, 1528) === 0) {
 			throw "No room exists at "+zoneX+", "+zoneY+", "+level;
 		}
 		_varbit(player, 1528, 0);
