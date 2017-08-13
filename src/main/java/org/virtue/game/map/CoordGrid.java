@@ -167,7 +167,7 @@ public class CoordGrid {
 	 * Returns the plane of this {@link CoordGrid}.
 	 * @return The <b>height</b>, or <b>plane</b> of this {@link CoordGrid}.
 	 */
-	public int getLevel() {
+	public byte getLevel() {
 		if (plane > 3)
 			return 3;
 		return plane;

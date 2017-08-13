@@ -24,7 +24,8 @@ var coords = require('map/coords');
 
 module.exports = {
 	PARLOUR : {
-		id : 8395,
+		objId : 8395,
+		typeId : 1,
 		srcCoord : coords(0,29,79,0,56),
 		hotspots : [
 			[ 8309, 8310, 8311, 8312, 8313, 8314, 8315 ],//Chair #1
@@ -36,8 +37,14 @@ module.exports = {
 			[ 8322, 8323, 8324 ]//Curtains
 		]
 	},
+	GARDEN : {
+		objId : 8415,
+		typeId : 2,
+		srcCoord : coords(0,29,79,0,8),
+	},
 	KITCHEN : {
-		id : 8396,
+		objId : 8396,
+		typeId : 3,
 		srcCoord : coords(0,29,79,16,56),
 		hotspots : [
 			[ 8216, 8217, 8218, 8219, 8220, 8221, 8222 ],//Range
@@ -46,11 +53,13 @@ module.exports = {
 		]
 	},
 	DINING : {
-		id : 8397,
+		objId : 8397,
+		typeId : 4,
 		srcCoord : coords(0,29,79,32,56),
 	},
 	BEDROOM : {
-		id : 8398,
+		objId : 8398,
+		typeId : 5,
 		srcCoord : coords(0,29,79,48,56),
 	},
 	GAME : {
@@ -117,10 +126,6 @@ module.exports = {
 		id : 8414,
 		srcCoord : coords(0,29,79,56,32),
 	},
-	GARDEN : {
-		id : 8415,
-		srcCoord : coords(0,29,79,0,8),
-	},
 	FORMAL_GARDEN : {
 		id : 8416,
 		srcCoord : coords(0,29,79,16,8),
@@ -140,5 +145,5 @@ module.exports = {
 	AQUARIUM : {
 		id : 34685,
 		srcCoord : coords(0,29,79,56,0),
-	},
+	}
 };

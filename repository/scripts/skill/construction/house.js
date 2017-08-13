@@ -21,14 +21,16 @@
  */
  
 /* globals EventType */
-var _map = require('engine/map');
 var _varp = require('engine/var/player');
 var _varbit = require('engine/var/bit');
+var _config = require('engine/config');
+var _map = require('engine/map');
 
 var entityMap = require('map/entity');
 var coords = require('map/coords');
 var chat = require('chat');
 var dialog = require('dialog');
+var util = require('util');
 
 //397 = Furnature creation (flatpacks)
 //402 = (Possibly) Room creation
@@ -42,7 +44,8 @@ var RoomType = require('./room');
 module.exports = (function () {
 	return {
 		init : init,
-		enterHouse : enterHouse
+		enterHouse : enterHouse,
+		addRoom : addRoom
 	};
 	
 	function init (scriptManager) {
@@ -89,8 +92,7 @@ module.exports = (function () {
 		});
 		
 	}
-	
-	
+
 	function buyhouse (player, npc) {
 		dialog.builder(player).multi2("SELECT AN OPTION", "How can I get a house?", function () {
 			dialog.builder(player).chatnpc(npc,"I can sell you a starting house in Taverley for 1,000 coins.<br> As your Construction level increases, you will be able to<br> move your house to other areas and redecorate it in<br> other styles.")
@@ -109,7 +111,6 @@ module.exports = (function () {
 				.chatnpc(npc,"There are various other people across RuneScape who can<br> help you furnish your house. You should start by buying<br> planks from the sawmill operator in Varrock.") 
 				.finish();
 		});
-		
 	}
 
 	function enterHouse (player) {
@@ -151,7 +152,10 @@ module.exports = (function () {
 				var zoneY = _varbit(player, 1525);
 				var level = _varbit(player, 1526);
 				var rotation = _varbit(player, 1527);
-				var room = lookupRoomType(roomType);
+				var room = util.lookupValue(RoomType, 'typeId', roomType);
+				if (!room) {
+					throw "Unsupported room: "+room+" at "+zoneX+", "+zoneY;
+				}
 				_map.setZone(mapSquare, level, zoneX, zoneY, room.srcCoord, rotation);
 			}
 		}
@@ -160,17 +164,36 @@ module.exports = (function () {
 		_map.build(mapSquare);
 	}
 
-	function lookupRoomType (roomType) {
-		switch (roomType) {
-		case 1:
-			return RoomType.PARLOUR;
-		case 2:
-			return RoomType.GARDEN;
-		case 3:
-			return RoomType.KITCHEN;
-		default:
-			throw "Unsupported room type: "+roomType;
+	function addRoom (player, roomObjId, zoneX, zoneY, level, rotation) {
+		if (_config.objCategory(roomObjId) !== 483) {
+			throw "Object '"+_config.objName(roomObjId)+"' ("+roomObjId+") is not a room!";
 		}
+
+		var roomId;
+		for (roomId=0; roomId<5; roomId++) {
+			loadRoomData(player, roomId);
+			if (_varbit(player, 1528) === 0) {
+				break;
+			}
+		}
+		if (roomId === 5) {
+			throw "No empty room slots available!";
+		}
+
+		var room = util.lookupValue(RoomType, 'objId', roomObjId);
+		if (!room) {
+			throw _config.objName(roomObjId)+" is not yet supported!";
+		}
+
+		_varbit(player, 1524, zoneX);
+		_varbit(player, 1525, zoneY);
+		_varbit(player, 1526, level);
+		_varbit(player, 1527, rotation);
+		_varbit(player, 1528, room.typeId);
+		storeRoomData(player, roomId);
+
+		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
+		_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
 	}
 
 	function loadRoomData (player, roomId) {
@@ -189,6 +212,26 @@ module.exports = (function () {
 			return;
 		case 4:
 			_varp(player, 482, _varp(player, 489));
+			return;
+		}
+	}
+
+	function storeRoomData (player, roomId) {
+		switch (roomId) {
+		case 0:
+			_varp(player, 485, _varp(player, 482));
+			return;
+		case 1:
+			_varp(player, 486, _varp(player, 482));
+			return;
+		case 2:
+			_varp(player, 487, _varp(player, 482));
+			return;
+		case 3:
+			_varp(player, 488, _varp(player, 482));
+			return;
+		case 4:
+			_varp(player, 489, _varp(player, 489));
 			return;
 		}
 	}

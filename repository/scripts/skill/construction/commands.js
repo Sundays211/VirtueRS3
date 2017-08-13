@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var _config = require('engine/config');
+var _map = require('engine/map');
+
+var chat = require('chat');
+
 var house = require('./house');
 
 module.exports = (function () {
@@ -30,6 +35,26 @@ module.exports = (function () {
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND, "house", function (ctx) {
 			house.enterHouse(ctx.player);
+		});
+
+		scriptManager.bind(EventType.COMMAND, "room", function (ctx) {
+			var args = ctx.cmdArgs;
+
+			if (args.length < 1) {
+				chat.sendCommandResponse(ctx.player, "Usage: room {room_id}", ctx.console);
+				return;
+			}
+			var roomObjId = parseInt(args[0]);
+			if (!roomObjId) {
+				chat.sendCommandResponse(ctx.player, "Usage: room {room_id}", ctx.console);
+				return;
+			}
+			var zoneX = Math.floor(_map.getLocalX(ctx.player) / 8);
+			var zoneY = Math.floor(_map.getLocalY(ctx.player) / 8);
+			var level = _map.getLevel(ctx.player);
+
+			house.addRoom(ctx.player, roomObjId, zoneX, zoneY, level, 0);
+			chat.sendCommandResponse(ctx.player, "Added "+_config.objName(roomObjId)+" at "+zoneX+", "+zoneY, ctx.console);
 		});
 	}
 })();

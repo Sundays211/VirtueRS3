@@ -80,6 +80,21 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
+	public int getLocalX(CoordGrid coord) {
+		return coord.getXInRegion();
+	}
+
+	@Override
+	public int getLocalY(CoordGrid coord) {
+		return coord.getYInRegion();
+	}
+
+	@Override
+	public byte getLevel(CoordGrid coord) {
+		return coord.getLevel();
+	}
+
+	@Override
 	public boolean inZone(CoordGrid from, CoordGrid to, CoordGrid coords) {
 		if (coords.getLevel() <= from.getLevel() || coords.getLevel() >= to.getLevel()) {
 			return false;
@@ -103,6 +118,15 @@ public class VirtueMapAPI implements MapAPI {
 	@Override
 	public DynamicMapSquare createArea() {
 		return World.getInstance().getRegions().createDynamicMapSquare();
+	}
+
+	@Override
+	public DynamicMapSquare getDynamicSquare(CoordGrid coords) {
+		MapSquare square = World.getInstance().getRegions().getRegionByID(coords.getRegionID());
+		if (square == null || !(square instanceof DynamicMapSquare)) {
+			throw new IllegalArgumentException("No dynamic map square found at "+coords);
+		}
+		return (DynamicMapSquare) square;
 	}
 
 	/* (non-Javadoc)
