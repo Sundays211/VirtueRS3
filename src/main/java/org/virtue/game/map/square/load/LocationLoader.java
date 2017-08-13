@@ -3,6 +3,8 @@ package org.virtue.game.map.square.load;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
 import org.virtue.config.loctype.LocTypeList;
@@ -10,6 +12,8 @@ import org.virtue.game.map.square.MapSquare;
 import org.virtue.network.event.buffer.InboundBuffer;
 
 public class LocationLoader {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(MapLoader.class);
 
 	private LocTypeList locTypeList;
 
@@ -64,23 +68,28 @@ public class LocationLoader {
 				if (srcLevel == locLevel
 						&& locPosX >= srcX && locPosX < srcX + 8
 						&& locPosY >= srcY && locPosY < srcY + 8) {
-					if (terrainData != null && (terrainData[1][locPosX][locPosY] & 0x2) == 2) {
-						locLevel--;
+					count++;
+					LocType locType = locTypeList.list(locTypeId);
+					if (locType == null) {
+						throw new RuntimeException("Invalid locTypeId: "+locTypeId+" at "+locPosX+", "+locPosY+", "+locLevel);
 					}
-					if (locLevel >= 0 && locLevel < 4) {
-						count++;
-						LocType locType = locTypeList.list(locTypeId);
-						LocShape shape = LocShape.getById(settings >> 2);
-						int locRotation = settings & 0x3;
+					LocShape shape = LocShape.getById(settings >> 2);
+					int locRotation = settings & 0x3;
 
-						int x = destX + getRotatedXPos(locPosX & 0x7, locPosY & 0x7, mapRotation, locType.sizeX, locType.sizeY, locRotation);
-						int y = destY + getRotatedYPos(locPosX & 0x7, locPosY & 0x7, mapRotation, locType.sizeX, locType.sizeY, locRotation);
+					int x = destX + getRotatedXPos(locPosX & 0x7, locPosY & 0x7, mapRotation, locType.sizeX, locType.sizeY, locRotation);
+					int y = destY + getRotatedYPos(locPosX & 0x7, locPosY & 0x7, mapRotation, locType.sizeX, locType.sizeY, locRotation);
 
-						mapSquare.addBaseLocation(locType, x, y, locLevel, shape, locRotation);
+					int newDestLevel = destLevel;
+					if (terrainData != null && (terrainData[1][x][y] & 0x2) == 2) {
+						newDestLevel--;
+					}
+					if (newDestLevel >= 0 && newDestLevel < 4) {
+						mapSquare.addBaseLocation(locType, x, y, newDestLevel, shape, (locRotation + mapRotation) & 0x3);
+					} else {
+						LOGGER.warn("Not placing location {} at {},{} because it's level is invalid: {}", locTypeId, x, y, newDestLevel);
 					}
 				}
-				
-		    }
+			}
 		}
 		return count;
 	}
