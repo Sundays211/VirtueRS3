@@ -87,25 +87,29 @@ module.exports = {
 		typeId : 10,
 		srcCoord : coords(0,29,79,56,48),
 	},
-	COMBAT : {
-		id : 8400,
-		srcCoord : coords(0,29,79,24,32),
-	},
 	CHAPEL : {
-		id : 8405,
+		objId : 8405,
+		typeId : 11,
 		srcCoord : coords(0,29,79,16,40),
 	},
 	WORKSHOP : {
-		id : 8406,
+		objId : 8406,
+		typeId : 12,
 		srcCoord : coords(0,29,79,0,40),
 	},
 	STUDY : {
-		id : 8407,
+		objId : 8407,
+		typeId : 13,
 		srcCoord : coords(0,29,79,32,40),
 	},
 	PORTAL_CHAMBER : {
-		id : 8408,
+		objId : 8408,
+		typeId : 14,
 		srcCoord : coords(0,29,79,8,32),
+	},
+	COMBAT : {
+		id : 8400,
+		srcCoord : coords(0,29,79,24,32),
 	},
 	THRONE : {
 		id : 8409,

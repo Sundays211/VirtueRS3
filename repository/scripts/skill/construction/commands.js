@@ -26,6 +26,7 @@ var _map = require('engine/map');
 var chat = require('chat');
 
 var house = require('./house');
+var houseBuilder = require('./house-builder');
 
 module.exports = (function () {
 	return {
@@ -34,7 +35,7 @@ module.exports = (function () {
 
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND, "house", function (ctx) {
-			house.enterHouse(ctx.player);
+			house.enter(ctx.player);
 		});
 
 		scriptManager.bind(EventType.COMMAND, "room", function (ctx) {
@@ -53,7 +54,7 @@ module.exports = (function () {
 			var zoneY = Math.floor(_map.getLocalY(ctx.player) / 8);
 			var level = _map.getLevel(ctx.player);
 
-			house.addRoom(ctx.player, roomObjId, zoneX, zoneY, level, 0);
+			houseBuilder.addRoom(ctx.player, roomObjId, zoneX, zoneY, level, 0);
 			chat.sendCommandResponse(ctx.player, "Added "+_config.objName(roomObjId)+" at "+zoneX+", "+zoneY, ctx.console);
 		});
 
@@ -62,7 +63,7 @@ module.exports = (function () {
 			var zoneY = Math.floor(_map.getLocalY(ctx.player) / 8);
 			var level = _map.getLevel(ctx.player);
 
-			house.removeRoom(ctx.player, zoneX, zoneY, level);
+			houseBuilder.removeRoom(ctx.player, zoneX, zoneY, level);
 			chat.sendCommandResponse(ctx.player, "Removed room at "+zoneX+", "+zoneY+", "+level, ctx.console);
 		});
 	}

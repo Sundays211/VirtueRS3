@@ -19,18 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
 /* globals EventType */
-var _varp = require('engine/var/player');
-var _varbit = require('engine/var/bit');
-var _config = require('engine/config');
 var _map = require('engine/map');
 
 var entityMap = require('map/entity');
 var coords = require('map/coords');
 var chat = require('chat');
 var dialog = require('dialog');
-var util = require('util');
 
 //397 = Furnature creation (flatpacks)
 //402 = (Possibly) Room creation
@@ -39,16 +34,12 @@ var util = require('util');
 //879 = pet house
 //399 = there's no place like home
 //1613 = aquarium planning
-var RoomType = require('./room');
+var houseBuilder = require('./house-builder');
 
 module.exports = (function () {
-	var grassCoord = coords(0,29,79,8,0);
-
 	return {
 		init : init,
-		enterHouse : enterHouse,
-		addRoom : addRoom,
-		removeRoom : removeRoom
+		enter : enterHouse
 	};
 	
 	function init (scriptManager) {
@@ -118,167 +109,12 @@ module.exports = (function () {
 
 	function enterHouse (player) {
 		var house = _map.createDynamicSquare();
-		/*var grassCoord = coords(0,29,79,8,0);
-		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
-			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-				_map.setZone(house, 1, xOffSet, yOffSet, grassCoord, 0);
-			}
-		}*/
-		//MAP_ENGINE.setZone(house, E/W Coord, N/S Coord, 1, 232, 639, 0, 0);
-		//Format: region, houseLevel, houseZoneX, houseZoneY, sourceCoords, rotation
-		//_map.setZone(house, 1, 2, 2, coords(0,29,79,0,8), 0);//Add a garden at 2,2
-		//_map.setZone(house, 1, 2, 3, coords(0,29,79,0,56), 0);//Add a parlor at 2,3
-		//_map.setZone(house, 2, 2, 3, coords(0,29,79,24,16), 0);//Add a parlor Roof
-		//_map.setZone(house, 1, 3, 3, coords(0,29,79,0,56), 0);//Add a parlor at 2,4
-		_varp(player, 485, 1362);
-		buildHouse(player, house);
+		houseBuilder.buildHouse(player, house);
 		var houseCoords = _map.getCoords(house);
 		var destCoords = coords(houseCoords, 8, 8, 1);
 		entityMap.setCoords(player, destCoords);
 		player.setHouse(house);
 		chat.sendMessage(player, "Welcome to your house!");
-	}
-
-	function buildHouse (player, houseSquare) {
-		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
-			for (var yOffSet = 0; yOffSet < 8; yOffSet++) {
-				_map.setZone(houseSquare, 1, xOffSet, yOffSet, grassCoord, 0);
-			}
-		}
-
-		for (var i=0; i<5; i++) {
-			loadRoomData(player, i);
-			var roomType = _varbit(player, 1528);
-			if (roomType !== 0) {
-				var zoneX = _varbit(player, 1524);
-				var zoneY = _varbit(player, 1525);
-				var level = _varbit(player, 1526);
-				var rotation = _varbit(player, 1527);
-				var room = util.lookupValue(RoomType, 'typeId', roomType);
-				if (!room) {
-					throw "Unsupported room: "+room+" at "+zoneX+", "+zoneY;
-				}
-				_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
-			}
-		}
-
-		_map.build(houseSquare);
-	}
-
-	function addRoom (player, roomObjId, zoneX, zoneY, level, rotation) {
-		if (_config.objCategory(roomObjId) !== 483) {
-			throw "Object '"+_config.objName(roomObjId)+"' ("+roomObjId+") is not a room!";
-		}
-
-		var roomId;
-		var found = false;
-		for (roomId=0; roomId<8; roomId++) {
-			loadRoomData(player, roomId);
-			if (_varbit(player, 1528) === 0) {
-				found = true;
-				break;
-			}
-		}
-		if (!found) {
-			throw "No empty room slots available!";
-		}
-
-		var room = util.lookupValue(RoomType, 'objId', roomObjId);
-		if (!room) {
-			throw _config.objName(roomObjId)+" is not yet supported!";
-		}
-
-		_varbit(player, 1524, zoneX);
-		_varbit(player, 1525, zoneY);
-		_varbit(player, 1526, level);
-		_varbit(player, 1527, rotation);
-		_varbit(player, 1528, room.typeId);
-		storeRoomData(player, roomId);
-
-		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
-		_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
-		_map.build(houseSquare);
-	}
-
-	function removeRoom (player, zoneX, zoneY, level) {
-		var roomId;
-		var found = false;
-		for (roomId=0; roomId<8; roomId++) {
-			loadRoomData(player, roomId);
-			if (_varbit(player, 1524) === zoneX &&
-					_varbit(player, 1525) === zoneY &&
-					_varbit(player, 1526) === level) {
-				found = true;
-				break;
-			}
-		}
-		if (!found) {
-			throw "No room exists at "+zoneX+", "+zoneY+", "+level;
-		}
-		_varbit(player, 1528, 0);
-		storeRoomData(player, roomId);
-
-		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
-		_map.setZone(houseSquare, level, zoneX, zoneY, grassCoord, 0);
-		_map.build(houseSquare);
-	}
-
-	function loadRoomData (player, roomId) {
-		switch (roomId) {
-		case 0:
-			_varp(player, 482, _varp(player, 485));
-			return;
-		case 1:
-			_varp(player, 482, _varp(player, 486));
-			return;
-		case 2:
-			_varp(player, 482, _varp(player, 487));
-			return;
-		case 3:
-			_varp(player, 482, _varp(player, 488));
-			return;
-		case 4:
-			_varp(player, 482, _varp(player, 489));
-			return;
-		case 5:
-			_varp(player, 482, _varp(player, 490));
-			return;
-		case 6:
-			_varp(player, 482, _varp(player, 491));
-			return;
-		case 7:
-			_varp(player, 482, _varp(player, 492));
-			return;
-		}
-	}
-
-	function storeRoomData (player, roomId) {
-		switch (roomId) {
-		case 0:
-			_varp(player, 485, _varp(player, 482));
-			return;
-		case 1:
-			_varp(player, 486, _varp(player, 482));
-			return;
-		case 2:
-			_varp(player, 487, _varp(player, 482));
-			return;
-		case 3:
-			_varp(player, 488, _varp(player, 482));
-			return;
-		case 4:
-			_varp(player, 489, _varp(player, 482));
-			return;
-		case 5:
-			_varp(player, 490, _varp(player, 482));
-			return;
-		case 6:
-			_varp(player, 491, _varp(player, 482));
-			return;
-		case 7:
-			_varp(player, 492, _varp(player, 482));
-			return;
-		}
 	}
 
 	function joinHouse(player) {
