@@ -27,6 +27,7 @@ module.exports = {
 		objId : 8395,
 		typeId : 1,
 		srcCoord : coords(0,29,79,0,56),
+		doors : [false, true, true, true],
 		hotspots : [
 			[ 8309, 8310, 8311, 8312, 8313, 8314, 8315 ],//Chair #1
 			[ 8309, 8310, 8311, 8312, 8313, 8314, 8315 ],//Chair #2
@@ -40,11 +41,13 @@ module.exports = {
 	GARDEN : {
 		objId : 8415,
 		typeId : 2,
+		doors : [true, true, true, true],
 		srcCoord : coords(0,29,79,0,8),
 	},
 	KITCHEN : {
 		objId : 8396,
 		typeId : 3,
+		doors : [false, false, true, true],
 		srcCoord : coords(0,29,79,16,56),
 		hotspots : [
 			[ 8216, 8217, 8218, 8219, 8220, 8221, 8222 ],//Range
@@ -55,6 +58,7 @@ module.exports = {
 	DINING : {
 		objId : 8397,
 		typeId : 4,
+		doors : [false, true, true, true],
 		srcCoord : coords(0,29,79,32,56),
 	},
 	BEDROOM : {

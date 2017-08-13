@@ -29,6 +29,7 @@ var util = require('util');
 
 var RoomType = require('./room');
 
+//Real doors: 13098 to 13103
 module.exports = (function () {
 	var grassCoord = coords(0,29,79,8,0);
 	var maxRooms = 10;
@@ -36,7 +37,8 @@ module.exports = (function () {
 	return {
 		buildHouse : buildHouse,
 		addRoom : addRoom,
-		removeRoom : removeRoom
+		removeRoom : removeRoom,
+		findRoom : findRoom
 	};
 
 	function buildHouse (player, houseSquare) {
@@ -103,19 +105,11 @@ module.exports = (function () {
 		_map.build(houseSquare);
 	}
 
-	function removeRoom (player, zoneX, zoneY, level) {
-		var roomId;
-		var found = false;
-		for (roomId=0; roomId<maxRooms; roomId++) {
-			loadRoomData(player, roomId);
-			if (_varbit(player, 1524) === zoneX &&
-					_varbit(player, 1525) === zoneY &&
-					_varbit(player, 1526) === level) {
-				found = true;
-				break;
-			}
-		}
-		if (!found || _varbit(player, 1528) === 0) {
+	function removeRoom (player, roomId) {
+		var zoneX = _varbit(player, 1524);
+		var zoneY = _varbit(player, 1525);
+		var level = _varbit(player, 1526);
+		if (roomId === -1 || _varbit(player, 1528) === 0) {
 			throw "No room exists at "+zoneX+", "+zoneY+", "+level;
 		}
 		_varbit(player, 1528, 0);
@@ -124,6 +118,18 @@ module.exports = (function () {
 		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
 		_map.setZone(houseSquare, level, zoneX, zoneY, grassCoord, 0);
 		_map.build(houseSquare);
+	}
+
+	function findRoom (player, zoneX, zoneY, level) {
+		for (var roomId=0; roomId<maxRooms; roomId++) {
+			loadRoomData(player, roomId);
+			if (_varbit(player, 1524) === zoneX &&
+					_varbit(player, 1525) === zoneY &&
+					_varbit(player, 1526) === level) {
+				return roomId;
+			}
+		}
+		return -1;
 	}
 
 	function loadRoomData (player, roomId) {
