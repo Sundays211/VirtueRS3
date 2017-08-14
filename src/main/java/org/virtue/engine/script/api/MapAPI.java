@@ -90,7 +90,40 @@ public interface MapAPI {
 	 */
 	public CoordGrid getCoords (CoordGrid coords, int levelOffset, int squareXoff, int squareYoff, 
 			int localXoff, int localYoff);
-	
+
+	public default int getLocalX (Node node) {
+		return getLocalX(node.getCurrentTile());
+	}
+
+	/**
+	 * Gets the local x-component of the specified coordinate 
+	 * @param coord The coordinate
+	 * @return The local x component of the specified coord
+	 */
+	public int getLocalX (CoordGrid coord);
+
+	public default int getLocalY (Node node) {
+		return getLocalY(node.getCurrentTile());
+	}
+
+	/**
+	 * Gets the local y-component of the specified coordinate
+	 * @param coord The coordinate
+	 * @return The local y component of the specified coord
+	 */
+	public int getLocalY (CoordGrid coord);
+
+	public default byte getLevel (Node node) {
+		return getLevel(node.getCurrentTile());
+	}
+
+	/**
+	 * Gets the level component of the specified coordinate
+	 * @param coord The coordinate
+	 * @return The level component of the specified coord
+	 */
+	public byte getLevel (CoordGrid coord);
+
 	/**
 	 * Checks whether the provided coordinates lie within the range given
 	 * @param from The start of the range to check
@@ -99,11 +132,24 @@ public interface MapAPI {
 	 * @return True if {@code coords} lie between {@code from} and {@code to}
 	 */
 	public boolean inZone (CoordGrid from, CoordGrid to, CoordGrid coords);
-	
+
+	/**
+	 * Creates a new empty dynamic map square. 
+	 * Note: This will not be built until {@link #buildArea(DynamicMapSquare)} is called.
+	 * @return A newly created dynamic map square
+	 */
 	public DynamicMapSquare createArea();
-	
+
+	/**
+	 * Fetches the dynamic map square within which the given coordinates are located
+	 * @param coords Some coordinates within a dynamic map square
+	 * @return The dynamic map square
+	 * @throws IllegalArgumentException If the coords do not lie within a dynamic map square
+	 */
+	public DynamicMapSquare getDynamicSquare(CoordGrid coords);
+
 	public void destroyArea(DynamicMapSquare area);
-	
+
 	public void buildArea(DynamicMapSquare area);
 
 	public void rotateZone(DynamicMapSquare area, int zoneX, int zoneY, int level, int rotation);

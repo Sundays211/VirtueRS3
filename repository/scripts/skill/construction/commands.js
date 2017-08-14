@@ -20,7 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var _varbit = require('engine/var/bit');
+var _config = require('engine/config');
+var _map = require('engine/map');
+
+var chat = require('chat');
+
 var house = require('./house');
+var houseBuilder = require('./house-builder');
 
 module.exports = (function () {
 	return {
@@ -29,7 +36,46 @@ module.exports = (function () {
 
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND, "house", function (ctx) {
-			house.enterHouse(ctx.player);
+			house.enter(ctx.player);
+		});
+
+		scriptManager.bind(EventType.COMMAND, "addroom", function (ctx) {
+			var args = ctx.cmdArgs;
+
+			if (args.length < 1) {
+				chat.sendCommandResponse(ctx.player, "Usage: room {room_id}", ctx.console);
+				return;
+			}
+			var roomObjId = parseInt(args[0]);
+			if (!roomObjId) {
+				chat.sendCommandResponse(ctx.player, "Usage: room {room_id} [{rotation}]", ctx.console);
+				return;
+			}
+
+			var rotation = 0;
+			if (args.length >= 2) {
+				rotation = parseInt(args[1]) & 0x3;
+			}
+			var zoneX = Math.floor(_map.getLocalX(ctx.player) / 8);
+			var zoneY = Math.floor(_map.getLocalY(ctx.player) / 8);
+			var level = _map.getLevel(ctx.player);
+
+			houseBuilder.addRoom(ctx.player, roomObjId, zoneX, zoneY, level, rotation);
+			chat.sendCommandResponse(ctx.player, "Added "+_config.objName(roomObjId)+" at "+zoneX+", "+zoneY, ctx.console);
+		});
+
+		scriptManager.bind(EventType.COMMAND, "delroom", function (ctx) {
+			var zoneX = Math.floor(_map.getLocalX(ctx.player) / 8);
+			var zoneY = Math.floor(_map.getLocalY(ctx.player) / 8);
+			var level = _map.getLevel(ctx.player);
+
+			var roomId = houseBuilder.findRoom(ctx.player, zoneX, zoneY, level);
+			if (roomId === -1 || _varbit(ctx.player, 1528) === 0) {
+				chat.sendCommandResponse(ctx.player, "No room exists at "+zoneX+", "+zoneY+", "+level, ctx.console);
+			} else {
+				houseBuilder.removeRoom(ctx.player, roomId, zoneX, zoneY, level);
+				chat.sendCommandResponse(ctx.player, "Removed room at "+zoneX+", "+zoneY+", "+level, ctx.console);
+			}
 		});
 	}
 })();
