@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var _varbit = require('engine/var/bit');
 var _map = require('engine/map');
 
 var entityMap = require('map/entity');
@@ -83,33 +82,6 @@ module.exports = (function () {
 			.then(function () {
 				buyhouse(ctx.player, ctx.npc);
 			});
-		});
-		
-		scriptManager.bind(EventType.OPLOC5, [ 15305, 15306, 15307, 15308, 15309, 15310, 15311, 15312,
-				15313, 15314, 15315, 15316, 15317 ], function (ctx) {
-			var player = ctx.player;
-			//Build option on door hotpots
-			var posX = _map.getLocalX(player);
-			var posY = _map.getLocalY(player);
-			var level = _map.getLevel(player);
-			var zoneX = Math.floor(posX / 8);
-			var zoneY = Math.floor(posY / 8);
-			if (posX % 8 === 0) {
-				zoneX--;//Building to the west
-			} else if (posX % 8 === 7) {
-				zoneX++;//Building to the east
-			} else if (posY % 8 === 0) {
-				zoneY--;//Building to the south
-			} else if (posY % 8 === 7) {
-				zoneY++;//Building to the north
-			}
-			var roomId = houseBuilder.findRoom(player, zoneX, zoneY, level);
-			if (roomId !== -1) {
-				dialog.builder(player).confirm("TODO: Dialog for confirming room removal")
-					.then(function () {
-						houseBuilder.removeRoom(player, roomId);
-					});
-			}
 		});
 	}
 

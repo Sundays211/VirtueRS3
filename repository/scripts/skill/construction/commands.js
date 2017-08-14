@@ -73,7 +73,7 @@ module.exports = (function () {
 			if (roomId === -1 || _varbit(ctx.player, 1528) === 0) {
 				chat.sendCommandResponse(ctx.player, "No room exists at "+zoneX+", "+zoneY+", "+level, ctx.console);
 			} else {
-				houseBuilder.removeRoom(ctx.player, roomId);
+				houseBuilder.removeRoom(ctx.player, roomId, zoneX, zoneY, level);
 				chat.sendCommandResponse(ctx.player, "Removed room at "+zoneX+", "+zoneY+", "+level, ctx.console);
 			}
 		});

@@ -38,7 +38,8 @@ module.exports = (function () {
 		buildHouse : buildHouse,
 		addRoom : addRoom,
 		removeRoom : removeRoom,
-		findRoom : findRoom
+		loadRoom : loadRoom,
+		findEmptyRoom : findEmptyRoom
 	};
 
 	function buildHouse (player, houseSquare) {
@@ -48,8 +49,8 @@ module.exports = (function () {
 			}
 		}
 
-		for (var i=0; i<maxRooms; i++) {
-			loadRoomData(player, i);
+		for (var roomId=0; roomId<maxRooms; roomId++) {
+			loadRoomData(player, roomId);
 			var roomType = _varbit(player, 1528);
 			if (roomType !== 0) {
 				var zoneX = _varbit(player, 1524);
@@ -72,19 +73,8 @@ module.exports = (function () {
 			throw "Object '"+_config.objName(roomObjId)+"' ("+roomObjId+") is not a room!";
 		}
 
-		var roomId;
-		var found = false;
-		for (roomId=0; roomId<maxRooms; roomId++) {
-			loadRoomData(player, roomId);
-			if (_varbit(player, 1528) === 0 || (
-					_varbit(player, 1524) === zoneX &&
-					_varbit(player, 1525) === zoneY &&
-					_varbit(player, 1526) === level)) {
-				found = true;
-				break;
-			}
-		}
-		if (!found) {
+		var roomId = findEmptyRoom(player);
+		if (roomId === -1) {
 			throw "No empty room slots available!";
 		}
 
@@ -105,22 +95,18 @@ module.exports = (function () {
 		_map.build(houseSquare);
 	}
 
-	function removeRoom (player, roomId) {
-		var zoneX = _varbit(player, 1524);
-		var zoneY = _varbit(player, 1525);
-		var level = _varbit(player, 1526);
+	function removeRoom (player, roomId, zoneX, zoneY, level) {
 		if (roomId === -1 || _varbit(player, 1528) === 0) {
 			throw "No room exists at "+zoneX+", "+zoneY+", "+level;
 		}
-		_varbit(player, 1528, 0);
-		storeRoomData(player, roomId);
+		setRoomData(player, roomId, 0);
 
 		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
 		_map.setZone(houseSquare, level, zoneX, zoneY, grassCoord, 0);
 		_map.build(houseSquare);
 	}
 
-	function findRoom (player, zoneX, zoneY, level) {
+	function loadRoom (player, zoneX, zoneY, level) {
 		for (var roomId=0; roomId<maxRooms; roomId++) {
 			loadRoomData(player, roomId);
 			if (_varbit(player, 1524) === zoneX &&
@@ -132,74 +118,80 @@ module.exports = (function () {
 		return -1;
 	}
 
-	function loadRoomData (player, roomId) {
-		switch (roomId) {
-		case 0:
-			_varp(player, 482, _varp(player, 485));
-			return;
-		case 1:
-			_varp(player, 482, _varp(player, 486));
-			return;
-		case 2:
-			_varp(player, 482, _varp(player, 487));
-			return;
-		case 3:
-			_varp(player, 482, _varp(player, 488));
-			return;
-		case 4:
-			_varp(player, 482, _varp(player, 489));
-			return;
-		case 5:
-			_varp(player, 482, _varp(player, 490));
-			return;
-		case 6:
-			_varp(player, 482, _varp(player, 491));
-			return;
-		case 7:
-			_varp(player, 482, _varp(player, 492));
-			return;
-		case 8:
-			_varp(player, 482, _varp(player, 493));
-			return;
-		case 9:
-			_varp(player, 482, _varp(player, 494));
-			return;
+	function findEmptyRoom (player) {
+		for (var roomId=0; roomId<maxRooms; roomId++) {
+			if (getRoomData(player, roomId) === 0) {
+				return roomId;
+			}
 		}
+		return -1;
+	}
+
+	function loadRoomData (player, roomId) {
+		_varp(player, 482, getRoomData(player, roomId));
 	}
 
 	function storeRoomData (player, roomId) {
+		setRoomData(player, roomId, _varp(player, 482));
+	}
+
+	function getRoomData (player, roomId) {
 		switch (roomId) {
 		case 0:
-			_varp(player, 485, _varp(player, 482));
-			return;
+			return _varp(player, 485);
 		case 1:
-			_varp(player, 486, _varp(player, 482));
-			return;
+			return _varp(player, 486);
 		case 2:
-			_varp(player, 487, _varp(player, 482));
-			return;
+			return _varp(player, 487);
 		case 3:
-			_varp(player, 488, _varp(player, 482));
-			return;
+			return _varp(player, 488);
 		case 4:
-			_varp(player, 489, _varp(player, 482));
-			return;
+			return _varp(player, 489);
 		case 5:
-			_varp(player, 490, _varp(player, 482));
-			return;
+			return _varp(player, 490);
 		case 6:
-			_varp(player, 491, _varp(player, 482));
-			return;
+			return _varp(player, 491);
 		case 7:
-			_varp(player, 492, _varp(player, 482));
-			return;
+			return _varp(player, 492);
 		case 8:
-			_varp(player, 493, _varp(player, 482));
-			return;
+			return _varp(player, 493);
 		case 9:
-			_varp(player, 494, _varp(player, 482));
-			return;
+			return _varp(player, 494);
 		}
 	}
 
+	function setRoomData(player, roomId, roomData) {
+		switch (roomId) {
+		case 0:
+			_varp(player, 485, roomData);
+			return;
+		case 1:
+			_varp(player, 486, roomData);
+			return;
+		case 2:
+			_varp(player, 487, roomData);
+			return;
+		case 3:
+			_varp(player, 488, roomData);
+			return;
+		case 4:
+			_varp(player, 489, roomData);
+			return;
+		case 5:
+			_varp(player, 490, roomData);
+			return;
+		case 6:
+			_varp(player, 491, roomData);
+			return;
+		case 7:
+			_varp(player, 492, roomData);
+			return;
+		case 8:
+			_varp(player, 493, roomData);
+			return;
+		case 9:
+			_varp(player, 494, roomData);
+			return;
+		}
+	}
 })();
