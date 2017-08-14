@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+/* globals EventType, Stat */
 var _varbit = require('engine/var/bit');
 var _map = require('engine/map');
 var _config = require('engine/config');
@@ -30,6 +30,7 @@ var dialog = require('dialog');
 var widget = require('widget');
 var util = require('util');
 var inv = require('inv');
+var stat = require('stat');
 
 var houseBuilder = require('./house-builder');
 var RoomType = require('./room');
@@ -114,6 +115,10 @@ module.exports = (function () {
 	}
 
 	function buildRoom(player, roomType) {
+		if (stat.getLevel(player, Stat.CONSTRUCTION) < _config.objParam(roomType.objId, 23)) {
+			chat.sendDebugMessage(player, "You need a construction level of "+_config.objParam(roomType.objId, 23)+" to build this room.");
+			return;
+		}
 		chat.sendDebugMessage(player, "Building room: "+_config.objName(roomType.objId));
 		var zoneX = _varbit(player, 1524);
 		var zoneY = _varbit(player, 1525);
