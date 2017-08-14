@@ -49,7 +49,7 @@ module.exports = (function () {
 			}
 		}
 		//This is just here to give you an initial room. It will be remove later on, once proper house purchasing is implemented
-		_map.setZone(houseSquare, 1, 1, 1, RoomType.GARDEN.srcCoords, 0);
+		_map.setZone(houseSquare, 1, 1, 1, RoomType.GARDEN.srcCoord, 0);
 
 		for (var roomId=0; roomId<maxRooms; roomId++) {
 			loadRoomData(player, roomId);
