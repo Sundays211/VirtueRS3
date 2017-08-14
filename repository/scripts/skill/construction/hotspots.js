@@ -24,10 +24,12 @@ var _varbit = require('engine/var/bit');
 var _map = require('engine/map');
 var _config = require('engine/config');
 
+var CONST = require('const');
 var chat = require('chat');
 var dialog = require('dialog');
 var widget = require('widget');
 var util = require('util');
+var inv = require('inv');
 
 var houseBuilder = require('./house-builder');
 var RoomType = require('./room');
@@ -88,6 +90,22 @@ module.exports = (function () {
 				widget.closeAll(player);
 				buildRoom(player, RoomType.GARDEN);
 				return;
+			case 91://Build kitchen
+				widget.closeAll(player);
+				buildRoom(player, RoomType.KITCHEN);
+				return;
+			case 99://Build dining room
+				widget.closeAll(player);
+				buildRoom(player, RoomType.DINING);
+				return;
+			case 107://Build workshop
+				widget.closeAll(player);
+				buildRoom(player, RoomType.WORKSHOP);
+				return;
+			case 115://Build bedroom
+				widget.closeAll(player);
+				buildRoom(player, RoomType.BEDROOM);
+				return;
 			default:
 				util.defaultHandler(ctx, "room selection");
 				return;
@@ -125,6 +143,7 @@ module.exports = (function () {
 		dialog.multi2(player, 
 			"TODO: Add support for rotating rooms...", 
 			"Build", function () {
+				inv.take(player, CONST.COINS, _config.objCost(roomType.objId));
 				houseBuilder.addRoom(player, roomType.objId, zoneX, zoneY, level, rotation);
 			}, "Cancel");
 	}

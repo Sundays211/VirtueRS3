@@ -64,6 +64,7 @@ module.exports = {
 	BEDROOM : {
 		objId : 8398,
 		typeId : 5,
+		doors : [false, false, true, true],
 		srcCoord : coords(0,29,79,48,56),
 	},
 	GAME : {
@@ -99,6 +100,7 @@ module.exports = {
 	WORKSHOP : {
 		objId : 8406,
 		typeId : 12,
+		doors : [true, false, true, false],
 		srcCoord : coords(0,29,79,0,40),
 	},
 	STUDY : {
