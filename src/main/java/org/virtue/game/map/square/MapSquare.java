@@ -142,7 +142,7 @@ public class MapSquare {
 		SceneLocation loc = SceneLocation.createBase(locType.myid, coord, shape, rotation);
 		int zoneHash = getZoneHash(localX, localY, level);
 		synchronized (zones) {
-			if (zones.get(zoneHash) == null) {
+			if (!zones.containsKey(zoneHash)) {
 				zones.put(zoneHash, new Zone(coord));
 			}
 			zones.get(zoneHash).addBaseLocation(loc);

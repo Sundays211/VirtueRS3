@@ -62,7 +62,7 @@ module.exports = (function () {
 			if (roomId !== -1 && _varbit(player, 1528) !== 0) {
 				dialog.builder(player).confirm("TODO: Dialog for confirming room removal")
 					.then(function () {
-						houseBuilder.removeRoom(player, roomId);
+						houseBuilder.removeRoom(player, roomId, zoneX, zoneY, level);
 					});
 			} else {
 				roomId = houseBuilder.findEmptyRoom(player);

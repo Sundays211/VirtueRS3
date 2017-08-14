@@ -64,7 +64,6 @@ module.exports = (function () {
 				_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
 			}
 		}
-
 		_map.build(houseSquare);
 	}
 
