@@ -239,7 +239,7 @@ public class Viewport implements GameEventContext {
 	 */
 	public synchronized void onLogout () {
 		for (MapSquare r : regions) {
-			r.removePlayer(player);			
+			r.removePlayer(player);
 		}
 	}
 	
@@ -248,7 +248,7 @@ public class Viewport implements GameEventContext {
 	 */
 	public synchronized void onMapLoaded () {
 		for (MapSquare r : regions) {
-			r.addPlayer(player);			
+			r.addPlayer(player);
 		}
 	}
 	

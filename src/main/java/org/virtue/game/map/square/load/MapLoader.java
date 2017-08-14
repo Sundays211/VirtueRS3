@@ -114,6 +114,7 @@ public final class MapLoader {
 
 	public void loadDynamicMapSquare (DynamicMapSquare square) throws IOException {
 		square.setLoadStage(LoadStage.STARTING);
+		square.reset();//Removes all clips & locations so they can be re-applied
 		long start = System.currentTimeMillis();
 		
 		int[][][] allZoneData = square.getZoneData();
