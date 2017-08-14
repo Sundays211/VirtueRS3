@@ -20,11 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var anim = require('anim');
+var inv = require('inv');
+var coords = require('map/coords');
 var chat = require('chat');
 var map = require('map');
-var coords = require('map/coords');
 var util = require('util');
-
+var widget = require('widget');
+var varbit = require('engine/var/bit');
 module.exports = (function () {
 	return {
 		init : init
@@ -32,17 +35,37 @@ module.exports = (function () {
 	function init (scriptManager) {
 		
 		//Surfboard anim 26597
+		scriptManager.bind(EventType.IF_BUTTON, 1644, function (ctx) {//Beach ball rolling interface
+            switch (ctx.component) { 
+		        case 12://don't show again
+				    enabled = varbit(ctx.player, 28481) == 1;
+				    varbit(ctx.player, 28481, enabled ? 0 : 1);
+			    return;
+			}
+		});
+			
 		scriptManager.bind(EventType.OPLOC1, 97278, function (ctx) {//Beach ball rolling portal
 			if (util.mapMembers()){
-				map.setCoords(ctx.player, coords(0, 19, 83, 30, 7));
+				if (varbit(ctx.player, 28481) == 0) {
+				    map.setCoords(ctx.player, coords(0, 19, 83, 30, 7));
+				    widget.openCentral(ctx.player, 1644, false);
+				} else {
+                    map.setCoords(ctx.player, coords(0, 19, 83, 30, 7));					
+		        }	
 			} else {
 				chat.sendMessage(ctx.player, "You need to be on a members' world to participate in beach ball rolling."); 
 			}
 		});
 
+		scriptManager.bind(EventType.OPLOC1, 73673, function (ctx) {//Beach ball rolling exit portal
+            map.setCoords(ctx.player, coords(0, 49, 50, 26, 54));					
+		});
+		
+		
 		scriptManager.bind(EventType.OPLOC1, [97313, 97318, 97320,  97323, 97326], function (ctx) {//palm tree
 			if (util.mapMembers()){
-				chat.sendMessage(ctx.player, "todo"); 
+                anim.run(ctx.player, 24908);
+                inv.give(ctx.player, 35102, 1);				
 			} else {
 				chat.sendMessage(ctx.player, "You need to be on a members' world to pick tropical coconuts."); 
 			}

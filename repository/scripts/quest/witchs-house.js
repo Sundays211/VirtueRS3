@@ -21,6 +21,8 @@
  */
 /* globals EventType */
 var quest = require('../quest');
+var dialog = require('dialog');
+var varp = require('engine/var/player');
 module.exports = (function () {
 	var witchshouse = {
 		init : init,
@@ -31,6 +33,16 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		quest.register(7, witchshouse);
+		
+		scriptManager.bind(EventType.OPNPCU, 901, function (ctx) {
+            switch (ctx.useObjId) {
+	        case 2410:
+			//remove npc 901
+			dialog.mesbox(ctx.player, "You attach the magnet to the mouse's harness. The mouse finishes the<br> cheese and runs back into its hole. You hear some odd noises from inside<br> the walls. There is a strange whirring noise from above the door frame.");
+			varp(ctx.player, 2276, 3);
+	        return;	
+	        } 
+	    });	
 	}
 	
 	function openJournal (player, questLog) {

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Expression */
+/* globals EventType */
 var chat = require('chat');
 var inv = require('inv');
 var dialog = require('dialog');
@@ -28,6 +28,8 @@ var anim = require('anim');
 var map = require('map');
 var coords = require('map/coords');
 var loc = require('map/location');
+var quest = require('../../quest');
+var varp = require('engine/var/player');
 module.exports = (function () {
 	return {
 		init : init
@@ -112,23 +114,53 @@ module.exports = (function () {
 	});
 	
 	scriptManager.bind(EventType.OPLOC1, 2861, function (ctx) {//Door (Quest Witch's House)
-	  if (util.mapMembers()){
-	  if (inv.has(ctx.player, 2409)) {
-	     dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL);
-	  } else {
-	     chat.sendMessage(ctx.player, "This door is locked."); 	 
-	  }
-      } else {
-         chat.sendMessage(ctx.player, "You need to be on a member's world to use this feature."); 
-      }
+	    if (util.mapMembers()){
+	        if (inv.has(ctx.player, 2409)) {
+	            if(quest.hasStarted(ctx.player, 7)) {
+		            chat.sendMessage(ctx.player, "todo add doors that work"); 
+		        } else {	
+	                dialog.chatplayer(ctx.player, "It would be rude to break into this house.");
+		        }
+	        } else {
+	            chat.sendMessage(ctx.player, "This door is locked."); 	 
+	        }
+        } else {
+            chat.sendMessage(ctx.player, "You need to be on a member's world to use this feature."); 
+        }
 	});	
 	
-	scriptManager.bind(EventType.OPLOCU, 2861, function (ctx) {
-	  switch (ctx.useObjId) {
-	   case 2409:	
-	     dialog.chatplayer(ctx.player, "It would be rude to break into this house.", Expression.NEUTRAL);
-	   return;	
-	  }
+	scriptManager.bind(EventType.OPLOC1, 2862, function (ctx) {//door to garden(Quest Witch's House)
+	    if (varp(ctx.player, 2276) == 3) {
+			chat.sendMessage(ctx.player, "todo add door ");
+        } else {	
+	        dialog.builder(ctx.player).mesbox("This door is locked.")
+            .chatplayer("Strange... I can't see any kind of lock or handle to open<br> this door...")
+            .finish();
+		}	
+    });	
+	
+	scriptManager.bind(EventType.OPLOCU, 2861, function (ctx) {//door (Quest Witch's House)
+	    switch (ctx.useObjId) {
+	    case 2409:	
+	    if(quest.hasStarted(ctx.player, 7)) {
+		   chat.sendMessage(ctx.player, "todo add doors that work");
+		} else {	
+	        dialog.chatplayer(ctx.player, "It would be rude to break into this house.");
+		}	
+	    return;	
+	}
+    });	
+	
+	scriptManager.bind(EventType.OPLOCU, 2870, function (ctx) {//mouse hole(Quest Witch's House)
+	    switch (ctx.useObjId) {
+	    case 1985:
+	    if (varp(ctx.player, 2276) == 1) {
+		   chat.sendMessage(ctx.player, "todo add the npc 901");
+		} else {	
+	        chat.sendMessage(ctx.player, "varp not right");
+		}	
+	    return;	
+	}
     });	
 	
 	}
