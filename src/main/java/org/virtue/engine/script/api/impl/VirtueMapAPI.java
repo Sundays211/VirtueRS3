@@ -206,7 +206,11 @@ public class VirtueMapAPI implements MapAPI {
 	@Override
 	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int shapeId, int rotation) {
 		SceneLocation location = SceneLocation.create(locTypeId, coords, LocShape.getById(shapeId), rotation);
-		getRegion(coords).addChangeLocation(location);
+		MapSquare region = getRegion(coords);
+		if (region == null) {
+			throw new IllegalArgumentException("Invalid coordinates: "+coords);
+		}
+		region.addChangeLocation(location);
 		return location;
 	}
 

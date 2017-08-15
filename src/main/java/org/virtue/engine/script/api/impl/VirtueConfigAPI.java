@@ -369,6 +369,24 @@ public class VirtueConfigAPI implements ConfigAPI {
 	}
 
 	@Override
+	public int locSizeX(int locTypeId) {
+		LocType locType = configProvider.getLocTypes().list(locTypeId);
+		if (locType == null) {
+			throw new IllegalArgumentException("Invalid locTypeId: "+locTypeId);
+		}
+		return locType.sizeX;
+	}
+
+	@Override
+	public int locSizeY(int locTypeId) {
+		LocType locType = configProvider.getLocTypes().list(locTypeId);
+		if (locType == null) {
+			throw new IllegalArgumentException("Invalid locTypeId: "+locTypeId);
+		}
+		return locType.sizeY;
+	}
+
+	@Override
 	public int invSize(int invId) {
 		InvType invType = configProvider.getInvTypes().list(invId);
 		if (invType == null) {
