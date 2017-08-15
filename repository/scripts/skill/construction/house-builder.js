@@ -36,6 +36,8 @@ module.exports = (function () {
 
 	return {
 		buildHouse : buildHouse,
+		previewRoom : previewRoom,
+		clearRoomPreview : clearRoomPreview,
 		addRoom : addRoom,
 		removeRoom : removeRoom,
 		loadRoom : loadRoom,
@@ -69,6 +71,38 @@ module.exports = (function () {
 		_map.build(houseSquare);
 	}
 
+	function previewRoom (roomObjId, zoneCoord, rotation) {
+		if (_config.objCategory(roomObjId) !== 483) {
+			throw "Object '"+_config.objName(roomObjId)+"' ("+roomObjId+") is not a room!";
+		}
+		var room = util.lookupValue(RoomType, 'objId', roomObjId);
+		if (!room) {
+			throw _config.objName(roomObjId)+" is not yet supported!";
+		}
+		for (var i in room.hotspots) {
+			var hotspot = room.hotspots[i];
+			var locRot = hotspot.rotation || 0;
+			var destCoord = getRotatedCoord(hotspot.coord, zoneCoord, rotation, hotspot.locTypeId, locRot);
+			_map.addLoc(hotspot.locTypeId, destCoord, 10, (rotation + locRot) & 0x3);
+		}
+	}
+
+	function clearRoomPreview (roomObjId, zoneCoord, rotation) {
+		if (_config.objCategory(roomObjId) !== 483) {
+			throw "Object '"+_config.objName(roomObjId)+"' ("+roomObjId+") is not a room!";
+		}
+		var room = util.lookupValue(RoomType, 'objId', roomObjId);
+		if (!room) {
+			throw _config.objName(roomObjId)+" is not yet supported!";
+		}
+		for (var i in room.hotspots) {
+			var hotspot = room.hotspots[i];
+			var locRot = hotspot.rotation || 0;
+			var destCoord = getRotatedCoord(hotspot.coord, zoneCoord, rotation, hotspot.locTypeId, locRot);
+			_map.delLoc(destCoord, 10, (rotation + locRot) & 0x3);
+		}
+	}
+	
 	function addRoom (player, roomObjId, zoneX, zoneY, level, rotation) {
 		if (_config.objCategory(roomObjId) !== 483) {
 			throw "Object '"+_config.objName(roomObjId)+"' ("+roomObjId+") is not a room!";
@@ -126,6 +160,33 @@ module.exports = (function () {
 			}
 		}
 		return -1;
+	}
+
+	function getRotatedCoord(srcCoord, zoneCoord, mapRotation, locTypeId, locRotation) {
+		var tmp;
+		var sizeX = _config.locSizeX(locTypeId);
+		var sizeY = _config.locSizeY(locTypeId);
+		if ((locRotation & 0x1) === 1) {
+			tmp = sizeX;
+			sizeX = sizeY;
+			sizeY = tmp;
+		}
+
+		var localX = _map.getCoordX(srcCoord) & 0x7;
+		var localY = _map.getCoordY(srcCoord) & 0x7;
+		if (mapRotation == 1) {
+			tmp = localX;
+			localX = localY;
+			localY = 7 - tmp - (sizeX - 1);
+		} else if (mapRotation == 2) {
+			localX = 7 - localX - (sizeX - 1);
+			localY = 7 - localY - (sizeY - 1);
+		} else if (mapRotation == 3) {
+			tmp = localX;
+			localX = 7 - localY - (sizeY - 1);
+			localY = tmp;
+		}
+		return coords(zoneCoord, localX, localY, 0);
 	}
 
 	function loadRoomData (player, roomId) {
