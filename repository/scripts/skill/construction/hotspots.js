@@ -33,6 +33,7 @@ var util = require('util');
 var inv = require('inv');
 var stat = require('stat');
 
+var roomRegistry = require('./room-registry');
 var houseBuilder = require('./house-builder');
 var RoomType = require('./room');
 
@@ -145,24 +146,25 @@ module.exports = (function () {
 		var squareY = _map.getSquareY(player);
 		var destCoord = coords(level, squareX, squareY, zoneX << 3, zoneY << 3);
 		var rotation = -1;
+		var room = roomRegistry.lookup(roomType.objId);
 
 		var rotateRoom = function (delta) {
 			do {
 				rotation = (rotation + delta) & 0x3;
 			} while (!roomType.doors[(rotation+doorPos) & 0x3]);
-			houseBuilder.previewRoom(roomType.objId, destCoord, rotation);
+			room.preview(destCoord, rotation);
 		};
 
 		function showRotate () {
-			dialog.multi2(player,
+			dialog.multi4(player,
 				"TODO: Add support for rotating rooms...",
 				"Rotate Clockwise", function () {
-					houseBuilder.clearRoomPreview(roomType.objId, destCoord, rotation);
+					room.clearPreview(destCoord, rotation);
 					rotateRoom(1);
 					showRotate();
 				},
 				"Rotate Anticlockwise", function () {
-					houseBuilder.clearRoomPreview(roomType.objId, destCoord, rotation);
+					room.clearPreview(destCoord, rotation);
 					rotateRoom(-1);
 					showRotate();
 				},

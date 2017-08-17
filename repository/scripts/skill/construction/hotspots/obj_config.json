@@ -1,0 +1,14 @@
+{
+	"poh_exit_portal" : { "id" : 8168, "locTypeId" : 13405 },
+	"poh_decorative_rock" : { "id" : 8169, "locTypeId" : 13406 },
+	"poh_pond" : { "id" : 8170, "locTypeId" : 13407 },
+	"poh_imp_statue" : { "id" : 8171, "locTypeId" : 13408 },
+	"poh_dungeon_entrance" : { "id" : 8172, "locTypeId" : 13409 },
+	"poh_tree" : { "id" : 8173, "locTypeId" : 13411 },
+	"poh_nice_tree" : { "id" : 8174, "locTypeId" : 13412 },
+	"poh_oak_tree" : { "id" : 8175, "locTypeId" : 13413 },
+	"poh_willow_tree" : { "id" : 8176, "locTypeId" : 13414 },
+	"poh_maple_tree" : { "id" : 8177, "locTypeId" : 13415 },
+	"poh_yew_tree" : { "id" : 8178, "locTypeId" : 13416 },
+	"poh_magic_tree" : { "id" : 8179, "locTypeId" : 13417 }
+}
