@@ -80,6 +80,26 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
+	public int getCoordX(CoordGrid coord) {
+		return coord.getX();
+	}
+
+	@Override
+	public int getCoordY(CoordGrid coord) {
+		return coord.getY();
+	}
+
+	@Override
+	public int getSquareX(CoordGrid coord) {
+		return coord.getRegionX();
+	}
+
+	@Override
+	public int getSquareY(CoordGrid coord) {
+		return coord.getRegionY();
+	}
+
+	@Override
 	public int getLocalX(CoordGrid coord) {
 		return coord.getXInRegion();
 	}
@@ -186,7 +206,11 @@ public class VirtueMapAPI implements MapAPI {
 	@Override
 	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int shapeId, int rotation) {
 		SceneLocation location = SceneLocation.create(locTypeId, coords, LocShape.getById(shapeId), rotation);
-		getRegion(coords).addChangeLocation(location);
+		MapSquare region = getRegion(coords);
+		if (region == null) {
+			throw new IllegalArgumentException("Invalid coordinates: "+coords);
+		}
+		region.addChangeLocation(location);
 		return location;
 	}
 
@@ -203,6 +227,11 @@ public class VirtueMapAPI implements MapAPI {
 	@Override
 	public void delLoc(SceneLocation loc) {
 		getRegion(loc.getTile()).removeLocation(loc.getTile(), loc.getShape(), loc.getRotation());
+	}
+
+	@Override
+	public void delLoc(CoordGrid coords, int shape, int rotation) {
+		getRegion(coords).removeLocation(coords, LocShape.getById(shape), rotation);
 	}
 
 	@Override

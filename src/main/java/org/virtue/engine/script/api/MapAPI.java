@@ -33,7 +33,7 @@ import org.virtue.game.node.Node;
  * @since 10/01/2016
  */
 public interface MapAPI {
-	
+
 	/**
 	 * Gets the coordinates for the specified game node
 	 * @param node The game node
@@ -47,7 +47,7 @@ public interface MapAPI {
 	 * @return The base coordinates, with the local coords and level set to zero
 	 */
 	public CoordGrid getCoords (MapSquare square);
-	
+
 	/**
 	 * Gets the coordinate from the specified components
 	 * @param x The x-component of the coordinate
@@ -56,7 +56,7 @@ public interface MapAPI {
 	 * @return The coordinate
 	 */
 	public CoordGrid getCoords (int x, int y, int level);
-	
+
 	/**
 	 * Gets the offset coordinates from the provided {@code coords}
 	 * @param coords The base coordinates to offset
@@ -66,7 +66,7 @@ public interface MapAPI {
 	 * @return
 	 */	
 	public CoordGrid getCoords (CoordGrid coords, int xOff, int yOff, byte levelOffset);
-	
+
 	/**
 	 * Gets the coordinate from the specified components
 	 * @param squareX The x-coordinate of the map square
@@ -77,7 +77,7 @@ public interface MapAPI {
 	 * @return The coordinate
 	 */
 	public CoordGrid getCoords (int squareX, int squareY, int level, int localX, int localY);
-	
+
 	/**
 	 * Gets the offset coordinates from the provided {@code coords}
 	 * @param coords The base coordinates to offset
@@ -90,6 +90,48 @@ public interface MapAPI {
 	 */
 	public CoordGrid getCoords (CoordGrid coords, int levelOffset, int squareXoff, int squareYoff, 
 			int localXoff, int localYoff);
+
+	public default int getCoordX (Node node) {
+		return getCoordX(node.getCurrentTile());
+	}
+
+	public int getCoordX (CoordGrid coord);
+
+	public default int getCoordY (Node node) {
+		return getCoordY(node.getCurrentTile());
+	}
+
+	public int getCoordY (CoordGrid coord);
+
+	public default int getSquareX (MapSquare square) {
+		return getSquareX(square.getBaseCoords());
+	}
+	
+	public default int getSquareX (Node node) {
+		return getSquareX(node.getCurrentTile());
+	}
+
+	/**
+	 * Gets the x-coordinate of the map square containing the specified coord
+	 * @param coord The coord
+	 * @return The map square x coord
+	 */
+	public int getSquareX(CoordGrid coord);
+
+	public default int getSquareY (MapSquare square) {
+		return getSquareY(square.getBaseCoords());
+	}
+
+	public default int getSquareY (Node node) {
+		return getSquareY(node.getCurrentTile());
+	}
+
+	/**
+	 * Gets the y-coordinate of the map square containing the specified coord
+	 * @param coord The coord
+	 * @return The map square y coord
+	 */
+	public int getSquareY(CoordGrid coord);
 
 	public default int getLocalX (Node node) {
 		return getLocalX(node.getCurrentTile());
@@ -170,7 +212,7 @@ public interface MapAPI {
 	 * @return The newly created location
 	 */
 	public SceneLocation addLoc(int locTypeId, CoordGrid coords, int shape, int rotation);
-	
+
 	/**
 	 * Fetches a location at the specified coords of the specified type
 	 * @param coords The coordinates to look at
@@ -178,34 +220,42 @@ public interface MapAPI {
 	 * @return The location at the specified coords, or null if none could be found
 	 */
 	public SceneLocation getLoc(CoordGrid coords, int shape);
-	
+
 	/**
 	 * Removes the specified location from the map
 	 * @param loc The location to remove
 	 */
 	public void delLoc(SceneLocation loc);
-	
+
+	/**
+	 * Removes the location with the specified info from the map
+	 * @param coords The coordinates to clear
+	 * @param shape The desired shape to clear
+	 * @param rotation The desired rotation to clear
+	 */
+	public void delLoc(CoordGrid coords, int shape, int rotation);
+
 	/**
 	 * Runs an animation on a location
 	 * @param loc The location
 	 * @param animId The animation ID to run
 	 */
 	public void locAnim(SceneLocation loc, int animId);
-	
+
 	/**
 	 * Gets the current rotation for the specified location
 	 * @param loc The location to check
 	 * @return The rotation, between 0 and 3 clockwise from the default rotation
 	 */
 	public int getLocRotation(SceneLocation loc);
-	
+
 	/**
 	 * Gets the shape of the specified location
 	 * @param loc The location to check
 	 * @return The location's shape
 	 */
 	public int getLocShape(SceneLocation loc);
-	
+
 	/**
 	 * Delays the execution of a task by the given number of server cycles.
 	 * The task will be cancelled if the location is destroyed
@@ -214,7 +264,7 @@ public interface MapAPI {
 	 * @param ticks The number of server cycles to delay by
 	 */
 	public void delay (SceneLocation loc, Runnable task, int ticks);
-	
+
 	/**
 	 * Adds an item to the map at the given coordinates.
 	 * The item will remain for {@link org.virtue.Constants#ITEM_REMOVAL_DELAY} ticks, unless the server is restarted or the region destroyed
@@ -224,7 +274,7 @@ public interface MapAPI {
 	 * @param amount The number of objects to drop (defaults to 1)
 	 */
 	public void addObj (int objTypeId, CoordGrid coords, Player player, int amount);
-	
+
 	/**
 	 * Adds an item to the map at the given coordinates.
 	 * The item will remain for the specified number of ticks, or "permanently" if -1, unless the server is restarted or the region destroyed
@@ -243,7 +293,7 @@ public interface MapAPI {
 	 * @return True if an object exists, false otherwise
 	 */
 	public boolean hasObject (int objTypeId, CoordGrid coords);
-	
+
 	/**
 	 * Removes an object from the map
 	 * @param objTypeId The object ID to remove

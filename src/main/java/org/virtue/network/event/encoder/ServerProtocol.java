@@ -295,9 +295,14 @@ public enum ServerProtocol {
 	REBUILD_REGION(121, -2),
 
 	/**
-	 * Sets the base tile for map updates
+	 * Sets the base zone coord for map updates
 	 */
 	UPDATE_ZONE_PARTIAL_FOLLOWS(112, 3),
+
+	/**
+	 * Clears all locations & objects currently in the zone in preparation for an update
+	 */
+	UPDATE_ZONE_FULL_FOLLOWS(42, 3),
 
 	/**
 	 * Adds an item to the floor

@@ -159,7 +159,7 @@ public class GameEventDispatcher {
 		case LOGIN_WORLD:
 		case LOGIN_CONTINUE:
 			player.setGameState(GameState.WORLD);
-			sendSceneGraph(5, player.getCurrentTile(), MapSize.DEFAULT, true, true);
+			sendSceneGraph(5, player.getCurrentTile(), MapSize.DEFAULT, true, true, true);
 			if (Virtue.getInstance().hasUpdate()) {
 				sendSystemUpdate(Virtue.getInstance().getUpdateTime() - 2);
 				// Subtract a couple of ticks to account for delay
@@ -323,10 +323,10 @@ public class GameEventDispatcher {
 		sendEvent(WorldListEventEncoder.class, context);
 	}
 
-	public void sendSceneGraph(int sceneRadius, CoordGrid tile, MapSize mapSize, boolean init,
-			boolean isStatic) {
+	public void sendSceneGraph(int sceneRadius, CoordGrid tile, MapSize mapSize, boolean forceRefresh,
+			boolean render, boolean isStatic) {
 		sendEvent(MapRebuildEventEncoder.class, new MapRebuildEventContext(sceneRadius,
-				tile, mapSize, init, isStatic));
+				tile, mapSize, forceRefresh, render, isStatic));
 	}
 
 	public void sendLogout(boolean toLobby) {

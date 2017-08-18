@@ -43,20 +43,21 @@ public class ZoneUpdateEventEncoder implements EventEncoder<ZoneUpdateEventConte
 	@Override
 	public OutboundBuffer encode(Player player, ZoneUpdateEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(ServerProtocol.UPDATE_ZONE_PARTIAL_FOLLOWS, player);
-		int localX = context.getTile().getLocalX(player.getViewport().getBaseTile());
-		int localY = context.getTile().getLocalY(player.getViewport().getBaseTile());
-		buffer.putA(localX >> 3);
-		buffer.putS(localY >> 3);
-		buffer.putA(context.getTile().getLevel());
-		if (context.isSingle()) {
-			buffer.putPacket(context.getPacket().getType().getServerTransmitID(), player);
-			context.getPacket().encode(buffer, player);
+		buffer.putPacket(context.isFull() ? ServerProtocol.UPDATE_ZONE_FULL_FOLLOWS : ServerProtocol.UPDATE_ZONE_PARTIAL_FOLLOWS, player);
+		int localX = context.getCoord().getLocalX(player.getViewport().getBaseTile());
+		int localY = context.getCoord().getLocalY(player.getViewport().getBaseTile());
+		if (context.isFull()) {
+			buffer.putA(context.getCoord().getLevel());
+			buffer.putC(localY >> 3);
+			buffer.putS(localX >> 3);
 		} else {
-			for (ZoneUpdatePacket packet : context.getPackets()) {
-				buffer.putPacket(packet.getType().getServerTransmitID(), player);
-				packet.encode(buffer, player);
-			}
+			buffer.putA(localX >> 3);
+			buffer.putS(localY >> 3);
+			buffer.putA(context.getCoord().getLevel());
+		}
+		for (ZoneUpdatePacket packet : context.getPackets()) {
+			buffer.putPacket(packet.getType().getServerTransmitID(), player);
+			packet.encode(buffer, player);
 		}
 		return buffer;
 	}

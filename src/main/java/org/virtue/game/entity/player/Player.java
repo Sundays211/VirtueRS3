@@ -647,7 +647,7 @@ public class Player extends Entity {
 				getLastTile().getX() + 7, getLastTile().getY() + 4,
 				getLastTile().getLevel()), null, 2231, 70, 150, 30, 41, 0));
 		getDispatcher().sendEvent(ZoneUpdateEventEncoder.class,
-				new ZoneUpdateEventContext(list, getLastTile()));
+				new ZoneUpdateEventContext(list, getLastTile(), false));
 	}
 
 	/*

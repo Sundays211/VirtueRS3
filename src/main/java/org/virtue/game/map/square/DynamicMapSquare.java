@@ -90,7 +90,7 @@ public class DynamicMapSquare extends MapSquare {
 		return baseSquares.size();
 	}
 
-	public int getStaticZone (int plane, int chunkX, int chunkY) {
+	public int getZoneData (int plane, int chunkX, int chunkY) {
 		return staticZones[plane][chunkX - baseTile.getZoneX()][chunkY - baseTile.getZoneY()];
 	}
 }

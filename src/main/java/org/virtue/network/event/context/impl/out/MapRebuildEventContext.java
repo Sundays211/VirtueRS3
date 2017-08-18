@@ -29,22 +29,25 @@ import org.virtue.network.event.context.GameEventContext;
  * @author Im Frizzy <skype:kfriz1998>
  * @since Oct 3, 2014
  */
-public class MapRebuildEventContext implements GameEventContext {
+public final class MapRebuildEventContext implements GameEventContext {
 
-	private boolean render;
-	
-	private CoordGrid baseCoord;
-	
-	private MapSize mapSize;
-	
-	private int sceneRadius;
-	
-	private boolean isStatic;
+	private final boolean render;
 
-	public MapRebuildEventContext(int sceneRadius, CoordGrid coord, MapSize mapSize, boolean render, boolean isStatic) {
+	private final CoordGrid baseCoord;
+
+	private final MapSize mapSize;
+
+	private final int sceneRadius;
+
+	private final boolean forceUpdate;
+
+	private final boolean isStatic;
+
+	public MapRebuildEventContext(int sceneRadius, CoordGrid coord, MapSize mapSize, boolean forceUpdate, boolean render, boolean isStatic) {
 		this.sceneRadius = sceneRadius;
 		this.baseCoord = coord;
 		this.mapSize = mapSize;
+		this.forceUpdate = forceUpdate;
 		this.render = render;
 		this.isStatic = isStatic;
 	}
@@ -63,6 +66,10 @@ public class MapRebuildEventContext implements GameEventContext {
 	
 	public int getSceneRadius () {
 		return sceneRadius;
+	}
+
+	public boolean isForceUpdate() {
+		return forceUpdate;
 	}
 
 	public boolean isRender() {
