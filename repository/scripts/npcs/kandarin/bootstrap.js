@@ -3,6 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
+		require('./khazard-guard'),
 		require('./monk'),
 		require('./wizard-cromperty')
 	];

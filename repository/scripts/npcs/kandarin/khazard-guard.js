@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2017 Virtue Studios
+ * Copyright (c) 2016 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * furnished to do so, subject to the following conditions\:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -19,19 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+/* globals EventType, */
+
 var dialog = require('dialog');
+var _entity = require('engine/entity');
 
 module.exports = (function () {
 	return {
-		init : init
+	init : init
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 81, function (ctx) {
-			dialog.builder(ctx.player).chatplayer("This door appears to be locked.",9807)
-			.chatnpc(253, "Yeah, it's to prevent people like you bothering us. Get out<br> of here.",9786)
+
+		scriptManager.bind(EventType.OPNPC1, 253, function (ctx) {
+			dialog.builder(ctx.player).chatplayer("Hello.",9807)
+			.chatnpc(ctx.npc, "This area is restricted! Leave now and don't come back.",9785)
 	        .finish();
 		});
+
 	}
+	
 })();

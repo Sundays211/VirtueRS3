@@ -8,7 +8,8 @@ module.exports = function (scriptManager) {
 	    require('./fred-the-farmer'),
 		require('./jambon'),
 		require('./lumbridge-guardsman'),
-		require('./lumbridge-sage'),	
+		require('./lumbridge-sage'),
+		require('./seth-groats'),
 		require('./wardsman'),
 		require('./wizard-valina')	
 	];
