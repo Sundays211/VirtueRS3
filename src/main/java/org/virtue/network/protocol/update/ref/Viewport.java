@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.virtue.game.World;
 import org.virtue.game.entity.Entity;
 import org.virtue.game.entity.npc.NPC;
@@ -42,7 +44,9 @@ import org.virtue.network.event.context.GameEventContext;
  * @since Oct 18, 2014
  */
 public class Viewport implements GameEventContext {
-	
+
+	private static Logger LOGGER = LoggerFactory.getLogger(Viewport.class);
+
 	/**
 	 * Represents an array of players within the current player's view
 	 */
@@ -130,7 +134,7 @@ public class Viewport implements GameEventContext {
 
 	private boolean dynamicUpdate = false;
 
-	private boolean needsUpdate;
+	private boolean forceUpdate;
 	
 	public Viewport(Player player) {
 		this.player = player;
@@ -200,7 +204,8 @@ public class Viewport implements GameEventContext {
 	 * @param sendUpdate Whether to send the update to the client
 	 */
 	public synchronized void moveToRegion (CoordGrid tile, MapSize mapSize, boolean sendUpdate) {
-		needsUpdate = false;
+		boolean wasForceUpdate = forceUpdate;
+		forceUpdate = false;
 		Set<MapSquare> oldRegions = new HashSet<MapSquare>(regions);
 		regions.clear();
 		int actualSize = mapSize.getTileCount();
@@ -229,7 +234,8 @@ public class Viewport implements GameEventContext {
 		}
 		if (sendUpdate) {
 			sceneRadius = ((actualSize >> 3) / 2) - 1;//no fucking idea what this should be
-			player.getDispatcher().sendSceneGraph(sceneRadius, tile, mapSize, false, !containsDynamicRegion);
+			LOGGER.debug("Sending map rebuild: {}, radius={}", tile, sceneRadius);
+			player.getDispatcher().sendSceneGraph(sceneRadius, tile, mapSize, wasForceUpdate, false, !containsDynamicRegion);
 			onMapLoaded();
 		}
 	}
@@ -260,11 +266,11 @@ public class Viewport implements GameEventContext {
 		int chunkDeltaX = Math.abs(baseTile.getZoneX() - player.getCurrentTile().getZoneX());
 		int chunkDeltaY = Math.abs(baseTile.getZoneY() - player.getCurrentTile().getZoneY());
 		int size = ((CoordGrid.REGION_SIZES[0] >> 3) / 2) - 1;
-		return needsUpdate || chunkDeltaX >= size || chunkDeltaY >= size;
+		return forceUpdate || chunkDeltaX >= size || chunkDeltaY >= size;
 	}
 	
 	public void flagUpdate () {
-		needsUpdate = true;
+		forceUpdate = true;
 	}
 	
 	/**
