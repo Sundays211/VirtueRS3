@@ -22,6 +22,7 @@
 package org.virtue.network.event.context.impl.out;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.prot.ZoneUpdatePacket;
@@ -34,37 +35,33 @@ import org.virtue.network.event.context.GameEventContext;
  * @author Sundays211
  * @since 31/10/2014
  */
-public class ZoneUpdateEventContext implements GameEventContext {
-	
-	private Collection<ZoneUpdatePacket> packets;
-	
-	private ZoneUpdatePacket packet;
-	
-	private CoordGrid tile;
-	
-	public ZoneUpdateEventContext (Collection<ZoneUpdatePacket> packets, CoordGrid tile) {
-		this.packets = packets;
-		this.tile = tile;
-	}
-	
+public final class ZoneUpdateEventContext implements GameEventContext {
+
+	private final Collection<ZoneUpdatePacket> packets;
+
+	private final CoordGrid coord;
+
+	private final boolean full;
+
 	public ZoneUpdateEventContext (ZoneUpdatePacket packet) {
-		this.packet = packet;
-		this.tile = packet.getTile();
+		this(Collections.singleton(packet), packet.getTile(), false);
 	}
-	
+
+	public ZoneUpdateEventContext (Collection<ZoneUpdatePacket> packets, CoordGrid coord, boolean full) {
+		this.packets = packets;
+		this.coord = coord;
+		this.full = full;
+	}
+
+	public boolean isFull() {
+		return full;
+	}
+
 	public Collection<ZoneUpdatePacket> getPackets () {
 		return packets;
 	}
-	
-	public ZoneUpdatePacket getPacket () {
-		return packet;
-	}
-	
-	public boolean isSingle () {
-		return packets == null;
-	}
-	
-	public CoordGrid getTile () {
-		return tile;
+
+	public CoordGrid getCoord () {
+		return coord;
 	}
 }

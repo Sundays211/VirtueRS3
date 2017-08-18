@@ -322,7 +322,7 @@ public class MapSquare {
 	private void sendUpdates (Player player) {
 		synchronized (zones) {
 			for (Zone block : zones.values()) {
-				block.sendUpdate(player);
+				block.sendUpdates(player);
 			}
 		}
 	}
