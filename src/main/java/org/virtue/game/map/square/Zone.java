@@ -174,7 +174,7 @@ public class Zone {
 		}
 	}
 
-	protected void sendUpdate (Player player) {
+	protected void sendUpdates (Player player) {
 		List<ZoneUpdatePacket> packets = new ArrayList<ZoneUpdatePacket>();
 		for (List<GroundItem> tileItems : items.values()) {
 			for (GroundItem item : tileItems) {
@@ -193,7 +193,7 @@ public class Zone {
 				}
 			});
 		if (!packets.isEmpty()) {
-			player.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(packets, coord));
+			player.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, new ZoneUpdateEventContext(packets, coord, true));
 		}
 	}
 

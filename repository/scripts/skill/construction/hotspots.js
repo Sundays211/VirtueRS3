@@ -24,6 +24,7 @@ var _varbit = require('engine/var/bit');
 var _map = require('engine/map');
 var _config = require('engine/config');
 
+var coords = require('map/coords');
 var CONST = require('const');
 var chat = require('chat');
 var dialog = require('dialog');
@@ -32,6 +33,7 @@ var util = require('util');
 var inv = require('inv');
 var stat = require('stat');
 
+var roomRegistry = require('./room-registry');
 var houseBuilder = require('./house-builder');
 var RoomType = require('./room');
 
@@ -140,16 +142,38 @@ module.exports = (function () {
 				throw "Invalid player position: "+_map.getCoords(player)+" for zone "+zoneX+","+zoneY+","+level;
 			}
 		}
-		var rotation = 0;
-		while (!roomType.doors[(rotation+doorPos) & 0x3]) {
-			rotation++;
-		}
+		var squareX = _map.getSquareX(player);
+		var squareY = _map.getSquareY(player);
+		var destCoord = coords(level, squareX, squareY, zoneX << 3, zoneY << 3);
+		var rotation = -1;
+		var room = roomRegistry.lookup(roomType.objId);
 
-		dialog.multi2(player, 
-			"TODO: Add support for rotating rooms...", 
-			"Build", function () {
-				inv.take(player, CONST.COINS, _config.objCost(roomType.objId));
-				houseBuilder.addRoom(player, roomType.objId, zoneX, zoneY, level, rotation);
-			}, "Cancel");
+		var rotateRoom = function (delta) {
+			do {
+				rotation = (rotation + delta) & 0x3;
+			} while (!roomType.doors[(rotation+doorPos) & 0x3]);
+			room.preview(destCoord, rotation);
+		};
+
+		function showRotate () {
+			dialog.multi4(player,
+				"TODO: Add support for rotating rooms...",
+				"Rotate Clockwise", function () {
+					room.clearPreview(destCoord, rotation);
+					rotateRoom(1);
+					showRotate();
+				},
+				"Rotate Anticlockwise", function () {
+					room.clearPreview(destCoord, rotation);
+					rotateRoom(-1);
+					showRotate();
+				},
+				"Build", function () {
+					inv.take(player, CONST.COINS, _config.objCost(roomType.objId));
+					houseBuilder.addRoom(player, roomType.objId, zoneX, zoneY, level, rotation);
+				}, "Cancel");
+		}
+		rotateRoom(1);
+		showRotate();
 	}
 })();

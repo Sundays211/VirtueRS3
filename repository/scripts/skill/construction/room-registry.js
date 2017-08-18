@@ -19,49 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.virtue.network.event.context.impl.out;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import org.virtue.game.map.CoordGrid;
-import org.virtue.game.map.prot.ZoneUpdatePacket;
-import org.virtue.network.event.context.GameEventContext;
-
-/**
- * @author Im Frizzy <skype:kfriz1998>
- * @author Frosty Teh Snowman <skype:travis.mccorkle>
- * @author Arthur <skype:arthur.behesnilian>
- * @author Sundays211
- * @since 31/10/2014
- */
-public final class ZoneUpdateEventContext implements GameEventContext {
-
-	private final Collection<ZoneUpdatePacket> packets;
-
-	private final CoordGrid coord;
-
-	private final boolean full;
-
-	public ZoneUpdateEventContext (ZoneUpdatePacket packet) {
-		this(Collections.singleton(packet), packet.getTile(), false);
+module.exports = (function () {
+	var _rooms = {};
+	
+	return {
+		register : register,
+		lookup : lookup
+	};
+	
+	function register (roomObjId, room) {
+		_rooms[roomObjId] = room;
 	}
-
-	public ZoneUpdateEventContext (Collection<ZoneUpdatePacket> packets, CoordGrid coord, boolean full) {
-		this.packets = packets;
-		this.coord = coord;
-		this.full = full;
+	
+	function lookup (roomObjId) {
+		return _rooms[roomObjId];
 	}
-
-	public boolean isFull() {
-		return full;
-	}
-
-	public Collection<ZoneUpdatePacket> getPackets () {
-		return packets;
-	}
-
-	public CoordGrid getCoord () {
-		return coord;
-	}
-}
+})();

@@ -6,7 +6,9 @@ module.exports = function (scriptManager) {
 	var modules = [
 		require('./commands'),
 		require('./house'),
-		require('./hotspots')
+		require('./hotspots'),
+		require('./room/garden'),
+		require('./room/parlour')
 	];
 	
 	for (var i in modules) {

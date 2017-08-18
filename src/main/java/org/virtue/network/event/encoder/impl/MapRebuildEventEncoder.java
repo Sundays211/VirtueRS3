@@ -61,7 +61,7 @@ public class MapRebuildEventEncoder implements EventEncoder<MapRebuildEventConte
 			buffer.putA(5);
 			//buffer.putA(context.getSceneRadius());
 			buffer.putS(9);//Count
-			buffer.putS(context.isRender() ? 1 : 0);//Force
+			buffer.putS(context.isForceUpdate() ? 1 : 0);//Force
 			buffer.putS(context.getMapSize().getId());
 		} else {
 			int baseZoneX = context.getBaseCoord().getZoneX();
@@ -70,7 +70,7 @@ public class MapRebuildEventEncoder implements EventEncoder<MapRebuildEventConte
 			//buffer.putByte(context.getSceneRadius());
 			buffer.putC(1);//Type = 1 for dynamic region
 			buffer.putShort(baseZoneY);
-			buffer.putA(context.isRender() ? 1 : 0);//Force refresh
+			buffer.putA(context.isForceUpdate() ? 1 : 0);//Force refresh
 			buffer.putShortA(baseZoneX);
 			buffer.putA(context.getMapSize().getId());
 
@@ -99,7 +99,7 @@ public class MapRebuildEventEncoder implements EventEncoder<MapRebuildEventConte
 						} else {
 							buffer.putBits(1, 1);
 							if (mapSquare instanceof DynamicMapSquare) {
-								buffer.putBits(26, ((DynamicMapSquare) mapSquare).getStaticZone(level, zoneX, zoneY));
+								buffer.putBits(26, ((DynamicMapSquare) mapSquare).getZoneData(level, zoneX, zoneY));
 							} else {
 								LOGGER.debug("Sending static square in dynamic rebuild. x={},y={},z={}", zoneX, zoneY, level);
 								buffer.putBits(26, ((zoneY & 0x7ff) << 3) | ((zoneX & 0x3ff) << 14) | ((level & 0x3) << 24));

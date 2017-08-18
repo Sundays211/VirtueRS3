@@ -22,6 +22,8 @@
 
 var coords = require('map/coords');
 
+var Garden = require('./hotspots/garden');
+
 module.exports = {
 	PARLOUR : {
 		objId : 8395,
@@ -43,6 +45,15 @@ module.exports = {
 		typeId : 2,
 		doors : [true, true, true, true],
 		srcCoord : coords(0,29,79,0,8),
+		hotspots : [
+			{ coord : coords(0,29,79,3,11), locTypeId : 15361, furnature : Garden.CENTERPIECE },
+			{ coord : coords(0,29,79,1,13), locTypeId : 15362, furnature : Garden.BIG_TREE },
+			{ coord : coords(0,29,79,6,14), locTypeId : 15363, rotation : 1, furnature : Garden.TREE },
+			{ coord : coords(0,29,79,6,8), locTypeId : 15364, furnature : Garden.BIG_PLANT_1 },
+			{ coord : coords(0,29,79,0,8), locTypeId : 15365, furnature : Garden.BIG_PLANT_2 },
+			{ coord : coords(0,29,79,3,9), locTypeId : 15366, furnature : Garden.SMALL_PLANT_1 },
+			{ coord : coords(0,29,79,4,13), locTypeId : 15367, furnature : Garden.SMALL_PLANT_2 }
+		]
 	},
 	KITCHEN : {
 		objId : 8396,

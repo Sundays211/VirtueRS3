@@ -1,0 +1,49 @@
+{
+	"CENTERPIECE" : [
+		{ "objId" : 8168, "locTypeId" : 13405 },
+		{ "objId" : 8169, "locTypeId" : 13406 },
+		{ "objId" : 8170, "locTypeId" : 13407 },
+		{ "objId" : 8171, "locTypeId" : 13408 },
+		{ "objId" : 8172, "locTypeId" : 13409 },
+		{ "objId" : 8245, "locTypeId" : -1 },
+		{ "objId" : 8245, "locTypeId" : -1 }
+	],
+	"BIG_TREE" : [
+		{ "objId" : 8173, "locTypeId" : 13411 },
+		{ "objId" : 8174, "locTypeId" : 13412 },
+		{ "objId" : 8175, "locTypeId" : 13413 },
+		{ "objId" : 8176, "locTypeId" : 13414 },
+		{ "objId" : 8177, "locTypeId" : 13415 },
+		{ "objId" : 8178, "locTypeId" : 13416 },
+		{ "objId" : 8179, "locTypeId" : 13417 }
+	],
+	"TREE" : [
+		{ "objId" : 8173, "locTypeId" : 13418 },
+		{ "objId" : 8174, "locTypeId" : 13419 },
+		{ "objId" : 8175, "locTypeId" : 13420 },
+		{ "objId" : 8176, "locTypeId" : 13421 },
+		{ "objId" : 8177, "locTypeId" : 13422 },
+		{ "objId" : 8178, "locTypeId" : 13423 },
+		{ "objId" : 8179, "locTypeId" : 13424 }
+	],
+	"BIG_PLANT_1" : [
+		{ "objId" : 8186, "locTypeId" : 13425 },
+		{ "objId" : 8187, "locTypeId" : 13426 },
+		{ "objId" : 8188, "locTypeId" : 13427 }
+	],
+	"BIG_PLANT_2" : [
+		{ "objId" : 8189, "locTypeId" : 13428 },
+		{ "objId" : 8190, "locTypeId" : 13429 },
+		{ "objId" : 8191, "locTypeId" : 13430 }
+	],
+	"SMALL_PLANT_1" : [
+		{ "objId" : 8180, "locTypeId" : 13431 },
+		{ "objId" : 8181, "locTypeId" : 13432 },
+		{ "objId" : 8182, "locTypeId" : 13433 }
+	],
+	"SMALL_PLANT_2" : [
+		{ "objId" : 8183, "locTypeId" : 13434 },
+		{ "objId" : 8184, "locTypeId" : 13435 },
+		{ "objId" : 8185, "locTypeId" : 13436 }
+	]
+}
