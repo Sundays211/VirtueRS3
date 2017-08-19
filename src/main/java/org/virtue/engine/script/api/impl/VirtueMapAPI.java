@@ -183,6 +183,15 @@ public class VirtueMapAPI implements MapAPI {
 		area.updateZone(destZoneX, destZoneY, destLevel, srcCoord, rotation);
 	}
 
+	@Override
+	public void clearZone(CoordGrid zoneBaseCoord) {
+		MapSquare region = getRegion(zoneBaseCoord);
+		if (region == null) {
+			throw new IllegalArgumentException("Invalid coordinates: "+zoneBaseCoord);
+		}
+		region.clearZone(zoneBaseCoord);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.api.MapAPI#addLoc(org.virtue.game.world.region.DynamicRegion, int, org.virtue.game.world.region.Tile, int, int)
 	 */

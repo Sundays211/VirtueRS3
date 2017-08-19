@@ -28,8 +28,7 @@ var locMap = require('map/location');
 module.exports = (function () {
 	var room = {
 		init : init,
-		preview : preview,
-		clearPreview : clearPreview
+		preview : preview
 	};
 	return room;
 
@@ -55,25 +54,5 @@ module.exports = (function () {
 		locMap.addZoneLoc(coords(0,0,0,7,4), zoneCoord, rotation, 15314, 0, 2);
 		locMap.addZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
 		locMap.addZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
-	}
-
-	function clearPreview (zoneCoord, rotation) {
-		locMap.delZoneLoc(coords(0,29,79,3,11), zoneCoord, rotation, 15361, 10, 0);//Centerpiece
-		locMap.delZoneLoc(coords(0,29,79,1,13), zoneCoord, rotation, 15362, 10, 0);//Big Tree
-		locMap.delZoneLoc(coords(0,29,79,6,14), zoneCoord, rotation, 15363, 10, 1);//Tree
-		locMap.delZoneLoc(coords(0,29,79,6,8), zoneCoord, rotation, 15364, 10, 0);//Big Plant 1
-		locMap.delZoneLoc(coords(0,29,79,0,8), zoneCoord, rotation, 15365, 10, 0);//Big Plant 2
-		locMap.delZoneLoc(coords(0,29,79,3,9), zoneCoord, rotation, 15366, 10, 0);//Small Plant 1
-		locMap.delZoneLoc(coords(0,29,79,4,13), zoneCoord, rotation, 15367, 10, 0);//Small Plant 2
-		
-		//Doors
-		locMap.delZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
-		locMap.delZoneLoc(coords(0,0,0,0,3), zoneCoord, rotation, 15314, 0, 0);
-		locMap.delZoneLoc(coords(0,0,0,4,7), zoneCoord, rotation, 15313, 0, 1);
-		locMap.delZoneLoc(coords(0,0,0,3,7), zoneCoord, rotation, 15314, 0, 1);
-		locMap.delZoneLoc(coords(0,0,0,7,3), zoneCoord, rotation, 15313, 0, 2);
-		locMap.delZoneLoc(coords(0,0,0,7,4), zoneCoord, rotation, 15314, 0, 2);
-		locMap.delZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
-		locMap.delZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
 	}
 })();

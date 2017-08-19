@@ -28,8 +28,7 @@ var locMap = require('map/location');
 module.exports = (function () {
 	var room = {
 		init : init,
-		preview : preview,
-		clearPreview : clearPreview
+		preview : preview
 	};
 	return room;
 
@@ -87,37 +86,5 @@ module.exports = (function () {
 		locMap.addZoneLoc(coords(0,0,0,7,4), zoneCoord, rotation, 15314, 0, 2);
 		locMap.addZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
 		locMap.addZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
-	}
-
-	function clearPreview (zoneCoord, rotation) {
-		//Chairs
-		locMap.delZoneLoc(coords(0,0,0,2,60), zoneCoord, rotation, 15410, 11, 2);
-		locMap.delZoneLoc(coords(0,0,0,5,60), zoneCoord, rotation, 15411, 11, 1);
-		locMap.delZoneLoc(coords(0,0,0,4,59), zoneCoord, rotation, 15412, 10, 2);
-
-		//Bookcases
-		locMap.delZoneLoc(coords(0,0,0,0,57), zoneCoord, rotation, 15416, 10, 0);
-		locMap.delZoneLoc(coords(0,0,0,7,57), zoneCoord, rotation, 15416, 10, 2);
-
-		//Fireplace
-		locMap.delZoneLoc(coords(0,0,0,3,63), zoneCoord, rotation, 15418, 10, 1);
-
-		//Curtains
-		locMap.delZoneLoc(coords(0,0,0,0,58), zoneCoord, rotation, 15419, 5, 0);
-		locMap.delZoneLoc(coords(0,0,0,0,61), zoneCoord, rotation, 15419, 5, 0);
-		locMap.delZoneLoc(coords(0,0,0,2,63), zoneCoord, rotation, 15419, 5, 1);
-		locMap.delZoneLoc(coords(0,0,0,5,63), zoneCoord, rotation, 15419, 5, 1);
-		locMap.delZoneLoc(coords(0,0,0,7,58), zoneCoord, rotation, 15419, 5, 2);
-		locMap.delZoneLoc(coords(0,0,0,7,61), zoneCoord, rotation, 15419, 5, 2);
-		locMap.delZoneLoc(coords(0,0,0,2,56), zoneCoord, rotation, 15419, 5, 3);
-		locMap.delZoneLoc(coords(0,0,0,5,56), zoneCoord, rotation, 15419, 5, 3);
-		
-		//Doors
-		locMap.delZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
-		locMap.delZoneLoc(coords(0,0,0,0,3), zoneCoord, rotation, 15314, 0, 0);
-		locMap.delZoneLoc(coords(0,0,0,7,3), zoneCoord, rotation, 15313, 0, 2);
-		locMap.delZoneLoc(coords(0,0,0,7,4), zoneCoord, rotation, 15314, 0, 2);
-		locMap.delZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
-		locMap.delZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
 	}
 })();

@@ -147,6 +147,9 @@ module.exports = (function () {
 		var destCoord = coords(level, squareX, squareY, zoneX << 3, zoneY << 3);
 		var rotation = -1;
 		var room = roomRegistry.lookup(roomType.objId);
+		if (!room) {
+			throw "Room building not yet supported for room "+_config.objName(roomType.objId);
+		}
 
 		var rotateRoom = function (delta) {
 			do {
@@ -159,12 +162,12 @@ module.exports = (function () {
 			dialog.multi4(player,
 				"TODO: Add support for rotating rooms...",
 				"Rotate Clockwise", function () {
-					room.clearPreview(destCoord, rotation);
+					_map.clearZone(destCoord);
 					rotateRoom(1);
 					showRotate();
 				},
 				"Rotate Anticlockwise", function () {
-					room.clearPreview(destCoord, rotation);
+					_map.clearZone(destCoord);
 					rotateRoom(-1);
 					showRotate();
 				},
