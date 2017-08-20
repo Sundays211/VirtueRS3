@@ -33,7 +33,7 @@ module.exports = (function () {
 	return room;
 
 	function init (scriptManager) {
-		roomRegistry.register(8395, room);
+		roomRegistry.register(room, 8395);
 	}
 
 	function preview (zoneCoord, rotation) {

@@ -82,6 +82,18 @@ module.exports = (function () {
 			}
 		});
 
+		scriptManager.bind(EventType.IF_OPEN, 1306, function (ctx) {
+			widget.setEvents(ctx.player, 1306, 5, 1, 1, 1);//exit button
+
+			widget.setEvents(ctx.player, 1306, 8, 4, 4, 1);//Option 1
+			widget.setEvents(ctx.player, 1306, 15, 4, 4, 1);//Option 2
+			widget.setEvents(ctx.player, 1306, 22, 4, 4, 1);//Option 3
+			widget.setEvents(ctx.player, 1306, 29, 4, 4, 1);//Option 4
+			widget.setEvents(ctx.player, 1306, 36, 4, 4, 1);//Option 5
+			widget.setEvents(ctx.player, 1306, 43, 4, 4, 1);//Option 6
+			widget.setEvents(ctx.player, 1306, 50, 4, 4, 1);//Option 7
+		});
+
 		scriptManager.bind(EventType.IF_BUTTON, 402, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -155,7 +167,7 @@ module.exports = (function () {
 			do {
 				rotation = (rotation + delta) & 0x3;
 			} while (!roomType.doors[(rotation+doorPos) & 0x3]);
-			room.preview(destCoord, rotation);
+			room.preview(player, destCoord, rotation);
 		};
 
 		function showRotate () {

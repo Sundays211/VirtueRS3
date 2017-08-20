@@ -39,7 +39,8 @@ module.exports = (function () {
 		addRoom : addRoom,
 		removeRoom : removeRoom,
 		loadRoom : loadRoom,
-		findEmptyRoom : findEmptyRoom
+		findEmptyRoom : findEmptyRoom,
+		storeRoomData : storeRoomData
 	};
 
 	function buildHouse (player, houseSquare) {
