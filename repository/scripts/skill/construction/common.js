@@ -19,10 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/* globals Inv */
 var _varbit = require('engine/var/bit');
 var _map = require('engine/map');
 
 var chat = require('chat');
+var widget = require('widget');
+var dialog = require('dialog');
+var inv = require('inv');
 
 var houseBuilder = require('./house-builder');
 
@@ -31,11 +35,23 @@ module.exports = (function () {
 		buildFurniture : buildFurniture
 	};
 
-	function buildFurniture (player, optionComponentId, hotspotId, callback) {
-		var zoneX = _map.getLocalX(player) >> 3;
-		var zoneY = _map.getLocalY(player) >> 3;
-		var level = _map.getLevel(player);
+	function buildFurniture (player, roomCoord, hotspotId, options, callback) {
+		inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, options);
+		widget.openCentral(player, 1306);
+		dialog.setResumeHandler(player, function (value) {
+			handleSelectResponse(player, roomCoord, value & 0xffff, hotspotId);
+			callback();
+		});
+	}
+	
+	function handleSelectResponse (player, zoneCoord, optionComponentId, hotspotId) {
+		var zoneX = _map.getLocalX(zoneCoord) >> 3;
+		var zoneY = _map.getLocalY(zoneCoord) >> 3;
+		var level = _map.getLevel(zoneCoord);
 		var roomId = houseBuilder.loadRoom(player, zoneX, zoneY, level);
+		if (roomId === -1) {
+			throw "Room not found at "+zoneCoord;
+		}
 
 		var slot;
 		switch (optionComponentId) {
@@ -66,7 +82,6 @@ module.exports = (function () {
 		}
 		setHotspot(player, hotspotId, slot);
 		houseBuilder.storeRoomData(player, roomId);
-		callback();
 	}
 
 	function setHotspot (player, hotspotId, value) {

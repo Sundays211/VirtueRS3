@@ -19,16 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Inv */
+/* globals EventType */
 var _varbit = require('engine/var/bit');
 var coords = require('map/coords');
 
 var roomRegistry = require('../room-registry');
 var locMap = require('map/location');
 var mapUtil = require('map/common');
-var inv = require('inv');
-var widget = require('widget');
-var dialog = require('dialog');
 
 var common = require('../common');
 
@@ -50,7 +47,8 @@ module.exports = (function () {
 
 	var room = {
 		init : init,
-		preview : preview
+		preview : preview,
+		build : build
 	};
 	return room;
 
@@ -58,93 +56,58 @@ module.exports = (function () {
 		roomRegistry.register(room, 8415);
 
 		scriptManager.bind(EventType.OPLOC5, 15361, function (ctx) {//Centerpiece
-			var player = ctx.player;
-			inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, centerpiece_options);
-			widget.openCentral(player, 1306);
-			dialog.setResumeHandler(player, function (value) {
-				common.buildFurniture(player, value & 0xffff, 1, function () {
-					var zoneCoord = mapUtil.getZoneCoord(player);
-					var rotation = _varbit(player, 1527);
-					buildCenterpiece(player, zoneCoord, rotation);
-				});
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.buildFurniture(ctx.player, roomCoord, 1, centerpiece_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildCenterpiece(ctx.player, roomCoord, rotation);
 			});
 		});
 
 		scriptManager.bind(EventType.OPLOC5, 15362, function (ctx) {//Big Tree
-			var player = ctx.player;
-			inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, tree_options);
-			widget.openCentral(player, 1306);
-			dialog.setResumeHandler(player, function (value) {
-				common.buildFurniture(player, value & 0xffff, 2, function () {
-					var zoneCoord = mapUtil.getZoneCoord(player);
-					var rotation = _varbit(player, 1527);
-					buildBigTree(player, zoneCoord, rotation);
-				});
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.buildFurniture(ctx.player, roomCoord, 2, tree_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildBigTree(ctx.player, roomCoord, rotation);
 			});
 		});
 
 		scriptManager.bind(EventType.OPLOC5, 15363, function (ctx) {//Tree
-			var player = ctx.player;
-			inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, tree_options);
-			widget.openCentral(player, 1306);
-			dialog.setResumeHandler(player, function (value) {
-				common.buildFurniture(player, value & 0xffff, 3, function () {
-					var zoneCoord = mapUtil.getZoneCoord(player);
-					var rotation = _varbit(player, 1527);
-					buildTree(player, zoneCoord, rotation);
-				});
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.buildFurniture(ctx.player, roomCoord, 3, tree_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildTree(ctx.player, roomCoord, rotation);
 			});
 		});
 
 		scriptManager.bind(EventType.OPLOC5, 15364, function (ctx) {//Big Plant 1
-			var player = ctx.player;
-			inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, big_plant_1_options);
-			widget.openCentral(player, 1306);
-			dialog.setResumeHandler(player, function (value) {
-				common.buildFurniture(player, value & 0xffff, 4, function () {
-					var zoneCoord = mapUtil.getZoneCoord(player);
-					var rotation = _varbit(player, 1527);
-					buildBigPlant1(player, zoneCoord, rotation);
-				});
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.buildFurniture(ctx.player, roomCoord, 4, big_plant_1_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildBigPlant1(ctx.player, roomCoord, rotation);
 			});
 		});
 
 		scriptManager.bind(EventType.OPLOC5, 15365, function (ctx) {//Big Plant 2
-			var player = ctx.player;
-			inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, big_plant_2_options);
-			widget.openCentral(player, 1306);
-			dialog.setResumeHandler(player, function (value) {
-				common.buildFurniture(player, value & 0xffff, 5, function () {
-					var zoneCoord = mapUtil.getZoneCoord(player);
-					var rotation = _varbit(player, 1527);
-					buildBigPlant2(player, zoneCoord, rotation);
-				});
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.buildFurniture(ctx.player, roomCoord, 5, big_plant_2_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildBigPlant2(ctx.player, roomCoord, rotation);
 			});
 		});
 
 		scriptManager.bind(EventType.OPLOC5, 15366, function (ctx) {//Small Plant 1
-			var player = ctx.player;
-			inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, small_plant_1_options);
-			widget.openCentral(player, 1306);
-			dialog.setResumeHandler(player, function (value) {
-				common.buildFurniture(player, value & 0xffff, 6, function () {
-					var zoneCoord = mapUtil.getZoneCoord(player);
-					var rotation = _varbit(player, 1527);
-					buildSmallPlant1(player, zoneCoord, rotation);
-				});
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.buildFurniture(ctx.player, roomCoord, 6, small_plant_1_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildSmallPlant1(ctx.player, roomCoord, rotation);
 			});
 		});
 
 		scriptManager.bind(EventType.OPLOC5, 15367, function (ctx) {//Small Plant 2
-			var player = ctx.player;
-			inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, small_plant_2_options);
-			widget.openCentral(player, 1306);
-			dialog.setResumeHandler(player, function (value) {
-				common.buildFurniture(player, value & 0xffff, 7, function () {
-					var zoneCoord = mapUtil.getZoneCoord(player);
-					var rotation = _varbit(player, 1527);
-					buildSmallPlant2(player, zoneCoord, rotation);
-				});
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.buildFurniture(ctx.player, roomCoord, 7, small_plant_2_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildSmallPlant2(ctx.player, roomCoord, rotation);
 			});
 		});
 	}
@@ -157,13 +120,6 @@ module.exports = (function () {
 		buildBigPlant2(player, zoneCoord, rotation);
 		buildSmallPlant1(player, zoneCoord, rotation);
 		buildSmallPlant2(player, zoneCoord, rotation);
-		//locMap.addZoneLoc(coords(0,29,79,3,11), zoneCoord, rotation, 15361, 10, 0);//Centerpiece
-		//locMap.addZoneLoc(coords(0,29,79,1,13), zoneCoord, rotation, 15362, 10, 0);//Big Tree
-		//locMap.addZoneLoc(coords(0,29,79,6,14), zoneCoord, rotation, 15363, 10, 1);//Tree
-		//locMap.addZoneLoc(coords(0,29,79,6,8), zoneCoord, rotation, 15364, 10, 0);//Big Plant 1
-		//locMap.addZoneLoc(coords(0,29,79,0,8), zoneCoord, rotation, 15365, 10, 0);//Big Plant 2
-		//locMap.addZoneLoc(coords(0,29,79,3,9), zoneCoord, rotation, 15366, 10, 0);//Small Plant 1
-		//locMap.addZoneLoc(coords(0,29,79,4,13), zoneCoord, rotation, 15367, 10, 0);//Small Plant 2
 
 		//Doors
 		locMap.addZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
@@ -174,6 +130,16 @@ module.exports = (function () {
 		locMap.addZoneLoc(coords(0,0,0,7,4), zoneCoord, rotation, 15314, 0, 2);
 		locMap.addZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
 		locMap.addZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
+	}
+
+	function build (player, zoneCoord, rotation) {
+		buildCenterpiece(player, zoneCoord, rotation);
+		buildBigTree(player, zoneCoord, rotation);
+		buildTree(player, zoneCoord, rotation);
+		buildBigPlant1(player, zoneCoord, rotation);
+		buildBigPlant2(player, zoneCoord, rotation);
+		buildSmallPlant1(player, zoneCoord, rotation);
+		buildSmallPlant2(player, zoneCoord, rotation);
 	}
 
 	function buildCenterpiece (player, zoneCoord, rotation) {

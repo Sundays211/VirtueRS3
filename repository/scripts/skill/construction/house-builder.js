@@ -26,7 +26,9 @@ var _map = require('engine/map');
 
 var coords = require('map/coords');
 var util = require('util');
+var chat = require('chat');
 
+var roomRegistry = require('./room-registry');
 var RoomType = require('./room');
 
 //Real doors: 13098 to 13103
@@ -68,8 +70,34 @@ module.exports = (function () {
 			}
 		}
 		_map.build(houseSquare);
+
+		buildRoomFurniture(player, houseSquare);
 	}
 
+	function buildRoomFurniture (player, houseSquare) {
+		for (var roomId=0; roomId<maxRooms; roomId++) {
+			loadRoomData(player, roomId);
+			var roomTypeId = _varbit(player, 1528);
+			if (roomTypeId !== 0) {
+				var zoneX = _varbit(player, 1524);
+				var zoneY = _varbit(player, 1525);
+				var level = _varbit(player, 1526);
+				var rotation = _varbit(player, 1527);
+				var roomType = util.lookupValue(RoomType, 'typeId', roomTypeId);
+				if (!roomType) {
+					throw "Unsupported room: "+roomTypeId+" at "+zoneX+", "+zoneY;
+				}
+				var room = roomRegistry.lookup(roomType.objId);
+				if (!room || !room.build) {
+					chat.sendDebugMessage(player, "Furniture in the "+_config.objName(roomType.objId)+" is not yet supported");
+				} else {
+					var zoneCoord = coords(level, _map.getSquareX(houseSquare), _map.getSquareY(houseSquare), zoneX << 3, zoneY << 3);
+					room.build(player, zoneCoord, rotation);
+				}
+			}
+		}
+	}
+	
 	function addRoom (player, roomObjId, zoneX, zoneY, level, rotation) {
 		if (_config.objCategory(roomObjId) !== 483) {
 			throw "Object '"+_config.objName(roomObjId)+"' ("+roomObjId+") is not a room!";
