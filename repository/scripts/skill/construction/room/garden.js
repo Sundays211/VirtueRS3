@@ -46,6 +46,8 @@ module.exports = (function () {
 	var small_plant_2_locations = [ -1, 13434, 13435, 13436 ];
 
 	var room = {
+		srcCoord : coords(0,29,79,0,8),
+		doors : [true, true, true, true],
 		init : init,
 		preview : preview,
 		build : build

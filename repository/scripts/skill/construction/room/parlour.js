@@ -43,6 +43,8 @@ module.exports = (function () {
 	var fireplace_locations = [ -1, 13609, 13611, 13613 ];
 
 	var room = {
+		srcCoord : coords(0,29,79,0,56),
+		doors : [ false, true, true, true ],
 		init : init,
 		preview : preview,
 		build : build

@@ -35,7 +35,6 @@ var stat = require('stat');
 
 var roomRegistry = require('./room-registry');
 var houseBuilder = require('./house-builder');
-var RoomType = require('./room');
 
 module.exports = (function () {
 	return {
@@ -99,27 +98,27 @@ module.exports = (function () {
 			switch (ctx.component) {
 			case 73://Build parlor
 				widget.closeAll(player);
-				buildRoom(player, RoomType.PARLOUR);
+				buildRoom(player, 8395);
 				return;
 			case 82://Build garden
 				widget.closeAll(player);
-				buildRoom(player, RoomType.GARDEN);
+				buildRoom(player, 8415);
 				return;
 			case 91://Build kitchen
 				widget.closeAll(player);
-				buildRoom(player, RoomType.KITCHEN);
+				buildRoom(player, 8396);
 				return;
 			case 99://Build dining room
 				widget.closeAll(player);
-				buildRoom(player, RoomType.DINING);
+				buildRoom(player, 8397);
 				return;
 			case 107://Build workshop
 				widget.closeAll(player);
-				buildRoom(player, RoomType.WORKSHOP);
+				buildRoom(player, 8406);
 				return;
 			case 115://Build bedroom
 				widget.closeAll(player);
-				buildRoom(player, RoomType.BEDROOM);
+				buildRoom(player, 8398);
 				return;
 			default:
 				util.defaultHandler(ctx, "room selection");
@@ -128,12 +127,12 @@ module.exports = (function () {
 		});
 	}
 
-	function buildRoom(player, roomType) {
-		if (stat.getLevel(player, Stat.CONSTRUCTION) < _config.objParam(roomType.objId, 23)) {
-			chat.sendDebugMessage(player, "You need a construction level of "+_config.objParam(roomType.objId, 23)+" to build this room.");
+	function buildRoom(player, roomObjId) {
+		if (stat.getLevel(player, Stat.CONSTRUCTION) < _config.objParam(roomObjId, 23)) {
+			chat.sendDebugMessage(player, "You need a construction level of "+_config.objParam(roomObjId, 23)+" to build this room.");
 			return;
 		}
-		chat.sendDebugMessage(player, "Building room: "+_config.objName(roomType.objId));
+		chat.sendDebugMessage(player, "Building room: "+_config.objName(roomObjId));
 		var zoneX = _varbit(player, 1524);
 		var zoneY = _varbit(player, 1525);
 		var level = _varbit(player, 1526);
@@ -158,15 +157,15 @@ module.exports = (function () {
 		var squareY = _map.getSquareY(player);
 		var destCoord = coords(level, squareX, squareY, zoneX << 3, zoneY << 3);
 		var rotation = -1;
-		var room = roomRegistry.lookup(roomType.objId);
+		var room = roomRegistry.lookup(roomObjId);
 		if (!room) {
-			throw "Room building not yet supported for room "+_config.objName(roomType.objId);
+			throw "Room building not yet supported for room "+_config.objName(roomObjId);
 		}
 
 		var rotateRoom = function (delta) {
 			do {
 				rotation = (rotation + delta) & 0x3;
-			} while (!roomType.doors[(rotation+doorPos) & 0x3]);
+			} while (!room.doors[(rotation+doorPos) & 0x3]);
 			room.preview(player, destCoord, rotation);
 		};
 
@@ -184,8 +183,8 @@ module.exports = (function () {
 					showRotate();
 				},
 				"Build", function () {
-					inv.take(player, CONST.COINS, _config.objCost(roomType.objId));
-					houseBuilder.addRoom(player, roomType.objId, zoneX, zoneY, level, rotation);
+					inv.take(player, CONST.COINS, _config.objCost(roomObjId));
+					houseBuilder.addRoom(player, roomObjId, zoneX, zoneY, level, rotation);
 				}, "Cancel");
 		}
 		rotateRoom(1);
