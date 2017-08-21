@@ -32,8 +32,24 @@ var houseBuilder = require('./house-builder');
 
 module.exports = (function () {
 	return {
-		buildFurniture : buildFurniture
+		buildFurniture : buildFurniture,
+		removeFurniture : removeFurniture
 	};
+
+	function removeFurniture (player, roomCoord, hotspotId, callback) {
+		dialog.builder(player).confirm("Really remove it?").then(function () {
+			var zoneX = _map.getLocalX(roomCoord) >> 3;
+			var zoneY = _map.getLocalY(roomCoord) >> 3;
+			var level = _map.getLevel(roomCoord);
+			var roomId = houseBuilder.loadRoom(player, zoneX, zoneY, level);
+			if (roomId === -1) {
+				throw "Room not found at "+roomCoord;
+			}
+			setHotspot(player, hotspotId, 0);
+			houseBuilder.storeRoomData(player, roomId);
+			callback();
+		});
+	}
 
 	function buildFurniture (player, roomCoord, hotspotId, options, callback) {
 		inv.fill(player, Inv.HOUSE_FURNITURE_OPTIONS, options);
@@ -43,7 +59,7 @@ module.exports = (function () {
 			callback();
 		});
 	}
-	
+
 	function handleSelectResponse (player, zoneCoord, optionComponentId, hotspotId) {
 		var zoneX = _map.getLocalX(zoneCoord) >> 3;
 		var zoneY = _map.getLocalY(zoneCoord) >> 3;
