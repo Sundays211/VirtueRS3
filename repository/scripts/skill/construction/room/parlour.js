@@ -54,7 +54,8 @@ module.exports = (function () {
 	function init (scriptManager) {
 		roomRegistry.register(room, 8395);
 
-		scriptManager.bind(EventType.OPLOC5, 15410, function (ctx) {//Chair #1
+		//Chair #1
+		scriptManager.bind(EventType.OPLOC5, 15410, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 1, chair_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -62,7 +63,8 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15411, function (ctx) {//Chair #2
+		//Chair #2
+		scriptManager.bind(EventType.OPLOC5, 15411, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 2, chair_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -70,7 +72,8 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15412, function (ctx) {//Chair #3
+		//Chair #3
+		scriptManager.bind(EventType.OPLOC5, 15412, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 3, chair_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -78,7 +81,10 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, [ 15413, 15414, 15415 ], function (ctx) {//Rug
+		//TODO: Chair removal (it's complicated because all three hotspots have the same location IDs...)
+
+		//Rug
+		scriptManager.bind(EventType.OPLOC5, [ 15413, 15414, 15415 ], function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 4, rug_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -86,7 +92,18 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15416, function (ctx) {//Bookcase
+		//Remove Rug
+		scriptManager.bind(EventType.OPLOC5, [ 13588, 13591, 13594, 13589, 13592, 
+				13595, 13590, 13593, 13596 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 4, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildRug(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Bookcase
+		scriptManager.bind(EventType.OPLOC5, 15416, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 5, bookcase_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -94,9 +111,28 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15418, function (ctx) {//Fireplace
+		//Remove Bookcase
+		scriptManager.bind(EventType.OPLOC5, [ 13597, 13598, 13599 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 5, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildBookcase(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Fireplace
+		scriptManager.bind(EventType.OPLOC5, 15418, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 6, fireplace_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildFireplace(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Remove Fireplace
+		scriptManager.bind(EventType.OPLOC5, [ 13609, 13611, 13613 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 6, function () {
 				var rotation = _varbit(ctx.player, 1527);
 				buildFireplace(ctx.player, roomCoord, rotation);
 			});
@@ -199,7 +235,7 @@ module.exports = (function () {
 	}
 
 	function buildFireplace (player, zoneCoord, rotation) {
-		var locTypeId = fireplace_locations[_varbit(player, 1533)];
+		var locTypeId = fireplace_locations[_varbit(player, 1534)];
 		if (locTypeId === -1) {
 			locTypeId = 15418;
 		}
