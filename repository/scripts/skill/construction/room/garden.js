@@ -192,16 +192,6 @@ module.exports = (function () {
 		buildBigPlant2(player, zoneCoord, rotation);
 		buildSmallPlant1(player, zoneCoord, rotation);
 		buildSmallPlant2(player, zoneCoord, rotation);
-
-		//Doors
-		locMap.addZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
-		locMap.addZoneLoc(coords(0,0,0,0,3), zoneCoord, rotation, 15314, 0, 0);
-		locMap.addZoneLoc(coords(0,0,0,4,7), zoneCoord, rotation, 15313, 0, 1);
-		locMap.addZoneLoc(coords(0,0,0,3,7), zoneCoord, rotation, 15314, 0, 1);
-		locMap.addZoneLoc(coords(0,0,0,7,3), zoneCoord, rotation, 15313, 0, 2);
-		locMap.addZoneLoc(coords(0,0,0,7,4), zoneCoord, rotation, 15314, 0, 2);
-		locMap.addZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
-		locMap.addZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
 	}
 
 	function build (player, zoneCoord, rotation) {

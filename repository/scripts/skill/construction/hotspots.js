@@ -25,6 +25,7 @@ var _map = require('engine/map');
 var _config = require('engine/config');
 
 var coords = require('map/coords');
+var locMap = require('map/location');
 var CONST = require('const');
 var chat = require('chat');
 var dialog = require('dialog');
@@ -165,8 +166,14 @@ module.exports = (function () {
 		var rotateRoom = function (delta) {
 			do {
 				rotation = (rotation + delta) & 0x3;
-			} while (!room.doors[(rotation+doorPos) & 0x3]);
+			} while (!room.doors[rotation]);
 			room.preview(player, destCoord, rotation);
+			for (var i=0;i<4;i++) {
+				if (room.doors[i]) {
+					locMap.addZoneLoc(coords(0,0,0,0,4), destCoord, (rotation+i) & 0x3, 15313, 0, 0);
+					locMap.addZoneLoc(coords(0,0,0,0,3), destCoord, (rotation+i) & 0x3, 15314, 0, 0);
+				}
+			}
 		};
 
 		function showRotate () {

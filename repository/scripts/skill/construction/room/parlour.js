@@ -44,7 +44,7 @@ module.exports = (function () {
 
 	var room = {
 		srcCoord : coords(0,29,79,0,56),
-		doors : [ false, true, true, true ],
+		doors : [ true, false, true, true ],
 		init : init,
 		preview : preview,
 		build : build
@@ -121,14 +121,6 @@ module.exports = (function () {
 		locMap.addZoneLoc(coords(0,0,0,7,61), zoneCoord, rotation, 15419, 5, 2);
 		locMap.addZoneLoc(coords(0,0,0,2,56), zoneCoord, rotation, 15419, 5, 3);
 		locMap.addZoneLoc(coords(0,0,0,5,56), zoneCoord, rotation, 15419, 5, 3);
-		
-		//Doors
-		locMap.addZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
-		locMap.addZoneLoc(coords(0,0,0,0,3), zoneCoord, rotation, 15314, 0, 0);
-		locMap.addZoneLoc(coords(0,0,0,7,3), zoneCoord, rotation, 15313, 0, 2);
-		locMap.addZoneLoc(coords(0,0,0,7,4), zoneCoord, rotation, 15314, 0, 2);
-		locMap.addZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
-		locMap.addZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
 	}
 
 	function build (player, zoneCoord, rotation) {

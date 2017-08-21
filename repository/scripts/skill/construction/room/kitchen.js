@@ -49,7 +49,7 @@ module.exports = (function () {
 
 	var room = {
 		srcCoord : coords(0,29,79,16,56),
-		doors : [ false, true, true, true ],
+		doors : [ true, false, false, true ],
 		init : init,
 		preview : preview,
 		build : build
@@ -59,9 +59,19 @@ module.exports = (function () {
 	function init (scriptManager) {
 		roomRegistry.register(room, 8396);
 
-		scriptManager.bind(EventType.OPLOC5, 15398, function (ctx) {//Stove
+		//Stove
+		scriptManager.bind(EventType.OPLOC5, 15398, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 1, range_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildStove(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Remove Stove
+		scriptManager.bind(EventType.OPLOC5, [ 13528, 13529, 13531, 13533, 13536, 13539, 13542 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 1, function () {
 				var rotation = _varbit(ctx.player, 1527);
 				buildStove(ctx.player, roomCoord, rotation);
 			});
@@ -75,7 +85,18 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15401, function (ctx) {//Beer barrel
+		//Remove Shelves
+		scriptManager.bind(EventType.OPLOC5, [ 13545, 13546, 13547, 13548, 13549, 13550, 13551,
+				13552, 13553, 13554, 13555, 13556, 13557, 13558 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 2, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildShelves(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Beer barrel
+		scriptManager.bind(EventType.OPLOC5, 15401, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 3, beer_barrel_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -83,7 +104,17 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15402, function (ctx) {//Cat basket
+		//Remove Beer barrel
+		scriptManager.bind(EventType.OPLOC5, [ 13568, 13569, 13570, 13571, 13572, 13573 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 3, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildBeerBarrel(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Cat basket
+		scriptManager.bind(EventType.OPLOC5, 15402, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 4, cat_basket_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -91,7 +122,17 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15403, function (ctx) {//Larder
+		//Remove Cat basket
+		scriptManager.bind(EventType.OPLOC5, [ 13574, 13575, 13576 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 4, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildCatBasket(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Larder
+		scriptManager.bind(EventType.OPLOC5, 15403, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 5, larder_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -99,7 +140,17 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15404, function (ctx) {//Sink
+		//Remove Larder
+		scriptManager.bind(EventType.OPLOC5, [ 13565, 13566, 13567 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 5, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildLarder(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Sink
+		scriptManager.bind(EventType.OPLOC5, 15404, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 6, sink_options, function () {
 				var rotation = _varbit(ctx.player, 1527);
@@ -107,9 +158,28 @@ module.exports = (function () {
 			});
 		});
 
-		scriptManager.bind(EventType.OPLOC5, 15405, function (ctx) {//Table
+		//Remove Sink
+		scriptManager.bind(EventType.OPLOC5, [ 13559, 13561, 13563 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 6, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildSink(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Table
+		scriptManager.bind(EventType.OPLOC5, 15405, function (ctx) {
 			var roomCoord = mapUtil.getZoneCoord(ctx.location);
 			common.buildFurniture(ctx.player, roomCoord, 7, table_options, function () {
+				var rotation = _varbit(ctx.player, 1527);
+				buildTable(ctx.player, roomCoord, rotation);
+			});
+		});
+
+		//Remove Sink
+		scriptManager.bind(EventType.OPLOC5, [ 13577, 13578, 13579 ], function (ctx) {
+			var roomCoord = mapUtil.getZoneCoord(ctx.location);
+			common.removeFurniture(ctx.player, roomCoord, 7, function () {
 				var rotation = _varbit(ctx.player, 1527);
 				buildTable(ctx.player, roomCoord, rotation);
 			});
@@ -124,12 +194,6 @@ module.exports = (function () {
 		buildLarder(player, zoneCoord, rotation);
 		buildSink(player, zoneCoord, rotation);
 		buildTable(player, zoneCoord, rotation);
-
-		//Doors
-		locMap.addZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
-		locMap.addZoneLoc(coords(0,0,0,0,3), zoneCoord, rotation, 15314, 0, 0);
-		locMap.addZoneLoc(coords(0,0,0,3,0), zoneCoord, rotation, 15313, 0, 3);
-		locMap.addZoneLoc(coords(0,0,0,4,0), zoneCoord, rotation, 15314, 0, 3);
 	}
 
 	function build (player, zoneCoord, rotation) {
