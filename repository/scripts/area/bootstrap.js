@@ -3,6 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
+	    require('./location-picking'),
 		require('./player-moderator-room'),
 		require('./sign-posts'),
 		require('./wilderness')

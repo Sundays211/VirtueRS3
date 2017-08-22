@@ -67,6 +67,15 @@ module.exports = (function () {
 			respawnDelay : 5,
 			randomLife : 0
 		},
+		BLURITE : {
+			level : 10,
+			xp : 18,
+			oreId : 668,
+			baseTime : 20,
+			randomTime : 1,
+			respawnDelay : 25,
+			randomLife : 0
+		},
 		IRON : {
 			level : 15,
 			xp : 35,
@@ -165,6 +174,10 @@ module.exports = (function () {
 			11934, 11935, 11957, 11958, 11959, 14902, 14903, 18994, 18995, 18996, 19024, 19025, 19026, 21293, 21294, 
 	        21295, 29227, 29229, 72092, 72093, 72094, 75629, 75630, 75631, 88642, 88877, 88879 ], function (ctx) {
 				mineRock(ctx.player, ctx.location, RockType.TIN);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, [ 2561, 33221], function (ctx) {
+				mineRock(ctx.player, ctx.location, RockType.BLURITE);
 		});
 		
 		scriptManager.bind(EventType.OPLOC1, [ 2092, 2093, 5773, 5774, 5775, 6943, 6944, 9717, 9718, 9719, 

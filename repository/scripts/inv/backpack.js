@@ -226,7 +226,7 @@ module.exports = (function() {
 			if (opString == "Drop") {
 				dropItem(player, objId, objCount, ctx.slot);
 			} else if ("Destroy" == opString) {
-				destroyItem(player, objId, ctx.slot);
+				destroyItem(player, objId, objCount, ctx.slot);
 			} else if ("Discard" == opString) {
 				discardItem(player, objId, ctx.slot);
 			}
@@ -383,9 +383,16 @@ module.exports = (function() {
 		}
 	}
 	
-	function destroyItem (player, objId, slot) {
-		//Are you sure you want to destroy this object?
-		//You can get a new one from....
+	function destroyItem (player, objId, count, slot) {
+		//if (common.total(player, objId) > 1 && common.getCount(player, Inv.BACKPACK, slot)== 1) {
+		//	widget.hide(player, 1183, 8, false);
+		//}	
+		//widget.setText(player, 1183, 4, config.objName(objId));
+		//widget.setText(player, 1183, 9, "destroy info here");
+		//widget.setObject(player, 1183, 10, objId, count);
+		//widget.setText(player, 1183, 12, "Are you sure you want to destroy this object?");
+		//widget.openOverlaySub(player, 1006, 1183, false);
+		//todo get buttons to work
 		chat.sendDebugMessage(player, "Destroyed item: "+objId);
 		common.clearSlot(player, Inv.BACKPACK, slot);
 	}

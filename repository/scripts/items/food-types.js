@@ -29,6 +29,24 @@ var config = require('engine/config');
 module.exports = (function () {
 		
 	var Types = {
+		ONION : {
+			itemID : 1957,
+			healAmount : 200,
+	        delayTime : 1,
+	        healText : "You eat the onion.<br>It's always sad to see a grown man cry."
+	    },
+		CABBAGE : {
+			itemID : 1965,
+			healAmount : 210,
+	        delayTime : 1,
+	        healText : "You eat the Cabbage. Yuck!"
+	    },
+		DRAYNOR_CABBAGE : {
+			itemID : 1967,
+			healAmount : 200,
+	        delayTime : 1,
+	        healText : "You eat the Cabbage.<br> It seems to taste nicer then normal."
+	    },
  	    ANCHOVIES : {
 			itemID : 319,
 			healAmount : 200,
