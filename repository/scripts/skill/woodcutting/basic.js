@@ -22,6 +22,7 @@
 /* globals EventType, Stat */
 var coords = require('map/coords');
 var _config = require('engine/config');
+var _map = require('engine/map');
 
 var util = require('util');
 var chat = require('chat');
@@ -353,13 +354,12 @@ module.exports = (function () {
 			locMap.del(treeTop);
 		}
 
-		var treeStump = locMap.add(stumpId, treeCoords, shape, rotation);
-		
-		locMap.delay(treeStump, respawnDelay, function () {
+		locMap.add(stumpId, treeCoords, shape, rotation);
+		_map.delay(treeCoords, function () {
 			locMap.add(treeId, treeCoords, shape, rotation);
 			if (treeTop) {
 				locMap.add(util.getId(treeTop), map.getCoords(treeTop), shape, locMap.getRotation(treeTop));
 			}
-		});
+		}, respawnDelay);
 	}
 })();

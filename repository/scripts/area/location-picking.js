@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var _map = require('engine/map');
+
 var anim = require('anim');
 var util = require('util');
 var dialog = require('dialog');
@@ -27,78 +29,96 @@ var inv = require('inv');
 var map = require('map');
 var loc = require('map/location');
 var chat = require('chat');
+
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
-		
 		scriptManager.bind(EventType.OPLOC2, [ 2646, 67263, 67264, 67265 ], function (ctx) {//flax
 			if(util.mapMembers()){
-	            anim.run(ctx.player, 827, function () {
-				inv.give(ctx.player, 1779, 1);	
-			    loc.delay(loc.add(-1, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 60, function () {
-			    loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-		        });
-			    });	
-            } else {
-                dialog.mesbox(ctx.player, "Only members can pick flax."); 
-            }
+				anim.run(ctx.player, 827, function () {
+					inv.give(ctx.player, 1779, 1);
+					var coord = map.getCoords(ctx.location);
+					var shape = loc.getShape(ctx.location);
+					var rotation = loc.getRotation(ctx.location);
+					_map.delay(coord, function () {
+						_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
+					}, 60);
+				});
+			} else {
+				dialog.mesbox(ctx.player, "Only members can pick flax."); 
+			}
 		});
 
 		scriptManager.bind(EventType.OPLOC2, [ 15506, 15507, 15508 ], function (ctx) {//wheat
-	        anim.run(ctx.player, 827, function () {
-			chat.sendMessage(ctx.player, "You pick some wheat.");
-			inv.give(ctx.player, 1947, 1);	
-			loc.delay(loc.add(-1, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 60, function () {
-			loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-		    });
-			});	
+			anim.run(ctx.player, 827, function () {
+				chat.sendMessage(ctx.player, "You pick some wheat.");
+				inv.give(ctx.player, 1947, 1);
+				var coord = map.getCoords(ctx.location);
+				var shape = loc.getShape(ctx.location);
+				var rotation = loc.getRotation(ctx.location);
+				_map.delay(coord, function () {
+					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
+				}, 60);
+			});
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, 1161, function (ctx) {//cabbage
-	        anim.run(ctx.player, 827, function () {
-			chat.sendMessage(ctx.player, "You pick a cabbage.");
-			inv.give(ctx.player, 1965, 1);	
-			loc.delay(loc.add(-1, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 60, function () {
-			loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-		    });
-			});	
+			anim.run(ctx.player, 827, function () {
+				chat.sendMessage(ctx.player, "You pick a cabbage.");
+				inv.give(ctx.player, 1965, 1);
+				var coord = map.getCoords(ctx.location);
+				var shape = loc.getShape(ctx.location);
+				var rotation = loc.getRotation(ctx.location);
+				_map.delay(coord, function () {
+					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
+				}, 60);
+			});
 		});
-		
-		scriptManager.bind(EventType.OPLOC1, [86687,86688,86689, 86690, 86691], function (ctx) {//cabbage
-	        anim.run(ctx.player, 827);
+
+		scriptManager.bind(EventType.OPLOC1, [ 86687,86688,86689, 86690, 86691 ], function (ctx) {//cabbage
+			anim.run(ctx.player, 827);
 			inv.give(ctx.player, 1965, 1);	
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 11494, function (ctx) {//cabbage
-	        anim.run(ctx.player, 827, function () {
-			chat.sendMessage(ctx.player, "You pick a cabbage.");
-			inv.give(ctx.player, 1967, 1);	
-			loc.delay(loc.add(-1, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 60, function () {
-			loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-		    });
+			anim.run(ctx.player, 827, function () {
+				chat.sendMessage(ctx.player, "You pick a cabbage.");
+				inv.give(ctx.player, 1967, 1);
+				var coord = map.getCoords(ctx.location);
+				var shape = loc.getShape(ctx.location);
+				var rotation = loc.getRotation(ctx.location);
+				_map.delay(coord, function () {
+					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
+				}, 60);
 			});
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, 3366, function (ctx) {//Onion
-	        anim.run(ctx.player, 827, function () {
-			inv.give(ctx.player, 1957, 1);	
-			chat.sendMessage(ctx.player, "You pick a onion.");
-			loc.delay(loc.add(-1, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 60, function () {
-			loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-		    });
+			anim.run(ctx.player, 827, function () {
+				chat.sendMessage(ctx.player, "You pick a onion.");
+				inv.give(ctx.player, 1957, 1);
+				var coord = map.getCoords(ctx.location);
+				var shape = loc.getShape(ctx.location);
+				var rotation = loc.getRotation(ctx.location);
+				_map.delay(coord, function () {
+					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
+				}, 60);
 			});
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, 312, function (ctx) {//Potato
-	        anim.run(ctx.player, 827, function () {
-			chat.sendMessage(ctx.player, "You pick a potato.");
-			inv.give(ctx.player, 1942, 1);	
-			loc.delay(loc.add(-1, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 60, function () {
-			loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-		    });
+			anim.run(ctx.player, 827, function () {
+				chat.sendMessage(ctx.player, "You pick a potato.");
+				inv.give(ctx.player, 1942, 1);
+				var coord = map.getCoords(ctx.location);
+				var shape = loc.getShape(ctx.location);
+				var rotation = loc.getRotation(ctx.location);
+				_map.delay(coord, function () {
+					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
+				}, 60);
 			});
 		});
 	}
