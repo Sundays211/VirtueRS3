@@ -94,7 +94,8 @@ module.exports = (function () {
 			level : 75,
 			xp : 250,
 			logId : 1513,
-			baseTime : 150
+			baseTime : 150,
+			respawnDelay : 121
 		},
 		/*CURSED_MAGIC : {//TODO: These all need to go in their own scripts as they have custom logic
 	        level : 82,
@@ -244,6 +245,10 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 1289, function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 1353);
 		});
+		
+		scriptManager.bind(EventType.OPLOC1, 1291, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 23054);
+		});
 
 		//Dying tree
 		scriptManager.bind(EventType.OPLOC1, 24168, function (ctx) {
@@ -300,6 +305,10 @@ module.exports = (function () {
 		//Magic
 		scriptManager.bind(EventType.OPLOC1, 63176 , function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.MAGIC, 63179);
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 92440 , function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.MAGIC, 92441);
 		});
 	}
 

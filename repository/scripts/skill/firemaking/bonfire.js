@@ -103,7 +103,7 @@ module.exports = (function () {
 	function findBonfire (player) {
 		var xOff = map.getCoordX(player) - 5;
 		var yOff = map.getCoordY(player) - 5;
-		var level = map.getCoordLevel(player);
+		var level = map.getLevel(player);
 		var location;
 		for (var x = xOff; x <= xOff+10; x++) {
 			for (var y = yOff; y <= yOff+10; y++) {

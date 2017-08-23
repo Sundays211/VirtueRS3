@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2016 Virtue Studios
+ * Copyright (c) 2017 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions\:
+ * furnished to do so, subject to the following conditions:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -20,18 +20,34 @@
  * SOFTWARE.
  */
 /* globals EventType */
-
+var coords = require('map/coords');
+var map = require('map');
+var anim = require('anim');
 var dialog = require('dialog');
+var varp = require('engine/var/player');
+var widget = require('widget');
 module.exports = (function () {
 	return {
 		init : init
 	};
-
+	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPNPC1, 14936, function (ctx) {
-			dialog.builder(ctx.player).chatnpc(ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actuall have", 9850)
-			.chatnpc(ctx.npc, "proper equipment and traning!", 9847)
-			.finish();	
-		});	
+	   
+	    scriptManager.bind(EventType.OPLOC1, 87997, function (ctx) {//jump down well
+		    anim.run(ctx.player, 21924, function () {
+			    varp(ctx.player, 5142, 15364);//find right varbits that are used
+				varp(ctx.player, 5144, 24181);
+				widget.openCentral(ctx.player, 1591, false);	
+				
+			});	
+			//getting kicked out anim 21922
+        });
+		
+		scriptManager.bind(EventType.OPLOC2, 87997, function (ctx) {//well graveyard
+            map.setCoords(ctx.player, coords(1,37,94,31,39));
+			anim.run(ctx.player, 2924);
+        });
+
 	}
+
 })();

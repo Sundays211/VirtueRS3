@@ -26,6 +26,7 @@ var varc = require('engine/var/client');
 var varp = require('engine/var/player');
 var widget = require('widget');
 var chat = require('chat');
+var util = require('util');
 module.exports = (function () {
 	return {
 	init : init
@@ -127,9 +128,13 @@ module.exports = (function () {
 	
 	
 	function openshop (player) {
-      varp(player, 304, Inv.DIANGOS_TOY_STORE);
-	  varc(player, 2360, "Diango's Toy Store");
-	  widget.openCentral(player, 1265);
+		if(util.mapMembers()){
+	        varp(player, 304, Inv.DIANGOS_TOY_STORE_MEMBERS);
+        } else {
+            varp(player, 304, Inv.DIANGOS_TOY_STORE); 
+        }
+	    varc(player, 2360, "Diango's Toy Store");
+	    widget.openCentral(player, 1265);
 	}
 	
 	
