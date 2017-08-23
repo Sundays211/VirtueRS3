@@ -32,6 +32,7 @@ import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
  * @since 5/11/2014
  */
 public class Zone {
+
 	/**
 	 * Base locations which have been replaced
 	 */
@@ -151,11 +152,6 @@ public class Zone {
 	}
 
 	protected void updateBlock (Iterable<Player> players) {
-		Iterator<SceneLocation> locIterator = locations.values().iterator();
-		while (locIterator.hasNext()) {
-			SceneLocation loc = locIterator.next();
-			loc.processTick();
-		}
 		for (List<GroundItem> itemSet : items.values()) {
 			Iterator<GroundItem> iterator = itemSet.iterator();
 			GroundItem item;
