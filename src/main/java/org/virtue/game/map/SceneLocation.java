@@ -21,9 +21,6 @@
  */
 package org.virtue.game.map;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.virtue.Virtue;
 import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
@@ -38,11 +35,6 @@ import org.virtue.network.event.context.impl.in.OptionButton;
  * @since 27/10/2014
  */
 public class SceneLocation extends Node {
-
-	private static class DelayTask {
-		private int delayTime;
-		private Runnable onFinish;		
-	}
 
 	public static SceneLocation createBase (int id, CoordGrid tile, LocShape shape, int rotation) {
 		SceneLocation location = new SceneLocation(id, tile, shape, rotation);
@@ -62,8 +54,6 @@ public class SceneLocation extends Node {
 	private boolean replacement = true;
 
 	private LocType locType;
-
-	private Set<DelayTask> delayTasks = new HashSet<>();
 
 	protected SceneLocation (int id, CoordGrid tile, LocShape shape, int rotation) {
 		super(id);
@@ -92,22 +82,6 @@ public class SceneLocation extends Node {
 	 */
 	public int getID () {
 		return id;
-	}
-	
-	public synchronized void processTick () {
-		Set<DelayTask> tasks = delayTasks;
-		delayTasks = new HashSet<>();
-		for (DelayTask task : tasks) {
-			task.delayTime--;
-			if (task.delayTime > 0) {
-				delayTasks.add(task);
-			} else {
-				if (task.onFinish != null) {
-					task.onFinish.run();
-				}
-				delayTasks.remove(task);
-			}
-		}
 	}
 
 	/**
@@ -220,13 +194,6 @@ public class SceneLocation extends Node {
 		} else {
 			return false;
 		}
-	}
-
-	public synchronized void addDelayTask (Runnable onFinish, int delay) {
-		DelayTask task = new DelayTask();
-		task.onFinish = onFinish;
-		task.delayTime = delay;
-		delayTasks.add(task);
 	}
 
 	@Override

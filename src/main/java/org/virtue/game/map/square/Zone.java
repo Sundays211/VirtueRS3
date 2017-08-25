@@ -32,10 +32,6 @@ import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
  * @since 5/11/2014
  */
 public class Zone {
-	/**
-	 * Base locations which have been replaced
-	 */
-	private final Map<Integer, SceneLocation> replacedLocations = new HashMap<>();
 
 	/**
 	 * Represents the ground items located within this block
@@ -46,6 +42,8 @@ public class Zone {
 	 * Locations currently active in the zone
 	 */
 	protected final Map<Integer, SceneLocation> locations = new HashMap<>();
+
+	private final Map<Integer, LocationReplacement> replacementLocations = new HashMap<>();
 
 	private CoordGrid coord;
 
@@ -58,50 +56,53 @@ public class Zone {
 		locations.put(hash, loc);
 	}
 
-	protected void updateLocation (SceneLocation loc) {
-		int hash = getLocationHash(loc);
-		if (replacedLocations.containsKey(hash)) {
-			if (Objects.equals(replacedLocations.get(hash), loc)) {
-				//We already have a base location at the same coords.
-				//Add it instead so we don't keep trying to send it to clients
-				locations.put(hash, replacedLocations.remove(hash));
-			} else {
-				//Otherwise, we're replacing another replacement.
-				//Don't worry about keeping the reference to it
-				locations.put(hash, loc);
-			}
+	/**
+	 * Adds or updates a location at the specified coords in the zone.
+	 * If the location is the same as the base, removes the replacement
+	 * If a base location already exists with the same coords & layer, retain it for future use
+	 * @param newLoc
+	 */
+	protected void updateLocation (SceneLocation newLoc) {
+		int hash = getLocationHash(newLoc);
+		SceneLocation original;
+		if (replacementLocations.containsKey(hash)) {
+			original = replacementLocations.remove(hash).getOriginal();
 		} else {
-			SceneLocation oldLoc = locations.put(hash, loc);
-			if (oldLoc != null && !oldLoc.isReplacement()) {
-				//Store the base location so it can be retrieved later
-				replacedLocations.put(hash, oldLoc);
-			}
+			original = locations.remove(hash);
+		}
+		if (Objects.equals(original, newLoc)) {
+			locations.put(hash, original);
+		} else {
+			LocationReplacement replacement = new LocationReplacement(newLoc);
+			replacement.setOriginal(original);
+			replacementLocations.put(hash, replacement);
+			locations.put(hash, newLoc);
 		}
 	}
 
 	protected void removeLocation (CoordGrid coord, LocShape shape, int rotation) {
-		int hash = getLocationHash(coord, shape, rotation);
-		if (replacedLocations.containsKey(hash)) {
-			//This change removed a base location, so we need to send the removal to new players
-			locations.put(hash, SceneLocation.create(-1, coord, shape, rotation));
-		} else {
-			SceneLocation oldLoc = locations.remove(hash);
-			if (oldLoc != null && !oldLoc.isReplacement()) {
-				//Store the old base location & send removal to new players
-				locations.put(hash, SceneLocation.create(-1, coord, shape, rotation));
-				replacedLocations.put(hash, oldLoc);
-			}
+		int hash = getLocationHash(coord, shape);
+		SceneLocation original = locations.remove(hash);
+		if (replacementLocations.containsKey(hash)) {
+			original = replacementLocations.remove(hash).getOriginal();
+		}
+		if (original != null) {
+			LocationReplacement replacement 
+				= new LocationReplacement(SceneLocation.create(-1, coord, shape, rotation));
+			replacement.setOriginal(original);
+			replacementLocations.put(hash, replacement);
 		}
 	}
 
 	protected Optional<SceneLocation> getLocation (CoordGrid coord, LocShape shape) {
-		return locations.values().stream()
-				.filter(loc -> loc.getTile().equals(coord) && loc.getShape() == shape).findAny();
+		int hash = getLocationHash(coord, shape);
+		return Optional.ofNullable(locations.get(hash));
 	}
 
 	protected Optional<SceneLocation> getLocation (CoordGrid coord, int locTypeId) {
 		return locations.values().stream()
-				.filter(loc -> loc.getTile().equals(coord) && loc.getId() == locTypeId).findAny();
+				.filter(loc -> loc.getId() == locTypeId && Objects.equals(loc.getTile(), coord))
+				.findAny();
 	}
 
 	protected void addItem (GroundItem item) {
@@ -150,12 +151,19 @@ public class Zone {
 		return selected;
 	}
 
+	protected void preRebuild () {
+		locations.clear();
+	}
+
+	public void postRebuild () {
+		replacementLocations.entrySet().forEach(entry -> {
+			LocationReplacement replacement = entry.getValue();
+			replacement.setOriginal(locations.remove(entry.getKey()));
+			locations.put(entry.getKey(), replacement.getReplacement());
+		});
+	}
+
 	protected void updateBlock (Iterable<Player> players) {
-		Iterator<SceneLocation> locIterator = locations.values().iterator();
-		while (locIterator.hasNext()) {
-			SceneLocation loc = locIterator.next();
-			loc.processTick();
-		}
 		for (List<GroundItem> itemSet : items.values()) {
 			Iterator<GroundItem> iterator = itemSet.iterator();
 			GroundItem item;
@@ -183,8 +191,8 @@ public class Zone {
 				}
 			}
 		}
-		locations.values().stream()
-			.filter(SceneLocation::isReplacement)
+		replacementLocations.values().stream()
+			.map(LocationReplacement::getReplacement)
 			.forEach(loc -> {
 				if (loc.getId() < 0) {
 					packets.add(new DeleteLocation(loc));
@@ -198,11 +206,11 @@ public class Zone {
 	}
 
 	public int getLocationHash (SceneLocation loc) {
-		return getLocationHash(loc.getTile(), loc.getShape(), loc.getRotation());
+		return getLocationHash(loc.getTile(), loc.getShape());
 	}
 
-	public int getLocationHash (CoordGrid coord, LocShape shape, int rotation) {
-		return getLocalHash(coord) | rotation << 10 | shape.getId() << 12;
+	public int getLocationHash (CoordGrid coord, LocShape shape) {
+		return getLocalHash(coord) | shape.getLayer() << 10;
 	}
 
 	private int getLocalHash (CoordGrid coord) {

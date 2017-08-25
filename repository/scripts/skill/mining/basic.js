@@ -20,7 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var config = require('engine/config');
+var _config = require('engine/config');
+var _map = require('engine/map');
+
 var util = require('util');
 var chat = require('chat');
 var inv = require('inv');
@@ -225,7 +227,7 @@ module.exports = (function () {
 				mineRock(ctx.player, ctx.location, RockType.RUNITE);
 		});
 	}
-	
+
 	function mineRock(player, location, rockType) {
 		if (!inv.hasSpace(player)) {
 			chat.sendMessage(player, "Not enough space in your inventory.");
@@ -236,34 +238,33 @@ module.exports = (function () {
 			setEmpty(player, location, rockType.respawnDelay);
 			
 			inv.give(player, rockType.oreId, 1);
-			chat.sendSpamMessage(player, "You mine some " + config.objName(rockType.oreId) + ".");
+			chat.sendSpamMessage(player, "You mine some " + _config.objName(rockType.oreId) + ".");
 		});
 	}
-	
+
 	function setEmpty (player, location, respawnDelay) {
 		var rockCoords = map.getCoords(location);
 		var fullId = util.getId(location);
 		var emptyId = getEmptyId(player, fullId);
 		var rotation = loc.getRotation(location);
 		var shape = loc.getShape(location);
-		
-		var emptyRock = loc.add(emptyId, rockCoords, shape, rotation);
-		
-		loc.delay(emptyRock, respawnDelay, function () {
+
+		loc.add(emptyId, rockCoords, shape, rotation);
+		_map.delay(rockCoords, function () {
 			loc.add(fullId, rockCoords, shape, rotation);
-		});
+		}, respawnDelay);
 	}
-	
+
 	function getEmptyId (player, locTypeId) {
-		if (config.locHasModel(locTypeId, 65251)) {
+		if (_config.locHasModel(locTypeId, 65251)) {
 			return 5765;
-		} else if (config.locHasModel(locTypeId, 65253)) {
+		} else if (_config.locHasModel(locTypeId, 65253)) {
 			return 5764;
-		} else if (config.locHasModel(locTypeId, 65252)) {
+		} else if (_config.locHasModel(locTypeId, 65252)) {
 			return 5763;
-		} else if (config.locHasModel(locTypeId, 99106)) {
+		} else if (_config.locHasModel(locTypeId, 99106)) {
 			return 93014;
-		} else if (config.locHasModel(locTypeId, 99109)) {
+		} else if (_config.locHasModel(locTypeId, 99109)) {
 			return 93015;
 		} else {
 			chat.sendDebugMessage(player, "Warning: No empty rock mesh for location "+locTypeId);
