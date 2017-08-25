@@ -22,6 +22,7 @@
 package org.virtue.network.event.encoder.impl;
 
 import org.virtue.game.entity.player.Player;
+import org.virtue.game.map.CoordGrid;
 import org.virtue.game.map.prot.ZoneUpdatePacket;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.event.context.impl.out.ZoneUpdateEventContext;
@@ -43,17 +44,20 @@ public class ZoneUpdateEventEncoder implements EventEncoder<ZoneUpdateEventConte
 	@Override
 	public OutboundBuffer encode(Player player, ZoneUpdateEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		buffer.putPacket(context.isFull() ? ServerProtocol.UPDATE_ZONE_FULL_FOLLOWS : ServerProtocol.UPDATE_ZONE_PARTIAL_FOLLOWS, player);
-		int localX = context.getCoord().getLocalX(player.getViewport().getBaseTile());
-		int localY = context.getCoord().getLocalY(player.getViewport().getBaseTile());
-		if (context.isFull()) {
-			buffer.putA(context.getCoord().getLevel());
-			buffer.putC(localY >> 3);
-			buffer.putS(localX >> 3);
-		} else {
-			buffer.putA(localX >> 3);
-			buffer.putS(localY >> 3);
-			buffer.putA(context.getCoord().getLevel());
+		if (needsZoneChange(player.getViewport().getLastActiveZone(), context.getCoord())) {
+			buffer.putPacket(context.isFull() ? ServerProtocol.UPDATE_ZONE_FULL_FOLLOWS : ServerProtocol.UPDATE_ZONE_PARTIAL_FOLLOWS, player);
+			int localX = context.getCoord().getLocalX(player.getViewport().getBaseTile());
+			int localY = context.getCoord().getLocalY(player.getViewport().getBaseTile());
+			if (context.isFull()) {
+				buffer.putA(context.getCoord().getLevel());
+				buffer.putC(localY >> 3);
+				buffer.putS(localX >> 3);
+			} else {
+				buffer.putA(localX >> 3);
+				buffer.putS(localY >> 3);
+				buffer.putA(context.getCoord().getLevel());
+			}
+			player.getViewport().setLastActiveZone(context.getCoord());
 		}
 		for (ZoneUpdatePacket packet : context.getPackets()) {
 			buffer.putPacket(packet.getType().getServerTransmitID(), player);
@@ -62,4 +66,10 @@ public class ZoneUpdateEventEncoder implements EventEncoder<ZoneUpdateEventConte
 		return buffer;
 	}
 
+	
+	private boolean needsZoneChange (CoordGrid lastZone, CoordGrid newZone) {
+		return lastZone == null || lastZone.getLevel() != newZone.getLevel() ||
+				lastZone.getZoneX() != newZone.getZoneX() ||
+				lastZone.getZoneY() != lastZone.getZoneY();
+	}
 }

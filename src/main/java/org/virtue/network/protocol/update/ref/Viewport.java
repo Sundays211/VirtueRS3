@@ -50,17 +50,17 @@ public class Viewport implements GameEventContext {
 	/**
 	 * Represents an array of players within the current player's view
 	 */
-	private Player[] localPlayers;
+	private final Player[] localPlayers;
 	
 	/**
 	 * Represents the npcs currently within the player's viewport
 	 */
-	private List<NPC> localNpcs;
+	private final List<NPC> localNpcs;
 	
 	/**
 	 * Represents an array of players' indices within the current player's view
 	 */
-	private int[] localPlayersIndexes;
+	private final int[] localPlayersIndexes;
 	
 	/**
 	 * Represents the amount of local players within the current player's view
@@ -70,7 +70,7 @@ public class Viewport implements GameEventContext {
 	/**
 	 * Represents an array of players outside the current player's view
 	 */
-	private int[] outPlayersIndexes;
+	private final int[] outPlayersIndexes;
 	
 	/**
 	 * Represents an the amount of players outside the current player's view
@@ -80,17 +80,17 @@ public class Viewport implements GameEventContext {
 	/**
 	 * Represents an array of region hashes
 	 */
-	private int[] regionHashes;
+	private final int[] regionHashes;
 	
 	/**
 	 * Represents an array
 	 */
-	private byte[] slotFlags;
+	private final byte[] slotFlags;
 	
 	/**
 	 * Represents the movement types of all active players
 	 */
-	private byte[] movementTypes;
+	private final byte[] movementTypes;
 	
 	/**
 	 * Represents the amount of players added in the current tick
@@ -100,22 +100,22 @@ public class Viewport implements GameEventContext {
 	/**
 	 * Represents the array of appearance hashes cached in the current runtime
 	 */
-	private byte[][] cachedAppearencesHashes;
+	private final byte[][] cachedAppearencesHashes;
 	
 	/**
 	 * Represents the array of Player head icon hashes cached in the current runtime
 	 */
-	private byte[][] cachedHeadIconsHashes;
+	private final byte[][] cachedHeadIconsHashes;
 	
 	/**
 	 * Represents the array of NPC head icon hashes cached in the current runtime
 	 */
-	private byte[][] cachedNPCHeadIconsHashes;
+	private final byte[][] cachedNPCHeadIconsHashes;
 	
 	/**
 	 * Represents the current player
 	 */
-	private Player player;
+	private final Player player;
 	
 	/**
 	 * Represents if the player has a large scene radius
@@ -130,12 +130,14 @@ public class Viewport implements GameEventContext {
 	/**
 	 * Represents the map regions currently used by the player
 	 */
-	private Set<MapSquare> regions = new HashSet<MapSquare>();
+	private final Set<MapSquare> regions = new HashSet<MapSquare>();
 
 	private boolean dynamicUpdate = false;
 
 	private boolean forceUpdate;
-	
+
+	private CoordGrid lastActiveZone;
+
 	public Viewport(Player player) {
 		this.player = player;
 		sceneRadius = 5;
@@ -405,6 +407,14 @@ public class Viewport implements GameEventContext {
 	
 	public void setSceneRadius(int size) {
 		sceneRadius = size;
+	}
+
+	public CoordGrid getLastActiveZone() {
+		return lastActiveZone;
+	}
+
+	public void setLastActiveZone(CoordGrid lastActiveZone) {
+		this.lastActiveZone = lastActiveZone;
 	}
 
 }

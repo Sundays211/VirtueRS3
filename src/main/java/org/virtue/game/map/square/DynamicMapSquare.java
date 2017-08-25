@@ -59,11 +59,17 @@ public class DynamicMapSquare extends MapSquare {
 	/**
 	 * Clears all locations, objects, and terrain clipping from the map square in preparation for a rebuild
 	 */
-	public void reset () {
+	public void preRebuild () {
 		synchronized (zones) {
-			zones.clear();
+			zones.values().forEach(zone -> zone.preRebuild());
 		}
 		getClipMap().reset();
+	}
+
+	public void postRebuild () {
+		synchronized (zones) {
+			zones.values().forEach(zone -> zone.postRebuild());
+		}
 	}
 
 	public void rotateZone (int zoneX, int zoneY, int level, int rotation) {

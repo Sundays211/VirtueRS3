@@ -24,6 +24,7 @@ package org.virtue.game.map.square;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -55,36 +56,41 @@ import org.virtue.network.event.encoder.impl.ZoneUpdateEventEncoder;
  * @since 28/10/2014
  */
 public class MapSquare {
-	
+
+	private static class DelayTask {
+		private int delayTime;
+		private Runnable onFinish;
+	}
+
 	protected int mapSquareHash;
 	protected CoordGrid baseTile;
-	
+
 	/**
 	 * Represents an 8x8 block within the region. 
 	 * All items and objects within these blocks can be updated in a single packet, saving bandwidth and processing time
 	 */
 	protected Map<Integer, Zone> zones = new HashMap<Integer, Zone>();
-	
+
 	/**
 	 * Represents the players which have this region in their viewport.
 	 * Note that these players are NOT necessarily located in the region itself
 	 */
 	private Set<Player> players = Collections.synchronizedSet(new HashSet<Player>());
-	
+
 	private Set<NPC> npcs = Collections.synchronizedSet(new HashSet<NPC>());
-	
+
 	protected LoadStage loadStage = LoadStage.IDLE;
-	
-	protected int locationCount = 0;
-	
+
 	private ClipMap clipMap;
-	
+
+	private Set<DelayTask> delayTasks = new HashSet<>();
+
 	public MapSquare (int id, RegionManager regionManager) {
 		this.mapSquareHash = id;
 		this.baseTile = new CoordGrid(0, 0, 0, id);
 		this.clipMap = new ClipMap(this, regionManager);
 	}
-	
+
 	/**
 	 * Gets the ID for this region
 	 * @return The ID
@@ -146,7 +152,6 @@ public class MapSquare {
 				zones.put(zoneHash, new Zone(coord));
 			}
 			zones.get(zoneHash).addBaseLocation(loc);
-			locationCount++;
 		}
 		clipMap.addLocation(loc);
 	}
@@ -375,12 +380,30 @@ public class MapSquare {
 			return zones.get(hash).getItem(itemID, coords);
 		}
 	}
-	
+
+	public synchronized void queueTask (Runnable onFinish, int delay) {
+		DelayTask task = new DelayTask();
+		task.onFinish = onFinish;
+		task.delayTime = delay;
+		delayTasks.add(task);
+	}
+
 	/**
 	 * Runs the regular update tasks for this region, such as removing items and respawning locations
 	 * This method should only be used by the RegionManager class
 	 */
 	protected void updateRegion () {
+		synchronized (delayTasks) {
+			Iterator<DelayTask> tasks = delayTasks.iterator();
+			while (tasks.hasNext()) {
+				DelayTask task = tasks.next();
+				task.delayTime--;
+				if (task.delayTime <= 0) {
+					task.onFinish.run();
+					tasks.remove();
+				}
+			}
+		}
 		synchronized (zones) {
 			for (Zone block : zones.values()) {
 				if (block != null) {
