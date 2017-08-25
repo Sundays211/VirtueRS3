@@ -21,9 +21,6 @@
  */
 package org.virtue.game.map;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.virtue.Virtue;
 import org.virtue.config.loctype.LocShape;
 import org.virtue.config.loctype.LocType;
