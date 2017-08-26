@@ -36,7 +36,7 @@ module.exports = (function () {
 	       var player = ctx.player;
 	       var npc = ctx.npc;
            dialog.multi3(player, "SELECT AN OPTION", "I'd like to trade.", function () {
-	          dialog.builder(player).chatplayer("I'd like to trade.")
+	          dialog.builder(player).chatplayer("I'd like to trade.",9827)
 	          .chatnpc(npc, "Great! I buy and sell pickaxes and hatchets. There are<br> plenty to choose from, and I've some free samples too.<br> Take your pick...or hatchet.")
 	          .then(function () {
               openshop(player);

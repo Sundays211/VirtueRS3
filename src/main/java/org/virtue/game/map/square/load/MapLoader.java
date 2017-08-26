@@ -114,8 +114,8 @@ public final class MapLoader {
 
 	public void loadDynamicMapSquare (DynamicMapSquare square) throws IOException {
 		square.setLoadStage(LoadStage.STARTING);
-		square.reset();//Removes all clips & locations so they can be re-applied
 		long start = System.currentTimeMillis();
+		square.preRebuild();//Removes all clips & locations so they can be re-applied
 		
 		int[][][] allZoneData = square.getZoneData();
 		Map<Integer, Archive> baseSquareData = new HashMap<>();
@@ -189,6 +189,7 @@ public final class MapLoader {
 			}
 		}
 
+		square.postRebuild();
 		long loadTime = System.currentTimeMillis() - start;
 		LOGGER.info("Finished loading dynamic map square {}. Source square count: {}, location count: {}, load time: {} ms.", square, baseSquareData.size(), locCount, loadTime);
 		square.setLoadStage(LoadStage.COMPLETED);

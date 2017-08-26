@@ -259,8 +259,12 @@ public class VirtueMapAPI implements MapAPI {
 	}
 
 	@Override
-	public void delay(SceneLocation loc, Runnable task, int ticks) {
-		loc.addDelayTask(task, ticks);
+	public void delay(CoordGrid mapSquareCoord, Runnable task, int ticks) {
+		MapSquare mapSquare = getRegion(mapSquareCoord);
+		if (mapSquare == null) {
+			throw new IllegalArgumentException("Invalid coords: "+mapSquareCoord);
+		}
+		mapSquare.queueTask(task, ticks);
 	}
 
 	@Override

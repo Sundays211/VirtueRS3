@@ -354,7 +354,7 @@ module.exports = (function () {
 			ENGINE.hitEntity(player, damage);
 			ENGINE.entitySay(npc, "What do you think you're doing?");
 			
-			anim.setSpotAnim(player, 80);
+			anim.addSpotAnim(player, 80);
 			anim.run(player, 834);
 		} else {
 			anim.run(player, 881, function () {

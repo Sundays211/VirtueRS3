@@ -29,8 +29,8 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 81, function (ctx) {
-			dialog.builder(ctx.player).chatplayer("This door appears to be locked.")
-			.chatnpc(253, "Yeah, it's to prevent people like you bothering us. Get out<br> of here.")
+			dialog.builder(ctx.player).chatplayer("This door appears to be locked.",9807)
+			.chatnpc(253, "Yeah, it's to prevent people like you bothering us. Get out<br> of here.",9786)
 	        .finish();
 		});
 	}

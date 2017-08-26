@@ -20,7 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var config = require('engine/config');
+var _config = require('engine/config');
+var _map = require('engine/map');
+
 var util = require('util');
 var chat = require('chat');
 var inv = require('inv');
@@ -65,6 +67,15 @@ module.exports = (function () {
 			baseTime : 10,
 			randomTime : 1,
 			respawnDelay : 5,
+			randomLife : 0
+		},
+		BLURITE : {
+			level : 10,
+			xp : 18,
+			oreId : 668,
+			baseTime : 20,
+			randomTime : 1,
+			respawnDelay : 25,
 			randomLife : 0
 		},
 		IRON : {
@@ -167,6 +178,10 @@ module.exports = (function () {
 				mineRock(ctx.player, ctx.location, RockType.TIN);
 		});
 		
+		scriptManager.bind(EventType.OPLOC1, [ 2561, 33221], function (ctx) {
+				mineRock(ctx.player, ctx.location, RockType.BLURITE);
+		});
+		
 		scriptManager.bind(EventType.OPLOC1, [ 2092, 2093, 5773, 5774, 5775, 6943, 6944, 9717, 9718, 9719, 
 			11954, 11955, 11956, 14856, 14857, 14858, 14913, 14914, 19000, 19001, 19002, 21281, 21282, 
 			21283, 29221, 29222, 29223, 32441, 32442, 32443, 32451, 32452, 37307, 37308, 37309, 72081, 72082, 
@@ -212,7 +227,7 @@ module.exports = (function () {
 				mineRock(ctx.player, ctx.location, RockType.RUNITE);
 		});
 	}
-	
+
 	function mineRock(player, location, rockType) {
 		if (!inv.hasSpace(player)) {
 			chat.sendMessage(player, "Not enough space in your inventory.");
@@ -223,34 +238,33 @@ module.exports = (function () {
 			setEmpty(player, location, rockType.respawnDelay);
 			
 			inv.give(player, rockType.oreId, 1);
-			chat.sendSpamMessage(player, "You mine some " + config.objName(rockType.oreId) + ".");
+			chat.sendSpamMessage(player, "You mine some " + _config.objName(rockType.oreId) + ".");
 		});
 	}
-	
+
 	function setEmpty (player, location, respawnDelay) {
 		var rockCoords = map.getCoords(location);
 		var fullId = util.getId(location);
 		var emptyId = getEmptyId(player, fullId);
 		var rotation = loc.getRotation(location);
 		var shape = loc.getShape(location);
-		
-		var emptyRock = loc.add(emptyId, rockCoords, shape, rotation);
-		
-		loc.delay(emptyRock, respawnDelay, function () {
+
+		loc.add(emptyId, rockCoords, shape, rotation);
+		_map.delay(rockCoords, function () {
 			loc.add(fullId, rockCoords, shape, rotation);
-		});
+		}, respawnDelay);
 	}
-	
+
 	function getEmptyId (player, locTypeId) {
-		if (config.locHasModel(locTypeId, 65251)) {
+		if (_config.locHasModel(locTypeId, 65251)) {
 			return 5765;
-		} else if (config.locHasModel(locTypeId, 65253)) {
+		} else if (_config.locHasModel(locTypeId, 65253)) {
 			return 5764;
-		} else if (config.locHasModel(locTypeId, 65252)) {
+		} else if (_config.locHasModel(locTypeId, 65252)) {
 			return 5763;
-		} else if (config.locHasModel(locTypeId, 99106)) {
+		} else if (_config.locHasModel(locTypeId, 99106)) {
 			return 93014;
-		} else if (config.locHasModel(locTypeId, 99109)) {
+		} else if (_config.locHasModel(locTypeId, 99109)) {
 			return 93015;
 		} else {
 			chat.sendDebugMessage(player, "Warning: No empty rock mesh for location "+locTypeId);

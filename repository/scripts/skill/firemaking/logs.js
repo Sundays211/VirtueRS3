@@ -148,7 +148,7 @@ module.exports = (function () {
 			case 24291://Add logs to a nearby bonfire
 				var fire = bonfire.find(player);
 				if (fire) {
-					bonfire.moveTop(player, logType, fire);
+					bonfire.moveTo(player, logType, fire);
 				}
 				break;
 			default:

@@ -3,6 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
+	    require('./boy'),
 		require('./brian'),
         require('./rommik'),
 		require('./stubthumb')

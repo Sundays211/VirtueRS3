@@ -19,25 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType*/
+/* globals EventType */
 var coords = require('map/coords');
-var _entity = require('engine/entity');
-var anim = require('anim');
 var map = require('map');
+var anim = require('anim');
+var dialog = require('dialog');
+var widget = require('widget');
+var varp = require('engine/var/player');
 module.exports = (function () {
 	return {
 		init : init
 	};
-	//halloween 2007   0,25,75,42,25
+	
 	function init (scriptManager) {
 		
-	    scriptManager.bind(EventType.OPLOC1, 27218, function (ctx) {//Slide
-		var currentCoords = map.getCoords(ctx.player);
-		var targetCoords = coords(0,25,75,42,19);
-	    anim.run(ctx.player, 7274);
-	    _entity.forceMove(ctx.player, currentCoords, 220, targetCoords, 300);
-	    });
-
+		scriptManager.bind(EventType.OPLOC1, 91500, function (ctx) {//Webbed entrance
+	        dialog.builder(ctx.player).mesbox("<col=7f0000>Beyound this point is the Araxyte hive.<br><col=7f0000> There is no way out other then death or Victory.<br><col=7f0000> Only those who can endure dangerous encouters should proceed.")
+            .multi2("SELECT AN OPTION", "Enter encounter", function () {
+			}, "Start/join custom encounter", function () {
+				varp(ctx.player, 5142, 15362);//find right varbits that are used
+				varp(ctx.player, 5144, 28799);
+				widget.openCentral(ctx.player, 1591, false);
+	        });	
+        });
+		
+	    scriptManager.bind(EventType.OPLOC1, 91553, function (ctx) {//rope out of lair
+	        anim.run(ctx.player, 15456, function () {
+		    anim.run(ctx.player, -1);
+            map.setCoords(ctx.player, coords(0,57,53,52,27));
+	        });	
+        });
+	   
+         scriptManager.bind(EventType.OPLOC1, 91661, function (ctx) {//Gap
+	        anim.run(ctx.player, 10738, function () {
+           // map.setCoords(ctx.player, coords(1,70,98,26,15)); //and 1,70,98,31,17
+	        });	
+        });
+		
 	}
 
 })();

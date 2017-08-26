@@ -22,6 +22,7 @@
 /* globals EventType, Stat */
 var coords = require('map/coords');
 var _config = require('engine/config');
+var _map = require('engine/map');
 
 var util = require('util');
 var chat = require('chat');
@@ -94,7 +95,8 @@ module.exports = (function () {
 			level : 75,
 			xp : 250,
 			logId : 1513,
-			baseTime : 150
+			baseTime : 150,
+			respawnDelay : 121
 		},
 		/*CURSED_MAGIC : {//TODO: These all need to go in their own scripts as they have custom logic
 	        level : 82,
@@ -244,6 +246,10 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 1289, function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 1353);
 		});
+		
+		scriptManager.bind(EventType.OPLOC1, 1291, function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 23054);
+		});
 
 		//Dying tree
 		scriptManager.bind(EventType.OPLOC1, 24168, function (ctx) {
@@ -301,6 +307,10 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 63176 , function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.MAGIC, 63179);
 		});
+		
+		scriptManager.bind(EventType.OPLOC1, 92440 , function (ctx) {
+			chopTree(ctx.player, ctx.location, TreeType.MAGIC, 92441);
+		});
 	}
 
 	function chopTree(player, location, treeType, stumpId) {
@@ -344,13 +354,12 @@ module.exports = (function () {
 			locMap.del(treeTop);
 		}
 
-		var treeStump = locMap.add(stumpId, treeCoords, shape, rotation);
-		
-		locMap.delay(treeStump, respawnDelay, function () {
+		locMap.add(stumpId, treeCoords, shape, rotation);
+		_map.delay(treeCoords, function () {
 			locMap.add(treeId, treeCoords, shape, rotation);
 			if (treeTop) {
 				locMap.add(util.getId(treeTop), map.getCoords(treeTop), shape, locMap.getRotation(treeTop));
 			}
-		});
+		}, respawnDelay);
 	}
 })();

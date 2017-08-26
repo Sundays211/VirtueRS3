@@ -3,8 +3,9 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./draynormanor-and-village'),
-		require('./lumbridge-and-lumbridge-swamp')
+		require('./khazard-guard'),
+		require('./monk'),
+		require('./wizard-cromperty')
 	];
 	
 	for (var i in modules) {

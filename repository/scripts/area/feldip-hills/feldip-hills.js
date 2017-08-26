@@ -21,20 +21,31 @@
  */
 /* globals EventType */
 var chat = require('chat');
-
+var dialog = require('dialog');
+var map = require('map');
+var coords = require('map/coords');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
-		
-		scriptManager.bind(EventType.OPLOC1, 69813, function (ctx) {//
-			chat.sendMessage(ctx.player, "East to the Oo'glog Spa Resort.");
+        
+		scriptManager.bind(EventType.OPLOC1, 2836, function (ctx) {
+			chat.sendMessage(ctx.player, "Nothing interesting happens.");
 		});
 		
-		scriptManager.bind(EventType.OPLOC1, 69814, function (ctx) {//
-			chat.sendMessage(ctx.player, "South to Mobilising Armies.");
+		scriptManager.bind(EventType.OPLOC1, 2837, function (ctx) {
+			chat.sendMessage(ctx.player, "Nothing interesting happens.");
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2811, function (ctx) {
+			map.setCoords(ctx.player, coords(0,40,47,16,21));
+			dialog.mesbox(ctx.player, "Wow! That tunnel went a long way."); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 2812, function (ctx) {
+			map.setCoords(ctx.player, coords(0,39,46,4,44));
 		});
 		
 	}

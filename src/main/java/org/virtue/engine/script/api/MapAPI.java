@@ -264,12 +264,23 @@ public interface MapAPI {
 
 	/**
 	 * Delays the execution of a task by the given number of server cycles.
-	 * The task will be cancelled if the location is destroyed
-	 * @param loc The location to delay on
+	 * The task will be cancelled if the map square the node is currently on is destroyed
+	 * @param node The node to retrieve the map square coord from
 	 * @param task The task to run after the delay
 	 * @param ticks The number of server cycles to delay by
 	 */
-	public void delay (SceneLocation loc, Runnable task, int ticks);
+	public default void delay (Node node, Runnable task, int ticks) {
+		delay(node.getCurrentTile(), task, ticks);
+	}
+
+	/**
+	 * Delays the execution of a task by the given number of server cycles.
+	 * The task will be cancelled if the map square is destroyed
+	 * @param mapSquareCoord The coordinate of the map square to run this task in
+	 * @param task The task to run after the delay
+	 * @param ticks The number of server cycles to delay by
+	 */
+	public void delay (CoordGrid mapSquareCoord, Runnable task, int ticks);
 
 	/**
 	 * Adds an item to the map at the given coordinates.

@@ -19,19 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+/* globals EventType, */
 
 var dialog = require('dialog');
+var _entity = require('engine/entity');
+
 module.exports = (function () {
 	return {
-		init : init
+	init : init
 	};
-
+	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPNPC1, 14936, function (ctx) {
-			dialog.builder(ctx.player).chatnpc(ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actuall have", 9850)
-			.chatnpc(ctx.npc, "proper equipment and traning!", 9847)
-			.finish();	
-		});	
+
+		scriptManager.bind(EventType.OPNPC1, 253, function (ctx) {
+			dialog.builder(ctx.player).chatplayer("Hello.",9807)
+			.chatnpc(ctx.npc, "This area is restricted! Leave now and don't come back.",9785)
+	        .finish();
+		});
+
 	}
+	
 })();
