@@ -118,7 +118,7 @@ public class DefaultVars {
 		varps[285] = 12288;
 		varps[286] = 67108864;
 		varps[288] = 128;
-		varps[289] = 16875520;
+		varps[289] = 0;//some emote unlocks. unlock them by server and not here
 		varps[291] = 1610612736;
 		varps[292] = 67108864;
 		varps[293] = 1024;
@@ -149,7 +149,7 @@ public class DefaultVars {
 		varps[458] = 865;
 		varps[459] = 1;
 		varps[460] = 0;
-		varps[461] = 3460;
+		varps[461] = 0;//some emote unlocks. unlock them by server and not here
 		varps[463] = 1;
 		varps[476] = -1;
 		varps[481] = 1023950916;
@@ -350,7 +350,7 @@ public class DefaultVars {
 		varps[1238] = -1;
 		varps[1241] = 32;
 		varps[1242] = 536870912;
-		varps[1245] = 131583;
+		varps[1245] = 0;//some emote unlocks. unlock them by server and not here
 		varps[1246] = 4140;
 		varps[1247] = 69206033;
 		varps[1254] = 4;
@@ -760,7 +760,7 @@ public class DefaultVars {
 		varps[3103] = 1342214309;
 		varps[3104] = 1073858568;
 		varps[3105] = 536871938;
-		varps[3109] = 15;
+		varps[3109] = 0;//some emote unlocks. unlock them by server and not here
 		varps[3120] = 906;
 		varps[3121] = 401408;
 		varps[3138] = 1048576;

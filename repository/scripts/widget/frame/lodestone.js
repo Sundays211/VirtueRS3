@@ -30,7 +30,7 @@ var map = require('map');
 var chat = require('chat');
 
 module.exports = (function () {
-	
+	//varbit 28623 quick charges
 	var LodestoneType = {	
 		BANDIT_CAMP : {
 			base : 69827,
@@ -271,7 +271,7 @@ module.exports = (function () {
 				return;
 			case 49://close
 				return;
-			case 58://Enable/disable quick teleport
+			case 57://Enable/disable quick teleport varbit 28622
 				return;
 			default:
 				util.defaultHandler(ctx, "Lodestone");

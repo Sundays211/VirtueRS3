@@ -6,6 +6,7 @@ module.exports = function (scriptManager) {
 	    require('./bob'),
 		require('./diango'),
 	    require('./fred-the-farmer'),
+		require('./gillie-groats'),
 		require('./jambon'),
 		require('./lumbridge-guardsman'),
 		require('./lumbridge-sage'),
