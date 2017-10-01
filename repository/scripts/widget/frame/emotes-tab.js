@@ -129,7 +129,7 @@ module.exports = (function () {
 			varbit(player, 16831, 1);//Ozan's Smile
 			varbit(player, 17982, 1);//Love at First Sight
 			varbit(player, 17983, 1);//Jealous Rage
-			//Butterfly Dervish
+			varbit(player, 18194, 1);//Butterfly Dervish
 			varbit(player, 18169, 1);//Balance of Nature varbit 18171 will unlock as well
 			varbit(player, 18284, 1);//Actor's Emote Set
 			varbit(player, 18326, 1);//Ring of Fire
@@ -157,7 +157,7 @@ module.exports = (function () {
 			varbit(player, 21620, 1);//Loved up
 			varbit(player, 21621, 1);//Down to Earth
 			varbit(player, 22138, 1);//Runescape through the ages
-			//Cabbage Facepunch Bonanza
+			varbit(player, 22221, 1);//Cabbage Facepunch Bonanza
 			varbit(player, 22249, 1);//Cute Bunny
 			varbit(player, 22250, 1);//Sneaky Bunny
 			varbit(player, 22781, 1);//Demonic Rock Off
@@ -267,7 +267,7 @@ module.exports = (function () {
 			varbit(player, 16831, 0);//Ozan's Smile
 			varbit(player, 17982, 0);//Love at First Sight
 			varbit(player, 17983, 0);//Jealous Rage
-			//Butterfly Dervish
+			varbit(player, 18194, 0);//Butterfly Dervish
 			varbit(player, 18169, 0);//Balance of Nature varbit 18171 will unlock as well
 			varbit(player, 18284, 0);//Actor's Emote Set
 			varbit(player, 18326, 0);//Ring of Fire
@@ -295,7 +295,7 @@ module.exports = (function () {
 			varbit(player, 21620, 0);//Loved up
 			varbit(player, 21621, 0);//Down to Earth
 			varbit(player, 22138, 0);//Runescape through the ages
-			//Cabbage Facepunch Bonanza
+			varbit(player, 22221, 0);//Cabbage Facepunch Bonanza
 			varbit(player, 22249, 0);//Cute Bunny
 			varbit(player, 22250, 0);//Sneaky Bunny
 			varbit(player, 22781, 0);//Demonic Rock Off
@@ -859,7 +859,7 @@ module.exports = (function () {
 				return;	
 			case 92://Clap(sitting)
 				    anim.run(ctx.player, 12691);
-					chat.sendMessage(player, "You may only perform this emote while sitting in the clan theatre audience.");
+					chat.sendMessage(ctx.player, "You may only perform this emote while sitting in the clan theatre audience.");
 				return;	
 			case 93://Living on Borrowed Time
 			    //if (varbit(ctx.player, ?) == 1) {
@@ -1103,13 +1103,13 @@ module.exports = (function () {
 				anim.addSpotAnim(ctx.player, 3841);todo
 				return;	
 			case 126://Butterfly Dervish
-			   // if (varbit(ctx.player, ?) == 1) {
+			    if (varbit(ctx.player, 18194) == 1) {
 				    anim.run(ctx.player, 20009);
 				    anim.addSpotAnim(ctx.player, 3916);
 				    anim.addSpotAnim(ctx.player, 3917);
-				//} else {
-				//	dialog.mesbox(ctx.player, "This emote can be unlocked by exchanging Guthixian butterfly memories<br> with the druids.");
-				//}
+				} else {
+					dialog.mesbox(ctx.player, "This emote can be unlocked by exchanging Guthixian butterfly memories<br> with the druids.");
+				}
 				return;
 			case 127://Balance of Nature
 				if (varbit(ctx.player, 18169) == 1 || varbit(ctx.player, 18171) == 1){
@@ -1308,12 +1308,12 @@ module.exports = (function () {
 				}	
 				return;
 			case 170://Cabbage Facepunch Bonanza
-			    //if (varbit(ctx.player, ?) == 1) {
+			    if (varbit(ctx.player, 22221) == 1) {
                     anim.run(ctx.player, 23279);
 				    anim.addSpotAnim(ctx.player, 4776);//4775 for Monkey
-				//} else {
-				//	dialog.mesbox(ctx.player, "You must unlock during the Cabbage Facepunch Bonanza special event.");
-				//}	
+				} else {
+					dialog.mesbox(ctx.player, "You must unlock during the Cabbage Facepunch Bonanza special event.");
+				}	
 				return;	
 			case 171: //Cute Bunny
 			    if (varbit(ctx.player, 22249) == 1) {

@@ -10,6 +10,7 @@ module.exports = function (scriptManager) {
 		require('./jambon'),
 		require('./lumbridge-guardsman'),
 		require('./lumbridge-sage'),
+		require('./mysterious-old-man'),
 		require('./seth-groats'),
 		require('./wardsman'),
 		require('./wizard-valina')	

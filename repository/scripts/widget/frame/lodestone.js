@@ -28,7 +28,7 @@ var widget = require('widget');
 var anim = require('anim');
 var map = require('map');
 var chat = require('chat');
-
+var dialog = require('dialog');
 module.exports = (function () {
 	//varbit 28623 quick charges
 	var LodestoneType = {	
@@ -254,7 +254,12 @@ module.exports = (function () {
 				teleportToLodestone(ctx.player, ctx.button, LodestoneType.TIRANNWN);
 				return;
 			case 29://Wilderness lodestone
-				teleportToLodestone(ctx.player, ctx.button, LodestoneType.WILDERNESS_VOLCANO);
+			    widget.closeAll(ctx.player);
+			    dialog.builder(ctx.player).mesbox("The lodestone you have chosen is in level 15 Wilderness. Are you sure you<br> want to teleport there?")
+			    .multi2("TELEPORT TO THE WILDERNESS?", "Yes.", function () {
+			        teleportToLodestone(ctx.player, ctx.button, LodestoneType.WILDERNESS_VOLCANO);
+			    }, "No.", function () {	
+			    });	
 				return;
 			case 30://Ashdale lodestone
 			    teleportToLodestone(ctx.player, ctx.button, LodestoneType.ASHDALE);
