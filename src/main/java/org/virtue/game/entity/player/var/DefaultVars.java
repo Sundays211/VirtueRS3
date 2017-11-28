@@ -373,7 +373,7 @@ public class DefaultVars {
 		varps[1296] = 20;
 		varps[1297] = 0;// quest points config
 		varps[1302] = -1;
-		varps[1305] = 475092735;
+		varps[1305] = 469780197;
 		varps[1324] = 4194304;
 		varps[1335] = 22;
 		varps[1336] = -1274404864;
@@ -530,7 +530,7 @@ public class DefaultVars {
 		//varps[2227] = 4;
 		//varps[2231] = -2146959817;
 		varps[2232] = -1073741824;
-		varps[2233] = 525312;
+		varps[2233] = 0;
 		varps[2234] = 5000;
 		//varps[2250] = 1073741824;
 		//varps[2253] = 190;

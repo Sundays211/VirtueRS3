@@ -4,7 +4,9 @@
 module.exports = function (scriptManager) {
 	var modules = [
 	    require('./bob'),
+		require('./cook'),
 		require('./diango'),
+		require('./elite-lumbridge-guardsman'),
 	    require('./fred-the-farmer'),
 		require('./gillie-groats'),
 		require('./jambon'),
