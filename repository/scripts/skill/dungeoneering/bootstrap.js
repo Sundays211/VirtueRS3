@@ -3,9 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-		require('./draynormanor-and-village'),
-		require('./lumbridge-and-lumbridge-swamp'),
-		require('./wizards-tower')
+		require('./resource-dungeons')
 	];
 	
 	for (var i in modules) {

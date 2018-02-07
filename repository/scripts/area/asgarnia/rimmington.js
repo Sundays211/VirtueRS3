@@ -21,13 +21,27 @@
  */
 /* globals EventType, Expression */
 var dialog = require('dialog');
-
+var loc = require('map/location');
+var inv = require('inv');
+var anim = require('anim');
+var map = require('map');
+var util = require('util');
 module.exports = (function () {
 	return {
 		init : init
 	};
 	
 	function init (scriptManager) {
+		
+		scriptManager.bind(EventType.OPLOC1, 9662, function (ctx) {//spade in mining area
+		    anim.run(ctx.player, 832, function () {
+		    inv.give(ctx.player, 952, 1);	
+		    loc.delay(loc.add(10626, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 40, function () {
+		    loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
+		    });
+		    });
+		});	
+		
 		scriptManager.bind(EventType.OPLOC1, 31459, function (ctx) {//Customs Sergeant
 			dialog.chatnpc(ctx.player, 7830, "Zzzzzzzzzzzzzzzzzzz", Expression.NEUTRAL);//just need the right chat head
 		});

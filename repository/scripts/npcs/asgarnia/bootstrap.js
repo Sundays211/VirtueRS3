@@ -6,7 +6,10 @@ module.exports = function (scriptManager) {
 	    require('./boy'),
 		require('./brian'),
         require('./rommik'),
-		require('./stubthumb')
+		require('./stubthumb'),
+		require('./thurgo'),
+		require('./wydin')
+		
 	];
 	
 	for (var i in modules) {

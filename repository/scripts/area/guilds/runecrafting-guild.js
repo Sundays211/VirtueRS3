@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+ 
+/* globals EventType*/
+var anim = require('anim');
 var map = require('map');
 var coords = require('map/coords');
-var dialog = require('dialog');
 module.exports = (function () {
 	return {
 		init : init
@@ -30,12 +31,13 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		
-		scriptManager.bind(EventType.OPLOC1, 9472, function (ctx) {//Asgarnian ice dungeon
-			map.setCoords(ctx.player, coords(3007, 9550, 0));
-		});
+	    scriptManager.bind(EventType.OPLOC1, 79603, function (ctx) {//portal
+		anim.addSpotAnim(ctx.player, 1771);
+	    anim.run(ctx.player, 10180, function () {
+        map.setCoords(ctx.player, coords(3, 48, 49, 30, 15));
+	    });	
 		
-		scriptManager.bind(EventType.OPLOC1, 10090, function (ctx) {//signpost
-		    dialog.mesbox(ctx.player, "Mudskipper Point.<br> WARNING!<br> BEWARE OF THE MUDSKIPPERS!"); 
-		});
+	});
+
 	}
 })();

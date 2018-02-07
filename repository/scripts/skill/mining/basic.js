@@ -255,20 +255,128 @@ module.exports = (function () {
 		}, respawnDelay);
 	}
 
+	//function getEmptyId (player, locTypeId) {
+	//	if (_config.locHasModel(locTypeId, 65251)) {
+	//		return 5765;
+	//	} else if (_config.locHasModel(locTypeId, 65253)) {
+	//		return 5764;
+	//	} else if (_config.locHasModel(locTypeId, 65252)) {
+	//		return 5763;
+	//	} else if (_config.locHasModel(locTypeId, 99106)) {
+	//		return 93014;
+	//	} else if (_config.locHasModel(locTypeId, 99109)) {
+	//		return 93015;
+	//	} else {
+	//		chat.sendDebugMessage(player, "Warning: No empty rock mesh for location "+locTypeId);
+	//		return 5763;
+	//   }
+	//   }	
+	
+	
 	function getEmptyId (player, locTypeId) {
-		if (_config.locHasModel(locTypeId, 65251)) {
-			return 5765;
-		} else if (_config.locHasModel(locTypeId, 65253)) {
-			return 5764;
-		} else if (_config.locHasModel(locTypeId, 65252)) {
-			return 5763;
-		} else if (_config.locHasModel(locTypeId, 99106)) {
-			return 93014;
-		} else if (_config.locHasModel(locTypeId, 99109)) {
-			return 93015;
-		} else {
-			chat.sendDebugMessage(player, "Warning: No empty rock mesh for location "+locTypeId);
-			return 5763;
+		switch (locTypeId) {
+			
+		    case 3027:
+			case 3032:
+		    case 3038:
+			case 3040:
+			case 3041:
+		        return 3227;
+				
+			case 3229:
+			case 3233:
+			case 3245:
+			case 3273:
+			case 3280:
+		        return 3281;			
+			
+			case 5782:
+			case 5773:	
+			case 5770:
+			case 5776:
+			case 5779:
+			    return 5763;				
+				
+			case 5771:
+            case 5774:			
+			case 5777:
+			case 5780:
+			    return 5764;	
+			
+			case 5772:
+			case 5775:
+			case 5781:
+			case 5783:
+			    return 5765;
+			
+			case 72075:
+			    return 72078;
+			
+			case 72077:
+			    return 72080;
+			
+			case 72081:
+			    return 72084;
+			
+			case 72082:
+			    return 72085;
+			
+			case 72083:
+			    return 72086;
+				
+			case 72092:
+			    return 72095;	
+			
+			case 72094:
+			    return 72097;
+			
+			case 72098:
+			    return 72101;
+			
+			case 72099:
+			    return 72102;
+			
+			case 72100:
+			    return 72103;
+			
+			case 10578:	
+				return 11553;
+				
+			case 10577:	
+            case 37307:
+			case 37310:
+		        return 11552;
+			
+			case 10579:	
+            case 37309:
+			case 37312:
+		        return 11554;
+				
+			case 11948:
+			case 11954:
+            case 11957:
+			case 11960:
+			case 15503:
+		        return 11555;
+			
+			case 11949:
+			case 11955:
+			case 11958:
+			case 11961:
+			case 15504:
+		        return 11556;
+			
+            case 11950:		
+			case 11956:
+			case 11959:
+			case 11962:
+			case 15505:
+		        return 11557;	
+				
+		    default:
+		        return 3227;
 		}
 	}
+	
+	
 })();

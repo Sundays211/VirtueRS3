@@ -4,7 +4,7 @@
 module.exports = function (scriptManager) {
 	var modules = [
 	    require('./araxyte-lair'),
-		require('./barrows-graveyard'),
+		require('./barrows-graveyard'),	
 		require('./misthalin-underground'),
 		require('./paterdomus'),
 		require('./witches-house-cellar')
