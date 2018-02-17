@@ -95,6 +95,15 @@ module.exports = (function () {
 				case 2:
 					showQuestJournal(player, config.enumValue(812, ctx.slot));
 					return;
+				case 3:
+				    if (varp(player, 1225) == ctx.slot) {
+			            varp(player, 1225, 0);
+					    chat.sendMessage(player, "The quest area marking has been cleared.");
+		            } else {
+						varp(player, 1225, ctx.slot);
+						chat.sendMessage(player, "The quest area has been marked.");
+		            }	
+				return	
 				default:
 					util.defaultHandler(ctx, "quest list");
 					return;
@@ -106,6 +115,19 @@ module.exports = (function () {
 				return;
 			}
 		});
+		
+		
+		scriptManager.bind(EventType.IF_BUTTON, 1500, function (ctx) {
+			var player = ctx.player;
+			switch (ctx.component) {
+			    case 325:
+				selectQuest(player, 153);//for testing
+			    return;
+			    default:
+				    util.defaultHandler(ctx, "quest list");
+				return;
+			}	
+		});	
 	}
 	
 	function selectQuest (player, slot) {

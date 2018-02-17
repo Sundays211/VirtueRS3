@@ -1,0 +1,4 @@
+// NPC Spawns for map square 64,81
+// Format: npcTypeId - level,localX,localY
+14379 - 0,9,17 //Beauty
+

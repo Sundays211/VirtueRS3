@@ -20,9 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var coords = require('map/coords');
 var map = require('map');
-var anim = require('anim');
+var coords = require('map/coords');
+var dialog = require('dialog');
+var varbit = require('engine/var/bit');
+var quest = require('../../quest');
 module.exports = (function () {
 	return {
 		init : init
@@ -30,12 +32,28 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		
-	   scriptManager.bind(EventType.OPLOC1, 29355, function (ctx) {//Ladder to lumbridge castle
-	       anim.run(ctx.player, 828, function () {
-           map.setCoords(ctx.player, coords(3210, 3216, 0));
-	       });	
-       });
-
+		scriptManager.bind(EventType.OPLOC1, 9472, function (ctx) {//Asgarnian ice dungeon
+			map.setCoords(ctx.player, coords(3007, 9550, 0));
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 10090, function (ctx) {//signpost
+		    dialog.mesbox(ctx.player, "Mudskipper Point.<br> WARNING!<br> BEWARE OF THE MUDSKIPPERS!"); 
+		});
+		
+		scriptManager.bind(EventType.OPLOC1, 39442, function (ctx) {//trapdoor betty's basement quest (swept away)
+		    if(quest.hasStarted(ctx.player, 20) && varbit(ctx.player, 9868) == 0) {
+		        varbit(ctx.player, 9868, 1); //open trapdoor   
+			} else if (varbit(ctx.player, 9868) == 1){	
+			    map.setCoords(ctx.player, coords(3221, 4522, 0));
+			} else {
+                dialog.chatnpc(ctx.player, 583, "Excuse me, my cellar isn't open to the public.")
+		        .chatplayer("Oh, sorry.")
+		        .finish();    
+			}	
+		});
+		
+		scriptManager.bind(EventType.OPLOC2, 39442, function (ctx) {//trapdoor betty's basement quest (swept away)
+		    varbit(ctx.player, 9868, 0);    			
+		});
 	}
-
 })();

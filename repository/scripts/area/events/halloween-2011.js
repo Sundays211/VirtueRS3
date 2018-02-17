@@ -19,23 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var map = require('map');
-var coords = require('map/coords');
-var dialog = require('dialog');
+/* globals EventType*/
+var widget = require('widget');
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+	//halloween 2011   0,64,81,49,10
 	function init (scriptManager) {
 		
-		scriptManager.bind(EventType.OPLOC1, 9472, function (ctx) {//Asgarnian ice dungeon
-			map.setCoords(ctx.player, coords(3007, 9550, 0));
+		
+		scriptManager.bind(EventType.OPLOC1, 62624, function (ctx) {
+			widget.openCentral(ctx.player, 1151, false);
 		});
 		
-		scriptManager.bind(EventType.OPLOC1, 10090, function (ctx) {//signpost
-		    dialog.mesbox(ctx.player, "Mudskipper Point.<br> WARNING!<br> BEWARE OF THE MUDSKIPPERS!"); 
+	    scriptManager.bind(EventType.OPLOC1, 62428, function (ctx) {
+			widget.openCentral(ctx.player, 1149, false);
+			widget.setText(ctx.player, 1149, 27, "Welcome Area Portal");	
+			widget.setText(ctx.player, 1149, 28, "This welcome portal area is where you'll first arrive in a clan citadel, and where<br> visitors can be greeted. The statues around the portal can be customised, and<br> all banners will bear the clan's logo. In the rest of the welcome area you'll, find<br> the noticeboard, meeting tent and signpost, and the entrance to the clan's<br> battlefield.");
+			widget.setText(ctx.player, 1149, 29, "Notes for Deathcon attendees:<br> -Death does't do personal greetings (because of last year's incident).<br> -Beauty needs some help to pick the welcome portal statues.");
 		});
+
 	}
+
 })();

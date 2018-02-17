@@ -1,0 +1,5 @@
+// NPC Spawns for map square 63,82
+// Format: npcTypeId - level,localX,localY
+14380 - 1,63,25 //Infinity
+14404 - 1,60,18 //Cosplayer
+

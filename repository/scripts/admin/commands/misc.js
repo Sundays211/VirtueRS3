@@ -48,7 +48,7 @@ module.exports = (function () {
 		});
 		
 		scriptManager.bind(EventType.COMMAND_ADMIN, ["coords","pos","mypos"], function (ctx) {
-		chat.sendCommandResponse(ctx.player, util.getName(ctx.player) +" "+ map.getCoords(ctx.player), ctx.console);
+		chat.sendCommandResponse(ctx.player, util.getName(ctx.player) +" "+ map.getCoords(ctx.player) +" or "+ map.getCoordX(ctx.player)+" "+ map.getCoordY(ctx.player), ctx.console);
 		});
 		
 		scriptManager.bind(EventType.COMMAND_ADMIN, [ "inter", "if", "widget" ], function (ctx) {

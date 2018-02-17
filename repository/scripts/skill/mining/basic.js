@@ -152,6 +152,8 @@ module.exports = (function () {
 			respawnDelay : 10,
 			randomLife : 0
 		}*/
+		
+		//Crystal-flecked sandstone ore id 32847
 	};
 	
 	return {
@@ -288,8 +290,17 @@ module.exports = (function () {
 			case 3245:
 			case 3273:
 			case 3280:
-		        return 3281;			
+		        return 3281;	
+            ///////////////limestone//////////////
+			case 4027:
+				return 4028;
+				
+			case 4028:
+				return 4029;
 			
+            case 4029:
+				return 4030;			
+			//////////////////////////////////
 			case 5782:
 			case 5773:	
 			case 5770:
@@ -303,75 +314,165 @@ module.exports = (function () {
 			case 5780:
 			    return 5764;	
 			
-			case 5772:
-			case 5775:
-			case 5781:
-			case 5783:
+			case 5772://coal
+			case 5775://iron
+			case 5781://copper
+			case 5783://adamantite
 			    return 5765;
 			
-			case 72075:
+			case 72075://clay
 			    return 72078;
 			
-			case 72077:
+			case 72077://clay
 			    return 72080;
 			
-			case 72081:
+			case 72081://iron
 			    return 72084;
 			
-			case 72082:
+			case 72082://iron
 			    return 72085;
 			
-			case 72083:
+			case 72083://iron
 			    return 72086;
+			
+            case 72087://gold
+			    return 72089;
 				
-			case 72092:
+			case 72088://gold
+			    return 72090;	
+				
+			case 72092://tin
 			    return 72095;	
 			
-			case 72094:
+			case 72094://tin
 			    return 72097;
 			
-			case 72098:
+			case 72098://copper
 			    return 72101;
 			
-			case 72099:
+			case 72099://copper
 			    return 72102;
 			
-			case 72100:
+			case 72100://copper
 			    return 72103;
 			
-			case 10578:	
+			case 93016://mithril	
+			case 93018://coal
+			case 93020://adamantite
+			case 93022://runite
+			case 93024://gem rock
+			case 94218://soft clay
+				return 93014;
+			
+			case 93017://mithril
+			case 93019://coal
+			case 93021://adamantite
+			case 93023://runite
+			case 93025://gem rock
+			case 94219://soft clay
+				return 93015;
+
+			case 10578://clay	
 				return 11553;
 				
-			case 10577:	
-            case 37307:
-			case 37310:
+			case 10577://clay
+            case 37307://iron
+			case 37310://gold
 		        return 11552;
 			
-			case 10579:	
-            case 37309:
-			case 37312:
+			case 10579://clay
+            case 37309://iron
+			case 37312://gold
 		        return 11554;
 				
-			case 11948:
-			case 11954:
-            case 11957:
-			case 11960:
-			case 15503:
+			case 11183://gold
+			case 11186://silver
+			case 11189://clay
+				return 37700;
+			
+			case 11184://gold	
+			case 11187://silver	
+			case 11190://clay
+				return 37701;
+			
+            case 11185://gold	
+			case 11188://silver	
+			case 11191://clay
+				return 37702;
+				
+			case 11930://coal
+			case 11933://tin
+				return 11552;
+				
+			case 11931://coal	
+			case 11934://tin
+				return 11553;
+				
+			case 11932://coal
+			case 11935://tin
+				return 11554;	
+	
+			case 11948://silver	
+			case 11954://iron
+            case 11957://tin
+			case 11960://copper
+			case 15503://clay
 		        return 11555;
 			
-			case 11949:
-			case 11955:
-			case 11958:
-			case 11961:
-			case 15504:
+			case 11949://silver	
+			case 11955://iron
+			case 11958://tin
+			case 11961://copper
+			case 15504://clay
 		        return 11556;
 			
-            case 11950:		
-			case 11956:
-			case 11959:
-			case 11962:
-			case 15505:
-		        return 11557;	
+            case 11950://silver	
+			case 11956://iron
+			case 11959://tin
+			case 11962://copper
+			case 15505://clay
+		      	return 11557;	
+			
+			case 14852://coal
+			case 14855://mithril
+			case 14858://iron
+			case 14864://adamantite
+		        return 14834;
+			
+			case 14850://coal
+			case 14853://mithril
+			case 14856://iron
+			case 14859://runite
+			case 14862://adamantite
+		        return 14832;
+			
+			case 14851://coal
+			case 14854://mithril
+			case 14857://iron
+			case 14860://runite
+			case 14863://adamantite
+		        return 14833;	
+			
+			case 21275://adamantite
+			case 21278://mithril
+            case 21281://iron
+			case 21284://copper
+			case 21287://coal
+				return 21296;
+			
+			case 21276://adamantite
+			case 21279://mithril
+			case 21282://iron
+			case 21285://copper
+			case 21288://coal
+				return 21297;
+			
+			case 21277://adamantite
+			case 21280://mithril
+			case 21283://iron
+			case 21286://copper
+			case 21289://coal
+				return 21298;
 				
 		    default:
 		        return 3227;
