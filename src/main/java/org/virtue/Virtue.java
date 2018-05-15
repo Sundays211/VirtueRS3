@@ -72,6 +72,8 @@ import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.parser.impl.NpcDropParser;
 import org.virtue.game.parser.xml.XMLAccountIndex;
 import org.virtue.game.parser.xml.XMLClanIndex;
+import org.virtue.game.parser.mysql.MySQLAccountIndex;
+import org.virtue.game.parser.mysql.MySQLParser;
 import org.virtue.network.Network;
 import org.virtue.network.event.EventRepository;
 import org.virtue.utility.FileUtility;
@@ -270,6 +272,10 @@ public class Virtue {
 	 */
 	private void loadGame() throws Exception {
 		accountIndex = new XMLAccountIndex(properties);
+		
+		if(Constants.Mysql) {
+		accountIndex = new MySQLAccountIndex(properties);
+		}
 		
 		if (accountIndex instanceof CachingParser){
 			cachingParsers.add((CachingParser) accountIndex);

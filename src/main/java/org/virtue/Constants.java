@@ -85,6 +85,9 @@ public class Constants {
 	 */
 	public static final boolean legacyOnly = false;
 	
+	
+	public static final boolean Mysql = false;
+	
 	/**
 	 * Whether or not to lead GE Prices from a JSON File
 	 */

@@ -285,6 +285,8 @@ module.exports = (function () {
 			
 			//case 2096://coal
 			
+			
+			
 		    case 3027://copper
 			case 3032://coal
 		    case 3038://tin
@@ -335,7 +337,16 @@ module.exports = (function () {
 			case 5783://adamantite
 			case 5786://mithril
 			    return 5765;
-
+			
+            case 10574://gold	
+				return 19003;
+			
+			case 10575://gold	
+				return 19004;	
+						
+			case 10576://gold	
+				return 19005;
+				
 			case 10578://clay	
 				return 11553;
 				
@@ -400,12 +411,14 @@ module.exports = (function () {
 			case 15505://clay
 		      	return 11557;	
 			
+			case 2611://gold
 			case 14852://coal
 			case 14855://mithril
 			case 14858://iron
 			case 14864://adamantite
 		        return 14834;
 			
+			case 2609://gold
 			case 14850://coal
 			case 14853://mithril
 			case 14856://iron
@@ -413,6 +426,7 @@ module.exports = (function () {
 			case 14862://adamantite
 		        return 14832;
 			
+			case 2610://gold
 			case 14851://coal
 			case 14854://mithril
 			case 14857://iron
@@ -432,12 +446,20 @@ module.exports = (function () {
 			case 14914://iron
 				return 14893;	
 			
+			
+			case 2092://iron
+			case 2096://coal
+			case 2098://gold
+			case 2100://silver
+			case 2102://mithril
 			case 21275://adamantite
-			case 21278://mithril
+			case 21278://mithril	
             case 21281://iron
 			case 21284://copper
 			case 21287://coal
 				return 21296;
+			
+			
 			
 			case 21276://adamantite
 			case 21279://mithril
@@ -446,6 +468,11 @@ module.exports = (function () {
 			case 21288://coal
 				return 21297;
 			
+			case 2099://gold
+			case 2093://iron
+			case 2097://coal
+			case 2103://mithril
+			case 2105://adamantite
 			case 21277://adamantite
 			case 21280://mithril
 			case 21283://iron

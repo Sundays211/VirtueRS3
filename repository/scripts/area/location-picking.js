@@ -43,6 +43,7 @@ module.exports = (function () {
 					var coord = map.getCoords(ctx.location);
 					var shape = loc.getShape(ctx.location);
 					var rotation = loc.getRotation(ctx.location);
+					_map.addLoc(-1, coord, shape, rotation);
 					_map.delay(coord, function () {
 						_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
 					}, 60);
@@ -59,6 +60,7 @@ module.exports = (function () {
 				var coord = map.getCoords(ctx.location);
 				var shape = loc.getShape(ctx.location);
 				var rotation = loc.getRotation(ctx.location);
+				_map.addLoc(-1, coord, shape, rotation);
 				_map.delay(coord, function () {
 					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
 				}, 60);
@@ -72,6 +74,7 @@ module.exports = (function () {
 				var coord = map.getCoords(ctx.location);
 				var shape = loc.getShape(ctx.location);
 				var rotation = loc.getRotation(ctx.location);
+				_map.addLoc(-1, coord, shape, rotation);
 				_map.delay(coord, function () {
 					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
 				}, 60);
@@ -90,6 +93,7 @@ module.exports = (function () {
 				var coord = map.getCoords(ctx.location);
 				var shape = loc.getShape(ctx.location);
 				var rotation = loc.getRotation(ctx.location);
+				_map.addLoc(-1, coord, shape, rotation);
 				_map.delay(coord, function () {
 					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
 				}, 60);
@@ -103,6 +107,7 @@ module.exports = (function () {
 				var coord = map.getCoords(ctx.location);
 				var shape = loc.getShape(ctx.location);
 				var rotation = loc.getRotation(ctx.location);
+				_map.addLoc(-1, coord, shape, rotation);
 				_map.delay(coord, function () {
 					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
 				}, 60);
@@ -116,6 +121,7 @@ module.exports = (function () {
 				var coord = map.getCoords(ctx.location);
 				var shape = loc.getShape(ctx.location);
 				var rotation = loc.getRotation(ctx.location);
+				_map.addLoc(-1, coord, shape, rotation);
 				_map.delay(coord, function () {
 					_map.addLoc(util.getId(ctx.location), coord, shape, rotation);
 				}, 60);

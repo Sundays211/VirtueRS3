@@ -24,7 +24,7 @@ package org.virtue.game.parser;
 import java.util.Properties;
 
 import org.virtue.game.parser.xml.XmlParser;
-
+import org.virtue.game.parser.mysql.MySQLParser;
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Sep 26, 2014
@@ -35,12 +35,20 @@ public class ParserRepository {
 	 * The XML Parser
 	 */
 	private XmlParser xml;
+        
+    /**
+	 * The mysql Parser
+	 */
+	private MySQLParser mysql;
+        
+        
 	
 	/**
 	 * Loads the possible parsers into the repo
 	 */
-	public void load(Properties properties) {
+	public void load(Properties properties) throws Exception {
 		xml = new XmlParser(properties);
+        mysql = new MySQLParser(properties);
 	}
 	
 	public <T> T loadObject (Class<T> outputType, String name) {
@@ -55,4 +63,8 @@ public class ParserRepository {
 	public XmlParser getParser () {
 		return xml;
 	}
+        
+    //public MySQLParser getParser () {
+	//    return mysql;
+	//}	
 }
