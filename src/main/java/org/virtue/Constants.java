@@ -38,6 +38,11 @@ public class Constants {
 	 */
 	public static final String FRAME_NAME = "Virtue";
 	
+        
+    public static final String SERVER_IP = "127.0.0.1";
+        
+    public static final int SERVER_PORT = 43594;
+        
 	/**
 	 * The Framework Version
 	 */
@@ -85,8 +90,14 @@ public class Constants {
 	 */
 	public static final boolean legacyOnly = false;
 	
-	
-	public static final boolean Mysql = false;
+	/**
+	 * MYSQL Database settings.
+	 */
+    public static final boolean Mysql = true;
+	public static final String DB_HOST = "localhost";
+	public static final String DB_USER = "root";
+	public static final String DB_PASS = "";
+	public static final String DB_NAME = "runescape";
 	
 	/**
 	 * Whether or not to lead GE Prices from a JSON File
@@ -142,7 +153,6 @@ public class Constants {
 		return Virtue.getInstance().getProperty("login.token", LOGIN_TOKEN);
 	}
 	
-	public static final int SERVER_PORT = 43594;
 
 	public static BigInteger getLoginModulus () {
 		return new BigInteger(Virtue.getInstance().getProperty("login.modulus", LOGIN_MODULUS));

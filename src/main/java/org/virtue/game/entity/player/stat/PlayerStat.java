@@ -99,7 +99,7 @@ public class PlayerStat implements GameEventContext {
 	}
 	
 	private void calculateBaseLevel () {
-		baseLevel = type.getBaseLevel(xp/10);
+		baseLevel = type.getBaseLevel(xp);
 	}
 	
 	/**

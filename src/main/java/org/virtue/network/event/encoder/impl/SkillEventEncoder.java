@@ -45,7 +45,7 @@ public class SkillEventEncoder implements EventEncoder<PlayerStat> {
 		buffer.putPacket(ServerProtocol.UPDATE_STAT, player);
 		buffer.putByte(context.getLevel());
 		buffer.putByte(context.getType().getId());
-		buffer.putInt(context.getExperience()/10);
+		buffer.putInt(context.getExperience());
 		return buffer;
 	}
 

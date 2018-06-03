@@ -1,11 +1,7 @@
 package org.virtue.game.parser.mysql;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -15,9 +11,6 @@ import java.util.Map;
 import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,21 +30,18 @@ import org.virtue.game.entity.combat.CombatMode;
 import org.virtue.game.entity.player.ExchangeOffer;
 import org.virtue.game.entity.player.Player;
 import org.virtue.game.entity.player.PlayerModel.Gender;
-import org.virtue.game.entity.player.PrivilegeLevel;
 import org.virtue.game.entity.player.inv.ContainerState;
 import org.virtue.game.entity.player.inv.Item;
 import org.virtue.game.entity.player.stat.PlayerStat;
 import org.virtue.game.entity.player.stat.Stat;
+import org.virtue.game.entity.player.stat.StatManager;
 import org.virtue.game.entity.player.var.VarContainer;
-import org.virtue.game.parser.AccountIndex;
-import org.virtue.game.parser.AccountInfo;
-import org.virtue.game.parser.Parser;
 import org.virtue.game.parser.ParserType;
 import org.virtue.network.protocol.message.ResponseTypeMessage;
 import org.virtue.network.protocol.message.login.LoginRequestMessage;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
+import org.virtue.utility.FileUtility;
 import org.virtue.utility.text.Base37Utility;
-import org.virtue.utility.text.UsernameUtility;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -71,6 +61,8 @@ public class MySQLParser {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(MySQLParser.class);
 
+  
+
         private EnumMap<ParserType, File> pathLookup = new EnumMap<>(ParserType.class);
 
 	/**
@@ -80,68 +72,119 @@ public class MySQLParser {
 		logger.info("Creating new MySQLParser instance");
 	}
  
-        
-        public MySQLParser(Properties properties) throws Exception {
-		
+        public static int messages() throws Exception {    
+            ResultSet result = Virtue.database().executeQuery("SELECT COUNT(*) FROM messages WHERE Status = 0 and UID = 0 ");
+            result.next();
+            return result.getInt(1);
+        }
+
+        public MySQLParser(Properties properties) {
+		for (ParserType type : ParserType.values()) {
+			File path = FileUtility.parseFilePath(type.getPath(), properties);
+			pathLookup.put(type, path);
+			logger.info("Using path {} for type {}", path, type);
+		}
 	}
 
+        
+        public void addAccount(Object object, String file, ParserType type) {
+            try
+            {
+
+	        switch(type) {
+                case FRIEND:
+		case IGNORE:
+		case INV:
+		case SKILL:
+		case EXCHANGE:
+		case LAYOUT:
+		case CLAN_SETTINGS:
+		case CHARACTER:
+                    Player player = (Player) object;  
+		    try {	
+                        StringBuilder query = new StringBuilder();
+                        query.append("INSERT INTO `character_saves_865` (username,password, email) VALUES(");
+				query.append("'" + player.getUsername() + "'").append(",");
+				query.append("'" + player.getPassword() + "'").append(",");
+                                query.append("'null'").append(")");
+                        Virtue.database().executeUpdate(query.toString());     
+		    } catch (Exception e) {
+		        System.out.println("error addAccount");
+		    }
+	        break;
+		case VAR:
+                break;
+	    }
+            } catch (Exception e) { }
+	}
+        
+        
+        
 	/* (non-Javadoc)
 	 * @see org.virtue.game.parser.Parser#saveObjectDefinition(java.lang.Object, java.lang.String, org.virtue.game.parser.ParserType)
 	 */
 	public void saveObjectDefinition(Object object, String file, ParserType type) {
+             
             try
-    {
+            {
 
-			switch(type) {
-                        case FRIEND:
-			case IGNORE:
-			case INV:
-			case SKILL:
-			case EXCHANGE:
-			case LAYOUT:
-			case CLAN_SETTINGS:
-			case CHARACTER:
-                        Player player = (Player) object;  
-			try {	
-                  String myUrl = "jdbc:mysql://localhost/runesource";
-                  Class.forName("org.gjt.mm.mysql.Driver");
-                  Connection conn = DriverManager.getConnection(myUrl, "root", "");
-                  String query = "UPDATE characters SET username = ? ,gender = ? ,coords = ?  WHERE username = '" + player.getUsername() + "' ";
-                  PreparedStatement preparedStmt = conn.prepareStatement(query);
-                  preparedStmt.setString(1, ""+ player.getUsername() +"");
-               // preparedStmt.setString(2, ""+ player.getDisplay() +"");
-                  preparedStmt.setInt(2, player.getModel().getGender().ordinal());
-                  preparedStmt.setString(3, "" + player.getCurrentTile().getX() + "," + player.getCurrentTile().getY() + "," + player.getCurrentTile().getLevel() + "");
-                  preparedStmt.executeUpdate();
-		  } catch (Exception e) {
-		System.out.println("test");
-		}
-	        break;
-			case VAR:
-                        break;
+	        switch(type) {
+                case FRIEND:
+		case IGNORE:
+		case INV:
+		case SKILL:
+                StatManager skills = (StatManager) object;
+		    try {	
+
+                       StringBuilder query = new StringBuilder(), skillsLVL = new StringBuilder(), skillsXP = new StringBuilder();
+                       for (int i = 0; i < 27; i++) {
+				skillsLVL.append(skills.getCurrentLevel(Stat.getById(i))).append(",");
+				skillsXP.append(skills.getExperience(Stat.getById(i))).append(",");
 			}
-                        } catch (Exception e) { }
+                        query.append("UPDATE ").append("character_skills_865").append(" SET ");
+			query.append("skills_levels='" + skillsLVL.substring(0, skillsLVL.length() - 1) + "'").append(",");
+                        query.append("skills_experience='" + skillsXP.substring(0, skillsXP.length() - 1) + "'");
+			query.append(" WHERE username='test'");
+                        Virtue.database().executeUpdate(query.toString());  
+		    } catch (Exception e) {
+		        System.out.println("error mysql saveObjectDefinition SKILL");
+		    }
+	        break;  
+		case EXCHANGE:
+		case LAYOUT:
+		case CLAN_SETTINGS:
+		case CHARACTER:
+                     Player player = (Player) object;
+		    try {	
+                        StringBuilder query = new StringBuilder();
+                        query.append("UPDATE ").append("character_saves_865").append(" SET ");
+			query.append("username='" + player.getUsername() + "'").append(",");
+			query.append("gender='" + player.getModel().getGender().ordinal() + "'").append(",");
+                        query.append("coords='" + player.getCurrentTile().getX() + "," + player.getCurrentTile().getY() + "," + player.getCurrentTile().getLevel() + "'");
+			query.append(" WHERE username='" + player.getUsername() + "'");
+                        Virtue.database().executeUpdate(query.toString());     
+		    } catch (Exception e) {
+		        System.out.println("error mysql saveObjectDefinition CHARACTER");
+		    }
+	        break;
+		case VAR:
+                break;
+	    }
+            } catch (Exception e) { }
 	}
 
 	/* (non-Javadoc)
 	 * @see org.virtue.game.parser.Parser#loadObjectDefinition(java.lang.Object, org.virtue.game.parser.ParserType)
 	 */
-	
 	public Object loadObjectDefinition(Object object, ParserType type) {
-           
-			
-	try
-    {
-                 Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/runesource", "root", "");
-			Statement stmt = conn.createStatement();
-            
-            
+                   try
+            {
 			switch(type) {
+                           
 			case CHARACTER:
-
+                     
 				LoginRequestMessage request = (LoginRequestMessage) object;
-                                ResultSet rs = stmt.executeQuery("SELECT * FROM characters WHERE username = '" + request.getUsername() + "'");
+                                ResultSet rs = Virtue.database().executeQuery("SELECT * FROM character_saves_865 WHERE username = '" + request.getUsername() + "'");
 				try {         
                                        while (rs.next()) {
 						//String display = element.getElementsByTagName("display").item(0).getTextContent();
@@ -151,9 +194,7 @@ public class MySQLParser {
 							return ResponseTypeMessage.STATUS_INVALID_PASSWORD.getCode();
 						}
                                                 String[] loc = rs.getString("coords").split(",");
-						int posX = Integer.parseInt(loc[0]);
-						int posY = Integer.parseInt(loc[1]);
-						int posZ = Integer.parseInt(loc[2]);	
+							
 						int mode = 2;
 						boolean sheathe = false;
 						
@@ -189,8 +230,8 @@ public class MySQLParser {
 						
                    
 						player.getModel().setGender(gender == 0 ? Gender.MALE : Gender.FEMALE);
-						player.setCurrentTile(posX, posY, posZ);
-						player.setLastTile(posX, posY, posZ);
+						player.setCurrentTile(Integer.parseInt(loc[0]), Integer.parseInt(loc[1]), Integer.parseInt(loc[2]));
+						player.setLastTile(Integer.parseInt(loc[0]), Integer.parseInt(loc[1]), Integer.parseInt(loc[2]));
 						player.setLastLogin(login);
 						player.setKeys(keys);
 						player.setHeartsOfIce(hearts);
@@ -209,7 +250,23 @@ public class MySQLParser {
 					return ResponseTypeMessage.STATUS_ERROR_LOADING_PROFILE.getCode();
 				}
 				break;
-                                
+                            case SKILL:  
+                                ResultSet sk = Virtue.database().executeQuery("SELECT * FROM character_skills_865 WHERE username = 'test'");
+				try {
+                                    while (sk.next()) {
+                                    List<PlayerStat> skills = new ArrayList<>();    
+                                    String[] sl = sk.getString("skills_levels").split(",");
+                                    String[] se = sk.getString("skills_experience").split(",");
+                                       for (int i = 0; i < 27; i++) {
+                                        skills.add(new PlayerStat(Stat.getById(i), Integer.parseInt(se[i]), Integer.parseInt(sl[i])));   
+                                        }			
+				    return skills;
+                                    }          
+				} catch (Exception ex) {
+                                    logger.error("Error mysql loading skills ");
+				    return new ArrayList<>();
+				}    
+                            break;
                             case VAR:
 				try {
 					String name = (String) object;
@@ -446,34 +503,7 @@ public class MySQLParser {
 					//logger.warn("Error loading "+type.name().toLowerCase()+" parser: ", ex);
 					return new EnumMap<>(ContainerState.class);
 				}
-			case SKILL:
-				try {
-					List<PlayerStat> skills = new ArrayList<>();
-					String name = (String) object;
-					
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					DocumentBuilder builder = factory.newDocumentBuilder();
-					Document doc = builder.parse(new File(type.getPath(), name + ".xml"));
-				
-					doc.getDocumentElement().normalize();
-
-					NodeList list = doc.getElementsByTagName("skill");
-
-					for (int ordinal = 0; ordinal < list.getLength(); ordinal++) {
-						Node node = list.item(ordinal);
-						if (node.getNodeType() == Node.ELEMENT_NODE) {
-							Element element = (Element) node;
-							Stat skillType = Stat.getById(Integer.parseInt(element.getAttribute("id")));
-							int xp = Integer.parseInt(element.getElementsByTagName("experience").item(0).getTextContent());
-							int level = Integer.parseInt(element.getElementsByTagName("level").item(0).getTextContent());
-							skills.add(new PlayerStat(skillType, xp, level));
-						}
-					}					
-					return skills;
-				} catch (Exception ex) {
-					//logger.warn("Error loading "+type.name().toLowerCase()+" parser: ", ex);
-					return new ArrayList<>();
-				}
+			
 			case EXCHANGE:
 				try {
 					ExchangeOffer[][] offers = new ExchangeOffer[3][8];
@@ -694,19 +724,13 @@ public class MySQLParser {
 					}
 
 					return data;
-                                        
-                                        
-                                        
 				} catch (Exception ex) {
 					logger.error("Error loading "+type.name().toLowerCase()+" for "+((Long) object), ex);
 					return null;
-                                      }
-                                    }
-                        
-                        
-                        
-                        
-           } catch (Exception e) { }
+                                }
+                        }
+                                        
+				} catch (Exception e) { }
 		return null;
 	}
 

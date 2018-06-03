@@ -42,7 +42,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import org.virtue.Virtue;
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -96,20 +96,17 @@ public class MySQLAccountIndex extends AccountIndex implements CachingParser {
 	 * @throws Exception
 	 */
 	public  void load() throws Exception {
-             Class.forName("com.mysql.jdbc.Driver");
-	     Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/runesource", "root", "");
-	     Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM characters");
-             try {         
-             while (rs.next()) {
+        ResultSet rs = Virtue.database().executeQuery("SELECT * FROM character_saves_865");
+        try {         
+        while (rs.next()) {
 	     boolean locked = false;
 	     String email = rs.getString("email");;		
 	     long userhash = Long.parseLong(rs.getString("userhash"), 16);
 	     String display = rs.getString("displayname");
 	     String prevname = rs.getString("previousname");
-             PrivilegeLevel rights = PrivilegeLevel.forId(rs.getInt("server_rights"));
+         PrivilegeLevel rights = PrivilegeLevel.forId(rs.getInt("server_rights"));
 	     addAccount(email, userhash, display, prevname, locked, rights);
-             }
+         }
 	     } catch (Exception ex) {
 	     logger.warn("Error loading account index definition ", ex);
 	     }       
@@ -122,10 +119,10 @@ public class MySQLAccountIndex extends AccountIndex implements CachingParser {
 		try {	
                   for (AccountInfo acc : hashLookup.values()) {
                  //  Player player = (Player) object;
-                  String myUrl = "jdbc:mysql://localhost/runesource";
+                  String myUrl = "jdbc:mysql://localhost/runescape";
                   Class.forName("org.gjt.mm.mysql.Driver");
                   Connection conn = DriverManager.getConnection(myUrl, "root", "");
-                  String query = "UPDATE characters SET userhash = ?, displayname = ?, server_rights = ?  WHERE userhash = '" + Long.toString(acc.getUserHash(), 16) + "'" ;
+                  String query = "UPDATE character_saves_865 SET userhash = ?, displayname = ?, server_rights = ?  WHERE userhash = '" + Long.toString(acc.getUserHash(), 16) + "'" ;
                   PreparedStatement preparedStmt = conn.prepareStatement(query);
                   preparedStmt.setString(1, ""+ Long.toString(acc.getUserHash(), 16) +"");
                   preparedStmt.setString(2, ""+ acc.getDisplayName() +"");

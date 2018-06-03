@@ -60,11 +60,11 @@ public class ParserRepository {
 	 * Gets the current active parser
 	 * @return The active parser
 	 */
-	public XmlParser getParser () {
-		return xml;
-	}
+	//public XmlParser getParser () {
+	//	return xml;
+	//}
         
-    //public MySQLParser getParser () {
-	//    return mysql;
-	//}	
+    public MySQLParser getParser () {
+	    return mysql;
+	}	
 }

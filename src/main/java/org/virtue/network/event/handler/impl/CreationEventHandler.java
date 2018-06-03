@@ -119,7 +119,7 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 		newPlayer.setRuneCoins(0);
 		newPlayer.setRunEnergy(100);
 		Virtue.getInstance().getAccountIndex().addAccount(context.getEmail(), context.getName());
-		Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(newPlayer, newPlayer.getUsername(), ParserType.CHARACTER);
+		Virtue.getInstance().getParserRepository().getParser().addAccount(newPlayer, newPlayer.getUsername(), ParserType.CHARACTER);
 		player.getDispatcher().sendEnum(ServerProtocol.CREATE_ACCOUNT_REPLY, SubmitStatus.SUCCESS);
 	}
 	

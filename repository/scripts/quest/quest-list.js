@@ -121,7 +121,7 @@ module.exports = (function () {
 			var player = ctx.player;
 			switch (ctx.component) {
 			    case 325:
-				selectQuest(player, 153);//for testing
+				showQuestOverview(player, config.enumValue(2252, ctx.slot));
 			    return;
 			    default:
 				    util.defaultHandler(ctx, "quest list");

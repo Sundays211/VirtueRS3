@@ -28,6 +28,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 import org.virtue.Constants;
 import org.virtue.game.World;
+import org.virtue.game.parser.mysql.MySQLParser;
 import org.virtue.network.event.buffer.OutboundBuffer;
 import org.virtue.network.protocol.message.login.LoginResponseMessage;
 import org.virtue.network.protocol.message.login.LoginTypeMessage;
@@ -77,7 +78,7 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 			packet.putInt(0);//Jcoins
 			packet.putInt(response.getPlayer().getLoyaltyPoints());//Loyalty points
 			packet.putShort(3843);
-			packet.putShort(77);//unread emails
+			packet.putShort(MySQLParser.messages());//unread emails
 			packet.putShort((int)(((response.getPlayer().getLastLogin() - 1014786000000L) / 86400000) + 1));
 
 			packet.putInt(response.getPlayer().getIPHash());//ip hash
@@ -92,7 +93,7 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 
 			packet.putInt(37396180);
 			packet.putShort(1);
-            packet.putJagString("127.0.0.1");
+            packet.putJagString(Constants.SERVER_IP);
 			packet.putShort(Constants.SERVER_PORT);
 			packet.putShort(Constants.SERVER_PORT);
 		} else if (response.getLoginType().equals(LoginTypeMessage.LOGIN_WORLD)) {

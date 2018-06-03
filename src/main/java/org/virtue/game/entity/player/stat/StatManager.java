@@ -112,7 +112,7 @@ public class StatManager {
 			return;//Don't add xp past the 200m cap.
 		}
 		int levelBefore = skillData.getBaseLevel();
-		int newXp = skillData.getExperience() + (int) (totalXpToAdd*10);
+		int newXp = skillData.getExperience() + (int) (totalXpToAdd);
 		skillData.setExperience(newXp);
 		int levelAfter = skillData.getBaseLevel();
 		if (levelAfter > levelBefore) {//Player has advanced in level
@@ -176,7 +176,7 @@ public class StatManager {
 	public void setInitialLevels () {
 		for (Stat s : Stat.values()) {
 			if (s.equals(Stat.CONSTITUTION)) {
-				stats.put(s, new PlayerStat(s, 11840, 10));
+				stats.put(s, new PlayerStat(s, 1154, 10));
 			} else {
 				stats.put(s, new PlayerStat(s));
 			}
