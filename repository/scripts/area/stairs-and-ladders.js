@@ -169,7 +169,31 @@ module.exports = (function () {
                 map.setCoords(ctx.player, coords(3014, 3257, 0));
 	        });  
 	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 45481, function (ctx) {
+		    if (map.getCoordX(ctx.location) == 3215 && map.getCoordY(ctx.location) == 3239) {//Staircase Lumbridge's general store
+                map.setCoords(ctx.player, coords(3214, 3239, 1));
+		    } else if (map.getCoordX(ctx.location) == 3200 && map.getCoordY(ctx.location) == 3243) {//Staircase west of Lumbridge's general store
+                map.setCoords(ctx.player, coords(3200, 3242, 1));
+			} else if (map.getCoordX(ctx.location) == 3193 && map.getCoordY(ctx.location) == 3255) {//Staircase Lumbridge's fishing store
+                map.setCoords(ctx.player, coords(3195, 3255, 1));
+		    } else {
+			    util.defaultHandler(ctx, "unhandled Staircase");
+		    }	
+        });
 
+		scriptManager.bind(EventType.OPLOC1, 45482, function (ctx) {
+		    if (map.getCoordX(ctx.location) == 3215 && map.getCoordY(ctx.location) == 3239) {//Staircase Lumbridge's general store
+                map.setCoords(ctx.player, coords(3217, 3239, 0));
+		   } else if (map.getCoordX(ctx.location) == 3200 && map.getCoordY(ctx.location) == 3243) {//Staircase west of Lumbridge's general store
+                map.setCoords(ctx.player, coords(3200, 3245, 0));
+		   } else if (map.getCoordX(ctx.location) == 3193 && map.getCoordY(ctx.location) == 3255) {//Staircase Lumbridge's fishing store
+                map.setCoords(ctx.player, coords(3195, 3255, 0));
+		    } else {
+			    util.defaultHandler(ctx, "Staircase");
+		    }	
+        });
+		
 	}
 
 })();

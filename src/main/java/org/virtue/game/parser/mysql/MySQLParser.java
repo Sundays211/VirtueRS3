@@ -85,41 +85,7 @@ public class MySQLParser {
 			logger.info("Using path {} for type {}", path, type);
 		}
 	}
-
-        
-        public void addAccount(Object object, String file, ParserType type) {
-            try
-            {
-
-	        switch(type) {
-                case FRIEND:
-		case IGNORE:
-		case INV:
-		case SKILL:
-		case EXCHANGE:
-		case LAYOUT:
-		case CLAN_SETTINGS:
-		case CHARACTER:
-                    Player player = (Player) object;  
-		    try {	
-                        StringBuilder query = new StringBuilder();
-                        query.append("INSERT INTO `character_saves_865` (username,password, email) VALUES(");
-				query.append("'" + player.getUsername() + "'").append(",");
-				query.append("'" + player.getPassword() + "'").append(",");
-                                query.append("'null'").append(")");
-                        Virtue.database().executeUpdate(query.toString());     
-		    } catch (Exception e) {
-		        System.out.println("error addAccount");
-		    }
-	        break;
-		case VAR:
-                break;
-	    }
-            } catch (Exception e) { }
-	}
-        
-        
-        
+    
 	/* (non-Javadoc)
 	 * @see org.virtue.game.parser.Parser#saveObjectDefinition(java.lang.Object, java.lang.String, org.virtue.game.parser.ParserType)
 	 */
@@ -144,7 +110,7 @@ public class MySQLParser {
                         query.append("UPDATE ").append("character_skills_865").append(" SET ");
 			query.append("skills_levels='" + skillsLVL.substring(0, skillsLVL.length() - 1) + "'").append(",");
                         query.append("skills_experience='" + skillsXP.substring(0, skillsXP.length() - 1) + "'");
-			query.append(" WHERE username='test'");
+			query.append(" WHERE username='" + file + "'");
                         Virtue.database().executeUpdate(query.toString());  
 		    } catch (Exception e) {
 		        System.out.println("error mysql saveObjectDefinition SKILL");
@@ -168,6 +134,7 @@ public class MySQLParser {
 		    }
 	        break;
 		case VAR:
+               
                 break;
 	    }
             } catch (Exception e) { }
@@ -251,7 +218,8 @@ public class MySQLParser {
 				}
 				break;
                             case SKILL:  
-                                ResultSet sk = Virtue.database().executeQuery("SELECT * FROM character_skills_865 WHERE username = 'test'");
+                                String skillname = (String) object;
+                                ResultSet sk = Virtue.database().executeQuery("SELECT * FROM character_skills_865 WHERE username = '" + skillname + "'");
 				try {
                                     while (sk.next()) {
                                     List<PlayerStat> skills = new ArrayList<>();    
@@ -272,45 +240,15 @@ public class MySQLParser {
 					String name = (String) object;
 					Map<Integer, Object> varps = new HashMap<Integer, Object>();
 					
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					DocumentBuilder builder = factory.newDocumentBuilder();
-					Document doc = builder.parse(new File(type.getPath(), name + ".xml"));
-				
-					doc.getDocumentElement().normalize();
-
-					NodeList list = doc.getElementsByTagName("varp");
-
-					for (int ordinal = 0; ordinal < list.getLength(); ordinal++) {
-						Node node = list.item(ordinal);
-						if (node.getNodeType() == Node.ELEMENT_NODE) {
-							Element element = (Element) node;
-							
-							int key = Integer.parseInt(element.getAttribute("key"));
-							
-							String varType = "i";
-							if (element.hasAttribute("type")) {
-								varType = element.getAttribute("type");
-							}	
-							
-							Object value;			
-							if (element.hasAttribute("value")) {
-								value = Integer.parseInt(element.getAttribute("value"));
-							} else if (varType.equalsIgnoreCase("s")) {
-								value = element.getTextContent();
-							} else if (varType.equalsIgnoreCase("l")) {
-								value = Long.parseLong(element.getTextContent());
-							} else {
-								value = Integer.parseInt(element.getTextContent());
-							}
-							varps.put(key, value);
-						}
-					}
+                    //Legacy interface
+					varps.put(3680, 3345417);
+					varps.put(3813, 0);
+                    varps.put(3814, 42);
+					
 					return varps;
 				} catch (Exception ex) {
-					//logger.error("Error loading "+type.name().toLowerCase()+" for "+((String) object), ex);
 					return new HashMap<Integer, Object>();
 				}    
-                                
 			case FRIEND:
 				try {
 					FriendsList.Data data = new FriendsList.Data();
