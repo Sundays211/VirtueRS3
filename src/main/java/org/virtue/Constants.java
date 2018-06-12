@@ -93,7 +93,7 @@ public class Constants {
 	/**
 	 * MYSQL Database settings.
 	 */
-    public static final boolean Mysql = true;
+    public static final boolean Mysql = false;
 	public static final String DB_HOST = "localhost";
 	public static final String DB_USER = "root";
 	public static final String DB_PASS = "";
