@@ -78,7 +78,11 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponseMessage> {
 			packet.putInt(0);//Jcoins
 			packet.putInt(response.getPlayer().getLoyaltyPoints());//Loyalty points
 			packet.putShort(3843);
-			packet.putShort(MySQLParser.messages());//unread emails
+			if(Constants.Mysql) {
+		        packet.putShort(MySQLParser.messages());//unread emails
+		        }else{
+                        packet.putShort(0);//unread emails   
+                        }
 			packet.putShort((int)(((response.getPlayer().getLastLogin() - 1014786000000L) / 86400000) + 1));
 
 			packet.putInt(response.getPlayer().getIPHash());//ip hash
