@@ -82,5 +82,123 @@ module.exports = (function () {
 	         });	
 	    });
 		
+		scriptManager.bind(EventType.OPLOC1, 36768, function (ctx) {//ladder lumbridge castle
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)+1;
+			anim.run(ctx.player, 828);
+            map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 36769, function (ctx) {//ladder lumbridge castle
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)-1;
+			var level2 = map.getLevel(currentCoords)+1;
+			dialog.builder(ctx.player).multi3("WHAT WOULD YOU LIKE TO DO?", "Climb up the ladder.", function () {
+				anim.run(ctx.player, 828);
+				map.setCoords(ctx.player, coords(x, y, level2));
+			}, "Climb down the ladder.", function () {	
+                anim.run(ctx.player, 828);			
+			    map.setCoords(ctx.player, coords(x, y, level));  
+			}, "Never mind.", function () {	
+	        });
+	    });
+		
+		scriptManager.bind(EventType.OPLOC2, 36769, function (ctx) {//ladder lumbridge castle
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)+1;
+			anim.run(ctx.player, 828);
+            map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC3, 36769, function (ctx) {//ladder lumbridge castle
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)-1;
+			anim.run(ctx.player, 828);
+            map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+
+		scriptManager.bind(EventType.OPLOC1, 36770, function (ctx) {//ladder lumbridge castle
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)-1;
+			anim.run(ctx.player, 828);
+            map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 36771, function (ctx) {//ladder lumbridge castle
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords)-2;
+			var level = map.getLevel(currentCoords)+1;
+			anim.run(ctx.player, 828);
+            map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, 36772, function (ctx) {//ladder lumbridge castle
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords)+2;
+			var level = map.getLevel(currentCoords)-1;
+	        anim.run(ctx.player, 828);
+            map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, [36773,36776], function (ctx) {//Staircase lumbridge castle bottom floor
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)+1;
+	        map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC2, [36774,36777], function (ctx) {//Staircase lumbridge castle mid floor
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)+1;
+	        map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, [36774,36777], function (ctx) {//Staircase lumbridge castle mid floor
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)-1;
+			var level2 = map.getLevel(currentCoords)+1;
+			dialog.builder(ctx.player).multi3("WHAT WOULD YOU LIKE TO DO?", "Go up the stairs.", function () {
+				map.setCoords(ctx.player, coords(x, y, level2));
+			}, "Go down the stairs.", function () {		
+			    map.setCoords(ctx.player, coords(x, y, level));  
+			}, "Never mind.", function () {	
+	        });
+	    });
+			
+		scriptManager.bind(EventType.OPLOC3, [36774,36777], function (ctx) {//Staircase lumbridge castle mid floor
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)-1;
+	        map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		scriptManager.bind(EventType.OPLOC1, [36775,36778], function (ctx) {//Staircase lumbridge castle top floor
+		    var currentCoords = map.getCoords(ctx.player);
+			var x = map.getCoordX(currentCoords);
+			var y = map.getCoordY(currentCoords);
+			var level = map.getLevel(currentCoords)-1;
+	        map.setCoords(ctx.player, coords(x, y, level));	
+	    });
+		
+		
+		
 	}
 })();

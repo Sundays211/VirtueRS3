@@ -4,10 +4,10 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./dark-wizards-tower'),
-		require('./ice-mountain'),
-		require('./mudskipper-point'),
-		require('./rimmington'),
 		require('./falador'),
+		require('./ice-mountain'),
+		require('./port-sarim'),
+		require('./rimmington'),
 		require('./taverley')
 	];
 	

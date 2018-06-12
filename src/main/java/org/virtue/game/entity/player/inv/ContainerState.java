@@ -83,6 +83,7 @@ public enum ContainerState {
 	VARROCK_GEN_STORE(4, true, false),
     VARROCK_SWORD_SHOP(6, true, false),
 	VARROCK_SWORD_FREE_STOCK(555, true, false),
+	WYDINS_FOOD_STORE(76, true, false),
 	ZAFF_STAFF_SHOP(9, true, false),
 	
 	/**

@@ -75,11 +75,9 @@ module.exports = (function () {
 		scriptManager.bind(EventType.IF_BUTTON, 1311, function (ctx) {
 			var player = ctx.player;	
 			switch (ctx.component) {
-		    case 507://Show all items
-				varbit(player, 678, 1);
-				return;
-			case 74://Show owned items
-				varbit(player, 678, 0);
+			case 515://Show all items/Show owned items
+				enabled = varbit(ctx.player, 678) == 1;
+				varbit(ctx.player, 678, enabled ? 0 : 1);
 				return;
 			case 92://Apply
 				applyCustomStyles(player);

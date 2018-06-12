@@ -28,9 +28,9 @@ var widget = require('widget');
 var anim = require('anim');
 var map = require('map');
 var chat = require('chat');
-
+var dialog = require('dialog');
 module.exports = (function () {
-	
+	//varbit 28623 quick charges
 	var LodestoneType = {	
 		BANDIT_CAMP : {
 			base : 69827,
@@ -191,76 +191,81 @@ module.exports = (function () {
 		scriptManager.bind(EventType.IF_BUTTON, 1092, function (ctx) {
 			switch (ctx.component) {	
 			case 8://Bandit camp lodestone
-				teleportToLodestone(ctx.player, LodestoneType.BANDIT_CAMP);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.BANDIT_CAMP);
 				return;
 			case 9://Lunar lodestone
-				teleportToLodestone(ctx.player, LodestoneType.LUNAR_ISLE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.LUNAR_ISLE);
 				return;
 			case 10://Al Kharid lodestone
-				teleportToLodestone(ctx.player, LodestoneType.AL_KHARID);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.AL_KHARID);
 				return;
 			case 11://Ardougne lodestone
-				teleportToLodestone(ctx.player, LodestoneType.ARDOUGNE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.ARDOUGNE);
 				return;
 			case 12://Burthorpe lodestone
-				teleportToLodestone(ctx.player, LodestoneType.BURTHORPE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.BURTHORPE);
 				return;
 			case 13://Catherby lodestone
-				teleportToLodestone(ctx.player, LodestoneType.CATHERBY);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.CATHERBY);
 				return;
 			case 14://Draynor lodestone
-				teleportToLodestone(ctx.player, LodestoneType.DRAYNOR_VILLAGE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.DRAYNOR_VILLAGE);
 				return;
 			case 15://Edgeville lodestone
-				teleportToLodestone(ctx.player, LodestoneType.EDGEVILLE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.EDGEVILLE);
 				return;
 			case 16://Falador lodestone
-				teleportToLodestone(ctx.player, LodestoneType.FALADOR);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.FALADOR);
 				return;
 			case 17://Lumbridge lodestone
-				teleportToLodestone(ctx.player, LodestoneType.LUMBRIDGE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.LUMBRIDGE);
 				return;
 			case 18://Port sarim lodestone
-				teleportToLodestone(ctx.player, LodestoneType.PORT_SARIM);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.PORT_SARIM);
 				return;
 			case 19://Seers village lodestone
-				teleportToLodestone(ctx.player, LodestoneType.SEERS_VILLAGE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.SEERS_VILLAGE);
 				return;
 			case 20://Taverly lodestone
-				teleportToLodestone(ctx.player, LodestoneType.TAVERLY);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.TAVERLY);
 				return;
 			case 21://Varrock lodestone
-			    teleportToLodestone(ctx.player, LodestoneType.VARROCK);
+			    teleportToLodestone(ctx.player, ctx.button, LodestoneType.VARROCK);
 				return;
 			case 22://Yanille lodestone
-				teleportToLodestone(ctx.player, LodestoneType.YANILLE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.YANILLE);
 				return;
 			case 23://Canifis lodestone
-				teleportToLodestone(ctx.player, LodestoneType.CANIFIS);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.CANIFIS);
 				return;
 			case 24://Eagles peak lodestone
-				teleportToLodestone(ctx.player, LodestoneType.EAGLES_PEEK);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.EAGLES_PEEK);
 				return;
 			case 25://Fremennik lodestone
-				teleportToLodestone(ctx.player, LodestoneType.FREMINIK_PROVINCE);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.FREMINIK_PROVINCE);
 				return;
 			case 26://Karamja lodestone
-				teleportToLodestone(ctx.player, LodestoneType.KARAMJA);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.KARAMJA);
 				return;
 			case 27://Oo'glog lodestone
-				teleportToLodestone(ctx.player, LodestoneType.OOGLOG);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.OOGLOG);
 				return;
 			case 28://Tirannwn lodestone
-				teleportToLodestone(ctx.player, LodestoneType.TIRANNWN);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.TIRANNWN);
 				return;
 			case 29://Wilderness lodestone
-				teleportToLodestone(ctx.player, LodestoneType.WILDERNESS_VOLCANO);
+			    widget.closeAll(ctx.player);
+			    dialog.builder(ctx.player).mesbox("The lodestone you have chosen is in level 15 Wilderness. Are you sure you<br> want to teleport there?")
+			    .multi2("TELEPORT TO THE WILDERNESS?", "Yes.", function () {
+			        teleportToLodestone(ctx.player, ctx.button, LodestoneType.WILDERNESS_VOLCANO);
+			    }, "No.", function () {	
+			    });	
 				return;
 			case 30://Ashdale lodestone
-			    teleportToLodestone(ctx.player, LodestoneType.ASHDALE);
+			    teleportToLodestone(ctx.player, ctx.button, LodestoneType.ASHDALE);
 				return;
 			case 31://Prifddinas lodestone
-				teleportToLodestone(ctx.player, LodestoneType.PRIFDDINAS);
+				teleportToLodestone(ctx.player, ctx.button, LodestoneType.PRIFDDINAS);
 				return;
 			case 32://jmod event lodestone 
 				return;	
@@ -271,7 +276,9 @@ module.exports = (function () {
 				return;
 			case 49://close
 				return;
-			case 58://Enable/disable quick teleport
+			case 57://Enable/disable quick teleport
+			    enabled = varbit(ctx.player, 28622) == 1;
+				varbit(ctx.player, 28622, enabled ? 0 : 1);
 				return;
 			default:
 				util.defaultHandler(ctx, "Lodestone");
@@ -281,26 +288,50 @@ module.exports = (function () {
 	
 	}
 
-	function teleportToLodestone(player, dest) {
-		if (dest.varbit == -1 || varbit(player, dest.varbit) == 1) {
-			widget.closeAll(player);
-			var landSpot = ENGINE.offsetCoords(dest.coords, 0, -1, 0);
-			anim.addSpotAnim(player,3017);
-			anim.run(player, 16385, function () {
-				map.setCoords(player, dest.coords);
-				ENGINE.faceCoords(player, landSpot);
-				anim.addSpotAnim(player, 3018);
-				anim.run(player, 16386, function () {
-					anim.run(player, 16393, function () {
-						anim.run(player, -1); 
-						map.setCoords(player, landSpot);
-					});
-				});
-			});
+	function teleportToLodestone(player, button, dest) {
+		if (button == 1 && varbit(player, 28622) == 1 && varbit(player, 28623) > 0 || button == 2 && varbit(player, 28622) == 0 && varbit(player, 28623) > 0) {
+		    if (dest.varbit == -1 || varbit(player, dest.varbit) == 1) {
+			    widget.closeAll(player);
+			    var landSpot = ENGINE.offsetCoords(dest.coords, 0, -1, 0);
+			    anim.addSpotAnim(player,1576);
+			    anim.run(player, 8939, function () {
+				    map.setCoords(player, dest.coords);
+				    ENGINE.faceCoords(player, landSpot);
+				    anim.addSpotAnim(player, 3018);
+				    anim.run(player, 16386, function () {
+					    anim.run(player, 16393, function () {
+						    anim.run(player, -1); 
+						    map.setCoords(player, landSpot);
+						    varbit(player, 28623, varbit(player, 28623)-1);
+					    });
+				    });
+			    });
+		    } else {
+			    var locType = ENGINE.getLocType(player, dest.base);
+			    chat.sendMessage(player, "You'll need to unlock the "+locType.name+" before you can Home Teleport there.");
+		    }
 		} else {
-			var locType = ENGINE.getLocType(player, dest.base);
-			chat.sendMessage(player, "You'll need to unlock the "+locType.name+" before you can Home Teleport there.");
-		}
+		    if (dest.varbit == -1 || varbit(player, dest.varbit) == 1) {
+			    widget.closeAll(player);
+			    var landSpot = ENGINE.offsetCoords(dest.coords, 0, -1, 0);
+			    anim.addSpotAnim(player,3017);
+			    anim.run(player, 16385, function () {
+				    map.setCoords(player, dest.coords);
+				    ENGINE.faceCoords(player, landSpot);
+				    anim.addSpotAnim(player, 3018);
+				    anim.run(player, 16386, function () {
+				        anim.run(player, 16393, function () {
+						    anim.run(player, -1); 
+						    map.setCoords(player, landSpot);
+					    });
+				    });
+			    });
+		    } else {
+			    var locType = ENGINE.getLocType(player, dest.base);
+			    chat.sendMessage(player, "You'll need to unlock the "+locType.name+" before you can Home Teleport there.");
+		    }
+	    }
 	}
+	
 	
 })();

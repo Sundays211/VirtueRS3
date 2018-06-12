@@ -1,0 +1,7 @@
+// NPC Spawns for map square 63,81
+// Format: npcTypeId - level,localX,localY
+14389 - 0,49,18 //Muncher
+14385 - 0,34,19 //Death
+14381 - 0,62,48 //Diango
+14402 - 0,59,43 //Cosplayer
+14401 - 0,60,44 //Cosplayer

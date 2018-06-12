@@ -34,7 +34,7 @@ module.exports = (function () {
 	scriptManager.bind(EventType.OPNPC1, 2244, function (ctx) {
 	var player = ctx.player;
 	var npc = ctx.npc;
-	dialog.chatnpc(player, npc, "Greetings, adventurer. How may i help you?")
+	dialog.chatnpc(player, npc, "Greetings, adventurer. How may i help you?", 9847)
 	.then(function () {
 	if (util.isAdmin(player)) {
 	dialog.multi4(player, "CHOOSE AN OPTION", "Who are you?", function () {
@@ -57,7 +57,7 @@ module.exports = (function () {
 	}
 	
 	function iamphileas (player, npc) {
-	dialog.builder(player).chatnpc(npc, "I am Phileas, the Lumbridge Sage. In times past, people<br>came from all around to ask me for advice. My renown<br>seems to have diminished somewhat in recent years,<br>though. Can i help you with anything?")	
+	dialog.builder(player).chatnpc(npc, "I am Phileas, the Lumbridge Sage. In times past, people<br>came from all around to ask me for advice. My renown<br>seems to have diminished somewhat in recent years,<br>though. Can i help you with anything?", 9810)	
     .multi2("CHOOSE AN OPTION", "Tell me about the town of lumbridge.", function () {	
 	townofLumbridge(player, npc);	
 	}, "I'm fine for now, thanks.", function () {	
@@ -65,8 +65,8 @@ module.exports = (function () {
 	}
 	
     function townofLumbridge (player, npc) {
-	dialog.builder(player).chatnpc(npc, "Lumbridge is one of the older towns in the human-<br>controlled kingdoms. It was founded over two hundred<br> years ago towards the end of the Fourth Age. It's called<br> Lumbridge because of this bridge built over the River Lum.")
-	.chatnpc(npc, "The town is governed by Duke Horacio, who is a good<br> friend of our monarch, King Roald of Misthalin.")
+	dialog.builder(player).chatnpc(npc, "Lumbridge is one of the older towns in the human-<br>controlled kingdoms. It was founded over two hundred<br> years ago towards the end of the Fourth Age. It's called<br> Lumbridge because of this bridge built over the River Lum.", 9810)
+	.chatnpc(npc, "The town is governed by Duke Horacio, who is a good<br> friend of our monarch, King Roald of Misthalin.", 9810)
 	.chatnpc(npc, "Recently, however,there have been great changes due to<br> the Battle of Lumbridge")
 	.multi3("CHOOSE AN OPTION", "Who are you?", function () {
 	iamphileas(player, npc);

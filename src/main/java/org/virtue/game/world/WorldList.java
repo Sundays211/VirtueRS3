@@ -21,6 +21,7 @@
  */
 package org.virtue.game.world;
 
+import org.virtue.Constants;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class WorldList {
 	private static final List<WorldEntry> entries = new LinkedList<>();
 	
 	static {
-		entries.add(new WorldEntry(1, "-", "127.0.0.1", "World 1", 255, WorldFlag.MEMBERS, WorldFlag.LOOTSHARE));
+		entries.add(new WorldEntry(1, "-", Constants.SERVER_IP, "World 1", 255, WorldFlag.MEMBERS, WorldFlag.LOOTSHARE));
 	}
 	
 	/**

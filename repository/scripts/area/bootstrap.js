@@ -6,6 +6,7 @@ module.exports = function (scriptManager) {
 	    require('./location-picking'),
 		require('./player-moderator-room'),
 		require('./sign-posts'),
+		require('./stairs-and-ladders'),
 		require('./wilderness')
 	];
 	

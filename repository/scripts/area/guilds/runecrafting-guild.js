@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var coords = require('map/coords');
-var map = require('map');
+ 
+/* globals EventType*/
 var anim = require('anim');
+var map = require('map');
+var coords = require('map/coords');
 module.exports = (function () {
 	return {
 		init : init
@@ -30,12 +31,13 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		
-	   scriptManager.bind(EventType.OPLOC1, 29355, function (ctx) {//Ladder to lumbridge castle
-	       anim.run(ctx.player, 828, function () {
-           map.setCoords(ctx.player, coords(3210, 3216, 0));
-	       });	
-       });
+	    scriptManager.bind(EventType.OPLOC1, 79603, function (ctx) {//portal
+		anim.addSpotAnim(ctx.player, 1771);
+	    anim.run(ctx.player, 10180, function () {
+        map.setCoords(ctx.player, coords(3, 48, 49, 30, 15));
+	    });	
+		
+	});
 
 	}
-
 })();

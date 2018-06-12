@@ -70,8 +70,10 @@ import org.virtue.game.parser.ClanIndex;
 import org.virtue.game.parser.ParserRepository;
 import org.virtue.game.parser.impl.NewsDataParser;
 import org.virtue.game.parser.impl.NpcDropParser;
+import org.virtue.game.parser.mysql.DatabaseManager;
 import org.virtue.game.parser.xml.XMLAccountIndex;
 import org.virtue.game.parser.xml.XMLClanIndex;
+import org.virtue.game.parser.mysql.MySQLAccountIndex;
 import org.virtue.network.Network;
 import org.virtue.network.event.EventRepository;
 import org.virtue.utility.FileUtility;
@@ -89,6 +91,8 @@ public class Virtue {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(Virtue.class);
 
+	private static DatabaseManager database = new DatabaseManager();
+	
 	/**
 	 * The {@link Virtue} Instance
 	 */
@@ -179,7 +183,7 @@ public class Virtue {
 	private boolean live = true;
 	
 	private boolean running = false;
-	
+           
 	/**
 	 * Main entry point of Virtue
 	 * @param args - command line arguments
@@ -193,7 +197,7 @@ public class Virtue {
 				File propertiesFile = new File(args[0]);
 				instance.loadProperties(propertiesFile);
 			}
-			
+			database.connect();
 			instance.loadEngine();
 			instance.loadCache();
 			instance.loadConfig();
@@ -270,6 +274,10 @@ public class Virtue {
 	 */
 	private void loadGame() throws Exception {
 		accountIndex = new XMLAccountIndex(properties);
+		
+		if(Constants.Mysql) {
+		accountIndex = new MySQLAccountIndex(properties);
+		}
 		
 		if (accountIndex instanceof CachingParser){
 			cachingParsers.add((CachingParser) accountIndex);
@@ -552,6 +560,10 @@ public class Virtue {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static DatabaseManager database() {
+		return database;
 	}
 	
 	/**

@@ -119,7 +119,20 @@ public class CreationEventHandler implements GameEventHandler<CreationEventConte
 		newPlayer.setRuneCoins(0);
 		newPlayer.setRunEnergy(100);
 		Virtue.getInstance().getAccountIndex().addAccount(context.getEmail(), context.getName());
-		Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(newPlayer, newPlayer.getUsername(), ParserType.CHARACTER);
+        if(Constants.Mysql) {
+            StringBuilder query = new StringBuilder(), query2 = new StringBuilder();
+            query.append("INSERT INTO `character_saves_865` (username,password, email) VALUES(");
+	        query.append("'" + context.getName() + "'").append(",");
+	        query.append("'" + context.getPassword() + "'").append(",");
+            query.append("'"+context.getEmail()+"'").append(")");
+            Virtue.database().executeUpdate(query.toString()); 
+                        
+            query2.append("INSERT INTO `character_skills_865` (username) VALUES(");
+            query2.append("'" + context.getName() + "'").append(")");      
+            Virtue.database().executeUpdate(query2.toString()); 
+        } else {
+            Virtue.getInstance().getParserRepository().getParser().saveObjectDefinition(newPlayer, newPlayer.getUsername(), ParserType.CHARACTER);
+		}
 		player.getDispatcher().sendEnum(ServerProtocol.CREATE_ACCOUNT_REPLY, SubmitStatus.SUCCESS);
 	}
 	

@@ -32,7 +32,7 @@ module.exports = (function () {
 	function init (scriptManager) {
 		
 	   scriptManager.bind(EventType.OPNPC1, 20985, function (ctx) {
-		    anim.addSpotAnim(ctx.player, 2685);//find right one
+		    anim.addSpotAnim(ctx.player, 5128);
 	        anim.run(ctx.player, 24529);  
 		    dialog.builder(ctx.player).chatplayer("Ow! How did that pig give me an electric shock?")
 			.finish();

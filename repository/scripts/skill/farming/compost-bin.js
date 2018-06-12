@@ -40,7 +40,7 @@ module.exports = (function () {
 	};
 	
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, [ 7836, 7837, 7838, 7839 ], function (ctx) {
+		scriptManager.bind(EventType.OPLOC1, [ 7836, 7837, 7838, 7839, 56684, 66577, 93286 ], function (ctx) {
 			var player = ctx.player;
 			var binId = ctx.locTypeId;
 			var currentStatus = getStatus(player, binId);
@@ -69,10 +69,16 @@ module.exports = (function () {
 			return varbit(player, 84);
 		case 7837://Catherby
 			return varbit(player, 85);
-		case 7838://Ardougne
+		case 7838://Morytania
 			return varbit(player, 86);
-		case 7839://Morytania
+		case 7839://Ardougne
 			return varbit(player, 87);
+		case 56684://Herblore Habitat 
+			return varbit(player, 16095);		
+		case 66577://Taverly
+			return varbit(player, 148);	
+		case 93286://Prifddinas
+			return varbit(player, 24966);		
 		default:
 			throw "Unsupoorted bin: "+binId;
 		}
@@ -86,12 +92,21 @@ module.exports = (function () {
 		case 7837://Catherby
 			varbit(player, 85, status);
 			return;
-		case 7838://Ardougne
+		case 7838://Morytania
 			varbit(player, 86, status);
 			return;
-		case 7839://Morytania
+		case 7839://Ardougne
 			varbit(player, 87, status);
 			return;
+		case 56684://Herblore Habitat 
+			varbit(player, 16095, status);
+			return;		
+		case 66577://Taverly
+			varbit(player, 148, status);
+			return;
+		case 93286://Prifddinas
+			varbit(player, 24966, status);
+			return;		
 		default:
 			throw "Unsupoorted bin: "+binId;
 		}

@@ -79,7 +79,7 @@ module.exports = (function () {
 		var coord = _map.getCoords(player);
 		var loc = _map.addLoc(logType.fireId, coord, 10, 0);//Spawn the fire
 		_map.delay(coord, function () {
-			_map.delLoc(loc);
+			map.delLoc(loc);
 		}, logType.duration);
 		_entity.moveAdjacent(player);
 		stat.giveXp(player, Stat.FIREMAKING, logType.xp);//Add firemaking xp
