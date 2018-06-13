@@ -14,7 +14,7 @@ var anim = require('anim');
 module.exports = (function () {
 	return {
 		init : init
-	}
+	};
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, 550, function (ctx) {//Newcomer map
@@ -28,4 +28,4 @@ module.exports = (function () {
 		
 	}
 	
-}();
+})();
