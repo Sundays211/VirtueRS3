@@ -5,7 +5,8 @@
 module.exports = function (scriptManager) {
 	var modules = [
 		require('./herbs'),
-		require('./unfinished')
+		require('./unfinished'),
+		require('./grinding')
 	];
 	
 	for (var i in modules) {

@@ -11,7 +11,11 @@ module.exports = function (scriptManager) {
 		require('./pottery-oven'),
 		require('./leather'),
 		require('./battlestaff'),
-		require('./gems')
+		require('./gems'),
+		require('./robust-glass'),
+		require('./noxious-weapon-creation'),
+		require('./sirenic-crafting'),
+		require('./tectonic-crafting')
 	];
 	
 	for (var i in modules) {
