@@ -9,7 +9,8 @@ module.exports = function (scriptManager) {
 		require('./holiday-items'),
 		require('./music-box'),
 		require('./potions'),
-		require('./teletabs')
+		require('./teletabs'),
+		require('./misc-items')
 	];
 	
 	for (var i in modules) {
