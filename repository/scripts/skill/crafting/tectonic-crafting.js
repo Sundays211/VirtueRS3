@@ -24,7 +24,7 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, TECTONIC_ENERGY, function (ctx) {
-			selectTectonicProduct(cxt.player);
+			selectTectonicProduct(ctx.player);
 		});
 	}
 	

@@ -23,7 +23,7 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, SIRENIC_SCALE, function (ctx) {
-			selectSirenicProduct(cxt.player);
+			selectSirenicProduct(ctx.player);
 		});
 	}
 	

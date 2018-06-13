@@ -5,7 +5,7 @@
 
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
-
+var map = require('map');
 var makex = require('../makex');
 var dialog = require('dialog');
 var widget = require('widget');
@@ -17,15 +17,15 @@ module.exports = (function () {
 	
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 94067 ], function (ctx) {
-			selectRobustGlassProduct(ctx.player);
+			selectRobustGlassProduct(ctx.player, ctx.location);
 		});
 		
 		scriptManager.bind(EventType.OPLOC1, [ 67968 ], function (ctx) {
-			selectRobustGlassProduct(ctx.player);
+			selectRobustGlassProduct(ctx.player, ctx.location);
 		});
 	}
 	
-	function selectRobustGlassProduct (player) {
+	function selectRobustGlassProduct (player, location) {
 		makex.selectProduct(player, -1, -1, 6979, -1, "Robust Glass");
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
@@ -34,7 +34,8 @@ module.exports = (function () {
 			if (amount) {
 				varp(player, 1175, productId);
 				var text = "You make an item.";
-				makex.startCrafting(player, amount, 25041, text);
+				makex.startCrafting(player, amount, 25120, text);
+				map.locAnim(location, 25041);
 			}
 		});
 	}
