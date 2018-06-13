@@ -64,6 +64,14 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPHELD1, 24374, function (ctx) {
 			selectProduct(ctx.player, 6997, 25594);//Royal Dragonhide
 		});
+		
+		scriptManager.bind(EventType.OPHELD1, [ 10818, 10820 ], function (ctx) {
+			selectProduct(ctx.player, 6998, 25594);//Yak-Hide
+		});
+		
+		scriptManager.bind(EventType.OPHELD1, 10113, function (ctx) {
+			selectProduct(ctx.player, 6999, 25594);//Enhanced Armour
+		});
 	}
 	
 	function selectProduct (player, category, animationId) {
