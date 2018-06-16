@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals Stat */
-var chat = require('chat');
-var util = require('util');
-var anim = require('anim');
-var stat = require('stat');
+var chat = require('shared/chat');
+var util = require('shared/util');
+var anim = require('shared/anim');
+var stat = require('shared/stat');
 
 var pickaxe = require('./pickaxe');
 
@@ -39,7 +39,7 @@ module.exports = (function () {
 	return {
 		runMiningAction : runMiningAction
 	};
-	
+
 	function runMiningAction (player, levelReq, onSuccess) {
 		if (stat.getLevel(player, Stat.MINING) < levelReq) {
 			chat.sendMessage(player, "You require a mining level of "+levelReq+"  to mine this rock.");
@@ -59,11 +59,11 @@ module.exports = (function () {
 				onSuccess();
 			} else {
 				anim.run(player, pic.anim);
-				util.delayFunction(player, pic.speed, process, true);				
+				util.delayFunction(player, pic.speed, process, true);
 			}
 		}
 	}
-	
+
 	function checkSuccess(player, levelReq, pic) {
 		//TODO: Get the right calculation for this. At the moment it's a complete guess...
 		var chance = (stat.getLevel(player, Stat.MINING) + pic.bonus) - levelReq;

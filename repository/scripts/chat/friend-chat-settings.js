@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,10 +22,10 @@
 /* globals EventType, FriendChatData, ENGINE */
 var varc = require('engine/var/client');
 var config = require('engine/config');
-var util = require('util');
-var dialog = require('dialog');
-var widget = require('widget');
-var chat = require('chat');
+var util = require('shared/util');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
+var chat = require('shared/chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -49,7 +49,7 @@ module.exports = function(scriptManager) {
 		util.runClientScript(player, 8178, []);
 		widget.setEvents(player, 1108, 2, 0, 199, 254);//Allow all rank options to be sent to the server
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1108, function (ctx) {
 		var player = ctx.player;
 		var rankId;
@@ -104,7 +104,7 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	function rankFromButton (button, defaultValue) {
 		switch (button) {
 		case 1:
@@ -129,7 +129,7 @@ module.exports = function(scriptManager) {
 			return defaultValue;
 		}
 	}
-	
+
 	function nameFromRank (rankId) {
 		return config.enumValue(616, rankId+1);
 	}

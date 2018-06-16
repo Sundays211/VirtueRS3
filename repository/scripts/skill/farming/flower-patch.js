@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var util = require('util');
-var anim = require('anim');
-var inv = require('inv');
-var chat = require('chat');
-var dialog = require('dialog');
-var stat = require('stat');
+var util = require('shared/util');
+var anim = require('shared/anim');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var dialog = require('shared/dialog');
+var stat = require('shared/stat');
 
 var common = require('./common');
 var variables = require('./variables');
@@ -50,13 +50,13 @@ module.exports = (function () {
 			produce : 6010
 		}
 	};
-	
+
 	return {
 		init : init,
 		process : process,
 		values : Flower
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 7847, 7848, 7849, 7850 ], function (ctx) {
 			var player = ctx.player;
@@ -87,7 +87,7 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOCU, [ 7847, 7848, 7849, 7850 ], function (ctx) {
 			var player = ctx.player;
 			var patchId = ctx.locTypeId;
@@ -113,19 +113,19 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, [ 7847, 7848, 7849, 7850 ], function (ctx) {
-			var player = ctx.player;			
+			var player = ctx.player;
 			var status = variables.getStatus(player, ctx.locTypeId);
 			var compost = variables.getCompost(player, ctx.locTypeId);
-			
+
 			chat.sendMessage(player, "This is a Flower Patch. status = "+status+", compost = "+compost);
 			if (util.isAdmin(player)) {
 				chat.sendMessage(player, "id="+ctx.locTypeId+", status = "+status+", compost = "+compost);
 			}
 		});
 	}
-	
+
 	function handleEmptyPatch(player, patchId, seedId, ctx) {
 		switch(seedId) {
 		case 5096://Marigold seed
@@ -142,21 +142,21 @@ module.exports = (function () {
 			return;
 		}
 	}
-	
+
 	function process (player) {
 		processPatch(player, 7847);
 		processPatch(player, 7848);
 		processPatch(player, 7849);
 		processPatch(player, 7850);
 	}
-	
+
 	function processPatch (player, patchId) {
 		common.processWeeds(player, patchId);
 		processGrowth(player, patchId);
 	}
-	
+
 	function processGrowth (player, patchId) {
-		switch(variables.getStatus(player, patchId)) {			
+		switch(variables.getStatus(player, patchId)) {
 		/* Regular growth */
 		case 8://Marigolds (1)
 			variables.setStatus(player, patchId, 9);
@@ -170,7 +170,7 @@ module.exports = (function () {
 		case 11://Marigolds (4)
 			common.processGrowthStage(player, patchId, 12, 139);
 			break;
-			
+
 		/* Watered patches */
 		case 72://Watered Marigolds (1)
 			variables.setStatus(player, patchId, 9);
@@ -184,7 +184,7 @@ module.exports = (function () {
 		case 75://Watered Marigolds (4)
 			variables.setStatus(player, patchId, 12);
 			break;
-			
+
 		/* Diseased patches */
 		case 137://Diseased Marigolds (2)
 			common.processDiseasedStage(player, patchId, 201);
@@ -197,7 +197,7 @@ module.exports = (function () {
 			break;
 		}
 	}
-	
+
 	function plantSeed (player, patchId, crop, plantStatus) {
 		if (stat.getLevel(player, Stat.FARMING) < crop.level) {
 			dialog.mesbox(player, "You need a farming level of "+crop.level+" to plant those seeds");
@@ -208,7 +208,7 @@ module.exports = (function () {
 			variables.setStatus(player, patchId, plantStatus);
 		});
 	}
-	
+
 	function harvest (player, patchId, crop) {
 		if (!inv.hasSpace(player)) {
 			chat.sendMessage(player, "You need free space!");

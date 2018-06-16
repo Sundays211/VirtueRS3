@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,22 +25,22 @@ var World = Java.type('org.virtue.game.World');
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 var GlowColorBlock = Java.type('org.virtue.network.protocol.update.block.GlowColorBlock');
 
-var chat = require('chat');
-var anim = require('anim');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
 
 /**
- * 
+ *
  */
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "anim", function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 1 || isNaN(args[0])) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id]", ctx.console);
 				return;
@@ -51,11 +51,11 @@ module.exports = (function () {
 			});
 			chat.sendCommandResponse(player, "Running animation "+animId, ctx.console);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "gender", function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args[0] == 0) {
 				player.getModel().setGender(Gender.MALE);
 				player.getModel().refresh();
@@ -64,11 +64,11 @@ module.exports = (function () {
 				player.getModel().refresh();
 			}
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, [ "spot", "spotanim" ], function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 1 || isNaN(args[0])) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [type]", ctx.console);
 				return;
@@ -76,15 +76,15 @@ module.exports = (function () {
 			var spotAnimId = parseInt(args[0]);
 			anim.addSpotAnim(player, spotAnimId);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, [ "hair", "hairstyle" ], function (ctx) {
 			ctx.player.getModel().setTempStyle(0, parseInt(ctx.cmdArgs[0]));
 			ctx.player.getModel().refresh();
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, [ "bas", "baseanim" ], function (ctx) {
 			var player = ctx.player;
-			
+
 			if (ctx.cmdArgs.length < 1) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id]", ctx.console);
 				return;
@@ -93,10 +93,10 @@ module.exports = (function () {
 			player.getModel().setRenderAnimation(animID);
 			player.getModel().refresh();
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "render", function (ctx) {
 			var player = ctx.player;
-			
+
 			if (ctx.cmdArgs[0] === 0) {
 				player.getModel().setRender(Render.PLAYER);
 				player.getModel().refresh();
@@ -109,16 +109,16 @@ module.exports = (function () {
 				player.getModel().refresh();
 			}
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "render", function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 4) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [red] [green] [blue] [alpha]", ctx.console);
 				return;
 			}
-			
+
 			var iterate = World.getInstance().getPlayers().iterator();
 			var players = null;
 			while (iterate.hasNext()) {

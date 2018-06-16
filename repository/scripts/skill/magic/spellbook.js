@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,22 +22,22 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var chat = require('chat');
-var dialog = require('dialog');
-var widget = require('widget');
+var chat = require('shared/chat');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 
 var disassembly = require('../invention/disassembly');
 var makex = require('../makex');
 
 /**
- * 
+ *
  */
 module.exports = (function () {
 	return {
 		cast : cast,
 		castOnItem : castOnItem
 	};
-	
+
 	function cast (player, spellId) {
 		//param 2871 = spellbook (0=Normal, 1=Ancient, 2=Lunar, 3=Common, 4=Dungeoneering)
 		//varbit 0 = active spellbook
@@ -52,7 +52,7 @@ module.exports = (function () {
 			chat.sendDebugMessage(player, "Spell not yet implemented: "+spellId);
 		}
 	}
-	
+
 	function castOnItem (player, spellId, objId, slot) {
 		switch (spellId) {
 		case 32942://Analyse
@@ -66,7 +66,7 @@ module.exports = (function () {
 			return;
 		}
 	}
-	
+
 	function enchantCrossbowBolts (player) {
 		makex.selectProduct(player, -1, -1, 6761, -1, "Enchant Bolts");
 		dialog.setResumeHandler(player, function () {

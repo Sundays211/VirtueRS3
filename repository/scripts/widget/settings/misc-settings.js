@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,7 +38,7 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1674, function (ctx) {
 			widget.setEvents(ctx.player, 1674, 91, 0, 8, 2359296);
@@ -46,23 +46,23 @@ module.exports = (function () {
 			widget.setEvents(ctx.player, 1674, 67, 0, 8, 2359296);
 			widget.setEvents(ctx.player, 1674, 68, 0, 8, 2);
 		});
-		
+
 		scriptManager.bind(EventType.IF_DRAG, component(1674, 67), function (ctx) {
 			if (ctx.toslot >= 0 && ctx.toslot < 8) {
 				varbit(ctx.player, 19011, ctx.toslot);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_DRAG, component(1674, 91), function (ctx) {
 			if (ctx.toslot >= 0 && ctx.toslot < 8) {
 				varbit(ctx.player, 19010, ctx.toslot);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1674, function (ctx) {
 			var player = ctx.player;
 			var enabled, newIcon;
-			switch (ctx.component) {	
+			switch (ctx.component) {
 			case 17://Destroy empty vials when mixing potions
 				enabled = varbit(player, 1723) == 1;
 				varbit(player, 1723, enabled ? 0 : 1);
@@ -75,7 +75,7 @@ module.exports = (function () {
 				enabled = varbit(player, 1724) == 1;
 				varbit(player, 1724, enabled ? 0 : 1);
 				return;
-			case 39://Destroy empty vials when drinking potions	
+			case 39://Destroy empty vials when drinking potions
 				enabled = varbit(player, 26774) == 1;
 				varbit(player, 26774, enabled ? 0 : 1);
 				return;

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var util = require('util');
-var widget = require('widget');
-var dialog = require('dialog');
-var chat = require('chat');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
 var varbit = require('engine/var/bit');
 var varp = require('engine/var/player');
 
@@ -31,11 +31,11 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_BUTTON, 20, function (ctx) {
-			var player = ctx.player;		
-		    switch (ctx.component) {		
+			var player = ctx.player;
+		    switch (ctx.component) {
 			case 10://Colour 1
 				selectCapeColour(player, 1);
 				return;
@@ -74,7 +74,7 @@ module.exports = (function () {
 				return;
 			case 71://Change col3 to col4
 				copyCapeColour(player, 4, 3);
-				return;		
+				return;
 			case 81://Change col4 to col1
 				copyCapeColour(player, 1, 4);
 				return;
@@ -106,18 +106,18 @@ module.exports = (function () {
 				return;
 			case 188://Load preset 3
 				handlePreset(player, 3, false);
-				return;		
+				return;
 			default:
 				util.defaultHandler(ctx, "skillcape-customiser");
 			}
-			return;				
+			return;
 		});
-		
+
 		scriptManager.bind(EventType.IF_CLOSE, 20, function (ctx) {
 			ENGINE.refreshEquipment(ctx.player);
 		});
 	}
-	
+
 	function selectCapeColour (player, type) {
 	    var prevColour;
 		switch (type) {
@@ -159,7 +159,7 @@ module.exports = (function () {
 			widget.openCentral(player, 20, false);
 		});
 	}
-	
+
 	function copyCapeColour (player, fromType, toType) {
 		var colour;
 		switch (fromType) {
@@ -191,7 +191,7 @@ module.exports = (function () {
 			break;
 		}
 	}
-	
+
 	function handlePreset (player, preset, isSave) {
 		dialog.setResumeHandler(player, function (value) {
 			if ((value & 0xffff) == 211) {//Confirm
@@ -201,10 +201,10 @@ module.exports = (function () {
 					loadPreset(player, preset);
 				}
 			}
-			widget.openCentral(player, 20, false);		
-		});			
+			widget.openCentral(player, 20, false);
+		});
 	}
-	
+
 	function savePreset (player, preset) {
 		chat.sendMessage(player, "Saving preset "+preset);
 		var col1 = varbit(player, 1039);
@@ -232,7 +232,7 @@ module.exports = (function () {
 			break;
 		}
     }
-	
+
 	function loadPreset (player, preset) {
 		chat.sendMessage(player, "Loading preset "+preset);
 		var col1, col2, col3, col4;
@@ -261,7 +261,7 @@ module.exports = (function () {
 		varbit(player, 1039, col1);
 		varbit(player, 1040, col2);
 		varbit(player, 1041, col3);
-		varbit(player, 1042, col4);	
+		varbit(player, 1042, col4);
     }
 
 })();

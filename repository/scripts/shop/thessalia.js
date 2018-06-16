@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,11 +25,11 @@ var varc = require('engine/var/client');
 var varbit = require('engine/var/bit');
 
 var config = require('engine/config');
-var dialog = require('dialog');
-var inv = require('inv');
-var chat = require('chat');
-var widget = require('widget');
-var util = require('util');
+var dialog = require('shared/dialog');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var widget = require('shared/widget');
+var util = require('shared/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -46,24 +46,24 @@ module.exports = function (scriptManager) {
 	var MALE_ARMS = 711, FEMALE_ARMS = 693, MALE_WRISTS = 749, FEMALE_WRISTS = 751;
 
 	var TOP_COLOURS = 3282, LEG_COLOURS = 3284;
-	
+
 	scriptManager.bind(EventType.OPNPC3, 548, function (ctx) {
 		varp(ctx.player, 304, Inv.THESSALIAS_FINE_SHOP);
 		varc(ctx.player, 2360, "Thessalia's Fine Clothes");
 		widget.openCentral(ctx.player, 1265);
 	});
 
-	scriptManager.bind(EventType.OPNPC4, 548, function (ctx) {		
+	scriptManager.bind(EventType.OPNPC4, 548, function (ctx) {
 		if(inv.freeSpace(ctx.player, Inv.EQUIPMENT) !== inv.size(Inv.EQUIPMENT)) {
 			dialog.chatnpc(ctx.player, ctx.npc, "You're not able to try on my clothes with all that armour. Take it off and then speak to me again.");
 			return;
 		}
 		widget.openCentral(ctx.player, 729);
 	});
-	
-	scriptManager.bind(EventType.IF_OPEN, 729, function (ctx) {	
+
+	scriptManager.bind(EventType.IF_OPEN, 729, function (ctx) {
 		var player = ctx.player;
-		
+
 		widget.setEvents(player, 729, 17, 0, 126, 2);//17=Select style
 		widget.setEvents(player, 729, 20, 0, 500, 2);//20=Select colour
 		widget.setText(player, 729, 32, "Free!");
@@ -77,14 +77,14 @@ module.exports = function (scriptManager) {
 		varc(player, 1016, ENGINE.getPlayerColour(player, 1));//Top colour
 		varc(player, 1017, ENGINE.getPlayerColour(player, 2));//Legs colour
 	});
-	
+
 	scriptManager.bind(EventType.IF_CLOSE, 729, function (ctx) {
 		ENGINE.clearStyleEdit(ctx.player);
-	});	
+	});
 
 	scriptManager.bind(EventType.IF_BUTTON, 729, function (ctx) {
 		var player = ctx.player;
-		
+
 		switch (ctx.component) {
 		case 12://Choose top
 			varbit(player, 481, 0);
@@ -92,14 +92,14 @@ module.exports = function (scriptManager) {
 		case 13://Choose arms
 			if (getSetByKit(ENGINE.getPlayerKit(player, 2), 3, ENGINE.isFemale(player)) == -1) {
 				varbit(player, 481, 1);
-			} else {				
+			} else {
 				chat.sendMessage(player, "You can't select different arms to go with that top.");
 			}
 			return;
 		case 14://Choose wrists
 			if (getSetByKit(ENGINE.getPlayerKit(player, 2), 3, ENGINE.isFemale(player)) == -1) {
 				varbit(player, 481, 2);
-			} else {				
+			} else {
 				chat.sendMessage(player, "You can't select different wrists to go with that top.");
 			}//Retro striped sweater
 			//Retro two-tonned
@@ -122,7 +122,7 @@ module.exports = function (scriptManager) {
 			return;
 		}
 	});
-	
+
 	function setKit (player, slot) {
 		switch(varbit(player, 481)) {
 		case 0:
@@ -139,7 +139,7 @@ module.exports = function (scriptManager) {
 			break;
 		}
 	}
-	
+
 	function setColour (player, slot) {
 		switch(varbit(player, 481)) {
 		case 0:
@@ -153,7 +153,7 @@ module.exports = function (scriptManager) {
 			break;
 		}
 	}
-	
+
 	function setKitInner (player, enumID, slot, type) {
 		var newKitPiece = config.enumValue(enumID, slot);
 		if (newKitPiece != -1) {
@@ -167,11 +167,11 @@ module.exports = function (scriptManager) {
 					ENGINE.setPlayerKit(player, 4, config.structParam(setId, 1184));
 				} else {
 					ENGINE.setPlayerKit(player, 2, newKitPiece);
-					if (ENGINE.getPlayerKit(player, 3) == -1 || 
+					if (ENGINE.getPlayerKit(player, 3) == -1 ||
 							getSetByKit(ENGINE.getPlayerKit(player, 3), 4, ENGINE.isFemale(player)) == -1) {
 						ENGINE.setPlayerKit(player, 3, ENGINE.isFemale(player) ? 61 : 26);
 					}
-					if (ENGINE.getPlayerKit(player, 4) == -1 || 
+					if (ENGINE.getPlayerKit(player, 4) == -1 ||
 							getSetByKit(ENGINE.getPlayerKit(player, 4), 5, ENGINE.isFemale(player)) == -1) {
 						ENGINE.setPlayerKit(player, 3, ENGINE.isFemale(player) ? 68 : 34);
 					}
@@ -186,10 +186,10 @@ module.exports = function (scriptManager) {
 			case 3:
 				ENGINE.setPlayerKit(player, 5, newKitPiece);
 				break;
-			}			
+			}
 		}
 	}
-	
+
 	function setColourInner (player, enumId, slot, type) {
 		var newColour = config.enumValue(enumId, slot);
 		if (newColour != -1) {
@@ -204,7 +204,7 @@ module.exports = function (scriptManager) {
 			}
 		}
 	}
-	
+
 	function getSetByKit (kitId, kitSlot, female) {
 		for (var slot = config.enumSize(5735) - 1; slot >= 0; slot--) {
 			var v6 = config.enumValue(5735, slot);
@@ -241,7 +241,7 @@ module.exports = function (scriptManager) {
 		}
 		return -1;
 	}
-	
+
 	function getSetStruct (structId, slot, female) {
 		switch (slot) {
 		case 0:
@@ -258,6 +258,6 @@ module.exports = function (scriptManager) {
 			return config.structParam(structId, female ? 1180 : 1174);
 		default:
 			return -1;
-		}		
+		}
 	}
 };

@@ -4,30 +4,30 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 var makex = require('../makex');
 
 module.exports = (function () {
 	var _handlers = {};
-	
+
 	return {
 		registerProcessHandler : registerProcessHandler,
 		startStringing : startStringing,
 		startFeathering : startFeathering,
 		setSelectionHandler : setSelectionHandler
 	};
-	
+
 	function startStringing (player, category, productId) {
 		makex.selectProduct(player, 6941, 6942, category, productId);
 		setSelectionHandler(player);
 	}
-	
+
 	function startFeathering(player, category, productId) {
 		makex.selectProduct(player, 6943, 6944, category, productId);
 		setSelectionHandler(player);
 	}
-	
+
 	function setSelectionHandler (player) {
 		dialog.setResumeHandler(player, function () {
 			widget.closeAll(player);
@@ -37,7 +37,7 @@ module.exports = (function () {
 			invokeProcessHandler(player, category, productId, amount);
 		});
 	}
-	
+
 	function invokeProcessHandler (player, category, productId, amount) {
 		if (amount) {
 			if (typeof(_handlers[category]) !== "undefined") {
@@ -47,7 +47,7 @@ module.exports = (function () {
 			}
 		}
 	}
-	
+
 	function registerProcessHandler (category, handler) {
 		if (typeof(_handlers[category]) !== "undefined") {
 			throw "Handler "+category+" is already registered!";

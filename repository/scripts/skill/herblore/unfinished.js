@@ -6,7 +6,7 @@
 var varp = require('engine/var/player');
 
 var config = require('engine/config');
-var util = require('util');
+var util = require('shared/util');
 
 var makex = require('../makex');
 var common = require('./common.js');
@@ -16,76 +16,76 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELDU, 249, function (ctx) {
 			cleanHerbUse(ctx, 91);//Guam
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 251, function (ctx) {
 			cleanHerbUse(ctx, 93);//Marrentill
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 253, function (ctx) {
 			cleanHerbUse(ctx, 95);//Tarromin
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 255, function (ctx) {
 			cleanHerbUse(ctx, 97);//Harralander
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 257, function (ctx) {
 			cleanHerbUse(ctx, 99);//Ranarr
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 259, function (ctx) {
 			cleanHerbUse(ctx, 101);//Irit
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 261, function (ctx) {
 			cleanHerbUse(ctx, 103);//Avantoe
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 263, function (ctx) {
 			cleanHerbUse(ctx, 105);//Kwuarm
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 265, function (ctx) {
 			cleanHerbUse(ctx, 107);//Cadantine
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 267, function (ctx) {
 			cleanHerbUse(ctx, 109);//Dwarf weed
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 269, function (ctx) {
 			cleanHerbUse(ctx, 111);//Torstol
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 2481, function (ctx) {
 			cleanHerbUse(ctx, 2483);//Lantadyme
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 2998, function (ctx) {
 			cleanHerbUse(ctx, 3002);//Toadflax
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 3000, function (ctx) {
 			cleanHerbUse(ctx, 3004);//Snapdragon
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 12172, function (ctx) {
 			cleanHerbUse(ctx, 12181);//Spirit weed
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 14854, function (ctx) {
 			cleanHerbUse(ctx, 14856);//Wergali
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 21624, function (ctx) {
 			cleanHerbUse(ctx, 21628);//Fellstalk
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, 227, function (ctx) {
 			//Vial of water
 			switch (ctx.useitem) {
@@ -145,10 +145,10 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		common.registerProcessHandler(UNFINISHED_POTIONS, mixUnfinished);
 	}
-	
+
 	function cleanHerbUse(ctx, productId) {
 		if (ctx.useObjId !== 227) {
 			util.defaultHandler(ctx);
@@ -156,7 +156,7 @@ module.exports = (function () {
 			common.startHerblore(ctx.player, UNFINISHED_POTIONS, productId);
 		}
 	}
-	
+
 	function mixUnfinished (player, unfinishedId, amount) {
 		varp(player, 1175, unfinishedId);
 		var text = "You mix the "+config.objName(unfinishedId);

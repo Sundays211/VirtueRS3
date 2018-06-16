@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,15 +21,15 @@
  */
 /* globals EventType */
 
-var dialog = require('dialog');
-var map = require('map');
-var coords = require('map/coords');
-var util = require('util');
+var dialog = require('shared/dialog');
+var map = require('shared/map');
+var coords = require('shared/map/coords');
+var util = require('shared/util');
 module.exports = (function () {
 	return {
 	init : init
 	};
-	
+
 	function init (scriptManager) {
 	scriptManager.bind(EventType.OPNPC1, 2244, function (ctx) {
 	var player = ctx.player;
@@ -40,30 +40,30 @@ module.exports = (function () {
 	dialog.multi4(player, "CHOOSE AN OPTION", "Who are you?", function () {
 	iamphileas(player, npc);
 	}, "Tell me about the town of Lumbridge.", function () {
-	townofLumbridge(player, npc);	
-	}, "I'm fine for now, thanks.", function () {	
+	townofLumbridge(player, npc);
+	}, "I'm fine for now, thanks.", function () {
 	}, "I would like to access the P-Mod room.", function () {
 	map.setCoords(player, coords(2845, 5158, 0));
 	});
-	} else 
+	} else
 	dialog.multi3(player, "CHOOSE AN OPTION", "Who are you?", function () {
 	iamphileas(player, npc);
 	}, "Tell me about the town of Lumbridge.", function () {
-	townofLumbridge(player, npc);	
-	}, "I'm fine for now, thanks.", function () {	
+	townofLumbridge(player, npc);
+	}, "I'm fine for now, thanks.", function () {
 	});
-	});	
+	});
 	});
 	}
-	
+
 	function iamphileas (player, npc) {
-	dialog.builder(player).chatnpc(npc, "I am Phileas, the Lumbridge Sage. In times past, people<br>came from all around to ask me for advice. My renown<br>seems to have diminished somewhat in recent years,<br>though. Can i help you with anything?", 9810)	
-    .multi2("CHOOSE AN OPTION", "Tell me about the town of lumbridge.", function () {	
-	townofLumbridge(player, npc);	
-	}, "I'm fine for now, thanks.", function () {	
-	});	
+	dialog.builder(player).chatnpc(npc, "I am Phileas, the Lumbridge Sage. In times past, people<br>came from all around to ask me for advice. My renown<br>seems to have diminished somewhat in recent years,<br>though. Can i help you with anything?", 9810)
+    .multi2("CHOOSE AN OPTION", "Tell me about the town of lumbridge.", function () {
+	townofLumbridge(player, npc);
+	}, "I'm fine for now, thanks.", function () {
+	});
 	}
-	
+
     function townofLumbridge (player, npc) {
 	dialog.builder(player).chatnpc(npc, "Lumbridge is one of the older towns in the human-<br>controlled kingdoms. It was founded over two hundred<br> years ago towards the end of the Fourth Age. It's called<br> Lumbridge because of this bridge built over the River Lum.", 9810)
 	.chatnpc(npc, "The town is governed by Duke Horacio, who is a good<br> friend of our monarch, King Roald of Misthalin.", 9810)
@@ -77,12 +77,12 @@ module.exports = (function () {
 	.chatnpc(npc, "befor Saradomin could complete his victory, Moia the<br> general of Zamorak's transported him away.")
 	.chatnpc(npc, "Now, the battlefield lies empty save for a single<br> Saradominist devotee.")
 	.multi2("SELECT AN OPTION", "Who are you?", function () {
-	iamphileas(player, npc);	
+	iamphileas(player, npc);
 	}, "Goodbye", function () {
 	dialog.builder(player).chatnpc(npc, "Good adventuring, traveller.")
     .finish();
 	});
 	}, "Goodbye!");
 	}
-	
+
 })();

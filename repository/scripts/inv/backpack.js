@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,21 +20,21 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Inv, Stat */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
-var CONST = require('const');
+var CONST = require('shared/const');
 
-var util = require('util');
+var util = require('shared/util');
 var config = require('engine/config');
-var map = require('map');
-var dialog = require('dialog');
-var widget = require('widget');
-var chat = require('chat');
-var common = require('inv/common');
+var map = require('shared/map');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
+var chat = require('shared/chat');
+var common = require('shared/inv/common');
 
-var moneyPouch = require('inv/money-pouch');
-var wornEquipment = require('inv/equipment');
+var moneyPouch = require('shared/inv/money-pouch');
+var wornEquipment = require('shared/inv/equipment');
 var loan = require('../trade/loan');
 var actionBar = require('../combat/widgets/action-bar');
 
@@ -50,7 +50,7 @@ module.exports = (function() {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1473, function (ctx) {
 			var player = ctx.player;
@@ -59,7 +59,7 @@ module.exports = (function() {
 			widget.setEvents(player, 1473, 34, 0, 27, 15302030);
 			ENGINE.sendInv(player, Inv.BACKPACK);
 			ENGINE.sendInv(player, Inv.MONEY_POUCH);
-			
+
 			//TODO: Move this logic to Invention code
 			if (varbit(player, 30224) != 1 &&
 					ENGINE.getBaseLevel(player, Stat.SMITHING) > 80 &&
@@ -69,7 +69,7 @@ module.exports = (function() {
 			}
 			moneyPouch.updateCoins(player);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1473, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -115,7 +115,7 @@ module.exports = (function() {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_DRAG, component(1473, 34), function (ctx) {
 			var player = ctx.player;
 			var item = ENGINE.getItem(player, Inv.BACKPACK, ctx.fromslot);
@@ -161,7 +161,7 @@ module.exports = (function() {
 
 		scriptManager.bind(EventType.OPHELD4, CONST.COINS, function (ctx) {
 			var amount = ENGINE.getCount(ctx.item);
-			
+
 			if (util.checkOverflow(moneyPouch.getCoinCount(ctx.player), amount)) {
 				chat.sendMessage(ctx.player, "You do not have enough space in your money pouch.");
 				return;
@@ -169,13 +169,13 @@ module.exports = (function() {
 			moneyPouch.addCoins(ctx.player, amount);
 			ENGINE.delItem(ctx.player, Inv.BACKPACK, CONST.COINS, amount);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTONT, component(1473, 34), handleUseOnInterface);
 		scriptManager.bind(EventType.OPLOCT, component(1473, 34), handleUseOnLoc);
 		scriptManager.bind(EventType.OPNPCT, component(1473, 34), handleUseOnNpc);
 		scriptManager.bind(EventType.OPPLAYERT, component(1473, 34), handleUseOnPlayer);
 	}
-	
+
 	function handleItemInteraction (player, item, ctx) {
 		var objId = util.getId(item);
 		var objCount = ENGINE.getCount(item);
@@ -208,7 +208,7 @@ module.exports = (function() {
 				chat.sendMessage(player, "GE guide price: "+util.toFormattedString(ENGINE.getExchangeCost(item)) +" gp each");
 			}
 		return;
-		
+
 		default:
 			util.defaultHandler(ctx, "backpack");
 			return;
@@ -238,7 +238,7 @@ module.exports = (function() {
 			chat.sendDebugMessage(player, "Unhanded inventory item option: item="+item+", slot="+ctx.slot+", option="+opString+" ("+ctx.button+")");
 		}
 	}
-	
+
 	function handleUseOnInterface (ctx) {
 		var player = ctx.player;
 		var useslot = ctx.slot;
@@ -247,7 +247,7 @@ module.exports = (function() {
 			ENGINE.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 			return;
 		}
-		
+
 		if (ctx.targetInterface != 1473) {//Item used on something other than backpack
 			chat.sendDebugMessage(player, "Unhandled backpack item target: srcItem="+useitem+", targetInterface="+ctx.targetInterface+", targetComp="+ctx.targetComponent);
 			return;
@@ -290,7 +290,7 @@ module.exports = (function() {
 			return;
 		}
 	}
-	
+
 	function handleUseOnLoc (ctx) {
 		var player = ctx.player;
 		var useslot = ctx.slot;
@@ -299,7 +299,7 @@ module.exports = (function() {
 			ENGINE.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 			return;
 		}
-		
+
 		var location = ctx.targetLoc;
 		if (ENGINE.hasEvent(EventType.OPLOCU, util.getId(location))) {
 			var args = {
@@ -320,7 +320,7 @@ module.exports = (function() {
 			chat.sendDebugMessage(player, message);
 		}
 	}
-	
+
 	function handleUseOnNpc (ctx) {
 		var player = ctx.player;
 		var useslot = ctx.slot;
@@ -329,7 +329,7 @@ module.exports = (function() {
 			ENGINE.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 			return;
 		}
-		
+
 		var npc = ctx.npc;
 		if (ENGINE.hasEvent(EventType.OPNPCU, util.getId(npc))) {
 			var args = {
@@ -348,7 +348,7 @@ module.exports = (function() {
 			chat.sendDebugMessage(player, message);
 		}
 	}
-	
+
 	function handleUseOnPlayer (ctx) {
 		var player = ctx.player;
 		var useslot = ctx.slot;
@@ -357,7 +357,7 @@ module.exports = (function() {
 			ENGINE.sendInv(player, Inv.BACKPACK);//Client backpack is out of sync; re-synchronise it
 			return;
 		}
-		
+
 		var targetPlayer = ctx.target;
 		if (ENGINE.hasEvent(EventType.OPPLAYERU, util.getId(useitem))) {
 			var args = {
@@ -376,7 +376,7 @@ module.exports = (function() {
 			chat.sendDebugMessage(player, message);
 		}
 	}
-	
+
 	function dropItem (player, objId, count, slot) {
 		//The item you are about to drop has high value.
 		//I wish to drop it.
@@ -386,11 +386,11 @@ module.exports = (function() {
 			common.clearSlot(player, Inv.BACKPACK, slot);
 		}
 	}
-	
+
 	function destroyItem (player, objId, count, slot) {
 		//if (common.total(player, objId) > 1 && common.getCount(player, Inv.BACKPACK, slot)== 1) {
 		//	widget.hide(player, 1183, 8, false);
-		//}	
+		//}
 		//widget.setText(player, 1183, 4, config.objName(objId));
 		//widget.setText(player, 1183, 9, "destroy info here");
 		//widget.setObject(player, 1183, 10, objId, count);
@@ -400,13 +400,13 @@ module.exports = (function() {
 		chat.sendDebugMessage(player, "Destroyed item: "+objId);
 		common.clearSlot(player, Inv.BACKPACK, slot);
 	}
-	
+
 	function discardItem (player, objId, slot) {
 		var discard = function () {
 			common.clearSlot(player, Inv.BACKPACK, slot);
 			loan.returnBorrowedItem(player);
 		};
-		
+
 		var timeRemaining = varp(player, 430);
 		var loanFrom = varp(player, 428);
 		var message;

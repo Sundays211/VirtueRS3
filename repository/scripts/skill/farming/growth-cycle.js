@@ -1,13 +1,13 @@
 /**
- * 
+ *
  */
 /* globals EventType */
-var chat = require('chat');
-var CONST = require('const');
-var util = require('util');
+var chat = require('shared/chat');
+var CONST = require('shared/const');
+var util = require('shared/util');
 
 module.exports = (function () {
-	
+
 	var patches = [
 		require('./flower-patch'),
 		require('./herb-patch'),
@@ -15,12 +15,12 @@ module.exports = (function () {
 		require('./tree-patch'),
 		require('./plant-pots')
 	];
-	
+
 	return {
 		init : init,
 		processLogin : processLogin
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "farmtick", function (ctx) {
 			var args = ctx.cmdArgs;
@@ -42,13 +42,13 @@ module.exports = (function () {
 			chat.sendMessage(ctx.player, "Finshed "+cycleCount+" growth cycles in "+(end-start)+" milliseconds");
 		});
 	}
-	
+
 	function processLogin(ctx) {
 		var player = ctx.player;
 		var tickDifference = ctx.tickDifference;
-		
+
 		chat.sendDebugMessage(player, "Running farming login tasks.");
-		
+
 		var currentTick = util.getServerCycle();
 		var start;
 		var end = currentTick;
@@ -70,7 +70,7 @@ module.exports = (function () {
 		chat.sendDebugMessage(player, "Finished "+count+" farming cycles.");
 		queueFarmingCycle(player, 1);
 	}
-	
+
 	function queueFarmingCycle (player, cycleId) {
 		util.delayFunction(player, CONST.FARMING_CYCLE_LENGTH, function () {
 			var serverCycle = util.getServerCycle();
@@ -79,7 +79,7 @@ module.exports = (function () {
 			queueFarmingCycle(player, ++cycleId);
 		}, false);
 	}
-	
+
 	function process(player, serverCycle) {
 		for (var i in patches) {
 			patches[i].process(player, serverCycle);

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var stat = require('stat');
+var stat = require('shared/stat');
 var config = require('engine/config');
-var util = require('util');
-var inv = require('inv');
-var chat = require('chat');
-var anim = require('anim');
+var util = require('shared/util');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
 
 /**
  * @author Kayla
@@ -46,19 +46,19 @@ module.exports = (function () {
 			loot : {id:995, count:20}
 		}
 	};
-	
+
 	return {
 		init : init,
 		values : Stall,
 		stealFrom : stealFromStall
 	};
-	
+
 	function init(scriptManager) {
 		scriptManager.bind(EventType.OPLOC2, 34383, function (ctx) {
 			stealFromStall(ctx.player, Stall.SILK, ctx.location);
 		});
 	}
-	
+
 	function stealFromStall (player, stall, loc) {
 		if (stat.getLevel(player, Stat.THIEVING) < stall.level) {
 			chat.sendMessage(player, "You need a thieving level of " + stall.level + " to steal from this " + config.locName(util.getId(loc))+".");

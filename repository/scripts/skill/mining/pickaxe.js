@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,9 +23,9 @@
 var varbit = require('engine/var/bit');
 
 var config = require('engine/config');
-var inv = require('inv');
-var chat = require('chat');
-var stat = require('stat');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var stat = require('shared/stat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,7 +35,7 @@ var stat = require('stat');
  * @author Sundays211
  * @since 05/11/2014
  */
-module.exports = (function () {	
+module.exports = (function () {
 	var Pickaxe = {
 		BRONZE : {
 			objId : 1265,
@@ -94,25 +94,25 @@ module.exports = (function () {
 			anim : 25004
 		}
 	};
-	
+
 	var _pickaxeLookup;
-	
+
 	function lookupPickaxe (objId) {
 		if (!_pickaxeLookup) {
 			_pickaxeLookup = {};
-			
+
             for (var ordial in Pickaxe) {
             	_pickaxeLookup[Pickaxe[ordial].objId] = Pickaxe[ordial];
             }
         }
 		return _pickaxeLookup[objId.toString()];
 	}
-	
+
 	return {
 		getPickaxe : getPickaxe,
 		values : Pickaxe
 	};
-	
+
 	function getPickaxe (player) {
 		var playerLevel = stat.getLevel(player, Stat.MINING);
         var objId = inv.getObjId(player, Inv.EQUIPMENT, WearPos.WEAPON);
@@ -132,7 +132,7 @@ module.exports = (function () {
         		return getNextLowestPickaxe(playerLevel);
         	}
         }
-        
+
         for (var slot=0; slot<28; slot++) {
         	objId = inv.getObjId(player, Inv.BACKPACK, slot);
             if (objId !== -1 && config.objCategory(objId) === 67) {
@@ -147,7 +147,7 @@ module.exports = (function () {
         }
         return bestPickaxe;
 	}
-	
+
 	function getNextLowestPickaxe (playerLevel) {
 		var best = Pickaxe.BRONZE;
 		var pic;
@@ -159,5 +159,5 @@ module.exports = (function () {
 		}
 		return best;
 	}
-	
+
 })();

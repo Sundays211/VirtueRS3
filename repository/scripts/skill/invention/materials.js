@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,7 +22,7 @@
 var varp = require('engine/var/player');
 
 var config = require('engine/config');
-var util = require('util');
+var util = require('shared/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -105,7 +105,7 @@ module.exports = (function () {
 		SHIFTING : 146,
 		REFINED : 141
 	};
-	
+
 	return {
 		values : Material,
 		take : takeMaterials,
@@ -114,7 +114,7 @@ module.exports = (function () {
 		getCategory : getCategory,
 		getTotal : getTotal
 	};
-	
+
 	function takeMaterials (player, materialId, amount) {
 		var total = getTotal(player, materialId);
 		total -= amount;
@@ -125,7 +125,7 @@ module.exports = (function () {
 			return false;
 		}
 	}
-	
+
 	function giveMaterials (player, materialId, amount) {
 		var total = getTotal(player, materialId);
 		if (util.checkOverflow(total, amount)) {
@@ -136,19 +136,19 @@ module.exports = (function () {
 			return true;
 		}
 	}
-	
+
 	function getName (materialId) {
 		var rowId = config.lookupDbRowIds(4, 0, materialId)[0];
 		var fieldValues = config.getDbFieldValues(4, rowId, 1);
 		return fieldValues[0];
 	}
-	
+
 	function getCategory (materialId) {
 		var rowId = config.lookupDbRowIds(4, 0, materialId)[0];
 		var fieldValues = config.getDbFieldValues(4, rowId, 7);
 		return fieldValues[0];
 	}
-	
+
 	function getTotal (player, materialId) {
 		//Clientscript 12054 for material varps
 		switch (materialId) {
@@ -296,7 +296,7 @@ module.exports = (function () {
 			return 0;
 		}
 	}
-	
+
 	function setTotal (player, materialId, value) {
 		//Clientscript 12054 for material varps
 		switch (materialId) {

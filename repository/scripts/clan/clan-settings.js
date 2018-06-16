@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,9 +24,9 @@ var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
-var chat = require('chat');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var chat = require('shared/chat');
 
 var clan = require('./logic/core');
 var permissions = require('./logic/permissions');
@@ -112,7 +112,7 @@ module.exports = function (scriptManager) {
 			varbit(player, 6146, ctx.slot);
 			varc(player, 1501, ctx.slot);
 			return;
-		case 282://Set member rank			
+		case 282://Set member rank
 			setSelectedRank(player, ctx.slot);
 			return;
 		case 295://Clan home world
@@ -176,7 +176,7 @@ module.exports = function (scriptManager) {
 		case 518://Citadel permission tab
 			setPermissionTab(player, 4);
 			return;
-		case 526://Skills permission tab			
+		case 526://Skills permission tab
 			setPermissionTab(player, 5);
 			return;
 		case 538:
@@ -289,7 +289,7 @@ module.exports = function (scriptManager) {
 			return;
 		}
 	});
-	
+
 	function setTab (player, tab) {
 		widget.hide(player, 1096, 88, (tab != 1));
 		widget.hide(player, 1096, 89, (tab != 2));
@@ -298,7 +298,7 @@ module.exports = function (scriptManager) {
 		widget.hide(player, 1096, 123, (tab != 2));
 		widget.hide(player, 1096, 389, (tab != 3));
 	}
-	
+
 	function showMember (player, member) {
 		//TODO: Remove direct references to 'member' methods
 		if (member === null) {
@@ -329,7 +329,7 @@ module.exports = function (scriptManager) {
 			util.runClientScript(player, 4314, []);
 		}
 	}
-	
+
 	function setSelectedRank (player, rank) {
 		var prevRank = varbit(player, 6154);
 		if (prevRank == 126 || prevRank == 127) {
@@ -381,37 +381,37 @@ module.exports = function (scriptManager) {
 		varc(player, 2003, permissions.canCustomiseAvatar(player, rank));//Customise avatar
 		varc(player, 1590, permissions.canMoveTick(player, rank));//Change build tick
 		varc(player, 3855, permissions.canBroadcastEvents(player, rank));//Broadcast events
-		varc(player, 4125, permissions.canChangeBroadcasts(player, rank));//Modify broadcast settings	
+		varc(player, 4125, permissions.canChangeBroadcasts(player, rank));//Modify broadcast settings
 	}
-	
+
 	function openMotifEditor (player) {
 		var logo1 = varbit(player, 8815);
 		varbit(player, 8965, logo1 == -1 ? 0 : logo1);
-		
+
 		var logo2 = varbit(player, 8816);
 		varbit(player, 8966, logo2 == -1 ? 0 : logo2);
-		
+
 		var col1 = ENGINE.getVarClanSetting(player, 16);
 		varp(player, 2067, col1 === null ? 6716 : col1);
-		
+
 		var col2 = ENGINE.getVarClanSetting(player, 17);
 		varp(player, 2068, col2 === null ? 6716 : col2);
-		
+
 		var col3 = ENGINE.getVarClanSetting(player, 18);
 		varp(player, 2069, col3 === null ? 42550 : col3);
-		
+
 		var col4 = ENGINE.getVarClanSetting(player, 19);
 		varp(player, 2070, col4 === null ? 39382 : col4);
-		
+
 		widget.openCentral(player, 1105);
 	}
-	
+
 	function saveMemberData (player) {
-		var memberHash = varp(player, 1844);	
-		
+		var memberHash = varp(player, 1844);
+
 		clan.setRank(player, memberHash, varbit(player, 6154));
 		clan.setJob(player, memberHash, varbit(player, 6146));
-		
+
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, varbit(player, 6148), 11, 11);//Change citadel ban
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, varbit(player, 6149), 12, 12);//Change keep ban
 		CLAN_ENGINE.setMemberVarBit(player, memberHash, varbit(player, 6150), 13, 13);//Change island ban

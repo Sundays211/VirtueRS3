@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,11 +23,11 @@
 var varbit = require('engine/var/bit');
 var varc = require('engine/var/client');
 
-var util = require('util');
-var widget = require('widget');
-var inv = require('inv');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var inv = require('shared/inv');
 
-var logic = require('inv/equipment');
+var logic = require('shared/inv/equipment');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,20 +41,20 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1464, function (ctx) {
 			widget.setEvents(ctx.player, 1464, 15, 0, 18, 15302654);
 			widget.setEvents(ctx.player, 1464, 13, 2, 12, 2);
-			ENGINE.sendInv(ctx.player, Inv.EQUIPMENT);		
+			ENGINE.sendInv(ctx.player, Inv.EQUIPMENT);
 			varc(ctx.player, 181, 0);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1464, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
 			case 15:
-				var objId = inv.getObjId(player, Inv.EQUIPMENT, ctx.slot);			
+				var objId = inv.getObjId(player, Inv.EQUIPMENT, ctx.slot);
 				if (objId === -1 || objId != ctx.itemId) {
 					//The client inventory must not be synchronised, so let's send it again
 					ENGINE.sentInv(player, Inv.EQUIPMENT);

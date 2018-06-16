@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,20 +22,20 @@
 /* globals EventType, ENGINE, Java */
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 
-var chat = require('chat');
-var widget = require('widget');
-var util = require('util');
-var map = require('map');
+var chat = require('shared/chat');
+var widget = require('shared/widget');
+var util = require('shared/util');
+var map = require('shared/map');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1610, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -67,7 +67,7 @@ module.exports = (function () {
 			case 291://Keep Max HP
 				chat.sendMessage(player, "Max HP timer toggled on.");
 				chat.sendMessage(player, "todo add the code");
-				return;	
+				return;
 			default:
 				util.defaultHandler(ctx, "JMod ToolBox");
 				return;

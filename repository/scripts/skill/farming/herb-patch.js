@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var util = require('util');
-var chat = require('chat');
-var dialog = require('dialog');
-var stat = require('stat');
+var util = require('shared/util');
+var chat = require('shared/chat');
+var dialog = require('shared/dialog');
+var stat = require('shared/stat');
 
 var common = require('./common');
 var variables = require('./variables');
@@ -69,13 +69,13 @@ module.exports = (function () {
 			produce : 205
 		}
 	};
-	
+
 	return {
 		init : init,
 		process : process,
 		values : Herb
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 8150, 8151, 8152, 8153 ], function (ctx) {
 			var player = ctx.player;
@@ -86,7 +86,7 @@ module.exports = (function () {
 			case 2://Rake (1)
 				common.rake(player, patchId);
 				return;
-				
+
 			case 8://Harvest Guam (3)
 				common.harvest(player, patchId, Herb.GUAM, [9, 10]);
 				return;
@@ -96,7 +96,7 @@ module.exports = (function () {
 			case 10://Harvest Guam (1)
 				common.harvest(player, patchId, Herb.GUAM);
 				return;
-				
+
 			case 15://Harvest Marrentill (3)
 				common.harvest(player, patchId, Herb.MARRENTILL, [16, 17]);
 				return;
@@ -106,7 +106,7 @@ module.exports = (function () {
 			case 17://Harvest Marrentill (1)
 				common.harvest(player, patchId, Herb.MARRENTILL);
 				return;
-				
+
 			case 22://Harvest Tarromin (3)
 				common.harvest(player, patchId, Herb.TARROMIN, [23, 24]);
 				return;
@@ -116,7 +116,7 @@ module.exports = (function () {
 			case 24://Harvest Tarromin (1)
 				common.harvest(player, patchId, Herb.TARROMIN);
 				return;
-				
+
 			case 29://Harvest Harralander (3)
 				common.harvest(player, patchId, Herb.HARRALANDER, [30, 31]);
 				return;
@@ -126,7 +126,7 @@ module.exports = (function () {
 			case 31://Harvest Harralander (1)
 				common.harvest(player, patchId, Herb.HARRALANDER);
 				return;
-				
+
 			case 170://Dead herbs (2)
 			case 171://Dead herbs (3)
 			case 172://Dead herbs (4)
@@ -137,7 +137,7 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOCU, [ 8150, 8151, 8152, 8153 ], function (ctx) {
 			var player = ctx.player;
 			var patchId = ctx.locTypeId;
@@ -163,19 +163,19 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, [ 8150, 8151, 8152, 8153 ], function (ctx) {
-			var player = ctx.player;			
+			var player = ctx.player;
 			var status = variables.getStatus(player, ctx.locTypeId);
 			var compost = variables.getCompost(player, ctx.locTypeId);
-			
+
 			chat.sendMessage(player, "This is a Herb Patch. status = "+status+", compost = "+compost);
 			if (util.isAdmin(player)) {
 				chat.sendMessage(player, "id="+ctx.locTypeId+", status = "+status+", compost = "+compost);
 			}
 		});
 	}
-	
+
 	function handleEmptyPatch(player, patchId, seedId, ctx) {
 		switch(seedId) {
 		case 5291://Guam seed
@@ -201,23 +201,23 @@ module.exports = (function () {
 			return;
 		}
 	}
-	
+
 	function process (player, serverCycle) {
 		processPatch(player, 8150, serverCycle);
 		processPatch(player, 8151, serverCycle);
 		processPatch(player, 8152, serverCycle);
 		processPatch(player, 8153, serverCycle);
 	}
-	
+
 	function processPatch (player, patchId, serverCycle) {
 		common.processWeeds(player, patchId);
 		if (common.canRunCycle(serverCycle, 4)) {
 			processGrowth(player, patchId);
 		}
 	}
-	
+
 	function processGrowth (player, patchId) {
-		switch(variables.getStatus(player, patchId)) {			
+		switch(variables.getStatus(player, patchId)) {
 		/* Regular growth */
 		case 4://Guam (1)
 			variables.setStatus(player, patchId, 5);
@@ -267,7 +267,7 @@ module.exports = (function () {
 		case 28://Harralander (4)
 			common.processGrowthStage(player, patchId, 29, 139);
 			break;
-			
+
 		/* Diseased patches */
 		case 128://Diseased Guam (2)
 		case 131://Diseased Marrentill (2)
@@ -289,7 +289,7 @@ module.exports = (function () {
 			break;
 		}
 	}
-	
+
 	function plantSeed (player, patchId, crop, plantStatus) {
 		if (stat.getLevel(player, Stat.FARMING) < crop.level) {
 			dialog.mesbox(player, "You need a farming level of "+crop.level+" to plant those seeds");

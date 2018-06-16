@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,22 +20,22 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Java, WearPos, Inv */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
-var util = require('util');
-var widget = require('widget');
-var chat = require('chat');
-var anim = require('anim');
-var inv = require('inv');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
+var inv = require('shared/inv');
 var varbit = require('engine/var/bit');
-var dialog = require('dialog');
-var map = require('map');
+var dialog = require('shared/dialog');
+var map = require('shared/map');
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 
 		scriptManager.bind(EventType.IF_OPEN, 590, function (ctx) {
@@ -43,10 +43,10 @@ module.exports = (function () {
 			widget.setEvents(ctx.player, 590, 13, 0, 11, 2);
 			util.runClientScript(ctx.player, 4717, [3874, 38666249, 38666247, 38666248]);
 		});
-		
+
 		//scriptManager.bind(EventType.IF_DRAG, component(590, 8), function () {
 		//});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "showemotes", function (ctx) {
 			var player = ctx.player;
 			varbit(player, 13963, 7);//goblin Bow and Salute
@@ -139,7 +139,7 @@ module.exports = (function () {
 			varbit(player, 18662, 1);//Saradomin's Glory(Tier 1) need to refresh interface
 			varbit(player, 18663, 1);//Saradomin's Glory(Tier 2) need to refresh interface
 			varbit(player, 18664, 1);//Saradomin's Glory(Tier 3) need to refresh interface
-			varbit(player, 18665, 1);//Zamorak's Might(Tier 1) need to refresh interface 
+			varbit(player, 18665, 1);//Zamorak's Might(Tier 1) need to refresh interface
 			varbit(player, 18666, 1);//Zamorak's Might(Tier 2) need to refresh interface
 			varbit(player, 18667, 1);//Zamorak's Might(Tier 3) need to refresh interface
 			varbit(player, 18756, 1);//Round of Applause
@@ -184,7 +184,7 @@ module.exports = (function () {
 			varbit(player, 30149, 1);//15 Year
 			varbit(player, 30391, 1);//Masquerade Dance
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "hideemotes", function (ctx) {
 			var player = ctx.player;
 			varbit(player, 13963, 0);//goblin Bow and Salute
@@ -277,7 +277,7 @@ module.exports = (function () {
 			varbit(player, 18662, 0);//Saradomin's Glory(Tier 1) need to refresh interface
 			varbit(player, 18663, 0);//Saradomin's Glory(Tier 2) need to refresh interface
 			varbit(player, 18664, 0);//Saradomin's Glory(Tier 3) need to refresh interface
-			varbit(player, 18665, 0);//Zamorak's Might(Tier 1) need to refresh interface 
+			varbit(player, 18665, 0);//Zamorak's Might(Tier 1) need to refresh interface
 			varbit(player, 18666, 0);//Zamorak's Might(Tier 2) need to refresh interface
 			varbit(player, 18667, 0);//Zamorak's Might(Tier 3) need to refresh interface
 			varbit(player, 18756, 0);//Round of Applause
@@ -322,11 +322,11 @@ module.exports = (function () {
 			varbit(player, 30149, 0);//15 Year
 			varbit(player, 30391, 0);//Masquerade Dance
 		});
-		
+
 		//varbit 14632 unlocks all Halloween needs to be looked into to see if you can unlock one at a time
 		//varbit 21259 unlocks all Christmas needs to be looked into to see if you can unlock one at a time
-		
-		scriptManager.bind(EventType.IF_BUTTON1, component(590, 8), function (ctx) {			
+
+		scriptManager.bind(EventType.IF_BUTTON1, component(590, 8), function (ctx) {
 			if (ENGINE.isRunningAnim(ctx.player)) {
 				chat.sendMessage(ctx.player, "You're already doing an emote!");
 				return;
@@ -365,9 +365,9 @@ module.exports = (function () {
 				anim.run(ctx.player, 21987);
 				return;
 			case 8://Beckon
-				if(inv.isWearing(ctx.player, 10862)&& inv.isWearing(ctx.player, 10863)&& inv.isWearing(ctx.player, 10864)&& 
-						inv.isWearing(ctx.player, 10865) || inv.isWearing(ctx.player, 10877)|| 
-						inv.isWearing(ctx.player, 10878)|| inv.isWearing(ctx.player, 10879)|| 
+				if(inv.isWearing(ctx.player, 10862)&& inv.isWearing(ctx.player, 10863)&& inv.isWearing(ctx.player, 10864)&&
+						inv.isWearing(ctx.player, 10865) || inv.isWearing(ctx.player, 10877)||
+						inv.isWearing(ctx.player, 10878)|| inv.isWearing(ctx.player, 10879)||
 						inv.isWearing(ctx.player, 10880)|| inv.isWearing(ctx.player, 10881)|| inv.isWearing(ctx.player, 10882) ) {
 					anim.run(ctx.player, 5845);
 				} else {
@@ -483,7 +483,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 713);
 				} else {
 					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
-				}	
+				}
 				return;
 			case 30://Flap
 			    if (varbit(ctx.player, 16030) == 1) {
@@ -491,7 +491,7 @@ module.exports = (function () {
 					    anim.run(ctx.player, 3859);
 				    } else {
 					    anim.run(ctx.player, 4280);
-				    } 
+				    }
 			    } else {
 					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
 				}
@@ -501,7 +501,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 4275);
 				} else {
 					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
-				}	
+				}
 				return;
 			case 32://Zombie Walk
 			    if (varbit(ctx.player, 1177) == 1) {
@@ -589,11 +589,11 @@ module.exports = (function () {
 			case 44://Give Thanks
 			    if (varbit(ctx.player, 1185) == 1) {//may not be right varbit
 				//TODO give thanks
-			
+
 				//Herald cape with turkey crest
 				//animGFX 15433 2033 - Give Thanks Enhanced (Emote) (e) (Holiday) (Begin)
-				//animGFX 15430 2028 - Give Thanks Enhanced (Emote) (e) (Holiday) (End) 
-				
+				//animGFX 15430 2028 - Give Thanks Enhanced (Emote) (e) (Holiday) (End)
+
 				} else {
 					dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Thanksgiving holiday event.");
 				}
@@ -604,7 +604,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 2037);
 				//} else {
 					//dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Easter holiday event.");
-				//}	
+				//}
 				return;
 			case 46://Dramatic Point
 			    if (varbit(ctx.player, 14369) == 1) {
@@ -619,7 +619,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 14165);
 				} else {
 				    dialog.mesbox(ctx.player, "This emote can be unlocked by completing the mime court case.");
-				}	
+				}
 				return;
 			case 48://Puppet Master
 			    //if (varbit(ctx.player, ?) == 1) {
@@ -791,16 +791,16 @@ module.exports = (function () {
 				return;
 			case 70://Kneel
 				anim.run(ctx.player, 12449);
-				return;	
+				return;
 			case 71://Begging
 				anim.run(ctx.player, 12450);
-				return;	
+				return;
             case 72://Stir Cauldron
 				anim.run(ctx.player, 12463);
-				return;	
+				return;
             case 73://Cheer
 				anim.run(ctx.player, 12473);
-				return;	
+				return;
             case 74://Tantrum
 				anim.run(ctx.player, 12497);
 				return;
@@ -829,38 +829,38 @@ module.exports = (function () {
 				return;
 			case 82://Raise Hand(sitting)
 				anim.run(ctx.player, 12487);
-				return;	
+				return;
             case 83://Wave(sitting)
 				anim.run(ctx.player, 12488);
 				return;
 			case 84://Cheer(sitting)
 				anim.run(ctx.player, 12500);
-				return;	
+				return;
 			case 85://Throw Tomato(sitting)
 				anim.run(ctx.player, 12468);
-				return;		
+				return;
 			case 86://Throw Flowers(sitting)
 				anim.run(ctx.player, 12469);
-				return;	
+				return;
 			case 87://Agree(sitting)
 				anim.run(ctx.player, 12504);
-				return;	
+				return;
 			case 88://Point(sitting)
 				anim.run(ctx.player, 12505);
-				return;	
+				return;
 			case 89://Whistle(sitting)
 				anim.run(ctx.player, 12509);
-				return;	
+				return;
 			case 90://Thumbs Up(sitting)
 				anim.run(ctx.player, 12687);
-				return;	
+				return;
 			case 91://Thumbs down(sitting)
 				anim.run(ctx.player, 12688);
-				return;	
+				return;
 			case 92://Clap(sitting)
 				    anim.run(ctx.player, 12691);
 					chat.sendMessage(ctx.player, "You may only perform this emote while sitting in the clan theatre audience.");
-				return;	
+				return;
 			case 93://Living on Borrowed Time
 			    //if (varbit(ctx.player, ?) == 1) {
 				    anim.run(ctx.player, 13965);
@@ -875,7 +875,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 15424);
 				} else {
 					dialog.mesbox(ctx.player, "Complete One Piercing Note to access this emote.");
-				}	
+				}
 				return;
 			case 95://Evil Laugh
 			    if (varbit(ctx.player, 20232) == 1) {
@@ -987,7 +987,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17079);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 110://Mahjarrat Transformation
 			    if (varbit(ctx.player, 934) == 1) {
@@ -995,7 +995,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3222);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 111://breakwind
 			    if (varbit(ctx.player, 935) == 1) {
@@ -1003,7 +1003,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3226);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 112://backflip
 			    if (varbit(ctx.player, 936) == 1) {
@@ -1011,15 +1011,15 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3221);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
-			case 113://gravedigger		
+			case 113://gravedigger
 			    if (varbit(ctx.player, 937) == 1) {
 				    anim.run(ctx.player, 17077);
 				    anim.addSpotAnim(ctx.player, 3219);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 114://frog transform
 			    if (varbit(ctx.player, 938) == 1) {
@@ -1027,21 +1027,21 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3220);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}		
+				}
 				return;
 			case 115://mexican wave
 			    //if (varbit(ctx.player, ?) == 1) {
 				    anim.run(ctx.player, 17163);
 				//} else {
 				//	dialog.mesbox(ctx.player, "Purchase this from Gielinor Games reward store.");
-				//}	
+				//}
 				return;
 			case 116://sports man
 			    //if (varbit(ctx.player, ?) == 1) {
 				    anim.run(ctx.player, 17166);
 				//} else {
 				//	dialog.mesbox(ctx.player, "Purchase this from Gielinor Games reward store.");
-				//}	
+				//}
 				return;
 			case 117://Sunbathe
 				anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 17213 : 17212);
@@ -1053,7 +1053,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3252);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 119://crab transform
 			    if (varbit(ctx.player, 773) == 1) {
@@ -1061,7 +1061,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3253);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 120://thruster stomp
 			    if (varbit(ctx.player, 827) == 1) {
@@ -1069,7 +1069,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3446);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 121://robot dance
 			    if (varbit(ctx.player, 826) == 1) {
@@ -1077,7 +1077,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3445);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 122://Ariane's Power
 			    if (varbit(ctx.player, 16821) == 1) {
@@ -1085,23 +1085,23 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3640);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;		
+				}
+				return;
 			case 123://Ozan's Smile
 			    if (varbit(ctx.player, 16831) == 1) {
 				    anim.run(ctx.player, 18824);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;	
+				}
+				return;
             case 124://Love at First Sight
 				anim.run(ctx.player, 19720);
 				anim.addSpotAnim(ctx.player, 3842);
-				return;	
+				return;
 			case 125://Jealous Rage
 				anim.run(ctx.player, 19718);
 				anim.addSpotAnim(ctx.player, 3841);todo
-				return;	
+				return;
 			case 126://Butterfly Dervish
 			    if (varbit(ctx.player, 18194) == 1) {
 				    anim.run(ctx.player, 20009);
@@ -1118,20 +1118,20 @@ module.exports = (function () {
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
 				}
-				return;	
-			case 128://Talk to Skull 
+				return;
+			case 128://Talk to Skull
 			    if (varbit(ctx.player, 18284) == 1) {
 				    anim.run(ctx.player, 20073);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote pack in Solomon's General Store.");
 				}
-				return;	
+				return;
 			case 129://Plead
 			    anim.run(ctx.player, 20057);
 				return;
 			case 130://Gestue
 			    anim.run(ctx.player, 20058);
-				return;	
+				return;
 			case 131://Slight nod
 			    anim.run(ctx.player, 20059);
 				return;
@@ -1173,39 +1173,39 @@ module.exports = (function () {
 				return;
             case 144://Talk(A)
 			    anim.run(ctx.player, 20071);
-				return;	
+				return;
 			case 145://Ring of Fire
 			    if (varbit(ctx.player, 18326) == 1) {
 				    anim.run(ctx.player, 20120);
 				    anim.addSpotAnim(ctx.player, 3947);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;	
+				}
+				return;
 			case 146://Rock Smash
 			    if (varbit(ctx.player, 18327) == 1) {
 				    anim.run(ctx.player, 20123);
 					anim.addSpotAnim(ctx.player, 3950);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;	
+				}
+				return;
 			case 147://Lightning Blast
 			    if (varbit(ctx.player, 18328) == 1) {
 				    anim.run(ctx.player, 20124);
 					anim.addSpotAnim(ctx.player, 3949);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;	
+				}
+				return;
 			case 148://Water Dance
 			    if (varbit(ctx.player, 18329) == 1) {
 				    anim.run(ctx.player, 20126);
 				    anim.addSpotAnim(ctx.player, 3948);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;	
+				}
+				return;
 			case 149://Saradomin's Glory(Tier 1)
 				anim.run(ctx.player, 20676);
 				anim.addSpotAnim(ctx.player, 4109);
@@ -1213,99 +1213,99 @@ module.exports = (function () {
             case 150://Saradomin's Glory(Tier 2)
 				anim.run(ctx.player, 20676);
 				anim.addSpotAnim(ctx.player, 4110);
-				return;	
+				return;
             case 151://Saradomin's Glory(Tier 3)
 				anim.run(ctx.player, 20676);
 				anim.addSpotAnim(ctx.player, 4111);
-				return;	
+				return;
             case 152://Zamorak's Might(Tier 1)
 				anim.run(ctx.player, 20677);
 				anim.addSpotAnim(ctx.player, 4112);
-				return;	
+				return;
             case 153://Zamorak's Might(Tier 2)
 				anim.run(ctx.player, 20677);
 				anim.addSpotAnim(ctx.player, 4113);
-				return;	
+				return;
             case 154://Zamorak's Might(Tier 3)
 				anim.run(ctx.player, 20677);
 				anim.addSpotAnim(ctx.player, 4114);
-				return;	 				
+				return;
 			case 155://Round of Applause
 			    //npc 17616(Fred) anim 20427
 			    //npc 17617(Jim) anim 20428
 				//npc 17618(Sophie) anim 20810
 				anim.run(ctx.player, 20429);
-				return;	
+				return;
 			case 156://Linza's Arsenal
 			    if (varbit(ctx.player, 20059) == 1) {
 				    anim.run(ctx.player, 21184);
 					anim.addSpotAnim(ctx.player, 4231);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;	
+				}
+				return;
 			case 157://Owen's Mastery
 			    if (varbit(ctx.player, 20071) == 1) {
 					anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 21176 : 21175);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
-				return;	
+				}
+				return;
 			case 158://Super September
 				anim.run(ctx.player, 21257);
 				anim.addSpotAnim(ctx.player, 4260);
-				return;	
+				return;
 			case 159://The Architect
 			    if (varbit(ctx.player, 20704) == 1) {
 				    anim.run(ctx.player, 21829);
 				   anim.addSpotAnim(ctx.player, 4401);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote during the Lumbridge Rebuildathon.");
-				}	
+				}
 				return;
 			case 160://Armadyl's Glory(Tier 1)
 				anim.run(ctx.player, 22345);
 				anim.addSpotAnim(ctx.player, 4509);
-				return;	
+				return;
 			case 161://Armadyl's Glory(Tier 2)
 				anim.run(ctx.player, 22349);
 				anim.addSpotAnim(ctx.player, 4510);
-				return;	
+				return;
 			case 162://Armadyl's Glory(Tier 3)
 				anim.run(ctx.player, 22350);
 				anim.addSpotAnim(ctx.player, 4511);
-				return;	
+				return;
 			case 163://Bandos's Might(Tier 1)
 				anim.run(ctx.player, 22276);
 				//anim.addSpotAnim(ctx.player, ?);
-				return;		
+				return;
 			case 164://Bandos's Might(Tier 2)
 				anim.run(ctx.player, 22276);
 				//anim.addSpotAnim(ctx.player, ?);
-				return;		
+				return;
 			case 165://Bandos's Might(Tier 3)
 				anim.run(ctx.player, 22276);
 				//anim.addSpotAnim(ctx.player, ?);
-				return;	
+				return;
 			case 166://Rockin around the tree
 				anim.run(ctx.player, 22508);
 				anim.addSpotAnim(ctx.player, 4549);
-				return;	
+				return;
 			case 167://Loved up
 				anim.run(ctx.player, 22679);
 				anim.addSpotAnim(ctx.player, 4570);
-				return;	
+				return;
 			case 168://Down to Earth
 				anim.run(ctx.player, 22682);
 				anim.addSpotAnim(ctx.player, 4571);
-				return;	
+				return;
 			case 169://Runescape through the ages
 			    if (varbit(ctx.player, 22138) == 1) {
 				    anim.run(ctx.player, 23248);
 				    anim.addSpotAnim(ctx.player, 4745);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 170://Cabbage Facepunch Bonanza
 			    if (varbit(ctx.player, 22221) == 1) {
@@ -1313,15 +1313,15 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 4776);//4775 for Monkey
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock during the Cabbage Facepunch Bonanza special event.");
-				}	
-				return;	
+				}
+				return;
 			case 171: //Cute Bunny
 			    if (varbit(ctx.player, 22249) == 1) {
 				    anim.run(ctx.player, 23288);
 				    anim.addSpotAnim(ctx.player, 4779);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}		
+				}
 				return;
 			case 172: //Sneaky Bunny
 			    if (varbit(ctx.player, 22250) == 1) {
@@ -1330,7 +1330,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 4781);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 173://Demonic Rock Off
 			    if (varbit(ctx.player, 22781) == 1) {
@@ -1338,7 +1338,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 4945);
 				} else {
 					dialog.mesbox(ctx.player, "This emote can be accessed by unlocking 1000 pieces of music.");
-				}	
+				}
 				return;
 			case 174://Shadow to Praetor
 			    if (varbit(ctx.player, 24775) == 1) {
@@ -1346,7 +1346,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 5110);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 175://Praetor to Shadow
 			    if (varbit(ctx.player, 24776) == 1) {
@@ -1354,7 +1354,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 5109);
 				} else {
 					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
-				}	
+				}
 				return;
 			case 176://Walk the Plank
 			    //npc 19722;
@@ -1420,18 +1420,18 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 5293);
 				} else {
 				    dialog.mesbox(ctx.player, "You must complete a Christmas cracker pull to unlock this emote.");
-				}	
+				}
 				return;
 			case 185://Efficiency
-			    anim.run(ctx.player, 25662); 
+			    anim.run(ctx.player, 25662);
 				anim.addSpotAnim(ctx.player, 5340);
 				anim.addSpotAnim(ctx.player, 5341);
-			    return;		
+			    return;
 			case 186://No More!
-			    anim.run(ctx.player, 25658); 
+			    anim.run(ctx.player, 25658);
 				anim.addSpotAnim(ctx.player, 5342);
 				anim.addSpotAnim(ctx.player, 5343);
-			    return;		
+			    return;
 			case 187://Egg juggler
 			    if (varbit(ctx.player, 27358) == 1) {
 				    anim.run(ctx.player, 26224);
@@ -1439,25 +1439,25 @@ module.exports = (function () {
 				} else {
 					dialog.mesbox(ctx.player, "This emote can only be unlocked at Easter.");
 				}
-				return;	
+				return;
 			case 188://Tuska's Fury (Tier 1)
-			    anim.run(ctx.player, 26440); 
+			    anim.run(ctx.player, 26440);
 				anim.addSpotAnim(ctx.player, 5513);
-			    return;	
+			    return;
 			case 189://Tuska's Fury (Tier 2)
-			    anim.run(ctx.player, 26494); 
+			    anim.run(ctx.player, 26494);
 				anim.addSpotAnim(ctx.player, 5514);
-			    return;	
+			    return;
 			case 190://Tuska's Fury (Tier 3)
-			    anim.run(ctx.player, 26438); 
+			    anim.run(ctx.player, 26438);
 				anim.addSpotAnim(ctx.player, 5515);
 			    return;
 			case 195://Ice Skating Champion
-			    anim.run(ctx.player, 27854); 
+			    anim.run(ctx.player, 27854);
 				anim.addSpotAnim(ctx.player, 5941);
 			    return;
 			case 196://15 Year
-			    anim.run(ctx.player, 27978); 
+			    anim.run(ctx.player, 27978);
 			    //anim.addSpotAnim(ctx.player, 5982);
 				anim.addSpotAnim(ctx.player, 5983);
 				//anim.addSpotAnim(ctx.player, 5984);
@@ -1465,16 +1465,16 @@ module.exports = (function () {
 			//27978
 			//27965
 			//28924
-				return;	
+				return;
             case 197://15th Anniversary Dance
-			    anim.run(ctx.player, 27965); 
+			    anim.run(ctx.player, 27965);
 			    anim.addSpotAnim(ctx.player, 5981);
-			return;	
+			return;
 			}
 		});
-		
-		
-		scriptManager.bind(EventType.IF_BUTTON2, component(590, 8), function (ctx) {			
+
+
+		scriptManager.bind(EventType.IF_BUTTON2, component(590, 8), function (ctx) {
 			if (ENGINE.isRunningAnim(ctx.player)) {
 				chat.sendMessage(ctx.player, "You're already doing an emote!");
 				return;
@@ -1491,12 +1491,12 @@ module.exports = (function () {
 			    anim.run(ctx.player, 20072);
 				return;
 			//case 196://15 Year
-				//return;	
+				//return;
 			}
 		});
-	
+
 	}
-	
+
 	function runSkillcape(player) {
 		var objId = inv.getObjId(player, Inv.EQUIPMENT, WearPos.CAPE);
 		switch (objId) {
@@ -1685,9 +1685,9 @@ module.exports = (function () {
 		default:
 			chat.sendMessage(player, "You need to be wearing a Skill Cape in order to perform this emote.");
 			return;
-		}				
+		}
 	}
-	
+
 	function runCompCape(player) {
 		anim.addSpotAnim(player, 307);
 		anim.run(player, 356, function () {
@@ -1700,9 +1700,9 @@ module.exports = (function () {
 				player.getModel().refresh();
 				anim.run(player, 1175);
 			});
-		});	
+		});
 	}
-	
+
 	function runTrimCompCape(player) {
 		anim.addSpotAnim(player, 307);
 		anim.run(player, 356, function () {

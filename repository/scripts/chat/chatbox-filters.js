@@ -1,8 +1,8 @@
 /**
- * 
+ *
  */
 var varbit = require('engine/var/bit');
-var chat = require('chat');
+var chat = require('shared/chat');
 
 module.exports = init();
 
@@ -29,9 +29,9 @@ function init () {
 		setAssist : setAssist,
 		setGroup : setGroup
 	};
-	
+
 	return filters;
-	
+
 	function toggleGame (player, chatWindow) {
 		var on, filtered;
 		switch (chatWindow) {
@@ -106,7 +106,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function togglePublic (player, chatWindow) {
 		var on, friends;
 		switch (chatWindow) {
@@ -141,7 +141,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function togglePrivate (player, chatWindow) {
 		var on, friends;
 		switch (chatWindow) {
@@ -176,7 +176,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function toggleFriendChat (player, chatWindow) {
 		var on, friends;
 		switch (chatWindow) {
@@ -210,7 +210,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function toggleClan (player, chatWindow) {
 		var on, friends;
 		switch (chatWindow) {
@@ -244,7 +244,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function toggleGuestClan (player, chatWindow) {
 		var on, friends;
 		switch (chatWindow) {
@@ -278,7 +278,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function toggleTrade (player, chatWindow) {
 		var on, friends;
 		switch (chatWindow) {
@@ -321,7 +321,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function toggleAssist (player, chatWindow) {
 		var on, friends;
 		switch (chatWindow) {
@@ -364,7 +364,7 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function toggleGroup (player, chatWindow) {
 		var on, team;
 		switch (chatWindow) {
@@ -398,16 +398,16 @@ function init () {
 			break;
 		}
 	}
-	
+
 	function toggleProfanity (player, chatWindow) {
 		chat.sendDebugMessage(player, "Unhandled profanity toggle on chat window: "+chatWindow);
 	}
-	
+
 	function toggleBroadcasts (player) {
 		var on = varbit(player, 20828) == 1;
 		varbit(player, 20828, on ? 0 : 1);
 	}
-	
+
 	function setGame (player, chatWindow, mode) {
 		var on = false;
 		var filtered = false;
@@ -420,7 +420,7 @@ function init () {
 		varbit(player, 18797, on ? 1 : 0);
 		varbit(player, 18805, filtered ? 1 : 0);
 	}
-	
+
 	function setPublic (player, chatWindow, mode) {
 		var on = false;
 		var friends = false;
@@ -433,7 +433,7 @@ function init () {
 		varbit(player, 18800, on ? 1 : 0);
 		varbit(player, 18808, friends ? 1 : 0);
 	}
-	
+
 	function setPrivate (player, chatWindow, mode) {
 		var on = false;
 		var friends = false;
@@ -446,7 +446,7 @@ function init () {
 		varbit(player, 18801, on ? 1 : 0);
 		varbit(player, 18809, friends ? 1 : 0);
 	}
-	
+
 	function setFriendChat (player, chatWindow, mode) {
 		var on = false;
 		var friends = false;
@@ -459,7 +459,7 @@ function init () {
 		varbit(player, 18802, on ? 1 : 0);
 		varbit(player, 18810, friends ? 1 : 0);
 	}
-	
+
 	function setClan (player, chatWindow, mode) {
 		var on = false;
 		var friends = false;
@@ -472,7 +472,7 @@ function init () {
 		varbit(player, 18803, on ? 1 : 0);
 		varbit(player, 18811, friends ? 1 : 0);
 	}
-	
+
 	function setGuestClan (player, chatWindow, mode) {
 		var on = false;
 		var friends = false;
@@ -485,7 +485,7 @@ function init () {
 		varbit(player, 18804, on ? 1 : 0);
 		varbit(player, 18811, friends ? 1 : 0);
 	}
-	
+
 	function setTrade (player, chatWindow, mode) {
 		var on = false;
 		var friends = false;
@@ -498,7 +498,7 @@ function init () {
 		varbit(player, 18798, on ? 1 : 0);
 		varbit(player, 18806, friends ? 1 : 0);
 	}
-	
+
 	function setAssist (player, chatWindow, mode) {
 		var on = false;
 		var friends = false;
@@ -511,7 +511,7 @@ function init () {
 		varbit(player, 18799, on ? 1 : 0);
 		varbit(player, 18807, friends ? 1 : 0);
 	}
-	
+
 	function setGroup (player, chatWindow, mode) {
 		var on = false;
 		var team = false;

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,17 +20,17 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 var varc = require('engine/var/client');
 var varp = require('engine/var/player');
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1253, function (ctx) {	
+	scriptManager.bind(EventType.IF_OPEN, 1253, function (ctx) {
 	varc(ctx.player, 1928, 0);
 	varc(ctx.player, 4038, 0);
 	varc(ctx.player, 3947, "This star can be drained of energy to give you bonus XP.");
@@ -100,8 +100,8 @@ module.exports = (function () {
 	varc(ctx.player, 1790, 0);
 	varc(ctx.player, 4079, 0);
 	varc(ctx.player, 4080, 0);
-	varc(ctx.player, 1993, 1);		
-	});	
+	varc(ctx.player, 1993, 1);
+	});
 	scriptManager.bind(EventType.IF_BUTTON, 1253, function (ctx) {
 	switch (ctx.component) {
 	case 40:
@@ -109,35 +109,35 @@ module.exports = (function () {
 	//api.sendMessage(player, "You are out of keys.");
 	//} else {
 	//player.getTreasureHunter().selectReward(0);
-	//}			
+	//}
 	return;
 	case 49:
 	//if(player.getKeys() < 1) {
 	//api.sendMessage(player, "You are out of keys.");
 	//} else {
 	//player.getTreasureHunter().selectReward(1);
-	//}			
+	//}
 	return;
 	case 55:
 	//if(player.getKeys() < 1) {
 	//api.sendMessage(player, "You are out of keys.");
 	//} else {
 	//player.getTreasureHunter().selectReward(2);
-	//}			
+	//}
 	return;
     case 35:
 	//if(player.getKeys() < 1) {
 	//api.sendMessage(player, "You are out of keys.");
 	//} else {
 	//player.getTreasureHunter().selectReward(3);
-	//}			
+	//}
 	return;
     case 31:
 	//if(player.getKeys() < 1) {
 	//api.sendMessage(player, "You are out of keys.");
 	//} else {
 	//player.getTreasureHunter().selectReward(4);
-	//}			
+	//}
 	return true;
 	case 214:
 	//player.getTreasureHunter().claimReward(2);
@@ -168,11 +168,11 @@ module.exports = (function () {
 	varc(ctx.player, 4082, 133);
 	widget.hide(ctx.player, 1253, 552, false);
 	varc(ctx.player, 1993, 1);
-	return;	
+	return;
     default:
 	util.defaultHandler(ctx, "treasure-hunter");
-	return;		
-	}		
+	return;
+	}
 	});
 	}
 })();

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,17 +21,17 @@
  */
 /* globals EventType, Inv */
 
-var dialog = require('dialog');
+var dialog = require('shared/dialog');
 var varc = require('engine/var/client');
 var varp = require('engine/var/player');
-var widget = require('widget');
+var widget = require('shared/widget');
 module.exports = (function () {
 	return {
 	init : init
 	};
-	
+
 	function init (scriptManager) {
-		
+
 	   scriptManager.bind(EventType.OPNPC1, 519, function (ctx) {
 	       var player = ctx.player;
 	       var npc = ctx.npc;
@@ -49,17 +49,17 @@ module.exports = (function () {
 			   dialog.multi2(player, "CHOOSE AN OPTION", "Tell me about the Task System.", function () {
 				  tasksystem(player,npc);
 			   }, "Sorry, I was just leaving.", function () {
-	           });  
-	       });	
-	   });	
-	
+	           });
+	       });
+	   });
+
 	   scriptManager.bind(EventType.OPNPC3, 519, function (ctx) {
 	      openshop(ctx.player);
 	   });
 	}
-	
+
 	function tasksystem (player, npc) {
-		  dialog.builder(player).chatnpc(npc, "Very well: the Task System is a collection of deeds you<br> may wish to complete while adventuring around<br> RuneScape.") 
+		  dialog.builder(player).chatnpc(npc, "Very well: the Task System is a collection of deeds you<br> may wish to complete while adventuring around<br> RuneScape.")
 	      .chatnpc(npc, "You van earn special rewards for completing Tasks; at<br> the very least, each is worth a cash bounty from Explorer<br> Jack in Lumbridge.")
           .chatnpc(npc, "Some also give items that will help complete other Tasks,<br> and many count as progress towards the set of area<br> they're in.")
 		  .multi3("CHOOSE AN OPTION", "Tell me about the set reward for this locality.", function () {
@@ -72,30 +72,30 @@ module.exports = (function () {
 			  }, "How do I claim these rewards?", function () {
 			    claimtheserewards(player,npc);
               }, "Sorry, I was just leaving.", function () {
-              });  
+              });
 		  }, "How do I claim these rewards?", function () {
 			  claimtheserewards(player,npc);
           }, "Sorry, I was just leaving.", function () {
-          });			  
+          });
 	}
-	
+
 	function claimtheserewards (player, npc) {
-		 dialog.builder(player).chatnpc(npc, "You need to complete all of the Tasks in the set of a<br> particular difficulty, then you can claim your reward. Most<br> of the Lumbridge set's Tasks are straightforward,<br> although you might find some require quests to be") 
-	     .chatnpc(npc, "started, if not finished.") 	  
+		 dialog.builder(player).chatnpc(npc, "You need to complete all of the Tasks in the set of a<br> particular difficulty, then you can claim your reward. Most<br> of the Lumbridge set's Tasks are straightforward,<br> although you might find some require quests to be")
+	     .chatnpc(npc, "started, if not finished.")
 		 .chatnpc(npc, "To claim the Lumbridge set rewards, speak to Ned in<br> Draynor Village, Explorer Jack in Lumbridge, or myself.")
 	     .multi2("CHOOSE AN OPTION", "Tell me about the Task System.", function () {
 		    tasksystem(player,npc);
 	     }, "Sorry, I was just leaving.", function () {
          });
 	}
-	
-	
+
+
 	function openshop (player) {
       varp(player, 304, Inv.BOBS_AXES);
 	  varp(player, 305, Inv.BOBS_AXES_FREE_STOCK);
 	  varc(player, 2360, "Bob's Brilliant Axes");
 	  widget.openCentral(player, 1265);
 	}
-	
-	
+
+
 })();

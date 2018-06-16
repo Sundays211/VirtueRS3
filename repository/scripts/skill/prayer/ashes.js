@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat, Inv */
-var stat = require('stat');
-var inv = require('inv');
-var chat = require('chat');
-var anim = require('anim');
+var stat = require('shared/stat');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
 
 /**
  * @author Kayla
@@ -47,29 +47,29 @@ module.exports = (function () {
 			spotAnimId : 40
 		}
 	};
-	
+
 	var bones = {
 		init : init,
 		scatter : scatterAshes,
 		values : Ashes
 	};
-	
+
 	return bones;
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, 20264, function (ctx) {
 			scatterAshes(ctx.player, ctx.slot, Ashes.IMPIOUS);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 20266, function (ctx) {
 			scatterAshes(ctx.player, ctx.slot, Ashes.ACCURSED);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 20268, function (ctx) {
 			scatterAshes(ctx.player, ctx.slot, Ashes.INFERNAL);
 		});
 	}
-	
+
 	function scatterAshes (player, slot, ashes) {
 		inv.clearSlot(player, Inv.BACKPACK, slot);
 		anim.addSpotAnim(player, ashes.spotAnimId);

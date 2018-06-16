@@ -7,24 +7,24 @@ var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
 var makex = require('../makex');
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 66849 ], function (ctx) {
 			selectLoomProduct(ctx.player);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, [ 85047 ], function (ctx) {
 			selectLoomProduct(ctx.player);
 		});
 	}
-	
+
 	function selectLoomProduct (player) {
 		makex.selectProduct(player, 7042, 7043, 7044);
 		dialog.setResumeHandler(player, function () {

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,24 +22,24 @@
 /* globals EventType, Java, ENGINE, Inv */
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
-var inv = require('inv');
-var map = require('map');
-var entityMap = require('map/entity');
-var widget = require('widget');
-var util = require('util');
-var stat = require('stat');
-var chat = require('chat');
-var dialog = require('dialog');
+var inv = require('shared/inv');
+var map = require('shared/map');
+var entityMap = require('shared/map/entity');
+var widget = require('shared/widget');
+var util = require('shared/util');
+var stat = require('shared/stat');
+var chat = require('shared/chat');
+var dialog = require('shared/dialog');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPPLAYERU, 5733, function (ctx) {//Item On Player
 			dialog.multi4(ctx.player, "Options", "Player Info", function() {
-				
+
 			}, "Bank Stats", function() {
 				widget.openCentral(ctx.player, 1691, false);
 				var total = 0;
@@ -55,8 +55,8 @@ module.exports = (function () {
 			 }, "Send "+util.getName(ctx.target)+" to Botany Bay", function() {
 				 dialog.multi2(ctx.player, "DEFINITELY SEND "+ util.getName(ctx.target) + " TO BOTANY BAY?",  "Yes", function () {
 					 var hash = util.getUserHash(ctx.target);
-					 if (hash) { 
-						 var targetPlayer = entityMap.getPlayer(hash); 
+					 if (hash) {
+						 var targetPlayer = entityMap.getPlayer(hash);
 						 if (targetPlayer) {
 							 //var frame = 0;
 							   //var Action = Java.extend(Java.type('org.virtue.game.entity.player.event.PlayerActionHandler'), {
@@ -81,21 +81,21 @@ module.exports = (function () {
 								//	api.clearSpotAnim(player, 1);
 								//}
 						//	});
-						//	player.setAction(new Action()); 
-						 
+						//	player.setAction(new Action());
+
 					// });
-					 	 } else { 
-					 		 chat.sendMessage(ctx.player, "The specified player is not currently in the game world."); 
-					 	 } 
-					 } else { 
-						 chat.sendMessage(ctx.player, ctx.target+" is not registered on this server."); 
-					 } 
-				 }, "No", function() {		
+					 	 } else {
+					 		 chat.sendMessage(ctx.player, "The specified player is not currently in the game world.");
+					 	 }
+					 } else {
+						 chat.sendMessage(ctx.player, ctx.target+" is not registered on this server.");
+					 }
+				 }, "No", function() {
 				 });
 			 }, "Cancel", function() {
 			 });
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 5733, function (ctx) {//Eat Option
 			dialog.multi5(ctx.player, "Eat", "Transform me", function () {
 				ctx.player.getModel().setRender(Render.NPC);
@@ -115,12 +115,12 @@ module.exports = (function () {
 			 	ENGINE.spawnNpc(npc);
 			});
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD2, 5733, function (ctx) {//Heal Option
 			ENGINE.restoreLifePoints(ctx.player);
 			chat.sendMessage(ctx.player, "You set your health to max.");
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD3, 5733, function (ctx) {//Jmod-Tools
 			dialog.multi5(ctx.player, "CM-Tool", "Open JMod Toolbox", function () {
 				widget.openCentral(ctx.player, 1610, false);
@@ -135,13 +135,13 @@ module.exports = (function () {
 				ctx.player.getModel().setPrefixTitle("");
 				ctx.player.getModel().refresh();
 			}, "Log Out", function () {
-				
+
 			});
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD4, 5733, function (ctx) {//Commands list
 			dialog.multi5(ctx.player, "How would you like to be logged?", "Keep me logged in.", function () {
-				
+
 			}, "Kick me out.", function () {
 				ENGINE.kickPlayer(ctx.player, true);
 			}, "Never mind logging, just wipe my bank.", function () {

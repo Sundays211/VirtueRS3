@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,22 +20,22 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 var varc = require('engine/var/client');
 var varbit = require('engine/var/bit');
 var varp = require('engine/var/player');
 var config = require('engine/config');
-var chat = require('chat');
+var chat = require('shared/chat');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1311, function (ctx) {
-			var player = ctx.player;	
+			var player = ctx.player;
 			ENGINE.startStyleEdit(player);
 			varc(player, 2017, ENGINE.getPlayerColour(player, 0));//Primary hair colour
 			varc(player, 2018, 0);//Secondary hair colour
@@ -70,10 +70,10 @@ module.exports = (function () {
 			widget.setEvents(player, 1311, 455, 0, 127, 2);//Pet name
 			widget.setEvents(player, 1311, 525, 0, 4, 2);
 			util.runClientScript(player, 6874, []);
-			widget.hide(player, 1311, 190, true);	
+			widget.hide(player, 1311, 190, true);
 		});
 		scriptManager.bind(EventType.IF_BUTTON, 1311, function (ctx) {
-			var player = ctx.player;	
+			var player = ctx.player;
 			switch (ctx.component) {
 			case 515://Show all items/Show owned items
 				enabled = varbit(ctx.player, 678) == 1;
@@ -92,18 +92,18 @@ module.exports = (function () {
 				return setHairColour(player, ctx.slot, ctx.option);
 		    default:
 				var handled = processOption(player, ctx.component, ctx.slot, ctx.option);
-				if (!handled) {	
+				if (!handled) {
 					util.defaultHandler(ctx, "customisations");
 				}
-				return;	
+				return;
 			}
-		});	
-		
+		});
+
 		scriptManager.bind(EventType.IF_CLOSE, 1311, function (ctx) {
-			ENGINE.clearStyleEdit(ctx.player);	
-		});	
+			ENGINE.clearStyleEdit(ctx.player);
+		});
 	}
-	
+
 	function processOption (player, component, slot, option) {
 		var optionType = -1;
 		for (var i = 0; i < config.enumSize(5961); i++) {
@@ -122,7 +122,7 @@ module.exports = (function () {
 			return false;
 		}
     }
-	
+
 	function handleHairstyleOption (player, type, slot, option) {
 		switch (type) {
 		case 1://Set hairstyle
@@ -138,7 +138,7 @@ module.exports = (function () {
 			return true;
 		}
     }
-	
+
 	function setHairstyle (player, style, isPreview, isBeard) {
 		ENGINE.setPlayerKit(player, isBeard ? 1 : 0, style);
 		if (!isPreview) {
@@ -154,7 +154,7 @@ module.exports = (function () {
 			util.runClientScript(player, 6462, []);
 		}
 	}
-	
+
 	function setHairColour (player, slot) {
 		if (varbit(player, 673) != 1) {
 			return false;
@@ -170,7 +170,7 @@ module.exports = (function () {
 		}
 		return true;
     }
-	
+
 	function applyCustomStyles (player) {
 		ENGINE.applyPlayerStyles(player);
 		varp(player, 261, ENGINE.getPlayerKit(player, 0));
@@ -191,5 +191,5 @@ module.exports = (function () {
 		//Received if hidden: if=1311, comp=347, hide=1
 		util.runClientScript(player, 6462, []);//Refresh the selected option. TODO: Fix this so it works
     }
-	
+
 })();

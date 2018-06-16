@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,13 +24,13 @@ var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 var varbit = require('engine/var/bit');
 
-var widget = require('widget');
-var dialog = require('dialog');
-var util = require('util');
+var widget = require('shared/widget');
+var dialog = require('shared/dialog');
+var util = require('shared/util');
 var config = require('engine/config');
-var chat = require('chat');
-var common = require('inv/common');
-var CONST = require('const');
+var chat = require('shared/chat');
+var common = require('shared/inv/common');
+var CONST = require('shared/const');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -45,11 +45,11 @@ module.exports = (function () {
 		init : init,
 		open : openExchange
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 105, function (ctx) {
 			var player = ctx.player;
-			
+
 			varp(player, 163, 4);
 			varp(player, 138, -1);//Exchange slot
 			varp(player, 139, -1);//Buy or sell (1=buy, 0=sell)
@@ -62,7 +62,7 @@ module.exports = (function () {
 			widget.setEvents(player, 105, 65, -1, -1, 8650758);
 			widget.setEvents(player, 105, 99, -1, -1, 263170);
 		});
-		
+
 		scriptManager.bind(EventType.IF_OPEN, 107, function (ctx) {
 			widget.setEvents(ctx.player, 107, 7, 0, 27, 14682110);
 			util.runClientScript(ctx.player, 8862, [0, 2]);
@@ -73,12 +73,12 @@ module.exports = (function () {
 			clearOffer(ctx.player);
 			varbit(ctx.player, 29044, 0);//0 - Unlock : 1 - Lock Exchange Tab
 		});
-		
+
 		scriptManager.bind(EventType.IF_CLOSE, 107, function (ctx) {
 			util.runClientScript(ctx.player, 8862, [1, 2]);
 			util.runClientScript(ctx.player, 8862, [1, 3]);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 107, function (ctx) {
 			if (ctx.component != 7) {
 				util.defaultHandler(ctx, "exchange inventory");
@@ -94,14 +94,14 @@ module.exports = (function () {
 				util.defaultHandler(ctx, "exchange inventory");
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1666, function (ctx) {
 			util.defaultHandler(ctx, "exchange money pouch");
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 105, function (ctx) {
 			var player = ctx.player;
-			switch (ctx.component) {	
+			switch (ctx.component) {
 			case -1://Select item to buy
 				searchForItem(player);
 				return;
@@ -136,7 +136,7 @@ module.exports = (function () {
 				var slot = varp(player, 138);
 				if (slot >= 0 && slot < 8) {
 					ENGINE.abortExchangeOffer(player, 1, slot);
-				}				
+				}
 				return;
 			case 63://Collect item
 				collectItems(player, 0, ctx.button);
@@ -147,10 +147,10 @@ module.exports = (function () {
 			case 121://Decrease quantity by one
 				if (varp(player, 136) > 0) {
 					ENGINE.incrementVarp(player, 136, -1);
-				}				
+				}
 				return;
 			case 124://Increase quantity by one
-				ENGINE.incrementVarp(player, 136, 1);			
+				ENGINE.incrementVarp(player, 136, 1);
 				return;
 			case 128://Increase quantity by ten
 				handleQuantityButton(player, 2);
@@ -167,7 +167,7 @@ module.exports = (function () {
 			case 145://Decrease price by 1gp
 				if (varp(player, 137) > 1) {
 					ENGINE.incrementVarp(player, 137, -1);
-				}				
+				}
 				return;
 			case 148://Increase price by 1gp
 				if (varp(player, 137) < CONST.INTEGER_MAX) {
@@ -261,7 +261,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function openExchange (player) {
 		if (ENGINE.getAccountType(player) == 6 || ENGINE.getAccountType(player) == 7 ||
 				ENGINE.getAccountType(player) == 8) {
@@ -273,7 +273,7 @@ module.exports = (function () {
 		widget.openOverlay(player, 5);
 		//api.openCentralWidget(player, 105, false);
 	}
-	
+
 	function openOffer (player, slot, isSell) {
 		varp(player, 138, slot);
 		varp(player, 139, isSell ? 1 : 0);
@@ -281,7 +281,7 @@ module.exports = (function () {
 			searchForItem(player);
 		}
 	}
-	
+
 	function viewOffer (player, slot) {
 		var offer = ENGINE.getExchangeOffer(player, 1, slot);
 		if (offer !== null) {
@@ -297,10 +297,10 @@ module.exports = (function () {
 				varc(player, 2354, config.objDesc(objId));
 				widget.setText(player, 105, 14, config.objDesc(objId));
 				varp(player, 138, slot);
-			}				
-		}			
+			}
+		}
 	}
-	
+
 	function clearOffer (player) {
 		varp(player, 138, -1);
 		varp(player, 139, -1);
@@ -309,7 +309,7 @@ module.exports = (function () {
 		varp(player, 135, -1);
 		util.runClientScript(player, 571, []);
 	}
-	
+
 	function offerItem (player, invSlot) {
 		if (varp(player, 139) != 1) {
 			if (varp(player, 139) == -1) {
@@ -322,11 +322,11 @@ module.exports = (function () {
 				}
 				if (varp(player, 139) != 1) {
 					chat.sendMessage(player, "Unable to set up Sell Offer at this time.");
-					return;						
+					return;
 				}
 			} else {
 				return;
-			}				
+			}
 		}
 
 		var objId = common.getObjId(player, Inv.BACKPACK, invSlot);
@@ -345,7 +345,7 @@ module.exports = (function () {
 			}
 		}
 	}
-	
+
 	function searchForItem (player) {
 		widget.inframeInput(player, 105, 301, function (objId) {
 			var exchangePrice = ENGINE.getExchangeCost(objId);
@@ -358,7 +358,7 @@ module.exports = (function () {
 			}
 		}, 10, 0);
 	}
-	
+
 	function setPrice (player, percent) {
 		if (varp(player, 135) == -1) {
 			return;
@@ -381,7 +381,7 @@ module.exports = (function () {
 		}
 		varp(player, 137, newPrice);
 	}
-	
+
 	function handleQuantityButton (player, button) {
 		var isSell = varp(player, 139) == 1;
 		var offset = isSell ? 0 : varp(player, 136);
@@ -405,8 +405,8 @@ module.exports = (function () {
 				if (certId !== objId) {
 					itemTotal += common.total(player, certId);
 				}
-				varp(player, 136, itemTotal);					
-			}	
+				varp(player, 136, itemTotal);
+			}
 			break;
 		case 5://Choose amount
 			dialog.requestCount(player, "Enter the amount you wish to "+(isSell ? "sell" : "purchase")+":")
@@ -416,7 +416,7 @@ module.exports = (function () {
 			break;
 		}
 	}
-	
+
 	function submitOffer (player) {
 		var slot = varp(player, 138);
 		var isSell = varp(player, 139) == 1;
@@ -439,17 +439,17 @@ module.exports = (function () {
 				}
 				if ((carriedTotal+certTotal) >= amount) {
 					var fullAmount = amount;
-					
+
 					//Grab as much as we can as un-certed objects
 					amount = Math.min(carriedTotal, amount);
 					common.take(player, objId, amount, Inv.BACKPACK);
-					
+
 					//And grab the rest as certed objects
 					amount = fullAmount - carriedTotal;
 					if (amount > 0) {
 						common.take(player, certId, amount, Inv.BACKPACK);
 					}
-					
+
 					common.give(player, objId, fullAmount, offerInv);
 					ENGINE.sendExchangeOffer(player, 1, slot, isSell, objId, fullAmount, price);
 					clearOffer(player);
@@ -461,17 +461,17 @@ module.exports = (function () {
 				if (common.has(player, CONST.COINS, totalCoins)) {
 					common.take(player, CONST.COINS, totalCoins);
 					common.give(player, CONST.COINS, totalCoins, offerInv);
-					
+
 					ENGINE.sendExchangeOffer(player, 1, slot, isSell, objId, amount, price);
 					clearOffer(player);
 				} else {
 					chat.sendMessage(player, "You do not have enough coins to cover the offer.");
 				}
 			}
-			
+
 		}
 	}
-	
+
 	function collectItems (player, slot, option) {
 		var exchangeSlot = varp(player, 138);
 		var returnInv = config.enumValue(1079, exchangeSlot);
@@ -486,12 +486,12 @@ module.exports = (function () {
 			amount = common.freeSpace(player, Inv.BACKPACK);
 		}
 		common.take(player, objId, amount, returnInv);
-		
+
 		if (option === 1 && amount > 1) {
 			objId = config.objCert(objId);
-		}		
+		}
 		common.give(player, objId, amount);
-		
+
 		if (common.freeSpace(player, returnInv) == 2 && ENGINE.exchangeOfferFinished(player, 1, exchangeSlot)) {
 			ENGINE.clearExchangeOffer(player, 1, exchangeSlot);
 		}

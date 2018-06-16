@@ -7,24 +7,24 @@ var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
 var makex = require('../makex');
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPNPC3, 2824, function (ctx) {
 			selectHides(ctx.player);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC4, 14877, function (ctx) {
 			selectHides(ctx.player);
 		});
 	}
-	
+
 	function selectHides (player) {
 		makex.selectProduct(player, -1, -1, 6989, -1, "Tanner");
 		dialog.setResumeHandler(player, function () {
@@ -36,7 +36,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function tanHides (player, productId, amount) {
 		makex.makeItem(player, productId, amount);
 	}

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,10 +24,10 @@ var varc = require('engine/var/client');
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
-var inv = require('inv');
-var chat = require('chat');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
 var config = require('engine/config');
 
 /**
@@ -43,7 +43,7 @@ module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.IF_OPEN, 1265, function (ctx) {
 		initShop(ctx.player);
 	});
-	
+
 	scriptManager.bind(EventType.IF_CLOSE, 1265, function (ctx) {
 		varp(ctx.player, 304, -1);
 		varp(ctx.player, 305, -1);
@@ -51,19 +51,19 @@ module.exports = function (scriptManager) {
 		varc(ctx.player, 1876, -1);
 		varc(ctx.player, 1878, -1);
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1265, function (ctx) {
 		var player = ctx.player;
-		
+
 		if (varp(player, 304) != -1 && !ENGINE.containerReady(player, varp(player, 304))) {
 			if (util.isAdmin(player)) {
 				chat.sendDebugMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 304));
 			} else {
 				chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
-			}				
+			}
 			return;
 		}
-		
+
 		switch (ctx.component) {
 		case 89://Close button
 			return;
@@ -143,7 +143,7 @@ module.exports = function (scriptManager) {
 			return;
 		}
 	});
-	
+
 	function initShop (player) {
 		//varp(player, 304, 4);
 		//varp(player, 305, -1);
@@ -155,7 +155,7 @@ module.exports = function (scriptManager) {
 					chat.sendDebugMessage(player, "The stock for this shop has not been added to ContainerState.java. ContainerID="+shopId);
 				} else {
 					chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
-				}				
+				}
 				return;
 			}
 			ENGINE.sendInv(player, shopId);
@@ -167,7 +167,7 @@ module.exports = function (scriptManager) {
 					chat.sendDebugMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+freeStockId);
 				} else {
 					chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
-				}				
+				}
 				return;
 			}
 			ENGINE.sendInv(player, freeStockId);
@@ -177,14 +177,14 @@ module.exports = function (scriptManager) {
 			var item = ENGINE.getItem(player, Inv.BACKPACK, slot);
 			if (item !== null && canSellTo(player, varp(player, 304), ENGINE.getId(item))) {
 				canSell |= 1 << slot;
-			}			
+			}
 		}
 		varc(player, 1879, canSell);//Bitpacked can sell
 		widget.setEvents(player, 1265, 20, 0, 40, 2097406);
 		widget.setEvents(player, 1265, 21, 0, 40, 2097406);
 		widget.setEvents(player, 1265, 26, 0, 40, 10223616);
 	}
-	
+
 	function handleBuyButton (player, slot, option) {
 		setSelectedItem(player, varp(player, 304), slot);
 		var amount = 0;
@@ -213,14 +213,14 @@ module.exports = function (scriptManager) {
 			buyItem(player, objId, amount);
 		}
 	}
-	
+
 	function handleTakeButton (player, slot, option) {
 		if (!ENGINE.containerReady(player, varp(player, 305))) {
 			if (util.isAdmin(player)) {
 				chat.sendDebugMessage(player, "The free stock for this shop has not been added to ContainerState.java. ContainerID="+varp(player, 305));
 			} else {
 				chat.sendDebugMessage(player, "This shop is not fully implemented. Please contact an admin for assistance.");
-			}				
+			}
 			return;
 		}
 		setSelectedItem(player, varp(player, 305), slot);
@@ -249,9 +249,9 @@ module.exports = function (scriptManager) {
 		if (amount > 0) {
 			takeItem(player, objId, amount);
 		}
-		
+
 	}
-	
+
 	function handleSellButton (player, slot, option) {
 		setSelectedItem(player, Inv.BACKPACK, slot);
 		var amount = 0;
@@ -277,7 +277,7 @@ module.exports = function (scriptManager) {
 			sellItem(player, objId, amount);
 		}
 	}
-	
+
 	function setSelectedItem (player, invId, slot) {
 		varp(player, 299, invId);
 		varp(player, 301, slot);
@@ -287,23 +287,23 @@ module.exports = function (scriptManager) {
 		varc(player, 2361, config.objDesc(objId));//item examine
 		//api.sendMessage(player, "Setting selected item to inv="+inv+", slot="+slot);
 	}
-	
+
 	function showMessage (player, message) {
 		ENGINE.sendFilterMessage(player, message);
 		widget.hide(player, 1265, 64, false);
 		widget.setText(player, 1265, 260, message);
 	}
-	
+
 
 	function getBuyCost (player, objId) {
 		return Math.max(config.objCost(objId), 1);
 	}
-	
+
 	function getSellPrice (player, objId) {
 		var price = Math.floor((config.objCost(objId) * 30) / 100);
 		return Math.max(price, 1);
 	}
-	
+
 	function canSellTo (player, invId, objId) {
 		objId = config.objUncert(objId);
 		if (config.enumValue(921, invId) != 1) {
@@ -317,18 +317,18 @@ module.exports = function (scriptManager) {
 		}
 		return true;
 	}
-	
+
 	function sendBackpackCanSell (player, shopInv) {
 		var canSell = 0;
 		for (var slot=0; slot<28; slot++) {
 			var objId = inv.getObjId(player, Inv.BACKPACK, slot);
 			if (objId !== -1 && canSellTo(player, shopInv, objId)) {
 				canSell |= 1 << slot;
-			}			
+			}
 		}
 		varc(player, 1879, canSell);//Bitpacked can sell
 	}
-	
+
 	function getMaxBuySellAmount (player, objId) {
 		if (varp(player, 299) === Inv.BACKPACK) {
 			return Math.max(inv.total(player, objId, Inv.BACKPACK), 1);
@@ -339,10 +339,10 @@ module.exports = function (scriptManager) {
 				return Math.max(Math.min(shopStock, freeSpace), 1);
 			} else {
 				return Math.max(shopStock, 1);
-			}				
+			}
 		}
 	}
-	
+
 	function buyItem (player, objId, amount, confirmed) {
 		var invId = varp(player, 304);
 		var currency = varp(player, 306);
@@ -355,16 +355,16 @@ module.exports = function (scriptManager) {
 		} else if (inv.total(player, objId, invId) < 1 && inv.freeSpace(player, Inv.BACKPACK) < 1) {
 			showMessage(player, "You have no inventory space at the moment and cannot buy anything.");
 			return;//Full backpack
-		} 
+		}
 		if (amount < 1) {
 			showMessage(player, "You have no inventory space at the moment and cannot buy anything.");
 			return;//Full backpack
 		}
 		var cost = getBuyCost(player, objId);
-		
+
 		//Make sure the player has enough money
 		var currentMoneyAmount = inv.total(player, currency);
-		if (amount > (currentMoneyAmount/cost)) {				
+		if (amount > (currentMoneyAmount/cost)) {
 			showMessage(player, "You don't have enough coins to buy "+amount+".");
 			amount = (currentMoneyAmount/cost);
 		}
@@ -378,32 +378,32 @@ module.exports = function (scriptManager) {
 			widget.hide(player, 1265, 62, false);
 			return;
 		}
-		
+
 		//Remove money from the player
 		inv.take(player, currency, amount*cost);
-		
+
 		//Remove the item from the shop
 		inv.take(player, objId, amount, invId);
-		
+
 		//Give the item to the player
 		inv.give(player, objId, amount);
-		
+
 		sendBackpackCanSell(player, invId);
 	}
-	
+
 	function sellItem (player, objId, amount, confirmed) {
 		var shopInv = varp(player, 304);
 		if (!canSellTo(player, shopInv, objId)) {
 			return;//Can't sell this item
 		}
-		
+
 		amount = Math.min(amount, inv.total(player, objId, Inv.BACKPACK));
 		if (inv.total(player, objId, shopInv) < 1 &&
 				inv.baseStock(player, shopInv, objId) === -1 &&
 				inv.freeSpace(player, shopInv) < 1) {
 			return;//Shop does not have space for item
 		}
-		
+
 		var value = getSellPrice(player, objId);
 		if (!confirmed && value*amount > 30000) {
 			//If the player is trying to sell an item worth more than 30k, warn them first
@@ -412,20 +412,20 @@ module.exports = function (scriptManager) {
 			widget.hide(player, 1265, 63, false);
 			return;
 		}
-		
+
 		//Remove items from the player's backpack
 		inv.take(player, objId, amount, Inv.BACKPACK);
 
 		//Add items to the shop's stock
 		inv.give(player, config.objUncert(objId), amount, shopInv);
-		
+
 		//Give currency back to the player
 		inv.give(player, varp(player, 306), amount*value);
-		
+
 		//Refresh the sellability of items
 		sendBackpackCanSell(player, shopInv);
 	}
-	
+
 	function takeItem (player, objId, amount) {
 		var invId = varp(player, 305);
 		amount = Math.min(amount, inv.total(player, objId, invId));
@@ -438,18 +438,18 @@ module.exports = function (scriptManager) {
 				inv.freeSpace(player, Inv.BACKPACK) < 1) {
 			showMessage(player, "You don't have enough inventory space to take that.");
 			return;//Full backpack
-		} 
+		}
 		if (amount < 1) {
 			showMessage(player, "You don't have enough inventory space to take that.");
 			return;//Full backpack
 		}
-		
+
 		//Remove the item from the shop's stock
 		inv.take(player, objId, amount, invId);
-		
+
 		//Add the item to the player's backpack
 		inv.give(player, objId, amount);
-		
+
 		//Refresh the sellability of items
 		sendBackpackCanSell(player, varp(player, 304));
 	}

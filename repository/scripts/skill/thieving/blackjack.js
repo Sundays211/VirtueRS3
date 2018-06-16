@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('util');
+var util = require('shared/util');
 
 var pickpocket = require('./pickpocket');
 
@@ -30,9 +30,9 @@ var pickpocket = require('./pickpocket');
  * @since 01/16/2015
  */
 
-module.exports = (function () {	
+module.exports = (function () {
 	var item = util.lootItem;
-	
+
 	var Npc = {
 		BEARDED_POLLNIVNIAN_BANDIT : {
 		    level : 45,
@@ -56,23 +56,23 @@ module.exports = (function () {
 		    stunDamage : 50
 		},
 	};
-	
+
 	return {
 		init : init,
 		values : Npc
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPNPC3, [ 6174, 6388 ], function (ctx) {
 			//TODO: Add blackjack logic
 			pickpocket.run(ctx.player, Npc.BEARDED_POLLNIVNIAN_BANDIT, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 1880, 1881 ], function (ctx) {
 			//TODO: Add blackjack logic
 			pickpocket.run(ctx.player, Npc.POLLINIVNIAN_BANDIT, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 1905 ], function (ctx) {
 			//TODO: Add blackjack logic
 			pickpocket.run(ctx.player, Npc.MENAPHITE_THUG, ctx.npc);

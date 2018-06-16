@@ -6,9 +6,9 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var dialog = require('dialog');
-var widget = require('widget');
-var anim = require('anim');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
+var anim = require('shared/anim');
 
 var makex = require('../makex');
 
@@ -16,13 +16,13 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 67036, 94230 ], function (ctx) {
 			startSummoning(ctx.player);
 		});
 	}
-	
+
 	function startSummoning (player) {
 		makex.selectProduct(player, 6932, 6933, 6934);
 		dialog.setResumeHandler(player, function () {
@@ -34,7 +34,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function createPouches (player, productId, amount) {
 		makex.makeItem(player, productId, amount);
 		anim.run(player, 8500);

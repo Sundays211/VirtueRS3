@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,23 +20,23 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, Java */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 var varbit = require('engine/var/bit');
 
 var Spellbook = Java.type('org.virtue.game.content.skills.magic.Spellbook');
 
 var config = require('engine/config');
-var util = require('util');
-var chat = require('chat');
-var inv = require('inv');
-var widget = require('widget');
+var util = require('shared/util');
+var chat = require('shared/chat');
+var inv = require('shared/inv');
+var widget = require('shared/widget');
 
 var spellbook = require('../../skill/magic/spellbook');
-var abilities = require('combat/abilities');
+var abilities = require('shared/combat/abilities');
 var actionBar = require('./action-bar');
 var common = require('./common');
 
-/** 
+/**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
@@ -47,14 +47,14 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		//Script 8426 = ability book options
 		scriptManager.bind(EventType.IF_OPEN, 1461, function (ctx) {
 			widget.setEvents(ctx.player, 1461, 1, 0, 189, 10320902);
 			widget.setEvents(ctx.player, 1461, 7, 0, 16, 2);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON1, component(1461, 7), function (ctx) {
 			if (ctx.slot === 11) {
 				//Toggle hide
@@ -64,7 +64,7 @@ module.exports = (function () {
 				varbit(ctx.player, 18791, common.tabIdFromSlot(ctx.slot));
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON1, component(1461, 1), function (ctx) {
 			var player = ctx.player;
 			var spell = config.enumValue(6740, ctx.slot);
@@ -75,7 +75,7 @@ module.exports = (function () {
 				spellbook.cast(player, spell);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON2, component(1461, 1), function (ctx) {
 			var player = ctx.player;
 			var spellId = config.enumValue(6740, ctx.slot);
@@ -105,10 +105,10 @@ module.exports = (function () {
 				util.defaultHandler(ctx, "magic abilities");
 			}
 		});
-				
+
 		scriptManager.bind(EventType.IF_BUTTONT, component(1461, 1), function (ctx) {
 			var player = ctx.player;
-			
+
 			if (ctx.targetInterface != 1473) {//Spell used on something other than backpack
 				util.defaultHandler(ctx, "magic abilities");
 				return;
@@ -120,7 +120,7 @@ module.exports = (function () {
 			}
 			spellbook.castOnItem(player, spell, objId, ctx.targetSlot);
 		});
-		
+
 		scriptManager.bind(EventType.IF_DRAG, component(1461, 1), function (ctx) {
 			var hash = ctx.toHash;
 			if (widget.getId(hash) == 1430) {

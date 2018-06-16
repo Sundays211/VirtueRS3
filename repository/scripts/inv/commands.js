@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Exchange */
-var dialog = require('dialog');
+var dialog = require('shared/dialog');
 var config = require('engine/config');
-var widget = require('widget');
-var chat = require('chat');
-var common = require('inv/common');
+var widget = require('shared/widget');
+var chat = require('shared/chat');
+var common = require('shared/inv/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -37,23 +37,23 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND, "bank", function (ctx) {
 			//Open Bank
 			widget.openOverlaySub(ctx.player, 1017, 762, false);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND, [ "openge", "ge" ], function (ctx) {
 			//Open Grand Exchange
 			Exchange.open(ctx.player);
 		});
-		
-		scriptManager.bind(EventType.COMMAND, [ "removeitem", "delitem", "clearitem", "takeitem" 
+
+		scriptManager.bind(EventType.COMMAND, [ "removeitem", "delitem", "clearitem", "takeitem"
 				], function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 1) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
 				return;
@@ -64,17 +64,17 @@ module.exports = (function () {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
 				return;
 			}
-			
+
 			if (args.length == 2) {
 				amount = parseInt(args[1]);
 			}
 			common.take(player, objId, amount);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND, [ "item", "give" ], function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 1 || isNaN(args[0])) {
 				dialog.requestItem(player, "Choose an item to spawn.")
 					.then(function (objId) {
@@ -82,7 +82,7 @@ module.exports = (function () {
 							dialog.requestCount(player, "Enter the number of items to spawn: ")
 								.then(function (amount) {
 									common.give(player, objId, amount);
-								});	
+								});
 						} else if (common.hasSpace(player)) {
 							common.give(player, objId, 1);
 						} else {
@@ -111,7 +111,7 @@ module.exports = (function () {
 						chat.sendCommandResponse(player, "This item cannot be traded on the Grand Exchange.", ctx.console);
 					} else {
 						chat.sendCommandResponse(player, "This item is worth: "+value+"gp on the Grand Exchange.", ctx.console);
-					}				
+					}
 				} else {
 					chat.sendCommandResponse(player, "You do not have enough space in your backpack to store this item.", ctx.console);
 				}

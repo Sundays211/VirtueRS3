@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 
-var logic = require('combat/action-bar');
+var logic = require('shared/combat/action-bar');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,7 +38,7 @@ module.exports = (function () {
 		init : init,
 		dragOnto : dragOnto
 	};
-	
+
 	function init (scriptManager) {
 		//Script 11799 = get action bar interface ID by hud slot
 		//Script 8447 = Set action bar value
@@ -61,14 +61,14 @@ module.exports = (function () {
 			//12 = 200
 			//13 = 213
 			//14 = 228
-			
+
 			util.runClientScript(player, 8320, [1032]);
 			util.runClientScript(player, 8320, [1033]);
 			util.runClientScript(player, 8320, [1034]);
 			util.runClientScript(player, 8320, [1035]);
-			
+
 			refreshSlotEvents(ctx.player);
-			
+
 			widget.setEvents(player, 1458, 33, 0, 35, 8388610);
 			widget.setEvents(player, 1430, 14, -1, -1, 8388608);
 			widget.setEvents(player, 1505, 4, -1, -1, 8388608);
@@ -83,7 +83,7 @@ module.exports = (function () {
 			//widget.setEvents(player, 1449, 1, 0, 187, 8485894);
 			//widget.setEvents(player, 590, 8, 0, 196, 8388614);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1430, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -156,10 +156,10 @@ module.exports = (function () {
 				util.defaultHandler(ctx, "action bar");
 			}
 		});
-		
-		scriptManager.bind(EventType.IF_DRAG, [ component(1430, 57), component(1430, 70), 
-				component(1430, 83), component(1430, 96), component(1430, 109), component(1430, 122), 
-				component(1430, 135), component(1430, 148), component(1430, 161), component(1430, 174), 
+
+		scriptManager.bind(EventType.IF_DRAG, [ component(1430, 57), component(1430, 70),
+				component(1430, 83), component(1430, 96), component(1430, 109), component(1430, 122),
+				component(1430, 135), component(1430, 148), component(1430, 161), component(1430, 174),
 				component(1430, 187), component(1430, 200), component(1430, 213), component(1430, 228)
 					], function (ctx) {
 			var srcSlot = slotFromComponent(ctx.fromHash);
@@ -173,7 +173,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function slotFromComponent (hash) {
 		if (widget.getId(hash) != 1430) {
 			return -1;
@@ -211,85 +211,85 @@ module.exports = (function () {
 			return -1;
 		}
 	}
-	
+
 	function refreshSlotEvents (player) {
 		var events;
-		
+
 		//Slot 1
 		events = getEvents(player, 1);
 		widget.setEvents(player, 1430, 57, -1, -1, events);
 		widget.setEvents(player, 1430, 62, -1, -1, events);
-		
+
 		//Slot 2
 		events = getEvents(player, 2);
 		widget.setEvents(player, 1430, 70, -1, -1, events);
 		widget.setEvents(player, 1430, 75, -1, -1, events);
-		
+
 		//Slot 3
 		events = getEvents(player, 3);
 		widget.setEvents(player, 1430, 83, -1, -1, events);
 		widget.setEvents(player, 1430, 88, -1, -1, events);
-		
+
 		//Slot 4
 		events = getEvents(player, 4);
 		widget.setEvents(player, 1430, 96, -1, -1, events);
 		widget.setEvents(player, 1430, 101, -1, -1, events);
-		
+
 		//Slot 5
 		events = getEvents(player, 5);
 		widget.setEvents(player, 1430, 109, -1, -1, events);
 		widget.setEvents(player, 1430, 114, -1, -1, events);
-		
+
 		//Slot 6
 		events = getEvents(player, 6);
 		widget.setEvents(player, 1430, 122, -1, -1, events);
 		widget.setEvents(player, 1430, 127, -1, -1, events);
-		
+
 		//Slot 7
 		events = getEvents(player, 7);
 		widget.setEvents(player, 1430, 135, -1, -1, events);
 		widget.setEvents(player, 1430, 140, -1, -1, events);
-		
+
 		//Slot 8
 		events = getEvents(player, 8);
 		widget.setEvents(player, 1430, 148, -1, -1, events);
 		widget.setEvents(player, 1430, 153, -1, -1, events);
-		
+
 		//Slot 9
 		events = getEvents(player, 9);
 		widget.setEvents(player, 1430, 161, -1, -1, events);
 		widget.setEvents(player, 1430, 166, -1, -1, events);
-		
+
 		//Slot 10
 		events = getEvents(player, 10);
 		widget.setEvents(player, 1430, 174, -1, -1, events);
 		widget.setEvents(player, 1430, 179, -1, -1, events);
-		
+
 		//Slot 11
 		events = getEvents(player, 11);
 		widget.setEvents(player, 1430, 187, -1, -1, events);
 		widget.setEvents(player, 1430, 192, -1, -1, events);
-		
+
 		//Slot 12
 		events = getEvents(player, 12);
 		widget.setEvents(player, 1430, 200, -1, -1, events);
 		widget.setEvents(player, 1430, 205, -1, -1, events);
-		
+
 		//Slot 13
 		events = getEvents(player, 13);
 		widget.setEvents(player, 1430, 213, -1, -1, events);
 		widget.setEvents(player, 1430, 218, -1, -1, events);
-		
+
 		//Slot 14
 		events = getEvents(player, 14);
 		widget.setEvents(player, 1430, 228, -1, -1, events);
 		widget.setEvents(player, 1430, 233, -1, -1, events);
 	}
-	
+
 	function getEvents(player, slot) {
 		return logic.hasAction(player, slot) ? (varbit(player, 1892) ? 2195454 : 11108350) : 2098176;
 	}
-	
+
 	function dragOnto (player, destHash, srcType, srcSlot, srcObjId) {
 		srcObjId = typeof(srcObjId) === "undefined" ? -1 : srcObjId;
 		var destPos = slotFromComponent(destHash);

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@ var varbit = require('engine/var/bit');
 var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 
-var chat = require('chat');
+var chat = require('shared/chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -37,7 +37,7 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, ["varp", "setvarp"], function (ctx) {
 			if (checkArgs(ctx)) {
@@ -47,7 +47,7 @@ module.exports = (function () {
 				chat.sendCommandResponse(ctx.player, "Setting varp "+key+" to "+value, ctx.console);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, ["varbit", "setvarbit"], function (ctx) {
 			if (checkArgs(ctx)) {
 				var key = parseInt(ctx.cmdArgs[0]);
@@ -60,7 +60,7 @@ module.exports = (function () {
 				}
 			}
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, ["varc", "setvarc"], function (ctx) {
 			if (checkArgs(ctx)) {
 				var key = parseInt(ctx.cmdArgs[0]);
@@ -69,7 +69,7 @@ module.exports = (function () {
 				chat.sendCommandResponse(ctx.player, "Setting varc "+key+" to "+value, ctx.console);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, ["varcstr", "setvarcstr"], function (ctx) {
 			if (checkArgs(ctx)) {
 				var key = parseInt(ctx.cmdArgs[0]);
@@ -79,7 +79,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function checkArgs (ctx) {
 		if (ctx.cmdArgs.length < 2) {
 			chat.sendCommandResponse(ctx.player, "Usage: "+ctx.syntax+" [id] [value]", ctx.console);

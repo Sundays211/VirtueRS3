@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,23 +21,23 @@
  */
 /* globals EventType */
 
-var anim = require('anim');
-var dialog = require('dialog');
+var anim = require('shared/anim');
+var dialog = require('shared/dialog');
 
 module.exports = (function () {
 	return {
 	init : init
 	};
-	
+
 	function init (scriptManager) {
-		
+
 	   scriptManager.bind(EventType.OPNPC1, 20985, function (ctx) {
 		    anim.addSpotAnim(ctx.player, 5128);
-	        anim.run(ctx.player, 24529);  
+	        anim.run(ctx.player, 24529);
 		    dialog.builder(ctx.player).chatplayer("Ow! How did that pig give me an electric shock?")
 			.finish();
-	   });	
-	   
+	   });
+
 	}
-	
+
 })();

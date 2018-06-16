@@ -2,7 +2,7 @@
 var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 
-var widget = require('widget');
+var widget = require('shared/widget');
 
 /**
  * Aubury - Varrock Rune Shop

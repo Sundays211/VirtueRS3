@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 
 var roomRegistry = require('../room-registry');
-var locMap = require('map/location');
+var locMap = require('shared/map/location');
 
 module.exports = (function () {
 	var room = {
@@ -45,7 +45,7 @@ module.exports = (function () {
 		locMap.addZoneLoc(coords(0,29,79,0,8), zoneCoord, rotation, 15365, 10, 0);//Big Plant 2
 		locMap.addZoneLoc(coords(0,29,79,3,9), zoneCoord, rotation, 15366, 10, 0);//Small Plant 1
 		locMap.addZoneLoc(coords(0,29,79,4,13), zoneCoord, rotation, 15367, 10, 0);//Small Plant 2
-		
+
 		//Doors
 		locMap.addZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
 		locMap.addZoneLoc(coords(0,0,0,0,3), zoneCoord, rotation, 15314, 0, 0);
@@ -65,7 +65,7 @@ module.exports = (function () {
 		locMap.delZoneLoc(coords(0,29,79,0,8), zoneCoord, rotation, 15365, 10, 0);//Big Plant 2
 		locMap.delZoneLoc(coords(0,29,79,3,9), zoneCoord, rotation, 15366, 10, 0);//Small Plant 1
 		locMap.delZoneLoc(coords(0,29,79,4,13), zoneCoord, rotation, 15367, 10, 0);//Small Plant 2
-		
+
 		//Doors
 		locMap.delZoneLoc(coords(0,0,0,0,4), zoneCoord, rotation, 15313, 0, 0);
 		locMap.delZoneLoc(coords(0,0,0,0,3), zoneCoord, rotation, 15314, 0, 0);

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,14 +22,14 @@
 /* globals EventType, ENGINE, Inv */
 var varbit = require('engine/var/bit');
 var varc = require('engine/var/client');
-var CONST = require('const');
+var CONST = require('shared/const');
 
 var config = require('engine/config');
-var util = require('util');
-var chat = require('chat');
-var widget = require('widget');
-var inv = require('inv');
-var dialog = require('dialog');
+var util = require('shared/util');
+var chat = require('shared/chat');
+var widget = require('shared/widget');
+var inv = require('shared/inv');
+var dialog = require('shared/dialog');
 
 var logic = require('./trade-logic');
 
@@ -45,11 +45,11 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 334, function (ctx) {
 			var player = ctx.player;
-			
+
 			widget.setText(player, 334, 14, "Are you sure you want to make this trade?");
 			ENGINE.setTradeAccepted(player, false);
 			if (!inv.hasSpace(player, Inv.LOAN_OFFER)) {
@@ -64,10 +64,10 @@ module.exports = (function () {
 				}
 				//api.setVarBit(targetPlayer, 1047, value);
 				widget.hide(player, 334, 17, false);
-				widget.setText(player, 334, 33, "Lend: <col=ffffff>"+config.objName(loanedObjId)+", "+duration);				
+				widget.setText(player, 334, 33, "Lend: <col=ffffff>"+config.objName(loanedObjId)+", "+duration);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_OPEN, 335, function (ctx) {
 			var player = ctx.player;
 			var targetPlayer = ENGINE.getInteractionTarget(player);
@@ -83,10 +83,10 @@ module.exports = (function () {
 			widget.setText(player, 335, 31, "");
 			varc(player, 2504, util.getName(targetPlayer));
 			widget.hide(player, 335, 35, false);
-			
+
 			widget.hide(player, 335, 38, false);
 			widget.hide(player, 335, 40, false);
-			
+
 			util.runClientScript(player, 150, ["Value<col=ff9040>", "Remove-X<col=ff9040>", "Remove-All<col=ff9040>", "Remove-10<col=ff9040>", "Remove-5<col=ff9040>", "Remove<col=ff9040>", -1, 0, 7, 4, 90, 21954584]);
 			widget.setEvents(player, 335, 24, 0, 27, 1150);
 			util.runClientScript(player, 695, ["Value<col=ff9040>", -1, 0, 7, 4, 90, 21954587]);
@@ -102,12 +102,12 @@ module.exports = (function () {
 			//api.setVarc(player, 729, 0);
 			//api.setVarc(player, 697, 0);
 		});
-		
+
 		scriptManager.bind(EventType.IF_OPEN, 336, function (ctx) {
 			util.runClientScript(ctx.player, 8862, [0, 2]);
 			util.runClientScript(ctx.player, 8862, [0, 3]);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 334, function (ctx) {
 			switch (ctx.component) {//Confirm screen
 			case 47://Accept
@@ -121,28 +121,28 @@ module.exports = (function () {
 				return false;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 335, handleTradeButton);
 		scriptManager.bind(EventType.IF_BUTTON, 336, handleTradeInvButton);
-		
+
 		scriptManager.bind(EventType.IF_CLOSE, [ 334, 335 ], function (ctx) {
 			varc(ctx.player, 2504, "");
 			logic.removeAll(ctx.player);
 			cancelTrade(ctx.player);
 			ENGINE.clearInteractionTarget(ctx.player);
 		});
-		
+
 		scriptManager.bind(EventType.IF_CLOSE, 336, function (ctx) {
 			util.runClientScript(ctx.player, 8862, [1, 2]);
 			util.runClientScript(ctx.player, 8862, [1, 3]);
 		});
 	}
-	
+
 	function handleTradeButton (ctx) {
 		var player = ctx.player;
-		
+
 		var objId, targetPlayer;
-		
+
 		switch (ctx.component) {
 		case 24://Trade screen
 			objId = inv.getObjId(player, Inv.TRADE, ctx.slot);
@@ -220,7 +220,7 @@ module.exports = (function () {
 		case 55://Remove loan item
 			objId = inv.getObjId(targetPlayer, Inv.LOAN_OFFER, 0);
 			if (objId === -1) {
-				return;		
+				return;
 			}
 			if (ctx.button == 1) {
 				logic.removeLoanItem(player, objId);
@@ -246,10 +246,10 @@ module.exports = (function () {
 			return;
 		}
 	}
-	
+
 	function handleTradeInvButton (ctx) {
 		var player = ctx.player;
-		
+
 		if (ctx.component !== 0) {
 			util.defaultHandler(ctx, "trade inventory");
 			return;
@@ -263,7 +263,7 @@ module.exports = (function () {
 				chat.sendMessage(player, config.objDesc(objId));
 			} else {
 				chat.sendMessage(player, "You cannot add new items in this trade screen!");
-			}				
+			}
 			return;
 		}
 		var count = 0;
@@ -303,15 +303,15 @@ module.exports = (function () {
 			} else {
 				logic.offerItem(player, objId, count, ctx.slot);
 				refreshTrade(player);
-			}				
+			}
 		}
 	}
-	
+
 	function offerCoins (player, amount) {
 		//Money pouch uses the same inv methods
 		logic.offerItem(player, CONST.COINS, amount);
 	}
-	
+
 	function refreshTrade (player) {
 		var targetPlayer = ENGINE.getInteractionTarget(player);
 		if (targetPlayer) {
@@ -330,21 +330,21 @@ module.exports = (function () {
 					total += ENGINE.getExchangeCost(objId) * objCount;
 				} else if (objId == CONST.COINS) {
 					total += objCount;
-				}					
+				}
 			}
 		}
 		varc(player, 729, total);
 		varc(targetPlayer, 697, total);
 		widget.setText(targetPlayer, 335, 22, "has "+inv.freeSpace(player, Inv.BACKPACK)+" free inventory slots.");
 	}
-	
+
 	function showValue (player, objId) {
 		var value = ENGINE.getExchangeCost(objId);
 		if (value !== -1) {
 			chat.sendMessage(player, config.objName(objId)+": market price is "+value+" coins.");
 		}
 	}
-	
+
 	function selectLoanDuration (player) {
 		dialog.requestCount(player, "Set the loan duration in hours: (1-72)<br>"+
 				"(Enter 0 for 'Just until logout'.)").then(function (value) {
@@ -357,7 +357,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function cancelTrade (player) {
 		var targetPlayer = ENGINE.getInteractionTarget(player);
 		if (targetPlayer) {
@@ -370,7 +370,7 @@ module.exports = (function () {
 			chat.sendMessage(targetPlayer, "Other player declined trade.");
 		}
 	}
-	
+
 	function acceptTrade (player, isConfirm) {
 		var targetPlayer = ENGINE.getInteractionTarget(player);
 		if (!targetPlayer) {
@@ -384,7 +384,7 @@ module.exports = (function () {
 			widget.setText(player, 334, 14, "Waiting for other player...");
 		} else if (isConfirm) {
 			logic.tradeItems(player, targetPlayer);
-			
+
 			widget.closeOverlaySub(player, 1007, false);
 			widget.closeAll(player);
 			widget.closeOverlaySub(targetPlayer, 1007, false);

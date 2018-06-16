@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('util');
-var chat = require('chat');
+var util = require('shared/util');
+var chat = require('shared/chat');
 
 var common = require('./common');
 var variables = require('./variables');
@@ -51,13 +51,13 @@ module.exports = (function () {
 			sapling : 5371
 		}
 	};
-	
+
 	return {
 		init : init,
 		process : process,
 		values : Tree
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 8388, 8389, 8390, 8391 ], function (ctx) {
 			var player = ctx.player;
@@ -74,7 +74,7 @@ module.exports = (function () {
 			case 21://Check health Willow
 				common.checkHealth(player, patchId, Tree.WILLOW, 22);
 				return;
-				
+
 			case 73://Prune Oak (2)
 				common.prune(player, patchId, 9);
 				break;
@@ -99,7 +99,7 @@ module.exports = (function () {
 			case 84://Prune Willow (6)
 				common.prune(player, patchId, 20);
 				break;
-				
+
 			case 201://Dead Oak (2)
 			case 202://Dead Oak (3)
 			case 203://Dead Oak (4)
@@ -110,7 +110,7 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOCU, [ 8388, 8389, 8390, 8391 ], function (ctx) {
 			var player = ctx.player;
 			var patchId = ctx.locTypeId;
@@ -136,21 +136,21 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, [ 8388, 8389, 8390, 8391 ], function (ctx) {
-			var player = ctx.player;			
+			var player = ctx.player;
 			var status = variables.getStatus(player, ctx.locTypeId);
 			var compost = variables.getCompost(player, ctx.locTypeId);
-			
-			var message = common.getInspectMessage(player, ctx.locTypeId, "This is a tree patch.");			
+
+			var message = common.getInspectMessage(player, ctx.locTypeId, "This is a tree patch.");
 			chat.sendMessage(player, message);
-			
+
 			if (util.isAdmin(player)) {
 				chat.sendMessage(player, "id="+ctx.locTypeId+", status = "+status+", compost = "+compost);
 			}
 		});
 	}
-	
+
 	function handleEmptyPatch(player, patchId, seedId, ctx) {
 		switch(seedId) {
 		case 5370://Oak sapling
@@ -170,23 +170,23 @@ module.exports = (function () {
 			return;
 		}
 	}
-	
+
 	function process (player, serverCycle) {
 		processPatch(player, 8388, serverCycle);
 		processPatch(player, 8389, serverCycle);
 		processPatch(player, 8390, serverCycle);
 		processPatch(player, 8391, serverCycle);
 	}
-	
+
 	function processPatch (player, patchId, serverCycle) {
 		common.processWeeds(player, patchId);
 		if (common.canRunCycle(serverCycle, 8)) {
 			processGrowth(player, patchId);
 		}
 	}
-	
+
 	function processGrowth (player, patchId) {
-		switch(variables.getStatus(player, patchId)) {			
+		switch(variables.getStatus(player, patchId)) {
 		/* Regular growth */
 		case 8://Oak (1)
 			variables.setStatus(player, patchId, 9);
@@ -200,7 +200,7 @@ module.exports = (function () {
 		case 11://Oak (4)
 			common.processGrowthStage(player, patchId, 12, 75);
 			break;
-			
+
 		case 15://Willow (1)
 			variables.setStatus(player, patchId, 16);
 			break;
@@ -219,7 +219,7 @@ module.exports = (function () {
 		case 20://Willow (6)
 			common.processGrowthStage(player, patchId, 21, 84);
 			break;
-			
+
 		/* Diseased patches */
 		case 73://Diseased Oak (2)
 			common.processDiseasedStage(player, patchId, 201);

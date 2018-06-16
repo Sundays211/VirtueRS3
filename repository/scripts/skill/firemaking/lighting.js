@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,11 +23,11 @@
 var _entity = require('engine/entity');
 var _map = require('engine/map');
 
-var stat = require('stat');
-var chat = require('chat');
-var map = require('map');
-var inv = require('inv');
-var anim = require('anim');
+var stat = require('shared/stat');
+var chat = require('shared/chat');
+var map = require('shared/map');
+var inv = require('shared/inv');
+var anim = require('shared/anim');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -51,7 +51,7 @@ module.exports = (function () {
 			return;
 		}
 		var fireCoords = map.getCoords(player);
-		
+
 		if (!tileEmpty(fireCoords)) {
 			chat.sendMessage(player, "You can't light a fire here.");
 			return;

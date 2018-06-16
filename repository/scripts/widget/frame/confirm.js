@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,8 +24,8 @@ var varbit = require('engine/var/bit');
 var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 
-var widget = require('widget');
-var util = require('util');
+var widget = require('shared/widget');
+var util = require('shared/util');
 
 var CombatMode = Java.type('org.virtue.game.entity.combat.CombatMode');
 /**
@@ -36,12 +36,12 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 26, function (ctx) {
 			widget.setEvents(ctx.player, 26, 22, -1, -1, 2);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 26, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -88,7 +88,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function setLegacyInterfaceMode (player) {
 		varbit(player, 27169, 1);//Legacy mode enabled
 		varp(player, 3813, 0);
@@ -137,7 +137,7 @@ module.exports = (function () {
 		varc(player, 779, 124);
 		widget.openOverlaySub(player, 6, 1503, true);
 	}
-	
+
 	function setEocInterfaceMode (player) {
 		varbit(player, 27169, 0);//Legacy mode disabled
 		varp(player, 3813, 0);
@@ -170,13 +170,13 @@ module.exports = (function () {
 		varp(player, 4012, 528832);
 		varp(player, 260, 0);
 		varc(player, 779, 2704);
-		
+
 		widget.openOverlaySub(player, 6, 1460, true);
 		widget.openOverlaySub(player, 7, 1452, true);
 		widget.openOverlaySub(player, 8, 1449, true);
 		util.runClientScript(player, 8862, [5, 1]);
 	}
-	
+
 	function setLegacyCombatMode (player) {
 		//TODO: Figure out what needs to be sent here
 		varbit(player, 27168, 1);//Legacy combat mode enabled
@@ -222,7 +222,7 @@ module.exports = (function () {
 		player.setMode(CombatMode.LEGACY);
 		ENGINE.refreshModel(player);
 	}
-	
+
 	function setEoCCombatMode (player) {
 		//TODO: Figure out what needs to be sent here
 		varbit(player, 27168, 0);//Legacy combat mode disabled

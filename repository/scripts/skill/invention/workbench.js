@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,8 +23,8 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 var makex = require('../makex');
 
 /**
@@ -35,13 +35,13 @@ module.exports = (function () {
 		init : init,
 		selectInventionProduct : selectInventionProduct
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 100874, function (ctx) {
 			selectInventionProduct(ctx.player);
 		});
 	}
-	
+
 	function selectInventionProduct (player) {
 		makex.selectProduct(player, 10738, 10739, 10740);
 		dialog.setResumeHandler(player, function () {

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 var _entity = require('engine/entity');
 
-var util = require('util');
-var anim = require('anim');
-var dialog = require('dialog');
-var chat = require('chat');
-var map = require('map');
+var util = require('shared/util');
+var anim = require('shared/anim');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
+var map = require('shared/map');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -40,7 +40,7 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "test", function (ctx) {
 			var args = ctx.cmdArgs;
@@ -48,7 +48,7 @@ module.exports = (function () {
 			if (args.length < 1) {
 				chat.sendCommandResponse(player, "Usage: test <type>", ctx.console);
 			}
-			
+
 			switch (args[0]) {
 			case "icons":
 				testHeadIcons(player, args, ctx);
@@ -67,9 +67,9 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 	}
-	
+
 	function testHeadIcons(player, args, ctx) {
 		if (args.length >= 4) {
 			player.getHeadIcons().setIcon(parseInt(args[3]), parseInt(args[1]), parseInt(args[2]));
@@ -78,7 +78,7 @@ module.exports = (function () {
 			chat.sendCommandResponse(player, "Usage: test icons <main_sprite> <sub_sprite> <slot>", ctx.console);
 		}
 	}
-	
+
 	function testNameChange (player) {
 		dialog.requestName(player, "Please enter your desired display name: ").then(function (name) {
 			var userHash = util.getUserHash(player);
@@ -93,7 +93,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function testLocAnim(player, args, ctx) {
 		if (args.length < 2 || isNaN(args[1])) {
 			chat.sendCommandResponse(player, "Usage: test locanim <anim_id>", ctx.console);
@@ -102,11 +102,11 @@ module.exports = (function () {
 		var animId = parseInt(args[1]);
 		var locCoords = coords(2551, 3550, 0);
 		var shape = 10;
-		
+
 		var loc = map.getLoc(locCoords, shape);
 		map.locAnim(loc, animId);
 	}
-	
+
 	function testMessageType(player, args, ctx) {
 		if (args.length < 2 || isNaN(args[1])) {
 			chat.sendCommandResponse(player, "Usage: test mestype <channel_id>", ctx.console);
@@ -115,7 +115,7 @@ module.exports = (function () {
 		var mesType = args[1];
 		chat.sendMessage(player, "Test", mesType);
 	}
-	
+
 	function testDelayedMovement(player, args, ctx) {
 		testLocAnim(player, ["locanim", 497], ctx);
 		anim.run(player, 751);
@@ -125,4 +125,3 @@ module.exports = (function () {
 		_entity.forceMove(player, targetCoords, 105);
 	}
 })();
-

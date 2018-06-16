@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,15 +20,15 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, ENGINE */
-var anim = require('anim');
-var inv = require('inv');
-var chat = require('chat');
+var anim = require('shared/anim');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPPLAYERU, 962, function (ctx) {
 			var possibles = [1046, 1042, 1044, 1048, 1040, 1038];
@@ -37,7 +37,7 @@ module.exports = (function () {
 			var idx2 = Math.floor(Math.random()*extraPossibles.length);
 			var choice = possibles[idx];
 			var choice2 = extraPossibles[idx2];
-			 
+
 			if (inv.freeSpace(ctx.player, Inv.BACKPACK) < 3) {
 				 chat.sendMessage(ctx.player, "Not enough space in your inventory.");
 				 return;
@@ -48,9 +48,9 @@ module.exports = (function () {
 			}
 			chat.sendMessage(ctx.player, "You pulled the Christmas Cracker... ");
 			anim.run(ctx.player, 15153);
-			ENGINE.faceEntity(ctx.player, ctx.target);	 
+			ENGINE.faceEntity(ctx.player, ctx.target);
 			anim.run(ctx.target, 15153);
-			ENGINE.faceEntity(ctx.target, ctx.player);	
+			ENGINE.faceEntity(ctx.target, ctx.player);
 			if (Math.random() <= 0.5) {
 				ENGINE.clearFaceEntity(ctx.player);
 				ENGINE.playerForceSay(ctx.player, "Hey! I got the cracker!", false);
@@ -63,9 +63,9 @@ module.exports = (function () {
 				ENGINE.playerForceSay(ctx.target, "Hey! I got the cracker!", false);
 				inv.give(ctx.target, choice2, 1); //Extra reward random
 				inv.give(ctx.target, choice, 1); //Random Partyhat
-				inv.give(ctx.target, 995, 100000); //Extra 100k for opening 
+				inv.give(ctx.target, 995, 100000); //Extra 100k for opening
 				inv.take(ctx.player, 962, 1, ctx.slot);
-			} 	   
+			}
 		});
 	}
 

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,13 +23,13 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var anim = require('anim');
+var anim = require('shared/anim');
 var config = require('engine/config');
-var util = require('util');
-var inv = require('inv');
-var dialog = require('dialog');
-var widget = require('widget');
-var stat = require('stat');
+var util = require('shared/util');
+var inv = require('shared/inv');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
+var stat = require('shared/stat');
 
 var makex = require('../makex');
 
@@ -44,46 +44,46 @@ var makex = require('../makex');
 module.exports = (function () {
 	var Saplings = {
 		OAK : {
-			seed : 5312, 
-			seedling : 5358, 
-			wateredSeedling : 5364, 
+			seed : 5312,
+			seedling : 5358,
+			wateredSeedling : 5364,
 			sapling : 5370
 		},
-		WILLOW : { 
-			seed : 5313, 
-			seedling : 5359, 
+		WILLOW : {
+			seed : 5313,
+			seedling : 5359,
 			wateredSeedling : 5365,
-			sapling : 5371 
+			sapling : 5371
 		},
 		MAPLE : {
-			seed : 5314, 
-			seedling : 5360, 
+			seed : 5314,
+			seedling : 5360,
 			wateredSeedling : 5366,
 			sapling : 5372
 		},
 		YEW : {
-			seed : 5315, 
-			seedling : 5361, 
+			seed : 5315,
+			seedling : 5361,
 			wateredSeedling : 5367,
 			sapling : 5373
 		},
 		MAGIC : {
-			seed : 5316, 
-			seedling : 5362, 
+			seed : 5316,
+			seedling : 5362,
 			wateredSeedling : 5368,
 			sapling : 5374
 		},
 		SPIRIT : {
-			seed : 5317, 
-			seedling : 5363, 
+			seed : 5317,
+			seedling : 5363,
 			wateredSeedling : 5369,
 			sapling : 5375
 		}
 	};
-	
+
 	var _bySeedId = {};
 	var _bySeedlingId = {};
-	
+
 	function initLookups () {
 		for (var i in Saplings) {
 			var s = Saplings[i];
@@ -91,14 +91,14 @@ module.exports = (function () {
 			_bySeedlingId[s.seedling] = s;
 		}
 	}
-	
+
 	return {
 		init : init,
 		process : process,
 		values : Saplings,
 		fill : fill
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELDU, 5354, function (ctx) {
 			var sapling = lookupBySeedId(ctx.useObjId);
@@ -108,7 +108,7 @@ module.exports = (function () {
 				util.defaultHandler(ctx, "plant pot");
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, [ 5312, 5313, 5314, 5315, 5316, 5317 ], function (ctx) {
 			var sapling = lookupBySeedId(ctx.objId);
 			if (ctx.useObjId === 5354) {
@@ -126,7 +126,7 @@ module.exports = (function () {
 				util.defaultHandler(ctx, "seedling");
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPHELDU, config.enumValueList(136), function (ctx) {
 			//Watering can
 			var seedling = lookupBySeedlingId(ctx.useObjId);
@@ -138,15 +138,15 @@ module.exports = (function () {
 		});
 		initLookups();
 	}
-	
+
 	function lookupBySeedId (seedId) {
 		return _bySeedId[seedId];
 	}
-	
+
 	function lookupBySeedlingId (seedlingId) {
 		return _bySeedlingId[seedlingId];
 	}
-	
+
 	function process (player) {
 		for (var slot=0; slot<28; slot++) {
 			var objId = inv.getObjId(player, Inv.BACKPACK, slot);
@@ -172,12 +172,12 @@ module.exports = (function () {
 			}
 		}
 	}
-	
+
 	function growSapling (player, oldId, newId) {
 		inv.take(player, oldId);
 		inv.give(player, newId);
 	}
-	
+
 	function fill (player) {
 		anim.run(player, 24898, function () {
 			inv.take(player, 5350);
@@ -188,7 +188,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function plantSeed (player, productId, productCategory) {
 		makex.selectProduct(player, 6821, 6822, productCategory, productId);
 		dialog.setResumeHandler(player, function () {
@@ -202,7 +202,7 @@ module.exports = (function () {
 			inv.give(player, selectedProduct, count);
 		});
 	}
-	
+
 	function water (player, productId, productCategory) {
 		makex.selectProduct(player, 6823, 6824, productCategory, productId);
 		dialog.setResumeHandler(player, function () {

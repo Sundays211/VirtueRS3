@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,10 +21,10 @@
  */
 /* globals EventType */
 var quest = require('../quest');
-var dialog = require('dialog');
-var anim = require('anim');
-var inv = require('inv');
-var chat = require('chat');
+var dialog = require('shared/dialog');
+var anim = require('shared/anim');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
 var varbit = require('engine/var/bit');
 
 /**
@@ -39,13 +39,13 @@ module.exports = (function () {
 		init : init,
 		openJournal : openJournal
 	};
-	
+
 	return cooksAssistant;
-	
+
 	function init (scriptManager) {
         quest.register(6, cooksAssistant);
 	}
-	
+
 	function openJournal (player, questLog) {
 		if(quest.hasFinished(player, 6)) {
 			questLog.setJournalLine(player, 1, "");
@@ -60,20 +60,20 @@ module.exports = (function () {
 			questLog.setJournalLine(player, 10, "<col=EB981F>The cook now also lets me use his high-quality <col=EBE076>range<col=EB981F>, which burns certain low-");
 			questLog.setJournalLine(player, 11, "<col=EB981F>level dishes less often thsn other ranges.");
 		} else if(quest.hasStarted(player, 6)) {
-			if (varbit(player, 12206) == 1) { 
+			if (varbit(player, 12206) == 1) {
 		        var QualityMilk = "I have given the cook a bucket of top-quality milk.";
 		    } else {
-		        var QualityMilk = "<col=EB981F>I need to find a <col=EBE076>bucket of top-quality milk<col=EB981F>.";	
+		        var QualityMilk = "<col=EB981F>I need to find a <col=EBE076>bucket of top-quality milk<col=EB981F>.";
 		    }
-		    if (varbit(player, 12205) == 1) { 
+		    if (varbit(player, 12205) == 1) {
 		        var LargeEgg = "I have given the cook a super large egg.";
 		    } else {
-		        var LargeEgg = "<col=EB981F>I need to find a <col=EBE076>super large egg<col=EB981F>.";	
+		        var LargeEgg = "<col=EB981F>I need to find a <col=EBE076>super large egg<col=EB981F>.";
 		    }
-	    	if (varbit(player, 12204) == 1) { 
+	    	if (varbit(player, 12204) == 1) {
 		        var FineFlour = "I have given the cook a pot of extra fine flour.";
 		    } else {
-		        var FineFlour = "<col=EB981F>I need to find a <col=EBE076>pot of extra fine flour<col=EB981F>.";	
+		        var FineFlour = "<col=EB981F>I need to find a <col=EBE076>pot of extra fine flour<col=EB981F>.";
 		    }
 			questLog.setJournalLine(player, 1, "");
 			questLog.setJournalLine(player, 2, "<col=EB981F>It's the <col=EBE076>Duke of Lumbridge's <col=EB981F>birthday and I have to help his <col=EBE076>cook<col=EB981F> make him a");
@@ -88,7 +88,7 @@ module.exports = (function () {
 		} else {
 			questLog.setJournalLine(player, 1, "");
 			questLog.setJournalLine(player, 2, "<col=EB981F>I can start this quest by speaking to the <col=EBE076>Cook<col=EB981F> in the <col=EBE076>kitchen<col=EB981F> of <col=EBE076>Lumbridge");
-		}	
+		}
 	}
-		
+
 })();

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var anim = require('anim');
-var chat = require('chat');
-var inv = require('inv');
+var anim = require('shared/anim');
+var chat = require('shared/chat');
+var inv = require('shared/inv');
 var config = require('engine/config');
 
 
 module.exports = (function () {
-		
+
 	var Types = {
 		ONION : {
 			itemID : 1957,
@@ -154,7 +154,7 @@ module.exports = (function () {
 			healAmount : 1600,
 	        delayTime : 1,
 	        healText : null
-	    },	    	    	    	    	    	     	  	    	    	    
+	    },
  	    SHARK : {
 			itemID : 385,
 			healAmount : 2000,
@@ -172,7 +172,7 @@ module.exports = (function () {
 			healAmount : 2200,
 	        delayTime : 1,
 	        healText : null
-	    },	    	    	    
+	    },
 		MANTA_RAY : {
 			itemID : 391,
 			healAmount : 2275,
@@ -309,7 +309,7 @@ module.exports = (function () {
 			healAmount : 7800,
 	        delayTime : 1,
 	        healText : null
-	    }	    			    		    		    	   
+	    }
 	};
 
 	return {
@@ -330,7 +330,7 @@ module.exports = (function () {
 			var delay = 2;
 			ENGINE.freezeEntity(ctx.player, delay+1);
 			if (food.healText !== null) {
-				chat.sendMessage(ctx.player, food.healText);		
+				chat.sendMessage(ctx.player, food.healText);
 			} else {
 				chat.sendMessage(ctx.player, "You eat the " + config.objName(food.itemID) + ".");
 			}
@@ -343,7 +343,7 @@ module.exports = (function () {
 			inv.take(ctx.player, food.itemID, 1);
 		});
 	}
-   
+
 	function forFood(player, item) {
 		var food;
 		for (var ordial in Types) {
@@ -356,5 +356,5 @@ module.exports = (function () {
 	}
 
 
-	
+
 })();

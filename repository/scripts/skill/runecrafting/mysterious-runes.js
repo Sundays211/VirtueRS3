@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 
-var map = require('map');
-var util = require('util');
-var inv = require('inv');
-var chat = require('chat');
+var map = require('shared/map');
+var util = require('shared/util');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -36,7 +36,7 @@ var chat = require('chat');
  */
 
 module.exports = (function () {
-	
+
 	var Runes = {
 		AIR : {
 			destination : coords(2841, 4829, 0),
@@ -123,63 +123,63 @@ module.exports = (function () {
 			noAccessMsg : "You need a blood talisman to access the Blood Altar."
 		}
 	};
-	
+
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2452, function (ctx) {
 			enterRunes(ctx.player, Runes.AIR, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2453, function (ctx) {
 			enterRunes(ctx.player, Runes.MIND, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2454, function (ctx) {
 			enterRunes(ctx.player, Runes.WATER, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2455, function (ctx) {
 			enterRunes(ctx.player, Runes.EARTH, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2456, function (ctx) {
 			enterRunes(ctx.player, Runes.FIRE, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2457, function (ctx) {
 			enterRunes(ctx.player, Runes.BODY, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2458, function (ctx) {
 			enterRunes(ctx.player, Runes.COSMIC, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2461, function (ctx) {
 			enterRunes(ctx.player, Runes.CHAOS, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2460, function (ctx) {
 			enterRunes(ctx.player, Runes.NATURE, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2459, function (ctx) {
 			enterRunes(ctx.player, Runes.LAW, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2462, function (ctx) {
 			enterRunes(ctx.player, Runes.DEATH, ctx.useitem, ctx);
 		});
-		
+
 		scriptManager.bind([ EventType.OPLOCU, EventType.OPLOC1 ], 2464, function (ctx) {
 			enterRunes(ctx.player, Runes.BLOOD, ctx.useitem, ctx);
 		});
 	}
-	
 
-	
+
+
 	function enterRunes (player, runes, useitem, ctx) {
 		if (useitem) {
 			if (useitem !== runes.talisman) {
@@ -190,7 +190,7 @@ module.exports = (function () {
 			chat.sendMessage(player, runes.noAccessMsg);
 			return;
 		}
-		chat.sendMessage(player, "You feel a powerful force take hold of you.");		
+		chat.sendMessage(player, "You feel a powerful force take hold of you.");
 		var dest = runes.destination;
 		map.setCoords(player, dest);
 	}

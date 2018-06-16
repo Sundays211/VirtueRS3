@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,15 +23,15 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
-var dialog = require('dialog');
-var chat = require('chat');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
 
 var broadcasts = require('./logic/broadcasts');
 var clan = require('./logic/core');
 
-/** 
+/**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
  * @author Arthur <skype:arthur.behesnilian>
@@ -46,7 +46,7 @@ module.exports = function (scriptManager) {
 		widget.setEvents(ctx.player, 1105, 63, 0, 118, 2);
 		util.runClientScript(ctx.player, 4399, [72417446]);
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1105, function (ctx) {
 		switch (ctx.component) {
 		case 148://Close button
@@ -113,7 +113,7 @@ module.exports = function (scriptManager) {
 			return;
 		}
 	});
-	
+
 	function saveChanges  (player) {
 		varbit(player, 8815, varbit(player, 8965));//Update logo 1
 		varbit(player, 8816, varbit(player, 8966));//Update logo 2
@@ -125,7 +125,7 @@ module.exports = function (scriptManager) {
 		broadcasts.send(clan.getHash(player), 24, ["[Player A]"], [util.getName(player)]);
 		widget.closeAll(player);
 	}
-	
+
 	function selectLogo (player, type, slot) {
 		switch (type) {
 		case 1:
@@ -136,7 +136,7 @@ module.exports = function (scriptManager) {
 			return;
 		}
 	}
-	
+
 	function selectColour (player, type) {
 		var prevColour;
 		switch (type) {
@@ -177,7 +177,7 @@ module.exports = function (scriptManager) {
 			util.runClientScript(player, 4399, [72417469]);
 		});
 	}
-	
+
 	function copyColour (player, fromType, toType) {
 		var colour;
 		switch (fromType) {

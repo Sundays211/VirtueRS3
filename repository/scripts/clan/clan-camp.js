@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv */
-var dialog = require('dialog');
-var util = require('util');
-var inv = require('inv');
-var chat = require('chat');
+var dialog = require('shared/dialog');
+var util = require('shared/util');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
 
 var clan = require('./logic/core');
 
@@ -40,15 +40,15 @@ module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPNPC1, 5915, function (ctx) {
 		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+util.getName(ctx.player)+", I am giving away free clan vex. If you right click me and click get vex.");
 	});
-	
+
 	scriptManager.bind(EventType.OPNPC3, 5915, function (ctx) {
 		startClanVexGiver(ctx.player, ctx.npc);//Get vexillum from
 	});
-	
+
 	scriptManager.bind(EventType.OPNPC1, 13633, function (ctx) {
 		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+util.getName(ctx.player)+", You can get a clan cape from me.");
 	});
-	
+
 	scriptManager.bind(EventType.OPNPC3, 13633, function (ctx) {
 		startClanCloakGiver(ctx.player, ctx.npc);
 	});

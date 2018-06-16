@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,10 +22,10 @@
 /* globals EventType */
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
-var dialog = require('dialog');
-var chat = require('chat');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
 
 var filters = require('./chatbox-filters');
 
@@ -70,7 +70,7 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 464, function (ctx) {
 		switch (ctx.component) {//Trade/Assist
 		case 6:
@@ -106,7 +106,7 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1470, function (ctx) {
 		switch (ctx.component) {//Guest clan chat
 		case 58://Chat box
@@ -136,7 +136,7 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1471, function (ctx) {
 		switch (ctx.component) {//Clan chat
 		case 60://Chat box
@@ -166,7 +166,7 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1472, function (ctx) {
 		switch (ctx.component) {//Friends chat
 		case 58://Chat box
@@ -199,7 +199,7 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1467, function (ctx) {
 		switch (ctx.component) {//Private chat
 		case 58://Chat box
@@ -232,7 +232,7 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 137, function (ctx) {
 		switch (ctx.component) {
 		case 65://Toggle game filter
@@ -243,7 +243,7 @@ module.exports = function(scriptManager) {
 			return;
 		case 71:
 			filters.togglePrivate(ctx.player, 18);
-			return;	
+			return;
 		case 74:
 			filters.toggleFriendChat(ctx.player, 18);
 			return;
@@ -379,24 +379,24 @@ module.exports = function(scriptManager) {
 			return;
 		}
 	});
-	
+
 	function toggleAlwaysOn (player) {
 		var on = varbit(player, 22310) == 1;
 		varbit(player, 22310, on ? 0 : 1);
 	}
-	
+
 	function toggleVipBadge (player) {
 		chat.sendDebugMessage(player, "Unhandled VIP badge toggle.");
 	}
-	
+
 	function report (player) {
 		widget.openCentral(player, 1406, false);
 	}
-	
+
 	function assistTime (player) {
 		chat.sendDebugMessage(player, "Unhandled assist time button.");
 	}
-	
+
 	function joinLeaveFriendChat (player) {
 		if (player.getChat().getFriendChatOwner() !== 0) {
 			util.runClientScript(player, 194, [1]);
@@ -407,27 +407,27 @@ module.exports = function(scriptManager) {
 		util.runClientScript(player, 8537, []);
 		util.runClientScript(player, 194, [1]);
 	}
-	
+
 	function friendChatSettings (player) {
 		widget.openCentral(player, 1108, false);
 	}
-	
+
 	function joinLeaveClanChat (player) {
 		chat.sendDebugMessage(player, "Unhandled join/leave clan chat button.");
 	}
-	
+
 	function joinLeaveGuestClanChat (player) {
 		chat.sendDebugMessage(player, "Unhandled join/leave guest clan chat button.");
 	}
-	
+
 	function createGroup (player) {
 		chat.sendDebugMessage(player, "Unhandled group create button.");
 	}
-	
+
 	function switchGroupTeam (player) {
 		chat.sendDebugMessage(player, "Unhandled switch group team button.");
 	}
-	
+
 	function openExamineSettings (player) {
 		widget.openCentral(player, 1561, false);
 	}

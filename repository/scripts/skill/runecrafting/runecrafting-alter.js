@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var stat = require('stat');
-var inv = require('inv');
-var chat = require('chat');
-var anim = require('anim');
+var stat = require('shared/stat');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
 var config = require('engine/config');
 
 /**
@@ -141,72 +141,72 @@ module.exports = (function () {
 			multiplesAt : []
 		}
 	};
-	
+
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, 2478, function (ctx) {
 			craftRunes(ctx.player, Alter.AIR);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2479, function (ctx) {
 			craftRunes(ctx.player, Alter.MIND);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2480, function (ctx) {
 			craftRunes(ctx.player, Alter.WATER);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2481, function (ctx) {
 			craftRunes(ctx.player, Alter.EARTH);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2482, function (ctx) {
 			craftRunes(ctx.player, Alter.FIRE);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2483, function (ctx) {
 			craftRunes(ctx.player, Alter.BODY);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2484, function (ctx) {
 			craftRunes(ctx.player, Alter.COSMIC);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2487, function (ctx) {
 			craftRunes(ctx.player, Alter.CHAOS);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 17010, function (ctx) {
 			craftRunes(ctx.player, Alter.ASTRAL);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2486, function (ctx) {
 			craftRunes(ctx.player, Alter.NATURE);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2485, function (ctx) {
 			craftRunes(ctx.player, Alter.LAW);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 2488, function (ctx) {
 			craftRunes(ctx.player, Alter.DEATH);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 30624, function (ctx) {
 			craftRunes(ctx.player, Alter.BLOOD);
 		});
 	}
-	
+
 	function craftRunes (player, alter) {
 		var level = stat.getLevel(player, Stat.RUNECRAFTING);
 		if (level < alter.level) {
 			chat.sendMessage(player, "You need a runecrafting level of "+alter.level+" to craft this rune.");
 			return;
 		}
-		
+
 		var essCount = inv.total(player, 7936);//Pure essence
 		var pureEss = true;
 		if (essCount < 1) {
@@ -221,7 +221,7 @@ module.exports = (function () {
 		}
 		var totalXp = essCount * alter.xp;
 		inv.take(player, pureEss ? 7936 : 1436, essCount);
-		
+
 		anim.addSpotAnim(player, alter.spotAnim, 0, 5, 0);
 		anim.run(player, 23250, function () {
 			stat.giveXp(player, Stat.RUNECRAFTING, totalXp);
@@ -229,7 +229,7 @@ module.exports = (function () {
 			chat.sendMessage(player, "You bind the temple's power into "+config.objName(alter.runeID)+"s.");
 		});
 	}
-	
+
 	function getHighestMultiple (alter, level) {
 		var multiple = 1;
 		for (var ordinal in alter.multiplesAt) {

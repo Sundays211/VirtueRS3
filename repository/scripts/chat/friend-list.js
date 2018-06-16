@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, ChatListType */
-var widget = require('widget');
-var util = require('util');
-var dialog = require('dialog');
-var chat = require('chat');
+var widget = require('shared/widget');
+var util = require('shared/util');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,7 +38,7 @@ module.exports = function(scriptManager) {
 		widget.setEvents(ctx.player, 550, 7, 0, 500, 1022);
 		widget.setEvents(ctx.player, 550, 57, 0, 500, 6);
 	});
-	
+
 	scriptManager.bind(EventType.IF_PLAYER, ChatListType.FRIEND, function (ctx) {
 		var player = ctx.player;
 		if (ctx.interface == 550) {
@@ -52,10 +52,10 @@ module.exports = function(scriptManager) {
 		}
 		util.defaultHandler(ctx, "friend list");
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 550, function (ctx) {
 		var player = ctx.player;
-		
+
 		switch (ctx.component) {
 		case 7://Friends list pane
 			if (ctx.button == 7) {
@@ -79,7 +79,7 @@ module.exports = function(scriptManager) {
 		case 42://Recruit friend
 			chat.sendDebugMessage(player, "Recruit friend has not been implemented");
 			return;
-		case 57://Add/set ignore note 
+		case 57://Add/set ignore note
 			if (ctx.button == 1) {
 				widget.openOverlaySub(player, 1006, 451, false);
 				util.runClientScript(player, 8178, []);

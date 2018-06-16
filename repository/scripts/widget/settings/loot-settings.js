@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 var varbit = require('engine/var/bit');
 
-var widget = require('widget');
-var util = require('util');
-var chat = require('chat');
+var widget = require('shared/widget');
+var util = require('shared/util');
+var chat = require('shared/chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,19 +39,19 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1623, function (ctx) {
 			widget.setEvents(ctx.player, 1623, 128, 0, 20, 2359296);
 			widget.setEvents(ctx.player, 1623, 129, 0, 20, 2);
 		});
-		
+
 		scriptManager.bind(EventType.IF_DRAG, component(1623, 128), function (ctx) {
 			if (ctx.toslot >= 0 && ctx.toslot < 20) {
 				varbit(ctx.player, 21238, (ctx.toslot+1)*50000);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1623, function (ctx) {
 			var player = ctx.player;
 			var enabled, value;
@@ -144,7 +144,7 @@ module.exports = (function () {
 			case 149://Default lootbeam
 				varbit(player, 23261, 1);
 				varbit(player, 26778, 1);
-				return;		
+				return;
 			case 151://Rainbow lootbeam
 				if (varbit(player, 22915) == 1) {//If rainbow lootbeam is enabled
 					varbit(player, 23261, 2);

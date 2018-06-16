@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,20 +20,20 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var map = require('map');
-var anim = require('anim');
+var map = require('shared/map');
+var anim = require('shared/anim');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [65084,65086,65082,65076,65077,65079], function (ctx) {//Wildy Ditch
 			if (map.getCoordY(ctx.player) == 3520) {
 				anim.run(ctx.player, 6132);
 				ENGINE.teleportEntityBy(ctx.player, 0, 3, 0);
-			}	
+			}
 		});
 
 	}

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,18 +20,18 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 var varbit = require('engine/var/bit');
 var config = require('engine/config');
-var chat = require('chat');
+var chat = require('shared/chat');
 var varc = require('engine/var/client');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_BUTTON, 1405, function (ctx) {//Bug report
 			switch (ctx.component) {
@@ -55,10 +55,10 @@ module.exports = (function () {
 				return;
 		    default:
 				util.defaultHandler(ctx, "report");
-				return;		
+				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1406, function (ctx) {
 			switch (ctx.component) {
 			case 16://Report player
@@ -71,15 +71,15 @@ module.exports = (function () {
 				return;
 		    default:
 				util.defaultHandler(ctx, "report");
-				return;		
+				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_CLOSE, 1405, function (ctx) {//Bug report
 			varbit(ctx.player, 18336, 0);
 			varbit(ctx.player, 18337, 0);
 		});
-		
+
 		scriptManager.bind(EventType.IF_OPEN, 594, function (ctx) {//Player report
 			varc(ctx.player, 2578, "");
 			widget.hide(ctx.player, 594, 18, false);//Set interface hidden: if=594, comp=18, hidden=0
@@ -90,7 +90,7 @@ module.exports = (function () {
 			widget.hide(ctx.player, 594, 28, false);//Another mute option
 			util.runClientScript(ctx.player, 7674, []);
 		});
-		
+
 		scriptManager.bind(EventType.IF_OPEN, 1405, function (ctx) {//Bug report
 			varc(ctx.player, 2911, -1);
 			util.runClientScript(ctx.player, 187, [1, 4]);

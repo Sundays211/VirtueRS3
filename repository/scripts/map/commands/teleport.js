@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 
-var dialog = require('dialog');
-var chat = require('chat');
-var entityMap = require('map/entity');
-var common = require('map/common');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
+var entityMap = require('shared/map/entity');
+var common = require('shared/map/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,14 +38,14 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND, [ "tele", "goto", "move" ], function (ctx) {
 			var args = ctx.cmdArgs;
 			var x, y, level;
 			var currentCoords = entityMap.getCoords(ctx.player);
 			var targetCoords;
-			if (args[0] == "home") {	
+			if (args[0] == "home") {
 			    entityMap.setCoords(ctx.player, coords(0, 50, 50, 21, 19));
 			    return;
 			}
@@ -58,7 +58,7 @@ module.exports = (function () {
 				var squareX = parseInt(args[1]);
 				var squareY = parseInt(args[2]);
 				var localX = parseInt(args[3]);
-				var localY = parseInt(args[4]);				
+				var localY = parseInt(args[4]);
 				targetCoords = coords(level, squareX, squareY, localX, localY);
 			} else	if (args.length == 2) {
 				x = parseInt(args[0]);
@@ -73,7 +73,7 @@ module.exports = (function () {
 			}
 			entityMap.setCoords(ctx.player, targetCoords);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "up", function (ctx) {
 			var currentCoords = entityMap.getCoords(ctx.player);
 			var x = common.getCoordX(currentCoords);
@@ -81,7 +81,7 @@ module.exports = (function () {
 			var level = Math.min(common.getLevel(currentCoords)+1, 3);
 			entityMap.setCoords(ctx.player, coords(x, y, level));
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "down", function (ctx) {
 			var currentCoords = entityMap.getCoords(ctx.player);
 			var x = common.getCoordX(currentCoords);
@@ -89,14 +89,14 @@ module.exports = (function () {
 			var level = Math.max(common.getLevel(currentCoords)-1, 0);
 			entityMap.setCoords(ctx.player, coords(x, y, level));
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teleto", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to:";
 			dialog.requestPlayer(ctx.player, message, function (targetPlayer) {
 				entityMap.setCoords(ctx.player, entityMap.getCoords(targetPlayer));
 			});
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teletome", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to you:";
 			dialog.requestPlayer(ctx.player, message, function (targetPlayer) {
@@ -104,5 +104,5 @@ module.exports = (function () {
 			});
 		});
 	}
-	
+
 })();

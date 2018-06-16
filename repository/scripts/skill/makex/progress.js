@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,13 +23,13 @@
 var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 var config = require('engine/config');
-var inv = require('inv');
-var chat = require('chat');
-var anim = require('anim');
-var stat = require('stat');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
+var stat = require('shared/stat');
 
 var resources = require('./resources');
 
@@ -50,7 +50,7 @@ module.exports = (function () {
 		setRemaining : setRemaining,
 		removeMaterials : removeMaterials
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_BUTTON, 1251, function (ctx) {
 			switch (ctx.component) {
@@ -77,7 +77,7 @@ module.exports = (function () {
 			varc(ctx.player, 2229, 0);//Clear remaining
 		});
 	}
-	
+
 	function openInterface (player, productId, category, amount, delayPerItem) {
 		widget.closeOverlaySub(player, 1018, false);
 		varp(player, 1175, productId);
@@ -85,12 +85,12 @@ module.exports = (function () {
 		varc(player, 2227, delayPerItem);//Time per item
 		varc(player, 2228, amount);//Total products
 		varc(player, 2229, amount);//Remaining products
-		
+
 		varp(player, 1176, 0);//Xp received
 		varp(player, 1177, 0);//Secondary skill xp received
 		widget.openOverlaySub(player, 1018, 1251, false);
 	}
-	
+
 	function startCrafting (player, amount, animation, successText) {
 		animation = animation || -1;
 		var productId = varp(player, 1175);
@@ -101,13 +101,13 @@ module.exports = (function () {
 		varc(player, 2227, length);//Time per item
 		varc(player, 2228, amount);//Total products
 		varc(player, 2229, amount);//Remaining products
-		
+
 		varp(player, 1176, 0);//Xp received
 		varp(player, 1177, 0);//Secondary skill xp received
 		var delay = length-1;
 		if (animation != -1) {
 			anim.run(player, animation);
-		}			
+		}
 		var CraftAction = Java.extend(Java.type("org.virtue.game.entity.player.event.PlayerActionHandler"), {
 			process : function (player1) {
 				if (delay <= 0) {
@@ -120,7 +120,7 @@ module.exports = (function () {
 					if (successText !== undefined) {
 						chat.sendSpamMessage(player1, successText);
 					}
-					
+
 					if (amount >= 1 && animation != -1) {
 						anim.run(player1, animation);
 					}
@@ -129,14 +129,14 @@ module.exports = (function () {
 				delay--;
 				return false;
 			},
-			
+
 			stop : function (player1) {
 				ENGINE.stopAnimation(player1);//Clear animation
 				widget.closeOverlaySub(player1, 1018, true);//Close interface
 			}
 		});
 		player.setAction(new CraftAction());
-		
+
 		/*var procItem = function () {
 			amount--;
 			api.setVarc(player, 2229, amount);
@@ -152,7 +152,7 @@ module.exports = (function () {
 		}
 		runAnimation(player, animation, procItem);*/
 	}
-	
+
 	function setRemaining (player, remaining) {
 		varc(player, 2229, remaining);
 		if (remaining === 0) {
@@ -162,16 +162,16 @@ module.exports = (function () {
 			util.delayFunction(player, 5, closeInterface, true, closeInterface);
 		}
 	}
-	
+
 	function makeItem (player, productId, productCount) {
 		productCount = typeof(productCount) === 'number' ? productCount : 1;
-		
-		var amountPerBatch = config.objParam(productId, 2653) * productCount;	
+
+		var amountPerBatch = config.objParam(productId, 2653) * productCount;
 		giveXp(player, productId, amountPerBatch);
 		removeMaterials(player, productId, productCount);
 		addProduct(player, productId, amountPerBatch);
 	}
-	
+
 	function giveXp (player, productId, amountPerBatch) {
 		var statId = config.enumValue(681, config.objParam(productId, 2696));
 		var xp;
@@ -186,8 +186,8 @@ module.exports = (function () {
 			stat.giveXp(player, statId, xp/10);
 			ENGINE.incrementVarp(player, 1177, xp);
 		}
-	} 
-	
+	}
+
 	function addProduct (player, productId, amount) {
 		switch (productId) {
 		case 34672://Arrow shafts
@@ -202,7 +202,7 @@ module.exports = (function () {
 			inv.give(player, productId, amount);
 		}
 	}
-	
+
 	function removeMaterials (player, productId, productCount) {
 		//See clientscript 7108
 		var resourceId = config.objParam(productId, 2655);
@@ -212,7 +212,7 @@ module.exports = (function () {
 		var structId = config.objParam(productId, 2675);
 		var inventionMaterialId = config.objParam(productId, 5456);
 		var loop = 1;
-		var amountPerBatch = config.objParam(productId, 2653);			
+		var amountPerBatch = config.objParam(productId, 2653);
 		while (resourceId != -1 || structId != -1) {
 			if (structId != -1) {
 				removeStructMaterials(player, structId, amountPerBatch * productCount);
@@ -220,7 +220,7 @@ module.exports = (function () {
 				if (matCountReq !== 0) {
 					var amount = separateAmount ? matCountReq : matCountReq * amountPerBatch;
 					resources.take(player, resourceId, amount * productCount, inventionMaterialId);
-				}				
+				}
 			}
 			loop++;
 			switch (loop) {
@@ -302,7 +302,7 @@ module.exports = (function () {
 			}
 		}
 	}
-	
+
 	function removeStructMaterials (player, structId, amount) {
 		var id = config.structParam(structId, 2655);
 		var matCountReq = config.structParam(structId, 2665);
@@ -324,7 +324,7 @@ module.exports = (function () {
 			if (amount <= 0) {
 				return;
 			}
-			
+
 			loop++;
 			switch (loop) {
 			case 2:
@@ -377,5 +377,5 @@ module.exports = (function () {
 			}
 		}
 	}
-	
+
 })();

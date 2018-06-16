@@ -3,18 +3,18 @@
  */
 /* globals Stat */
 var varbit = require('engine/var/bit');
-var CONST = require('const');
+var CONST = require('shared/const');
 
-var anim = require('anim');
-var chat = require('chat');
-var dialog = require('dialog');
-var inv = require('inv');
-var stat = require('stat');
+var anim = require('shared/anim');
+var chat = require('shared/chat');
+var dialog = require('shared/dialog');
+var inv = require('shared/inv');
+var stat = require('shared/stat');
 
 var variables = require('./variables');
 var resources = require('../makex/resources');
 
-module.exports = (function () {	
+module.exports = (function () {
 	return {
 		canRunCycle : canRunCycle,
 		processGrowthStage : processGrowthStage,
@@ -31,12 +31,12 @@ module.exports = (function () {
 		checkHealth : checkHealth,
 		getInspectMessage : getInspectMessage
 	};
-	
+
 	function getInspectMessage(player, patchId, patchType, statusType) {
 		var message = patchType;
 		var status = variables.getStatus(player, patchId);
 		var compost = variables.getCompost(player, patchId);
-		
+
 		if (compost === 0) {
 			message += " The soil has not been treated.";
 		} else if (compost === 1) {
@@ -44,7 +44,7 @@ module.exports = (function () {
 		} else if (compost === 2) {
 			message += " The soil has been treated with supercompost.";
 		}
-		
+
 		if (status < 3) {
 			message += " The patch needs weeding.";
 		} else if (status === 3) {
@@ -71,7 +71,7 @@ module.exports = (function () {
 		var gap = (serverCycle / CONST.FARMING_CYCLE_LENGTH) | 0;
 		return gap % cycleGap === 0;
 	}
-	
+
 	/**
 	 * Determines whether the growth cycle produces a healthy or diseased crop.
 	 * Sets the patch status to either growStatus or diseaseStatus depending on the determined result
@@ -86,20 +86,20 @@ module.exports = (function () {
 		chance /= variables.getCompost(player, patchId)+1;
 		variables.setStatus(player, patchId, Math.random() > chance ? growStatus : diseaseStatus);
 	}
-	
+
 	/**
 	 * Checks whether a diseased patch should advance to the "dead" stage
 	 * If so, sets the patch to "dead"
 	 * @param player The player
 	 * @param patchId The ID of the patch to modify
-	 * @param deadStatus The status to set if the patch becomes dead 
+	 * @param deadStatus The status to set if the patch becomes dead
 	 */
 	function processDiseasedStage (player, patchId, deadStatus) {
 		if (Math.random() > 0.5) {
 			variables.setStatus(player, patchId, deadStatus);
 		}
 	}
-	
+
 	function processWeeds (player, patchId) {
 		switch(variables.getStatus(player, patchId)) {
 		case 1://Weeds (2)
@@ -113,7 +113,7 @@ module.exports = (function () {
 			break;
 		}
 	}
-	
+
 	function plantSeed (player, seedId, onPlanted, seedCount) {
 		seedCount = typeof(seedCount) === "undefined" ? 1 : seedCount;
 		var success = anim.run(player, 24926, onPlanted);
@@ -121,10 +121,10 @@ module.exports = (function () {
 			inv.take(player, seedId, seedCount);
 		}
 	}
-	
+
 	/**
 	 * Plants a sapling in the specified patch
-	 * 
+	 *
 	 * @param player The player
 	 * @param patchId The ID of the patch to plant the sapling in
 	 * @param crop The type of crop to plant
@@ -135,7 +135,7 @@ module.exports = (function () {
 			dialog.mesbox(player, "You need a farming level of "+crop.level+" to plant this sapling.");
 			return;
 		}
-		
+
 		anim.run(player, 22705, function () {
 			inv.take(player, crop.sapling, 1);
 			stat.giveXp(player, Stat.FARMING, crop.plantxp);
@@ -145,7 +145,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	/**
 	 * Rakes the specified patch, clearing any weeds
 	 */
@@ -154,7 +154,7 @@ module.exports = (function () {
 			chat.sendMessage(player, "You need a rake to clear this patch.");
 			return;
 		}
-		
+
 		anim.run(player, 10574, function () {
 			inv.give(player, 6055, 1);
 			switch (variables.getStatus(player, patchId)) {
@@ -174,7 +174,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	/**
 	 * Water the current farming patch
 	 * @param player The player
@@ -191,13 +191,13 @@ module.exports = (function () {
 			chat.sendMessage(player, "You do not have anything suitable for watering that.");
 			return;
 		}
-		
+
 		anim.run(player, animId, function () {
 			resources.take(player, 5338, 1);
 			variables.setStatus(player, patchId, wateredStatus);
 		});
 	}
-	
+
 	/**
 	 * Applies compost to a farming patch
 	 * @param player The player
@@ -212,12 +212,12 @@ module.exports = (function () {
 			} else if (type == 2) {//Supercompost
 				inv.take(player, 6034, 1);
 				stat.giveXp(player, Stat.FARMING, 26);
-			}						
+			}
 			inv.give(player, 1925, 1);
 			variables.setCompost(player, patchId, type);
 		});
 	}
-	
+
 	function harvest (player, patchId, crop, statuses) {
 		if (!inv.hasSpace(player)) {
 			dialog.mesbox(player, "You don't have enough free space in your inventory to harvest these crops");
@@ -249,26 +249,26 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function canSaveLife (player) {
 		var chance = ((16 * stat.getLevel(player, Stat.FARMING) / 99) + 12)/100;
 		return Math.random() < chance;
 	}
-	
+
 	function clear (player, patchId) {
 		anim.run(player, 22705, function () {
 			variables.setStatus(player, patchId, 3);
 			variables.setCompost(player, patchId, 0);
 		});
 	}
-	
+
 	function prune (player, patchId, healthyStatus) {
 		anim.run(player, 24900, function () {
 			variables.setStatus(player, patchId, healthyStatus);
 			//TODO: Send message and (possibly) give xp
 		});
 	}
-	
+
 	/**
 	 * Runs the health check on the specified patch, granting the player xp
 	 * @param player The player

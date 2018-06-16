@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,16 +22,16 @@
 /* globals EventType */
 var varc = require('engine/var/client');
 
-var util = require('util');
-var widget = require('widget');
-var anim = require('anim');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var anim = require('shared/anim');
 var varc = require('engine/var/client');
-var map = require('map');
+var map = require('shared/map');
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1422, function (ctx) {
 			widget.setEvents(ctx.player, 1422, 38, 2, 2, 2);
@@ -51,7 +51,7 @@ module.exports = (function () {
 			varc(ctx.player, 674, map.getCoordHash(map.getCoords(ctx.player)));
 			anim.run(ctx.player, 22748);
 		});
-		
+
 		scriptManager.bind(EventType.IF_CLOSE, 1422, function (ctx) {
 			util.runClientScript(ctx.player, 8105, []);
 			varc(ctx.player, 622, -1);

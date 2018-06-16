@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,16 +20,16 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 var _config = require('engine/config');
 var _map = require('engine/map');
 
-var util = require('util');
-var chat = require('chat');
-var inv = require('inv');
-var map = require('map');
-var locMap = require('map/location');
-var stat = require('stat');
+var util = require('shared/util');
+var chat = require('shared/chat');
+var inv = require('shared/inv');
+var map = require('shared/map');
+var locMap = require('shared/map/location');
+var stat = require('shared/stat');
 
 var woodcutting = require('./common');
 
@@ -246,7 +246,7 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 1289, function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 1353);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 1291, function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.NORMAL, 23054);
 		});
@@ -307,7 +307,7 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 63176 , function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.MAGIC, 63179);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, 92440 , function (ctx) {
 			chopTree(ctx.player, ctx.location, TreeType.MAGIC, 92441);
 		});
@@ -345,7 +345,7 @@ module.exports = (function () {
 		var treeId = util.getId(location);
 		var rotation = locMap.getRotation(location);
 		var shape = locMap.getShape(location);
-		
+
 		var treeTop = locMap.get(coords(treeCoords, -1, -1, 1), shape);
 		if (!treeTop) {
 			treeTop = locMap.get(coords(treeCoords, 0, 0, 1), shape);

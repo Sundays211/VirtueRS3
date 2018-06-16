@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat, Inv */
-var stat = require('stat');
-var inv = require('inv');
-var chat = require('chat');
-var anim = require('anim');
+var stat = require('shared/stat');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
 
 /**
  * @author Kayla
@@ -114,85 +114,85 @@ module.exports = (function () {
 		bury : buryBones,
 		values : Bones
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, 526, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 2859, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.WOLF_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 528, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.BURNT_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 3179, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.MONKEY_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 17672, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.BAT_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 17674, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.BIG_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 3125, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.JOGRE_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 4812, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.ZOGRE_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 3123, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.SHAIKAHAN_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 534, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.BABYDRAGON_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 6812, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.WYVERN_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 17676, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.DRAGON_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 4830, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.FAYRG_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 4832, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.RAURG_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 6729, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.DAGANNOTH_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 30209, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.AIRUT_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 4834, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.OURG_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 18830, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.FROST_DRAGON_BONES);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 15410, function (ctx) {
 			buryBones(ctx.player, ctx.slot, Bones.ANCIENT_BONES);
 		});
 	}
-	
+
 	function buryBones (player, slot, bones) {
 		chat.sendSpamMessage(player, "You dig a hole in the ground...");
 		inv.clearSlot(player, Inv.BACKPACK, slot);

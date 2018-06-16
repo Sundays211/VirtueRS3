@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,10 +24,10 @@ var varbit = require('engine/var/bit');
 var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 
-var util = require('util');
+var util = require('shared/util');
 var config = require('engine/config');
-var widget = require('widget');
-var chat = require('chat');
+var widget = require('shared/widget');
+var chat = require('shared/chat');
 var quest = require('../quest');
 
 /**
@@ -42,15 +42,15 @@ module.exports = (function () {
 		init : init,
 		setJournalLine : setJournalLine
 	};
-	
+
 	return questJournal;
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 190, function (ctx) {
 			widget.setEvents(ctx.player, 190, 17, 0, 300, 14);
 			widget.setEvents(ctx.player, 190, 40, 0, 11, 2);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 190, function (ctx) {
 			var player = ctx.player;
 			var enabled;
@@ -79,13 +79,13 @@ module.exports = (function () {
 					return;
 				case 1:
 		            enabled = varbit(player, 317) == 1;
-					varbit(player, 317, enabled ? 0 : 1); 
+					varbit(player, 317, enabled ? 0 : 1);
 					return;
 				case 2:
 		            enabled = varbit(player, 317) == 1;
 					varbit(player, 317, enabled ? 0 : 1);
 					return;
-				}	
+				}
 				return;
 			case 17:
 				switch (ctx.button) {
@@ -102,8 +102,8 @@ module.exports = (function () {
 		            } else {
 						varp(player, 1225, ctx.slot);
 						chat.sendMessage(player, "The quest area has been marked.");
-		            }	
-				return	
+		            }
+				return
 				default:
 					util.defaultHandler(ctx, "quest list");
 					return;
@@ -115,8 +115,8 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
-		
+
+
 		scriptManager.bind(EventType.IF_BUTTON, 1500, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -126,10 +126,10 @@ module.exports = (function () {
 			    default:
 				    util.defaultHandler(ctx, "quest list");
 				return;
-			}	
-		});	
+			}
+		});
 	}
-	
+
 	function selectQuest (player, slot) {
 		var questId = config.enumValue(812, slot);
 		var questStructId = config.enumValue(2252, slot);
@@ -139,16 +139,16 @@ module.exports = (function () {
 		} else {
 			varp(player, 3936, slot);
 			showQuestJournal(player, questId);
-		}			
+		}
 		chat.sendDebugMessage(player, "Selected quest: id="+questId+", slot="+slot+", name="+QUEST_ENGINE.getName(questId));
 	}
-	
+
 	function showQuestOverview (player, questStructId) {
 		widget.hide(player, 1500, 4, true);
 		widget.hide(player, 1500, 5, false);
 		varc(player, 699, questStructId);
 	}
-	
+
 	function showQuestJournal (player, questId) {
 		if (quest.isRegisted(questId)) {
 			quest.openJournal(player, questId, questJournal);
@@ -170,21 +170,21 @@ module.exports = (function () {
 			setJournalLine(player, 15, "");
 			setJournalLine(player, 16, "");
 			setJournalLine(player, 17, "");
-			setJournalLine(player, 18, "");	
+			setJournalLine(player, 18, "");
 		}
 		widget.hide(player, 1500, 4, false);
 		widget.hide(player, 1500, 5, true);
 		util.runClientScript(player, 4021, [QUEST_ENGINE.getName(questId)]);
 	}
-	
+
 	function setJournalLine (player, line, text) {
 		if (line > 0 && line <= 300) {
 			widget.setText(player, 1500, 19+line, text);
 		}
 	}
-	
+
 	function showQuestComplete (player, questId) {// jshint ignore:line
 		//TODO: Remove jshint ignore when implemented
-		
+
 	}
 })();

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var chat = require('chat');
-var anim = require('anim');
-var map = require('map');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
+var map = require('shared/map');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -50,7 +50,7 @@ module.exports = function (scriptManager) {
 		//Option 3 (Remove) as an NPC vexillum
 		checkVexOwnership(ctx.player);
 	});
-	
+
 	function placeClanVex (player) {
 		var npc = ENGINE.createNpc(13634, map.getCoords(player));
 		if(npc.getOwner() !== null) {
@@ -70,11 +70,10 @@ module.exports = function (scriptManager) {
 		}
 		npc.destroy();
 		player.setPet(null);
-		
+
 	}
 
 	function readClanVex(player) {
 		chat.sendMessage(player, "There's no information about this clan.");
 	}
 };
-

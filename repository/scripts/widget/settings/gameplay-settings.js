@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,8 +23,8 @@
 var varbit = require('engine/var/bit');
 var varp = require('engine/var/player');
 
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,7 +38,7 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_BUTTON, 1663, function (ctx) {
 			var player = ctx.player;
@@ -142,7 +142,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function toggleAdvLog (player, bit) {
 		var baseVal = varp(player, 1274);
 		if (util.testBit(baseVal, bit)) {

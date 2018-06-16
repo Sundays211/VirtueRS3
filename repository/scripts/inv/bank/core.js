@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals ENGINE, Inv */
-var util = require('util');
+var util = require('shared/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,7 +35,7 @@ module.exports = (function () {
 		canDeposit : canDeposit,
 		deposit : deposit
 	};
-	
+
 	/**
 	 * Checks whether the player has enough space to fit the specified item in their bank
 	 */
@@ -48,7 +48,7 @@ module.exports = (function () {
 			return util.checkOverflow(storedCount, count);
 		}
 	}
-	
+
 	function deposit (player, objId, count) {// jshint ignore:line
 		//TODO: Remove jshint ignore when implemented
 		//var selectedTab = varbit(player, 288);

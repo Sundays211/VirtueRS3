@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,17 +20,17 @@
  * SOFTWARE.
  */
 /* globals EventType, Inv, ENGINE */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 var varbit = require('engine/var/bit');
 
-var widget = require('widget');
+var widget = require('shared/widget');
 var config = require('engine/config');
-var util = require('util');
-var inv = require('inv');
-var chat = require('chat');
-var stat = require('stat');
+var util = require('shared/util');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var stat = require('shared/stat');
 var quest = require('../../quest');
 
 var resources = require('./resources');
@@ -48,18 +48,18 @@ module.exports = (function () {
 		selectProduct : selectProduct,
 		structContainsItem : structContainsItem
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1370, function (ctx) {
 			openDialog(ctx.player);
 		});
-		
+
 		scriptManager.bind(EventType.IF_DRAG, component(1371, 36), function (ctx) {
 			if (ctx.toslot < varbit(ctx.player, 1002) && ctx.toslot >= 0) {
 				varbit(ctx.player, 1003, ctx.toslot+1);
 			}
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1371, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -101,7 +101,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function selectProduct (player, rootCategory, rootCategoryNames, category, productId, categoryName) {
 		productId = typeof(productId) === 'number' ? productId : -1;
 		if (typeof(categoryName) !== 'undefined') {
@@ -117,22 +117,22 @@ module.exports = (function () {
 		varp(player, 1170, productId);
 		widget.openCentral(player, 1370, false);
 	}
-	
+
 	function openDialog (player) {
 		util.runClientScript(player, 6946, []);
 		widget.hide(player, 1371, 20, false);
-				
+
 		varc(player, 2225, 0);
 		varc(player, 2689, 0);
 		varc(player, 2690, 0);
 
-		var categoryId = varp(player, 1169);		
+		var categoryId = varp(player, 1169);
 		var selectedObjId = varp(player, 1170);
-		
+
 		if (!config.enumHasValue(categoryId, selectedObjId)) {
 			selectedObjId = -1;//Only select items actually in the category
 		}
-		
+
 		if (selectedObjId == -1) {//Auto-select item
 			var productId;
 			for (var slot = 0; slot < config.enumSize(categoryId); slot++) {
@@ -151,21 +151,21 @@ module.exports = (function () {
 		var invCount = canCraft(player, selectedObjId) ? getMaxAmount(player, selectedObjId) : 0;//The maximum amount of the item the player can produce
 		varbit(player, 1002, invCount);//Product select max amount
 		varbit(player, 1003, invCount);//The amount currently selected
-		
+
 		//Information about the selected item
 		varc(player, 2391, config.objDesc(selectedObjId));//Description
 		varc(player, 2223, 1);
 		varc(player, 2224, ENGINE.getExchangeCost(selectedObjId));//Exchange guide price
-		
+
 		widget.open(player, 1370, 62, 1371, true);//The inner interface
-		
+
 		widget.setEvents(player, 1371, 62, 0, 12, 2);//Allows an option to be selected in the category drop-down menu
 		widget.setEvents(player, 1371, 36, 0, invCount, 2359296);//Activates the amount selection dragger
 		widget.setEvents(player, 1371, 143, 0, invCount, 2);//Clicks on the amount selection dragger
 		var slotCount = config.enumSize(categoryId) * 4;
 		widget.setEvents(player, 1371, 44, 0, slotCount, 2);//Allows the items to be clicked
 	}
-	
+
 	/**
 	 * Sets the selected product and updates the information for it
 	 * @param player The player
@@ -187,17 +187,17 @@ module.exports = (function () {
 			varbit(player, 1003, heldCount);//The selected amount of the product to produce
 			widget.setEvents(player, 1371, 36, 0, heldCount, 2359296);//Activates the count selection dragger
 			widget.setEvents(player, 1371, 143, 0, heldCount, 2);//Clicks on the count selection dragger
-			
+
 			varc(player, 2391, config.objDesc(objId));//Examine text
 			varc(player, 2223, 1);//
 			varc(player, 2224, ENGINE.getExchangeCost(objId));//Exchange guide price
-			
+
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns whether the player has the requirements to craft the product of the specified ID
 	 * @param productId The itemType ID of the product to check
@@ -208,7 +208,7 @@ module.exports = (function () {
 		if (!checkTools(player, productId)) {
 			return false;
 		}
-		
+
 		var key = config.objParam(productId, 2640);
 		var value = config.objParam(productId, 2645);
 		var reqID = 1;
@@ -240,7 +240,7 @@ module.exports = (function () {
 		 }
 		 return true;
 	}
-	
+
 	function checkRequirement (player, key, value, unk1, boostable) {
 		//See clientscript 7106
 		if (key > 0 && key < 61) {//Stat
@@ -316,7 +316,7 @@ module.exports = (function () {
 		}
 		return true;
 	}
-	
+
 	function hasTool (player, toolId) {
 		if (inv.has(player, toolId, 1, Inv.BACKPACK)) {
 			return true;
@@ -326,7 +326,7 @@ module.exports = (function () {
 		}
 		return inv.hasTool(player, toolId);
 	}
-	
+
 	/*function isTool (productId, itemId) {
 		var toolId = config.objParam(productId, 2655);
 		var structId = config.objParam(productId, 2675);
@@ -355,7 +355,7 @@ module.exports = (function () {
 		}
 		return false;
 	}*/
-	
+
 	function structContainsItem (structId, objId) {
 		var id = config.structParam(structId, 2655);
 		var loop = 1;
@@ -398,7 +398,7 @@ module.exports = (function () {
 		}
 		return false;
 	}
-	
+
 	function getMaxAmount (player, productId) {
 		//See clientscript 7108
 		var resourceId = config.objParam(productId, 2655);
@@ -518,7 +518,7 @@ module.exports = (function () {
 		}
 		return Math.min(maxAmount, 60);
 	}
-	
+
 	function getStructMaxAmount (player, structId, productAmount) {
 		//See clientscript 7109
 		var id = config.structParam(structId, 2655);

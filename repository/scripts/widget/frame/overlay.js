@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var component = require('widget/component');
+var component = require('shared/widget/component');
 var varbit = require('engine/var/bit');
 var varp = require('engine/var/player');
 
-var widget = require('widget');
-var util = require('util');
+var widget = require('shared/widget');
+var util = require('shared/util');
 
-var logic = require('widget/overlay');
+var logic = require('shared/widget/overlay');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -40,7 +40,7 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_BUTTON, 1477, function (ctx) {
 			var player = ctx.player;
@@ -86,12 +86,12 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
-		scriptManager.bind(EventType.IF_DRAG, [ component(1477, 251), component(1477, 89), 
-			component(1477, 295), component(1477, 164), component(1477, 186), component(1477, 328), 
+
+		scriptManager.bind(EventType.IF_DRAG, [ component(1477, 251), component(1477, 89),
+			component(1477, 295), component(1477, 164), component(1477, 186), component(1477, 328),
 			component(1477, 118), component(1477, 100), component(1477, 127), component(1477, 136),
 			component(1477, 78), component(1477, 154), component(1477, 145), component(1477, 262),
-			component(1477, 306), component(1477, 219), component(1477, 197), component(1477, 208), 
+			component(1477, 306), component(1477, 219), component(1477, 197), component(1477, 208),
 			component(1477, 230) ], function () {
 				//Do nothing as this is handled on the client side
 		});

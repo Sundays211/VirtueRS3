@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,13 +22,13 @@
 /* globals EventType */
 var _map = require('engine/map');
 
-var anim = require('anim');
-var util = require('util');
-var dialog = require('dialog');
-var inv = require('inv');
-var map = require('map');
-var loc = require('map/location');
-var chat = require('chat');
+var anim = require('shared/anim');
+var util = require('shared/util');
+var dialog = require('shared/dialog');
+var inv = require('shared/inv');
+var map = require('shared/map');
+var loc = require('shared/map/location');
+var chat = require('shared/chat');
 
 module.exports = (function () {
 	return {
@@ -49,7 +49,7 @@ module.exports = (function () {
 					}, 60);
 				});
 			} else {
-				dialog.mesbox(ctx.player, "Only members can pick flax."); 
+				dialog.mesbox(ctx.player, "Only members can pick flax.");
 			}
 		});
 
@@ -83,7 +83,7 @@ module.exports = (function () {
 
 		scriptManager.bind(EventType.OPLOC1, [ 86687,86688,86689, 86690, 86691 ], function (ctx) {//cabbage
 			anim.run(ctx.player, 827);
-			inv.give(ctx.player, 1965, 1);	
+			inv.give(ctx.player, 1965, 1);
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 11494, function (ctx) {//cabbage

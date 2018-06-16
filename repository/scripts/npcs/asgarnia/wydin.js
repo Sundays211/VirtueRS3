@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,25 +21,25 @@
  */
 /* globals EventType */
 
-var dialog = require('dialog');
+var dialog = require('shared/dialog');
 var varc = require('engine/var/client');
 var varp = require('engine/var/player');
-var widget = require('widget');
+var widget = require('shared/widget');
 module.exports = (function () {
 	return {
 	init : init
 	};
-	
+
 	function init (scriptManager) {
-		
-	    scriptManager.bind(EventType.OPNPC1, 557, function (ctx) { 	
+
+	    scriptManager.bind(EventType.OPNPC1, 557, function (ctx) {
 	        dialog.builder(ctx.player).chatnpc(ctx.npc, "Welcome to my food store! Would you like to buy<br> anything?")
 			.multi3("SELECT AN OPTION", "Yes please.", function () {
 			    dialog.builder(ctx.player).chatplayer("Yes please.")
                 .then(function () {
 				    openshop(ctx.player);
-				});  			
-			}, "No, thank you.", function () {	
+				});
+			}, "No, thank you.", function () {
 			    dialog.builder(ctx.player).chatplayer("No, thank you.")
 			    .finish();
 			}, "What can you recommend?", function () {
@@ -50,25 +50,25 @@ module.exports = (function () {
 					.chatnpc(ctx.npc, "Great. You might as well take a look at the rest of my<br> wares as well.")
 					.then(function () {
 				    openshop(ctx.player);
-				    }); 	
-				}, "I don't like the sound of that.", function () {	
+				    });
+				}, "I don't like the sound of that.", function () {
 				    dialog.builder(ctx.player).chatplayer("I don't like the sound of that.")
 					.chatnpc(ctx.npc, "Well, it's your choice, but I do recommend them.")
 					.finish();
 				});
 			});
-	    });	
-		
-		scriptManager.bind(EventType.OPNPC3, 557, function (ctx) { 
+	    });
+
+		scriptManager.bind(EventType.OPNPC3, 557, function (ctx) {
 		    openshop(ctx.player);
 		});
 	}
 
 	function openshop (player) {
-        varp(player, 304, Inv.WYDINS_FOOD_STORE); 
+        varp(player, 304, Inv.WYDINS_FOOD_STORE);
 	    varc(player, 2360, "Wydin's Food Store");
 	    widget.openCentral(player, 1265);
 	}
-	
-	
+
+
 })();

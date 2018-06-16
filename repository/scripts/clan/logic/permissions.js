@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals MesType */
-var chat = require('chat');
+var chat = require('shared/chat');
 var varbit = require('engine/var/bit');
 var clan = require('./core');
 
@@ -86,7 +86,7 @@ function init () {
 	};
 
 	return permissions;
-	
+
 	function canBlockKeep (player, rank) {
 		switch (rank) {
 		case 100:
@@ -106,7 +106,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canBlockCitadel (player, rank) {
 		switch (rank) {
 		case 100:
@@ -126,7 +126,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canRecruit (player, rank) {
 		switch (rank) {
 		case 0:
@@ -158,7 +158,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canStartBattles (player, rank) {
 		switch (rank) {
 		case 0:
@@ -190,7 +190,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function isRcwLeader (player, rank) {
 		switch (rank) {
 		case 0:
@@ -222,7 +222,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canStartVote (player, rank) {
 		switch (rank) {
 		case 0:
@@ -254,7 +254,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canStartMeeting (player, rank) {
 		switch (rank) {
 		case 0:
@@ -286,7 +286,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function isPartyTech (player, rank) {
 		switch (rank) {
 		case 0:
@@ -318,7 +318,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function isTheatreTech (player, rank) {
 		switch (rank) {
 		case 0:
@@ -350,7 +350,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canEditNoticeboard (player, rank) {
 		switch (rank) {
 		case 100:
@@ -370,7 +370,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canEditSignpost (player, rank) {
 		switch (rank) {
 		case 100:
@@ -390,7 +390,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canEditBattlefield (player, rank) {
 		switch (rank) {
 		case 0:
@@ -422,7 +422,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canUpgradeCitadel (player, rank) {
 		switch (rank) {
 		case 100:
@@ -442,7 +442,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canDowngradeCitadel (player, rank) {
 		switch (rank) {
 		case 100:
@@ -462,7 +462,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canSetGatherGoals (player, rank) {
 		switch (rank) {
 		case 100:
@@ -482,7 +482,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canChangeLanguage (player, rank) {
 		switch (rank) {
 		case 103:
@@ -496,7 +496,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canLockPlots (player, rank) {
 		switch (rank) {
 		case 100:
@@ -516,7 +516,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canCheckResources (player, rank) {
 		switch (rank) {
 		case 0:
@@ -548,7 +548,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canRemoveAvatar (player, rank) {
 		switch (rank) {
 		case 100:
@@ -565,10 +565,10 @@ function init () {
 		case 127:
 			return 1;
 		default:
-			return 0;	
+			return 0;
 		}
 	}
-	
+
 	function canAddAvatarBuffs (player, rank) {
 		switch (rank) {
 		case 100:
@@ -588,7 +588,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canCustomiseAvatar (player, rank) {
 		switch (rank) {
 		case 100:
@@ -608,7 +608,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canMoveTick (player, rank) {
 		switch (rank) {
 		case 103:
@@ -622,7 +622,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canBroadcastEvents (player, rank) {
 		switch (rank) {
 		case 0:
@@ -654,7 +654,7 @@ function init () {
 			return 0;
 		}
 	}
-	
+
 	function canChangeBroadcasts (player, rank) {
 		switch (rank) {
 		case 100:
@@ -672,10 +672,10 @@ function init () {
 			return 1;
 		default:
 			return 0;
-		}	
+		}
 	}
-	
-	function setBlockKeep (player, rank, holds) {			
+
+	function setBlockKeep (player, rank, holds) {
 		if (!canBlockKeep(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow locking of the keep if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
 			return false;
@@ -695,7 +695,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setBlockCitadel (player, rank, holds) {
 		if (!canBlockCitadel(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow locking of the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -716,7 +716,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanRecruit (player, rank, holds) {
 		if (!canRecruit(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow recruiting if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -749,7 +749,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanStartBattles (player, rank, holds) {
 		if (!canStartBattles(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow starting of battles if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -782,7 +782,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setIsRcwLeader (player, rank, holds) {
 		if (!isRcwLeader(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to lead Rated Clan Wars if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -815,7 +815,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanStartVote (player, rank, holds) {
 		if (!canStartVote(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to call a vote if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -848,7 +848,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanStartMeeting (player, rank, holds) {
 		if (!canStartMeeting(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to begin a meeting if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -881,7 +881,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setIsPartyTech (player, rank, holds) {
 		if (!isPartyTech(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only set a rank as a party tech if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -914,7 +914,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setIsTheatreTech (player, rank, holds) {
 		if (!isTheatreTech(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only set a rank as a theatre tech if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -947,7 +947,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanEditNoticeboard (player, rank, holds) {
 		if (!canEditNoticeboard(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow adding of notices if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -968,7 +968,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanEditSignpost (player, rank, holds) {
 		if (!canEditSignpost(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow adding to the signpost if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -989,7 +989,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanEditBattlefield (player, rank, holds) {
 		if (!canEditBattlefield(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow editing of the clan battlefield if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1022,7 +1022,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanUpgradeCitadel (player, rank, holds) {
 		if (!canUpgradeCitadel(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow upgrades to the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1043,7 +1043,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanDowngradeCitadel (player, rank, holds) {
 		if (!canDowngradeCitadel(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow downgrades to the citadel if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1064,7 +1064,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanSetGatherGoals (player, rank, holds) {
 		if (!canSetGatherGoals(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only set gather goals if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1085,7 +1085,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanChangeLanguage (player, rank, holds) {
 		if (!canChangeLanguage(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to change the stronghold's language if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1100,7 +1100,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanLockPlots (player, rank, holds) {
 		if (!canLockPlots(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to lock plots if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1121,7 +1121,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanCheckResources (player, rank, holds) {
 		if (!canCheckResources(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to check resources if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1154,7 +1154,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanRemoveAvatar (player, rank, holds) {
 		if (!canRemoveAvatar(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow another rank to remove the avatar habitat if your rank has permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1172,10 +1172,10 @@ function init () {
 		case 125:
 			return varbit(player, 6344, holds);
 		default:
-			return false;	
+			return false;
 		}
 	}
-	
+
 	function setCanAddAvatarBuffs (player, rank, holds) {
 		if (!canAddAvatarBuffs(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to fill avatar buff slots if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1196,7 +1196,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanCustomiseAvatar (player, rank, holds) {
 		if (!canCustomiseAvatar(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow another rank to customise the clan avatar if your rank has permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1217,7 +1217,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanMoveTick (player, rank, holds) {
 		if (!canMoveTick(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to change the stronghold's build time if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1232,7 +1232,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanBroadcastEvents (player, rank, holds) {
 		if (!canBroadcastEvents(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to broadcast a noticeboard event if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1265,7 +1265,7 @@ function init () {
 			return false;
 		}
 	}
-	
+
 	function setCanChangeBroadcasts (player, rank, holds) {
 		if (!canChangeBroadcasts(player, clan.getRank(player))) {
 			chat.sendMessage(player, "You may only allow a rank to change clan broadcast settings if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1284,6 +1284,6 @@ function init () {
 			return varbit(player, 21739, holds);
 		default:
 			return false;
-		}	
+		}
 	}
 }

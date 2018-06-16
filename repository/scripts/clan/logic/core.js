@@ -2,10 +2,10 @@
  * Manages the core functionality for clans
  */
 /* globals CLAN_ENGINE */
-var util = require('util');
-var dialog = require('dialog');
+var util = require('shared/util');
+var dialog = require('shared/dialog');
 var config = require('engine/config');
-var chat = require('chat');
+var chat = require('shared/chat');
 
 var broadcasts = require('./broadcasts');
 
@@ -24,13 +24,13 @@ function init () {
 		removeBan : removeClanBan,
 		leave : leaveClan
 	};
-	
+
 	return logic;
-	
+
 	function getClanHash (player) {
 		return CLAN_ENGINE.getClanHash(player);
 	}
-	
+
 	function inClan(player, clan) {
 		if (clan) {
 			return getClanHash(player) == clan;
@@ -38,7 +38,7 @@ function init () {
 			return !!getClanHash(player);
 		}
 	}
-	
+
 	function isClanAdmin (player, clan) {
 		if (clan) {
 			throw "Not yet supported!";
@@ -46,24 +46,24 @@ function init () {
 			return CLAN_ENGINE.isClanAdmin(player);
 		}
 	}
-	
+
 	function getClanRank (player, clan) {
 		clan = clan || getClanHash(player);
 		return CLAN_ENGINE.getRank(clan, util.getUserHash(player));
 	}
-	
+
 	function setClanRank (player, memberHash, newRank) {
-		var oldRank = CLAN_ENGINE.getRank(getClanHash(player), memberHash);		
+		var oldRank = CLAN_ENGINE.getRank(getClanHash(player), memberHash);
 		if (CLAN_ENGINE.setRank(player, memberHash, newRank)) {//Change rank
 			var replace = [util.getName(player), util.getName(memberHash), config.getEnumValue(3714, oldRank), config.getEnumValue(3714, newRank)];
-			if (newRank > oldRank) {//Promoted			
+			if (newRank > oldRank) {//Promoted
 				broadcasts.send(getClanHash(player), 10, ["[Player A]", "[Player B]", "[old rank]", "[new rank]"], replace);
 			} else {//Demoted
 				broadcasts.send(getClanHash(player), 9, ["[Player A]", "[Player B]", "[old rank]", "[new rank]"], replace);
 			}
 		}
 	}
-	
+
 	function setClanJob (player, memberHash, newJob) {
 		var oldJob = CLAN_ENGINE.getMemberVarBit(player, memberHash, 0, 9);
 		if (CLAN_ENGINE.setMemberVarBit(player, memberHash, newJob, 0, 9)) {//Change job
@@ -71,7 +71,7 @@ function init () {
 			broadcasts.send(getClanHash(player), 1, ["[Player A]", "[Clan Job X]", "[Clan Job Y]", "[Player B]"], replace);
 		}
 	}
-	
+
 	function kickClanMember (player, memberHash) {
 		//TODO: Remove direct references
 		var displayName = util.getName(memberHash);
@@ -85,7 +85,7 @@ function init () {
 			});
 		}
 	}
-	
+
 	function addClanBan (player) {
 		if (!inClan(player)) {
 			chat.sendMessage(player, "You must be in a clan to do that.");
@@ -156,11 +156,11 @@ function init () {
 
 	function leaveClan (player) {
 		if (!inClan(player)) {
-			chat.sendMessage(player, "You're not in a clan.");		
+			chat.sendMessage(player, "You're not in a clan.");
 			return;
 		}
 		var clanHash = getClanHash(player);
-		
+
 		if (!CLAN_ENGINE.isClanOwner(player)) {
 			dialog.builder(player).mesbox("If you leave the clan, you will need to be invited before you can join again,"+
 					"<br>and must wait a week before you contribute to clan resources.")
@@ -181,7 +181,7 @@ function init () {
 				.confirm("Leave the clan?")
 				.then(function () {
 					CLAN_ENGINE.leaveClan(player);
-				});		
+				});
 		} else {
 			dialog.builder(player).mesbox("Before you can leave the clan, you must assign a deputy owner. Once you have left, they will become the owner in your place. Remember that you will need to be invited to rejoin the clan.");
 		}

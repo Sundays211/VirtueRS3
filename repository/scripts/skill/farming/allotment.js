@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat */
-var util = require('util');
-var chat = require('chat');
-var dialog = require('dialog');
-var stat = require('stat');
+var util = require('shared/util');
+var chat = require('shared/chat');
+var dialog = require('shared/dialog');
+var stat = require('shared/stat');
 
 var common = require('./common');
 var variables = require('./variables');
@@ -76,13 +76,13 @@ module.exports = (function () {
 			produce : 5986
 		}
 	};
-	
+
 	return {
 		init : init,
 		process : process,
 		values : Produce
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 8550, 8551, 8552, 8553, 8554, 8555, 8556, 8557 ], function (ctx) {
 			var player = ctx.player;
@@ -93,7 +93,7 @@ module.exports = (function () {
 			case 2://Rake (1)
 				common.rake(player, patchId);
 				return;
-			
+
 			/* Water crops */
 			case 6://Water Potatoes (1)
 				common.water(player, patchId, 70);
@@ -107,7 +107,7 @@ module.exports = (function () {
 			case 9://Water Potatoes (4)
 				common.water(player, patchId, 73);
 				return;
-				
+
 			case 13://Water Onions (1)
 				common.water(player, patchId, 77);
 				return;
@@ -120,7 +120,7 @@ module.exports = (function () {
 			case 16://Water Onions (4)
 				common.water(player, patchId, 80);
 				return;
-				
+
 			case 20://Water Cabbages (1)
 				common.water(player, patchId, 84);
 				return;
@@ -133,7 +133,7 @@ module.exports = (function () {
 			case 23://Water Cabbages (4)
 				common.water(player, patchId, 87);
 				return;
-				
+
 			case 27://Water Tomatoes (1)
 				common.water(player, patchId, 91);
 				return;
@@ -146,7 +146,7 @@ module.exports = (function () {
 			case 30://Water Tomatoes (4)
 				common.water(player, patchId, 94);
 				return;
-				
+
 			case 34://Water Sweetcorn (1)
 				common.water(player, patchId, 98);
 				return;
@@ -165,7 +165,7 @@ module.exports = (function () {
 			case 39://Water Sweetcorn (6)
 				common.water(player, patchId, 103);
 				return;
-				
+
 			/* Harvest crops */
 			case 10://Harvest Potatoes (3)
 				common.harvest(player, patchId, Produce.POTATOES, [11, 12]);
@@ -176,7 +176,7 @@ module.exports = (function () {
 			case 12://Harvest Potatoes (1)
 				common.harvest(player, patchId, Produce.POTATOES);
 				return;
-				
+
 			case 17://Harvest Onions (3)
 				common.harvest(player, patchId, Produce.ONIONS, [18, 19]);
 				return;
@@ -186,7 +186,7 @@ module.exports = (function () {
 			case 19://Harvest Onions (1)
 				common.harvest(player, patchId, Produce.ONIONS);
 				return;
-				
+
 			case 24://Harvest Cabbages (3)
 				common.harvest(player, patchId, Produce.CABBAGES, [25, 26]);
 				return;
@@ -196,7 +196,7 @@ module.exports = (function () {
 			case 26://Harvest Cabbages (1)
 				common.harvest(player, patchId, Produce.CABBAGES);
 				return;
-				
+
 			case 31://Harvest Tomatoes (3)
 				common.harvest(player, patchId, Produce.TOMATOES, [32, 33]);
 				return;
@@ -206,7 +206,7 @@ module.exports = (function () {
 			case 33://Harvest Tomatoes (1)
 				common.harvest(player, patchId, Produce.TOMATOES);
 				return;
-				
+
 			case 40://Harvest Sweetcorn (3)
 				common.harvest(player, patchId, Produce.SWEETCORN, [41, 42]);
 				return;
@@ -216,7 +216,7 @@ module.exports = (function () {
 			case 42://Harvest Sweetcorn (1)
 				common.harvest(player, patchId, Produce.SWEETCORN);
 				return;
-			
+
 			/* Clear dead crops */
 			case 199://Dead potatoes (2)
 			case 200://Dead potatoes (3)
@@ -242,7 +242,7 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOCU, [ 8550, 8551, 8552, 8553, 8554, 8555, 8556, 8557 ], function (ctx) {
 			var player = ctx.player;
 			var patchId = ctx.locTypeId;
@@ -268,21 +268,21 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC2, [ 8550, 8551, 8552, 8553, 8554, 8555, 8556, 8557 ], function (ctx) {
-			var player = ctx.player;			
+			var player = ctx.player;
 			var status = variables.getStatus(player, ctx.locTypeId);
 			var compost = variables.getCompost(player, ctx.locTypeId);
-			
+
 			var message = common.getInspectMessage(player, ctx.locTypeId, "This is an allotment.");
-			
+
 			chat.sendMessage(player, message);
 			if (util.isAdmin(player)) {
 				chat.sendMessage(player, "id="+ctx.locTypeId+", status = "+status+", compost = "+compost);
 			}
 		});
 	}
-	
+
 	function handleEmptyPatch(player, patchId, seedId, ctx) {
 		switch(seedId) {
 		case 5318://Potato seed
@@ -311,7 +311,7 @@ module.exports = (function () {
 			return;
 		}
 	}
-	
+
 	function process (player, serverCycle) {
 		processPatch(player, 8550, serverCycle);
 		processPatch(player, 8551, serverCycle);
@@ -322,14 +322,14 @@ module.exports = (function () {
 		processPatch(player, 8556, serverCycle);
 		processPatch(player, 8557, serverCycle);
 	}
-	
+
 	function processPatch (player, patchId, serverCycle) {
 		common.processWeeds(player, patchId);
 		if (common.canRunCycle(serverCycle, 2)) {
 			processGrowth(player, patchId);
 		}
 	}
-	
+
 	function processGrowth (player, patchId) {
 		switch(variables.getStatus(player, patchId)) {
 		/* Regular growth */
@@ -345,7 +345,7 @@ module.exports = (function () {
 		case 9://Potatoes (4)
 			common.processGrowthStage(player, patchId, 10, 137);
 			break;
-			
+
 		case 13://Onions (1)
 			variables.setStatus(player, patchId, 14);
 			break;
@@ -358,7 +358,7 @@ module.exports = (function () {
 		case 16://Onions (4)
 			common.processGrowthStage(player, patchId, 17, 144);
 			break;
-			
+
 		case 20://Cabbages (1)
 			variables.setStatus(player, patchId, 21);
 			break;
@@ -371,7 +371,7 @@ module.exports = (function () {
 		case 23://Cabbages (4)
 			common.processGrowthStage(player, patchId, 24, 151);
 			break;
-			
+
 		case 27://Tomatoes (1)
 			variables.setStatus(player, patchId, 28);
 			break;
@@ -384,7 +384,7 @@ module.exports = (function () {
 		case 30://Tomatoes (4)
 			common.processGrowthStage(player, patchId, 31, 158);
 			break;
-			
+
 		case 34://Sweetcorn (1)
 			variables.setStatus(player, patchId, 35);
 			break;
@@ -403,8 +403,8 @@ module.exports = (function () {
 		case 39://Sweetcorn (6)
 			common.processGrowthStage(player, patchId, 40, 167);
 			break;
-			
-		/* Watered patches */			
+
+		/* Watered patches */
 		case 71://Watered Potatoes (1)
 			variables.setStatus(player, patchId, 7);
 			break;
@@ -417,7 +417,7 @@ module.exports = (function () {
 		case 75://Watered Potatoes (4)
 			variables.setStatus(player, patchId, 10);
 			break;
-			
+
 		case 77://Watered Onions (1)
 			variables.setStatus(player, patchId, 14);
 			break;
@@ -430,7 +430,7 @@ module.exports = (function () {
 		case 80://Watered Onions (4)
 			variables.setStatus(player, patchId, 17);
 			break;
-			
+
 		case 84://Watered Cabbages (1)
 			variables.setStatus(player, patchId, 21);
 			break;
@@ -443,7 +443,7 @@ module.exports = (function () {
 		case 87://Watered Cabbages (4)
 			variables.setStatus(player, patchId, 24);
 			break;
-			
+
 		case 91://Watered Tomatoes (1)
 			variables.setStatus(player, patchId, 28);
 			break;
@@ -456,7 +456,7 @@ module.exports = (function () {
 		case 94://Watered Tomatoes (4)
 			variables.setStatus(player, patchId, 31);
 			break;
-			
+
 		case 98://Watered Sweetcorn (1)
 			variables.setStatus(player, patchId, 35);
 			break;
@@ -475,7 +475,7 @@ module.exports = (function () {
 		case 103://Watered Sweetcorn (4)
 			variables.setStatus(player, patchId, 40);
 			break;
-			
+
 		/* Diseased patches */
 		case 135://Diseased Potatoes (2)
 			common.processDiseasedStage(player, patchId, 199);
@@ -486,7 +486,7 @@ module.exports = (function () {
 		case 137://Diseased Potatoes (4)
 			common.processDiseasedStage(player, patchId, 201);
 			break;
-			
+
 		case 142://Diseased Onions (2)
 			common.processDiseasedStage(player, patchId, 206);
 			break;
@@ -496,7 +496,7 @@ module.exports = (function () {
 		case 144://Diseased Onions (4)
 			common.processDiseasedStage(player, patchId, 208);
 			break;
-			
+
 		case 149://Diseased Cabbages (2)
 			common.processDiseasedStage(player, patchId, 213);
 			break;
@@ -506,7 +506,7 @@ module.exports = (function () {
 		case 151://Diseased Cabbages (4)
 			common.processDiseasedStage(player, patchId, 215);
 			break;
-			
+
 		case 156://Diseased Tomatoes (2)
 			common.processDiseasedStage(player, patchId, 220);
 			break;
@@ -516,7 +516,7 @@ module.exports = (function () {
 		case 158://Diseased Tomatoes (4)
 			common.processDiseasedStage(player, patchId, 222);
 			break;
-			
+
 		case 163://Diseased Sweetcorn (2)
 			common.processDiseasedStage(player, patchId, 227);
 			break;
@@ -534,7 +534,7 @@ module.exports = (function () {
 			break;
 		}
 	}
-	
+
 	function plantSeed (player, patchId, crop, plantStatus) {
 		if (stat.getLevel(player, Stat.FARMING) < crop.level) {
 			dialog.mesbox(player, "You need a farming level of "+crop.level+" to plant those seeds");

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat, ENGINE */
-var util = require('util');
+var util = require('shared/util');
 var config = require('engine/config');
-var inv = require('inv');
-var chat = require('chat');
-var anim = require('anim');
-var stat = require('stat');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
+var stat = require('shared/stat');
 
 /**
  * @author Kayla
@@ -35,19 +35,19 @@ var stat = require('stat');
 
 module.exports = (function () {
 	var item = util.lootItem;
-	
+
 	function hamCommon () {
 		return [ item(1349), item(1267), item(1205), item(1351), item(1265), item(321),
 			item(995, 2, 21), item(2138), item(1625), item(1511) ];
 	}
-	
+
 	function hamUncommon () {
 		return [ item(4304), item(4302), item(4306), item(4300), item(4298), item(1129),
 			item(4310), item(4308), item(1353), item(1207), item(1269), item(1739), item(686),
 			item(2370), item(33264), item(199), item(201), item(1627), item(203),
 			item(454, 1, 5), item(441, 1, 5), item(453), item(440), item(688), item(697) ];
 	}
-	
+
 	//Items are arrays in the syntax of [id, amount]
 	//if amount is an array the first element will be treated as min amount and
 	//the second element will be treated at max, result will be random number between those
@@ -216,7 +216,7 @@ module.exports = (function () {
 		ELVES : {
 		    level : 85,
 		    xp : 353.3,
-		    common : [ item(995, 280), item(995, 350), item(995, 240), item(1993), 
+		    common : [ item(995, 280), item(995, 350), item(995, 240), item(1993),
 		    	item(560, 2), item(561, 3), item(28259), item(28261), item(28260) ],
 		    uncommon : [ item(569), item(444), item(1601), item(28265),
 		    	 item(28266), item(28258), item(28263), item(28262) ],
@@ -241,51 +241,51 @@ module.exports = (function () {
 		}
 
 	};
-	
+
 	return {
 		init : init,
 		values : Npc,
 		run : pickpocket
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPNPC3, [ 1, 2, 3, 4, 5, 6 ], function (ctx) {
 			pickpocket(ctx.player, Npc.MAN_WOMAN, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, 7, function (ctx) {
 			pickpocket(ctx.player, Npc.FARMER, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, 1715, function (ctx) {
 			pickpocket(ctx.player, Npc.HAM_FEMALE, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, 1714, function (ctx) {
 			pickpocket(ctx.player, Npc.HAM_MALE, ctx.npc);
 		});
-		
+
 		/*scriptManager.bind(EventType.OPNPC3, -1, function (ctx) {
 		//TODO No pickpocket option on these? I think it unlocks after Death to the Dorgeshuun
 			pickpocket(ctx.player, Npc.HAM_GUARD, ctx.npc);
 		});*/
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 15, 18 ], function (ctx) {
 			pickpocket(ctx.player, Npc.WARRIOR, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, 187, function (ctx) {
 			pickpocket(ctx.player, Npc.ROGUE, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 5752, 5753, 5755, 5756, 5757, 5758, 5759 ], function (ctx) {
 			pickpocket(ctx.player, Npc.CAVE_GOBLIN, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 2234, 2235, 3299 ], function (ctx) {
 			pickpocket(ctx.player, Npc.MASTER_FARMER, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 9, 32, 296, 297, 298, 299 ], function (ctx) {
 			pickpocket(ctx.player, Npc.GUARD, ctx.npc);
 		});
@@ -293,50 +293,50 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPNPC3, [ 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312, 1313, 1314 ], function (ctx) {
 			pickpocket(ctx.player, Npc.FREMENNIK_CITIZEN, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 1926, 1931 ], function (ctx) {
 			pickpocket(ctx.player, Npc.DESERT_BANDIT, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 23, 26 ], function (ctx) {
 			pickpocket(ctx.player, Npc.KNIGHT_OF_ARDOUGNE, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, 34, function (ctx) {
 			pickpocket(ctx.player, Npc.YANILLE_WATCHMAN, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 20, 2256 ], function (ctx) {
 			pickpocket(ctx.player, Npc.PALADIN, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, 13212, function (ctx) {
 			pickpocket(ctx.player, Npc.MONKEY_KNIFE_FIGHTER, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 66, 67, 68, 168, 169 ], function (ctx) {
 			pickpocket(ctx.player, Npc.GNOME, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, 21, function (ctx) {
 			pickpocket(ctx.player, Npc.HERO, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 2363, 2364, 2365, 2366 ], function (ctx) {
 			pickpocket(ctx.player, Npc.ELVES, ctx.npc);
 		});
-		
+
 		scriptManager.bind(EventType.OPNPC3, [ 2109, 2110, 2111, 2112, 2113, 2114,
 				2115, 2116, 2117, 2118, 2119, 2120, 2121, 2122, 2124, 2126 ], function (ctx) {
 			pickpocket(ctx.player, Npc.DWARF_TRADER, ctx.npc);
 		});
 	}
-	
+
 	function pickpocket (player, data, npc) {
 		ENGINE.faceEntity(player, npc);
-		
+
 		if (stat.getLevel(player, Stat.THIEVING) < data.level) {
-			chat.sendMessage(player, "You need a thieving level of " + 
+			chat.sendMessage(player, "You need a thieving level of " +
 					data.level + " to steal from this " + config.npcName(npc) + ".");
 			return;
 		}
@@ -353,7 +353,7 @@ module.exports = (function () {
 			    damage += player.getImpactHandler().getLifepoints()*data.stunDamageLpPercentage/100;
 			ENGINE.hitEntity(player, damage);
 			ENGINE.entitySay(npc, "What do you think you're doing?");
-			
+
 			anim.addSpotAnim(player, 80);
 			anim.run(player, 834);
 		} else {
@@ -374,7 +374,7 @@ module.exports = (function () {
                 break;//Constantly increasing so might as well stop
             }
         }
-        
+
 		//Chance of multiple 1 : amount of multiples unlocked, probably horribly wrong so replace if you know how this should go
         var multiplier = 1+Math.floor(Math.random() * multiplesAvailable);
         switch(multiplier){
@@ -394,7 +394,7 @@ module.exports = (function () {
         }
 
 		stat.giveXp(player, Stat.THIEVING, data.xp);
-		
+
 		//uncommon (1:20), rare (1:100), veryRare (1:500)
 		var loot = util.weightedRandom(data.common, data.uncommon, 0.95,
 				data.rare, 0.99, data.veryRare, 0.998);

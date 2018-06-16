@@ -6,8 +6,8 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 var config = require('engine/config');
 
 var makex = require('../makex');
@@ -16,14 +16,14 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 
+		scriptManager.bind(EventType.OPLOC1,
 				[ 114, 5275, 24283, 34546, 61333, 63209, 66892, 76295, 94064 ], function (ctx) {
 			startCooking(ctx.player);
 		});
 	}
-	
+
 	function startCooking (player) {
 		makex.selectProduct(player, 6794, 6795, 6797);
 		dialog.setResumeHandler(player, function () {

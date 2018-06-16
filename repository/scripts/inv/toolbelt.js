@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,10 +22,10 @@
 /* globals EventType */
 var varbit = require('engine/var/bit');
 
-var util = require('util');
+var util = require('shared/util');
 var config = require('engine/config');
-var chat = require('chat');
-var common = require('inv/common');
+var chat = require('shared/chat');
+var common = require('shared/inv/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,10 +41,10 @@ module.exports = (function () {
 		init : init,
 		hasTool : hasTool
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_BUTTON, 1178, function (ctx) {
-			switch (ctx.component) {	
+			switch (ctx.component) {
 			case 17://See next item
 			case 18://See previous item
 			case 19://General tab
@@ -65,14 +65,14 @@ module.exports = (function () {
 				return;
 			}
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD4, [ 1265, 1267, 1269, 1273, 1271, 1275, 15259, 32646,
 	          1351, 1349, 1353, 1355, 1357, 1359, 6739, 32645,
 	          975, 6313, 6315, 6317 ], function (ctx) {
 			addMultiLevelTool(ctx.player, util.getId(ctx.item));
 		});
-		
-		scriptManager.bind(EventType.OPHELD4, [ 946, 1735, 1595, 1755, 1599, 1597, 1733, 1592, 
+
+		scriptManager.bind(EventType.OPHELD4, [ 946, 1735, 1595, 1755, 1599, 1597, 1733, 1592,
 				5523, 13431, 307, 309, 311, 301, 303, 2347, 590, 8794, 4,
 				9434, 11065, 1785, 2976, 1594, 5343, 5325, 5341, 5329,
 				233, 952, 305, 11323, 2575, 2576, 13153, 10150, 2574, 7409, 18682,
@@ -80,24 +80,24 @@ module.exports = (function () {
 				31188, 27996, 27996, 19675, 21451 ], function (ctx) {
 			addSingleLevelTool(ctx.player, util.getId(ctx.item));
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 36389, function (ctx) {
 			addSingleLevelTool(ctx.player, 36389);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 20565, function (ctx) {
 			addSingleLevelTool(ctx.player, 20565);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 30225, function (ctx) {
 			addSingleLevelTool(ctx.player, 30225);
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD3, 18337, function (ctx) {
 			addSingleLevelTool(ctx.player, 18337);
 		});
 	}
-	
+
 	function addSingleLevelTool(player, toolId) {
 		if (hasTool(player, toolId)) {
 			chat.sendMessage(player, "That is already on your tool belt.");
@@ -110,7 +110,7 @@ module.exports = (function () {
 			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}
-	
+
 	function addMultiLevelTool(player, toolId) {
 		var level = -1;
 		var type = -1;
@@ -234,12 +234,12 @@ module.exports = (function () {
 			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}
-	
+
 	function addTool (player, toolId) {
 		if (hasTool(player, toolId)) {
 			return false;
 		}
-		
+
 		switch (toolId) {
 		/* Dungeoneering Tools */
 		case 16295://Novite pickaxe
@@ -326,7 +326,7 @@ module.exports = (function () {
 		case 17444://Chisel
 			varbit(player, 3015, 1);
 			return true;
-			
+
 		/* Regular Tools */
 		case 946://Knife
 			varbit(player, 2968, 1);
@@ -503,7 +503,7 @@ module.exports = (function () {
 			return false;
 		}
 	}
-	
+
 	function hasTool (player, toolId) {
 		switch (toolId) {
 		/* Dungeoneering Tools */
@@ -563,7 +563,7 @@ module.exports = (function () {
 			return varbit(player, 3014) == 1;
 		case 17444://Chisel
 			return varbit(player, 3015) == 1;
-			
+
 		/* Regular Tools */
 		case 946://Knife
 			return varbit(player, 2968) == 1;
@@ -720,5 +720,5 @@ module.exports = (function () {
 			return false;
 		}
 	}
-	
+
 })();

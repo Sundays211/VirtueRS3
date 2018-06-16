@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,20 +20,20 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 var varp = require('engine/var/player');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 	scriptManager.bind(EventType.IF_OPEN, 1587, function (ctx) {
     widget.setEvents(ctx.player, 1587, 26, 0, 200, 6);
 	widget.setEvents(ctx.player, 1587, 47, 0, 1, 2);
-	widget.hide(ctx.player, 1587, 29, true);	
+	widget.hide(ctx.player, 1587, 29, true);
 	});
 	scriptManager.bind(EventType.IF_BUTTON, 1587, function (ctx) {
 	switch (ctx.component) {
@@ -61,9 +61,9 @@ module.exports = (function () {
 	return;
     default:
 	util.defaultHandler(ctx, "hop-worlds");
-	return;	
-	}		
+	return;
+	}
 	});
-	
+
 	}
 })();

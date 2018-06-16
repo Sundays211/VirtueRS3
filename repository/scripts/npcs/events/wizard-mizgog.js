@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,23 +21,23 @@
  */
 /* globals EventType, */
 
-var dialog = require('dialog');
-var util = require('util');
+var dialog = require('shared/dialog');
+var util = require('shared/util');
 module.exports = (function () {
 	return {
 	init : init
 	};
-	
+
 	function init (scriptManager) {
-		
+
 	   scriptManager.bind(EventType.OPNPC1, 14759, function (ctx) {
 	        dialog.builder(ctx.player).chatplayer("Merry Christmas Mizgog!")
 			.chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"! Have you seen what<br> Wizard Grayzag is up to now? He has picked a fight with<br> Frumscone - They are fighting it out behind that screen<br> there...")
 			.chatplayer("What happened?")
 			.chatnpc(ctx.npc, "I'm not sure, I didn't see. I have no doubt that it will be a<br> childish reason, though...")
 			.finish();
-	   });	
-	   
+	   });
+
     }
-	
+
 })();

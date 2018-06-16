@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var anim = require('anim');
-var dialog = require('dialog');
-var chat = require('chat');
-var util = require('util');
+var anim = require('shared/anim');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
+var util = require('shared/util');
 
 /**
  * @Author Kayla
@@ -33,7 +33,7 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "freeze", function (ctx) {
 			var player = ctx.player;
@@ -47,7 +47,7 @@ module.exports = (function () {
 				chat.sendMessage(targetPlayer, "You have been frozen.");
 			});
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "unfreeze", function (ctx) {
 			var player = ctx.player;
 			var message = "Please enter the display name of the player you wish to unfreeze:";

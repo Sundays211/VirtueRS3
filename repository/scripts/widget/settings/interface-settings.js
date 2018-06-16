@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,9 +25,9 @@ var varp = require('engine/var/player');
 var varc = require('engine/var/client');
 
 var config = require('engine/config');
-var util = require('util');
-var chat = require('chat');
-var widget = require('widget');
+var util = require('shared/util');
+var chat = require('shared/chat');
+var widget = require('shared/widget');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,12 +41,12 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1442, function (ctx) {
 			widget.setEvents(ctx.player, 1442, 133, 0, config.enumSize(9616), 2);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1442, function (ctx) {
 			var player = ctx.player;
 			var enabled;

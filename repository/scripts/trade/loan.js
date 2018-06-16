@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,12 +21,12 @@
  */
 /* globals EventType, Inv */
 var varp = require('engine/var/player');
-var CONST = require('const');
+var CONST = require('shared/const');
 
-var inv = require('inv');
-var chat = require('chat');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
 var config = require('engine/config');
-var util = require('util');
+var util = require('shared/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -45,7 +45,7 @@ module.exports = (function () {
 		isBorrowing : isBorrowing,
 		returnBorrowedItem : returnBorrowedItem
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "testloan", function (ctx) {
 			var args = ctx.cmdArgs;
@@ -59,7 +59,7 @@ module.exports = (function () {
 			lendItem(ctx.player, ctx.player, objId, duration);
 		});
 	}
-	
+
 	function isBorrowing (player) {
 		if (varp(player, 430) > 0) {
 			return false;
@@ -69,13 +69,13 @@ module.exports = (function () {
 			return true;
 		}
 	}
-	
+
 	function lendItem (fromPlayer, toPlayer, objId, duration) {
 		inv.give(fromPlayer, objId, 1, Inv.LOAN_RETURN);
-		
+
 		var lentId = config.objLent(objId);
 		inv.give(toPlayer, lentId, 1);
-		
+
 		if (duration === 0) {
 			varp(toPlayer, 428, fromPlayer);//Loan from
 			varp(fromPlayer, 429, toPlayer);//Loan to
@@ -83,7 +83,7 @@ module.exports = (function () {
 			duration *= 60;//Convert from hours to minutes
 			varp(toPlayer, 430, duration);//Loan from duration
 			varp(fromPlayer, 431, duration);//Loan to duration
-			
+
 			checkLoanedItem(fromPlayer, lentId);
 			checkLentItem(toPlayer);
 		}
@@ -93,11 +93,11 @@ module.exports = (function () {
 				"It will be sent to your Returned Items box if either you or "+util.getName(toPlayer)+" logs out.");
 		chat.sendMessage(fromPlayer, "Speak to a banker to view your returned item box.");
 	}
-	
+
 	function processLogin (ctx) {
 		var player = ctx.player;
 		var minutesPassed = Math.floor(ctx.tickDifference / CONST.CYCLES_PER_MIN);
-		
+
 		//Checks the item currently being loaned
 		if (varp(player, 430)) {
 			if (varp(player, 430)-minutesPassed < 0) {
@@ -110,7 +110,7 @@ module.exports = (function () {
 				checkLoanedItem(player);
 			}
 		}
-		
+
 		//Checks the item currently loaned out
 		if (varp(player, 431)) {
 			if (varp(player, 431)-minutesPassed < 0) {
@@ -122,14 +122,14 @@ module.exports = (function () {
 			}
 		}
 	}
-	
+
 	function processLogout (ctx) {
 		var player = ctx.player;
 		var lentFrom = varp(player, 428);
 		if (lentFrom !== -1) {
 			chat.sendMessage(lentFrom, util.getName(player)+" has returned the item "+util.textGender(player, "he", "she")+" borrowed from you.");
 			chat.sendMessage(lentFrom, "You may retrieve it from your Returned Items box by speaking to a banker.");
-			
+
 			destroyBorrowedItems(player);
 			varp(player, 428, null);
 			varp(lentFrom, 429, null);
@@ -142,7 +142,7 @@ module.exports = (function () {
 			varp(loanTo, 428, null);
 		}
 	}
-	
+
 	function checkLoanedItem (player, objId) {
 		util.delayFunction(player, CONST.CYCLES_PER_MIN, function () {
 			if (varp(player, 430) > 0) {
@@ -156,7 +156,7 @@ module.exports = (function () {
 			}
 		}, false);
 	}
-	
+
 	function checkLentItem (player) {
 		util.delayFunction(player, CONST.CYCLES_PER_MIN, function () {
 			if (varp(player, 431) > 0) {
@@ -169,7 +169,7 @@ module.exports = (function () {
 			}
 		}, false);
 	}
-	
+
 	function returnBorrowedItem (player) {
 		var lentFrom = varp(player, 428);
 		if (lentFrom !== -1) {
@@ -177,10 +177,10 @@ module.exports = (function () {
 			chat.sendMessage(lentFrom, util.getName(player)+" has returned the item "+util.textGender(player, "he", "she")+" borrowed from you.");
 			chat.sendMessage(lentFrom, "You may retrieve it from your Returned Items box by speaking to a banker.");
 		}
-		varp(player, 428, null);	
-		varp(player, 430, 0);	
+		varp(player, 428, null);
+		varp(player, 430, 0);
 	}
-	
+
 	function destroyBorrowedItems (player, objId) {
 		var slot;
 		for (slot=0; slot<inv.size(Inv.EQUIPMENT); slot++) {

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE, Stat */
-var anim = require('anim');
-var chat = require('chat');
-var inv = require('inv');
+var anim = require('shared/anim');
+var chat = require('shared/chat');
+var inv = require('shared/inv');
 var config = require('engine/config');
 
 module.exports = (function () {
@@ -35,7 +35,7 @@ module.exports = (function () {
 			buffMagic: 16,
 	        delayTime : 1,
 	        potionText : null
-	    }	    		    		    	   
+	    }
 	};
 
 	return {
@@ -55,7 +55,7 @@ module.exports = (function () {
 			var delay = 2;
 			ENGINE.freezeEntity(ctx.player, delay+1);
 			if (potion.healText !== null) {
-				chat.sendMessage(ctx.player, potion.healText);		
+				chat.sendMessage(ctx.player, potion.healText);
 			} else {
 				chat.sendMessage(ctx.player, "You drink the " + config.objName(potion.itemID) + ".");
 			}
@@ -73,7 +73,7 @@ module.exports = (function () {
 			inv.take(ctx.player, potion.itemID, 1);
 		});
 	}
-   
+
 	function forPotion(player, item) {
 		var potion;
 		for (var ordial in PotionTypes) {

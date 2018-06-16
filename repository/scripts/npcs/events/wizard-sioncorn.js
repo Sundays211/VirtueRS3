@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,22 +21,22 @@
  */
 /* globals EventType, */
 
-var dialog = require('dialog');
-var util = require('util');
+var dialog = require('shared/dialog');
+var util = require('shared/util');
 module.exports = (function () {
 	return {
 	init : init
 	};
-	
+
 	function init (scriptManager) {
-		
+
 	   scriptManager.bind(EventType.OPNPC1, 14755, function (ctx) {
 	        dialog.builder(ctx.player).chatplayer("Merry Christmas Sioncorn!")
 	        .chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"!")
 			.chatnpc(ctx.npc, "Thank you very much for your help with the decorations. I<br> could not have done it without you.")
 		    .finish();
-	   });	
-	   
+	   });
+
     }
-	
+
 })();

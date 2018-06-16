@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,12 +21,12 @@
  */
 /* globals Inv, ENGINE */
 var varbit = require('engine/var/bit');
-var CONST = require('const');
+var CONST = require('shared/const');
 
 var config = require('engine/config');
-var util = require('util');
-var inv = require('inv');
-var chat = require('chat');
+var util = require('shared/util');
+var inv = require('shared/inv');
+var chat = require('shared/chat');
 
 var loan = require('./loan');
 
@@ -40,14 +40,14 @@ module.exports = (function () {
 		removeItem : removeItem,
 		removeLoanItem : removeLoanItem
 	};
-	
+
 	function offerItem (player, objId, amount, slot) {
 		amount = Math.min(amount, inv.total(player, objId));
 		inv.take(player, objId, amount, Inv.BACKPACK, slot);
-		inv.give(player, objId, amount, Inv.TRADE);			
+		inv.give(player, objId, amount, Inv.TRADE);
 		chat.sendDebugMessage(player, "Offering item: "+objId+", slot="+slot+", amount="+amount);
 	}
-	
+
 	function offerLoanItem (player, objId, slot) {
 		var targetPlayer = ENGINE.getInteractionTarget(player);
 		if (!targetPlayer) {
@@ -67,7 +67,7 @@ module.exports = (function () {
 			//api.sendMessage(player, "Offering loan item: "+item+", slot="+slot);
 		}
 	}
-	
+
 	function removeLoanItem (player, objId) {
 		inv.take(player, objId, 1, Inv.LOAN_OFFER);
 		inv.give(player, objId, 1);
@@ -77,13 +77,13 @@ module.exports = (function () {
 			varbit(targetPlayer, 1047, 0);
 		}
 	}
-	
+
 	function removeItem (player, objId, amount, slot) {
 		amount = Math.min(amount, inv.total(player, objId, Inv.TRADE));
 		inv.take(player, objId, amount, Inv.TRADE, slot);
 		inv.give(player, objId, amount);
 	}
-	
+
 	function startTrade (player, targetPlayer) {
 		ENGINE.sendInv(player, Inv.TRADE);
 		ENGINE.sendInvTo(player, targetPlayer, Inv.TRADE);
@@ -91,7 +91,7 @@ module.exports = (function () {
 		ENGINE.sendInvTo(player, targetPlayer, Inv.LOAN_OFFER);
 		ENGINE.sendInv(player, Inv.LOAN_RETURN);
 	}
-	
+
 	function clearTrade (player) {
 		ENGINE.setTradeAccepted(player, false);
 		var objId = inv.getObjId(player, Inv.LOAN_OFFER, 0);
@@ -129,16 +129,16 @@ module.exports = (function () {
 			}
 			sendTrade(player1, player2);
 			sendTrade(player2, player1);
-			
+
 			chat.sendMessage(player1, "Accepted trade.");
 			chat.sendMessage(player2, "Accepted trade.");
 		}
 	}
-	
+
 	function getTotalTradeSize (player) {
 		return inv.usedSpace(player, Inv.TRADE) + inv.usedSpace(player, Inv.LOAN_OFFER);
 	}
-	
+
 	function hasSpaceForTrade (toPlayer, fromPlayer) {
 		var tradeSize = getTotalTradeSize(fromPlayer);
 		if (inv.freeSpace(toPlayer, Inv.BACKPACK) < tradeSize) {
@@ -156,7 +156,7 @@ module.exports = (function () {
 		}
 		return true;
 	}
-	
+
 	function sendTrade (fromPlayer, toPlayer) {
 		for (var slot=0; slot<28; slot++) {
 			var p1objId = inv.getObjId(fromPlayer, Inv.TRADE, slot);

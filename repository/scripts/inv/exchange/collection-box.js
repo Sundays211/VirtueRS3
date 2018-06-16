@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,10 +22,10 @@
 /* globals EventType, ENGINE, Inv */
 var varp = require('engine/var/player');
 
-var util = require('util');
+var util = require('shared/util');
 var config = require('engine/config');
-var chat = require('chat');
-var inv = require('inv');
+var chat = require('shared/chat');
+var inv = require('shared/inv');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -39,7 +39,7 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 109, function (ctx) {
 			ENGINE.sendInv(ctx.player, Inv.LOAN_RETURN);
@@ -70,17 +70,17 @@ module.exports = (function () {
 							inv.take(player, objId, 1, Inv.LOAN_RETURN);
 							inv.give(player, objId, 1, Inv.BACKPACK);
 							return;
-						}					
+						}
 					}
 					util.defaultHandler(ctx, "collection box");
 					return;
-				} else if (ctx.button === 10) {				
+				} else if (ctx.button === 10) {
 					var desc = config.objDesc(ctx.objId);
 					chat.sendMessage(player, desc);
 					return;
 				}
 				util.defaultHandler(ctx, "collection box");
-				return;	
+				return;
 			default:
 				util.defaultHandler(ctx, "collection box");
 				return;

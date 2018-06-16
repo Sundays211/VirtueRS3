@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var util = require('util');
+var util = require('shared/util');
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 module.exports = (function () {
-	
+
 	var SWAP_SKILLS = [0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 18, 12, 13, 14, 15, 16, 17, 11, 19, 20, 21, 22, 23, 24, 25, 26, 29, 30];
 	return {
 		init : init
@@ -61,18 +61,18 @@ module.exports = (function () {
 	case 49:
 	case 50:
 	case 51:
-	case 52:	
+	case 52:
 	case 53:
 	case 54:
 	case 55:
 	case 56:
 	case 57:
 	case 58:
-	case 59:	
-	case 60:	
-	case 61:	
-	case 62:	
-	case 63:	
+	case 59:
+	case 60:
+	case 61:
+	case 62:
+	case 63:
 	case 64:
 	case 65:
 	case 66:
@@ -86,8 +86,8 @@ module.exports = (function () {
 	return;
     default:
 	util.defaultHandler(ctx, "experience-counter");
-	return;		
-	}		
+	return;
+	}
 	});
 	}
 	function setCounterSkill (player, skill) {
@@ -97,5 +97,5 @@ module.exports = (function () {
 	var counter = varp(player, 96);
 	varbit(player, 224+counter, skill+1);
 	varp(player, 90+counter, 0);
-    }	
+    }
 })();

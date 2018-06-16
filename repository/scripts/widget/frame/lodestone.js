@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,18 +20,18 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
-var anim = require('anim');
-var map = require('map');
-var chat = require('chat');
-var dialog = require('dialog');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var anim = require('shared/anim');
+var map = require('shared/map');
+var chat = require('shared/chat');
+var dialog = require('shared/dialog');
 module.exports = (function () {
 	//varbit 28623 quick charges
-	var LodestoneType = {	
+	var LodestoneType = {
 		BANDIT_CAMP : {
 			base : 69827,
 			coords : coords(3214, 2955, 0),
@@ -153,13 +153,13 @@ module.exports = (function () {
 			varbit : 24967
 		}
 	};
-	
-	
+
+
 	return {
 		init : init
 	};
-	
-		
+
+
 	function getById (id) {
 		for (var ordial in LodestoneType) {
 			if (LodestoneType[ordial].base == id) {
@@ -167,7 +167,7 @@ module.exports = (function () {
 			}
 		}
 	}
-	
+
 	function init (scriptManager) {
 		var ids = [];
 	    for (var i in LodestoneType) {
@@ -176,7 +176,7 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, ids, function (ctx) {
 	        var lodestone = getById(util.getId(ctx.location));
 			var transformed = ENGINE.getLocType(ctx.player, util.getId(ctx.location));
-			if (lodestone.varbit == 9482) {	
+			if (lodestone.varbit == 9482) {
 				varbit(ctx.player, lodestone.varbit, 15);
 				chat.sendMessage(ctx.player, "You have activated the "+transformed.name+".");
 			} else if (lodestone.varbit == 10236) {	//lunar isle lodestone
@@ -187,9 +187,9 @@ module.exports = (function () {
 				chat.sendMessage(ctx.player, "You have activated the "+transformed.name+".");
 			}
         });
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1092, function (ctx) {
-			switch (ctx.component) {	
+			switch (ctx.component) {
 			case 8://Bandit camp lodestone
 				teleportToLodestone(ctx.player, ctx.button, LodestoneType.BANDIT_CAMP);
 				return;
@@ -258,8 +258,8 @@ module.exports = (function () {
 			    dialog.builder(ctx.player).mesbox("The lodestone you have chosen is in level 15 Wilderness. Are you sure you<br> want to teleport there?")
 			    .multi2("TELEPORT TO THE WILDERNESS?", "Yes.", function () {
 			        teleportToLodestone(ctx.player, ctx.button, LodestoneType.WILDERNESS_VOLCANO);
-			    }, "No.", function () {	
-			    });	
+			    }, "No.", function () {
+			    });
 				return;
 			case 30://Ashdale lodestone
 			    teleportToLodestone(ctx.player, ctx.button, LodestoneType.ASHDALE);
@@ -267,8 +267,8 @@ module.exports = (function () {
 			case 31://Prifddinas lodestone
 				teleportToLodestone(ctx.player, ctx.button, LodestoneType.PRIFDDINAS);
 				return;
-			case 32://jmod event lodestone 
-				return;	
+			case 32://jmod event lodestone
+				return;
 			case 33://Iceberg lodestone
 				//api.sendMessage(player, "Unhandled iceberg teleport.");
 				return;
@@ -282,10 +282,10 @@ module.exports = (function () {
 				return;
 			default:
 				util.defaultHandler(ctx, "Lodestone");
-				return;		
+				return;
 			}
 		});
-	
+
 	}
 
 	function teleportToLodestone(player, button, dest) {
@@ -300,7 +300,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(player, 3018);
 				    anim.run(player, 16386, function () {
 					    anim.run(player, 16393, function () {
-						    anim.run(player, -1); 
+						    anim.run(player, -1);
 						    map.setCoords(player, landSpot);
 						    varbit(player, 28623, varbit(player, 28623)-1);
 					    });
@@ -321,7 +321,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(player, 3018);
 				    anim.run(player, 16386, function () {
 				        anim.run(player, 16393, function () {
-						    anim.run(player, -1); 
+						    anim.run(player, -1);
 						    map.setCoords(player, landSpot);
 					    });
 				    });
@@ -332,6 +332,6 @@ module.exports = (function () {
 		    }
 	    }
 	}
-	
-	
+
+
 })();

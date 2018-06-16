@@ -5,7 +5,7 @@
 var varbit = require('engine/var/bit');
 var varc = require('engine/var/client');
 
-var inv = require('inv');
+var inv = require('shared/inv');
 var inventionMaterials = require('../invention/materials');
 
 module.exports = (function () {
@@ -16,11 +16,11 @@ module.exports = (function () {
 		takeRunes : takeRunes,
 		getRuneCount : getRuneCount
 	};
-	
+
 	function has (player, resourceId) {
 		return getResourceCount(player, resourceId) > 0;
 	}
-	
+
 	function getResourceCount (player, resourceId, inventionMaterialId, hasBeastOfBurden) {
 		//See clientscript 7115
 		var amount = 0;
@@ -109,7 +109,7 @@ module.exports = (function () {
 			case 1827://Waterskin (2)
 			case 1829://Waterskin (1)
 			case 1831://Waterskin (0)
-				amount = inv.total(player, 1831) + inv.total(player, 1829) + 
+				amount = inv.total(player, 1831) + inv.total(player, 1829) +
 					inv.total(player, 1827) + inv.total(player, 1825);
 				break;
 			case 26317://Ancient bones
@@ -147,11 +147,11 @@ module.exports = (function () {
 				//if (_map_members() == 0 && _oc_members(resourceId) == 1) {
 				//	amount = 0;
 				//} else if (a3 != -1 && inv.total(player, 2169) > 0) {
-				//	amount = -1; 
-				//} else 
-				if (hasBeastOfBurden) { 
+				//	amount = -1;
+				//} else
+				if (hasBeastOfBurden) {
 					amount = inv.total(player, resourceId) + inv.total(player, resourceId, Inv.BEAST_OF_BURDEN);
-				} else { 
+				} else {
 					amount = inv.total(player, resourceId);
 				}
 				break;
@@ -160,11 +160,11 @@ module.exports = (function () {
 				break;
 			default:
 				//if (_map_members() == 0 && _oc_members(resourceId) == 1) {
-				//	amount = 0; 
-				//} else 
-				if (hasBeastOfBurden) { 
+				//	amount = 0;
+				//} else
+				if (hasBeastOfBurden) {
 					amount = inv.total(player, resourceId) + inv.total(player, resourceId, Inv.BEAST_OF_BURDEN);
-				} else { 
+				} else {
 					amount = inv.total(player, resourceId);
 				}
 		}
@@ -174,7 +174,7 @@ module.exports = (function () {
 		//return _add(amount, v0);
 		return amount;
 	}
-	
+
 	function takeResources (player, resourceId, amount, inventionMaterialId) {
 		switch (resourceId) {
 		case 17792:
@@ -290,11 +290,11 @@ module.exports = (function () {
 			//if (_map_members() == 0 && _oc_members(resourceId) == 1) {
 			//	amount = 0;
 			//} else if (a3 != -1 && inv.total(player, 2169) > 0) {
-			//	amount = -1; 
-			//} else 
-			//if (hasBeastOfBurden) { 
+			//	amount = -1;
+			//} else
+			//if (hasBeastOfBurden) {
 			//	amount = inv.total(player, resourceId) + inv.total(player, resourceId, Inv.BEAST_OF_BURDEN);
-			//} else { 
+			//} else {
 			//	amount = inv.total(player, resourceId);
 			//}
 			break;
@@ -303,24 +303,24 @@ module.exports = (function () {
 			return;
 		default:
 			inv.take(player, resourceId);
-			//if (hasBeastOfBurden) { 
+			//if (hasBeastOfBurden) {
 			//	amount = inv.total(player, resourceId) + inv.total(player, resourceId, Inv.BEAST_OF_BURDEN);
-			//} else { 
+			//} else {
 			//	amount = inv.total(player, resourceId);
 			//}
 		}
 	}
-	
+
 	function takeFromWeighted(player, totalAmount, weightedItems) {
 		for (var slot=0; slot<inv.size(Inv.BACKPACK); slot++) {
 			var objId = inv.getObjId(player, Inv.BACKPACK, slot);
 			var amount = weightedItems.indexOf(objId);
-			
+
 			//If the item matches one of the weighted ones and it's not the empty item
 			if (amount > 0) {
 				//Take the lesser of the available amount & the amount needed
 				var removed = Math.min(amount, totalAmount);
-				
+
 				//Replace the item with one of less volume
 				inv.setSlot(player, Inv.BACKPACK, slot, weightedItems[amount-removed]);
 				totalAmount -= removed;
@@ -332,7 +332,7 @@ module.exports = (function () {
 		}
 		throw "Not enough capacity! Still need "+totalAmount+" more.";
 	}
-	
+
 	function takeFromMulti (player, totalAmount, items) {
 		for (var slot=0; slot<inv.size(Inv.BACKPACK); slot++) {
 			var objId = inv.getObjId(player, Inv.BACKPACK, slot);
@@ -344,14 +344,14 @@ module.exports = (function () {
 				} else {
 					inv.take(player, objId, totalAmount, Inv.BACKPACK, slot);
 				}
-				
+
 				if (totalAmount < 1) {
 					return;
 				}
 			}
 		}
 	}
-	
+
 	function takeRunes (player, runeId, amount) {
 		switch (runeId) {
 		case 17780://Air rune
@@ -409,35 +409,35 @@ module.exports = (function () {
 				inv.take(player, 556, amount);
 			}
 			return;
-			//if (_map_members() == 1) 
+			//if (_map_members() == 1)
 			//return inv.total(player, 556) + inv.total(player, 4697) + inv.total(player, 4695) + inv.total(player, 4696);
 		case 555://Water rune
 			if (!inv.totalparam(player, 973, Inv.EQUIPMENT)) {
 				inv.take(player, 555, amount);
 			}
 			return;
-			//if (_map_members() == 1) 
+			//if (_map_members() == 1)
 			//return inv.total(player, 555) + inv.total(player, 4694) + inv.total(player, 4695) + inv.total(player, 4698);
 		case 554://Fire rune
 			if (!inv.totalparam(player, 975, Inv.EQUIPMENT)) {
 				inv.take(player, 554, amount);
 			}
 			return;
-			//if (_map_members() == 1) 
+			//if (_map_members() == 1)
 			//return inv.total(player, 554) + inv.total(player, 4694) + inv.total(player, 4697) + inv.total(player, 4699);
 		case 557://Earth rune
 			if (!inv.totalparam(player, 974, Inv.EQUIPMENT)) {
 				inv.take(player, 557, amount);
 			}
 			return;
-			//if (_map_members() == 1) 
+			//if (_map_members() == 1)
 			//return inv.total(player, 557) + inv.total(player, 4696) + inv.total(player, 4699) + inv.total(player, 4698);
 		case 563://Law rune
-			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18342) > 0) 
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18342) > 0)
 			//	return domain_2['cfg2691'];
 			return inv.take(player, 563, amount);
 		case 561://Nature rune
-			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18341) > 0) 
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18341) > 0)
 			//	return domain_2['cfg2691'];
 			return inv.take(player, 561, amount);
 		case 558://Mind rune
@@ -451,7 +451,7 @@ module.exports = (function () {
 			return inv.take(player, runeId, amount);
 		}
 	}
-	
+
 	function getRuneCount (player, runeId) {
 		switch (runeId) {
 		case 17780://Air rune
@@ -498,7 +498,7 @@ module.exports = (function () {
 			if (inv.totalparam(player, 972, Inv.EQUIPMENT)) {
 				return -1;
 			}
-			//if (_map_members() == 1) { 
+			//if (_map_members() == 1) {
 			//	return inv.total(player, 556) + inv.total(player, 4697) + inv.total(player, 4695) + inv.total(player, 4696);
 			//}
 			return inv.total(player, 556);
@@ -527,11 +527,11 @@ module.exports = (function () {
 			//}
 			return inv.total(player, 557);
 		case 563://Law rune
-			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18342) > 0) 
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18342) > 0)
 			//	return domain_2['cfg2691'];
 			return inv.total(player, 563);
 		case 561://Nature rune
-			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18341) > 0) 
+			//if (domain_2['cfg2691'] > 0 && _inv_total(94, 18341) > 0)
 			//	return domain_2['cfg2691'];
 			return inv.total(player, 561);
 		case 558://Mind rune

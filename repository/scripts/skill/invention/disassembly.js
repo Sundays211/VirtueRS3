@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,13 +22,13 @@
 /* globals ENGINE, Inv, Stat, Woodcutting */
 var varc = require('engine/var/client');
 
-var anim = require('anim');
+var anim = require('shared/anim');
 var config = require('engine/config');
-var util = require('util');
-var chat = require('chat');
-var inv = require('inv');
-var widget = require('widget');
-var stat = require('stat');
+var util = require('shared/util');
+var chat = require('shared/chat');
+var inv = require('shared/inv');
+var widget = require('shared/widget');
+var stat = require('shared/stat');
 
 var materials = require('./materials');
 var makexProgress = require('../makex/progress');
@@ -46,7 +46,7 @@ module.exports = (function () {
 			75 : 4.2, 76 : 3.8, 77 : 3.4, 78 : 3.0, 79 : 2.7,
 			80 : 2.3, 81 : 2.0, 82 : 1.7, 83 : 1.4, 84 : 1.2,
 			85 : 1.0, 86 : 0.8, 87 : 0.6, 88 : 0.4, 89 : 0.3 };
-	
+
 	var _categoryLookup;
 	return {
 		init : init,
@@ -54,7 +54,7 @@ module.exports = (function () {
 		start : startDisassembly,
 		analyseItem : analyseItem
 	};
-	
+
 	function init () {
 		_categoryLookup = {};
 		function registerCategory (id, materialCount, often, sometimes, rarely, boosted) {
@@ -67,19 +67,19 @@ module.exports = (function () {
 		registerCategory(3751, 4, [Material.STAVE, Material.TENSILE, Material.FLEXIBLE], [], [Material.PRECISE, Material.STRONG], true);//Shieldbow (u)
 		registerCategory(3752, 4, [Material.STAVE, Material.TENSILE, Material.FLEXIBLE], [], [Material.PRECISE, Material.DEXTROUS], true);//Shortbow (u)
 	}
-	
+
 	function lookupCategory (category) {
 		if (!_categoryLookup) {
 			init();
 		}
 		return _categoryLookup[category];
 	}
-	
-	function canDisassemble (objId) {			
+
+	function canDisassemble (objId) {
 		var category = config.objCategory(config.objUncert(objId));
 		return lookupCategory(category) !== undefined;
 	}
-	
+
 	function startDisassembly (player, objId) {
 		ENGINE.interrupt(player);
 		if (!canDisassemble(objId)) {
@@ -104,16 +104,16 @@ module.exports = (function () {
 			inv.take(player, objId, 1);
 			remaining--;
 			makexProgress.setRemaining(player, remaining);
-			stat.giveXp(player, Stat.INVENTION, xp);				
+			stat.giveXp(player, Stat.INVENTION, xp);
 			if (remaining > 0) {
 				anim.addSpotAnim(player, 6003);
 				anim.run(player, 27997);
 				util.delayFunction(player, 2, disassembleItem, true, onInterrupt);
 			}
 		};
-		util.delayFunction(player, 2, disassembleItem, true, onInterrupt);			
+		util.delayFunction(player, 2, disassembleItem, true, onInterrupt);
 	}
-	
+
 	/**
 	 * Gets the level of the item, used to calculate the junk chance & experience gained.
 	 * For most items, this is based either off the level to make or gather (logs, bars, ores, etc) or the level to wear/wield.
@@ -129,9 +129,9 @@ module.exports = (function () {
 			return Math.floor(config.objParam(objId, 2645) / 2);
 		default:
 			return 1;
-		}		
+		}
 	}
-	
+
 	function analyseItem (player, objId) {
 		objId = config.objUncert(objId);
 		var categoryData = lookupCategory(config.objCategory(objId));
@@ -161,7 +161,7 @@ module.exports = (function () {
 		var level = getItemLevel(objId);
 		return Math.max((categoryData.boosted ? 0.3 : 0.03)*level, 0.1);
 	}
-	
+
 	function calculateJunkChance (itemId) {
 		var level = getItemLevel(itemId);
 		if (level < 75) {
@@ -172,7 +172,7 @@ module.exports = (function () {
 			return 0.0;
 		}
 	}
-	
+
 	function addMaterials (player, objId) {
 		var categoryData = lookupCategory(config.objCategory(objId));
 		if (categoryData === undefined) {
@@ -180,7 +180,7 @@ module.exports = (function () {
 			return;
 		}
 		var results = {};
-		
+
 		var junkChance = calculateJunkChance(objId);
 		for (var i=0;i<categoryData.materialCount;i++) {
 			var material = pickMaterial(categoryData.often, categoryData.sometimes, categoryData.rarely, junkChance);
@@ -202,13 +202,13 @@ module.exports = (function () {
 					materialValues.push("<col=ff0000>"+count+" x "+materials.getName(materialId)+"</col>");
 				} else {
 					materialValues.push(count+" x "+materials.getName(materialId));
-				}					
+				}
 				materials.give(player, materialId, count);
 			}
 		}
 		chat.sendSpamMessage(player, message+materialValues.join(", "));
 	}
-	
+
 	function pickMaterial (often, sometimes, rarely, junkChance) {
 		if ((Math.random() * 100) < junkChance) {
 			return materials.values.JUNK;

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,30 +21,30 @@
  */
 /* globals EventType */
 var quest = require('../quest');
-var dialog = require('dialog');
+var dialog = require('shared/dialog');
 var varp = require('engine/var/player');
 module.exports = (function () {
 	var witchshouse = {
 		init : init,
 		openJournal : openJournal
 	};
-	
+
 	return witchshouse;
-	
+
 	function init (scriptManager) {
 		quest.register(7, witchshouse);
-		
+
 		scriptManager.bind(EventType.OPNPCU, 901, function (ctx) {
             switch (ctx.useObjId) {
 	        case 2410:
 			//remove npc 901
 			dialog.mesbox(ctx.player, "You attach the magnet to the mouse's harness. The mouse finishes the<br> cheese and runs back into its hole. You hear some odd noises from inside<br> the walls. There is a strange whirring noise from above the door frame.");
 			varp(ctx.player, 2276, 3);
-	        return;	
-	        } 
-	    });	
+	        return;
+	        }
+	    });
 	}
-	
+
 	function openJournal (player, questLog) {
 		if(quest.hasFinished(player, 7)) {
 			questLog.setJournalLine(player, 1, "");
@@ -67,5 +67,5 @@ module.exports = (function () {
 			questLog.setJournalLine(player, 4, "<col=EB981F>I must be able to defeat a <col=EBE076>level 49 enemy");
 		}
 	}
-	
+
 })();

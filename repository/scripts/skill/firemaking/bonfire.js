@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,15 +24,15 @@
 var _entity = require('engine/entity');
 var _config = require('engine/config');
 
-var coords = require('map/coords');
-var locMap = require('map/location');
-var map = require('map');
-var util = require('util');
-var inv = require('inv');
-var stat = require('stat');
-var chat = require('chat');
-var anim = require('anim');
-var dialog = require('dialog');
+var coords = require('shared/map/coords');
+var locMap = require('shared/map/location');
+var map = require('shared/map');
+var util = require('shared/util');
+var inv = require('shared/inv');
+var stat = require('shared/stat');
+var chat = require('shared/chat');
+var anim = require('shared/anim');
+var dialog = require('shared/dialog');
 
 var FireType = require('./fire');
 /**
@@ -50,7 +50,7 @@ module.exports = (function () {
 	};
 
 	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC5, [ 70755, 70757, 70758, 70759, 
+		scriptManager.bind(EventType.OPLOC5, [ 70755, 70757, 70758, 70759,
 				70761, 70762, 70763, 70764, 70765, 87548 ], function (ctx) {
 			openFireToolDialog(ctx.player, ctx.location);
 		});
@@ -86,7 +86,7 @@ module.exports = (function () {
 					chat.sendDebugMessage(player, "Object "+objId+" is categorised as a log but is not yet supported!");
 				}
 			}
-			
+
 		}
 		var logs = Object.keys(logLookup);
 		if (!logs.length) {
@@ -134,7 +134,7 @@ module.exports = (function () {
 
 		var fireCoords = map.getCoords(fire);
 		var fireId = util.getId(fire);
-		
+
 		var addLogToFire = function () {
 			if (inv.has(player, logType.logId) && util.getId(map.getLoc(fireCoords, 10)) === fireId) {
 				inv.take(player, logType.logId, 1);//Remove logs

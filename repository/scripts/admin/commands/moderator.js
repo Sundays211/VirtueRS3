@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,24 +21,24 @@
  */
 /* globals EventType */
 
-var dialog = require('dialog');
-var chat = require('chat');
-var util = require('util');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
+var util = require('shared/util');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_MOD, ["mute","muteplayer"], function (ctx) {
-			dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {	
+			dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {
 				chat.sendMessage(ctx.player, "Applying mute to "+util.getName(targetPlayer)+".");
 				targetPlayer.getChat().setMuted(true);
 			});
 		});
 		scriptManager.bind(EventType.COMMAND_MOD, ["unmute","unmuteplayer"], function (ctx) {
-			dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {	
+			dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {
 				chat.sendMessage(ctx.player, "Removing mute on player "+util.getName(targetPlayer)+".");
 				targetPlayer.getChat().setMuted(false);
 			});

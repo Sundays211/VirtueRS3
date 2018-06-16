@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 /* globals EventType, Stat, ENGINE */
-var stat = require('stat');
-var chat = require('chat');
+var stat = require('shared/stat');
+var chat = require('shared/chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -34,17 +34,17 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, [ "bxp", "bonusxp" ], function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 2) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [skill] [amount]", ctx.console);
 				return;
 			}
-			
+
 			var statId = stat.lookup(args[0]);
 			if (statId === -1) {
 				chat.sendCommandResponse(player, "Invalid skill: "+args[0], ctx.console);
@@ -58,16 +58,16 @@ module.exports = (function () {
 			stat.giveBonusXp(player, statId, xp);
 			chat.sendCommandResponse(player, "Added "+xp+" bonus experience to "+args[0], ctx.console);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "xp", function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 2) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [skill] [amount]", ctx.console);
 				return;
 			}
-			
+
 			var statId = stat.lookup(args[0]);
 			if (statId === -1) {
 				chat.sendCommandResponse(player, "Invalid skill: "+args[0], ctx.console);
@@ -81,11 +81,11 @@ module.exports = (function () {
 			stat.giveXp(player, statId, xp, false);
 			chat.sendCommandResponse(player, "Added "+xp+" experience to "+args[0], ctx.console);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "boost", function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length < 2) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [skill] [boostAmount]", ctx.console);
 				return;
@@ -103,10 +103,10 @@ module.exports = (function () {
 			stat.boost(player, statId, boost);
 			chat.sendCommandResponse(player, "Boosted "+args[0]+" by "+boost+" levels.", ctx.console);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "god", function (ctx) {
 			var player = ctx.player;
-			
+
 			stat.setLevel(player, Stat.STRENGTH, 255);
 			stat.setLevel(player, Stat.ATTACK, 255);
 			stat.setLevel(player, Stat.MAGIC, 255);
@@ -117,10 +117,10 @@ module.exports = (function () {
 			ENGINE.restoreLifePoints(player);
 			ENGINE.setRenderAnim(player, 2987);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "normal", function (ctx) {
 			var player = ctx.player;
-			
+
 			stat.reset(player, Stat.STRENGTH);
 			stat.reset(player, Stat.ATTACK);
 			stat.reset(player, Stat.MAGIC);
@@ -131,10 +131,10 @@ module.exports = (function () {
 			ENGINE.restoreLifePoints(player);
 			ENGINE.setRenderAnim(player, -1);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, ["master", "max"], function (ctx) {
 			var player = ctx.player;
-			
+
 			for (var statId=0; statId < 27; statId++) {
 				stat.giveXp(player, statId, 13034431, false);
 			}

@@ -7,20 +7,20 @@ var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
 var makex = require('../makex');
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 
 module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 66848 ], function (ctx) {
 			selectPotteryWheelProduct(ctx.player);
 		});
 	}
-	
+
 	function selectPotteryWheelProduct (player) {
 		makex.selectProduct(player, 7004, 7005, 7014);
 		dialog.setResumeHandler(player, function () {

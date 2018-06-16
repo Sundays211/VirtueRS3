@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, ENGINE */
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 
-var anim = require('anim');
-var map = require('map');
-var inv = require('inv');
+var anim = require('shared/anim');
+var map = require('shared/map');
+var inv = require('shared/inv');
 
 module.exports = (function () {
 	var TeleTabs = {
@@ -35,7 +35,7 @@ module.exports = (function () {
 	    LumbridgeTele : {
 	    	itemID : 8008,
 	    	destination : coords(3222, 3218, 0)
-	    },		    
+	    },
         FaladorTele : {
         	itemID : 8009,
         	destination : coords(2965, 3379, 0)
@@ -59,7 +59,7 @@ module.exports = (function () {
 		GodwarsTele : {
 			itemID : 31665,
 			destination : coords(2886, 5309, 0)
-	    }	
+	    }
 	};
 
    return {
@@ -74,14 +74,14 @@ module.exports = (function () {
 		   ENGINE.freezeEntity(ctx.player, 7);
 		   anim.addSpotAnim(ctx.player, 1680);
 		   anim.run(ctx.player, 9597, function () {
-			   anim.run(ctx.player, 4731, function () {	
+			   anim.run(ctx.player, 4731, function () {
 				   map.setCoords(ctx.player, teletab.destination);
 				   anim.run(ctx.player, 9598);
 			   });
 		   });
-	   });	 
+	   });
    }
-   
+
    function forteletab(player, item) {
 	   var teletab;
 	   for (var ordial in TeleTabs) {
@@ -91,6 +91,6 @@ module.exports = (function () {
 		   }
 	   }
 	   return null;
-   } 
-	
+   }
+
 })();

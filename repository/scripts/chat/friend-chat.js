@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,10 +21,10 @@
  */
 /* globals EventType */
 var varc = require('engine/var/client');
-var util = require('util');
-var widget = require('widget');
-var dialog = require('dialog');
-var chat = require('chat');
+var util = require('shared/util');
+var widget = require('shared/widget');
+var dialog = require('shared/dialog');
+var chat = require('shared/chat');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -37,17 +37,17 @@ var chat = require('chat');
 module.exports = function(scriptManager) {
 	scriptManager.bind(EventType.IF_OPEN, 1427, function (ctx) {
 		var player = ctx.player;
-		
+
 		var name = util.getName(player.getSavedChannelOwner());
 		varc(player, 2508, name ? name : util.getName(player));//Last friend chat joined
 		varc(player, 1027, 1);
 		varc(player, 1034, 2);
 		widget.setEvents(player, 1427, 29, 0, 600, 1024);
 	});
-	
+
 	scriptManager.bind(EventType.IF_BUTTON, 1427, function (ctx) {
 		var player = ctx.player;
-		
+
 		switch (ctx.component) {
 		case 10://Join/leave
 			if (player.getChat().getFriendChatOwner() !== 0) {
@@ -58,7 +58,7 @@ module.exports = function(scriptManager) {
 				util.runClientScript(player, 8178, []);
 				util.runClientScript(player, 8537, []);
 				util.runClientScript(player, 194, [1]);
-			}				
+			}
 			return;
 		case 36://Manual kick/ban
 			dialog.openModalBase(player);

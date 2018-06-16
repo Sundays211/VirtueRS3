@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,8 +22,8 @@
 /* globals EventType */
 var varbit = require('engine/var/bit');
 
-var util = require('util');
-var widget = require('widget');
+var util = require('shared/util');
+var widget = require('shared/widget');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -37,12 +37,12 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.IF_OPEN, 1443, function (ctx) {
 			openTab(ctx.player);
 		});
-		
+
 		scriptManager.bind(EventType.IF_BUTTON, 1443, function (ctx) {
 			var player = ctx.player;
 			switch (ctx.component) {
@@ -52,7 +52,7 @@ module.exports = (function () {
 				return;
 			case 18://Loot settings
 				varbit(player, 29043, 1);
-				openTab(player);				
+				openTab(player);
 				return;
 			case 27://Death store settings
 				varbit(player, 29043, 2);
@@ -72,7 +72,7 @@ module.exports = (function () {
 				return;
 			case 65://Misc settings
 				varbit(player, 29043, 6);
-				openTab(player);				
+				openTab(player);
 				return;
 			case 74://Aid settings
 				varbit(player, 29043, 7);
@@ -88,7 +88,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function openTab (player) {
 		widget.hide(player, 1443, 10, true);
 		widget.hide(player, 1443, 19, true);

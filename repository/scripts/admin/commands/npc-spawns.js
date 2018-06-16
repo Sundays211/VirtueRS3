@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,15 +20,15 @@
  * SOFTWARE.
  */
 /* globals EventType, Java, ENGINE */
-var coords = require('map/coords');
+var coords = require('shared/map/coords');
 var BufferedWriter = Java.type('java.io.BufferedWriter');
 var FileWriter = Java.type('java.io.FileWriter');
 var NpcDropParser = Java.type('org.virtue.game.parser.impl.NpcDropParser');
 var NpcDataParser = Java.type('org.virtue.game.parser.impl.NpcDataParser');
 
-var map = require('map');
-var chat = require('chat');
-var util = require('util');
+var map = require('shared/map');
+var chat = require('shared/chat');
+var util = require('shared/util');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -41,12 +41,12 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.COMMAND_ADMIN, ["addspawn","addnpcspawn"], function (ctx) {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
-			
+
 			if (args.length === 0 || isNaN(args[0])) {
 				chat.sendCommandResponse(player, "Usage: npcTypeID [posX] [posY] [posZ]", ctx.console);
 				return false;
@@ -73,17 +73,17 @@ module.exports = (function () {
 				writer.write(npcType + " - " + posX + " " + posY + " " + level);
 				ENGINE.spawnNpc(npc, true);
 				writer.close();
-			} catch (e) { 
+			} catch (e) {
 				if (writer !== null) {
 					writer.close();
 				}
-			} 
+			}
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "npc", function (ctx) {
 			var args = ctx.cmdArgs;
 			var player = ctx.player;
-			
+
 			if (args.length === 0 || isNaN(args[0])) {
 				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [posX] [posY] [posZ]", ctx.console);
 				return;
@@ -93,17 +93,17 @@ module.exports = (function () {
 			ENGINE.spawnNpc(npc);
 			npc.getCombatSchedule().lock(player);
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "reloadNPCDrops", function (ctx) {
 			chat.sendCommandResponse(ctx.player, "Reloaded Npc Drops.", ctx.console);
 			NpcDropParser.loadNpcDrops();
 		});
-		
+
 		scriptManager.bind(EventType.COMMAND_ADMIN, "reloadNPCDefs", function (ctx) {
 			chat.sendCommandResponse(ctx.player, "NPC Combat Definitions has been reloaded!", ctx.console);
 			NpcDataParser.loadJsonNpcData();
 		});
 	}
-	
-	
+
+
 })();
