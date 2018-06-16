@@ -34,6 +34,7 @@ module.exports = (function () {
 	};
 	function init (scriptManager) {
 		
+		//gfx around 5560 for stuff on beach
 		//Surfboard anim 26597
 		scriptManager.bind(EventType.IF_BUTTON, 1644, function (ctx) {//Beach ball rolling interface
             switch (ctx.component) { 
@@ -112,6 +113,7 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 97381, function (ctx) {//Deck chair
+			//gfx 5650 5651 5652 Deck chair
 			//anim 26601 getting on chair
 			//anim 26602 staying on
 			//anim 26603 getting off

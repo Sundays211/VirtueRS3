@@ -42,7 +42,7 @@ module.exports = (function () {
 
 	function runWoodcuttingAction (player, levelReq, onSuccess) {
 		if (stat.getLevel(player, Stat.WOODCUTTING) < levelReq) {
-			chat.sendMessage(player, "You require a woodcutting level of "+levelReq+"  to chop this tree.");
+			chat.sendMessage(player, "You require a woodcutting level of "+levelReq+" to chop this tree.");
 			return;
 		}
 		var axe = hatchet.getHatchet(player);//Find the highest hatchet the player holds and can use

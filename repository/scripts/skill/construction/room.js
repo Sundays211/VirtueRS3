@@ -151,5 +151,5 @@ module.exports = {
 	AQUARIUM : {
 		id : 34685,
 		srcCoord : coords(0,29,79,56,0),
-	}
+	}//in the aquarium 0,24,104,11,10
 };

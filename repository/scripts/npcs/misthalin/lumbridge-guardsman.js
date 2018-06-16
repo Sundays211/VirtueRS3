@@ -29,7 +29,7 @@ module.exports = (function () {
 
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPNPC1, 14936, function (ctx) {
-			dialog.builder(ctx.player).chatnpc(ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actuall have", 9850)
+			dialog.builder(ctx.player).chatnpc(ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actually have", 9850)
 			.chatnpc(ctx.npc, "proper equipment and traning!", 9847)
 			.finish();	
 		});	

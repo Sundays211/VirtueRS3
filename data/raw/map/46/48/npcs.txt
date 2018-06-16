@@ -1,0 +1,11 @@
+// NPC Spawns for map square 46,48
+// Format: npcTypeId - level,localX,localY
+22062- 0,56,40 //wizard myrtle //////////////
+22066 - 0,58,40 //vannaka
+22104- 0,59,41 //master chef
+22106- 0,57,38 //survival expert
+22108- 0,54,40 //magic instructor   varbit 30071 195 to show all of them
+22110- 0,54,39 //financial advisor
+22112- 0,55,38 //mining instructor
+22114- 0,58,38 //brother brace //////////
+

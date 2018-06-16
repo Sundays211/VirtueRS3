@@ -56,10 +56,10 @@ module.exports = (function () {
 			var player = ctx.player;
 			var args = ctx.cmdArgs;
 			
-			if (args[0] === 0) {
+			if (args[0] == 0) {
 				player.getModel().setGender(Gender.MALE);
 				player.getModel().refresh();
-			} else if (args[0] === 1) {
+			} else if (args[0] == 1) {
 				player.getModel().setGender(Gender.FEMALE);
 				player.getModel().refresh();
 			}

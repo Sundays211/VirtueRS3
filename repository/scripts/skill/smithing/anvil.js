@@ -9,7 +9,7 @@ var varbit = require('engine/var/bit');
 var dialog = require('dialog');
 var widget = require('widget');
 var config = require('engine/config');
-
+var quest = require('../quest');
 var makex = require('../makex');
 
 module.exports = (function () {
@@ -21,6 +21,18 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, [ 2783, 12692, 67468 ], function (ctx) {
 			startSmithing(ctx.player);
 		});
+		//find out when you can use them
+		//26822 coords 0 39 52 2 3  
+		//49036 coords 0 41 53 16 27
+		//4306 coords 0 40 57 59 17
+		scriptManager.bind(EventType.OPLOC1, 78040, function (ctx) {//Doric's anvil
+		    if(quest.hasFinished(ctx.player, 207)) {
+			    startSmithing(ctx.player);
+			} else {
+			    dialog.mesbox(ctx.player, "You can't use the anvil until you finish helping Doric."); 	
+			}	
+		});
+		
 	}
 	
 	function startSmithing (player) {

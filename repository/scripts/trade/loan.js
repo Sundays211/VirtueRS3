@@ -84,7 +84,7 @@ module.exports = (function () {
 			varp(toPlayer, 430, duration);//Loan from duration
 			varp(fromPlayer, 431, duration);//Loan to duration
 			
-			checkLoanedItem(fromPlayer);
+			checkLoanedItem(fromPlayer, lentId);
 			checkLentItem(toPlayer);
 		}
 		chat.sendMessage(toPlayer, "The borrowed item will be returned to the owner's Returned Items box, "+
@@ -143,14 +143,15 @@ module.exports = (function () {
 		}
 	}
 	
-	function checkLoanedItem (player) {
+	function checkLoanedItem (player, objId) {
 		util.delayFunction(player, CONST.CYCLES_PER_MIN, function () {
 			if (varp(player, 430) > 0) {
 				varp(player, 430, varp(player, 430)-1);
 				if (varp(player, 430) === 0) {
-					destroyBorrowedItems(player);
+					destroyBorrowedItems(player, objId);
+					chat.sendMessage(player, "The item you were borrowing has been returned.");
 				} else {
-					checkLoanedItem(player);
+					checkLoanedItem(player, objId);
 				}
 			}
 		}, false);
@@ -180,8 +181,8 @@ module.exports = (function () {
 		varp(player, 430, 0);	
 	}
 	
-	function destroyBorrowedItems (player) {
-		var slot, objId;
+	function destroyBorrowedItems (player, objId) {
+		var slot;
 		for (slot=0; slot<inv.size(Inv.EQUIPMENT); slot++) {
 			objId = inv.getObjId(player, Inv.EQUIPMENT, slot);
 			if (objId !== -1 && config.objUnlent(objId) != objId) {
@@ -190,7 +191,7 @@ module.exports = (function () {
 			}
 		}
 		for (slot=0; slot<inv.size(Inv.BACKPACK); slot++) {
-			objId = inv.getObjId(player, Inv.EQUIPMENT, slot);
+			objId = inv.getObjId(player, Inv.BACKPACK, slot);
 			if (objId !== -1 && config.objUnlent(objId) != objId) {
 				inv.clearSlot(player, Inv.BACKPACK, slot);
 				return true;

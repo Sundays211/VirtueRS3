@@ -204,7 +204,11 @@ module.exports = (function() {
 		case 10://Examine
 			chat.sendMessage(player, ""+item);
 			chat.sendMessage(player, config.objDesc(objId));
-			return;
+			if (ENGINE.getExchangeCost(item) > -1) {
+				chat.sendMessage(player, "GE guide price: "+util.toFormattedString(ENGINE.getExchangeCost(item)) +" gp each");
+			}
+		return;
+		
 		default:
 			util.defaultHandler(ctx, "backpack");
 			return;
