@@ -1,7 +1,7 @@
 /**
  * The global bootstrap file for initialising all the script modules
  */
-/* globals load, Java, EventType */
+/* globals Java, EventType */
 
 /**
  * Gets the names of all modules within the script system
@@ -75,8 +75,6 @@ function getAllModules () {// jshint ignore:line
 function init (scriptManager, cwd, modules) {// jshint ignore:line
 	var logger = scriptManager.logger;//Shortcut method
 
-	load(cwd+'/jvm-npm.js');
-
 	var eventCount = 0;
 
 	var scriptManagerWrapper = {
@@ -102,29 +100,29 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 	for (var i in modules) {
 		var module = modules[i];
 		var start = new Date().getTime();
-		require(cwd+'/'+module+'/bootstrap')(scriptManagerWrapper);
+		require('./'+module+'/bootstrap')(scriptManagerWrapper);
 		var end = new Date().getTime();
 		logger.info('Loaded '+eventCount+' '+module+' event listeners in '+(end-start)+' milliseconds');
 		eventCount = 0;
 	}
 
-	registerLoginEvents(scriptManager, cwd);
-	registerLogoutEvents(scriptManager, cwd);
+	registerLoginEvents(scriptManager);
+	registerLogoutEvents(scriptManager);
 
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
-		CraftProcess : require(cwd+'/skill/makex/progress'),
-		CraftDialog : require(cwd+'/skill/makex/selection'),
-		MoneyPouch : require(cwd+'/node_modules/shared/inv/money-pouch'),
-		WornEquipment : require(cwd+'/node_modules/shared/inv/equipment'),
-		Toolbelt : require(cwd+'/inv/toolbelt')
+		CraftProcess : require('./skill/makex/progress'),
+		CraftDialog : require('./skill/makex/selection'),
+		MoneyPouch : require('./node_modules/shared/inv/money-pouch'),
+		WornEquipment : require('./node_modules/shared/inv/equipment'),
+		Toolbelt : require('./inv/toolbelt')
 	};
 }
 
-function registerLoginEvents (scriptManager, cwd) {
+function registerLoginEvents (scriptManager) {
 	var loginModules = [
-		require(cwd+'/skill/farming/growth-cycle'),
-		require(cwd+'/trade/loan')
+		require('./skill/farming/growth-cycle'),
+		require('./trade/loan')
 	];
 
 	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
@@ -138,9 +136,9 @@ function registerLoginEvents (scriptManager, cwd) {
 	scriptManager.registerListener(EventType.PLAYER_LOGIN, new Listener());
 }
 
-function registerLogoutEvents (scriptManager, cwd) {
+function registerLogoutEvents (scriptManager) {
 	var logoutModules = [
-		require(cwd+'/trade/loan')
+		require('./trade/loan')
 	];
 
 	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
@@ -153,3 +151,8 @@ function registerLogoutEvents (scriptManager, cwd) {
 
 	scriptManager.registerListener(EventType.PLAYER_LOGOUT, new Listener());
 }
+
+module.exports = {
+	getAllModules,
+	init
+};
