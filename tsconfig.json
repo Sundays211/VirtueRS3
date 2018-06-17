@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "module": "es6",
+        "moduleResolution": "node",
+        "target": "es2015",
+        "allowJs": true,
+        "checkJs": false,
+        "baseUrl": "./",
+        "paths": {
+            "engine/*": ["src/main/javascript/engine/*"],
+            "shared/*": ["src/main/javascript/shared/*"]
+        }
+    },
+    "files": [
+        "src/main/javascript/global-bootstrap.js",
+        "src/main/javascript/globals.d.ts"
+    ]
+}

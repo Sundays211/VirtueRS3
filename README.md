@@ -12,9 +12,19 @@ To contribute to the project, fork it to your own repository using the link at t
 
 ## Script System
 
-All content scripts are located under repository/scripts/. These scripts are loaded automatically when the server is first started, and they can be reloaded using the `::scripts` or `::reload <module>` command in-game (while logged into an Admin account) if you want to test a change without restarting the entire server. The [CommonJS module structure](http://wiki.commonjs.org/wiki/Modules/1.1) is used to organise scripts into modules which declare dependencies on other modules using `require(<relative path to module>)`. 
+All content scripts are located under scr/main/javascripts/. The [CommonJS module structure](http://wiki.commonjs.org/wiki/Modules/1.1) is used to organise scripts into modules which declare dependencies on other modules using `require(<relative path to module>)`. 
 
 NOTE: you must use the _relative path to the module_ when requiring modules, which usually involves stepping up one or more levels first. For example, if your module was in the folder `/skill/mining` and you wanted to import the `/core/var/bit` module, you would need to use `var varbit = require('../../core/var/bit');`
+
+### Dynamically Reloading Modules
+
+Scripts are built and loaded automatically when you start the server.
+
+To avoid restarting the server every time you change a script, you can run `./gradlew watchScripts` in a _separate_ terminal window/tab to automatically rebuild the bundle any time a file.
+
+You must also use the `::scripts` command in-game (while logged into an Admin account) to cause the server to load the updated module.
+
+*Note:* The `::reload <module>` command has not yet been updated to work with the new build script. For now, you must use `::scripts` to reload all modules instead.
 
 ### Creating and Registering Modules
 

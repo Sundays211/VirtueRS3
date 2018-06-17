@@ -23,6 +23,8 @@ package org.virtue.engine.script;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,14 +71,14 @@ public class JSListeners implements ScriptManager {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(JSListeners.class);
-	
+
 	private static String[] LEGACY_CATEGORIES = {"abilities", "npcs",
 			"skill", "specials"};
-	
+
 	private static class EventBind {
 		private ScriptEventType type;
 		private Object boundTo;
-		
+
 		private EventBind (ScriptEventType type, Object boundTo) {
 			this.type = type;
 			this.boundTo = boundTo;
@@ -252,19 +254,23 @@ public class JSListeners implements ScriptManager {
 
 	@SuppressWarnings("unchecked")
 	protected List<String> initModuleBootstrap(ScriptEngine engine) throws Exception {
-		File globalBootstrap = new File(scriptDir, "global-bootstrap.js");
-		engine.eval(new FileReader(globalBootstrap));
-		Invocable invoke = (Invocable) engine;
-		
-		modules.clear();		
-		Object modulesObj = invoke.invokeFunction("getAllModules");
-		return (List<String>) modulesObj;
+		try (InputStream bootstrapScriptIs = JSListeners.class.getResourceAsStream("/scripts/bundle.bootstrap.js")) {
+			//File globalBootstrap = new File(scriptDir, "global-bootstrap.js");
+			engine.eval(new InputStreamReader(bootstrapScriptIs));
+			Object bootstrapModule = engine.eval("bootstrapModule");
+			Invocable invoke = (Invocable) engine;
+
+			modules.clear();
+			Object modulesObj = invoke.invokeMethod(bootstrapModule, "getAllModules");
+			return (List<String>) modulesObj;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void loadModules(ScriptEngine engine, List<String> modules) throws Exception {
 		Invocable invoke = (Invocable) engine;
-		Object legacyGlobals = invoke.invokeFunction("init", this, scriptDir, modules);
+		Object bootstrapModule = engine.eval("bootstrapModule");
+		Object legacyGlobals = invoke.invokeMethod(bootstrapModule, "init", this, scriptDir, modules);
 		//TODO: This section only exists to support legacy scripts. Remove once modular system is fully implemented
 		Map<String, Object> legacyGlobalMap = (Map<String, Object>) legacyGlobals;
 		for (Map.Entry<String, Object> entry : legacyGlobalMap.entrySet()) {

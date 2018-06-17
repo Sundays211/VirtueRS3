@@ -23,6 +23,7 @@ hs_err_pid*
 .gradle
 build/
 bin/
+/node_modules/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
