@@ -3,6 +3,7 @@
   "unused": true,
   "shadow": "outer",
   "latedef": "nofunc",
+  "esversion": 6,
   "globals": {
     "module": true,
     "require":true	
