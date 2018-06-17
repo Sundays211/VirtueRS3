@@ -3,13 +3,14 @@
         "outDir": "./dist/",
         "noImplicitAny": true,
         "module": "es6",
+        "moduleResolution": "node",
         "target": "es2015",
         "allowJs": true,
         "checkJs": false,
-        "baseUrl": "./src/main/javascript/",
+        "baseUrl": "./",
         "paths": {
-            "engine/*": ["engine/*"],
-            "shared/*": ["shared/*"]
+            "engine/*": ["src/main/javascript/engine/*"],
+            "shared/*": ["src/main/javascript/shared/*"]
         }
     },
     "files": [

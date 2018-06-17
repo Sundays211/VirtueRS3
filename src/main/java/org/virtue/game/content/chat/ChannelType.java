@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,6 +21,7 @@
  */
 package org.virtue.game.content.chat;
 
+//NOTE: This should be kept in-sync with message-type.ts
 public enum ChannelType {
 	GAME(0),
 	PUBLIC(1),
@@ -49,28 +50,28 @@ public enum ChannelType {
 	TRADE(100),
 	REQUEST(101),
 	ASSIST(102),
-	
+
 	/**
 	 * Represents a game message which can be filtered by players
 	 */
 	GAME_SPAM(109),
-	
+
 	/**
 	 * Represents a clan invitation message
 	 */
 	CLAN_INVITE(117),
 	BROADCAST(125);
-	
+
 	private int type;
-	
+
 	ChannelType(int type) {
 		this.type = type;
 	}
-	
+
 	public int getType() {
 		return type;
 	}
-	
+
 	public static ChannelType forID (int id) {
 		for (ChannelType type : ChannelType.values()) {
 			if (type.type == id) {

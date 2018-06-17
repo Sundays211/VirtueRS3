@@ -32,6 +32,7 @@ module.exports = {
         }]
     },
     resolve: {
+        extensions: ['.js', '.ts', '.json'],
         alias: {
             shared: path.join(jsSourceFolder, 'shared'),
             engine: path.join(jsSourceFolder, 'engine')
