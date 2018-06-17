@@ -6,14 +6,14 @@
         "target": "es2015",
         "allowJs": true,
         "checkJs": false,
-        "baseUrl": "./",
+        "baseUrl": "./src/main/javascript/",
         "paths": {
-            "engine/*": ["repository/scripts/node_modules/engine/*"],
-            "shared/*": ["repository/scripts/node_modules/shared/*"]
+            "engine/*": ["engine/*"],
+            "shared/*": ["shared/*"]
         }
     },
     "files": [
-        "repository/scripts/global-bootstrap.js",
-        "repository/scripts/globals.d.ts"
+        "src/main/javascript/global-bootstrap.js",
+        "src/main/javascript/globals.d.ts"
     ]
 }

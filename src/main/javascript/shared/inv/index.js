@@ -2,7 +2,7 @@
  *
  */
 var common = require('./common');
-var toolbelt = require('../../../inv/toolbelt');
+var toolbelt = require('../../modules/inv/toolbelt');
 var equipment = require('./equipment');
 
 module.exports = {

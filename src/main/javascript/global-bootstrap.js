@@ -100,7 +100,7 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 	for (var i in modules) {
 		var module = modules[i];
 		var start = new Date().getTime();
-		require('./'+module+'/bootstrap')(scriptManagerWrapper);
+		require('./modules/'+module+'/bootstrap')(scriptManagerWrapper);
 		var end = new Date().getTime();
 		logger.info('Loaded '+eventCount+' '+module+' event listeners in '+(end-start)+' milliseconds');
 		eventCount = 0;
@@ -111,18 +111,18 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
-		CraftProcess : require('./skill/makex/progress'),
-		CraftDialog : require('./skill/makex/selection'),
-		MoneyPouch : require('./node_modules/shared/inv/money-pouch'),
-		WornEquipment : require('./node_modules/shared/inv/equipment'),
-		Toolbelt : require('./inv/toolbelt')
+		CraftProcess : require('./modules/skill/makex/progress'),
+		CraftDialog : require('./modules/skill/makex/selection'),
+		MoneyPouch : require('./shared/inv/money-pouch'),
+		WornEquipment : require('./shared/inv/equipment'),
+		Toolbelt : require('./modules/inv/toolbelt')
 	};
 }
 
 function registerLoginEvents (scriptManager) {
 	var loginModules = [
-		require('./skill/farming/growth-cycle'),
-		require('./trade/loan')
+		require('./modules/skill/farming/growth-cycle'),
+		require('./modules/trade/loan')
 	];
 
 	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
@@ -138,7 +138,7 @@ function registerLoginEvents (scriptManager) {
 
 function registerLogoutEvents (scriptManager) {
 	var logoutModules = [
-		require('./trade/loan')
+		require('./modules/trade/loan')
 	];
 
 	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {

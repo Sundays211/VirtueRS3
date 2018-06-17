@@ -3,13 +3,13 @@
 var path = require('path');
 var webpack = require('webpack');
 
-const modulesFolder = path.join(__dirname, 'repository/scripts/node_modules');
+const jsSourceFolder = path.join(__dirname, 'src/main/javascript');
 
 module.exports = {
     mode: 'development',
     devtool: false,//No point generating source maps since Nashorn can't understand them
     entry: {
-        "bootstrap": path.join(__dirname, 'repository/scripts/global-bootstrap.js')
+        "bootstrap": path.join(jsSourceFolder, 'global-bootstrap.js')
     },
     output: {
         path: path.join(__dirname, 'build/resources/main/scripts'),
@@ -33,8 +33,8 @@ module.exports = {
     },
     resolve: {
         alias: {
-            shared: path.join(modulesFolder, 'shared'),
-            engine: path.join(modulesFolder, 'engine')
+            shared: path.join(jsSourceFolder, 'shared'),
+            engine: path.join(jsSourceFolder, 'engine')
         }
     }
 };
