@@ -20,7 +20,7 @@ module.exports = (function () {
 			selectRobustGlassProduct(ctx.player, ctx.location);
 		});
 		
-		scriptManager.bind(EventType.OPLOC1, [ 67968 ], function (ctx) {
+		scriptManager.bind(EventType.OPLOC1, [ 2331,67968 ], function (ctx) {
 			selectRobustGlassProduct(ctx.player, ctx.location);
 		});
 	}
