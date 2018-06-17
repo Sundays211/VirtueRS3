@@ -55,6 +55,10 @@ task webpack(type: NpmTask, dependsOn: 'npmInstall') {
 	args = ['run', 'build']
 }
 
+task watchScripts(type: NpmTask, dependsOn: 'npmInstall') {
+	args = ['run', 'watch']
+}
+
 task packMap(type:JavaExec) {
 	main = 'org.virtue.io.pack.MapDataPacker'
 	classpath = sourceSets.main.runtimeClasspath
