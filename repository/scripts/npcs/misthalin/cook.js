@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
-var quest = require('../quest');
+var quest = require('../../quest');
 var varp = require('engine/var/player');
 var dialog = require('shared/dialog');
 var inv = require('shared/inv');

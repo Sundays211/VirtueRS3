@@ -9,7 +9,7 @@ var varbit = require('engine/var/bit');
 var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 var config = require('engine/config');
-var quest = require('../quest');
+var quest = require('../../quest');
 var makex = require('../makex');
 
 module.exports = (function () {

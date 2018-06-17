@@ -80,7 +80,7 @@ module.exports = (function () {
 	varc(ctx.player, 3969, "This star can be drained of energy to give you bonus XP.");
 	varc(ctx.player, 4061, 1);
 	varc(ctx.player, 3970, "Rub this lamp to get some Slayer XP.");
-	varc(ctx.player, 062, 0);
+	varc(ctx.player, 4062, 0);
 	varc(ctx.player, 3971, "This star can be drained of energy to give you bonus XP.");
 	varc(ctx.player, 4063, 1);
 	varc(ctx.player, 3972, "A chunk of tier 4 harvested divine energy. It can be manipulated to create or transmute objects.");
