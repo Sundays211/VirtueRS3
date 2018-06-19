@@ -73,6 +73,14 @@ function delLoc(coord: CoordGrid, shape: number, rotation: number) {
 	MAP_ENGINE.delLoc(coord, shape, rotation);
 }
 
+/**
+ * Runs the specified function after a delay on the given node.
+ * If the node is destroyed (or the region reset), the function will not run
+ *
+ * @param node The node to delay the function on
+ * @param task The function to run after the given delay
+ * @param delay The number of game cycles to delay by
+ */
 function delay(coord: Node | CoordGrid, task: () => void, ticks: number) {
 	MAP_ENGINE.delay(coord, task, ticks);
 }

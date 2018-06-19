@@ -11,6 +11,10 @@ export interface Entity extends Node {
 
 }
 
+export interface Location extends Node {
+
+}
+
 export interface Node {
 
 }
@@ -20,5 +24,9 @@ export interface CoordGrid {
 }
 
 export interface DynamicMapSquare {
+
+}
+
+export interface NodeHash {
 
 }

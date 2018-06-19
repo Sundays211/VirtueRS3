@@ -16,5 +16,8 @@
     "files": [
         "src/main/javascript/global-bootstrap.js",
         "src/main/javascript/globals.d.ts"
+    ],
+    "includes": [
+        "src/main/javascript/modules/**/bootstrap.*"
     ]
 }
