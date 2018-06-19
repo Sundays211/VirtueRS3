@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -83,7 +83,7 @@ public class JSListeners implements ScriptManager {
 			this.type = type;
 			this.boundTo = boundTo;
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see java.lang.Object#hashCode()
 		 */
@@ -115,11 +115,11 @@ public class JSListeners implements ScriptManager {
 			if (type != other.type)
 				return false;
 			return true;
-		}	
+		}
 	}
-	
+
 	private ScriptEngineManager engineManager = new ScriptEngineManager();
-	
+
 	/**
 	 * A map centralising all event listeners into one place
 	 */
@@ -128,25 +128,25 @@ public class JSListeners implements ScriptManager {
 	private Map<Integer, AbstractNPC> abstractNPCMap;
 
 	private Map<Integer, CombatHandler> combatScriptMap;
-	
+
 	private ScriptAPI scriptApi;
-	
+
 	private ClanAPI clanApi;
-	
+
 	private MapAPI mapApi;
-	
+
 	private ConfigAPI configApi;
-	
+
 	private QuestAPI questApi;
-	
+
 	private EntityAPI entityApi;
-	
+
 	private ScriptEngine engine;
-	
+
 	private File scriptDir;
-	
+
 	private File legacyScriptDir;
-	
+
 	private List<String> modules;
 
 	public JSListeners(File scriptDir) {
@@ -157,65 +157,66 @@ public class JSListeners implements ScriptManager {
 		this.legacyScriptDir = new File(scriptDir, "legacy");
 		this.modules = new ArrayList<>();
 	}
-	
+
 	protected void setConstants (ScriptEngine engine) {
 		engine.put("api", getScriptApi());
 		engine.put("ENGINE", getScriptApi());
 		engine.put("CLAN_ENGINE", clanApi);
 		engine.put("MAP_ENGINE", mapApi);
 		engine.put("configApi", configApi);
+		engine.put("CONFIG_ENGINE", configApi);
 		engine.put("QUEST_ENGINE", questApi);
 		engine.put("ENTITY_ENGINE", entityApi);
 		engine.put("scriptEngine", this);
-		
+
 		Map<String, Integer> map = new HashMap<>();
 		for (ScriptEventType type : ScriptEventType.values()) {
 			map.put(type.name(), type.getId());
 		}
 		engine.put("EventType", map);
-		
+
 		map = new HashMap<>();
 		for (ChannelType type : ChannelType.values()) {
 			map.put(type.name(), type.getType());
 		}
 		engine.put("MesType", map);
-		
+
 		map = new HashMap<>();
 		for (Stat type : Stat.values()) {
 			map.put(type.name(), type.getId());
 		}
 		engine.put("Stat", map);
-		
+
 		map = new HashMap<>();
 		for (ContainerState inv : ContainerState.values()) {
 			map.put(inv.name(), inv.getID());
 		}
 		engine.put("Inv", map);
-		
+
 		map = new HashMap<>();
 		for (WearPos wearPos : WearPos.values()) {
 			map.put(wearPos.name(), wearPos.getPos());
 		}
 		engine.put("WearPos", map);
-		
+
 		map = new HashMap<>();
 		for (ChatOptionType opType : ChatOptionType.values()) {
 			map.put(opType.name(), opType.getId());
 		}
 		engine.put("ChatListType", map);
-		
+
 		map = new HashMap<>();
 		for (FriendChatDataType opType : FriendChatDataType.values()) {
 			map.put(opType.name(), opType.getId());
 		}
 		engine.put("FriendChatData", map);
-		
+
 		map = new HashMap<>();
 		for (ChatheadEmoteType expression : ChatheadEmoteType.values()) {
 			map.put(expression.name(), expression.getAnimID());
 		}
 		engine.put("Expression", map);
-		
+
 		File generalFunctions = new File(legacyScriptDir, "GeneralFunctions.js");
 		if (generalFunctions.exists()) {
 			try {
@@ -233,7 +234,7 @@ public class JSListeners implements ScriptManager {
 		try {
 			initModuleBootstrap(engine);
 			modules = initModuleBootstrap(engine);
-			
+
 			loadModules(engine, modules);
 		} catch (Exception ex) {
 			logger.error("Failed to load script modules", ex);
@@ -277,7 +278,7 @@ public class JSListeners implements ScriptManager {
 			engine.put(entry.getKey(), entry.getValue());
 		}
 	}
-	
+
 	private boolean loadLegacyCategory (ScriptEngine engine, File folder) {
 		boolean success = true;
 		List<File> files = FileUtility.findFiles(folder, "js");
@@ -308,7 +309,7 @@ public class JSListeners implements ScriptManager {
 		abstractNPCMap.clear();
 		return load();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptManager#reload(java.lang.String)
 	 */
@@ -328,7 +329,7 @@ public class JSListeners implements ScriptManager {
 		}
 		return success;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptManager#categoryExists(java.lang.String)
 	 */
@@ -336,7 +337,7 @@ public class JSListeners implements ScriptManager {
 	public boolean categoryExists (String category) {
 		return new File(scriptDir, category).exists();
 	}
-	
+
 	/**
 	 * Returns the api for this script enviroment, which is used to interact with the underlying server
 	 * @return The {@link ScriptAPI} instance
@@ -344,7 +345,7 @@ public class JSListeners implements ScriptManager {
 	public ScriptAPI getScriptApi () {
 		return scriptApi;
 	}
-	
+
 	public void setScriptApi(ScriptAPI scriptApi) {
 		this.scriptApi = scriptApi;
 	}
@@ -396,7 +397,7 @@ public class JSListeners implements ScriptManager {
 	public Logger getLogger () {
 		return logger;
 	}
-	
+
 	/**
 	 * Registers a general event listener of the given type, which is bound to no objects.
 	 * This can be used to bind global listeners, such as player login/logouts
@@ -414,10 +415,10 @@ public class JSListeners implements ScriptManager {
 		EventBind bind = new EventBind(eventType, null);
 		listeners.put(bind, listener);
 	}
-	
+
 	/**
 	 * Registers a general event listener of the given type which is bound to the given object
-	 * @param eventTypeId The event type ID. Must match a valid id in {@link ScriptEventType}, otherwise an {@link IllegalArgumentException} will be thrown. 
+	 * @param eventTypeId The event type ID. Must match a valid id in {@link ScriptEventType}, otherwise an {@link IllegalArgumentException} will be thrown.
 	 * @param binding The item to bind to. The use of this paramater depends on the event type specified.
 	 * @param listener The listener to bind
 	 */
@@ -432,7 +433,7 @@ public class JSListeners implements ScriptManager {
 		EventBind bind = new EventBind(eventType, binding);
 		listeners.put(bind, listener);
 	}
-	
+
 	/**
 	 * Registers a general event listener of the given type which is bound to the given object
 	 * @param eventTypeId
@@ -450,33 +451,33 @@ public class JSListeners implements ScriptManager {
 		EventBind bind = new EventBind(eventType, binding);
 		listeners.put(bind, listener);
 	}
-	
+
 	public void registerCompListener(int eventTypeId, int iface, int comp, EventListener listener) {
 		registerListener(eventTypeId, iface << 16 | (comp & 0xffff), listener);
 	}
-	
+
 	public void registerAbilityListener(AbilityListener listener, int shortcut) {
 		ActionBar.getAbilities().put(listener.getAbilityID(), new ScriptedAbility(listener));
 	}
-	
+
 	public void registerAbstractNPC(AbstractNPC npc, int npcId) {
 		abstractNPCMap.put(npcId, npc);
 	}
-	
+
 	public AbstractNPC getNPC(int npcId) {
 		return abstractNPCMap.get(npcId);
 	}
-	
+
 	public void registerCombatScript(CombatHandler script, int... npcId) {
 		for (int id : npcId) {
 			combatScriptMap.put(id, script);
 		}
 	}
-	
+
 	public CombatHandler getCombatScript(int npcId) {
 		return combatScriptMap.get(npcId);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptManager#hasBinding(org.virtue.engine.script.ScriptEventType, java.lang.Object)
 	 */
@@ -485,7 +486,7 @@ public class JSListeners implements ScriptManager {
 		EventBind bind = new EventBind(type, trigger);
 		return listeners.containsKey(bind);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptManager#invokeScriptUnchecked(org.virtue.engine.script.ScriptEventType, java.lang.Object, java.util.Map)
 	 */
@@ -495,7 +496,7 @@ public class JSListeners implements ScriptManager {
 		EventListener listener = listeners.get(bind);
 		listener.invoke(type.getId(), trigger, args);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptManager#invokeScriptChecked(org.virtue.engine.script.ScriptEventType, java.lang.Object, java.util.Map)
 	 */
