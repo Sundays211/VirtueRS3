@@ -5,10 +5,10 @@
 
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
-var map = require('map');
+var map = require('shared/map');
 var makex = require('../makex');
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 
 module.exports = (function () {
 	return {

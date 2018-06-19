@@ -16,8 +16,8 @@ var OTHER_GRINDING = 6836;
 
 module.exports = (function () {
 	return {
-		init : init
-		grind_cooking_igredients : grind_cooking_igredients
+		init : init,
+		grind_cooking_igredients : grind_cooking_igredients,
 		grind_other : grind_other
 	};
 	

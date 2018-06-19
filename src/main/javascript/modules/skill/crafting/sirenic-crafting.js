@@ -7,8 +7,8 @@ var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
 var makex = require('../makex');
-var dialog = require('dialog');
-var widget = require('widget');
+var dialog = require('shared/dialog');
+var widget = require('shared/widget');
 
 var SIRENIC_MASK = 29854;
 var SIRENIC_HAUBERK = 29857;
