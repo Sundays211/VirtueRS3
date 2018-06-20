@@ -21,6 +21,6 @@ export function setVarp(player: Player, key: number, value: VarValue) {
 	ENGINE.setVarp(player, key, value);
 }
 
-export function varc(player: Player, key: number, value: VarValue) {
+export function setVarc(player: Player, key: number, value: VarValue) {
 	ENGINE.setVarc(player, key, value);
 }

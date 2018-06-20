@@ -1,52 +1,33 @@
-/**
- * 
- */
-/* globals ENGINE, Stat */
+import { Stat } from 'engine/enums/stat';
+import { Player } from 'engine/models';
 
-module.exports = init();
+export function boostStat(player: Player, stat: Stat, amount: number) {
+	setStatLevel(player, stat, getStatLevel(player, stat) + amount);
+}
 
-function init () {
-	var xp = {
-		getLevel : getLevel,
-		setLevel : setLevel,
-		boost : boost,
-		reset : reset,
-		getBaseLevel : getBaseLevel,
-		giveXp : giveXp,
-		giveBonusXp : giveBonusXp,
-		lookup : lookupStat
-	};
-	
-	return xp;
-	
-	function boost (player, stat, amount) {
-		setLevel(player, stat, getLevel(player, stat)+amount);
-	}
-	
-	function reset (player, stat) {
-		setLevel(player, stat, getBaseLevel(player, stat));
-	}
-	
-	function getLevel (player, stat) {
-		return ENGINE.getStatLevel(player, stat);
-	}
-	
-	function setLevel (player, stat, level) {
-		ENGINE.setStatLevel(player, stat, level);
-	}
-	
-	function getBaseLevel (player, stat) {
-		return ENGINE.getBaseLevel(player, stat);
-	}
-	
-	function giveXp (player, stat, amount, isAward) {
-		isAward = typeof(isAward) === "undefined" ? true : isAward;
-		ENGINE.addExperience(player, stat, amount, isAward);
-	}
+export function resetStat(player: Player, stat: Stat) {
+	setStatLevel(player, stat, getBaseLevel(player, stat));
+}
 
-	function giveBonusXp (player, skill, amount) {
-		amount *= 10;//Make the decimal fit
-		switch (skill) {
+export function getStatLevel(player: Player, stat: Stat): number {
+	return ENGINE.getStatLevel(player, stat);
+}
+
+export function setStatLevel(player: Player, stat: Stat, level: number) {
+	ENGINE.setStatLevel(player, stat, level);
+}
+
+export function getBaseLevel(player: Player, stat: Stat): number {
+	return ENGINE.getBaseLevel(player, stat);
+}
+
+export function giveXp(player: Player, stat: Stat, amount: number, isAward: boolean = true) {
+	ENGINE.addExperience(player, stat, amount, isAward);
+}
+
+export function giveBonusXp(player: Player, skill: Stat, amount: number) {
+	amount *= 10;//Make the decimal fit
+	switch (skill) {
 		case Stat.ATTACK:
 			ENGINE.incrementVarp(player, 3304, amount);
 			return;
@@ -125,10 +106,20 @@ function init () {
 		case Stat.DIVINATION:
 			ENGINE.incrementVarp(player, 3836, amount);
 			return;
-		}
 	}
-	
-	function lookupStat (statName) {
-		return ENGINE.getStatByName(statName);
-	}
+}
+
+function lookupStat(statName: string): Stat {
+	return ENGINE.getStatByName(statName);
+}
+
+export default {
+	getLevel: getStatLevel,
+	setLevel: setStatLevel,
+	boost: boostStat,
+	reset: resetStat,
+	getBaseLevel,
+	giveXp,
+	giveBonusXp,
+	lookup: lookupStat
 }
