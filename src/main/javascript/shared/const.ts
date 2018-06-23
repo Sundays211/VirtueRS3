@@ -13,10 +13,5 @@ export const CYCLES_PER_DAY = CYCLES_PER_MIN * 60 * 24;
 //The number of game cycles between farming ticks
 export const FARMING_CYCLE_LENGTH = 500;
 
-export default {
-	COINS : COINS_OBJ,
-	INTEGER_MAX,
-	CYCLES_PER_MIN,
-	CYCLES_PER_DAY,
-	FARMING_CYCLE_LENGTH
-};
+//TODO: This is a legacy export to support old modules. Remove this once the modules have been updated
+export const COINS = COINS_OBJ;

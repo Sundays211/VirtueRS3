@@ -113,13 +113,7 @@ function lookupStat(statName: string): Stat {
 	return ENGINE.getStatByName(statName);
 }
 
-export default {
-	getLevel: getStatLevel,
-	setLevel: setStatLevel,
-	boost: boostStat,
-	reset: resetStat,
-	getBaseLevel,
-	giveXp,
-	giveBonusXp,
-	lookup: lookupStat
-}
+//TODO: These are legacy exports to support old modules. Remove once the modules have been updated
+export const getLevel = getStatLevel;
+export const setLevel = setStatLevel;
+export const lookup = lookupStat;

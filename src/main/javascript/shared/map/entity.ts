@@ -27,9 +27,3 @@ export function setCoords(entity: Entity, coords: CoordGrid) {
 export function getPlayer(playerHash: NodeHash): Player {
 	return ENGINE.getWorldPlayerByHash(playerHash);
 }
-
-export default {
-	teleport,
-	setCoords,
-	getPlayer
-}

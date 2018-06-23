@@ -333,9 +333,8 @@ function openOverlayTab(player: Player, tabStruct: number) {
 	hideWidget(player, 1448, 1, true);//Close loading overlay
 }
 
-export default {
-	open: openOverlay,
-	close: closeOverlay,
-	setTab: setOverlayTab,
-	tabLocked: overlayTabLocked
-}
+//TODO: These are legacy exports to support old modules. Remove once the modules have been updated
+export const open = openOverlay;
+export const close =  closeOverlay;
+export const setTab = setOverlayTab;
+export const tabLocked = overlayTabLocked;

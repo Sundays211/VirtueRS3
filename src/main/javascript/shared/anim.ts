@@ -27,8 +27,6 @@ export function addSpotAnim(
 	ENGINE.setSpotAnim(entity, 1, id, height, speed, rotation);
 }
 
-export default {
-	run: runAnim,
-	stop: stopAnim,
-	addSpotAnim
-}
+//TODO: These are legacy exports to support old modules. Remove once the modules have been updated
+export const run = runAnim;
+export const stop = stopAnim;

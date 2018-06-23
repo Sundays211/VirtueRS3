@@ -58,13 +58,10 @@ export function delZoneLoc(
 	_map.delLoc(destCoord, locShape, (mapRotation + locRotation) & 0x3);
 }
 
-export default {
-	add: addLocation,
-	get: getLocation,
-	del: delLocation,
-	anim: locationAnim,
-	getRotation: getLocRotation,
-	getShape: getLocShape,
-	addZoneLoc,
-	delZoneLoc
-}
+//TODO: These are legacy exports to support old modules. Remove once the modules have been updated
+export const add = addLocation;
+export const get = getLocation;
+export const del = delLocation;
+export const anim = locationAnim;
+export const getRotation = getLocRotation;
+export const getShape = getLocShape;

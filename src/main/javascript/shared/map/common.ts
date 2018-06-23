@@ -3,6 +3,12 @@ import _config from 'engine/config';
 import _map from 'engine/map';
 import _coords from './coords';
 
+/**
+ * Checks whether the provided coordinates lie within the zone specified
+ * @param from The start coords of the zone
+ * @param to The end coords of the zone (inclusive)
+ * @param coords The coordinates to check
+ */
 export function inZone(from: CoordGrid, to: CoordGrid, coord: CoordGrid): boolean {
 	return MAP_ENGINE.inZone(from, to, coord);
 }
@@ -46,15 +52,4 @@ export function getRotatedCoord(
 		localY = tmp;
 	}
 	return _coords(zoneCoord, localX, localY, 0);
-}
-
-export default {
-	getCoordX: _map.getCoordX,
-	getCoordY: _map.getCoordY,
-	getLevel: _map.getLevel,
-	getCoords: _map.getCoords,
-	getCoordHash,
-	getGlobalCoord,
-	getRotatedCoord,
-	inZone
 }

@@ -3,7 +3,7 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    require('./spellbook')
+
 	];
 
 	for (var i in modules) {

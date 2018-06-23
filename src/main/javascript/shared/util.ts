@@ -1,7 +1,6 @@
 /**
  * Module containing miscellaneous utility functions
  */
-import _entity from 'engine/entity';
 import { EventType } from 'engine/enums/event-type';
 import { Player, Entity, Node, NodeHash } from 'engine/models';
 import { sendMessage } from './chat';
@@ -174,28 +173,13 @@ export function lookupValue<T> (values: T[], key: string, searchValue: any): T {
 	return null;
 }
 
-export default {
-		checkOverflow,
-		defaultHandler,
-		isAdmin,
-		getId,
-		mapMembers,
-		randomValue,
-		pickRandom,
-		weightedRandom,
-		lootItem,
-		testBit,
-		setBit,
-		unsetBit,
-		getName: (entity: Entity) => _entity.getName(entity),
-		getUserHash,
-		fromBase37Hash,
-		toBase37Hash,
-		toFormattedString,
-		toFormattedTime,
-		textGender,
-		delayFunction,
-		runClientScript,
-		getServerCycle,
-		lookupValue
-	}
+export function lookupPlayerName(userHash: NodeHash) {
+	return ENGINE.getName(userHash);
+}
+
+/**
+ * @deprecated In favour of `_entity.getName()` or `lookupPlayerName()`
+ */
+export function getName (entity: Entity | NodeHash) {
+	return ENGINE.getName(entity);
+}
