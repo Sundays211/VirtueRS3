@@ -1,6 +1,7 @@
 
 export interface Player extends Entity {
-
+    //TODO: Remove this from the game engine & replace here
+    getDialogs: () => any
 }
 
 export interface Npc extends Entity {

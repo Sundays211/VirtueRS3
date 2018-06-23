@@ -24,6 +24,8 @@ export function setCoords(entity: Entity, coords: CoordGrid) {
 	ENGINE.teleportEntity(entity, coords);
 }
 
-export function getPlayer(playerHash: NodeHash): Player {
+export function findPlayer(playerHash: NodeHash): Player {
 	return ENGINE.getWorldPlayerByHash(playerHash);
 }
+
+export const getPlayer = findPlayer;

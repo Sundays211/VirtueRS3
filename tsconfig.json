@@ -18,6 +18,7 @@
         "src/main/javascript/globals.d.ts"
     ],
     "includes": [
-        "src/main/javascript/modules/**/bootstrap.*"
+        "src/main/javascript/modules/**/bootstrap.*",
+        "src/main/javascript/modules/shared/**/*.*"
     ]
 }

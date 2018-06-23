@@ -94,6 +94,9 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 					eventCount++;
 				}
 			}
+		},
+		getLogger : function () {
+			return scriptManager.getLogger();
 		}
 	};
 
