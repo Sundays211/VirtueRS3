@@ -19,6 +19,6 @@
     ],
     "includes": [
         "src/main/javascript/modules/**/bootstrap.*",
-        "src/main/javascript/modules/shared/**/*.*"
+        "src/main/javascript/shared/**/*.*"
     ]
 }
