@@ -22,11 +22,3 @@ export function sendDebugMessage (player : Player, message : string) {
 export function sendCommandResponse (player : Player, message : string, console : boolean = false) {
 	ENGINE.sendMessage(player, message, console ? MesType.CONSOLE : MesType.GAME);
 }
-
-//Legacy export - for modules which don't yet support es6 imports
-export default {
-	sendMessage,
-	sendSpamMessage,
-	sendDebugMessage,
-	sendCommandResponse
-}

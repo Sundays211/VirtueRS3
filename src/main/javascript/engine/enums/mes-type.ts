@@ -1,7 +1,7 @@
 
 //NOTE: This should be kept in-sync with ChannelType.java
 export enum MesType {
-    GAME = 0,
+	GAME = 0,
 	PUBLIC = 1,
 	PUBLIC_UNFILTERABLE = 2,
 	PUBLIC_QUICKCHAT = 17,

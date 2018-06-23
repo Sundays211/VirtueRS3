@@ -82,7 +82,7 @@ module.exports = (function () {
 			map.delLoc(loc);
 		}, logType.duration);
 		_entity.moveAdjacent(player);
-		stat.giveXp(player, Stat.FIREMAKING, logType.xp);//Add firemaking xp
+		stat.giveXp(player, Stat.FIREMAKING, logType.lightXp);//Add firemaking xp
 		chat.sendSpamMessage(player, "The fire catches and the logs begin to burn.");
 	}
 

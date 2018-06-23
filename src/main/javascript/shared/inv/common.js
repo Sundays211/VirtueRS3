@@ -131,7 +131,7 @@ function init() {
 		invId = typeof invId !== "undefined" ? invId : Inv.BACKPACK;
 
 		if (objId == CONST.COINS) {
-			var coinsToAdd = Math.min(count, util.INTEGER_MAX-moneyPouch.getCoinCount(player));
+			var coinsToAdd = Math.min(count, CONST.INTEGER_MAX-moneyPouch.getCoinCount(player));
 			moneyPouch.addCoins(player, coinsToAdd);
 			count -= coinsToAdd;
 		}
@@ -218,7 +218,7 @@ function init() {
 		var held = ENGINE.itemTotal(player, invId, objId);
 		if (objId == CONST.COINS && invId == Inv.BACKPACK) {
 			var moneyHeld = moneyPouch.getCoinCount(player);
-			held = util.checkOverflow(held, moneyHeld) ? util.INTEGER_MAX : held + moneyHeld;
+			held = util.checkOverflow(held, moneyHeld) ? CONST.INTEGER_MAX : held + moneyHeld;
 		}
 		return held;
 	}

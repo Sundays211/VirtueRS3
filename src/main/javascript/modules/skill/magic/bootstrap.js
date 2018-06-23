@@ -3,9 +3,9 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    
+
 	];
-	
+
 	for (var i in modules) {
 		modules[i].init(scriptManager);
 	}

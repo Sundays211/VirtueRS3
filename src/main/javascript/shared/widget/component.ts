@@ -1,6 +1,6 @@
 /**
  * Helper function for generating component hashes
  */
-module.exports = function (widget, comp) {
+export default function (widget: number, comp: number): number {
 	return (widget << 16) | comp;
 };

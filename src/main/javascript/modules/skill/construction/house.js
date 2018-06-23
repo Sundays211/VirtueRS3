@@ -118,7 +118,7 @@ module.exports = (function () {
 	function joinHouse(player) {
 		var message = "Enter name:";
 		dialog.requestPlayer(player, message, function (targetPlayer) {
-			entityMap.setCoords(player, entityMap.getCoords(targetPlayer));
+			entityMap.setCoords(player, _map.getCoords(targetPlayer));
 			//chat.sendMessage(player, "They do not seem to be at home.");
 			//chat.sendMessage(player, "That player is offline, or has privacy mode enabled.");
 			//chat.sendMessage(player, "They don't own a house.");

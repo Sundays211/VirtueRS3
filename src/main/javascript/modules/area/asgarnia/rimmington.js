@@ -21,6 +21,7 @@
  */
 /* globals EventType, Expression */
 var dialog = require('shared/dialog');
+var _map = require('engine/map');
 var loc = require('shared/map/location');
 var inv = require('shared/inv');
 var anim = require('shared/anim');
@@ -36,9 +37,9 @@ module.exports = (function () {
 		scriptManager.bind(EventType.OPLOC1, 9662, function (ctx) {//spade in mining area
 		    anim.run(ctx.player, 832, function () {
 		    inv.give(ctx.player, 952, 1);
-		    loc.delay(loc.add(10626, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), 40, function () {
+		    _map.delay(loc.add(10626, map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location)), function () {
 		    loc.add(util.getId(ctx.location), map.getCoords(ctx.location), loc.getShape(ctx.location), loc.getRotation(ctx.location));
-		    });
+		    }, 40);
 		    });
 		});
 
