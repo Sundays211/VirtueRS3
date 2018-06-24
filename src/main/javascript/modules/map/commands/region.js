@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 /* globals EventType, MAP_ENGINE */
+var _map = require('engine/map');
 var coords = require('shared/map/coords');
 
 var chat = require('shared/chat');
 var entityMap = require('shared/map/entity');
-var common = require('shared/map/common');
 var location = require('shared/map/location');
 
 /**
@@ -77,7 +77,7 @@ module.exports = (function () {
 				rotation = parseInt(args[2]);
 			}
 
-			location.add(locId, common.getCoords(player), shape, rotation);
+			location.add(locId, _map.getCoords(player), shape, rotation);
 			chat.sendCommandResponse(player, "Spawned location "+locId, ctx.console);
 		});
 

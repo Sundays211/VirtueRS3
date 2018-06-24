@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 /* globals EventType */
+var _map = require('engine/map');
 var coords = require('shared/map/coords');
 
 var dialog = require('shared/dialog');
@@ -43,7 +44,7 @@ module.exports = (function () {
 		scriptManager.bind(EventType.COMMAND, [ "tele", "goto", "move" ], function (ctx) {
 			var args = ctx.cmdArgs;
 			var x, y, level;
-			var currentCoords = entityMap.getCoords(ctx.player);
+			var currentCoords = _map.getCoords(ctx.player);
 			var targetCoords;
 			if (args[0] == "home") {
 			    entityMap.setCoords(ctx.player, coords(0, 50, 50, 21, 19));
@@ -75,7 +76,7 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.COMMAND_ADMIN, "up", function (ctx) {
-			var currentCoords = entityMap.getCoords(ctx.player);
+			var currentCoords = _map.getCoords(ctx.player);
 			var x = common.getCoordX(currentCoords);
 			var y = common.getCoordY(currentCoords);
 			var level = Math.min(common.getLevel(currentCoords)+1, 3);
@@ -83,7 +84,7 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.COMMAND_ADMIN, "down", function (ctx) {
-			var currentCoords = entityMap.getCoords(ctx.player);
+			var currentCoords = _map.getCoords(ctx.player);
 			var x = common.getCoordX(currentCoords);
 			var y = common.getCoordY(currentCoords);
 			var level = Math.max(common.getLevel(currentCoords)-1, 0);
@@ -93,14 +94,14 @@ module.exports = (function () {
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teleto", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to:";
 			dialog.requestPlayer(ctx.player, message, function (targetPlayer) {
-				entityMap.setCoords(ctx.player, entityMap.getCoords(targetPlayer));
+				entityMap.setCoords(ctx.player, _map.getCoords(targetPlayer));
 			});
 		});
 
 		scriptManager.bind(EventType.COMMAND_ADMIN, "teletome", function (ctx) {
 			var message = "Please enter the display name of the player you wish to teleport to you:";
 			dialog.requestPlayer(ctx.player, message, function (targetPlayer) {
-				entityMap.setCoords(targetPlayer, entityMap.getCoords(ctx.player));
+				entityMap.setCoords(targetPlayer, _map.getCoords(ctx.player));
 			});
 		});
 	}

@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,6 +31,7 @@ import org.virtue.config.defaults.PlayerSkill;
  * @author Arthur <skype:arthur.behesnilian>
  * @author Sundays211
  * @since 27/10/2014
+ * NOTE: This should be kept in-sync with stat.ts
  */
 public enum Stat {
 	ATTACK(0, "Attack"),
@@ -60,7 +61,7 @@ public enum Stat {
 	DUNGEONEERING(24, "Dungeoneering"),
 	DIVINATION(25, "Divination"),
 	INVENTION(26, "Invention");
-	
+
 	private final String name;
 	private final int id;
 	private int levelCap;
@@ -74,7 +75,7 @@ public enum Stat {
 		this.xpCurve = PlayerSkillXPTable.DEFAULT;
 		this.initialLevel = 1;
 	}
-	
+
 	/**
 	 * Gets the id of the skill
 	 * @return	The id.
@@ -82,7 +83,7 @@ public enum Stat {
 	public int getId () {
 		return id;
 	}
-	
+
 	/**
 	 * Gets the name of the skill
 	 * @return	The name.
@@ -90,7 +91,7 @@ public enum Stat {
 	public String getName () {
 		return name;
 	}
-	
+
 	/**
 	 * Gets the maximum level for the skill
 	 * @return The level cap.
@@ -113,7 +114,7 @@ public enum Stat {
 	public String toString () {
 		return name;
 	}
-	
+
 	public static void setDefaults (SkillDefaults defaults) {
 		for (Stat s : values()) {
 			PlayerSkill type = defaults.getSkill(s.id);
@@ -122,7 +123,7 @@ public enum Stat {
 			s.initialLevel = type.getInitialLevel();
 		}
 	}
-	
+
 	/**
 	 * Gets the skill type from a specified ID
 	 * @param id The ID of the skill

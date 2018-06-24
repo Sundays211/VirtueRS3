@@ -4,7 +4,7 @@
         "noImplicitAny": true,
         "module": "es6",
         "moduleResolution": "node",
-        "target": "es2015",
+        "target": "es6",
         "allowJs": true,
         "checkJs": false,
         "baseUrl": "./",
@@ -16,5 +16,8 @@
     "files": [
         "src/main/javascript/global-bootstrap.js",
         "src/main/javascript/globals.d.ts"
+    ],
+    "includes": [
+        "src/main/javascript/modules/**/bootstrap.*"
     ]
 }
