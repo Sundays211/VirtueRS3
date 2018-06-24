@@ -89,7 +89,7 @@ export function unsetBit (value: number, bit: number): number {
 	return value & -1 - (1 << bit);
 }
 
-export function getUserHash (player: Player): NodeHash {
+export function getUserHash (player: Player | string): NodeHash {
 	return ENGINE.getUserHash(player);
 }
 

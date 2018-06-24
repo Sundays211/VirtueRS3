@@ -31,7 +31,7 @@ var map = require('shared/map');
 var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 var chat = require('shared/chat');
-var common = require('shared/inv/common');
+var inv = require('shared/inv');
 
 var moneyPouch = require('shared/inv/money-pouch');
 var wornEquipment = require('shared/inv/equipment');
@@ -89,7 +89,7 @@ module.exports = (function() {
 					widget.openCentral(player, 206, false);
 					return;
 				case 3://Examine
-					moneyPouch.examine(player);
+					moneyPouch.examineMoneyPouch(player);
 					return;
 				case 4://Withdraw
 					moneyPouch.requestWithdrawCoins(player);
@@ -224,7 +224,7 @@ module.exports = (function() {
 			ENGINE.invokeEvent(eventType, objId, args);
 		} else if (eventType == EventType.OPHELD2 && (opString == "Wear" || opString == "Wield") &&
 				config.objWearpos(objId) != -1) {
-			wornEquipment.wearItem(player, item, ctx.slot);
+			wornEquipment.equipItem(player, item, ctx.slot);
 		} else if (eventType == EventType.OPHELD5 &&
 				(opString == "Drop" || opString == "Destroy" || opString == "Discard")) {
 			if (opString == "Drop") {
@@ -383,12 +383,12 @@ module.exports = (function() {
 		//I wish to keep it.
 		if (objId !== -1) {
 			map.dropObj(objId, map.getCoords(player), player, count);
-			common.clearSlot(player, Inv.BACKPACK, slot);
+			inv.clearSlot(player, Inv.BACKPACK, slot);
 		}
 	}
 
 	function destroyItem (player, objId, count, slot) {
-		//if (common.total(player, objId) > 1 && common.getCount(player, Inv.BACKPACK, slot)== 1) {
+		//if (inv.total(player, objId) > 1 && inv.getCount(player, Inv.BACKPACK, slot)== 1) {
 		//	widget.hide(player, 1183, 8, false);
 		//}
 		//widget.setText(player, 1183, 4, config.objName(objId));
@@ -398,12 +398,12 @@ module.exports = (function() {
 		//widget.openOverlaySub(player, 1006, 1183, false);
 		//todo get buttons to work
 		chat.sendDebugMessage(player, "Destroyed item: "+objId);
-		common.clearSlot(player, Inv.BACKPACK, slot);
+		inv.clearSlot(player, Inv.BACKPACK, slot);
 	}
 
 	function discardItem (player, objId, slot) {
 		var discard = function () {
-			common.clearSlot(player, Inv.BACKPACK, slot);
+			inv.clearSlot(player, Inv.BACKPACK, slot);
 			loan.returnBorrowedItem(player);
 		};
 

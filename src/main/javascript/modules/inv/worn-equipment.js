@@ -60,7 +60,7 @@ module.exports = (function () {
 					ENGINE.sentInv(player, Inv.EQUIPMENT);
 					return;
 				}
-				logic.handleInteraction(player, objId, ctx.slot, ctx.button, ctx);
+				logic.handleEquipmentInteraction(player, objId, ctx.slot, ctx.button, ctx);
 				return;
 			case 13:
 				switch (ctx.slot) {

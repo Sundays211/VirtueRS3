@@ -26,7 +26,6 @@ var _inv = require('shared/inv');
 var util = require('shared/util');
 var config = require('engine/config');
 var chat = require('shared/chat');
-var common = require('shared/inv/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -106,7 +105,7 @@ module.exports = (function () {
 
 		var success = addTool(player, toolId);
 		if (success) {
-			common.take(player, toolId, 1);
+			_inv.takeItem(player, toolId, 1);
 			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}
@@ -230,7 +229,7 @@ module.exports = (function () {
 				varbit(player, 4935, level);
 				break;
 			}
-			common.take(player, toolId, 1);
+			_inv.takeItem(player, toolId, 1);
 			chat.sendMessage(player, "You add the " + config.objName(toolId) + " to your tool belt.");
 		}
 	}

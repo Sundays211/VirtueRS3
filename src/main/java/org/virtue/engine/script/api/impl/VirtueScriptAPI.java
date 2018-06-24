@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -96,9 +96,9 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * The {@link Logger} Instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(VirtueScriptAPI.class);
-	
+
 	private ConfigProvider configProvider;
-	
+
 	public VirtueScriptAPI (ConfigProvider configProvider) {
 		this.configProvider = configProvider;
 	}
@@ -150,7 +150,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	@Override
-	public Long getBase37Hash(String name) {		
+	public Long getBase37Hash(String name) {
 		return Base37Utility.encodeBase37(name);
 	}
 
@@ -186,8 +186,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 			return false;
 		}
 		AccountIndex index = Virtue.getInstance().getAccountIndex();
-		
-		
+
+
 		if (!Base37Utility.decodeBase37(userHash).equalsIgnoreCase(desiredName)
 				&& !index.lookupByHash(userHash).getPrevName().equalsIgnoreCase(desiredName)) {
 			//If the player is reverting to their username or old name, this is OK
@@ -430,7 +430,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setWidgetObject(Player player, int widgetID, int componentID, int objectId, int num) {
-		player.getDispatcher().sendWidgetObject(widgetID, componentID, objectId, num);		
+		player.getDispatcher().sendWidgetObject(widgetID, componentID, objectId, num);
 	}
 
 	/* (non-Javadoc)
@@ -495,7 +495,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		case RANKTALK:
 			rank = ChannelRank.forID(((Integer) value));
 			player.getChat().getFriendsList().setFriendChatTalkRank(rank);
-			break;		
+			break;
 		default:
 			throw new IllegalArgumentException("Invalid data type: "+dataTypeId);
 		}
@@ -551,7 +551,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getLocType(org.virtue.game.entity.region.SceneLocation)
 	 */
 	@Override
-	public LocType getLocType(SceneLocation location) {		
+	public LocType getLocType(SceneLocation location) {
 		return location.getLocType();
 	}
 
@@ -753,7 +753,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	public int getCount(Item item) {
 		return item.getAmount();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#addItem(int, int, int)
 	 */
@@ -767,13 +767,13 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (inv == null) {
 			throw new IllegalStateException("The inventory "+state+" has not been loaded yet!");
 		}
-		//Remove all checks for space here. If there's not enough space, an exception will be thrown 
+		//Remove all checks for space here. If there's not enough space, an exception will be thrown
 		/*int freeSpace = inv.getFreeSlots();
 		if (ObjTypeList.getInstance().list(itemID).isStackable() || state.alwaysStack()) {
 			int numOf = inv.getNumberOf(itemID);
 			if (numOf != 0 || freeSpace != 0) {
 				freeSpace = Integer.MAX_VALUE - numOf;
-			}			
+			}
 		}
 		if (count > freeSpace) {
 			throw new IllegalStateException("Not enough free space! Needed: "+count+", has: "+freeSpace);
@@ -906,20 +906,21 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#defaultItemTotal(org.virtue.game.entity.player.Player, int, int)
 	 */
 	@Override
-	public int defaultItemTotal(Player player, int invId, int itemID) {
-		ContainerState state = ContainerState.getById(invId);
-		if (state == null) {
+	public int defaultItemTotal(int invId, int itemID) {
+		InvType invType = configProvider.getInvTypes().list(invId);
+		if (invType == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
 		}
-		Inventory container = player.getInvs().getContainer(state);
-		if (container == null) {
-			return -1;
+		for (int slot=0; slot<invType.stockCount; slot++) {
+			if (invType.stockObjects[slot] == itemID) {
+				return invType.stockCounts[slot];
+			}
 		}
-		return container.getDefaultCount(itemID);
+		return -1;
 	}
 
 	@Override
-	public int invCapacity(Player player, int invId) {
+	public int invCapacity(int invId) {
 		InvType invType = configProvider.getInvTypes().list(invId);
 		if (invType == null) {
 			throw new IllegalArgumentException("Invalid inventory: "+invId);
@@ -1001,12 +1002,12 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getVarp(org.virtue.game.entity.player.Player, int)
 	 */
 	@Override
-	public Object getVarp(Player player, int key) {	
+	public Object getVarp(Player player, int key) {
 		VarType varType = configProvider.getVarTypes(VarDomainType.PLAYER).list(key);
 		if (varType == null) {
 			throw new IllegalArgumentException("Invalid varp id: "+key);
 		}
-		
+
 		return player.getVars().getVarValue(varType);
 	}
 
@@ -1025,7 +1026,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			player.getVars().setVarValueInt(varType, ((Integer) value).intValue());
 		} else {
 			player.getVars().setVarValue(varType, value);
-		}		
+		}
 	}
 
 	/* (non-Javadoc)
@@ -1159,7 +1160,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		}
 		if (item.getVarValues() == null) {
 			return 0;
-		}		
+		}
 		return item.getVarValues().getVarBitValue(type);
 	}
 
@@ -1241,7 +1242,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getStatLevel(Player player, int statId) {
-		Stat stat = Stat.getById(statId);		
+		Stat stat = Stat.getById(statId);
 		if (stat == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
@@ -1253,7 +1254,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public void setStatLevel(Player player, int statId, int level) {
-		Stat stat = Stat.getById(statId);	
+		Stat stat = Stat.getById(statId);
 		if (stat == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
@@ -1265,7 +1266,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 */
 	@Override
 	public int getBaseLevel(Player player, int statId) {
-		Stat skill = Stat.getById(statId);		
+		Stat skill = Stat.getById(statId);
 		if (skill == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
@@ -1293,7 +1294,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (stat == null) {
 			throw new IllegalArgumentException("Invalid stat: "+statId);
 		}
-		player.getSkills().boostStat(stat, amount);		
+		player.getSkills().boostStat(stat, amount);
 	}
 
 	/* (non-Javadoc)
@@ -1401,7 +1402,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	public void pausePlayer(Player player) {
 		player.setPaused(true);
 	}
-	
+
 	@Override
 	public void freezeEntity(Entity entity, int duration) {
 		entity.setFreezeDuration(duration);
@@ -1555,7 +1556,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 	 * @see org.virtue.engine.script.ScriptAPI#getInteractionTarget(org.virtue.game.entity.player.Player)
 	 */
 	@Override
-	public Entity getInteractionTarget(Player player) {		
+	public Entity getInteractionTarget(Player player) {
 		return player.getInteractions().getCurrentTarget();
 	}
 
@@ -1781,7 +1782,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			@Override
 			public void run() {
 				entity.getMovement().moveTo(destX, destY);
-			}			
+			}
 		});
 	}
 
@@ -1795,8 +1796,8 @@ public class VirtueScriptAPI implements ScriptAPI {
 			public void run() {
 				entity.getMovement().moveTo(destX, destY);
 				entity.getMovement().setOnTarget(onTarget);
-			}			
-		});//Run this in here so it doesn't clog up the main thread		
+			}
+		});//Run this in here so it doesn't clog up the main thread
 	}
 
 	/* (non-Javadoc)
@@ -1808,7 +1809,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			@Override
 			public void run() {
 				entity.getMovement().moveTo(dest);
-			}			
+			}
 		});
 	}
 
@@ -1822,7 +1823,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 			public void run() {
 				entity.getMovement().moveTo(dest);
 				entity.getMovement().setOnTarget(onTarget);
-			}			
+			}
 		});
 	}
 
@@ -2160,7 +2161,7 @@ public class VirtueScriptAPI implements ScriptAPI {
 		if (scripts.hasBinding(type, trigger)) {
 			scripts.invokeScriptChecked(type, trigger, args);
 		} else {
-			
+
 		}
 	}
 
