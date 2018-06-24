@@ -167,7 +167,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("CONFIG_ENGINE", configApi);
 		engine.put("QUEST_ENGINE", questApi);
 		engine.put("ENTITY_ENGINE", entityApi);
-		engine.put("scriptEngine", this);
+		engine.put("SCRIPT_ENGINE", this);
 
 		Map<String, Integer> map = new HashMap<>();
 		for (ScriptEventType type : ScriptEventType.values()) {
