@@ -122,11 +122,8 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.OPHELD3, 5733, function (ctx) {//Jmod-Tools
-			dialog.multi5(ctx.player, "CM-Tool", "Open JMod Toolbox", function () {
+			dialog.multi4(ctx.player, "CM-Tool", "Open JMod Toolbox", function () {
 				widget.openCentral(ctx.player, 1610, false);
-				}, "Open Bank", function () {
-				widget.closeAll(ctx.player);
-				widget.openOverlaySub(ctx.player, 1017, 762, false);
 			}, "Max Stats", function () {
 				for (var skill=0; skill < 27; skill++) {
 					stat.giveXp(ctx.player, skill, 140344310);
@@ -144,9 +141,15 @@ module.exports = (function () {
 
 			}, "Kick me out.", function () {
 				ENGINE.kickPlayer(ctx.player, true);
-			}, "Never mind logging, just wipe my bank.", function () {
-				ENGINE.emptyInv(ctx.player, Inv.BANK);
-				chat.sendMessage(ctx.player, "Bank is now clear!");
+			}, "Open / Wipe / Sort bank.", function () {
+				dialog.multi3(ctx.player, "SELECT AN OPTION", "Open bank", function () {
+				    widget.closeAll(ctx.player);
+				    widget.openOverlaySub(ctx.player, 1017, 762, false);	
+				}, "Wipe bank", function () {
+				    ENGINE.emptyInv(ctx.player, Inv.BANK);
+				    chat.sendMessage(ctx.player, "Bank is now clear!");
+				}, "Sort bank by price", function () {//TODO
+				});	
 			}, "QP Cape please!", function () {
 				if (inv.freeSpace(ctx.player, Inv.BACKPACK) < 1) {
 					chat.sendMessage(ctx.player, "Not enough space in your inventory.");
