@@ -19,11 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE, Inv */
-var util = require('../util');
-var config = require('engine/config');
-var chat = require('../chat');
-var common = require('./common');
+import { Inv } from 'engine/enums/inventory';
+import { Player } from 'engine/models';
+import _config from 'engine/config';
+
+import { defaultHandler } from 'shared/util';
+import { sendMessage } from 'shared/chat';
+
+import { hasItem } from './common';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,36 +36,42 @@ var common = require('./common');
  * @author Sundays211
  * @since 23/03/2016
  */
-module.exports = (function () {
-	return {
-		isWearing : isWearing,
-		wearItem : wearItem,
-		removeItem : removeItem,
-		handleInteraction : handleInteraction
-	};
 
-	function isWearing(player, objId) {
-		return common.has(player, objId, 1, Inv.EQUIPMENT);
+/**
+ *
+ * @param player The player to check
+ * @param objId The ID of the object to check
+ */
+export function isWearing(player: Player, objId: number): boolean {
+	return hasItem(player, objId, 1, Inv.EQUIPMENT);
+}
+
+export function equipItem(player: Player, objId: number, slot: number) {
+	//TODO: These engine methods should be moved here
+	if (!player.getEquipment().meetsEquipRequirements(objId)) {
+		return;
 	}
-
-	function wearItem (player, objId, slot) {
-		if (!player.getEquipment().meetsEquipRequirements(objId)) {
-			return;
-		}
-		if (!player.getEquipment().wearItem(slot)) {
-			chat.sendMessage(player, "You do not have enough space in your backpack to equip that item.");
-		}
+	if (!player.getEquipment().wearItem(slot)) {
+		sendMessage(player, "You do not have enough space in your backpack to equip that item.");
 	}
+}
 
-	function removeItem (player, objId, slot) {
-		player.getEquipment().removeItem(slot, objId);
-	}
+export function unequipItem(player: Player, objId: number, slot: number) {
+	//TODO: This engine method should be moved here
+	player.getEquipment().removeItem(slot, objId);
+}
 
-	function handleInteraction (player, objId, slot, button, ctx) {
-		var eventType = null;
-		switch (button) {
+export function handleEquipmentInteraction(
+	player: Player,
+	objId: number,
+	slot: number,
+	button: number,
+	ctx: any
+) {
+	var eventType = null;
+	switch (button) {
 		case 1://Remove
-			removeItem(player, objId, slot);
+			unequipItem(player, objId, slot);
 			return;
 		case 2://Equipment op 1
 			eventType = EventType.OPWORN1;
@@ -80,20 +89,19 @@ module.exports = (function () {
 			eventType = EventType.OPWORN5;
 			break;
 		case 10://Examine
-			chat.sendMessage(player, config.objDesc(objId));
+			sendMessage(player, _config.objDesc(objId));
 			return;
 		default:
 			break;
-		}
-		if (eventType === null || ENGINE.hasEvent(eventType, objId)) {
-			var args = {
-					"player" : player,
-					"item" : objId,
-					"slot" : slot
-			};
-			ENGINE.invokeEvent(eventType, objId, args);
-		} else {
-			util.defaultHandler(ctx, "worn equipment");
-		}
 	}
-})();
+	if (eventType === null || ENGINE.hasEvent(eventType, objId)) {
+		var args = {
+			"player": player,
+			"item": objId,
+			"slot": slot
+		};
+		ENGINE.invokeEvent(eventType, objId, args);
+	} else {
+		defaultHandler(ctx, "worn equipment");
+	}
+}

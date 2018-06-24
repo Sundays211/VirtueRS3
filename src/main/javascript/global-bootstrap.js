@@ -94,6 +94,9 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 					eventCount++;
 				}
 			}
+		},
+		getLogger : function () {
+			return scriptManager.getLogger();
 		}
 	};
 
@@ -112,10 +115,7 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
 		CraftProcess : require('./modules/skill/makex/progress'),
-		CraftDialog : require('./modules/skill/makex/selection'),
-		MoneyPouch : require('./shared/inv/money-pouch'),
-		WornEquipment : require('./shared/inv/equipment'),
-		Toolbelt : require('./modules/inv/toolbelt')
+		CraftDialog : require('./modules/skill/makex/selection')
 	};
 }
 

@@ -88,7 +88,7 @@ module.exports = (function () {
 			}
 
 		}
-		var logs = Object.keys(logLookup);
+		var logs = Object.keys(logLookup).map(logId => parseInt(logId));
 		if (!logs.length) {
 			return;//Player does not have any logs to add
 		} else if (logs.length === 1) {
