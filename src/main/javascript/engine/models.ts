@@ -1,7 +1,11 @@
 
 export interface Player extends Entity {
-    //TODO: Remove this from the game engine & replace here
+    //TODO: Remove these from the game engine & replace here
     getDialogs: () => any
+
+    getCombatSchedule: () => any
+
+    getEquipment: () => any
 }
 
 export interface Npc extends Entity {

@@ -24,7 +24,7 @@ var dialog = require('shared/dialog');
 var config = require('engine/config');
 var widget = require('shared/widget');
 var chat = require('shared/chat');
-var common = require('shared/inv/common');
+var inv = require('shared/inv');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -68,7 +68,7 @@ module.exports = (function () {
 			if (args.length == 2) {
 				amount = parseInt(args[1]);
 			}
-			common.take(player, objId, amount);
+			inv.takeItem(player, objId, amount);
 		});
 
 		scriptManager.bind(EventType.COMMAND, [ "item", "give" ], function (ctx) {
@@ -81,10 +81,10 @@ module.exports = (function () {
 						if (config.objStackable(objId)) {
 							dialog.requestCount(player, "Enter the number of items to spawn: ")
 								.then(function (amount) {
-									common.give(player, objId, amount);
+									inv.giveItem(player, objId, amount);
 								});
-						} else if (common.hasSpace(player)) {
-							common.give(player, objId, 1);
+						} else if (inv.hasSpace(player)) {
+							inv.giveItem(player, objId, 1);
 						} else {
 							chat.sendMessage(player, "You do not have enough space in your backpack to store this item.");
 						}
@@ -105,8 +105,8 @@ module.exports = (function () {
 				}
 
 				var value = ENGINE.getExchangeCost(objId) * amount;
-				if (config.objStackable(objId) || common.hasSpace(player, amount)) {
-					common.give(player, objId, amount);
+				if (config.objStackable(objId) || inv.hasSpace(player, amount)) {
+					inv.giveItem(player, objId, amount);
 					if (value == -1) {
 						chat.sendCommandResponse(player, "This item cannot be traded on the Grand Exchange.", ctx.console);
 					} else {

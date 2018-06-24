@@ -61,7 +61,7 @@ module.exports = (function () {
 	widget.openCentral(player, 206, false);
 	return;
     case 3://Examine money pouch
-	moneyPouch.examine(player);
+	moneyPouch.examineMoneyPouch(player);
 	return;
 	case 4://Withdraw money pouch
 	moneyPouch.requestWithdrawCoins(player);
