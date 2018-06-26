@@ -13,12 +13,7 @@
             "shared/*": ["src/main/javascript/shared/*"]
         }
     },
-    "files": [
-        "src/main/javascript/global-bootstrap.js",
-        "src/main/javascript/globals.d.ts"
-    ],
-    "includes": [
-        "src/main/javascript/modules/**/bootstrap.*",
-        "src/main/javascript/shared/**/*.*"
+    "include": [
+        "src/main/javascript/**/*.ts"
     ]
 }

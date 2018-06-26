@@ -56,8 +56,7 @@ function getAllModules () {// jshint ignore:line
 		'skill/thieving',
 		'skill/woodcutting',
 		'trade',
-		'widget/frame',
-		'widget/settings'
+		'widget/frame'
 	];
 
 	var ArrayList = Java.type('java.util.ArrayList');
@@ -100,14 +99,15 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 		}
 	};
 
+	require('./modules');
+
+	var start = new Date().getTime();
 	for (var i in modules) {
 		var module = modules[i];
-		var start = new Date().getTime();
 		require('./modules/'+module+'/bootstrap')(scriptManagerWrapper);
-		var end = new Date().getTime();
-		logger.info('Loaded '+eventCount+' '+module+' event listeners in '+(end-start)+' milliseconds');
-		eventCount = 0;
 	}
+	var end = new Date().getTime();
+	logger.info(`Loaded ${eventCount} event listeners in ${end-start} milliseconds`);
 
 	registerLoginEvents(scriptManager);
 	registerLogoutEvents(scriptManager);
