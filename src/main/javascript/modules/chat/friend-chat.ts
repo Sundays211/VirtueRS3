@@ -19,12 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var varc = require('engine/var/client');
-var util = require('shared/util');
-var widget = require('shared/widget');
-var dialog = require('shared/dialog');
-var chat = require('shared/chat');
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
+import { setVarc } from 'engine/var';
+
+import { setWidgetEvents, openCentralWidget } from 'shared/widget';
+import { lookupPlayerName, runClientScript, defaultHandler } from 'shared/util';
+import { openModalBase } from 'shared/dialog';
+import { sendMessage } from 'shared/chat';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,47 +36,44 @@ var chat = require('shared/chat');
  * @author Sundays211
  * @since 9/11/2014
  */
+_events.bindEventListener(EventType.IF_OPEN, 1427, (ctx) => {
+	var player = ctx.player;
 
-module.exports = function(scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1427, function (ctx) {
-		var player = ctx.player;
+	var name = lookupPlayerName(player.getSavedChannelOwner());
+	setVarc(player, 2508, name ? name : _entity.getName(player));//Last friend chat joined
+	setVarc(player, 1027, 1);
+	setVarc(player, 1034, 2);
+	setWidgetEvents(player, 1427, 29, 0, 600, 1024);
+});
 
-		var name = util.getName(player.getSavedChannelOwner());
-		varc(player, 2508, name ? name : util.getName(player));//Last friend chat joined
-		varc(player, 1027, 1);
-		varc(player, 1034, 2);
-		widget.setEvents(player, 1427, 29, 0, 600, 1024);
-	});
+_events.bindEventListener(EventType.IF_BUTTON, 1427, (ctx) => {
+	var player = ctx.player;
 
-	scriptManager.bind(EventType.IF_BUTTON, 1427, function (ctx) {
-		var player = ctx.player;
-
-		switch (ctx.component) {
+	switch (ctx.component) {
 		case 10://Join/leave
 			if (player.getChat().getFriendChatOwner() !== 0) {
-				util.runClientScript(player, 194, [1]);
+				runClientScript(player, 194, [1]);
 				return;
 			} else {
-				dialog.openModalBase(player);
-				util.runClientScript(player, 8178, []);
-				util.runClientScript(player, 8537, []);
-				util.runClientScript(player, 194, [1]);
+				openModalBase(player);
+				runClientScript(player, 8178, []);
+				runClientScript(player, 8537, []);
+				runClientScript(player, 194, [1]);
 			}
 			return;
 		case 36://Manual kick/ban
-			dialog.openModalBase(player);
-			util.runClientScript(player, 8178, []);
-			util.runClientScript(player, 2688, []);
+			openModalBase(player);
+			runClientScript(player, 8178, []);
+			runClientScript(player, 2688, []);
 			return;
 		case 4://Settings
-			widget.openCentral(player, 1108);
+			openCentralWidget(player, 1108, false);
 			return;
 		case 34://Loot share
-			chat.sendMessage(player, "Loot share has not yet been implemented.");
+			sendMessage(player, "Loot share has not yet been implemented.");
 			return;
 		default:
-			util.defaultHandler(ctx, "friends chat");
+			defaultHandler(ctx, "friends chat");
 			return;
-		}
-	});
-};
+	}
+});

@@ -16,7 +16,7 @@ export function checkOverflow (currentValue: number, addedValue: number): boolea
 	return (INTEGER_MAX-currentValue)<addedValue;
 }
 
-export function defaultHandler (ctx: any, type: EventType) {
+export function defaultHandler (ctx: any, type: EventType | string) {
 	if (isAdmin(ctx.player)) {
 		if (type === EventType.OPHELDU) {
 			sendMessage(ctx.player, "Unhandled item use: item="+ctx.item+", slot="+ctx.slot+", useitem="+ctx.useitem+", useslot="+ctx.useslot);

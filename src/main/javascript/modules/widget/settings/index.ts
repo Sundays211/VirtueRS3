@@ -1,0 +1,10 @@
+import './action-bar-settings';
+import './combat-settings';
+import './doomsayer-settings';
+import './game-settings';
+import './gameplay-settings';
+import './house-settings';
+import './interface-settings';
+import './loot-settings';
+import './misc-settings';
+import './player-inspect-settings';

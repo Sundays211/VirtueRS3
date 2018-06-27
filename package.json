@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Sundays211/VirtueRS3#readme",
   "devDependencies": {
+    "@types/promise-polyfill": "^6.0.0",
     "awesome-typescript-loader": "^5.0.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
@@ -28,6 +29,8 @@
     "webpack-command": "^0.2.1"
   },
   "dependencies": {
-    "npm": "^5.6.0"
+    "npm": "^5.6.0",
+    "promise-polyfill": "^7.1.2",
+    "regenerator-runtime": "^0.12.0"
   }
 }
