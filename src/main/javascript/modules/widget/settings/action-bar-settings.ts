@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Virtue Studios
+ * Copyright (c) 2014 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('shared/util');
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import { defaultHandler } from 'shared/util';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -28,29 +29,16 @@ var util = require('shared/util');
  * @author Arthur <skype:arthur.behesnilian>
  * @author Kayla <skype:ashbysmith1996>
  * @author Sundays211
- * @since 16/01/2016
+ * @since 08/01/2015
  */
-module.exports = (function () {
-	return {
-		init : init
-	};
-
-	function init (scriptManager) {
-		scriptManager.bind(EventType.IF_BUTTON, 1664, function (ctx) {
-			switch (ctx.component) {
-			/*case 18://Teleport arrive at house
-			case 22://Teleport arrive at portal
-			case 27://Doors closed
-			case 31://Doors open
-			case 51://Gathering prawnballs enabled
-			case 55://Gathering prawnballs disabled
-			case 76://Building mode on
-			case 80://Building mode off
-			*/
-			default:
-				util.defaultHandler(ctx, "house settings");
-				return;
-			}
-		});
+_events.bindEventListener(EventType.IF_BUTTON, 970, (ctx) => {
+	switch (ctx.component) {
+		/*case 11://Secondary action bar
+		case 14://Tertiary action bar
+		case 18://Quaternary action bar
+		case 22://Quinary action bar*/
+		default:
+			defaultHandler(ctx, "action bar settings");
+			return;
 	}
-})();
+});

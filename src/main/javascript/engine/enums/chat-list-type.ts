@@ -1,0 +1,9 @@
+
+export enum ChatListType {
+	FRIEND = 0,
+	GROUP_USER = 1,
+	GROUP_BAN = 2,
+	AFFFINEDCLANCHANNEL = 3,
+	LISTEDCLANCHANNEL = 4,
+	FRIENDCHAT_USER = 5
+}

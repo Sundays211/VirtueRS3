@@ -159,6 +159,15 @@ public class JSListeners implements ScriptManager {
 	}
 
 	protected void setConstants (ScriptEngine engine) {
+		try {
+			//Nashorn doesn't support timeouts like this, but to prevent scripts throwing errors we'll define it as an immediately invoking function
+			engine.eval("function setTimeout(callback) { callback(); }");
+		} catch (Exception ex) {
+			//If this excpetion is thrown, it indicates a code error with the above
+			throw new RuntimeException(ex);
+		}
+
+
 		engine.put("api", getScriptApi());
 		engine.put("ENGINE", getScriptApi());
 		engine.put("CLAN_ENGINE", clanApi);
@@ -167,7 +176,7 @@ public class JSListeners implements ScriptManager {
 		engine.put("CONFIG_ENGINE", configApi);
 		engine.put("QUEST_ENGINE", questApi);
 		engine.put("ENTITY_ENGINE", entityApi);
-		engine.put("scriptEngine", this);
+		engine.put("SCRIPT_ENGINE", this);
 
 		Map<String, Integer> map = new HashMap<>();
 		for (ScriptEventType type : ScriptEventType.values()) {
