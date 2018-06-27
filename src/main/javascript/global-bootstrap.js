@@ -20,7 +20,6 @@ function getAllModules () {// jshint ignore:line
 		'area/misthalin',
 		'area/morytania',
 		'area/underground',
-		'chat',
 		'clan',
 		'combat',
 		'inv',

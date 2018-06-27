@@ -6,6 +6,8 @@ export interface Player extends Entity {
 	getCombatSchedule: () => any
 	getEquipment: () => any
 	switchSheathing: () => any
+	getChat: () => any
+	getSavedChannelOwner: () => any
 }
 
 export interface Npc extends Entity {
@@ -40,8 +42,12 @@ export interface EventContext {
 	event: EventType;
 	trigger: number | string;
 	player: Player;
+	console?: boolean;
+	cmdArgs?: string[];
 	component?: number;
+	interface?: number;
 	slot?: number;
+	button?: number;
 	fromslot?: number;
 	toslot?: number;
 }

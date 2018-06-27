@@ -11,6 +11,10 @@ module.exports = {
     entry: {
         "bootstrap": path.join(jsSourceFolder, 'global-bootstrap.js')
     },
+    node: {
+        //Webpack tries to add timers-browserify if "setImmediate" is used anywhere in code - this library doesn't work with Nashorn.
+        setImmediate: false
+    },
     output: {
         path: path.join(__dirname, 'build/resources/main/scripts'),
         filename: 'bundle.[name].js',
