@@ -128,6 +128,9 @@ module.exports = (function () {
 				for (var skill=0; skill < 27; skill++) {
 					stat.giveXp(ctx.player, skill, 140344310);
 				}
+			//}, "TheDrop!", function () {
+			//	dialog.builder(ctx.player).mesbox("<col=800000>This event is restricted and should only be activated with permission<br>Please enter today's activation code to continue.")
+			//	.finish();
 			}, "Clear Title", function () {
 				ctx.player.getModel().setPrefixTitle("");
 				ctx.player.getModel().refresh();
