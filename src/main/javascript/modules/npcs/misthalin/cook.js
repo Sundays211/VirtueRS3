@@ -36,12 +36,12 @@ module.exports = (function () {
 			var player = ctx.player;
 			var npc = ctx.npc;
 			if(quest.hasFinished(player, 6)) {
-			    dialog.chatnpc(player, npc, "Hello, friend, how is the adventuring going?")
+			    dialog.builder(player).chatnpc(npc, "Hello, friend, how is the adventuring going?")
 				.then(function () {
 					cookFinished(player, npc);
 				});
 			} else if(quest.hasStarted(player, 6)) {
-			    dialog.chatnpc(player, npc, "How are you getting on with finding the ingredients?")
+			    dialog.builder(player).chatnpc(npc, "How are you getting on with finding the ingredients?")
 				.then(function () {
 					cookStarted(player, npc);
 				});

@@ -37,10 +37,10 @@ module.exports = (function () {
 
 		scriptManager.bind(EventType.OPLOC1, 15468, function (ctx) {
 			if(inv.total(ctx.player, 2347, Inv.BACKPACK)) {
-				dialog.mesbox(ctx.player, "You already have a hammer.");
+				dialog.builder(ctx.player).mesbox("You already have a hammer.");
 			} else {
 				inv.give(ctx.player, 2347,1);
-			    dialog.objbox(ctx.player, 2347, "You take a hammer from the crate.");
+			    dialog.builder(ctx.player).objbox(2347, "You take a hammer from the crate.");
 			}
 		});
 
@@ -57,14 +57,14 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 47713, function (ctx) {//Rocks (Quest The Restless Ghost)
-            dialog.mesbox(ctx.player, "There's nothing there of any use to you.");
+            dialog.builder(ctx.player).mesbox("There's nothing there of any use to you.");
 	    });
 
 	    scriptManager.bind(EventType.OPLOC1, 86431, function (ctx) {//Old mine entrance(Ham hidout)
 	        if(util.mapMembers()){
-	           dialog.mesbox(ctx.player, "not yet implemented.");
+	           dialog.builder(ctx.player).mesbox("not yet implemented.");
             } else {
-               dialog.mesbox(ctx.player, "You need to be on a member's world to use this feature.");
+               dialog.builder(ctx.player).mesbox("You need to be on a member's world to use this feature.");
             }
 	    });
 
@@ -72,7 +72,7 @@ module.exports = (function () {
 	        if(util.mapMembers()){
 	           chat.sendMessage(ctx.player, "not yet implemented.");
             } else {
-               dialog.mesbox(ctx.player, "You need to be on a member's world to use this feature.");
+               dialog.builder(ctx.player).mesbox("You need to be on a member's world to use this feature.");
             }
 	     });
 

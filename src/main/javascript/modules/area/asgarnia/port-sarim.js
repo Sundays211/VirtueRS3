@@ -37,7 +37,7 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 10090, function (ctx) {//signpost
-		    dialog.mesbox(ctx.player, "Mudskipper Point.<br> WARNING!<br> BEWARE OF THE MUDSKIPPERS!");
+		    dialog.builder(ctx.player).mesbox("Mudskipper Point.<br> WARNING!<br> BEWARE OF THE MUDSKIPPERS!");
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 39442, function (ctx) {//trapdoor betty's basement quest (swept away)
@@ -46,7 +46,7 @@ module.exports = (function () {
 			} else if (varbit(ctx.player, 9868) == 1){
 			    map.setCoords(ctx.player, coords(3221, 4522, 0));
 			} else {
-                dialog.chatnpc(ctx.player, 583, "Excuse me, my cellar isn't open to the public.")
+                dialog.builder(ctx.player).chatnpc(583, "Excuse me, my cellar isn't open to the public.")
 		        .chatplayer("Oh, sorry.")
 		        .finish();
 			}

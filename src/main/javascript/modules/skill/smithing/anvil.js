@@ -29,7 +29,7 @@ module.exports = (function () {
 		    if(quest.hasFinished(ctx.player, 207)) {
 			    startSmithing(ctx.player);
 			} else {
-			    dialog.mesbox(ctx.player, "You can't use the anvil until you finish helping Doric.");
+			    dialog.builder(ctx.player).mesbox("You can't use the anvil until you finish helping Doric.");
 			}
 		});
 

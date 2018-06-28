@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,33 +36,33 @@ import org.virtue.network.event.context.impl.out.widget.WidgetModelEventContext.
  * @since 19/11/2014
  */
 public class DialogManager {
-		
+
 	/**
 	 * The player linked to this dialog manager
 	 */
 	private Player player;
-	
+
 	/**
 	 * The event called when a player enters input (string or integer) on request
 	 */
 	private InputEnteredHandler onInputEntered;
-	
+
 	private int dialogStep;
 
 	public DialogManager (Player player) {
 		this.player = player;
 	}
-	
+
 	@Deprecated
 	public int getStep () {
 		return dialogStep;
 	}
-	
+
 	@Deprecated
 	public void setStep (int step) {
 		this.dialogStep = step;
 	}
-	
+
 	/**
 	 * Sends a dialog for the player to enter a count
 	 * @param message The dialog message
@@ -74,11 +74,11 @@ public class DialogManager {
 		player.getWidgets().openWidget(1418, 1, 1469, true);
 		player.getDispatcher().sendCS2Script(108, message);
 	}
-	
+
 	public void sendMultichoice (String message, String[] options) {
 		sendMultichoice(message, options, null);
 	}
-	
+
 	/**
 	 * Sends a dialog which allows players to select one of several options
 	 * @param message The message
@@ -100,7 +100,7 @@ public class DialogManager {
 			player.getDispatcher().sendCS2Script(8178);
 		}
 	}
-	
+
 	/**
 	 * Sends a dialog box with the player's chathead. Uses the "Neutral" animation
 	 * @param message The chat message
@@ -108,25 +108,25 @@ public class DialogManager {
 	public void sendPlayerChat(String message) {
 		sendPlayerChat(message, ChatheadEmoteType.NEUTRAL);
 	}
-	
+
 	/**
-	 * Sends a dialog box with the player's chathead. 
+	 * Sends a dialog box with the player's chathead.
 	 * @param message The chat message
 	 * @param expressionAnim The animation ID to play as the expression
 	 */
 	public void sendPlayerChat(String message, int expressionAnim) {
 		sendChat(ChatDialogType.PLAYER_L, message, expressionAnim, -1);
 	}
-	
+
 	/**
-	 * Sends a dialog box with the player's chathead. 
+	 * Sends a dialog box with the player's chathead.
 	 * @param message The chat message
 	 * @param emote The chathead emotion
 	 */
 	public void sendPlayerChat(String message, ChatheadEmoteType emote) {
 		sendChat(ChatDialogType.PLAYER_L, message, emote.getAnimID(), -1);
 	}
-	
+
 	/**
 	 * Sends a dialog box with a npc's chathead. Uses the "Neutral" animation
 	 * @param message The chat message
@@ -135,15 +135,15 @@ public class DialogManager {
 	public void sendNpcChat(String message, int npcID) {
 		sendNpcChat(message, npcID, ChatheadEmoteType.NEUTRAL);
 	}
-	
+
 	public void sendNpcChat(String message, int npcID, int expressionAnim) {
 		sendChat(ChatDialogType.NPC_R, message, expressionAnim, npcID);
 	}
-	
+
 	public void sendNpcChat(String message, int npcID, ChatheadEmoteType emote) {
 		sendChat(ChatDialogType.NPC_R, message, emote.getAnimID(), npcID);
 	}
-	
+
 	public void sendChat (ChatDialogType type, String message, int expressionAnim, int entityID) {
 		String name = player.getName();
 		ModelType modelType = ModelType.PLAYER_HEAD_SELF;
@@ -228,7 +228,7 @@ public class DialogManager {
 			}
 		}
 	}
-	
+
 	private int getMultichoiceOption (int compID) {
 		int option = -1;
 		switch (compID) {
@@ -250,7 +250,7 @@ public class DialogManager {
 		}
 		return option;
 	}
-	
+
 	/**
 	 * Sets the function to be called when the player submits input
 	 * @param handler The input handler

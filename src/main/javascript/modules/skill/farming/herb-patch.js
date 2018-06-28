@@ -292,7 +292,7 @@ module.exports = (function () {
 
 	function plantSeed (player, patchId, crop, plantStatus) {
 		if (stat.getLevel(player, Stat.FARMING) < crop.level) {
-			dialog.mesbox(player, "You need a farming level of "+crop.level+" to plant those seeds");
+			dialog.builder(player).mesbox("You need a farming level of "+crop.level+" to plant those seeds");
 			return;
 		}
 		common.plantSeed(player, crop.seed, function () {

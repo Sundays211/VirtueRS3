@@ -11,7 +11,7 @@ var widget = require('shared/widget');
  */
 module.exports = function(scriptManager) {
 	scriptManager.bind(EventType.OPNPC1, 14866, function (ctx) {
-		dialog.chatnpc(ctx.player, ctx.npc, "If you want to know how to bring forth magical creatures from the ether, you've come to the right place!")
+		dialog.builder(ctx.player).chatnpc(ctx.npc, "If you want to know how to bring forth magical creatures from the ether, you've come to the right place!")
 			.then(function () {
 				maintalk(ctx.player, ctx.npc);
 			});
@@ -38,15 +38,15 @@ module.exports = function(scriptManager) {
 	}
 
 	function howtotrain (player, npc) {
-		dialog.chatnpc(player, npc, "You need to create pouches, by combining reagents with spirit shards.").finish();
+		dialog.builder(player).chatnpc(npc, "You need to create pouches, by combining reagents with spirit shards.").finish();
 	}
 
 	function moreinfo (player, npc) {
-		dialog.chatnpc(player, npc, "There is another world, besides this one. That world is filled with wondrous creatures, great and small. Summoning is the art of drawing those creatures forth to server you.")
+		dialog.builder(player).chatnpc(npc, "There is another world, besides this one. That world is filled with wondrous creatures, great and small. Summoning is the art of drawing those creatures forth to server you.")
 			.chatnpc(npc, "By combining rare reagents with our spirit shards, you can create pouches to perform this act.").finish();
 	}
 
 	/*function farewell (player, npc) {
-		dialog.chatnpc(player, npc, "Thank you for the information about Summoning.").finish();
+		dialog.builder(player).chatnpc(npc, "Thank you for the information about Summoning.").finish();
 	}*/
 };

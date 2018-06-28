@@ -49,7 +49,7 @@ module.exports = (function () {
 					}, 60);
 				});
 			} else {
-				dialog.mesbox(ctx.player, "Only members can pick flax.");
+				dialog.builder(ctx.player).mesbox("Only members can pick flax.");
 			}
 		});
 
