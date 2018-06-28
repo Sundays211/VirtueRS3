@@ -132,7 +132,7 @@ module.exports = (function () {
 	 */
 	function plantSapling (player, patchId, crop, plantStatus) {
 		if (stat.getLevel(player, Stat.FARMING) < crop.level) {
-			dialog.mesbox(player, "You need a farming level of "+crop.level+" to plant this sapling.");
+			dialog.builder(player).mesbox("You need a farming level of "+crop.level+" to plant this sapling.");
 			return;
 		}
 
@@ -220,7 +220,7 @@ module.exports = (function () {
 
 	function harvest (player, patchId, crop, statuses) {
 		if (!inv.hasSpace(player)) {
-			dialog.mesbox(player, "You don't have enough free space in your inventory to harvest these crops");
+			dialog.builder(player).mesbox("You don't have enough free space in your inventory to harvest these crops");
 			return;
 		}
 		//Probably not the right animation, but at least it shows us doing something...

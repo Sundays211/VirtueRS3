@@ -55,7 +55,7 @@ module.exports = function (scriptManager) {
 
 	scriptManager.bind(EventType.OPNPC4, 548, function (ctx) {
 		if(inv.freeSpace(ctx.player, Inv.EQUIPMENT) !== inv.size(Inv.EQUIPMENT)) {
-			dialog.chatnpc(ctx.player, ctx.npc, "You're not able to try on my clothes with all that armour. Take it off and then speak to me again.");
+			dialog.builder(ctx.player).chatnpc(ctx.npc, "You're not able to try on my clothes with all that armour. Take it off and then speak to me again.");
 			return;
 		}
 		widget.openCentral(ctx.player, 729);

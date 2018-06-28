@@ -106,7 +106,7 @@ module.exports = (function () {
 	     chat.sendMessage(ctx.player, "You don't find anything interesting.");
 	  } else {
 	     inv.give(ctx.player, 2409, 1);
-	     dialog.mesbox(ctx.player, "You find a key hidden under the flower pot.");
+	     dialog.builder(ctx.player).mesbox("You find a key hidden under the flower pot.");
 	  }
       } else {
          chat.sendMessage(ctx.player, "You need to be on a member's world to use this feature.");
@@ -119,7 +119,7 @@ module.exports = (function () {
 	            if(quest.hasStarted(ctx.player, 7)) {
 		            chat.sendMessage(ctx.player, "todo add doors that work");
 		        } else {
-	                dialog.chatplayer(ctx.player, "It would be rude to break into this house.");
+	                dialog.builder(ctx.player).chatplayer("It would be rude to break into this house.");
 		        }
 	        } else {
 	            chat.sendMessage(ctx.player, "This door is locked.");
@@ -145,7 +145,7 @@ module.exports = (function () {
 	    if(quest.hasStarted(ctx.player, 7)) {
 		   chat.sendMessage(ctx.player, "todo add doors that work");
 		} else {
-	        dialog.chatplayer(ctx.player, "It would be rude to break into this house.");
+	        dialog.builder(ctx.player).chatplayer("It would be rude to break into this house.");
 		}
 	    return;
 	}

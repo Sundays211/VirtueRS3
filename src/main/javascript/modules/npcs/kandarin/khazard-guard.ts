@@ -19,24 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var _entity = require('engine/entity');
+import { Expression } from 'shared/dialog/expression';
+import { chatplayer, chatnpc } from 'shared/dialog';
 
-module.exports = (function () {
-	return {
-	init : init
-	};
-
-	function init (scriptManager) {
-
-		scriptManager.bind(EventType.OPNPC1, 253, function (ctx) {
-			dialog.builder(ctx.player).chatplayer("Hello.",9807)
-			.chatnpc(ctx.npc, "This area is restricted! Leave now and don't come back.",9785)
-	        .finish();
-		});
-
-	}
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 253, async (ctx) => {
+	await chatplayer(ctx.player, "Hello.", 9807);
+	await chatnpc(ctx.player, ctx.npc,
+		"This area is restricted! Leave now and don't come back.",
+		Expression.MEAN_FACE
+	);
+});

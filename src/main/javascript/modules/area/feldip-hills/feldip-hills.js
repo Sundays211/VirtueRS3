@@ -41,7 +41,7 @@ module.exports = (function () {
 
 		scriptManager.bind(EventType.OPLOC1, 2811, function (ctx) {
 			map.setCoords(ctx.player, coords(0,40,47,16,21));
-			dialog.mesbox(ctx.player, "Wow! That tunnel went a long way.");
+			dialog.builder(ctx.player).mesbox("Wow! That tunnel went a long way.");
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 2812, function (ctx) {

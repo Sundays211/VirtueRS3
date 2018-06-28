@@ -44,23 +44,23 @@ module.exports = (function () {
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 31459, function (ctx) {//Customs Sergeant
-			dialog.chatnpc(ctx.player, 7830, "Zzzzzzzzzzzzzzzzzzz", Expression.NEUTRAL);//just need the right chat head
+			dialog.builder(ctx.player).chatnpc(7830, "Zzzzzzzzzzzzzzzzzzz", Expression.NEUTRAL);//just need the right chat head
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 71969, function (ctx) {//locker
-			dialog.chatnpc(ctx.player, 7831, "Hey! Nobody stores anything in there unless thay are<br> under arrest.", Expression.NEUTRAL);//just need the right chat head
+			dialog.builder(ctx.player).chatnpc(7831, "Hey! Nobody stores anything in there unless thay are<br> under arrest.", Expression.NEUTRAL);//just need the right chat head
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 71970, function (ctx) {//notices outside Customs Sergeant
-			dialog.mesbox(ctx.player, "There are no new notices here.");
+			dialog.builder(ctx.player).mesbox("There are no new notices here.");
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 72434, function (ctx) {//Sleeping man
-			dialog.chatnpc(ctx.player, 15476, "...ears to pour their course...", Expression.NEUTRAL);//just need the right chat head
+			dialog.builder(ctx.player).chatnpc(15476, "...ears to pour their course...", Expression.NEUTRAL);//just need the right chat head
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 72442, function (ctx) {//Waylan
-			dialog.chatnpc(ctx.player, 15471, "...wending through the willows...", Expression.NEUTRAL);//just need the right chat head
+			dialog.builder(ctx.player).chatnpc(15471, "...wending through the willows...", Expression.NEUTRAL);//just need the right chat head
 		});
 	}
 })();

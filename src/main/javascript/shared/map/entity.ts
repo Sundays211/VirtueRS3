@@ -2,6 +2,7 @@
  * Function for adding, removing, and modifying entities on the map
  */
 import { Entity, CoordGrid, Player, NodeHash } from 'engine/models';
+import _entity from 'engine/entity';
 import { runAnim, addSpotAnim } from '../anim';
 
 export function teleport(
@@ -20,9 +21,10 @@ export function teleport(
 	});
 }
 
-export function setCoords(entity: Entity, coords: CoordGrid) {
-	ENGINE.teleportEntity(entity, coords);
-}
+/**
+ * @deprecated - Use `_entity.setCoords` instead
+ */
+export const setCoords = (entity: Entity, coords: CoordGrid) => _entity.setCoords(entity, coords);
 
 export function findPlayer(playerHash: NodeHash): Player {
 	return ENGINE.getWorldPlayerByHash(playerHash);
