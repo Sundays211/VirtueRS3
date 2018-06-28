@@ -19,25 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var coords = require('shared/map/coords');
+ 
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import { sendMessage } from 'shared/chat';
+import { setCoords } from 'shared/map';
 
-var chat = require('shared/chat');
-var map = require('shared/map');
-
-module.exports = (function () {
-	return {
-		init : init
-	};
-
-	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 26806, function (ctx) {//Staircase
-			map.setCoords(ctx.player, coords(3230, 3231, 0));
+        _events.bindEventListener(EventType.OPLOC1, 26806, (ctx) => {//Staircase
+			setCoords(ctx.player, coords(3230, 3231, 0));
 		});
 
-		scriptManager.bind(EventType.OPLOC2, 26807, function (ctx) {//Table
-			chat.sendMessage(ctx.player, "todo");
+		_events.bindEventListener(EventType.OPLOC2, 26807, (ctx) => {//Table
+			sendMessage(ctx.player, "todo");
 		});
-	}
+	
 
-})();
