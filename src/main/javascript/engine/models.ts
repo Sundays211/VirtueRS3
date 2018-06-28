@@ -43,6 +43,7 @@ export interface EventContext {
 	trigger: number | string;
 	player: Player;
 	npc?: Npc;
+	location?: Location;
 	console?: boolean;
 	cmdArgs?: string[];
 	component?: number;
