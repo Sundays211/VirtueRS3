@@ -24,9 +24,10 @@ import { EventType } from 'engine/enums/event-type';
 import _events from 'engine/events';
 import { sendMessage } from 'shared/chat';
 import { setCoords } from 'shared/map';
+import _coords from 'shared/map/coords';
 
         _events.bindEventListener(EventType.OPLOC1, 26806, (ctx) => {//Staircase
-			setCoords(ctx.player, coords(3230, 3231, 0));
+			setCoords(ctx.player, _coords(3230, 3231, 0));
 		});
 
 		_events.bindEventListener(EventType.OPLOC2, 26807, (ctx) => {//Table
