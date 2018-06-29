@@ -427,46 +427,46 @@ module.exports = (function () {
 			    if (varbit(ctx.player, 13963) > 6) {
 				    anim.run(ctx.player, 2127);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the Lost Tribe quest.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the Lost Tribe quest.");
 				}
 				return;
 			case 23://Goblin Salute
 			    if (varbit(ctx.player, 13963) > 6) {
 				    anim.run(ctx.player, 2128);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the Lost Tribe quest.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the Lost Tribe quest.");
 				}
 				return;
 			case 24://Glass Box
 			    if (varbit(ctx.player, 1172) == 1) {
 				    anim.run(ctx.player, 1131);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the mime random event.");
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the mime random event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
 				}
 				return;
 			case 25://Climb Rope
 			    if (varbit(ctx.player, 1173) == 1) {
 				    anim.run(ctx.player, 1130);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the mime random event.");
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the mime random event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
 				}
 				return;
 			case 26://Lean
 			    if (varbit(ctx.player, 1174) == 1) {
 				    anim.run(ctx.player, 1129);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the mime random event.");
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the mime random event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
 				}
 				return;
 			case 27://Glass Wall
 			    if (varbit(ctx.player, 1171) == 1) {
 				    anim.run(ctx.player, 1128);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the mime random event.");
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the mime random event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by buying a piece of mime costume from<br> Iffie in Varrock.");
 				}
 				return;
 			case 28://Idea
@@ -474,7 +474,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 4276);
 				    anim.addSpotAnim(ctx.player, 712);
 				} else {
-					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
+					dialog.builder(player).mesbox("You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
 				}
 				return;
 			case 29://Stomp
@@ -482,7 +482,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 4278);
 				    anim.addSpotAnim(ctx.player, 713);
 				} else {
-					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
+					dialog.builder(player).mesbox("You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
 				}
 				return;
 			case 30://Flap
@@ -493,43 +493,43 @@ module.exports = (function () {
 					    anim.run(ctx.player, 4280);
 				    }
 			    } else {
-					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
+					dialog.builder(player).mesbox("You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
 				}
 				return;
 			case 31://Slap Head
 			    if (varbit(ctx.player, 16031) == 1) {
 				    anim.run(ctx.player, 4275);
 				} else {
-					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
+					dialog.builder(player).mesbox("You can't use this emote yet. Visit the Stronghold of Security to unlock it.");
 				}
 				return;
 			case 32://Zombie Walk
 			    if (varbit(ctx.player, 1177) == 1) {
 					anim.run(ctx.player, 3544);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the gravedigger random event.");
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by buying a piece of zombie costume from<br> Iffie in Varrock.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the gravedigger random event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by buying a piece of zombie costume from<br> Iffie in Varrock.");
 				}
 				return;
 			case 33://Zombie Dance
 			    if (varbit(ctx.player, 1176) == 1) {
 					anim.run(ctx.player, 3543);
 			    } else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked during the gravedigger random event.");
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by buying a piece of zombie costume from<br> Iffie in Varrock.");
+				    dialog.builder(player).mesbox("This emote can be unlocked during the gravedigger random event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by buying a piece of zombie costume from<br> Iffie in Varrock.");
 				}
 				return;
 			case 34://Zombie Hand
-			    dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Halloween holiday event.");
+			    dialog.builder(player).mesbox("This emote can be unlocked by playing a Halloween holiday event.");
 				anim.run(ctx.player, 7272);
 				anim.addSpotAnim(ctx.player, 1244);
 				return;
 			case 35://Scared
-			    dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Halloween holiday event.");
+			    dialog.builder(player).mesbox("This emote can be unlocked by playing a Halloween holiday event.");
 				anim.run(ctx.player, 2836);
 				return;
 			case 36://Bunny-Hop
-			    dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Easter holiday event.");
+			    dialog.builder(player).mesbox("This emote can be unlocked by playing an Easter holiday event.");
 				anim.run(ctx.player, 6111);
 				return;
 			case 37://Skill Capes
@@ -543,7 +543,7 @@ module.exports = (function () {
 			    if (varbit(ctx.player, 1180) == 1) {//may not be the right varbit
 				    anim.run(ctx.player, 7531);
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Christmas holiday event.");
+					dialog.builder(player).mesbox("This emote can be unlocked by playing an Christmas holiday event.");
 				}
 				return;
 			case 39://Air Guitar
@@ -551,7 +551,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 21998);//old 2414
 				    anim.addSpotAnim(ctx.player, 4417);//old 1537
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be accessed by unlocking 500 pieces of music.");
+					dialog.builder(player).mesbox("This emote can be accessed by unlocking 500 pieces of music.");
 				}
 				return;
 			case 40://Safety First
@@ -559,7 +559,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 8770);
 				    anim.addSpotAnim(ctx.player, 1553);
 				} else {
-					dialog.mesbox(ctx.player, "You can't use this emote yet. Visit the Stronghold of Player Safety to<br> unlock it.");
+					dialog.builder(player).mesbox("You can't use this emote yet. Visit the Stronghold of Player Safety to<br> unlock it.");
 				}
 				return;
 			case 41://Explore
@@ -567,7 +567,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 9990);
 				    anim.addSpotAnim(ctx.player, 1734);
 				} else {
-					dialog.mesbox(ctx.player, "You can't use this emote yet. You will need to complete the Beginner<br> Tasks in the Lumbridge and Draynor Achievement Diary to use it.");
+					dialog.builder(player).mesbox("You can't use this emote yet. You will need to complete the Beginner<br> Tasks in the Lumbridge and Draynor Achievement Diary to use it.");
 				}
 				return;
 			case 42://Trick
@@ -575,7 +575,7 @@ module.exports = (function () {
 				anim.run(ctx.player, 10530);
 				anim.addSpotAnim(ctx.player, 1864);
 				//} else {
-				//dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Halloween holiday event.");
+				//dialog.builder(player).mesbox("This emote can be unlocked by playing a Halloween holiday event.");
 				//}
 				return;
 			case 43://Freeze
@@ -583,7 +583,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 11044);
 				    anim.addSpotAnim(ctx.player, 1973);
 				} else {
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Easter holiday event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by playing an Easter holiday event.");
 				}
 				return;
 			case 44://Give Thanks
@@ -595,7 +595,7 @@ module.exports = (function () {
 				//animGFX 15430 2028 - Give Thanks Enhanced (Emote) (e) (Holiday) (End)
 
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Thanksgiving holiday event.");
+					dialog.builder(player).mesbox("This emote can be unlocked by playing a Thanksgiving holiday event.");
 				}
 				return;
 			case 45://Eggy Days
@@ -603,7 +603,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 11542);
 				    anim.addSpotAnim(ctx.player, 2037);
 				//} else {
-					//dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Easter holiday event.");
+					//dialog.builder(player).mesbox("This emote can be unlocked by playing an Easter holiday event.");
 				//}
 				return;
 			case 46://Dramatic Point
@@ -611,14 +611,14 @@ module.exports = (function () {
 				    anim.run(ctx.player, 12658);
 				    anim.addSpotAnim(ctx.player, 780);
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Christmas holiday event.");
+					dialog.builder(player).mesbox("This emote can be unlocked by playing an Christmas holiday event.");
 				}
 				return;
 			case 47://Faint
 			    if (varbit(ctx.player, 5860) == 1) {
 				    anim.run(ctx.player, 14165);
 				} else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked by completing the mime court case.");
+				    dialog.builder(player).mesbox("This emote can be unlocked by completing the mime court case.");
 				}
 				return;
 			case 48://Puppet Master
@@ -626,7 +626,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 14869);
 				    anim.addSpotAnim(ctx.player, 2837);
 				//} else {
-				    //dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Halloween holiday event.");
+				    //dialog.builder(player).mesbox("This emote can be unlocked by playing a Halloween holiday event.");
 				//}
 				return;
 			case 49://Task Master
@@ -634,7 +634,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 15034 : 15033);
 				    anim.addSpotAnim(ctx.player, 2930);
 				} else {
-					dialog.mesbox(ctx.player, "Complete every Task in the Task System to access this emote.");
+					dialog.builder(player).mesbox("Complete every Task in the Task System to access this emote.");
 				}
 				return;
 			case 50://TODO Add tick processing
@@ -646,70 +646,70 @@ module.exports = (function () {
 				    //player.queueUpdateBlock(new SpotAnimationBlock(1, 1287, 40));
 				    anim.run(ctx.player, 15105);
 				//} else {
-				//	dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Christmas holiday event.");
+				//	dialog.builder(player).mesbox("This emote can be unlocked by playing an Christmas holiday event.");
 				//}
 				return;
 			case 51://Cat fight
 			    if (varbit(ctx.player, 20214) == 1) {
 				    anim.run(ctx.player, 2252);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 52://talk to the hand
 			    if (varbit(ctx.player, 20215) == 1) {
 				    anim.run(ctx.player, 2416);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 53://Shake Hands
 			    if (varbit(ctx.player, 20216) == 1) {
 				    anim.run(ctx.player, 2303);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 54://High Five
 			    if (varbit(ctx.player, 20217) == 1) {
 				    anim.run(ctx.player, 2312);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 55://Face-palm
 			    if (varbit(ctx.player, 20218) == 1) {
 				    anim.run(ctx.player, 2254);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 56://Surrender
 			     if (varbit(ctx.player, 20219) == 1) {
 				    anim.run(ctx.player, 2360);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 57://Levitate
 			    if (varbit(ctx.player, 20220) == 1) {
 				    anim.run(ctx.player, 2327);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 58://Muscle-man Pose
 			    if (varbit(ctx.player, 20221) == 1) {
 				    anim.run(ctx.player, 2566);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 59://Rofl
 			    if (varbit(ctx.player, 20222) == 1) {
 				    anim.run(ctx.player, 2359);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 60://Breathe Fire
@@ -717,7 +717,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 2238);
 				    anim.addSpotAnim(ctx.player, 358);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 61://Storm
@@ -725,7 +725,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 2563);
 				    anim.addSpotAnim(ctx.player, 365);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 62://Snow
@@ -733,7 +733,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 2417);
 				    anim.addSpotAnim(ctx.player, 364);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 63://Invoke Spring
@@ -741,7 +741,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 15357);
 				    anim.addSpotAnim(ctx.player, 1391);
 				//} else {
-				//	dialog.mesbox(ctx.player, "This emote can be unlocked by playing an Easter holiday event.");
+				//	dialog.builder(player).mesbox("This emote can be unlocked by playing an Easter holiday event.");
 				//}
 				return;
 			case 64://Head in sand
@@ -749,14 +749,14 @@ module.exports = (function () {
 				    anim.run(ctx.player, 12926);
 				    anim.addSpotAnim(ctx.player, 1761);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 65://Hula-hoop
 			    if (varbit(ctx.player, 20227) == 1) {
 				    anim.run(ctx.player, 12928);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 66://Disappear
@@ -764,7 +764,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 12929);
 				    anim.addSpotAnim(ctx.player, 1760);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 67://Ghost
@@ -772,21 +772,21 @@ module.exports = (function () {
 				    anim.run(ctx.player, 12932);
 				    anim.addSpotAnim(ctx.player, 1762);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 68://Bring it!
 			    if (varbit(ctx.player, 20230) == 1) {
 				    anim.run(ctx.player, 12934);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 69://Palm-fist
 			    if (varbit(ctx.player, 20231) == 1) {
 				    anim.run(ctx.player, 12931);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 70://Kneel
@@ -874,21 +874,21 @@ module.exports = (function () {
 			    if (varbit(ctx.player, 12258) == 100) {
 				    anim.run(ctx.player, 15424);
 				} else {
-					dialog.mesbox(ctx.player, "Complete One Piercing Note to access this emote.");
+					dialog.builder(player).mesbox("Complete One Piercing Note to access this emote.");
 				}
 				return;
 			case 95://Evil Laugh
 			    if (varbit(ctx.player, 20232) == 1) {
 				    anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 15536 : 15535);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 96://Golf Clap
 			    if (varbit(ctx.player, 20233) == 1) {
 				    anim.run(ctx.player, 15520);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 97://LOLcano
@@ -896,7 +896,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 15533 : 15532);
 				    anim.addSpotAnim(ctx.player, 2191);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 98://Infernal Power
@@ -904,7 +904,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 15529);
 				    anim.addSpotAnim(ctx.player, 2197);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 99://Divine Power
@@ -912,21 +912,21 @@ module.exports = (function () {
 				    anim.run(ctx.player, 15524);
 				    anim.addSpotAnim(ctx.player, 2195);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 100://Your Dead
 			    if (varbit(ctx.player, 20237) == 1) {
 				    anim.run(ctx.player, 14195);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 101://Scream
 			    if (varbit(ctx.player, 20238) == 1) {
 				    anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 15527 : 15526);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 102://Tornado
@@ -934,7 +934,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 15530);
 				    anim.addSpotAnim(ctx.player, 2196);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 103://Chaotic Cookery
@@ -942,7 +942,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 15604);
 				    anim.addSpotAnim(ctx.player, 2239);
 				//} else {
-				//	dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Christmas holiday event.");
+				//	dialog.builder(player).mesbox("This emote can be unlocked by playing a Christmas holiday event.");
 				//}
 				return;
 			case 104://ROFLcopter
@@ -950,7 +950,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 16374 : 16373);
 				    anim.addSpotAnim(ctx.player, 3010);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 105://Nature Might
@@ -958,7 +958,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 16376);
 				    anim.addSpotAnim(ctx.player, 3011);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 106://Inner Power
@@ -966,7 +966,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 16382);
 				    anim.addSpotAnim(ctx.player, 3014);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 107://Werewolf Transformation
@@ -975,7 +975,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3013);
 				    anim.addSpotAnim(ctx.player, 3016);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 108://Celebrate
@@ -986,7 +986,7 @@ module.exports = (function () {
 			    if (varbit(ctx.player, 933) == 1) {
 				    anim.run(ctx.player, 17079);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 110://Mahjarrat Transformation
@@ -994,7 +994,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17103);
 				    anim.addSpotAnim(ctx.player, 3222);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 111://breakwind
@@ -1002,7 +1002,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17076);
 				    anim.addSpotAnim(ctx.player, 3226);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 112://backflip
@@ -1010,7 +1010,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17101);
 				    anim.addSpotAnim(ctx.player, 3221);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 113://gravedigger
@@ -1018,7 +1018,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17077);
 				    anim.addSpotAnim(ctx.player, 3219);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 114://frog transform
@@ -1026,21 +1026,21 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17080);
 				    anim.addSpotAnim(ctx.player, 3220);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 115://mexican wave
 			    //if (varbit(ctx.player, ?) == 1) {
 				    anim.run(ctx.player, 17163);
 				//} else {
-				//	dialog.mesbox(ctx.player, "Purchase this from Gielinor Games reward store.");
+				//	dialog.builder(player).mesbox("Purchase this from Gielinor Games reward store.");
 				//}
 				return;
 			case 116://sports man
 			    //if (varbit(ctx.player, ?) == 1) {
 				    anim.run(ctx.player, 17166);
 				//} else {
-				//	dialog.mesbox(ctx.player, "Purchase this from Gielinor Games reward store.");
+				//	dialog.builder(player).mesbox("Purchase this from Gielinor Games reward store.");
 				//}
 				return;
 			case 117://Sunbathe
@@ -1052,7 +1052,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17186);
 				    anim.addSpotAnim(ctx.player, 3252);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 119://crab transform
@@ -1060,7 +1060,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17189);
 				    anim.addSpotAnim(ctx.player, 3253);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 120://thruster stomp
@@ -1068,7 +1068,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17801);
 				    anim.addSpotAnim(ctx.player, 3446);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 121://robot dance
@@ -1076,7 +1076,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 17799);
 				    anim.addSpotAnim(ctx.player, 3445);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 122://Ariane's Power
@@ -1084,14 +1084,14 @@ module.exports = (function () {
 				    anim.run(ctx.player, 18823);
 				    anim.addSpotAnim(ctx.player, 3640);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 123://Ozan's Smile
 			    if (varbit(ctx.player, 16831) == 1) {
 				    anim.run(ctx.player, 18824);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
             case 124://Love at First Sight
@@ -1108,7 +1108,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 3916);
 				    anim.addSpotAnim(ctx.player, 3917);
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be unlocked by exchanging Guthixian butterfly memories<br> with the druids.");
+					dialog.builder(player).mesbox("This emote can be unlocked by exchanging Guthixian butterfly memories<br> with the druids.");
 				}
 				return;
 			case 127://Balance of Nature
@@ -1116,14 +1116,14 @@ module.exports = (function () {
 				    anim.run(ctx.player, 19979);
 					anim.addSpotAnim(ctx.player, 3894);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 128://Talk to Skull
 			    if (varbit(ctx.player, 18284) == 1) {
 				    anim.run(ctx.player, 20073);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote pack in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote pack in Solomon's General Store.");
 				}
 				return;
 			case 129://Plead
@@ -1179,7 +1179,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 20120);
 				    anim.addSpotAnim(ctx.player, 3947);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 146://Rock Smash
@@ -1187,7 +1187,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 20123);
 					anim.addSpotAnim(ctx.player, 3950);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 147://Lightning Blast
@@ -1195,7 +1195,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 20124);
 					anim.addSpotAnim(ctx.player, 3949);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 148://Water Dance
@@ -1203,7 +1203,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 20126);
 				    anim.addSpotAnim(ctx.player, 3948);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 149://Saradomin's Glory(Tier 1)
@@ -1241,14 +1241,14 @@ module.exports = (function () {
 				    anim.run(ctx.player, 21184);
 					anim.addSpotAnim(ctx.player, 4231);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 157://Owen's Mastery
 			    if (varbit(ctx.player, 20071) == 1) {
 					anim.run(ctx.player, ENGINE.isFemale(ctx.player) ? 21176 : 21175);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 158://Super September
@@ -1260,7 +1260,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 21829);
 				   anim.addSpotAnim(ctx.player, 4401);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote during the Lumbridge Rebuildathon.");
+					dialog.builder(player).mesbox("You must unlock this emote during the Lumbridge Rebuildathon.");
 				}
 				return;
 			case 160://Armadyl's Glory(Tier 1)
@@ -1304,7 +1304,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 23248);
 				    anim.addSpotAnim(ctx.player, 4745);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 170://Cabbage Facepunch Bonanza
@@ -1312,7 +1312,7 @@ module.exports = (function () {
                     anim.run(ctx.player, 23279);
 				    anim.addSpotAnim(ctx.player, 4776);//4775 for Monkey
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock during the Cabbage Facepunch Bonanza special event.");
+					dialog.builder(player).mesbox("You must unlock during the Cabbage Facepunch Bonanza special event.");
 				}
 				return;
 			case 171: //Cute Bunny
@@ -1320,7 +1320,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 23288);
 				    anim.addSpotAnim(ctx.player, 4779);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 172: //Sneaky Bunny
@@ -1329,7 +1329,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 4780);
 				    anim.addSpotAnim(ctx.player, 4781);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 173://Demonic Rock Off
@@ -1337,7 +1337,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 23857);
 				    anim.addSpotAnim(ctx.player, 4945);
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be accessed by unlocking 1000 pieces of music.");
+					dialog.builder(player).mesbox("This emote can be accessed by unlocking 1000 pieces of music.");
 				}
 				return;
 			case 174://Shadow to Praetor
@@ -1345,7 +1345,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 24492);
 				    anim.addSpotAnim(ctx.player, 5110);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 175://Praetor to Shadow
@@ -1353,7 +1353,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 24492);
 				    anim.addSpotAnim(ctx.player, 5109);
 				} else {
-					dialog.mesbox(ctx.player, "You must unlock this emote in Solomon's General Store.");
+					dialog.builder(player).mesbox("You must unlock this emote in Solomon's General Store.");
 				}
 				return;
 			case 176://Walk the Plank
@@ -1368,7 +1368,7 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 5185);
 				    anim.addSpotAnim(ctx.player, 5186);
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be unlocked by playing a Halloween holiday event.");
+					dialog.builder(player).mesbox("This emote can be unlocked by playing a Halloween holiday event.");
 				}
 				return;
 			case 178://Ghostly Wardrobe
@@ -1383,35 +1383,35 @@ module.exports = (function () {
 				    anim.addSpotAnim(ctx.player, 5227);
 				    anim.addSpotAnim(ctx.player, 5228);
 				//} else {
-				//    dialog.mesbox(ctx.player, "You must complete the Broken Home quest to unlock this emote.");
+				//    dialog.builder(player).mesbox("You must complete the Broken Home quest to unlock this emote.");
 				//}
 				return;
 			case 180://Hefin Lotus
 			    if (varbit(ctx.player, 25837) == 1) {
 				    anim.run(ctx.player, 25009);
 				} else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked by completing the Prifddinas Agility Course.");
+				    dialog.builder(player).mesbox("This emote can be unlocked by completing the Prifddinas Agility Course.");
 				}
 				return;
 			case 181://Hefin Bow
 			    if (varbit(ctx.player, 25838) == 1) {
 				    anim.run(ctx.player, 25008);
 				} else {
-					dialog.mesbox(ctx.player, "This emote can be unlocked by completing the Prifddinas Agility Course.");
+					dialog.builder(player).mesbox("This emote can be unlocked by completing the Prifddinas Agility Course.");
 				}
 				return;
 			case 182://Hefin Ward
 			    if (varbit(ctx.player, 25839) == 1) {
 				    anim.run(ctx.player, 25010);
 				} else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked by completing the Prifddinas Agility Course.");
+				    dialog.builder(player).mesbox("This emote can be unlocked by completing the Prifddinas Agility Course.");
 				}
 				return;
 			case 183://Hefin Crane
 			    if (varbit(ctx.player, 25840) == 1) {
 				    anim.run(ctx.player, 25006);
 				} else {
-				    dialog.mesbox(ctx.player, "This emote can be unlocked by completing the Prifddinas Agility Course.");
+				    dialog.builder(player).mesbox("This emote can be unlocked by completing the Prifddinas Agility Course.");
 				}
 				return;
 			case 184://Cracker Pull
@@ -1419,7 +1419,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 25325);
 				    anim.addSpotAnim(ctx.player, 5293);
 				} else {
-				    dialog.mesbox(ctx.player, "You must complete a Christmas cracker pull to unlock this emote.");
+				    dialog.builder(player).mesbox("You must complete a Christmas cracker pull to unlock this emote.");
 				}
 				return;
 			case 185://Efficiency
@@ -1437,7 +1437,7 @@ module.exports = (function () {
 				    anim.run(ctx.player, 26224);
 				    anim.addSpotAnim(ctx.player, 5450);
 				} else {
-					dialog.mesbox(ctx.player, "This emote can only be unlocked at Easter.");
+					dialog.builder(player).mesbox("This emote can only be unlocked at Easter.");
 				}
 				return;
 			case 188://Tuska's Fury (Tier 1)

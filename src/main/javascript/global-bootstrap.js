@@ -28,7 +28,6 @@ function getAllModules () {// jshint ignore:line
 		'map',
 		'npcs/asgarnia',
 		'npcs/events',
-		'npcs/kandarin',
 		'npcs/misthalin',
 		'npcs/tirannwn',
 		'quest',

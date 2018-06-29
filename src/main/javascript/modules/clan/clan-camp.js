@@ -38,7 +38,7 @@ var clan = require('./logic/core');
 
 module.exports = function (scriptManager) {
 	scriptManager.bind(EventType.OPNPC1, 5915, function (ctx) {
-		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+util.getName(ctx.player)+", I am giving away free clan vex. If you right click me and click get vex.");
+		dialog.builder(ctx.player).chatnpc(ctx.npc, "Hey "+util.getName(ctx.player)+", I am giving away free clan vex. If you right click me and click get vex.");
 	});
 
 	scriptManager.bind(EventType.OPNPC3, 5915, function (ctx) {
@@ -46,7 +46,7 @@ module.exports = function (scriptManager) {
 	});
 
 	scriptManager.bind(EventType.OPNPC1, 13633, function (ctx) {
-		dialog.chatnpc(ctx.player, ctx.npc, "Hey "+util.getName(ctx.player)+", You can get a clan cape from me.");
+		dialog.builder(ctx.player).chatnpc(ctx.npc, "Hey "+util.getName(ctx.player)+", You can get a clan cape from me.");
 	});
 
 	scriptManager.bind(EventType.OPNPC3, 13633, function (ctx) {
@@ -67,7 +67,7 @@ module.exports = function (scriptManager) {
 			return;
 		}
 		inv.give(player, 20709, 1);
-		dialog.chatnpc(player, npc, "Here you go "+util.getName(player)+".");
+		dialog.builder(player).chatnpc(npc, "Here you go "+util.getName(player)+".");
 	}
 
 	function startClanCloakGiver (player, npc) {
@@ -84,6 +84,6 @@ module.exports = function (scriptManager) {
 			return;
 		}
 		inv.give(player, 20708, 1);
-		dialog.chatnpc(player, npc, "Here you go "+util.getName(player)+".");
+		dialog.builder(player).chatnpc(npc, "Here you go "+util.getName(player)+".");
 	}
 };

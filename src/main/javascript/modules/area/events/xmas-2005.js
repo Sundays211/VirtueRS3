@@ -39,17 +39,17 @@ module.exports = (function () {
 
 		scriptManager.bind(EventType.OPLOC1, 10687, function (ctx) {//puppet torsos blue
 			//if varbit or varp
-			//dialog.chatplayer(ctx.player, "NEUTRAL", "I should speak to Rosie befor I touch these.", function () {
+			//dialog.builder(ctx.player).chatplayer("NEUTRAL", "I should speak to Rosie befor I touch these.", function () {
 			//});
 			//else
 			anim.run(ctx.player, 832, function () {
 				inv.give(ctx.player, 6875, 1);
 			});
-			dialog.objbox(ctx.player, 6875, "You take a blue marionette torso from the box.");
+			dialog.builder(ctx.player).objbox(6875, "You take a blue marionette torso from the box.");
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 10699, function (ctx) {//Trapdoor steps
-			dialog.mesbox(ctx.player,"If you leave Diango's workshop, any marionette parts, bits of bauble or<br> boxes will be removed from your inventory.")
+			dialog.builder(ctx.player).mesbox("If you leave Diango's workshop, any marionette parts, bits of bauble or<br> boxes will be removed from your inventory.")
 				.multi2("LEAVE DIANGO'S WORKSHOP?", "Yes", function () {
 					anim.run(ctx.player, 828, function () {
 						map.setCoords(ctx.player, coords(2007, 4427, 1));

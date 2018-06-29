@@ -33,12 +33,12 @@ module.exports = (function () {
 
 	scriptManager.bind(EventType.OPLOC1, 75852, function (ctx) {//Trapdoor old xmas event
 	    //todo add knocking sound
-	    dialog.chatnpc(ctx.player, 15874, "Get lost!", Expression.NEUTRAL);
+	    dialog.builder(ctx.player).chatnpc(15874, "Get lost!", Expression.NEUTRAL);
 	    //todo add get lost sound
 	});
 
 	scriptManager.bind(EventType.OPLOC1, 5116, function (ctx) {//Trapdoor (Mysterious old man house)
-	    dialog.chatnpc(ctx.player, 16873, "Keep out of my basement!", Expression.NEUTRAL);//varp 3524 32772 to enter
+	    dialog.builder(ctx.player).chatnpc(16873, "Keep out of my basement!", Expression.NEUTRAL);//varp 3524 32772 to enter
 	});
 
 	scriptManager.bind(EventType.OPLOC1, [47424,47421], function (ctx) {//draynormanor main door

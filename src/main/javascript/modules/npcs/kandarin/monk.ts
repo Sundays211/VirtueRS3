@@ -19,22 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
 
-var dialog = require('shared/dialog');
-var _entity = require('engine/entity');
-
-module.exports = (function () {
-	return {
-	init : init
-	};
-
-	function init (scriptManager) {
-
-		scriptManager.bind(EventType.OPNPC1, 281, function (ctx) {
-			_entity.say(ctx.npc, "Peace brother");
-		});
-
-	}
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 281, (ctx) => {
+	_entity.say(ctx.npc, "Peace brother");
+});

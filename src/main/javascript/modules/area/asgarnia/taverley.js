@@ -34,7 +34,7 @@ module.exports = (function () {
 	        if (util.mapMembers()){
 	           map.setCoords(ctx.player, coords(2885, 9796, 0));
             } else {
-               dialog.mesbox(ctx.player, "You need to be on a member's world to use this feature.");
+               dialog.builder(ctx.player).mesbox("You need to be on a member's world to use this feature.");
             }
         });
 	}
