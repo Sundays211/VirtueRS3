@@ -34,17 +34,17 @@ import { hasFinished } from '../quest';
 	        sendMessage(ctx.player, "Digsite infomation and exam centre.");
 	    });
 
-		_events.bindEventListener(EventType.OPLOC1, 4066, (ctx) => {
-	        mesbox(ctx.player, "You inspect the signpost more closely. You see nothing wrong with it<br> initially, but after some time you notice teeth marks in the wood. It looks<br> like people have tried eating the post.");
+		_events.bindEventListener(EventType.OPLOC1, 4066, async (ctx) => {
+	       await mesbox(ctx.player, "You inspect the signpost more closely. You see nothing wrong with it<br> initially, but after some time you notice teeth marks in the wood. It looks<br> like people have tried eating the post.");
 	    });
 
-		_events.bindEventListener(EventType.OPLOC1, 5164, (ctx) => {
-	        mesbox(ctx.player, "The sinepost has a note pinned onto it. The note says:<br> '----Braindead Butler Wanted----<br> Gravedigging skills essential - Hunchback advantageous<br> See Dr Fenkenstrain at the castle NE of Canifis'");
+		_events.bindEventListener(EventType.OPLOC1, 5164, async (ctx) => {
+	        await mesbox(ctx.player, "The sinepost has a note pinned onto it. The note says:<br> '----Braindead Butler Wanted----<br> Gravedigging skills essential - Hunchback advantageous<br> See Dr Fenkenstrain at the castle NE of Canifis'");
 	    });
 
-		_events.bindEventListener(EventType.OPLOC1, 25397, (ctx) => {
-	        mesbox(ctx.player, "~ The Observatory ~<br> Step ahead to the reception if you wish to explore RuneScape's most<br> magnificent invention.")
-			chatplayer(ctx.player, "Magnificent invention? I've seen some pretty magnificent<br> things in my time. It'll have to be pretty impressive.")
+		_events.bindEventListener(EventType.OPLOC1, 25397, async (ctx) => {
+	       await mesbox(ctx.player, "~ The Observatory ~<br> Step ahead to the reception if you wish to explore RuneScape's most<br> magnificent invention.");
+		   await chatplayer(ctx.player, "Magnificent invention? I've seen some pretty magnificent<br> things in my time. It'll have to be pretty impressive.");
 			//.finish();
 	    });
 

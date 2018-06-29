@@ -32,7 +32,7 @@ import { getId, mapMembers } from 'shared/util';
 import { mesbox } from 'shared/dialog';
 
 
-		_events.bindEventListener(EventType.OPLOC2, [ 2646, 67263, 67264, 67265 ], (ctx) => {//flax
+		_events.bindEventListener(EventType.OPLOC2, [ 2646, 67263, 67264, 67265 ], async (ctx) => {//flax
 			if(mapMembers()){
 				runAnim(ctx.player, 827, function () {
 					giveItem(ctx.player, 1779, 1);
@@ -45,7 +45,7 @@ import { mesbox } from 'shared/dialog';
 					}, 60);
 				});
 			} else {
-				mesbox(ctx.player, "Only members can pick flax.");
+			    await mesbox(ctx.player, "Only members can pick flax.");
 			}
 		});
 
