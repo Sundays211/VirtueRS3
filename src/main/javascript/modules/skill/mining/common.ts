@@ -19,13 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals Stat */
-var chat = require('shared/chat');
-var util = require('shared/util');
-var anim = require('shared/anim');
-var stat = require('shared/stat');
+import { Stat } from 'engine/enums';
+import { Player } from 'engine/models';
 
-var pickaxe = require('./pickaxe');
+import { getStatLevel } from 'shared/stat';
+import { sendMessage } from 'shared/chat';
+import { delayFunction } from 'shared/util';
+import { runAnim, stopAnim } from 'shared/anim';
+
+import { Pickaxe, getPickaxe } from './pickaxe';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -35,43 +37,37 @@ var pickaxe = require('./pickaxe');
  * @author Sundays211
  * @since 05/11/2014
  */
-module.exports = (function () {
-	return {
-		runMiningAction : runMiningAction
-	};
+export function runMiningAction(player: Player, levelReq: number, onSuccess: () => void) {
+	if (getStatLevel(player, Stat.MINING) < levelReq) {
+		sendMessage(player, "You require a mining level of " + levelReq + "  to mine this rock.");
+		return;
+	}
+	var pic = getPickaxe(player);//Find the highest pickaxe the player holds and can use
+	if (!pic) {
+		sendMessage(player, "You need a pickaxe to mine this rock.");
+		return;
+	}
+	runAnim(player, pic.anim);
+	delayFunction(player, pic.speed, process, true);
 
-	function runMiningAction (player, levelReq, onSuccess) {
-		if (stat.getLevel(player, Stat.MINING) < levelReq) {
-			chat.sendMessage(player, "You require a mining level of "+levelReq+"  to mine this rock.");
-			return;
-		}
-		var pic = pickaxe.getPickaxe(player);//Find the highest pickaxe the player holds and can use
-		if (!pic) {
-			chat.sendMessage(player, "You need a pickaxe to mine this rock.");
-			return;
-		}
-		anim.run(player, pic.anim);
-		util.delayFunction(player, pic.speed, process, true);
-
-		function process () {
-			if (checkSuccess(player, levelReq, pic)) {
-				anim.stop(player);
-				onSuccess();
-			} else {
-				anim.run(player, pic.anim);
-				util.delayFunction(player, pic.speed, process, true);
-			}
+	function process() {
+		if (checkSuccess(player, levelReq, pic)) {
+			stopAnim(player);
+			onSuccess();
+		} else {
+			runAnim(player, pic.anim);
+			delayFunction(player, pic.speed, process, true);
 		}
 	}
+}
 
-	function checkSuccess(player, levelReq, pic) {
-		//TODO: Get the right calculation for this. At the moment it's a complete guess...
-		var chance = (stat.getLevel(player, Stat.MINING) + pic.bonus) - levelReq;
-		for (var i=0;i<chance;i++) {
-			if (Math.random() > 0.9) {
-				return true;
-			}
+function checkSuccess(player: Player, levelReq: number, pic: Pickaxe): boolean {
+	//TODO: Get the right calculation for this. At the moment it's a complete guess...
+	var chance = (getStatLevel(player, Stat.MINING) + pic.bonus) - levelReq;
+	for (var i = 0; i < chance; i++) {
+		if (Math.random() > 0.9) {
+			return true;
 		}
-		return false;
 	}
-})();
+	return false;
+}
