@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { Stat } from 'engine/enums';
+import { Stat, EventType } from 'engine/enums';
 import { Player, Location } from 'engine/models';
 import _config from 'engine/config';
 import _events from 'engine/events';

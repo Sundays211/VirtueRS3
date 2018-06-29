@@ -52,4 +52,5 @@ export interface EventContext {
 	button?: number;
 	fromslot?: number;
 	toslot?: number;
+	objId?: number;
 }

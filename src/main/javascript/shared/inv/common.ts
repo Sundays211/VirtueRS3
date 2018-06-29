@@ -25,7 +25,7 @@ export function giveItem(
 	invId: Inv = Inv.BACKPACK
 ) {
 
-	if (objId === COINS_OBJ) {
+	if (objId === COINS_OBJ && invId === Inv.BACKPACK) {
 		var coinsToAdd = Math.min(count, INTEGER_MAX - getCoinCount(player));
 		addCoins(player, coinsToAdd);
 		count -= coinsToAdd;
