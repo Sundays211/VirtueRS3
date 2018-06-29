@@ -27,6 +27,7 @@ import { defaultHandler } from 'shared/util';
 import { sendMessage } from 'shared/chat';
 
 import { hasItem } from './common';
+import { EventType } from 'engine/enums';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>

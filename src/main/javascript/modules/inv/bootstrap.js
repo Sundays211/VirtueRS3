@@ -7,10 +7,9 @@ module.exports = function (scriptManager) {
 		require('./worn-equipment'),
 		require('./bank'),
 		require('./backpack'),
-		require('./commands'),
-		require('./exchange')
+		require('./commands')
 	];
-	
+
 	for (var i in modules) {
 		modules[i].init(scriptManager);
 	}
