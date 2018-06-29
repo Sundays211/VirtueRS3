@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,8 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var exchangeWidget = require('./exchange-widget');
+import { EventType } from "engine/enums";
+import _events from 'engine/events';
+
+import { openExchange } from "./exchange-widget";
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -30,15 +32,6 @@ var exchangeWidget = require('./exchange-widget');
  * @author Sundays211
  * @since 17/02/2015
  */
-module.exports = (function () {
-	return {
-		init : init
-	};
-	
-	function init (scriptManager) {	
-		scriptManager.bind(EventType.OPNPC1, [ 1419, 2593, 2240 ], function (ctx) {
-			exchangeWidget.open(ctx.player);
-		});
-	}
-	
-})();
+_events.bindEventListener(EventType.OPNPC1, [1419, 2593, 2240], (ctx) => {
+	openExchange(ctx.player);
+});

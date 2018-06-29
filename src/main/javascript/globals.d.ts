@@ -1,8 +1,4 @@
 
-declare var EventType: any;
-
-declare var MesType: any;
-
 declare var ENGINE: any;
 
 declare var CONFIG_ENGINE: any;
