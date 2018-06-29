@@ -9,7 +9,6 @@
 function getAllModules () {// jshint ignore:line
 	var modules = [
 		'admin',
-		'area',
 	    'area/asgarnia',
 		'area/events',
 		'area/feldip-hills',

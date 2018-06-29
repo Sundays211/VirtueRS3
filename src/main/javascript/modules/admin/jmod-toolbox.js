@@ -23,7 +23,7 @@
 var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
 
 var coords = require('shared/map/coords');
-
+var varbit = require('engine/var/bit');
 var chat = require('shared/chat');
 var widget = require('shared/widget');
 var util = require('shared/util');
@@ -54,7 +54,13 @@ module.exports = (function () {
 			case 145://invis
 				player.getModel().setRender(Render.INVISIBLE);
 				player.getModel().refresh();
+				chat.sendMessage(player, "You are invisible.");
 				return;
+			case 153://Invulnerable 
+			    var enabled = varbit(ctx.player, 27405) == 1;
+				varbit(ctx.player, 27405, enabled ? 0 : 1);
+				chat.sendMessage(player, "You toggle your invulnerability.");
+				return;	
 			case 185://Jmod Quick-Chat Option
 				return;
 			case 269://Panic!
