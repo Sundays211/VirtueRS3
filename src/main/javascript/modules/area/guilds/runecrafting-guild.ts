@@ -19,18 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var map = require('shared/map');
-var coords = require('shared/map/coords');
 
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
 
-	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 100850, function (ctx) {//Invention Guild
-			map.setCoords(ctx.player, coords(6169, 1038, 0));
-		});
-	}
-})();
+import { runAnim, addSpotAnim } from 'shared/anim';
+import _coords from 'shared/map/coords';
+
+_events.bindEventListener(EventType.OPLOC1, 79603, (ctx) => {//portal
+	addSpotAnim(ctx.player, 1771);
+	runAnim(ctx.player, 10180, function () {
+        _entity.setCoords(ctx.player, _coords(3, 48, 49, 30, 15));
+    });
+});

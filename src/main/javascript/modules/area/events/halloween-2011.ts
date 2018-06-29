@@ -19,25 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+ 
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events'; 
+ 
+import { openCentralWidget, setWidgetText } from 'shared/widget';
 
-/* globals EventType*/
-var anim = require('shared/anim');
-var map = require('shared/map');
-var coords = require('shared/map/coords');
-module.exports = (function () {
-	return {
-		init : init
-	};
+	//halloween 2011   0,64,81,49,10
+_events.bindEventListener(EventType.OPLOC1, 62624, (ctx) => {
+	openCentralWidget(ctx.player, 1151, false);
+});
 
-	function init (scriptManager) {
-
-	    scriptManager.bind(EventType.OPLOC1, 79603, function (ctx) {//portal
-		anim.addSpotAnim(ctx.player, 1771);
-	    anim.run(ctx.player, 10180, function () {
-        map.setCoords(ctx.player, coords(3, 48, 49, 30, 15));
-	    });
-
-	});
-
-	}
-})();
+_events.bindEventListener(EventType.OPLOC1, 62428, (ctx) => {
+	openCentralWidget(ctx.player, 1149, false);
+	setWidgetText(ctx.player, 1149, 27, "Welcome Area Portal");
+	setWidgetText(ctx.player, 1149, 28, "This welcome portal area is where you'll first arrive in a clan citadel, and where<br> visitors can be greeted. The statues around the portal can be customised, and<br> all banners will bear the clan's logo. In the rest of the welcome area you'll, find<br> the noticeboard, meeting tent and signpost, and the entrance to the clan's<br> battlefield.");
+	setWidgetText(ctx.player, 1149, 29, "Notes for Deathcon attendees:<br> -Death does't do personal greetings (because of last year's incident).<br> -Beauty needs some help to pick the welcome portal statues.");
+});

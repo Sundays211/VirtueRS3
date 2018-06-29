@@ -9,11 +9,6 @@
 function getAllModules () {// jshint ignore:line
 	var modules = [
 		'admin',
-	    'area/asgarnia',
-		'area/events',
-		'area/feldip-hills',
-		'area/fremennik',
-		'area/guilds',
 		'area/kandarin',
 		'area/kharidian-desert',
 		'area/misthalin',

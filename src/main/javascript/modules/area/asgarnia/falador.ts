@@ -19,20 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
+
 import { EventType } from 'engine/enums/event-type';
 import _events from 'engine/events';
-import _entity from 'engine/entity';
+import _map from 'engine/map';
+ 
+import { locationAnim, addLocation, getLocShape, getLocRotation } from 'shared/map/location';
+import { runAnim } from 'shared/anim';
+import { multi3 } from 'shared/dialog';
 
-import { sendMessage } from 'shared/chat';
-import _coords from 'shared/map/coords';
-
-_events.bindEventListener(EventType.OPLOC1, 26806, (ctx) => {//Staircase
-	_entity.setCoords(ctx.player, _coords(3230, 3231, 0));
+_events.bindEventListener(EventType.OPLOC1, 26194, (ctx) => {//party room lever
+	locationAnim(ctx.location, 6934);
+	runAnim(ctx.player, 6933, function () {
+		multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", function () {
+		}, "Nightly Dance (500 coins).", function () {
+		}, "No action.", function () {
+		});
+	});
 });
 
-_events.bindEventListener(EventType.OPLOC2, 26807, (ctx) => {//Table
-	sendMessage(ctx.player, "todo");
+_events.bindEventListener(EventType.OPLOC1, 26193, (ctx) => {//party room chest
+	runAnim(ctx.player, 536, function () {
+	    addLocation(2418, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+	});
 });
-	
 
+_events.bindEventListener(EventType.OPLOC2, 2418, (ctx) => {//party room chest
+	//deposit
+});
+
+_events.bindEventListener(EventType.OPLOC3, 2418, (ctx) => {//party room chest
+	runAnim(ctx.player, 535, function () {
+		addLocation(26193, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+	});
+});

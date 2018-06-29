@@ -19,27 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var anim = require('shared/anim');
-var map = require('shared/map');
-var coords = require('shared/map/coords');
+ 
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
 
+import _coords from 'shared/map/coords';
 
-module.exports = (function () {
-	return {
-		init : init
-	};
-	// npcs
-	//gublinch  5003-5019 and 829 varbit 14381
-	//Shanty Claws 828
-	//loc
-	//19036-Cage
-    //19037-Cage with gublinch
-	function init (scriptManager) {
-	scriptManager.bind(EventType.OPLOC1, 19040, function (ctx) {//Ladder 3168 5320
-	anim.run(ctx.player, 828, function () {
-	map.setCoords(ctx.player, coords(2841, 3143, 0));
-	});
-	});
-	}
-})();
+_events.bindEventListener(EventType.OPLOC1, 100850, (ctx) => {//Invention Guild
+    _entity.setCoords(ctx.player, _coords(6169, 1038, 0));
+});

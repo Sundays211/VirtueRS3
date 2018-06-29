@@ -728,3 +728,6 @@ import { hasFinished } from '../quest';
 			}
 	    });
 
+        _events.bindEventListener(EventType.OPLOC1, 10090, async (ctx) => {
+		    await mesbox(ctx.player, "Mudskipper Point.<br> WARNING!<br> BEWARE OF THE MUDSKIPPERS!");
+	    });

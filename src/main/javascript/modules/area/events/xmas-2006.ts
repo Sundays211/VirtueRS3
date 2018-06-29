@@ -19,35 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var chat = require('shared/chat');
-var dialog = require('shared/dialog');
-var map = require('shared/map');
-var coords = require('shared/map/coords');
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events'; 
+import _entity from 'engine/entity';
 
-	function init (scriptManager) {
-
-		scriptManager.bind(EventType.OPLOC1, 2836, function (ctx) {
-			chat.sendMessage(ctx.player, "Nothing interesting happens.");
-		});
-
-		scriptManager.bind(EventType.OPLOC1, 2837, function (ctx) {
-			chat.sendMessage(ctx.player, "Nothing interesting happens.");
-		});
-
-		scriptManager.bind(EventType.OPLOC1, 2811, function (ctx) {
-			map.setCoords(ctx.player, coords(0,40,47,16,21));
-			dialog.builder(ctx.player).mesbox("Wow! That tunnel went a long way.");
-		});
-
-		scriptManager.bind(EventType.OPLOC1, 2812, function (ctx) {
-			map.setCoords(ctx.player, coords(0,39,46,4,44));
-		});
-
-	}
-
-})();
+import { runAnim } from 'shared/anim';
+import _coords from 'shared/map/coords';
+	// npcs
+	//gublinch  5003-5019 and 829 varbit 14381
+	//Shanty Claws 828
+	//loc
+	//19036-Cage
+    //19037-Cage with gublinch
+_events.bindEventListener(EventType.OPLOC1, 19040, (ctx) => {//Ladder 3168 5320
+	runAnim(ctx.player, 828, function () {
+        _entity.setCoords(ctx.player, _coords(2841, 3143, 0));
+	});
+});
