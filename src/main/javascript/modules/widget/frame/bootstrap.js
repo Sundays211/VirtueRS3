@@ -12,7 +12,6 @@ module.exports = function (scriptManager) {
 	    require('./lodestone'),
 	    require('./world-map'),
 		require('./overlay'),
-		require('./price-checker'),
 		require('./report'),
 		require('./ribbon'),
 		require('./skillcape-customiser'),
@@ -22,7 +21,7 @@ module.exports = function (scriptManager) {
 		require('./upgrades-and-extras'),
 		require('./confirm')
 	];
-	
+
 	for (var i in modules) {
 		modules[i].init(scriptManager);
 	}
