@@ -23,11 +23,11 @@ export function openWidget(
 	ENGINE.openWidget(player, parentId, parentComp, id, alwaysOpen);
 }
 
-export function openCentralWidget(player: Player, id: number, alwaysOpen: boolean) {
+export function openCentralWidget(player: Player, id: number, alwaysOpen: boolean = false) {
 	ENGINE.openCentralWidget(player, id, alwaysOpen);
 }
 
-export function openOverlaySub(player: Player, subId: number, id: number, alwaysOpen: boolean) {
+export function openOverlaySub(player: Player, subId: number, id: number, alwaysOpen: boolean = false) {
 	ENGINE.openOverlaySub(player, subId, id, alwaysOpen);
 }
 

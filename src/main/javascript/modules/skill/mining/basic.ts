@@ -31,7 +31,7 @@ import { addLocation, getLocRotation, getLocShape } from 'shared/map';
 import { giveItem, invHasSpace } from 'shared/inv';
 import { giveXp } from 'shared/stat';
 
-import { runMiningAction } from './common';
+import { runMiningAction, MiningAction } from './logic';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -110,137 +110,122 @@ _events.bindEventListener(EventType.OPLOC1, [
 	mineRock(ctx.player, ctx.location, RUNITE_ROCK);
 });
 
+class Rock implements MiningAction {
 
-
-class Rock {
-
-	public readonly level: number;
+	public readonly levelReq: number;
 	public readonly xp: number;
 	public readonly oreId: number;
-	public readonly baseTime: number;
-	public readonly randomTime: number;
 	public readonly respawnDelay: number;
-	public readonly randomLife: number;
+	public readonly baseChance: number;
+	public readonly maxChance: number;
 
-	constructor({ level, xp, oreId, baseTime, randomTime, respawnDelay, randomLife }: Rock) {
-		this.level = level;
+	constructor({ levelReq, xp, oreId, baseChance, maxChance, respawnDelay }: Rock) {
+		this.levelReq = levelReq;
 		this.xp = xp;
 		this.oreId = oreId;
-		this.baseTime = baseTime;
-		this.randomTime = randomTime;
 		this.respawnDelay = respawnDelay;
-		this.randomLife = randomLife;
+		this.baseChance = baseChance;
+		this.maxChance = maxChance;
 	}
 }
 
 const CLAY_ROCK = new Rock({
-	level: 1,
+	levelReq: 1,
 	xp: 5,
 	oreId: 434,
-	baseTime: 10,
-	randomTime: 1,
 	respawnDelay: 5,
-	randomLife: 0
+	baseChance: 80,
+	maxChance: 255
 });
 
 const COPPER_ROCK = new Rock({
-	level: 1,
+	levelReq: 1,
 	xp: 17.5,
 	oreId: 436,
-	baseTime: 10,
-	randomTime: 1,
 	respawnDelay: 5,
-	randomLife: 0
+	baseChance: 80,
+	maxChance: 210
 });
 
 const TIN_ROCK = new Rock({
-	level: 1,
+	levelReq: 1,
 	xp: 17.5,
 	oreId: 438,
-	baseTime: 10,
-	randomTime: 1,
 	respawnDelay: 5,
-	randomLife: 0
+	baseChance: 80,
+	maxChance: 210
 });
 
 const BLURITE_ROCK = new Rock({
-	level: 10,
+	levelReq: 10,
 	xp: 18,
 	oreId: 668,
-	baseTime: 20,
-	randomTime: 1,
 	respawnDelay: 25,
-	randomLife: 0
+	baseChance: 20,
+	maxChance: 1
 });
 
 const IRON_ROCK = new Rock({
-	level: 15,
+	levelReq: 15,
 	xp: 35,
 	oreId: 440,
-	baseTime: 15,
-	randomTime: 1,
 	respawnDelay: 10,
-	randomLife: 0
+	baseChance: 70,
+	maxChance: 200
 });
 
 const SILVER_ROCK = new Rock({
-	level: 20,
+	levelReq: 20,
 	xp: 40,
 	oreId: 442,
-	baseTime: 25,
-	randomTime: 1,
 	respawnDelay: 20,
-	randomLife: 0
+	baseChance: 60,
+	maxChance: 190
 });
 
 const COAL_ROCK = new Rock({
-	level: 30,
+	levelReq: 30,
 	xp: 50,
 	oreId: 453,
-	baseTime: 50,
-	randomTime: 10,
 	respawnDelay: 30,
-	randomLife: 0
+	baseChance: 60,
+	maxChance: 190
 });
 
 const GOLD_ROCK = new Rock({
-	level: 40,
+	levelReq: 40,
 	xp: 60,
 	oreId: 444,
-	baseTime: 80,
-	randomTime: 20,
 	respawnDelay: 40,
-	randomLife: 0
+	baseChance: 40,
+	maxChance: 170
 });
 
 const MITHRIL_ROCK = new Rock({
-	level: 55,
+	levelReq: 55,
 	xp: 80,
 	oreId: 447,
-	baseTime: 100,
-	randomTime: 20,
 	respawnDelay: 60,
-	randomLife: 0
+	baseChance: 20,
+	maxChance: 150
 });
 
 const ADAMANTITE_ROCK = new Rock({
-	level: 70,
+	levelReq: 70,
 	xp: 95,
 	oreId: 449,
-	baseTime: 130,
-	randomTime: 25,
 	respawnDelay: 180,
-	randomLife: 0
+	baseChance: 10,
+	maxChance: 140
 });
 
 const RUNITE_ROCK = new Rock({
-	level: 85,
+	levelReq: 85,
 	xp: 125,
 	oreId: 451,
-	baseTime: 150,
-	randomTime: 30,
 	respawnDelay: 360,
-	randomLife: 0
+	baseChance: 0,
+	maxChance: 130
 });
 
 //TODO: Seren stones need to go in their own script as they have different logic
@@ -262,7 +247,7 @@ function mineRock(player: Player, location: Location, rock: Rock) {
 		sendMessage(player, "Not enough space in your inventory.");
 		return;
 	}
-	runMiningAction(player, rock.level, function() {
+	runMiningAction(player, rock, function() {
 		giveXp(player, Stat.MINING, rock.xp);
 		setEmpty(location, rock.respawnDelay);
 

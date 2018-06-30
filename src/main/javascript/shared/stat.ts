@@ -1,5 +1,6 @@
 import { Stat } from 'engine/enums/stat';
 import { Player } from 'engine/models';
+import { interpolate } from 'shared/util';
 
 export function boostStat(player: Player, stat: Stat, amount: number) {
 	setStatLevel(player, stat, getStatLevel(player, stat) + amount);
@@ -111,6 +112,16 @@ export function giveBonusXp(player: Player, skill: Stat, amount: number) {
 
 function lookupStat(statName: string): Stat {
 	return ENGINE.getStatByName(statName);
+}
+
+export function randomStatChance (
+	player: Player,
+	stat: Stat,
+	baseChance: number,
+	topChance: number
+) : boolean {
+	const chance = interpolate(baseChance, topChance, 1, 99, getStatLevel(player, stat));
+	return chance > Math.random() * 255;
 }
 
 //TODO: These are legacy exports to support old modules. Remove once the modules have been updated

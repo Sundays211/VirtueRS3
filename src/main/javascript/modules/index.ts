@@ -12,6 +12,7 @@ import './area/morytania';
 import './area/underground';
 import './chat';
 import './exchange';
+import './shop';
 import './skill';
 import './npcs/kandarin';
 import './widget/settings';

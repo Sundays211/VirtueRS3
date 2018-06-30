@@ -21,7 +21,6 @@ function getAllModules () {// jshint ignore:line
 		'npcs/misthalin',
 		'npcs/tirannwn',
 		'quest',
-		'shop',
 		'skill/common',
 		'skill/construction',
 		'skill/cooking',
@@ -39,7 +38,6 @@ function getAllModules () {// jshint ignore:line
 		'skill/smithing',
 		'skill/summoning',
 		'skill/thieving',
-		'skill/woodcutting',
 		'trade',
 		'widget/frame'
 	];
