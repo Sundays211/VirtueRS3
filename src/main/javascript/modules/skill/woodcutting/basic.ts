@@ -365,6 +365,8 @@ function chopTree(player: Player, location: Location, treeType: Tree, stumpId: n
 		if (treeType === NORMAL_TREE || Math.random() < 0.125) {
 			//If the tree is not a normal tree, there is a 1 in 8 chance of felling it
 			fellTree(location, stumpId, treeType.respawnDelay);
+		} else if (!hasSpace(player)) {
+			sendMessage(player, "Your inventory is too full to hold any more logs.");
 		} else {
 			runWoodcuttingAction(player, treeType, onSuccess);
 		}
