@@ -22,7 +22,7 @@
 import { Stat } from 'engine/enums';
 import { Player } from 'engine/models';
 
-import { getStatLevel } from 'shared/stat';
+import { getStatLevel, randomStatChance } from 'shared/stat';
 import { sendMessage } from 'shared/chat';
 import { delayFunction } from 'shared/util';
 import { runAnim, stopAnim } from 'shared/anim';
@@ -37,9 +37,29 @@ import { Pickaxe, getPickaxe } from './pickaxe';
  * @author Sundays211
  * @since 05/11/2014
  */
-export function runMiningAction(player: Player, levelReq: number, onSuccess: () => void) {
-	if (getStatLevel(player, Stat.MINING) < levelReq) {
-		sendMessage(player, "You require a mining level of " + levelReq + "  to mine this rock.");
+
+export interface MiningAction {
+	/**
+	 * Minimum level required to perform the action
+	 */
+	levelReq: number;
+
+	/**
+	 * The chance, out of 255, to perform the action successfully at level 1.
+	 * Note: This doesn't take into account modifiers (better hatchets, familiars, boosts, etc)
+	 */
+	baseChance: number;
+
+	/**
+	 * The chance, out of 255, to perform the action successfully at level 99.
+	 * Note: This doesn't take into account modifiers (better hatchets, familiars, boosts, etc)
+	 */
+	maxChance: number;
+}
+
+export function runMiningAction(player: Player, action: MiningAction, onSuccess: () => void) {
+	if (getStatLevel(player, Stat.MINING) < action.levelReq) {
+		sendMessage(player, "You require a mining level of " + action.levelReq + "  to mine this rock.");
 		return;
 	}
 	var pic = getPickaxe(player);//Find the highest pickaxe the player holds and can use
@@ -51,7 +71,7 @@ export function runMiningAction(player: Player, levelReq: number, onSuccess: () 
 	delayFunction(player, pic.speed, process, true);
 
 	function process() {
-		if (checkSuccess(player, levelReq, pic)) {
+		if (checkSuccess(player, action, pic)) {
 			stopAnim(player);
 			onSuccess();
 		} else {
@@ -61,13 +81,14 @@ export function runMiningAction(player: Player, levelReq: number, onSuccess: () 
 	}
 }
 
-function checkSuccess(player: Player, levelReq: number, pic: Pickaxe): boolean {
-	//TODO: Get the right calculation for this. At the moment it's a complete guess...
-	var chance = (getStatLevel(player, Stat.MINING) + pic.bonus) - levelReq;
-	for (var i = 0; i < chance; i++) {
-		if (Math.random() > 0.9) {
-			return true;
-		}
-	}
-	return false;
+function checkSuccess(player: Player, action: MiningAction, pic: Pickaxe): boolean {
+	const extraChance = pic.bonus;
+	//TODO: Add modifiers here
+
+	return randomStatChance(
+		player,
+		Stat.MINING,
+		action.baseChance + extraChance,
+		action.maxChance + extraChance
+	);
 }
