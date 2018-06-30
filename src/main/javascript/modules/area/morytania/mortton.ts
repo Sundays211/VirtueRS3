@@ -19,21 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var dialog = require('shared/dialog');
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
+import { setVarp } from 'engine/var';
 
-	function init (scriptManager) {
+import { runAnim } from 'shared/anim';
+import _coords from 'shared/map/coords';
+import { openCentralWidget } from 'shared/widget';
 
-		scriptManager.bind(EventType.OPLOC1, [76651,76652], function (ctx) {//danger sign
-			dialog.builder(ctx.player).mesbox("The warning signs in front of the huge stone gate state:")
-			.mesbox("<col=800000>The Kharidian Desert is a VERY dangerous place. Beware of high<br><col=800000> temperatures, sandstorms, quicksand, bandits, slavers, kalphites,<br><col=800000> monkeys, crocodiles, and acts of vengeful, goddesses bent on the total<br><col=800000> destruction of all life in the desert.")
-			.mesbox("No responsibility is taken by shantay if anything bad should happen to you<br> under any circumstances whatsoever.")
-			.finish();
-		});
+_events.bindEventListener(EventType.OPLOC1, 87997, (ctx) => {//jump down well
+	runAnim(ctx.player, 21924, function () {
+		setVarp(ctx.player, 5142, 15364);//find right varbits that are used
+		setVarp(ctx.player, 5144, 24181);
+		openCentralWidget(ctx.player, 1591, false);
+	});
+	//getting kicked out anim 21922
+});
 
-	}
-})();
+_events.bindEventListener(EventType.OPLOC2, 87997, (ctx) => {//well graveyard
+    _entity.setCoords(ctx.player, _coords(1,37,94,31,39));
+	runAnim(ctx.player, 2924);
+});

@@ -28,8 +28,6 @@ import { chatplayer, mesbox } from 'shared/dialog';
 
 import { hasFinished } from '../quest';
 
-
-
 	    _events.bindEventListener(EventType.OPLOC1, 2371, (ctx) => {
 	        sendMessage(ctx.player, "Digsite infomation and exam centre.");
 	    });
@@ -45,7 +43,6 @@ import { hasFinished } from '../quest';
 		_events.bindEventListener(EventType.OPLOC1, 25397, async (ctx) => {
 	       await mesbox(ctx.player, "~ The Observatory ~<br> Step ahead to the reception if you wish to explore RuneScape's most<br> magnificent invention.");
 		   await chatplayer(ctx.player, "Magnificent invention? I've seen some pretty magnificent<br> things in my time. It'll have to be pretty impressive.");
-			//.finish();
 	    });
 
 		_events.bindEventListener(EventType.OPLOC1, 69620, (ctx) => {
@@ -727,7 +724,13 @@ import { hasFinished } from '../quest';
 	            sendMessage(ctx.player, "West to Barbarian Village and Falador.");
 			}
 	    });
-
+		
+		_events.bindEventListener(EventType.OPLOC1, [76651,76652], async (ctx) => {
+		    await mesbox(ctx.player, "The warning signs in front of the huge stone gate state:");
+			await mesbox(ctx.player, "<col=800000>The Kharidian Desert is a VERY dangerous place. Beware of high<br><col=800000> temperatures, sandstorms, quicksand, bandits, slavers, kalphites,<br><col=800000> monkeys, crocodiles, and acts of vengeful, goddesses bent on the total<br><col=800000> destruction of all life in the desert.");
+			await mesbox(ctx.player, "No responsibility is taken by shantay if anything bad should happen to you<br> under any circumstances whatsoever.");
+        });
+		
         _events.bindEventListener(EventType.OPLOC1, 10090, async (ctx) => {
 		    await mesbox(ctx.player, "Mudskipper Point.<br> WARNING!<br> BEWARE OF THE MUDSKIPPERS!");
 	    });

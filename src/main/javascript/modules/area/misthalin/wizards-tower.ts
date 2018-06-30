@@ -19,35 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var coords = require('shared/map/coords');
-var map = require('shared/map');
-var anim = require('shared/anim');
-var dialog = require('shared/dialog');
-var varp = require('engine/var/player');
-var widget = require('shared/widget');
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
 
-	function init (scriptManager) {
+import _coords from 'shared/map/coords';
+import { runAnim, addSpotAnim } from 'shared/anim';
 
-	    scriptManager.bind(EventType.OPLOC1, 87997, function (ctx) {//jump down well
-		    anim.run(ctx.player, 21924, function () {
-			    varp(ctx.player, 5142, 15364);//find right varbits that are used
-				varp(ctx.player, 5144, 24181);
-				widget.openCentral(ctx.player, 1591, false);
-
-			});
-			//getting kicked out anim 21922
-        });
-
-		scriptManager.bind(EventType.OPLOC2, 87997, function (ctx) {//well graveyard
-            map.setCoords(ctx.player, coords(1,37,94,31,39));
-			anim.run(ctx.player, 2924);
-        });
-
-	}
-
-})();
+ _events.bindEventListener(EventType.OPLOC1, 79518, (ctx) => {//RuneCrafting Guild portal
+	addSpotAnim(ctx.player, 1771);
+	runAnim(ctx.player, 10180, function () {
+        _entity.setCoords(ctx.player, _coords(2, 26, 85, 32, 23));
+	});
+});

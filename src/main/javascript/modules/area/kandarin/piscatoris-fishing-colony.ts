@@ -19,22 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, Expression */
-var dialog = require('shared/dialog');
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-/**
- *
- */
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { chatplayer } from 'shared/dialog';
 
-	function init (scriptManager) {
-		scriptManager.bind(EventType.OPLOC1, 14964, function (ctx) {
-			//Barrel
-			dialog.builder(ctx.player).chatplayer("I think I should maby catch my own.", Expression.NEUTRAL);//just need the right chat head
-
-		});
-	}
-})();
+_events.bindEventListener(EventType.OPLOC1, 14964, async (ctx) => {//Barrel
+	await chatplayer(ctx.player, "I think I should maby catch my own.");
+});

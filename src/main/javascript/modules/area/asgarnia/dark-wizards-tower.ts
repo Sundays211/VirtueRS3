@@ -27,7 +27,7 @@ import { varp } from 'engine/var';
 import _map from 'engine/map';
 
 import { sendMessage } from 'shared/chat';
-import { addLocation, getLocShape, getLocRotation } from 'shared/map/location';
+import { getLocShape, getLocRotation } from 'shared/map/location';
 import _coords from 'shared/map/coords';
 import { runAnim } from 'shared/anim';
 import { mapMembers } from 'shared/util';
@@ -36,7 +36,7 @@ import { mesbox, chatplayer } from 'shared/dialog';
 import { hasStarted } from '../../quest';
 
 _events.bindEventListener(EventType.OPLOC1, 34246, (ctx) => {//Wardrobe in Witch's House
-    addLocation(34247, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+    _map.addLoc(34247, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 });
     
 _events.bindEventListener(EventType.OPLOC2, 34247, (ctx) => {//Wardrobe in Witch's House
@@ -44,11 +44,11 @@ _events.bindEventListener(EventType.OPLOC2, 34247, (ctx) => {//Wardrobe in Witch
 });
 
 _events.bindEventListener(EventType.OPLOC3, 34247, (ctx) => {//Wardrobe in Witch's House
-    addLocation(34246, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+    _map.addLoc(34246, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 });
 
 _events.bindEventListener(EventType.OPLOC1, 24670, (ctx) => {//Wardrobe in Witch's House
-    addLocation(24671, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+    _map.addLoc(24671, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 });
 
 _events.bindEventListener(EventType.OPLOC2, 24671, (ctx) => {//Wardrobe in Witch's House
@@ -56,7 +56,7 @@ _events.bindEventListener(EventType.OPLOC2, 24671, (ctx) => {//Wardrobe in Witch
 });
 
 _events.bindEventListener(EventType.OPLOC3, 24671, (ctx) => {//Wardrobe in Witch's House
-    addLocation(24670, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+    _map.addLoc(24670, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 });
 
 _events.bindEventListener(EventType.OPLOC1, 24672, (ctx) => {//Staircase in Witch's House
@@ -68,7 +68,7 @@ _events.bindEventListener(EventType.OPLOC1, 24673, (ctx) => {//Staircase in Witc
 });
 
 _events.bindEventListener(EventType.OPLOC1, 24681, (ctx) => {//Drawers in Witch's House
-    addLocation(24682, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+    _map.addLoc(24682, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 });
 
 _events.bindEventListener(EventType.OPLOC2, 24682, (ctx) => {//Drawers in Witch's House
@@ -76,7 +76,7 @@ _events.bindEventListener(EventType.OPLOC2, 24682, (ctx) => {//Drawers in Witch'
 });
 
 _events.bindEventListener(EventType.OPLOC3, 24682, (ctx) => {//Drawers in Witch's House
-    addLocation(24681, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+    _map.addLoc(24681, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 	sendMessage(ctx.player, "You shut the drawers.");
 });
 
@@ -137,7 +137,7 @@ _events.bindEventListener(EventType.OPLOC1, 2862, async (ctx) => {//door to gard
 });
 
 _events.bindEventListener(EventType.OPLOCU, 2861, async (ctx) => {//door (Quest Witch's House)
-	switch (ctx.useObjId) {
+	switch (ctx.objId) {
 	    case 2409:
 	        if(hasStarted(ctx.player, 7)) {
 		        sendMessage(ctx.player, "todo add doors that work");
@@ -149,7 +149,7 @@ _events.bindEventListener(EventType.OPLOCU, 2861, async (ctx) => {//door (Quest 
 });
 
 _events.bindEventListener(EventType.OPLOCU, 2870, (ctx) => {//mouse hole(Quest Witch's House)
-	switch (ctx.useObjId) {
+	switch (ctx.objId) {
 	    case 1985:
 	        if (varp(ctx.player, 2276) == 1) {
 		        sendMessage(ctx.player, "todo add the npc 901");

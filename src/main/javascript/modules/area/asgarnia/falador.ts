@@ -24,23 +24,23 @@ import { EventType } from 'engine/enums/event-type';
 import _events from 'engine/events';
 import _map from 'engine/map';
  
-import { locationAnim, addLocation, getLocShape, getLocRotation } from 'shared/map/location';
+import { locationAnim, getLocShape, getLocRotation } from 'shared/map/location';
 import { runAnim } from 'shared/anim';
 import { multi3 } from 'shared/dialog';
 
 _events.bindEventListener(EventType.OPLOC1, 26194, (ctx) => {//party room lever
 	locationAnim(ctx.location, 6934);
 	runAnim(ctx.player, 6933, function () {
-		multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", function () {
-		}, "Nightly Dance (500 coins).", function () {
-		}, "No action.", function () {
+		multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", () => {
+		}, "Nightly Dance (500 coins).", () => {
+		}, "No action.", () => {
 		});
 	});
 });
 
 _events.bindEventListener(EventType.OPLOC1, 26193, (ctx) => {//party room chest
 	runAnim(ctx.player, 536, function () {
-	    addLocation(2418, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+	    _map.addLoc(2418, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 	});
 });
 
@@ -50,6 +50,6 @@ _events.bindEventListener(EventType.OPLOC2, 2418, (ctx) => {//party room chest
 
 _events.bindEventListener(EventType.OPLOC3, 2418, (ctx) => {//party room chest
 	runAnim(ctx.player, 535, function () {
-		addLocation(26193, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+		_map.addLoc(26193, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
 	});
 });

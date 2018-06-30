@@ -51,13 +51,13 @@ import _coords from 'shared/map/coords';
 	    });
 
 		_events.bindEventListener(EventType.OPLOC1, 36769, (ctx) => {//ladder lumbridge castle
-			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Climb up the ladder.", function () {
+			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Climb up the ladder.", () => {
 				runAnim(ctx.player, 828);
 				ENGINE.teleportEntityBy(ctx.player, 0, 0, 1);
-			}, "Climb down the ladder.", function () {
+			}, "Climb down the ladder.", () => {
                 runAnim(ctx.player, 828);
 			    ENGINE.teleportEntityBy(ctx.player, 0, 0, -1);
-			}, "Never mind.", function () {
+			}, "Never mind.", () => {
 	        });
 	    });
 
@@ -91,11 +91,11 @@ import _coords from 'shared/map/coords';
 	    });
 
 		_events.bindEventListener(EventType.OPLOC1, [36774,36777], (ctx) => {//Staircase lumbridge castle mid floor
-			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Go up the stairs.", function () {
+			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Go up the stairs.", () => {
 				ENGINE.teleportEntityBy(ctx.player, 0, 0, +1);
-			}, "Go down the stairs.", function () {
+			}, "Go down the stairs.", () => {
 			    ENGINE.teleportEntityBy(ctx.player, 0, 0, -1);
-			}, "Never mind.", function () {
+			}, "Never mind.", () => {
 	        });
 	    });
 

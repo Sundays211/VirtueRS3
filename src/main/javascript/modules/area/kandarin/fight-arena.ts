@@ -19,25 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-/* globals EventType*/
-var anim = require('shared/anim');
-var map = require('shared/map');
-var coords = require('shared/map/coords');
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { chatplayer, chatnpc } from 'shared/dialog';
 
-	function init (scriptManager) {
-
-	    scriptManager.bind(EventType.OPLOC1, 79518, function (ctx) {//RuneCrafting Guild portal
-		anim.addSpotAnim(ctx.player, 1771);
-	    anim.run(ctx.player, 10180, function () {
-        map.setCoords(ctx.player, coords(2, 26, 85, 32, 23));
-	    });
-
-	});
-
-	}
-})();
+_events.bindEventListener(EventType.OPLOC1, 81, async (ctx) => {
+	await chatplayer(ctx.player, "This door appears to be locked.",9807);
+	await chatnpc(ctx.player, 253, "Yeah, it's to prevent people like you bothering us. Get out<br> of here.",9786);
+});

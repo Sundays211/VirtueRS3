@@ -46,10 +46,10 @@ _events.bindEventListener(EventType.OPLOC1, 10687, async (ctx) => {//puppet tors
 
 _events.bindEventListener(EventType.OPLOC1, 10699, async (ctx) => {//Trapdoor steps
 	await mesbox(ctx.player, "If you leave Diango's workshop, any marionette parts, bits of bauble or<br> boxes will be removed from your inventory.")
-	multi2(ctx.player, "LEAVE DIANGO'S WORKSHOP?", "Yes", function () {
-	    runAnim(ctx.player, 828, function () {
+	multi2(ctx.player, "LEAVE DIANGO'S WORKSHOP?", "Yes", () => {
+	    runAnim(ctx.player, 828, () => {
 		    _entity.setCoords(ctx.player, _coords(2007, 4427, 1));
 	    });
-	}, "No", function () {
+	}, "No", () => {
 	});
 });

@@ -9,11 +9,6 @@
 function getAllModules () {// jshint ignore:line
 	var modules = [
 		'admin',
-		'area/kandarin',
-		'area/kharidian-desert',
-		'area/misthalin',
-		'area/morytania',
-		'area/underground',
 		'clan',
 		'combat',
 		'inv',
