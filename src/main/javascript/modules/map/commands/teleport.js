@@ -26,7 +26,6 @@ var coords = require('shared/map/coords');
 var dialog = require('shared/dialog');
 var chat = require('shared/chat');
 var entityMap = require('shared/map/entity');
-var common = require('shared/map/common');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -64,7 +63,7 @@ module.exports = (function () {
 			} else	if (args.length == 2) {
 				x = parseInt(args[0]);
 				y = parseInt(args[1]);
-				level = common.getLevel(currentCoords);
+				level = _map.getLevel(currentCoords);
 				targetCoords = coords(x, y, level);
 			} else {
 				x = parseInt(args[0]);
@@ -77,17 +76,17 @@ module.exports = (function () {
 
 		scriptManager.bind(EventType.COMMAND_ADMIN, "up", function (ctx) {
 			var currentCoords = _map.getCoords(ctx.player);
-			var x = common.getCoordX(currentCoords);
-			var y = common.getCoordY(currentCoords);
-			var level = Math.min(common.getLevel(currentCoords)+1, 3);
+			var x = _map.getCoordX(currentCoords);
+			var y = _map.getCoordY(currentCoords);
+			var level = Math.min(_map.getLevel(currentCoords)+1, 3);
 			entityMap.setCoords(ctx.player, coords(x, y, level));
 		});
 
 		scriptManager.bind(EventType.COMMAND_ADMIN, "down", function (ctx) {
 			var currentCoords = _map.getCoords(ctx.player);
-			var x = common.getCoordX(currentCoords);
-			var y = common.getCoordY(currentCoords);
-			var level = Math.max(common.getLevel(currentCoords)-1, 0);
+			var x = _map.getCoordX(currentCoords);
+			var y = _map.getCoordY(currentCoords);
+			var level = Math.max(_map.getLevel(currentCoords)-1, 0);
 			entityMap.setCoords(ctx.player, coords(x, y, level));
 		});
 
