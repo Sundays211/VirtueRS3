@@ -33,7 +33,7 @@ import { locationAnim } from 'shared/map/location';
 _events.bindEventListener(EventType.OPLOC1, 27211, (ctx) => {//ramp
 	runAnim(ctx.player, 7273);
 	_entity.forceMove(ctx.player, _entity.getCoords(ctx.player), 6, _coords(0,25,75,23,45), 160);
-	ENGINE.setRenderAnim(ctx.player, -1);
+	_entity.setRenderAnim(ctx.player, -1);
 });
 
 _events.bindEventListener(EventType.OPLOC1, 27218, (ctx) => {//Slide
@@ -60,7 +60,7 @@ _events.bindEventListener(EventType.OPLOC1, 27278, (ctx) => {//Springboard
 	    locationAnim(ctx.location, 7296);
 	    runAnim(ctx.player, 7269);
 		_entity.forceMove(ctx.player, _entity.getCoords(ctx.player), 5, _coords(0,25,75,24,28), 30);
-		ENGINE.setRenderAnim(ctx.player, 616);
+		_entity.setRenderAnim(ctx.player, 616);
 	} else {
 		defaultHandler(ctx, "halloween 2007 Springboard");
 	}
