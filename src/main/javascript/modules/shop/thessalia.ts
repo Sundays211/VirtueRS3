@@ -56,7 +56,7 @@ _events.bindEventListener(EventType.OPNPC4, 548, (ctx) => {
 		chatnpc(ctx.player, ctx.npc, "You're not able to try on my clothes with all that armour. Take it off and then speak to me again.");
 		return;
 	}
-	openCentralWidget(ctx.player, 729);
+	openCentralWidget(ctx.player, 729, false);
 });
 
 _events.bindEventListener(EventType.IF_OPEN, 729, (ctx) => {
