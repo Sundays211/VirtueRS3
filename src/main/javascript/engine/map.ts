@@ -1,106 +1,89 @@
 import { CoordGrid, Node, DynamicMapSquare } from './models';
 
-function getCoords(node: Node): CoordGrid {
-	return MAP_ENGINE.getCoords(node);
-}
+export default class {
 
-function getCoordX(coord: Node | CoordGrid): number {
-	return MAP_ENGINE.getCoordX(coord);
-}
+	public static getCoords(node: Node): CoordGrid {
+		return MAP_ENGINE.getCoords(node);
+	}
 
-function getCoordY(coord: Node | CoordGrid): number {
-	return MAP_ENGINE.getCoordY(coord);
-}
+	public static getCoordX(coord: Node | CoordGrid): number {
+		return MAP_ENGINE.getCoordX(coord);
+	}
 
-function getSquareX(coord: Node | CoordGrid): number {
-	return MAP_ENGINE.getSquareX(coord);
-}
+	public static getCoordY(coord: Node | CoordGrid): number {
+		return MAP_ENGINE.getCoordY(coord);
+	}
 
-function getSquareY(coord: Node | CoordGrid): number {
-	return MAP_ENGINE.getSquareY(coord);
-}
+	public static getSquareX(coord: Node | CoordGrid): number {
+		return MAP_ENGINE.getSquareX(coord);
+	}
 
-function getLocalX(coord: Node | CoordGrid): number {
-	return MAP_ENGINE.getLocalX(coord);
-}
+	public static getSquareY(coord: Node | CoordGrid): number {
+		return MAP_ENGINE.getSquareY(coord);
+	}
 
-function getLocalY(coord: Node | CoordGrid): number {
-	return MAP_ENGINE.getLocalY(coord);
-}
+	public static getLocalX(coord: Node | CoordGrid): number {
+		return MAP_ENGINE.getLocalX(coord);
+	}
 
-function getLevel(coord: Node | CoordGrid): number {
-	return MAP_ENGINE.getLevel(coord);
-}
+	public static getLocalY(coord: Node | CoordGrid): number {
+		return MAP_ENGINE.getLocalY(coord);
+	}
 
-function createDynamicSquare(): DynamicMapSquare {
-	return MAP_ENGINE.createArea();
-}
+	public static getLevel(coord: Node | CoordGrid): number {
+		return MAP_ENGINE.getLevel(coord);
+	}
 
-function getDynamicSquare(coord: CoordGrid): DynamicMapSquare {
-	return MAP_ENGINE.getDynamicSquare(coord);
-}
+	public static createDynamicSquare(): DynamicMapSquare {
+		return MAP_ENGINE.createArea();
+	}
 
-function setZone(
-	mapSquare: DynamicMapSquare,
-	level: number,
-	zoneX: number,
-	zoneY: number,
-	srcCoord: CoordGrid,
-	rotation: number
-) {
-	MAP_ENGINE.setZone(mapSquare, zoneX, zoneY, level, srcCoord, rotation);
-}
+	public static getDynamicSquare(coord: CoordGrid): DynamicMapSquare {
+		return MAP_ENGINE.getDynamicSquare(coord);
+	}
 
-function rotateZone(
-	mapSquare: DynamicMapSquare,
-	level: number,
-	zoneX: number,
-	zoneY: number,
-	rotation: number
-) {
-	MAP_ENGINE.rotateZone(mapSquare, zoneX, zoneY, level, rotation);
-}
+	public static setZone(
+		mapSquare: DynamicMapSquare,
+		level: number,
+		zoneX: number,
+		zoneY: number,
+		srcCoord: CoordGrid,
+		rotation: number
+	) {
+		MAP_ENGINE.setZone(mapSquare, zoneX, zoneY, level, srcCoord, rotation);
+	}
 
-function build(mapSquare: DynamicMapSquare) {
-	MAP_ENGINE.buildArea(mapSquare);
-}
+	public static rotateZone(
+		mapSquare: DynamicMapSquare,
+		level: number,
+		zoneX: number,
+		zoneY: number,
+		rotation: number
+	) {
+		MAP_ENGINE.rotateZone(mapSquare, zoneX, zoneY, level, rotation);
+	}
 
-function addLoc(locTypeId: number, coord: CoordGrid, shape: number, rotation: number): Location {
-	return MAP_ENGINE.addLoc(locTypeId, coord, shape, rotation);
-}
+	public static build(mapSquare: DynamicMapSquare) {
+		MAP_ENGINE.buildArea(mapSquare);
+	}
 
-function delLoc(coord: CoordGrid, shape: number, rotation: number) {
-	MAP_ENGINE.delLoc(coord, shape, rotation);
-}
+	public static addLoc(locTypeId: number, coord: CoordGrid, shape: number, rotation: number): Location {
+		return MAP_ENGINE.addLoc(locTypeId, coord, shape, rotation);
+	}
 
-/**
- * Runs the specified function after a delay on the given node.
- * If the node is destroyed (or the region reset), the function will not run
- *
- * @param node The node to delay the function on
- * @param task The function to run after the given delay
- * @param delay The number of game cycles to delay by
- */
-function delay(coord: Node | CoordGrid, task: () => void, ticks: number) {
-	MAP_ENGINE.delay(coord, task, ticks);
-}
+	public static delLoc(coord: CoordGrid, shape: number, rotation: number) {
+		MAP_ENGINE.delLoc(coord, shape, rotation);
+	}
 
-
-export default {
-	getCoords,
-	getCoordX,
-	getCoordY,
-	getSquareX,
-	getSquareY,
-	getLocalX,
-	getLocalY,
-	getLevel,
-	createDynamicSquare,
-	getDynamicSquare,
-	setZone,
-	rotateZone,
-	build,
-	addLoc,
-	delLoc,
-	delay
+	/**
+	 * Runs the specified function after a delay on the given node.
+	 * If the node is destroyed (or the region reset), the function will not run
+	 *
+	 * @param node The node to delay the function on
+	 * @param task The function to run after the given delay
+	 * @param delay The number of game cycles to delay by
+	 */
+	public static delay(coord: Node | CoordGrid, task: () => void, ticks: number) {
+		MAP_ENGINE.delay(coord, task, ticks);
+	}
 }
