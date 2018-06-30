@@ -32,7 +32,7 @@ import { giveItem, hasSpace } from 'shared/inv';
 import { getId } from 'shared/util';
 import { delLocation, getLocRotation, getLocShape } from 'shared/map';
 
-import { runWoodcuttingAction } from './common';
+import { runWoodcuttingAction } from './logic';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
