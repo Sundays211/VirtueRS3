@@ -34,7 +34,6 @@ function getAllModules () {// jshint ignore:line
 		'shop',
 		'skill/common',
 		'skill/construction',
-		'skill/agility',
 		'skill/cooking',
 		'skill/crafting',
 		'skill/dungeoneering',

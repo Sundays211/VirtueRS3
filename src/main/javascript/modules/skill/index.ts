@@ -1,1 +1,2 @@
+import './agility';
 import './mining';
