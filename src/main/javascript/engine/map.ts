@@ -65,7 +65,7 @@ function build(mapSquare: DynamicMapSquare) {
 	MAP_ENGINE.buildArea(mapSquare);
 }
 
-function addLoc(locTypeId: number, coord: CoordGrid, shape: number, rotation: number) {
+function addLoc(locTypeId: number, coord: CoordGrid, shape: number, rotation: number): Location {
 	return MAP_ENGINE.addLoc(locTypeId, coord, shape, rotation);
 }
 
