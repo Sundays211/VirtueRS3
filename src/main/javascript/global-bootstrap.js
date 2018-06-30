@@ -31,7 +31,6 @@ function getAllModules () {// jshint ignore:line
 		'npcs/misthalin',
 		'npcs/tirannwn',
 		'quest',
-		'shop',
 		'skill/common',
 		'skill/construction',
 		'skill/agility',
