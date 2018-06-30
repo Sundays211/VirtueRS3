@@ -160,13 +160,14 @@ export function getServerCycle (): number {
 /**
  * Looks up a value in the specified value object (or array) based on the given key
  * @param values The values to look up
- * @param key The object key to check
+ * @param propertyKey The object key to check
  * @param searchValue The value to look for
  * @return The value with the key matching the specified searchValue, or null if none can be found
  */
-export function lookupValue<T> (values: T[], key: string, searchValue: any): T {
-	for (let value of values) {
-		if ((value as any)[key] === searchValue) {
+export function lookupValue<T> (values: {[key: string]: T}, propertyKey: string, searchValue: any): T {
+	for (let key of Object.keys(values)) {
+		const value = values[key] as any;
+		if (value[propertyKey] === searchValue) {
 			return value;
 		}
 	}

@@ -67,6 +67,10 @@ export default class {
 		MAP_ENGINE.buildArea(mapSquare);
 	}
 
+	public static getLoc(coords: CoordGrid, shape: number): Location {
+		return MAP_ENGINE.getLoc(coords, shape);
+	}
+
 	public static addLoc(locTypeId: number, coord: CoordGrid, shape: number, rotation: number): Location {
 		return MAP_ENGINE.addLoc(locTypeId, coord, shape, rotation);
 	}
