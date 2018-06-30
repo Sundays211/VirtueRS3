@@ -25,7 +25,7 @@ import { sendMessage } from "shared/chat";
 
 import { runAnim, stopAnim } from "shared/anim";
 import { delayFunction } from "shared/util";
-import { getStatLevel } from "shared/stat";
+import { getStatLevel, randomStatChance } from "shared/stat";
 
 import { Hatchet, findHatchet } from "./hatchet";
 
@@ -38,9 +38,28 @@ import { Hatchet, findHatchet } from "./hatchet";
  * @since 05/11/2014
  */
 
-export function runWoodcuttingAction(player: Player, levelReq: number, onSuccess: () => void) {
-	if (getStatLevel(player, Stat.WOODCUTTING) < levelReq) {
-		sendMessage(player, "You require a woodcutting level of " + levelReq + " to chop this tree.");
+export interface WoodcuttingAction {
+	/**
+	 * Minimum level required to perform the action
+	 */
+	levelReq: number;
+
+	/**
+	 * The chance, out of 255, to perform the action successfully at level 1.
+	 * Note: This doesn't take into account modifiers (better hatchets, familiars, boosts, etc)
+	 */
+	baseChance: number;
+
+	/**
+	 * The chance, out of 255, to perform the action successfully at level 99.
+	 * Note: This doesn't take into account modifiers (better hatchets, familiars, boosts, etc)
+	 */
+	maxChance: number;
+}
+
+export function runWoodcuttingAction(player: Player, action: WoodcuttingAction, onSuccess: () => void) {
+	if (getStatLevel(player, Stat.WOODCUTTING) < action.levelReq) {
+		sendMessage(player, "You require a woodcutting level of " + action.levelReq + " to chop this tree.");
 		return;
 	}
 	var axe = findHatchet(player);//Find the highest hatchet the player holds and can use
@@ -52,7 +71,7 @@ export function runWoodcuttingAction(player: Player, levelReq: number, onSuccess
 	delayFunction(player, 4, process, true);
 
 	function process() {
-		if (checkSuccess(player, levelReq, axe)) {
+		if (checkSuccess(player, action, axe)) {
 			stopAnim(player);
 			onSuccess();
 		} else {
@@ -62,13 +81,14 @@ export function runWoodcuttingAction(player: Player, levelReq: number, onSuccess
 	}
 }
 
-function checkSuccess(player: Player, levelReq: number, axe: Hatchet): boolean {
-	//TODO: Get the right calculation for this. At the moment it's a complete guess...
-	var chance = (getStatLevel(player, Stat.WOODCUTTING) + axe.bonus) - levelReq;
-	for (var i = 0; i < chance; i++) {
-		if (Math.random() > 0.9) {
-			return true;
-		}
-	}
-	return false;
+function checkSuccess(player: Player, action: WoodcuttingAction, axe: Hatchet): boolean {
+	const extraChance = axe.bonus;
+	//TODO: Add modifiers here
+
+	return randomStatChance(
+		player,
+		Stat.WOODCUTTING,
+		action.baseChance + extraChance,
+		action.maxChance + extraChance
+	);
 }

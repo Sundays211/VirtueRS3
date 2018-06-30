@@ -178,6 +178,10 @@ export function lookupPlayerName(userHash: NodeHash) {
 	return ENGINE.getName(userHash);
 }
 
+export function interpolate (y0: number, y1: number, x0: number, x1: number, x: number): number {
+	return (x - x0) * (y1 - y0) / (x1 - x0) + y0;
+}
+
 /**
  * @deprecated In favour of `_entity.getName()` or `lookupPlayerName()`
  */
