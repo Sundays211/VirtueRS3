@@ -1,5 +1,7 @@
 import 'shared/nashorn-polyfills';
 
+import './admin';
+import './admin/commands';
 import './area';
 import './area/asgarnia';
 import './area/events';

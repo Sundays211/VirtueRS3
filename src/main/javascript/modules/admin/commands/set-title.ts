@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,10 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var chat = require('shared/chat');
-var util = require('shared/util');
-
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -30,37 +26,31 @@ var util = require('shared/util');
  * @author Sundays211
  * @since 05/11/2014
  */
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-	function init (scriptManager) {
-		scriptManager.bind(EventType.COMMAND_ADMIN, ["cs2", "cscript"], function (ctx) {
-			var player = ctx.player;
-			var args = ctx.cmdArgs;
-
-			if (ctx.length < 1 || isNaN(args[0])) {
-				chat.sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [args]", ctx.console);
-				return;
-			}
-			var scriptId = parseInt(args[0]);
-			var params = [];
-			for (var i = 1; i<args.length;i++) {
-				if (!args[i].trim()) {
-					continue;
-				}
-				try {
-					params[i-1] = parseInt(args[i]);
-				} catch (e) {
-					params[i-1] = args[i];
-				}
-				if (isNaN(params[i-1])) {
-					params[i-1] = args[i];
-				}
-			}
-			chat.sendCommandResponse(player, "Running client script "+scriptId+" with params "+JSON.stringify(params), ctx.console);
-			util.runClientScript(player, scriptId, params);
-		});
-	}
-})();
+_events.bindEventListener(EventType.COMMAND_ADMIN, ["title", "endtitle"], (ctx) => {
+	var player = ctx.player;
+	var args = ctx.cmdArgs;
+	var message = "";
+	for (var i = 0; i < args.length; i++) {
+		message += (i === 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
+	}			
+	//if (ctx.syntax.toLowerCase() == "title") {
+		//player.getAppearance().setPrefixTitle(message + "");
+		//player.getAppearance().refresh();
+	//} else if (ctx.syntax.toLowerCase() == "endtitle") {
+		//player.getAppearance().setSuffixTitle(message + "");
+		//player.getAppearance().refresh();
+	//}
+});
+		
+_events.bindEventListener(EventType.COMMAND_ADMIN, "removeTitle", (ctx) => {
+	//ctx.player.getModel().setPrefixTitle("");
+	//ctx.player.getModel().refresh();
+});
+	
+_events.bindEventListener(EventType.COMMAND_ADMIN, "devTitle", (ctx) => {	
+	//ctx.player.getModel().setPrefixTitle("<col=33CCFF>");
+	//ctx.player.getModel().refresh();
+});

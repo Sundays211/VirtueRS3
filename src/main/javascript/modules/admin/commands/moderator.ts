@@ -19,29 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var chat = require('shared/chat');
-var util = require('shared/util');
+import { sendMessage } from 'shared/chat';
+import { requestName } from 'shared/dialog';
 
-module.exports = (function () {
-	return {
-		init : init
-	};
+_events.bindEventListener(EventType.COMMAND_MOD, ["mute","muteplayer"], (ctx) => {
+	//requestName(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {
+	//sendMessage(ctx.player, "Applying mute to "+lookupPlayerName(targetPlayer)+".");
+	//targetPlayer.getChat().setMuted(true);
+	//});
+});
 
-	function init (scriptManager) {
-		scriptManager.bind(EventType.COMMAND_MOD, ["mute","muteplayer"], function (ctx) {
-			dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {
-				chat.sendMessage(ctx.player, "Applying mute to "+util.getName(targetPlayer)+".");
-				targetPlayer.getChat().setMuted(true);
-			});
-		});
-		scriptManager.bind(EventType.COMMAND_MOD, ["unmute","unmuteplayer"], function (ctx) {
-			dialog.requestPlayer(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {
-				chat.sendMessage(ctx.player, "Removing mute on player "+util.getName(targetPlayer)+".");
-				targetPlayer.getChat().setMuted(false);
-			});
-		});
-	}
-})();
+_events.bindEventListener(EventType.COMMAND_MOD, ["unmute","unmuteplayer"], (ctx) => {
+	//requestName(ctx.player, "Please enter the display name of the player you wish to mute:" , function (targetPlayer) {
+	//sendMessage(ctx.player, "Removing mute on player "+lookupPlayerName(targetPlayer)+".");
+	//targetPlayer.getChat().setMuted(false);
+	//});
+});

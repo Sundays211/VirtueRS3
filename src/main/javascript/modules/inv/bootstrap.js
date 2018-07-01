@@ -6,8 +6,7 @@ module.exports = function (scriptManager) {
 		require('./toolbelt'),
 		require('./worn-equipment'),
 		require('./bank'),
-		require('./backpack'),
-		require('./commands')
+		require('./backpack')
 	];
 
 	for (var i in modules) {

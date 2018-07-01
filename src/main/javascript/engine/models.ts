@@ -42,6 +42,7 @@ export interface EventContext {
 	event: EventType;
 	trigger: number | string;
 	player: Player;
+	target: Player;
 	npc?: Npc;
 	location?: Location;
 	console?: boolean;
