@@ -137,7 +137,7 @@ _events.bindEventListener(EventType.OPLOC1, 2862, async (ctx) => {//door to gard
 });
 
 _events.bindEventListener(EventType.OPLOCU, 2861, async (ctx) => {//door (Quest Witch's House)
-	switch (ctx.objId) {
+	switch (ctx.useObjId) {
 	    case 2409:
 	        if(hasStarted(ctx.player, 7)) {
 		        sendMessage(ctx.player, "todo add doors that work");
@@ -149,7 +149,7 @@ _events.bindEventListener(EventType.OPLOCU, 2861, async (ctx) => {//door (Quest 
 });
 
 _events.bindEventListener(EventType.OPLOCU, 2870, (ctx) => {//mouse hole(Quest Witch's House)
-	switch (ctx.objId) {
+	switch (ctx.useObjId) {
 	    case 1985:
 	        if (varp(ctx.player, 2276) == 1) {
 		        sendMessage(ctx.player, "todo add the npc 901");
