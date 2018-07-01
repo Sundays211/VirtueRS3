@@ -31,9 +31,11 @@ import { openCentralWidget, openWidget } from 'shared/widget';
 import _coords from 'shared/map/coords';
 import { runAnim } from 'shared/anim';
 
+var Virtue = Java.type('org.virtue.Virtue');
+
 _events.bindEventListener(EventType.COMMAND_ADMIN, "root", (ctx) => {
-	//var parent = parseInt(ctx.cmdArgs[0]);
-	//ctx.player.getDispatcher().sendRootWidget(parent);
+	var parent = parseInt(ctx.cmdArgs[0]);
+	ctx.player.getDispatcher().sendRootWidget(parent);
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["coords","pos","mypos"], (ctx) => {
@@ -73,7 +75,7 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, "setKey", (ctx) => {
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["priceReload", "reloadPrice"], (ctx) => {
-	//Virtue.getInstance().getExchange().loadPrices();
+	Virtue.getInstance().getExchange().loadPrices();
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["duel", "challenge"], (ctx) => {
@@ -81,7 +83,7 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, ["duel", "challenge"], (ctx) 
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "adr", (ctx) => {
-	//ctx.player.getCombat().setAdrenaline(100);
+	ctx.player.getCombatSchedule().updateAdrenaline(100);
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "adminroom", (ctx) => {

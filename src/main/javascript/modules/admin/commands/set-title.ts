@@ -36,21 +36,21 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, ["title", "endtitle"], (ctx) 
 	for (var i = 0; i < args.length; i++) {
 		message += (i === 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
 	}			
-	//if (ctx.syntax.toLowerCase() == "title") {
-		//player.getAppearance().setPrefixTitle(message + "");
-		//player.getAppearance().refresh();
-	//} else if (ctx.syntax.toLowerCase() == "endtitle") {
-		//player.getAppearance().setSuffixTitle(message + "");
-		//player.getAppearance().refresh();
-	//}
+	if (ctx.syntax.toLowerCase() == "title") {
+		player.getModel().setPrefixTitle(message + "");
+		player.getModel().refresh();
+	} else if (ctx.syntax.toLowerCase() == "endtitle") {
+		player.getModel().setSuffixTitle(message + "");
+		player.getModel().refresh();
+	}
 });
 		
 _events.bindEventListener(EventType.COMMAND_ADMIN, "removeTitle", (ctx) => {
-	//ctx.player.getModel().setPrefixTitle("");
-	//ctx.player.getModel().refresh();
+	ctx.player.getModel().setPrefixTitle("");
+	ctx.player.getModel().refresh();
 });
 	
 _events.bindEventListener(EventType.COMMAND_ADMIN, "devTitle", (ctx) => {	
-	//ctx.player.getModel().setPrefixTitle("<col=33CCFF>");
-	//ctx.player.getModel().refresh();
+	ctx.player.getModel().setPrefixTitle("<col=33CCFF>");
+	ctx.player.getModel().refresh();
 });

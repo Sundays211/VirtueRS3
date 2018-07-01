@@ -8,6 +8,9 @@ export interface Player extends Entity {
 	switchSheathing: () => any
 	getChat: () => any
 	getSavedChannelOwner: () => any
+	getHeadIcons: () => any
+	getModel: () => any
+	getDispatcher: () => any
 }
 
 export interface Npc extends Entity {
@@ -54,4 +57,5 @@ export interface EventContext {
 	fromslot?: number;
 	toslot?: number;
 	objId?: number;
+	syntax?: string;
 }

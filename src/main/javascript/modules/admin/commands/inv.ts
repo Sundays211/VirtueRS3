@@ -47,16 +47,16 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, [ "openge", "ge" ], (ctx) => 
 _events.bindEventListener(EventType.COMMAND_ADMIN, [ "removeitem", "delitem", "clearitem", "takeitem"], (ctx) => {
 	var player = ctx.player;
 	var args = ctx.cmdArgs;
-	//if (args.length < 1) {
-	//	sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
-	//return;
-	//}
+	if (args.length < 1) {
+		sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
+	return;
+	}
 	var amount = 1;
 	var objId = parseInt(args[0]);
-	//if (isNaN(objId)) {
-	//	sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
-	//return;
-	//}
+	if (isNaN(objId)) {
+		sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [amount]", ctx.console);
+	return;
+	}
 	if (args.length == 2) {
 		amount = parseInt(args[1]);
 	}

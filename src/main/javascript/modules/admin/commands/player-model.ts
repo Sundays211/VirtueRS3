@@ -19,6 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+var Gender = Java.type('org.virtue.game.entity.player.PlayerModel.Gender');
+ 
 import { EventType } from 'engine/enums';
 import _events from 'engine/events';
 
@@ -43,11 +45,11 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, "gender", (ctx) => {
 	var player = ctx.player;
 	var args = ctx.cmdArgs;
 	//if (args[0] = 0) {
-		//player.getModel().setGender(Gender.MALE);
-		//player.getModel().refresh();
+		player.getModel().setGender(Gender.MALE);
+		player.getModel().refresh();
 	//} else if (args[0] = 1) {
-		//player.getModel().setGender(Gender.FEMALE);
-		//player.getModel().refresh();
+	//	player.getModel().setGender(Gender.FEMALE);
+	//	player.getModel().refresh();
 	//}
 });
 
