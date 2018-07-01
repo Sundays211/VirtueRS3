@@ -35,10 +35,10 @@ import { runClientScript } from 'shared/util';
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["cs2", "cscript"], (ctx) => {
 	var player = ctx.player;
 	var args = ctx.cmdArgs;
-	//if (ctx.length < 1 || isNaN(args[0])) {
-		//sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [args]", ctx.console);
-	//return;
-	//}
+	if (ctx.length < 1 || isNaN(parseInt(args[0]))) {
+		sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [args]", ctx.console);
+	return;
+	}
 	var scriptId = parseInt(args[0]);
 	var params = [];
 	for (var i = 1; i<args.length;i++) {
@@ -47,12 +47,12 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, ["cs2", "cscript"], (ctx) => 
 		}
 	try {
 		params[i-1] = parseInt(args[i]);
+		if (isNaN(params[i-1]as number)) {
+		    params[i-1] = args[i];
+	    }
 	} catch (e) {
 		params[i-1] = args[i];
 	}
-	//if (isNaN(params[i-1])) {
-	//	params[i-1] = args[i];
-	//}
 	}
 	sendCommandResponse(player, "Running client script "+scriptId+" with params "+JSON.stringify(params), ctx.console);
 	runClientScript(player, scriptId, params);

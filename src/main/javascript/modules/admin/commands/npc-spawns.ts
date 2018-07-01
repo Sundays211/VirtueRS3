@@ -42,10 +42,10 @@ import { lookupPlayerName } from 'shared/util';
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["addspawn","addnpcspawn"], (ctx) => {
 	var player = ctx.player;
 	var args = ctx.cmdArgs;
-	//if (args.length === 0 || isNaN(args[0])) {
-	//	sendCommandResponse(player, "Usage: npcTypeID [posX] [posY] [posZ]", ctx.console);
-	//return false;
-	//}
+	if (args.length === 0 || isNaN(parseInt(args[0]))) {
+		sendCommandResponse(player, "Usage: npcTypeID [posX] [posY] [posZ]", ctx.console);
+	return false;
+	}
 	var writer = null;
 	try {
 		writer = new BufferedWriter(new FileWriter("./repository/NPCSpawns.txt", true));
@@ -78,14 +78,14 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, ["addspawn","addnpcspawn"], (
 _events.bindEventListener(EventType.COMMAND_ADMIN, "npc", (ctx) => {
 	var args = ctx.cmdArgs;
 	var player = ctx.player;
-	//if (args.length === 0 || isNaN(args[0])) {
-	//	sendCommandResponse(player, "Usage: "+ctx.syntax+" [posX] [posY] [posZ]", ctx.console);
-	//return;
-	//}
+	if (args.length === 0 || isNaN(parseInt(args[0]))) {
+		sendCommandResponse(player, "Usage: "+ctx.syntax+" [posX] [posY] [posZ]", ctx.console);
+	return;
+	}
 	var npcID = parseInt(args[0]);
 	var npc = ENGINE.createNpc(npcID, _map.getCoords(player));
 	ENGINE.spawnNpc(npc);
-	//npc.getCombatSchedule().lock(player);
+	npc.getCombatSchedule().lock(player);
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "reloadNPCDrops", (ctx) => {

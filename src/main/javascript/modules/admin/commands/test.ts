@@ -27,11 +27,13 @@
  * @since 05/11/2014
  */
 import { EventType, Inv } from 'engine/enums';
+import { EventContext, Player } from 'engine/models';
 import _events from 'engine/events';
 import _entity from 'engine/entity';
+import _map from 'engine/map';
 
 import { sendMessage, sendCommandResponse } from 'shared/chat';
-import { requestName } from 'shared/dialog';
+import { playerDialog } from 'shared/dialog';
 import { lookupPlayerName, getUserHash } from 'shared/util';
 import { runAnim } from 'shared/anim';
 import _coords from 'shared/map/coords';
@@ -45,73 +47,71 @@ import { locationAnim } from 'shared/map/location';
 	}
 	switch (args[0]) {
 		case "icons":
-		//	testHeadIcons(player, args, ctx);
+			testHeadIcons(player, args, ctx);
 		return;
 		case "name":
-		//	testNameChange(player, args, ctx);
+			testNameChange(player);
 		return;
 		case "locanim":
-		//	testLocAnim(player, args, ctx);
+			testLocAnim(player, args, ctx);
 		return;
 		case "mestype":
-		//	testMessageType(player, args, ctx);
+			testMessageType(player, args, ctx);
 		return;
 		case "move":
-		//	testDelayedMovement(player, args, ctx);
+			testDelayedMovement(player, args, ctx);
 		return;
 	}
 });
 
-//function testHeadIcons(player, args, ctx) {
-//	if (args.length >= 4) {
-		//	player.getHeadIcons().setIcon(parseInt(args[3]), parseInt(args[1]), parseInt(args[2]));
-		//	player.getHeadIcons().refresh();
-//	} else {
-//		sendCommandResponse(player, "Usage: test icons <main_sprite> <sub_sprite> <slot>", ctx.console);
-//	}
-//}
+function testHeadIcons(player: Player, args: string[], ctx: EventContext) {
+	if (args.length >= 4) {
+			player.getHeadIcons().setIcon(parseInt(args[3]), parseInt(args[1]), parseInt(args[2]));
+			player.getHeadIcons().refresh();
+	} else {
+		sendCommandResponse(player, "Usage: test icons <main_sprite> <sub_sprite> <slot>", ctx.console);
+	}
+}
 
-//function testNameChange (player) {
-	//requestName(player, "Please enter your desired display name: ").then(function (name) {
-	//    var userHash = getUserHash(player);
-	//    var oldName = lookupPlayerName(userHash);
-	//	var success = ENGINE.setDisplayName(player, userHash, name);
-	//	if (success) {
-	//		sendMessage(player, "Your display name has been changed from "+oldName+" to "+name+".");
-	//		sendMessage(player, "You might need to log out for the change to take effect.");
-	//		sendMessage(player, "NOTE: This change has no effect on the name you use to log in.");
-	//	} else {
-	//		sendMessage(player, "Sorry, "+name+" is not available.");
-	//	}
-	//});
-//}
+async function testNameChange (player: Player) {
+	const name = await playerDialog(player, "Please enter your desired display name: ");
+	    var userHash = getUserHash(player);
+	    var oldName = lookupPlayerName(userHash);
+		var success = ENGINE.setDisplayName(player, userHash, name);
+		if (success) {
+			sendMessage(player, "Your display name has been changed from "+oldName+" to "+name+".");
+			sendMessage(player, "You might need to log out for the change to take effect.");
+			sendMessage(player, "NOTE: This change has no effect on the name you use to log in.");
+		} else {
+			sendMessage(player, "Sorry, "+name+" is not available.");
+		}
+}
 
-//function testLocAnim(player, args, ctx) {
-//	if (args.length < 2 || isNaN(args[1])) {
-//		sendCommandResponse(player, "Usage: test locanim <anim_id>", ctx.console);
-//	return;
-//	}
-//	var animId = parseInt(args[1]);
-//	var locCoords = _coords(2551, 3550, 0);
-//	var shape = 10;
-//	var loc = map.getLoc(locCoords, shape);
-//	 locationAnim(loc, animId);
-//}
+function testLocAnim(player: Player, args: string[], ctx: EventContext) {
+	if (args.length < 2 || isNaN(parseInt(args[1]))) {
+		sendCommandResponse(player, "Usage: test locanim <anim_id>", ctx.console);
+	return;
+	}
+	var animId = parseInt(args[1]);
+	var locCoords = _coords(2551, 3550, 0);
+	var shape = 10;
+	var loc = _map.getLoc(locCoords, shape);
+	 locationAnim(loc, animId);
+}
 
-//function testMessageType(player, args, ctx) {
-//	if (args.length < 2 || isNaN(args[1])) {
-//		sendCommandResponse(player, "Usage: test mestype <channel_id>", ctx.console);
-//	return;
-//	}
-//	var mesType = args[1];
-//	    sendMessage(player, "Test", mesType);
-//	}
+function testMessageType(player: Player, args: string[], ctx: EventContext) {
+	if (args.length < 2 || isNaN(parseInt(args[1]))) {
+		sendCommandResponse(player, "Usage: test mestype <channel_id>", ctx.console);
+	return;
+	}
+	var mesType = parseInt(args[1]);
+	    sendMessage(player, "Test", mesType);
+	}
 
-//function testDelayedMovement(player, args, ctx) {
-//	testLocAnim(player, ["locanim", 497], ctx);
-//	runAnim(player, 751);
-//	var currentCoords = _entity.getCoords(player);
-//	var targetCoords = _coords(currentCoords, 0, -5, 0);
-//	sendCommandResponse(player, "Running foce move to: "+targetCoords, ctx.console);
-//	_entity.forceMove(player, targetCoords, 105);
-//}
+function testDelayedMovement(player: Player, args: string[], ctx: EventContext) {
+	runAnim(player, 751);
+	var currentCoords = _entity.getCoords(player);
+	var targetCoords = _coords(currentCoords, 0, -5, 0);
+	sendCommandResponse(player, "Running foce move to: "+targetCoords, ctx.console);
+	_entity.forceMove(player, targetCoords, 105);
+}

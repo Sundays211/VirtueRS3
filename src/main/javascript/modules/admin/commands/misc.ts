@@ -32,6 +32,7 @@ import _coords from 'shared/map/coords';
 import { runAnim } from 'shared/anim';
 
 var Virtue = Java.type('org.virtue.Virtue');
+var World = Java.type('org.virtue.game.World');
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "root", (ctx) => {
 	var parent = parseInt(ctx.cmdArgs[0]);
@@ -45,10 +46,10 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, ["coords","pos","mypos"], (ct
 _events.bindEventListener(EventType.COMMAND_ADMIN, [ "inter", "if", "widget" ], (ctx) => {
 	var player = ctx.player;
 	var args = ctx.cmdArgs;
-	//if (args.length < 1 || isNaN(args[0])) {
-		//sendCommandResponse(player, "Usage: "+ctx.syntax+" [id]", ctx.console);
-	//return;
-	//}
+	if (args.length < 1 || isNaN(parseInt(args[0]))) {
+		sendCommandResponse(player, "Usage: "+ctx.syntax+" [id]", ctx.console);
+	return;
+	}
 	if (args.length >= 3) {
 	    var parent = parseInt(args[0]);
 		var slot = parseInt(args[1]);
@@ -78,10 +79,6 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, ["priceReload", "reloadPrice"
 	Virtue.getInstance().getExchange().loadPrices();
 });
 
-_events.bindEventListener(EventType.COMMAND_ADMIN, ["duel", "challenge"], (ctx) => {
-	//ctx.player.test(ctx.player);
-});
-
 _events.bindEventListener(EventType.COMMAND_ADMIN, "adr", (ctx) => {
 	ctx.player.getCombatSchedule().updateAdrenaline(100);
 });
@@ -91,18 +88,18 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, "adminroom", (ctx) => {
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "forcetalk", (ctx) => {
-	//var player = ctx.player;
-	//var args = ctx.cmdArgs;
-	//var message = "";
-	//for (var i = 0; i < args.length; i++) {
-	//	message += (i === 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
-	//}
-	//var iterate = World.getInstance().getPlayers().iterator();
-	//var players = null;
-	//while (iterate.hasNext()) {
-	//	players = iterate.next();
-	//	ENGINE.playerForceSay(player, message, false);
-	//}
+	var player = ctx.player;
+	var args = ctx.cmdArgs;
+	var message = "";
+	for (var i = 0; i < args.length; i++) {
+		message += (i === 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
+	}
+	var iterate = World.getInstance().getPlayers().iterator();
+	var players = null;
+	while (iterate.hasNext()) {
+		players = iterate.next();
+		ENGINE.playerForceSay(player, message, false);
+	}
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "forcedance", (ctx) => {

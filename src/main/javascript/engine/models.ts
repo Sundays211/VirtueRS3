@@ -11,6 +11,9 @@ export interface Player extends Entity {
 	getHeadIcons: () => any
 	getModel: () => any
 	getDispatcher: () => any
+	lock: () => any
+	unlock: () => any
+	getArmarDynamicRegion: () => any
 }
 
 export interface Npc extends Entity {
@@ -57,5 +60,7 @@ export interface EventContext {
 	fromslot?: number;
 	toslot?: number;
 	objId?: number;
+	useObjId?: number;
 	syntax?: string;
+	length?: number;
 }
