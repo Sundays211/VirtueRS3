@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017 Virtue Studios
+ * Copyright (c) 2015 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,16 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import { EventType } from 'engine/enums/event-type';
+import { EventType } from 'engine/enums';
 import _events from 'engine/events';
-import _map from 'engine/map';
 
-import { runAnim } from 'shared/anim';
- 
-_events.bindEventListener(EventType.OPLOC1, [65084,65086,65082,65076,65077,65079], (ctx) => {//Wildy Ditch
-	if (_map.getCoordY(ctx.player) == 3520) {
-		runAnim(ctx.player, 6132);
-		ENGINE.teleportEntityBy(ctx.player, 0, 3, 0);
-	}
+import { sendMessage } from 'shared/chat';
+import { playerDialog } from 'shared/dialog';
+import { lookupPlayerName } from 'shared/util';
+
+_events.bindEventListener(EventType.COMMAND_MOD, ["mute","muteplayer"], async (ctx) => {
+	const targetPlayer = await playerDialog(ctx.player, "Please enter the display name of the player you wish to mute:");
+	sendMessage(ctx.player, "Applying mute to "+lookupPlayerName(targetPlayer)+".");
+	targetPlayer.getChat().setMuted(true);
+});
+
+_events.bindEventListener(EventType.COMMAND_MOD, ["unmute","unmuteplayer"], async (ctx) => {
+	const targetPlayer = await playerDialog(ctx.player, "Please enter the display name of the player you wish to mute:");
+	sendMessage(ctx.player, "Removing mute on player "+lookupPlayerName(targetPlayer)+".");
+	targetPlayer.getChat().setMuted(false);
 });

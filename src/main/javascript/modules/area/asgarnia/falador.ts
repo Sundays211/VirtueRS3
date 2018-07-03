@@ -23,12 +23,33 @@
 import { EventType } from 'engine/enums/event-type';
 import _events from 'engine/events';
 import _map from 'engine/map';
-
-import { runAnim } from 'shared/anim';
  
-_events.bindEventListener(EventType.OPLOC1, [65084,65086,65082,65076,65077,65079], (ctx) => {//Wildy Ditch
-	if (_map.getCoordY(ctx.player) == 3520) {
-		runAnim(ctx.player, 6132);
-		ENGINE.teleportEntityBy(ctx.player, 0, 3, 0);
-	}
+import { locationAnim, getLocShape, getLocRotation } from 'shared/map/location';
+import { runAnim } from 'shared/anim';
+import { multi3 } from 'shared/dialog';
+
+_events.bindEventListener(EventType.OPLOC1, 26194, (ctx) => {//party room lever
+	locationAnim(ctx.location, 6934);
+	runAnim(ctx.player, 6933, function () {
+		multi3(ctx.player, "SELECT AN OPTION", "Balloon Bonanza (1000 coins).", () => {
+		}, "Nightly Dance (500 coins).", () => {
+		}, "No action.", () => {
+		});
+	});
+});
+
+_events.bindEventListener(EventType.OPLOC1, 26193, (ctx) => {//party room chest
+	runAnim(ctx.player, 536, function () {
+	    _map.addLoc(2418, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+	});
+});
+
+_events.bindEventListener(EventType.OPLOC2, 2418, (ctx) => {//party room chest
+	//deposit
+});
+
+_events.bindEventListener(EventType.OPLOC3, 2418, (ctx) => {//party room chest
+	runAnim(ctx.player, 535, function () {
+		_map.addLoc(26193, _map.getCoords(ctx.location), getLocShape(ctx.location), getLocRotation(ctx.location));
+	});
 });

@@ -1,4 +1,3 @@
-import './broadcasts';
 import './chat-settings';
 import './chatbox';
 import './friend-chat-settings';

@@ -22,13 +22,14 @@
 
 import { EventType } from 'engine/enums/event-type';
 import _events from 'engine/events';
-import _map from 'engine/map';
+import _entity from 'engine/entity';
 
-import { runAnim } from 'shared/anim';
- 
-_events.bindEventListener(EventType.OPLOC1, [65084,65086,65082,65076,65077,65079], (ctx) => {//Wildy Ditch
-	if (_map.getCoordY(ctx.player) == 3520) {
-		runAnim(ctx.player, 6132);
-		ENGINE.teleportEntityBy(ctx.player, 0, 3, 0);
-	}
+import { runAnim, addSpotAnim } from 'shared/anim';
+import _coords from 'shared/map/coords';
+
+_events.bindEventListener(EventType.OPLOC1, 79603, (ctx) => {//portal
+	addSpotAnim(ctx.player, 1771);
+	runAnim(ctx.player, 10180, function () {
+        _entity.setCoords(ctx.player, _coords(3, 48, 49, 30, 15));
+    });
 });

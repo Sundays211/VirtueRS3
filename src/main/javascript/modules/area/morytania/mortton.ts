@@ -19,16 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 import { EventType } from 'engine/enums/event-type';
 import _events from 'engine/events';
-import _map from 'engine/map';
+import _entity from 'engine/entity';
+import { setVarp } from 'engine/var';
 
 import { runAnim } from 'shared/anim';
- 
-_events.bindEventListener(EventType.OPLOC1, [65084,65086,65082,65076,65077,65079], (ctx) => {//Wildy Ditch
-	if (_map.getCoordY(ctx.player) == 3520) {
-		runAnim(ctx.player, 6132);
-		ENGINE.teleportEntityBy(ctx.player, 0, 3, 0);
-	}
+import _coords from 'shared/map/coords';
+import { openCentralWidget } from 'shared/widget';
+
+_events.bindEventListener(EventType.OPLOC1, 87997, (ctx) => {//jump down well
+	runAnim(ctx.player, 21924, function () {
+		setVarp(ctx.player, 5142, 15364);//find right varbits that are used
+		setVarp(ctx.player, 5144, 24181);
+		openCentralWidget(ctx.player, 1591, false);
+	});
+	//getting kicked out anim 21922
+});
+
+_events.bindEventListener(EventType.OPLOC2, 87997, (ctx) => {//well graveyard
+    _entity.setCoords(ctx.player, _coords(1,37,94,31,39));
+	runAnim(ctx.player, 2924);
 });

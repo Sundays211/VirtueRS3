@@ -8,6 +8,14 @@ export interface Player extends Entity {
 	switchSheathing: () => any
 	getChat: () => any
 	getSavedChannelOwner: () => any
+	getHeadIcons: () => any
+	getModel: () => any
+	getDispatcher: () => any
+	lock: () => any
+	unlock: () => any
+	getArmarDynamicRegion: () => any
+	setKeys: (amount: number) => void;
+	getKeys: () => any
 }
 
 export interface Npc extends Entity {
@@ -42,6 +50,7 @@ export interface EventContext {
 	event: EventType;
 	trigger: number | string;
 	player: Player;
+	target: Player;
 	npc?: Npc;
 	location?: Location;
 	console?: boolean;
@@ -53,4 +62,6 @@ export interface EventContext {
 	fromslot?: number;
 	toslot?: number;
 	objId?: number;
+	useObjId?: number;
+	syntax?: string;
 }

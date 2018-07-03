@@ -22,23 +22,23 @@
  
 import { EventType } from 'engine/enums/event-type';
 import _events from 'engine/events';
+import _entity from 'engine/entity';
 import _map from 'engine/map';
 
 
 import { runAnim } from 'shared/anim';
 import { defaultHandler } from 'shared/util';
-import { setCoords } from 'shared/map';
 import { multi3 } from 'shared/dialog';
 import _coords from 'shared/map/coords';
 
         _events.bindEventListener(EventType.OPLOC1, 29355, (ctx) => {
 		    if (_map.getCoordX(ctx.location) == 3116 && _map.getCoordY(ctx.location) == 9852) {//ladder from hill giants to varrock
 		        runAnim(ctx.player, 828, function () {
-                setCoords(ctx.player, _coords(3115, 3452, 0));
+                _entity.setCoords(ctx.player, _coords(3115, 3452, 0));
 	            });
 		    } else if (_map.getCoordX(ctx.location) == 3209 && _map.getCoordY(ctx.location) == 9616) {//ladder to lumbridge castle where cook is
 		        runAnim(ctx.player, 828, function () {
-                setCoords(ctx.player, _coords(3210, 3216, 0));
+                _entity.setCoords(ctx.player, _coords(3210, 3216, 0));
 	            });
 		    } else {
 			    defaultHandler(ctx, "unhandled ladder");
@@ -51,13 +51,13 @@ import _coords from 'shared/map/coords';
 	    });
 
 		_events.bindEventListener(EventType.OPLOC1, 36769, (ctx) => {//ladder lumbridge castle
-			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Climb up the ladder.", function () {
+			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Climb up the ladder.", () => {
 				runAnim(ctx.player, 828);
 				ENGINE.teleportEntityBy(ctx.player, 0, 0, 1);
-			}, "Climb down the ladder.", function () {
+			}, "Climb down the ladder.", () => {
                 runAnim(ctx.player, 828);
 			    ENGINE.teleportEntityBy(ctx.player, 0, 0, -1);
-			}, "Never mind.", function () {
+			}, "Never mind.", () => {
 	        });
 	    });
 
@@ -91,11 +91,11 @@ import _coords from 'shared/map/coords';
 	    });
 
 		_events.bindEventListener(EventType.OPLOC1, [36774,36777], (ctx) => {//Staircase lumbridge castle mid floor
-			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Go up the stairs.", function () {
+			multi3(ctx.player, "WHAT WOULD YOU LIKE TO DO?", "Go up the stairs.", () => {
 				ENGINE.teleportEntityBy(ctx.player, 0, 0, +1);
-			}, "Go down the stairs.", function () {
+			}, "Go down the stairs.", () => {
 			    ENGINE.teleportEntityBy(ctx.player, 0, 0, -1);
-			}, "Never mind.", function () {
+			}, "Never mind.", () => {
 	        });
 	    });
 
@@ -113,7 +113,7 @@ import _coords from 'shared/map/coords';
 
 		_events.bindEventListener(EventType.OPLOC1, 39273, (ctx) => {//ladder betty's basement quest (swept away)
 	        runAnim(ctx.player, 828, function () {
-                setCoords(ctx.player, _coords(3014, 3257, 0));
+                _entity.setCoords(ctx.player, _coords(3014, 3257, 0));
 	        });
 	    });
 

@@ -25,7 +25,8 @@ var inv = require('shared/inv');
 var chat = require('shared/chat');
 var anim = require('shared/anim');
 var config = require('engine/config');
-
+var dialog = require('shared/dialog');
+var varbit = require('engine/var/bit');
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @author Frosty Teh Snowman <skype:travis.mccorkle>
@@ -181,6 +182,14 @@ module.exports = (function () {
 
 		scriptManager.bind(EventType.OPLOC1, 17010, function (ctx) {
 			craftRunes(ctx.player, Alter.ASTRAL);
+		});
+		
+		scriptManager.bind(EventType.OPLOC2, 17010, function (ctx) {
+			dialog.multi2(ctx.player, "CHOOSE AN OPTION", "Lunar spellbook", function () {
+				varbit(ctx.player, 0, 2);
+			}, "Normal spellbook", function () {
+				varbit(ctx.player, 0, 0);
+			});
 		});
 
 		scriptManager.bind(EventType.OPLOC1, 2486, function (ctx) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017 Virtue Studios
+ * Copyright (c) 2015 Virtue Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,20 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
-import { EventType } from 'engine/enums/event-type';
+import { EventType } from 'engine/enums';
 import _events from 'engine/events';
-import _entity from 'engine/entity';
 
 import { sendMessage } from 'shared/chat';
-import _coords from 'shared/map/coords';
+import { playerDialog } from 'shared/dialog';
+import { lookupPlayerName } from 'shared/util';
+import { runAnim, addSpotAnim } from 'shared/anim';
 
-_events.bindEventListener(EventType.OPLOC1, 26806, (ctx) => {//Staircase
-	_entity.setCoords(ctx.player, _coords(3230, 3231, 0));
+ _events.bindEventListener(EventType.COMMAND_ADMIN, "freeze", async (ctx) => {
+	var player = ctx.player;
+	const targetPlayer = await playerDialog(player, "Please enter the display name of the player you wish to freeze:");
+		sendMessage(player, "You have frozen the player named: " + lookupPlayerName(targetPlayer));
+		runAnim(player, 1979);
+		addSpotAnim(player, 366);
+		addSpotAnim(targetPlayer, 369);
+		targetPlayer.lock();
+		sendMessage(targetPlayer, "You have been frozen.");
+
 });
-
-_events.bindEventListener(EventType.OPLOC2, 26807, (ctx) => {//Table
-	sendMessage(ctx.player, "todo");
+		
+ _events.bindEventListener(EventType.COMMAND_ADMIN, "unfreeze", async (ctx) => {
+	var player = ctx.player;
+	const targetPlayer = await playerDialog(player, "Please enter the display name of the player you wish to unfreeze:");
+		sendMessage(player, "You have unfrozen the player: "+ lookupPlayerName(targetPlayer));
+		targetPlayer.unlock();
+		sendMessage(targetPlayer, "You can now move again!");
 });
-	
-
