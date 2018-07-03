@@ -14,7 +14,6 @@ function getAllModules () {// jshint ignore:line
 	    'items',
 		'items/item-use',
 		'items/degradables',
-		'npcs/asgarnia',
 		'npcs/events',
 		'npcs/misthalin',
 		'npcs/tirannwn',

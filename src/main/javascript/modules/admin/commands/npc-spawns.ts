@@ -70,7 +70,7 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, ["addspawn","addnpcspawn"], (
 		writer.close();
 	} catch (e) {
 	if (writer !== null) {
-	//	writer.close();
+		//writer.close();
 	}
 	}
 });

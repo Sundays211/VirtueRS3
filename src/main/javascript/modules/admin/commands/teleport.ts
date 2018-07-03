@@ -75,7 +75,7 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, [ "tele", "goto", "move" ], (
 	var y = _map.getCoordY(currentCoords);
 	var level = Math.min(_map.getLevel(currentCoords)+1, 3);
 	_entity.setCoords(ctx.player, _coords(x, y, level));
-	sendMessage(ctx.player, "You can use 'ctrl+shift scroll to change levels");
+	sendMessage(ctx.player, "You can use ctrl+shift scroll to change levels");
 });
 
  _events.bindEventListener(EventType.COMMAND_ADMIN, "down", (ctx) => {
@@ -84,7 +84,7 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, [ "tele", "goto", "move" ], (
 	var y = _map.getCoordY(currentCoords);
 	var level = Math.max(_map.getLevel(currentCoords)-1, 0);
 	_entity.setCoords(ctx.player, _coords(x, y, level));
-	sendMessage(ctx.player, "You can use 'ctrl+shift scroll to change levels");
+	sendMessage(ctx.player, "You can use ctrl+shift scroll to change levels");
 });
 
  _events.bindEventListener(EventType.COMMAND_ADMIN, "teleto", async (ctx) => {

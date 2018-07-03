@@ -14,6 +14,8 @@ export interface Player extends Entity {
 	lock: () => any
 	unlock: () => any
 	getArmarDynamicRegion: () => any
+	setKeys: (amount: number) => void;
+	getKeys: () => any
 }
 
 export interface Npc extends Entity {
@@ -62,5 +64,4 @@ export interface EventContext {
 	objId?: number;
 	useObjId?: number;
 	syntax?: string;
-	length?: number;
 }

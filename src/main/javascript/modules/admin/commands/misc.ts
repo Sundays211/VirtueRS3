@@ -30,6 +30,7 @@ import { lookupPlayerName, toFormattedTime } from 'shared/util';
 import { openCentralWidget, openWidget } from 'shared/widget';
 import _coords from 'shared/map/coords';
 import { runAnim } from 'shared/anim';
+import { teleport } from 'shared/map';
 
 var Virtue = Java.type('org.virtue.Virtue');
 var World = Java.type('org.virtue.game.World');
@@ -67,12 +68,12 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, "uptime", (ctx) => {
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "setKey", (ctx) => {
-	//var player = ctx.player;
-	//var args = ctx.cmdArgs;
-	//var amount = parseInt(args[0]);
-	//player.setKeys(amount);
-	//setVarc(player, 1800, player.getKeys() - 1);
-	//sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
+	var player = ctx.player;
+	var args = ctx.cmdArgs;
+	var amount = parseInt(args[0]);
+	player.setKeys(amount);
+	setVarc(player, 1800, player.getKeys() - 1);
+	sendMessage(player, "You now have "+(player.getKeys())+" for Treasure Hunter.");
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["priceReload", "reloadPrice"], (ctx) => {
@@ -84,7 +85,7 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, "adr", (ctx) => {
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "adminroom", (ctx) => {
-	//teleport(ctx.player, _coords(2845, 5154, 0), 18007);
+	teleport(ctx.player, _coords(2845, 5154, 0), 18007);
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "forcetalk", (ctx) => {

@@ -35,7 +35,7 @@ import { runClientScript } from 'shared/util';
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["cs2", "cscript"], (ctx) => {
 	var player = ctx.player;
 	var args = ctx.cmdArgs;
-	if (ctx.length < 1 || isNaN(parseInt(args[0]))) {
+	if (args.length < 1 || isNaN(parseInt(args[0]))) {
 		sendCommandResponse(player, "Usage: "+ctx.syntax+" [id] [args]", ctx.console);
 	return;
 	}

@@ -16,5 +16,6 @@ import './chat';
 import './exchange';
 import './shop';
 import './skill';
+import './npcs/asgarnia';
 import './npcs/kandarin';
 import './widget/settings';
