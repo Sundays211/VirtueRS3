@@ -9,6 +9,7 @@ import { COINS_OBJ, INTEGER_MAX } from 'shared/const';
 import { checkOverflow } from 'shared/util';
 
 import { getCoinCount, addCoins, removeCoins } from './money-pouch';
+import { hasTool } from 'shared/inv';
 
 /**
  * Gives items to the player
@@ -21,7 +22,7 @@ import { getCoinCount, addCoins, removeCoins } from './money-pouch';
 export function giveItem(
 	player: Player,
 	objId: number,
-	count: number,
+	count: number = 1,
 	invId: Inv = Inv.BACKPACK
 ) {
 
@@ -50,7 +51,7 @@ export function giveItem(
 export function takeItem(
 	player: Player,
 	objId: number,
-	count: number,
+	count: number = 1,
 	invId: Inv = Inv.BACKPACK,
 	slot?: number
 ) {
@@ -67,7 +68,8 @@ export function takeItem(
 }
 
 /**
- * Checks whether the player currently possesses the specified item
+ * Checks whether the player currently possesses the specified item.
+ * This function also checks the toolbelt if the inventory is Backpack.
  * @param player The player to check
  * @param objId The object to check
  * @param count The number of the item required. Defaults to 1
@@ -78,8 +80,11 @@ export function hasItem(
 	player: Player,
 	objId: number,
 	count: number = 1,
-	inv?: Inv
+	inv: Inv = Inv.BACKPACK
 ): boolean {
+	if (inv === Inv.BACKPACK && count === 1 && hasTool(player, objId)) {
+		return true;
+	}
 	return invTotal(player, objId, inv) >= count;
 }
 
