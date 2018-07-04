@@ -10,6 +10,10 @@ export function resetStat(player: Player, stat: Stat) {
 	setStatLevel(player, stat, getBaseLevel(player, stat));
 }
 
+export function hasLevel (player: Player, stat: Stat, level: number): boolean {
+	return getStatLevel(player, stat) >= level;
+}
+
 export function getStatLevel(player: Player, stat: Stat): number {
 	return ENGINE.getStatLevel(player, stat);
 }
