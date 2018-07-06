@@ -8,7 +8,6 @@
  */
 function getAllModules () {// jshint ignore:line
 	var modules = [
-		'clan',
 		'combat',
 		'inv',
 	    'items',
