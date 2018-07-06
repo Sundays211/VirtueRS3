@@ -69,11 +69,11 @@ export function weightedRandom<T> (
 	}
 }
 
-export function lootItem (id: number, min: number, max: number) {
+export function lootItem (id: number, min: number = 1, max?: number) {
 	return {
-		id : id,
-		min : min,
-		max : max
+		id,
+		min,
+		max : max || min
 	};
 }
 
