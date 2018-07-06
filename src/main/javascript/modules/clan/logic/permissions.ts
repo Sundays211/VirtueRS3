@@ -620,6 +620,26 @@ export function canChangeBroadcasts(player: Player, rank: number): boolean {
 	}
 }
 
+export function canRecallAvatar(player: Player, rank: number): boolean {
+	switch (rank) {
+		case 100:
+			return varbit(player, 30487) === 1;
+		case 101:
+			return varbit(player, 30488) === 1;
+		case 102:
+			return varbit(player, 30489) === 1;
+		case 103:
+			return varbit(player, 30490) === 1;
+		case 125:
+			return varbit(player, 30491) === 1;
+		case 126:
+		case 127:
+			return true;
+		default:
+			return false;
+	}
+}
+
 export function setBlockKeep(player: Player, rank: number, holds: boolean) {
 	if (!canBlockKeep(player, getClanRank(player))) {
 		sendMessage(player, "You may only allow locking of the keep if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
@@ -1227,6 +1247,27 @@ export function setCanChangeBroadcasts(player: Player, rank: number, holds: bool
 			return setVarBit(player, 21738, holds ? 1 : 0);
 		case 125:
 			return setVarBit(player, 21739, holds ? 1 : 0);
+		default:
+			return false;
+	}
+}
+
+export function setCanRecallAvatar(player: Player, rank: number, holds: boolean) {
+	if (!canRecallAvatar(player, getClanRank(player))) {
+		sendMessage(player, "You may only allow a rank to recall the avatar if your rank has this permission.", MesType.CLANCHANNEL_SYSTEM);
+		return false;
+	}
+	switch (rank) {
+		case 100:
+			return setVarBit(player, 30487, holds ? 1 : 0);
+		case 101:
+			return setVarBit(player, 30488, holds ? 1 : 0);
+		case 102:
+			return setVarBit(player, 30489, holds ? 1 : 0);
+		case 103:
+			return setVarBit(player, 30490, holds ? 1 : 0);
+		case 125:
+			return setVarBit(player, 30491, holds ? 1 : 0);
 		default:
 			return false;
 	}

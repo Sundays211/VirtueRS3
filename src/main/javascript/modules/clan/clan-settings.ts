@@ -270,10 +270,6 @@ _events.bindEventListener(EventType.IF_BUTTON, 1096, (ctx) => {
 			held = permissions.canBroadcastEvents(player, varbit(player, 6155));
 			permissions.setCanBroadcastEvents(player, varbit(player, 6155), !held);
 			return;
-		case 870:
-			held = permissions.canChangeBroadcasts(player, varbit(player, 6155));
-			permissions.setCanChangeBroadcasts(player, varbit(player, 6155), !held);
-			return;
 		case 858:
 			if (permissions.canChangeBroadcasts(player, getClanRank(player))) {
 				closeAllWidgets(player);
@@ -282,6 +278,14 @@ _events.bindEventListener(EventType.IF_BUTTON, 1096, (ctx) => {
 			} else {
 				sendMessage(player, "You do not have sufficient rank in your clan to do this.");
 			}
+			return;
+		case 870:
+			held = permissions.canChangeBroadcasts(player, varbit(player, 6155));
+			permissions.setCanChangeBroadcasts(player, varbit(player, 6155), !held);
+			return;
+		case 881:
+			held = permissions.canRecallAvatar(player, varbit(player, 6155));
+			permissions.setCanRecallAvatar(player, varbit(player, 6155), !held);
 			return;
 		default:
 			defaultHandler(ctx, "clan settings");
@@ -341,12 +345,12 @@ function setSelectedRank(player: Player, rank: number) {
 }
 
 function setPermissionTab(player: Player, tab: number) {
-	hideWidget(player, 1096, 31, true);
+	hideWidget(player, 1096, 32, true);
 	hideWidget(player, 1096, 20, (tab !== 1));
 	hideWidget(player, 1096, 21, (tab !== 2));
 	hideWidget(player, 1096, 22, (tab !== 3));
 	hideWidget(player, 1096, 24, (tab !== 4));
-	hideWidget(player, 1096, 25, (tab !== 5));
+	hideWidget(player, 1096, 26, (tab !== 5));
 	runClientScript(player, 5136, [tab]);
 }
 
@@ -381,6 +385,7 @@ function setPermissionGroup(player: Player, rank: number) {
 	setVarc(player, 1590, permissions.canMoveTick(player, rank) ? 1 : 0);//Change build tick
 	setVarc(player, 3855, permissions.canBroadcastEvents(player, rank) ? 1 : 0);//Broadcast events
 	setVarc(player, 4125, permissions.canChangeBroadcasts(player, rank) ? 1 : 0);//Modify broadcast settings
+	setVarc(player, 5128, permissions.canRecallAvatar(player, rank) ? 1 : 0);//Recall avatar
 }
 
 function openMotifEditor(player: Player) {
