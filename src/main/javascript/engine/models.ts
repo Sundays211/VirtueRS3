@@ -17,6 +17,7 @@ export interface Player extends Entity {
 	setKeys: (amount: number) => void;
 	getKeys: () => any
 	setPet: (npc: Npc) => void
+	getImpactHandler: () => any
 }
 
 export interface Npc extends Entity {

@@ -33,7 +33,6 @@ function getAllModules () {// jshint ignore:line
 		'skill/runecrafting',
 		'skill/smithing',
 		'skill/summoning',
-		'skill/thieving',
 		'trade',
 		'widget/frame'
 	];
