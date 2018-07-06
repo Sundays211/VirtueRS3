@@ -16,6 +16,7 @@ export interface Player extends Entity {
 	getArmarDynamicRegion: () => any
 	setKeys: (amount: number) => void;
 	getKeys: () => any
+	getImpactHandler: () => any
 }
 
 export interface Npc extends Entity {
