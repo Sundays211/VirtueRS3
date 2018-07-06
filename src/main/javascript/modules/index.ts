@@ -13,6 +13,7 @@ import './area/misthalin';
 import './area/morytania';
 import './area/underground';
 import './chat';
+import './clan';
 import './exchange';
 import './shop';
 import './skill';

@@ -19,17 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, ENGINE */
-var varp = require('engine/var/player');
-var varbit = require('engine/var/bit');
+import { EventType } from 'engine/enums';
+import { Player } from 'engine/models';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
+import { varp, varbit, setVarBit, setVarp } from 'engine/var';
 
-var util = require('shared/util');
-var widget = require('shared/widget');
-var dialog = require('shared/dialog');
-var chat = require('shared/chat');
+import { runClientScript, defaultHandler } from 'shared/util';
+import { setWidgetEvents, closeAllWidgets, openCentralWidget } from 'shared/widget';
+import { setResumeHandler } from 'shared/dialog';
+import { sendMessage } from 'shared/chat';
 
-var broadcasts = require('./logic/broadcasts');
-var clan = require('./logic/core');
+import { sendClanBroadcast } from './logic/broadcasts';
+import { getClanHash } from './logic/core';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -38,17 +40,15 @@ var clan = require('./logic/core');
  * @author Sundays211
  * @since 24/01/2015
  */
+_events.bindEventListener(EventType.IF_OPEN, 1105, (ctx) => {
+	//if_opensub: parent=1477, parentSlot=412, if=1105, closable=0
+	setWidgetEvents(ctx.player, 1105, 66, 0, 118, 2);
+	setWidgetEvents(ctx.player, 1105, 63, 0, 118, 2);
+	runClientScript(ctx.player, 4399, [72417446]);
+});
 
-module.exports = function (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1105, function (ctx) {
-		//if_opensub: parent=1477, parentSlot=412, if=1105, closable=0
-		widget.setEvents(ctx.player, 1105, 66, 0, 118, 2);
-		widget.setEvents(ctx.player, 1105, 63, 0, 118, 2);
-		util.runClientScript(ctx.player, 4399, [72417446]);
-	});
-
-	scriptManager.bind(EventType.IF_BUTTON, 1105, function (ctx) {
-		switch (ctx.component) {
+_events.bindEventListener(EventType.IF_BUTTON, 1105, (ctx) => {
+	switch (ctx.component) {
 		case 148://Close button
 			return;
 		case 120://Save changes
@@ -109,37 +109,37 @@ module.exports = function (scriptManager) {
 			copyColour(ctx.player, 3, 4);
 			return;
 		default:
-			util.defaultHandler(ctx, "clan motif editor");
+			defaultHandler(ctx, "clan motif editor");
 			return;
-		}
-	});
-
-	function saveChanges  (player) {
-		varbit(player, 8815, varbit(player, 8965));//Update logo 1
-		varbit(player, 8816, varbit(player, 8966));//Update logo 2
-		ENGINE.setVarClanSetting(player, 16, varp(player, 2067));//Update logo 1 colour
-		ENGINE.setVarClanSetting(player, 17, varp(player, 2068));//Update logo 2 colour
-		ENGINE.setVarClanSetting(player, 18, varp(player, 2069));//Update primary colour
-		ENGINE.setVarClanSetting(player, 19, varp(player, 2070));//Update secondary colour
-		chat.sendMessage(player, "Clan motif updated. Changes will take effect in the next few minutes.");
-		broadcasts.send(clan.getHash(player), 24, ["[Player A]"], [util.getName(player)]);
-		widget.closeAll(player);
 	}
+});
 
-	function selectLogo (player, type, slot) {
-		switch (type) {
+function saveChanges(player: Player) {
+	setVarBit(player, 8815, varbit(player, 8965));//Update logo 1
+	setVarBit(player, 8816, varbit(player, 8966));//Update logo 2
+	ENGINE.setVarClanSetting(player, 16, varp(player, 2067));//Update logo 1 colour
+	ENGINE.setVarClanSetting(player, 17, varp(player, 2068));//Update logo 2 colour
+	ENGINE.setVarClanSetting(player, 18, varp(player, 2069));//Update primary colour
+	ENGINE.setVarClanSetting(player, 19, varp(player, 2070));//Update secondary colour
+	sendMessage(player, "Clan motif updated. Changes will take effect in the next few minutes.");
+	sendClanBroadcast(getClanHash(player), 24, ["[Player A]"], [_entity.getName(player)]);
+	closeAllWidgets(player);
+}
+
+function selectLogo(player: Player, type: number, slot: number) {
+	switch (type) {
 		case 1:
-			varbit(player, 8965, slot+1);
+			setVarBit(player, 8965, slot + 1);
 			return;
 		case 2:
-			varbit(player, 8966, slot+1);
+			setVarBit(player, 8966, slot + 1);
 			return;
-		}
 	}
+}
 
-	function selectColour (player, type) {
-		var prevColour;
-		switch (type) {
+function selectColour(player: Player, type: number) {
+	var prevColour;
+	switch (type) {
 		case 1:
 			prevColour = varp(player, 2067);
 			break;
@@ -152,35 +152,35 @@ module.exports = function (scriptManager) {
 		case 4:
 			prevColour = varp(player, 2070);
 			break;
-		}
-		varp(player, 1111, prevColour);
-		widget.openCentral(player, 1106);
-		dialog.setResumeHandler(player, function (value) {
-			widget.closeAll(player);
-			if (value !== 0) {
-				switch (type) {
+	}
+	setVarp(player, 1111, prevColour);
+	openCentralWidget(player, 1106);
+	setResumeHandler(player, (value) => {
+		closeAllWidgets(player);
+		if (value !== 0) {
+			switch (type) {
 				case 1:
-					varp(player, 2067, value);
+					setVarp(player, 2067, value);
 					break;
 				case 2:
-					varp(player, 2068, value);
+					setVarp(player, 2068, value);
 					break;
 				case 3:
-					varp(player, 2069, value);
+					setVarp(player, 2069, value);
 					break;
 				case 4:
-					varp(player, 2070, value);
+					setVarp(player, 2070, value);
 					break;
-				}
 			}
-			widget.openCentral(player, 1105);
-			util.runClientScript(player, 4399, [72417469]);
-		});
-	}
+		}
+		openCentralWidget(player, 1105);
+		runClientScript(player, 4399, [72417469]);
+	});
+}
 
-	function copyColour (player, fromType, toType) {
-		var colour;
-		switch (fromType) {
+function copyColour(player: Player, fromType: number, toType: number) {
+	var colour;
+	switch (fromType) {
 		case 1:
 			colour = varp(player, 2067);
 			break;
@@ -193,20 +193,19 @@ module.exports = function (scriptManager) {
 		case 4:
 			colour = varp(player, 2070);
 			break;
-		}
-		switch (toType) {
+	}
+	switch (toType) {
 		case 1:
-			varp(player, 2067, colour);
+			setVarp(player, 2067, colour);
 			break;
 		case 2:
-			varp(player, 2068, colour);
+			setVarp(player, 2068, colour);
 			break;
 		case 3:
-			varp(player, 2069, colour);
+			setVarp(player, 2069, colour);
 			break;
 		case 4:
-			varp(player, 2070, colour);
+			setVarp(player, 2070, colour);
 			break;
-		}
 	}
-};
+}
