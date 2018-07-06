@@ -19,12 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, CLAN_ENGINE*/
-var widget = require('shared/widget');
-var dialog = require('shared/dialog');
-var chat = require('shared/chat');
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-var clan = require('./logic/core');
+import { sendCommandResponse } from 'shared/chat';
+import { setResumeHandler } from 'shared/dialog';
+import { closeWidgetSub, openWidget } from 'shared/widget';
+
+import { inClan, getClanHash } from './logic/core';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -33,19 +35,16 @@ var clan = require('./logic/core');
  * @author Sundays211
  * @since 26/12/2014
  */
-
-module.exports = function (scriptManager) {
-	scriptManager.bind(EventType.COMMAND, "makeclan", function (ctx) {
-		if (clan.inClan(ctx.player)) {
-			chat.sendCommandResponse(ctx.player, "You need to leave your current clan before you can use this command (clan="+clan.getHash(ctx.player)+")", ctx.console);
-			return;
+_events.bindEventListener(EventType.COMMAND, "makeclan", (ctx) => {
+	if (inClan(ctx.player)) {
+		sendCommandResponse(ctx.player, "You need to leave your current clan before you can use this command (clan=" + getClanHash(ctx.player) + ")", ctx.console);
+		return;
+	}
+	openWidget(ctx.player, 1477, 437, 1094, false);
+	setResumeHandler(ctx.player, (value) => {
+		closeWidgetSub(ctx.player, 1477, 437);
+		if (value) {
+			CLAN_ENGINE.createClan(value, ctx.player, []);
 		}
-		widget.open(ctx.player, 1477, 437, 1094, false);
-		dialog.setResumeHandler(ctx.player, function (value) {
-			widget.closeSub(ctx.player, 1477, 437);
-			if (value) {
-				CLAN_ENGINE.createClan(value, ctx.player, []);
-			}
-		});
 	});
-};
+});

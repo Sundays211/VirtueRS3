@@ -127,3 +127,17 @@ export function multi5(
 
 	ENGINE.requestMulti(player, message, [op1, op2, op3, op4, op5], [1, 2, 3, 4, 5], new Handler());
 }
+
+
+export function confirmDialog (player: Player, message: string): Promise<void> {
+	return new Promise(resolve => {
+		multi2(
+			player,
+			message,
+			"Yes",
+			() => resolve(),
+			"No",
+			() => {}
+		);
+	});
+}

@@ -1,7 +1,7 @@
 import { EventType } from './enums/event-type';
 
 export interface Player extends Entity {
-	//TODO: Remove these from the game engine & replace here
+	//TODO: Add these methods to the game engine (or replace with something else)
 	getDialogs: () => any
 	getCombatSchedule: () => any
 	getEquipment: () => any
@@ -16,10 +16,14 @@ export interface Player extends Entity {
 	getArmarDynamicRegion: () => any
 	setKeys: (amount: number) => void;
 	getKeys: () => any
+	setPet: (npc: Npc) => void
+	getImpactHandler: () => any
 }
 
 export interface Npc extends Entity {
-
+	//TODO: Add these methods to the game engine (or replace with something else)
+	isOwner: (player: Player) => boolean
+	destroy: () => void
 }
 
 export interface Entity extends Node {
@@ -43,6 +47,10 @@ export interface DynamicMapSquare {
 }
 
 export interface NodeHash {
+
+}
+
+export interface ClanHash {
 
 }
 

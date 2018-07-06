@@ -69,11 +69,11 @@ export function weightedRandom<T> (
 	}
 }
 
-export function lootItem (id: number, min: number, max: number) {
+export function lootItem (id: number, min: number = 1, max?: number) {
 	return {
-		id : id,
-		min : min,
-		max : max
+		id,
+		min,
+		max : max || min
 	};
 }
 
@@ -87,6 +87,10 @@ export function setBit (value: number, bit: number): number {
 
 export function unsetBit (value: number, bit: number): number {
 	return value & -1 - (1 << bit);
+}
+
+export function getOrDefault <T> (value: T, def: T): T {
+	return value ? def : value;
 }
 
 export function getUserHash (player: Player | string): NodeHash {
