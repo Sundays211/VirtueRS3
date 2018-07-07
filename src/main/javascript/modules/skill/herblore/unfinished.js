@@ -8,7 +8,7 @@ var varp = require('engine/var/player');
 var config = require('engine/config');
 var util = require('shared/util');
 
-var makex = require('../makex');
+var makex = require('shared/makex');
 var common = require('./common.js');
 var UNFINISHED_POTIONS = 6842;
 

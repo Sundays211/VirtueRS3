@@ -12,7 +12,7 @@ var inv = require('shared/inv');
 var stat = require('shared/stat');
 
 var variables = require('./variables');
-var resources = require('../makex/resources');
+var resources = require('shared/makex/resources');
 
 module.exports = (function () {
 	return {

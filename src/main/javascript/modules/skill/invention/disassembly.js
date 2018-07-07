@@ -31,7 +31,7 @@ var widget = require('shared/widget');
 var stat = require('shared/stat');
 
 var materials = require('shared/inv/materials');
-var makexProgress = require('../makex/progress');
+var makexProgress = require('shared/makex/progress');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
