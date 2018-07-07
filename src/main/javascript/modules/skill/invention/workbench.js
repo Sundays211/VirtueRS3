@@ -25,7 +25,7 @@ var varbit = require('engine/var/bit');
 
 var dialog = require('shared/dialog');
 var widget = require('shared/widget');
-var makex = require('../makex');
+var makex = require('shared/makex');
 
 /**
  * @author Greco

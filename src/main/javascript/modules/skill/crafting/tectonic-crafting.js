@@ -6,7 +6,7 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var makex = require('../makex');
+var makex = require('shared/makex');
 var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 
@@ -21,13 +21,13 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, TECTONIC_ENERGY, function (ctx) {
 			selectTectonicProduct(ctx.player);
 		});
 	}
-	
+
 	function selectTectonicProduct (player) {
 		makex.selectProduct(player, -1, -1, 7512, -1, "Tectonic");
 		dialog.setResumeHandler(player, function () {
@@ -41,11 +41,11 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function createWeapon (player, itemId, amount) {
 		varp(player, 1175, itemId);
 		var text = "You create a weapon";
 		makex.startCrafting(player, amount, 25594, text);
 	}
-	
+
 })();

@@ -23,7 +23,7 @@
 var varp = require('engine/var/player');
 
 var util = require('shared/util');
-var makex = require('../makex');
+var makex = require('shared/makex');
 var common = require('./common');
 var FEATHER_ARROWS = 6966;
 

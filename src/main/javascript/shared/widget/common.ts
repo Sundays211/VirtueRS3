@@ -39,7 +39,7 @@ export function closeAllWidgets(player: Player) {
 	ENGINE.closeCentralWidgets(player);
 }
 
-export function closeOverlaySub(player: Player, subId: number, handle: boolean) {
+export function closeOverlaySub(player: Player, subId: number, handle: boolean = true) {
 	ENGINE.closeOverlaySub(player, subId, handle);
 }
 

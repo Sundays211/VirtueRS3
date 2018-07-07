@@ -6,7 +6,7 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var makex = require('../makex');
+var makex = require('shared/makex');
 var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 var config = require('engine/config');

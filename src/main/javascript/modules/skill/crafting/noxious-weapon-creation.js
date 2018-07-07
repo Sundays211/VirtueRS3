@@ -6,7 +6,7 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 
-var makex = require('../makex');
+var makex = require('shared/makex');
 var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 
@@ -25,12 +25,12 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 	/*	scriptManager.bind(EventType.OPHELD1, [ 31718, 31719, 31720, 31722, 31723, 31724 ], function (ctx) {
 			selectNoxiousWeaponProduct(cxt.player);
 		});*/
-		
+
 		scriptManager.bind(EventType.OPHELD1, 31718, function (ctx) {
 			selectNoxiousWeaponProduct(cxt.player);
 		});
@@ -50,7 +50,7 @@ module.exports = (function () {
 			selectNoxiousWeaponProduct(cxt.player);
 		});
 	}
-	
+
 	function selectNoxiousWeaponProduct (player) {
 		makex.selectProduct(player, -1, -1, 9056, -1, "Noxious");
 		dialog.setResumeHandler(player, function () {
@@ -64,11 +64,11 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function createWeapon (player, itemId, amount) {
 		varp(player, 1175, itemId);
 		var text = "You create a weapon";
 		makex.startCrafting(player, amount, 25594, text);
 	}
-	
+
 })();
