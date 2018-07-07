@@ -6,7 +6,7 @@ var varbit = require('engine/var/bit');
 var varc = require('engine/var/client');
 
 var inv = require('shared/inv');
-var inventionMaterials = require('../invention/materials');
+var inventionMaterials = require('shared/inv/materials');
 
 module.exports = (function () {
 	return {
@@ -156,7 +156,7 @@ module.exports = (function () {
 				}
 				break;
 			case 36365://Invention material
-				amount = inventionMaterials.getTotal(player, inventionMaterialId);
+				amount = inventionMaterials.getMaterialCount(player, inventionMaterialId);
 				break;
 			default:
 				//if (_map_members() == 0 && _oc_members(resourceId) == 1) {
@@ -299,7 +299,7 @@ module.exports = (function () {
 			//}
 			break;
 		case 36365://Invention material
-			inventionMaterials.take(player, inventionMaterialId, amount);
+			inventionMaterials.takeMaterials(player, inventionMaterialId, amount);
 			return;
 		default:
 			inv.take(player, resourceId);

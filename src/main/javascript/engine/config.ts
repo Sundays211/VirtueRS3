@@ -89,7 +89,7 @@ function lookupDbRowIds(dbTableId: number, indexId: number, key: number | string
 	return CONFIG_ENGINE.lookupDbRowIds(dbTableId, indexId, key);
 }
 
-function getDbFieldValues(dbTableId: number, dbRowId: number, column: number): any[] {
+function getDbFieldValues(dbTableId: number, dbRowId: number, column: number): Array<number | string> {
 	return CONFIG_ENGINE.getDbFieldValues(dbTableId, dbRowId, column);
 }
 
