@@ -19,25 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var _entity = require('engine/entity');
+import { chatnpc, chatplayer } from 'shared/dialog';
+import { getName } from 'shared/util';
 
-module.exports = (function () {
-	return {
-	init : init
-	};
-
-	function init (scriptManager) {
-
-		scriptManager.bind(EventType.OPNPC1, 14758, function (ctx) {
-		dialog.builder(ctx.player).chatplayer("Merry Christmas Timmy!")
-			.then(function () {
-				_entity.say(ctx.npc, "RAWR!!");
-			});
-		});
-
-	}
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 14746, async (ctx) => {
+	await chatplayer(ctx.player, "Merry Christmas Aubury!");
+	await chatnpc(ctx.player, ctx.npc, "Merry Christmas, "+ getName(ctx.player)+"!");
+	await chatplayer(ctx.player, "How is the shop doing?");
+	await chatnpc(ctx.player, ctx.npc, "It is a lot quieter these days, but I don't mind. Teleporting<br> people to the rune essence mine that many times in a day<br> gets tiring.");
+	await chatplayer(ctx.player, "I can only imagine.");
+});

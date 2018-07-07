@@ -19,23 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-module.exports = (function () {
-	return {
-	init : init
-	};
+import { chatnpc, chatplayer } from 'shared/dialog';
+import { getName } from 'shared/util';
 
-	function init (scriptManager) {
-		//random say
-		//api.entitySay(npc, "Zzzzz...");
-		//api.entitySay(npc, "Huh, what? where?");
-	   scriptManager.bind(EventType.OPNPC1, 6130, function (ctx) {
-	        dialog.builder(ctx.player).mesbox("The little goblin appears to be fast asleep, and yet still fishing...")
-			.chatplayer("I think I'd rather not wake him.")
-	        .finish();
-	   });
-	}
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 14743, async (ctx) => {
+	await chatplayer(ctx.player, "Merry Christmas Traiborn!");
+	await chatnpc(ctx.player, ctx.npc, "Merry Christmas young thingummywut. Somebody has<br> stolen the eyes from the dragon bust in my room. Would<br> you know about that?");
+	await chatplayer(ctx.player, "No...no idea. It must have been a thingummywut.");
+	await chatnpc(ctx.player, ctx.npc, "Interesting theory "+ getName(ctx.player)+".....I shall have to<br> investigate more; those blasted thingummywuts cause me<br> so much trouble!");
+	await chatplayer(ctx.player, "Yeah... Tell me about it.....");
+});

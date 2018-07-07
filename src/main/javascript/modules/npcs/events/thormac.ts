@@ -19,26 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var util = require('shared/util');
-module.exports = (function () {
-	return {
-	init : init
-	};
+import { chatnpc, chatplayer } from 'shared/dialog';
+import { getName } from 'shared/util';
 
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 14745, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas Zavistic!")
-			.chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"!")
-			.chatplayer("This is a great banquet!")
-			.chatnpc(ctx.npc, "Yes, this is the first thing I have seen tower wizards do<br> correctly... They must have had some help.")
-			.chatplayer("Maby, yes - They do have good friends.")
-			.finish();
-	   });
-
-    }
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 14747, async (ctx) => {
+	await chatplayer(ctx.player, "Merry Christmas, Thormac!");
+	await chatnpc(ctx.player, ctx.npc, "Merry Christmas "+ getName(ctx.player)+"!");
+	await chatnpc(ctx.player, ctx.npc, "You have not seen my pet scorpion around here, have<br> you?");
+	await chatplayer(ctx.player, "No! Sorry, I've had enough of chasing animals for one day<br> thank you.");
+	await chatnpc(ctx.player, ctx.npc, "Well, okay. Can you let me know if you find it, please?");
+	await chatplayer(ctx.player, "Sure.");
+});

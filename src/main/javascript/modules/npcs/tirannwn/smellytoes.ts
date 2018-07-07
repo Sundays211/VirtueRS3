@@ -19,23 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var util = require('shared/util');
-module.exports = (function () {
-	return {
-	init : init
-	};
+import { chatplayer, chatnpc } from 'shared/dialog';
 
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 14757, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas Sanfew!")
-			.chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"!")
-			.finish();
-	   });
-
-    }
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 6128, async (ctx) => {
+	await chatplayer(ctx.player, "Hi there.");
+	await chatnpc(ctx.player, ctx.npc, "Hey, ids me matesh!");
+	await chatplayer(ctx.player, "Sorry, have we met?");
+	await chatnpc(ctx.player, ctx.npc, "Yeah! you wazsh wiv me in dat pub overy by hill!");
+	await chatplayer(ctx.player, "I have no idea what you're going on about.");
+	await chatnpc(ctx.player, ctx.npc, "Glad yeeash remembers.");
+});

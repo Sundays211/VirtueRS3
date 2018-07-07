@@ -19,22 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
 
-var dialog = require('shared/dialog');
-module.exports = (function () {
-	return {
-	init : init
-	};
+import { chatplayer } from 'shared/dialog';
 
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 14753, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas Bogrog!")
-			.chatnpc(ctx.npc, "Merry Christmas tiny human!")
-			.finish();
-	   });
-
-    }
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 14758, async (ctx) => {
+	await chatplayer(ctx.player, "Merry Christmas Timmy!");
+	_entity.say(ctx.npc, "RAWR!!");
+});

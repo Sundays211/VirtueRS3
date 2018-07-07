@@ -19,25 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var util = require('shared/util');
-module.exports = (function () {
-	return {
-	init : init
-	};
+import { chatnpc, chatplayer } from 'shared/dialog';
+import { getName } from 'shared/util';
 
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 14759, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas Mizgog!")
-			.chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"! Have you seen what<br> Wizard Grayzag is up to now? He has picked a fight with<br> Frumscone - They are fighting it out behind that screen<br> there...")
-			.chatplayer("What happened?")
-			.chatnpc(ctx.npc, "I'm not sure, I didn't see. I have no doubt that it will be a<br> childish reason, though...")
-			.finish();
-	   });
-
-    }
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 14755, async (ctx) => {
+	await chatplayer(ctx.player, "Merry Christmas Sioncorn!");
+	await chatnpc(ctx.player, ctx.npc, "Merry Christmas "+ getName(ctx.player)+"!");
+	await chatnpc(ctx.player, ctx.npc, "Thank you very much for your help with the decorations. I<br> could not have done it without you.");
+});

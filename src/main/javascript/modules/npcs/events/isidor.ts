@@ -19,26 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var util = require('shared/util');
-module.exports = (function () {
-	return {
-	init : init
-	};
-
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 14743, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas Traiborn!")
-			.chatnpc(ctx.npc, "Merry Christmas young thingummywut. Somebody has<br> stolen the eyes from the dragon bust in my room. Would<br> you know about that?")
-			.chatplayer("No...no idea. It must have been a thingummywut.")
-			.chatnpc(ctx.npc, "Interesting theory "+ util.getName(ctx.player)+".....I shall have to<br> investigate more; those blasted thingummywuts cause me<br> so much trouble!")
-			.chatplayer("Yeah... Tell me about it.....")
-			.finish();
-	   });
-
-    }
-
-})();
+import { chatnpc, chatplayer } from 'shared/dialog';
+import { getName } from 'shared/util';
+		
+_events.bindEventListener(EventType.OPNPC1, 14760, async (ctx) => {
+	await chatplayer(ctx.player, "Merry Christmas Isidor!");
+	await chatnpc(ctx.player, ctx.npc, "Merry Christmas "+ getName(ctx.player)+"! Thank you for your help,<br> the banquet hall looks very snowy. Good job!");
+});

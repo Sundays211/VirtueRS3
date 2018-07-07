@@ -19,24 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var util = require('shared/util');
-module.exports = (function () {
-	return {
-	init : init
-	};
+import { chatnpc, chatplayer } from 'shared/dialog';
+import { getName } from 'shared/util';
 
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 14755, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas Sioncorn!")
-	        .chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"!")
-			.chatnpc(ctx.npc, "Thank you very much for your help with the decorations. I<br> could not have done it without you.")
-		    .finish();
-	   });
-
-    }
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 14745, async (ctx) => {
+    await chatplayer(ctx.player, "Merry Christmas Zavistic!");
+	await chatnpc(ctx.player, ctx.npc, "Merry Christmas "+ getName(ctx.player)+"!");
+	await chatplayer(ctx.player, "This is a great banquet!");
+	await chatnpc(ctx.player, ctx.npc, "Yes, this is the first thing I have seen tower wizards do<br> correctly... They must have had some help.");
+	await chatplayer(ctx.player, "Maby, yes - They do have good friends.");
+});

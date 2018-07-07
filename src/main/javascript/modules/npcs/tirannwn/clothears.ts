@@ -19,27 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType, */
+import { EventType } from 'engine/enums/event-type';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-var util = require('shared/util');
-module.exports = (function () {
-	return {
-	init : init
-	};
-
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 14747, function (ctx) {
-	        dialog.builder(ctx.player).chatplayer("Merry Christmas, Thormac!")
-			.chatnpc(ctx.npc, "Merry Christmas "+ util.getName(ctx.player)+"!")
-			.chatnpc(ctx.npc, "You have not seen my pet scorpion around here, have<br> you?")
-			.chatplayer("No! Sorry, I've had enough of chasing animals for one day<br> thank you.")
-			.chatnpc(ctx.npc, "Well, okay. Can you let me know if you find it, please?")
-			.chatplayer("Sure.")
-			.finish();
-	   });
-
-    }
-
-})();
+import { chatplayer, mesbox } from 'shared/dialog';
+		//random say
+		//api.entitySay(npc, "Zzzzz...");
+		//api.entitySay(npc, "Huh, what? where?");
+_events.bindEventListener(EventType.OPNPC1, 6130, async (ctx) => {
+	await mesbox(ctx.player, "The little goblin appears to be fast asleep, and yet still fishing...");
+	await chatplayer(ctx.player, "I think I'd rather not wake him.");
+});
