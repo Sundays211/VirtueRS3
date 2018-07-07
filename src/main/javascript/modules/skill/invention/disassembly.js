@@ -30,8 +30,8 @@ var inv = require('shared/inv');
 var widget = require('shared/widget');
 var stat = require('shared/stat');
 
-var materials = require('./materials');
-var makexProgress = require('../makex/progress');
+var materials = require('shared/inv/materials');
+var makexProgress = require('shared/makex/progress');
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -61,7 +61,7 @@ module.exports = (function () {
 			boosted = boosted === undefined ? false : boosted;
 			_categoryLookup[id] = {"id":id, "materialCount":materialCount, "often":often, "sometimes":sometimes, "rarely":rarely, "boosted":boosted};
 		}
-		var Material = materials.values;
+		var Material = materials.InventionMaterial;
 		registerCategory(22, 1, [Material.SIMPLE], [], [Material.LIVING]);//Logs
 		registerCategory(64, 12, [Material.STAVE, Material.TENSILE, Material.FLEXIBLE], [], [Material.PRECISE, Material.DEXTROUS], true);//Shortbow
 		registerCategory(3751, 4, [Material.STAVE, Material.TENSILE, Material.FLEXIBLE], [], [Material.PRECISE, Material.STRONG], true);//Shieldbow (u)
@@ -146,13 +146,13 @@ module.exports = (function () {
 		chat.sendMessage(player, "This may be disassembled into: ");
 		var ordinal;
 		for (ordinal in categoryData.often) {
-			chat.sendMessage(player, "* "+materials.getName(categoryData.often[ordinal])+" (often)");
+			chat.sendMessage(player, "* "+materials.getMaterialName(categoryData.often[ordinal])+" (often)");
 		}
 		for (ordinal in categoryData.sometimes) {
-			chat.sendMessage(player, "* "+materials.getName(categoryData.often[ordinal])+" (sometimes)");
+			chat.sendMessage(player, "* "+materials.getMaterialName(categoryData.often[ordinal])+" (sometimes)");
 		}
 		for (ordinal in categoryData.rarely) {
-			chat.sendMessage(player, "* "+materials.getName(categoryData.often[ordinal])+" (rarely)");
+			chat.sendMessage(player, "* "+materials.getMaterialName(categoryData.often[ordinal])+" (rarely)");
 		}
 	}
 	//1713?
@@ -194,16 +194,16 @@ module.exports = (function () {
 		for (var ordinal in results) {
 			var count = results[ordinal];
 			var materialId = parseInt(ordinal);
-			var type = materials.getCategory(materialId);
+			var type = materials.getMaterialCategory(materialId);
 			if (count > 0) {
 				if (type === 3) {//Uncommon
-					materialValues.push("<col=ff6600>"+count+" x "+materials.getName(materialId)+"</col>");
+					materialValues.push("<col=ff6600>"+count+" x "+materials.getMaterialName(materialId)+"</col>");
 				} else if (type === 4) {//Rare
-					materialValues.push("<col=ff0000>"+count+" x "+materials.getName(materialId)+"</col>");
+					materialValues.push("<col=ff0000>"+count+" x "+materials.getMaterialName(materialId)+"</col>");
 				} else {
-					materialValues.push(count+" x "+materials.getName(materialId));
+					materialValues.push(count+" x "+materials.getMaterialName(materialId));
 				}
-				materials.give(player, materialId, count);
+				materials.giveMaterials(player, materialId, count);
 			}
 		}
 		chat.sendSpamMessage(player, message+materialValues.join(", "));
@@ -211,7 +211,7 @@ module.exports = (function () {
 
 	function pickMaterial (often, sometimes, rarely, junkChance) {
 		if ((Math.random() * 100) < junkChance) {
-			return materials.values.JUNK;
+			return materials.InventionMaterial.JUNK;
 		}
 		return often[(Math.floor(Math.random() * often.length))];
 	}

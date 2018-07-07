@@ -6,7 +6,7 @@
 var varp = require('engine/var/player');
 var varbit = require('engine/var/bit');
 var map = require('shared/map');
-var makex = require('../makex');
+var makex = require('shared/makex');
 var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 
@@ -14,17 +14,17 @@ module.exports = (function () {
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPLOC1, [ 94067 ], function (ctx) {
 			selectRobustGlassProduct(ctx.player, ctx.location);
 		});
-		
+
 		scriptManager.bind(EventType.OPLOC1, [ 2331,67968 ], function (ctx) {
 			selectRobustGlassProduct(ctx.player, ctx.location);
 		});
 	}
-	
+
 	function selectRobustGlassProduct (player, location) {
 		makex.selectProduct(player, -1, -1, 6979, -1, "Robust Glass");
 		dialog.setResumeHandler(player, function () {
@@ -39,7 +39,7 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 	function selectRobustGlassProduct_Two (player) {
 		makex.selectProduct(player, -1, -1, 9467, -1, "Robust Glass");
 		dialog.setResumeHandler(player, function () {
@@ -54,5 +54,5 @@ module.exports = (function () {
 			}
 		});
 	}
-	
+
 })();

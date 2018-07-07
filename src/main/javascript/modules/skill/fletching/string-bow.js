@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,7 +22,7 @@
 /* globals EventType */
 var varp = require('engine/var/player');
 
-var makex = require('../makex');
+var makex = require('shared/makex');
 var common = require('./common');
 var STRING_BOWS = 6958;
 
@@ -37,75 +37,75 @@ module.exports = (function (){
 	return {
 		init : init
 	};
-	
+
 	function init (scriptManager) {
 		scriptManager.bind(EventType.OPHELD1, 48, function (ctx) {
 			selectBow(ctx.player, 839);//Shieldbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 50, function (ctx) {
 			selectBow(ctx.player, 841);//Shortbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 56, function (ctx) {
 			selectBow(ctx.player, 845);//Oak shieldbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 54, function (ctx) {
 			selectBow(ctx.player, 843);//Oak shortbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 58, function (ctx) {
 			selectBow(ctx.player, 847);//Willow shieldbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 60, function (ctx) {
 			selectBow(ctx.player, 849);//Willow shortbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 62, function (ctx) {
 			selectBow(ctx.player, 851);//Maple shieldbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 64, function (ctx) {
 			selectBow(ctx.player, 853);//Maple shortbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 66, function (ctx) {
 			selectBow(ctx.player, 855);//Yew shieldbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 68, function (ctx) {
 			selectBow(ctx.player, 857);//Yew shortbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 70, function (ctx) {
 			selectBow(ctx.player, 859);//Magic shieldbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 72, function (ctx) {
 			selectBow(ctx.player, 861);//Magic shortbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 29734, function (ctx) {
 			selectBow(ctx.player, 29611);//Elder shieldbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 29736, function (ctx) {
 			selectBow(ctx.player, 29614);//Elder shortbow
 		});
-		
+
 		scriptManager.bind(EventType.OPHELD1, 1777, function (ctx) {
 			selectBow(ctx.player, -1);//Bowstring
 		});
-		
+
 		common.registerProcessHandler(STRING_BOWS, stringBows);
 	}
-	
+
 	function selectBow (player, productId) {
 		common.startStringing(player, STRING_BOWS, productId);
 	}
-	
+
 	function stringBows (player, bowId, amount) {
 		varp(player, 1175, bowId);
 		var text, animationId;

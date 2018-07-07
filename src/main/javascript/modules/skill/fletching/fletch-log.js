@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,7 +21,7 @@
  */
 var varp = require('engine/var/player');
 
-var makex = require('../makex');
+var makex = require('shared/makex');
 var common = require('./common');
 
 /**
@@ -36,33 +36,33 @@ module.exports = (function (){
 		init : init,
 		selectProduct : selectProduct
 	};
-	
+
 	function init () {
 		common.registerProcessHandler(6947, fletchLogs);//Logs
-		
+
 		common.registerProcessHandler(6948, fletchLogs);//Achey logs
-		
+
 		common.registerProcessHandler(6949, fletchLogs);//Oak logs
-		
+
 		common.registerProcessHandler(6950, fletchLogs);//Willow logs
-		
+
 		common.registerProcessHandler(6951, fletchLogs);//Teak logs
-		
+
 		common.registerProcessHandler(6952, fletchLogs);//Maple logs
-		
+
 		common.registerProcessHandler(6953, fletchLogs);//Mahogany logs
-		
+
 		common.registerProcessHandler(6954, fletchLogs);//Yew logs
-		
+
 		common.registerProcessHandler(6955, function (player, productId, amount) {
 			fletchLogs(player, productId, amount, 24939);//Magic logs
 		});
-		
+
 		common.registerProcessHandler(6956, fletchLogs);//Blisterwood logs
-		
+
 		common.registerProcessHandler(7994, fletchLogs);//Elder logs
 	}
-	
+
 	function selectProduct (player, materialId) {
 		var categoryEnum;
 		switch (materialId) {
@@ -103,7 +103,7 @@ module.exports = (function (){
 		makex.selectProduct(player, 6939, 6940, categoryEnum);
 		common.setSelectionHandler(player);
 	}
-	
+
 	function fletchLogs (player, productId, amount, animationId) {
 		animationId = animationId || 24943;
 		varp(player, 1175, productId);

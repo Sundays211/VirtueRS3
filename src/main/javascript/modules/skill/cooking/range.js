@@ -10,7 +10,7 @@ var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 var config = require('engine/config');
 
-var makex = require('../makex');
+var makex = require('shared/makex');
 
 module.exports = (function () {
 	return {

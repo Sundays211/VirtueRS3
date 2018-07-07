@@ -26,7 +26,6 @@ function getAllModules () {// jshint ignore:line
 		'skill/herblore',
 		'skill/invention',
 		'skill/magic',
-		'skill/makex',
 		'skill/prayer',
 		'skill/runecrafting',
 		'skill/smithing',
@@ -90,8 +89,8 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
-		CraftProcess : require('./modules/skill/makex/progress'),
-		CraftDialog : require('./modules/skill/makex/selection')
+		CraftProcess : require('./shared/makex/progress'),
+		CraftDialog : require('./shared/makex/selection')
 	};
 }
 

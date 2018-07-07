@@ -27,7 +27,7 @@ var dialog = require('shared/dialog');
 var widget = require('shared/widget');
 
 var disassembly = require('../invention/disassembly');
-var makex = require('../makex');
+var makex = require('shared/makex');
 
 /**
  *
