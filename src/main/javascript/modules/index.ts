@@ -18,5 +18,7 @@ import './exchange';
 import './shop';
 import './skill';
 import './npcs/asgarnia';
+import './npcs/events';
 import './npcs/kandarin';
+import './npcs/tirannwn';
 import './widget';
