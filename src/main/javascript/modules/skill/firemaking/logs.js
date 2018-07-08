@@ -143,7 +143,7 @@ module.exports = (function () {
 				lighting.lightLogs(player, logType, slot);
 				break;
 			case 946://Craft
-				fletching.selectProduct(player, logType.logId, slot);
+				fletching.selectFletchingProduct(player, logType.logId, slot);
 				break;
 			case 24291://Add logs to a nearby bonfire
 				var fire = bonfire.find(player);

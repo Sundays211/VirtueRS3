@@ -61,10 +61,9 @@ export function openInterface(
 export function startCrafting(
 	player: Player,
 	amount: number,
-	animation: number,
-	successText: string
+	animation: number = -1,
+	successText?: string
 ) {
-	animation = animation || -1;
 	var productId = varp(player, 1175) as number;
 	//api.setVarp(player, 1169, category);
 	openOverlaySub(player, 1018, 1251, false);

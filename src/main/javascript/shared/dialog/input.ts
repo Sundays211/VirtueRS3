@@ -35,10 +35,10 @@ export function stringDialog (player: Player, message: string): Promise<string> 
 
 export function objectDialog (player: Player, message: string): Promise<number> {
 	return new Promise(resolve => {
-		openWidget(this.player, 1477, 521, 1418, true);
-		openWidget(this.player, 1418, 1, 389, true);
-		runClientScript(this.player, 8178, []);
-		runClientScript(this.player, 570, [message]);
+		openWidget(player, 1477, 521, 1418, true);
+		openWidget(player, 1418, 1, 389, true);
+		runClientScript(player, 8178, []);
+		runClientScript(player, 570, [message]);
 		setResumeHandler(player, value => resolve(value as number));
 	});
 }
