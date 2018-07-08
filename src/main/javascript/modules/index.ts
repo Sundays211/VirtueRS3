@@ -20,5 +20,6 @@ import './skill';
 import './npcs/asgarnia';
 import './npcs/events';
 import './npcs/kandarin';
+import './npcs/misthalin';
 import './npcs/tirannwn';
 import './widget';

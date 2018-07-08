@@ -19,27 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-module.exports = (function () {
-	return {
-	init : init
-	};
+import { chatnpc } from 'shared/dialog';
 
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 16186, function (ctx) {
-	        dialog.builder(ctx.player).chatnpc(ctx.npc, "Welcome to the Wizards' Tower, adventurer.")
-			.multi2("CHOOSE AN OPTION", "What can i do here?", function () {
-			    dialog.builder(ctx.player).chatnpc(ctx.npc, "It was wizards of the tower who discovered the Rune<br> Mysteries - the secret of creating runes out of rune<br> essence. Archmage Sedridor will teleport adventurers to<br> the essence mine. His office is on the second floor.")
-			    .chatnpc(ctx.npc, "Recently a wizard called Finix descovered an alternative<br> runecrafting method. Speak to him on the roof if you're<br> interested.")
-			    .chatnpc(ctx.npc, "If you'd like to practice combat magic, you might want to<br> attack the spellwisps outside the tower. I believe there's a<br> cluster of them to the west of here.")
-			    .finish();
-			}, "I'm fine, thanks.", function () {
-	        });
-	   });
-
-	}
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 17486, async (ctx) => {
+	await chatnpc(ctx.player, 17507, "Greetings, adventurer. I've been called by Duke Horacio to<br> strengthen the magical defences of the town and the<br> castle. I would love to chat, but bear in mind that this is a<br> very delicate magical operation. Please let me");
+	await chatnpc(ctx.player, 17507, "concentrate.");
+});

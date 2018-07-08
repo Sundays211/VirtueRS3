@@ -19,18 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { chatnpc } from 'shared/dialog';
 
-	function init (scriptManager) {
-		scriptManager.bind(EventType.OPNPC1, 452, function (ctx) {
-			dialog.builder(ctx.player).chatnpc(ctx.npc, "M'arnin'....going to milk cowsies!", 9807)
-			.finish();
-		});
-	}
-})();
+_events.bindEventListener(EventType.OPNPC1, 452, async (ctx) => {
+	await chatnpc(ctx.player, ctx.npc, "M'arnin'....going to milk cowsies!", 9807);
+});

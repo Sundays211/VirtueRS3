@@ -19,25 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-var anim = require('shared/anim');
-var dialog = require('shared/dialog');
+import { chatnpc } from 'shared/dialog';
 
-module.exports = (function () {
-	return {
-	init : init
-	};
-
-	function init (scriptManager) {
-
-	   scriptManager.bind(EventType.OPNPC1, 20985, function (ctx) {
-		    anim.addSpotAnim(ctx.player, 5128);
-	        anim.run(ctx.player, 24529);
-		    dialog.builder(ctx.player).chatplayer("Ow! How did that pig give me an electric shock?")
-			.finish();
-	   });
-
-	}
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 17483, async (ctx) => {
+	await chatnpc(ctx.player, ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actuall have", 9850);
+	await chatnpc(ctx.player, ctx.npc, "proper equipment and traning!", 9847);
+});

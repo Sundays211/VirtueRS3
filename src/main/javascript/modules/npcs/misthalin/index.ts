@@ -1,0 +1,13 @@
+import './bob';
+import './cook';
+import './diango';
+import './elite-lumbridge-guardsman';
+import './fred-the-farmer';
+import './gillie-groats';
+import './jambon';
+import './lumbridge-guardsman';
+import './lumbridge-sage';
+import './mysterious-old-man';
+import './seth-groats';
+import './wardsman';
+import './wizard-valina';

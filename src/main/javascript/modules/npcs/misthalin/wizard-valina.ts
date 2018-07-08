@@ -19,19 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { chatnpc, multi2 } from 'shared/dialog';
 
-	function init (scriptManager) {
-		scriptManager.bind(EventType.OPNPC1, 17483, function (ctx) {
-			dialog.builder(ctx.player).chatnpc(ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actuall have", 9850)
-			.chatnpc(ctx.npc, "proper equipment and traning!", 9847)
-			.finish();
-		});
-	}
-})();
+_events.bindEventListener(EventType.OPNPC1, 16186, async (ctx) => {
+	await chatnpc(ctx.player, ctx.npc, "Welcome to the Wizards' Tower, adventurer.");
+	multi2(ctx.player, "CHOOSE AN OPTION", "What can i do here?", async () => {
+		await chatnpc(ctx.player, ctx.npc, "It was wizards of the tower who discovered the Rune<br> Mysteries - the secret of creating runes out of rune<br> essence. Archmage Sedridor will teleport adventurers to<br> the essence mine. His office is on the second floor.");
+		await chatnpc(ctx.player, ctx.npc, "Recently a wizard called Finix descovered an alternative<br> runecrafting method. Speak to him on the roof if you're<br> interested.");
+		await chatnpc(ctx.player, ctx.npc, "If you'd like to practice combat magic, you might want to<br> attack the spellwisps outside the tower. I believe there's a<br> cluster of them to the west of here.");
+	}, "I'm fine, thanks.", () => {
+	});
+});

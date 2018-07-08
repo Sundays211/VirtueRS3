@@ -19,19 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-var dialog = require('shared/dialog');
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { chatnpc } from 'shared/dialog';
 
-	function init (scriptManager) {
-		scriptManager.bind(EventType.OPNPC1, 17486, function (ctx) {
-			dialog.builder(ctx.player).chatnpc(17507, "Greetings, adventurer. I've been called by Duke Horacio to<br> strengthen the magical defences of the town and the<br> castle. I would love to chat, but bear in mind that this is a<br> very delicate magical operation. Please let me")
-				.chatnpc(17507, "concentrate.").finish();
-		});
-	}
-
-})();
+_events.bindEventListener(EventType.OPNPC1, 14936, async (ctx) => {
+	await chatnpc(ctx.player, ctx.npc, "Greetings, adventurer. Duke Horacio has recently<br> provided us guards with advanced training, as well as<br> much improved swords! I feel much more confident in our<br> ability to defend Lumbridge now that we actually have", 9850);
+	await chatnpc(ctx.player, ctx.npc, "proper equipment and traning!", 9847);
+});
