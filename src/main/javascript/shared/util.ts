@@ -2,7 +2,7 @@
  * Module containing miscellaneous utility functions
  */
 import { EventType } from 'engine/enums/event-type';
-import { Player, Entity, Node, NodeHash } from 'engine/models';
+import { Player, Entity, Node, NodeHash, EventContext } from 'engine/models';
 import { sendMessage } from './chat';
 import { INTEGER_MAX } from './const';
 
@@ -16,10 +16,10 @@ export function checkOverflow (currentValue: number, addedValue: number): boolea
 	return (INTEGER_MAX-currentValue)<addedValue;
 }
 
-export function defaultHandler (ctx: any, type: EventType | string) {
+export function defaultHandler (ctx: EventContext, type?: EventType | string) {
 	if (isAdmin(ctx.player)) {
 		if (type === EventType.OPHELDU) {
-			sendMessage(ctx.player, "Unhandled item use: item="+ctx.item+", slot="+ctx.slot+", useitem="+ctx.useitem+", useslot="+ctx.useslot);
+			sendMessage(ctx.player, "Unhandled item use: item="+ctx.objId+", slot="+ctx.slot+", useitem="+ctx.useObjId+", useslot="+ctx.useslot);
 		} else {
 			sendMessage(ctx.player, "Unhandled "+(type?type:"interface")+" button: "+ctx.toString());
 		}
