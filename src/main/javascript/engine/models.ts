@@ -72,5 +72,6 @@ export interface EventContext {
 	toslot?: number;
 	objId?: number;
 	useObjId?: number;
+	useslot?: number;
 	syntax?: string;
 }

@@ -29,6 +29,7 @@ import { runAnim } from "shared/anim";
 import { delayFunction } from "shared/util";
 import { giveItem, takeItem, invTotal } from "shared/inv";
 import { takeResources } from "shared/makex/resources";
+import { giveXp } from "shared/stat";
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -137,12 +138,12 @@ export function setRemaining(player: Player, remaining: number) {
 
 export function makeItem(player: Player, productId: number, productCount: number = 1) {
 	var amountPerBatch = _config.objParam(productId, 2653) as number * productCount;
-	giveXp(player, productId, amountPerBatch);
+	processItemXp(player, productId, amountPerBatch);
 	removeMaterials(player, productId, productCount);
 	addProduct(player, productId, amountPerBatch);
 }
 
-function giveXp(player: Player, productId: number, amountPerBatch: number) {
+function processItemXp(player: Player, productId: number, amountPerBatch: number) {
 	var statId = _config.enumValue(681, _config.objParam(productId, 2696) as number) as number;
 	var xp;
 	if (statId != -1) {//Primary xp gained
