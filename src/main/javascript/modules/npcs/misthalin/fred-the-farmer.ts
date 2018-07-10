@@ -116,7 +116,7 @@ async function startquest (player: Player, npc: Npc) {
 }
 
 function wool (player: Player) {
-	return varp(player, 2163);
+	return 21 - + varp(player, 2163);
 }
 
 async function rememberhow (player: Player, npc: Npc) {
