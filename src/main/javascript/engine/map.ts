@@ -71,6 +71,10 @@ export default class {
 		return MAP_ENGINE.getLoc(coords, shape);
 	}
 
+	public static clearZone (coord: CoordGrid) {
+		MAP_ENGINE.clearZone(coord);
+	}
+
 	public static addLoc(locTypeId: number, coord: CoordGrid, shape: number, rotation: number): Location {
 		return MAP_ENGINE.addLoc(locTypeId, coord, shape, rotation);
 	}

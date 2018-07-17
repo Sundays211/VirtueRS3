@@ -8,7 +8,8 @@ module.exports = function (scriptManager) {
 		require('./house'),
 		require('./hotspots'),
 		require('./room/garden'),
-		require('./room/parlour')
+		require('./room/parlour'),
+		require('./room/kitchen')
 	];
 	
 	for (var i in modules) {

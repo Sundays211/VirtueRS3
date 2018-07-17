@@ -149,3 +149,33 @@ export function invHasSpace(
 export function invUsedSpace(player: Player, inv: Inv): number {
 	return _inv.size(inv) - _inv.freeSpace(player, inv);
 }
+
+/**
+ * Removes all items from the specified inventory
+ *
+ * @param player The player who's inventory to clear
+ * @param invId The ID of the inventory to clear
+ */
+export function emptyInv (player: Player, invId: Inv) {
+	var size = _inv.size(invId);
+	for (var slot=0; slot < size; slot++) {
+		_inv.clearSlot(player, invId, slot);
+	}
+}
+
+/**
+ * Populates the specified inventory with the specified objects.
+ * If the inventory already contains items, remove them.
+ * If the inventory hasn't yet been created, create it.
+ * @param player The player
+ * @param invId The ID of the inventory to fill
+ * @param objIds An array of object IDs used to fill the inventory. Only one of each item will be added
+ */
+export function fillInv (player: Player, invId: Inv, objIds: number[]) {
+	ENGINE.sendInv(player, invId);
+	emptyInv(player, invId);
+	for (var i=0; i<objIds.length; i++) {
+		var objId = objIds[i];
+		giveItem(player, objId, 1, invId);
+	}
+}

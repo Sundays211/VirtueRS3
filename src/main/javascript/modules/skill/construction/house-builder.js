@@ -25,22 +25,45 @@ var _config = require('engine/config');
 var _map = require('engine/map');
 
 var coords = require('shared/map/coords');
-var util = require('shared/util');
+var chat = require('shared/chat');
 
-var RoomType = require('./room');
+var roomRegistry = require('./room-registry');
 
 //Real doors: 13098 to 13103
 module.exports = (function () {
 	var grassCoord = coords(0,29,79,8,0);
 	var maxRooms = 10;
 
+	var rooms = [ -1, 8395, 8415, 8396, 8397, 8398, 8399,
+		8401, 8402, 8403, 8404, 8405, 8406, 8407, 8408,
+		8400, 8409, 8410, 8411, 8412, 8413, 8414, 8416,
+		9842, 15221, 18800, 34685 ];
+
 	return {
 		buildHouse : buildHouse,
 		addRoom : addRoom,
 		removeRoom : removeRoom,
 		loadRoom : loadRoom,
-		findEmptyRoom : findEmptyRoom
+		findEmptyRoom : findEmptyRoom,
+		storeRoomData : storeRoomData
 	};
+
+	function getRoom (roomTypeId) {
+		if (roomTypeId < rooms.length) {
+			return rooms[roomTypeId];
+		} else {
+			return -1;
+		}
+	}
+
+	function getRoomTypeId (roomObjId) {
+		for (var i=0; i<rooms.length; i++) {
+			if (rooms[i] === roomObjId) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	function buildHouse (player, houseSquare) {
 		for (var xOffSet = 0; xOffSet < 8; xOffSet++) {
@@ -49,24 +72,55 @@ module.exports = (function () {
 			}
 		}
 		//This is just here to give you an initial room. It will be remove later on, once proper house purchasing is implemented
-		_map.setZone(houseSquare, 1, 1, 1, RoomType.GARDEN.srcCoord, 0);
+		//_map.setZone(houseSquare, 1, 1, 1, RoomType.GARDEN.srcCoord, 0);
 
 		for (var roomId=0; roomId<maxRooms; roomId++) {
 			loadRoomData(player, roomId);
-			var roomType = _varbit(player, 1528);
-			if (roomType !== 0) {
+			var roomTypeId = _varbit(player, 1528);
+			if (roomTypeId !== 0) {
 				var zoneX = _varbit(player, 1524);
 				var zoneY = _varbit(player, 1525);
 				var level = _varbit(player, 1526);
 				var rotation = _varbit(player, 1527);
-				var room = util.lookupValue(RoomType, 'typeId', roomType);
-				if (!room) {
-					throw "Unsupported room: "+room+" at "+zoneX+", "+zoneY;
+				var roomObjId = getRoom(roomTypeId);
+				if (roomObjId === -1) {
+					throw "Unsupported room: "+roomTypeId+" at "+zoneX+", "+zoneY;
 				}
-				_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
+				var room = roomRegistry.lookup(roomObjId);
+				if (!room) {
+					chat.sendDebugMessage(player, _config.objName(roomObjId)+" is not yet supported");
+				} else {
+					_map.setZone(houseSquare, level, zoneX, zoneY, room.srcCoord, rotation);
+				}
 			}
 		}
 		_map.build(houseSquare);
+
+		buildRoomFurniture(player, houseSquare);
+	}
+
+	function buildRoomFurniture (player, houseSquare) {
+		for (var i=0; i<maxRooms; i++) {
+			loadRoomData(player, i);
+			var roomTypeId = _varbit(player, 1528);
+			if (roomTypeId !== 0) {
+				var zoneX = _varbit(player, 1524);
+				var zoneY = _varbit(player, 1525);
+				var level = _varbit(player, 1526);
+				var rotation = _varbit(player, 1527);
+				var roomObjId = getRoom(roomTypeId);
+				if (roomObjId === -1) {
+					throw "Unsupported room: "+roomTypeId+" at "+zoneX+", "+zoneY;
+				}
+				var room = roomRegistry.lookup(roomObjId);
+				if (!room || !room.build) {
+					chat.sendDebugMessage(player, "Furniture in the "+_config.objName(roomObjId)+" is not yet supported");
+				} else {
+					var zoneCoord = coords(level, _map.getSquareX(houseSquare), _map.getSquareY(houseSquare), zoneX << 3, zoneY << 3);
+					room.build(player, zoneCoord, rotation);
+				}
+			}
+		}
 	}
 
 	function addRoom (player, roomObjId, zoneX, zoneY, level, rotation) {
@@ -79,8 +133,13 @@ module.exports = (function () {
 			throw "No empty room slots available!";
 		}
 
-		var room = util.lookupValue(RoomType, 'objId', roomObjId);
-		if (!room) {
+		var roomTypeId = getRoomTypeId(roomObjId);
+		if (roomTypeId === -1) {
+			throw _config.objName(roomObjId)+" is not yet supported!";
+		}
+
+		var room = roomRegistry.lookup(roomObjId);
+		if (roomTypeId === -1) {
 			throw _config.objName(roomObjId)+" is not yet supported!";
 		}
 
@@ -88,7 +147,7 @@ module.exports = (function () {
 		_varbit(player, 1525, zoneY);
 		_varbit(player, 1526, level);
 		_varbit(player, 1527, rotation);
-		_varbit(player, 1528, room.typeId);
+		_varbit(player, 1528, roomTypeId);
 		storeRoomData(player, roomId);
 
 		var houseSquare = _map.getDynamicSquare(_map.getCoords(player));
