@@ -199,6 +199,12 @@ public interface MapAPI {
 	public void setZone(DynamicMapSquare area, int destZoneX, int destZoneY, int destLevel, 
 			CoordGrid srcCoord, int rotation);
 
+	/**
+	 * Removes all locations & objects from the specified zone
+	 * @param zoneBaseCoord The zone coordinate to clear
+	 */
+	public void clearZone (CoordGrid zoneBaseCoord);
+
 	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level, int nodeType, int rotation);
 
 	public SceneLocation addLoc(MapSquare area, int locTypeID, int localX, int localY, int level);
