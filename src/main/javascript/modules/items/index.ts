@@ -1,4 +1,9 @@
+import './degradables';
+import './item-use';
+import './customisable-cape';
+import './food-types';
 import './holiday-items';
 import './misc-items';
 import './music-box';
+import './potions';
 import './teletabs';

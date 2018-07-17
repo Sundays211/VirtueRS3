@@ -19,6 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+var Render = Java.type('org.virtue.game.entity.player.PlayerModel.Render');
+ 
 import { EventType } from 'engine/enums';
 import _events from 'engine/events';
 import _entity from 'engine/entity';
@@ -126,7 +128,7 @@ _events.bindEventListener(EventType.OPHELD1, 4079, (ctx) => {//Yo-yo play
 });
 
 _events.bindEventListener(EventType.OPHELD1, 6722, (ctx) => {//Zombie head talk at
-	_entity.say(ctx.player, (ctx.player, "Alas!");
+	_entity.say(ctx.player, "Alas!");
 	runAnim(ctx.player, 2840);
 });
 

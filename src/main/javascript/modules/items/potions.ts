@@ -19,36 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var anim = require('shared/anim');
-var map = require('shared/map');
-var inv = require('shared/inv');
+import { EventType, Stat } from 'engine/enums';
+import _events from 'engine/events';
+import _config from 'engine/config';
 
-module.exports = (function () {
-	return {
-		init : init
-	};
-
-	function init (scriptManager) {
-	 scriptManager.bind(EventType.OPHELD1, 6, function (ctx) {//cannon
-		 var coords = map.getCoords(ctx.player);
-		 anim.run(ctx.player, 827, function () {
-			 map.addLoc(7, coords, 10, 0);
-			 inv.take(ctx.player, 6, 1);
-		     anim.run(ctx.player, 827, function () {
-				 map.addLoc(8, coords, 10, 0);
-				 inv.take(ctx.player, 8, 1);
-				 anim.run(ctx.player, 827, function () {
-					 map.addLoc(9, coords, 10, 0);
-					 inv.take(ctx.player, 10, 1);
-				     anim.run(ctx.player, 827, function () {
-						 map.addLoc(6, coords, 10, 0);
-						 inv.take(ctx.player, 12, 1);
-				     });
-				 });
-		     });
-	     });
-	 });
+import { takeItem } from 'shared/inv';
+import { sendMessage } from 'shared/chat';
+import { runAnim } from 'shared/anim';
+ 
+_events.bindEventListener(EventType.OPHELD1, 23531, function(ctx) {//OVERLOAD_FLASK
+	ENGINE.freezeEntity(ctx.player, 2);
+		sendMessage(ctx.player, "You drink the " + _config.objName(ctx.objId) + ".");
+	if (ctx.player.getImpactHandler().inCombat()) {
+		runAnim(ctx.player, 18002);
+	} else {
+		runAnim(ctx.player, 18001);
 	}
-
-})();
+	//To get the current level, use api.getStatLevel(player, stat)
+	//To set the current level, use api.setStatLevel(player, stat, level)
+	ENGINE.boostStat(ctx.player, Stat.STRENGTH, 16);
+	ENGINE.boostStat(ctx.player, Stat.ATTACK, 16);
+	ENGINE.boostStat(ctx.player, Stat.MAGIC, 16);
+	ENGINE.boostStat(ctx.player, Stat.RANGED, 16);
+	takeItem(ctx.player, ctx.objId, 1);
+}); 
