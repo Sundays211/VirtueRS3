@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "module": "es6",
+        "moduleResolution": "node",
+        "target": "es6",
+        "allowJs": true,
+        "checkJs": false,
+        "baseUrl": "./",
+        "paths": {
+            "engine/*": ["src/main/javascript/engine/*"],
+            "shared/*": ["src/main/javascript/shared/*"]
+        }
+    },
+    "include": [
+        "src/main/javascript/**/*.ts"
+    ]
+}

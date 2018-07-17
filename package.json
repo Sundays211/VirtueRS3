@@ -1,0 +1,37 @@
+{
+  "name": "virtue-rs3",
+  "version": "2.1.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sundays211/VirtueRS3.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sundays211/VirtueRS3/issues"
+  },
+  "homepage": "https://github.com/Sundays211/VirtueRS3#readme",
+  "devDependencies": {
+    "@types/promise-polyfill": "^6.0.0",
+    "awesome-typescript-loader": "^5.0.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.24.1",
+    "typescript": "^2.9.2",
+    "webpack": "^4.12.0",
+    "webpack-command": "^0.2.1"
+  },
+  "dependencies": {
+    "core-js": "^2.5.7",
+    "npm": "^5.6.0",
+    "promise-polyfill": "^7.1.2",
+    "regenerator-runtime": "^0.12.0"
+  }
+}

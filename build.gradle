@@ -7,12 +7,29 @@ mainClassName='org.virtue.Virtue'
 group='org.virtue'
 version='2.1.0-SNAPSHOT'
 
-allprojects {
-	apply plugin: 'java'
-
+buildscript {
 	repositories {
 		jcenter()
 	}
+
+	dependencies {
+		classpath 'com.moowork.gradle:gradle-node-plugin:0.12'
+	}
+}
+apply plugin: 'com.moowork.node'
+
+node {
+  version = '8.11.3'
+  npmVersion = '5.6.0'
+  download = true
+}
+
+allprojects {
+	repositories {
+		jcenter()
+	}
+
+	apply plugin: 'java'
 
 	dependencies {
 	    compile files('libs/mysql-connector-java-5.1.34-bin.jar')
@@ -24,8 +41,6 @@ allprojects {
 	}
 }
 
-
-
 dependencies {
 	compile 'com.google.code.gson:gson:2.3'
 	compile 'io.netty:netty-all:4.0.26.Final'
@@ -36,9 +51,17 @@ dependencies {
 	testCompile "org.mockito:mockito-core:2.2.+"
 }
 
+task webpack(type: NpmTask, dependsOn: 'npmInstall') {
+	args = ['run', 'build']
+}
+
+task watchScripts(type: NpmTask, dependsOn: 'npmInstall') {
+	args = ['run', 'watch']
+}
+
 task packMap(type:JavaExec) {
 	main = 'org.virtue.io.pack.MapDataPacker'
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-//run.dependsOn packMap
+processResources.dependsOn webpack
