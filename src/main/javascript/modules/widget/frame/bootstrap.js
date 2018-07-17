@@ -13,7 +13,6 @@ module.exports = function (scriptManager) {
 	    require('./world-map'),
 		require('./overlay'),
 		require('./ribbon'),
-		require('./skillcape-customiser'),
 		require('./minimap'),
 		require('./options'),
 		require('./treasure-hunter'),
