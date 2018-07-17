@@ -1,4 +1,4 @@
-import { CoordGrid, Node, DynamicMapSquare } from './models';
+import { Location, CoordGrid, Node, DynamicMapSquare } from './models';
 
 export default class {
 
@@ -77,6 +77,10 @@ export default class {
 
 	public static delLoc(coord: CoordGrid, shape: number, rotation: number) {
 		MAP_ENGINE.delLoc(coord, shape, rotation);
+	}
+
+	public static locAnim(location: Location, animId: number) {
+		MAP_ENGINE.locAnim(location, animId);
 	}
 
 	/**
