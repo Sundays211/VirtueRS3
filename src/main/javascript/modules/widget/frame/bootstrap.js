@@ -12,7 +12,6 @@ module.exports = function (scriptManager) {
 	    require('./lodestone'),
 	    require('./world-map'),
 		require('./overlay'),
-		require('./report'),
 		require('./ribbon'),
 		require('./skillcape-customiser'),
 		require('./minimap'),
