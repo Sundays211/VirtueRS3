@@ -10,12 +10,6 @@ function getAllModules () {// jshint ignore:line
 	var modules = [
 		'combat',
 		'inv',
-	    'items',
-		'items/item-use',
-		'items/degradables',
-		'npcs/events',
-		'npcs/misthalin',
-		'npcs/tirannwn',
 		'quest',
 		'skill/common',
 		'skill/construction',
