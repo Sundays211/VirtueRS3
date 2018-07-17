@@ -17,6 +17,10 @@ export function stopAnim(entity: Entity) {
 	ENGINE.stopAnimation(entity);
 }
 
+export function isRunningAnim(entity: Entity): boolean {
+	return ENGINE.isRunningAnim(entity);
+}
+
 export function addSpotAnim(
 	entity: Entity,
 	id: number,

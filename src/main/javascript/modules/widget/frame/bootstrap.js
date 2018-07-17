@@ -4,7 +4,6 @@
 module.exports = function (scriptManager) {
 	var modules = [
 	    require('./customisations'),
-	    require('./emotes-tab'),
 		require('./experience-counter'),
 		require('./hero-skill-tab'),
 		require('./hero-widget'),
