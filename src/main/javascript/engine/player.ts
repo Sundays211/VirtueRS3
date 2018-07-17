@@ -8,6 +8,14 @@ export default class {
         return ENGINE.isFemale(player);
     }
 
+    public static getBaseColour(player: Player, slot: number): number {
+        return ENGINE.getPlayerColour(player, slot);
+    }
+
+    public static getBaseKit(player: Player, slot: number): number {
+        return ENGINE.getPlayerKit(player, slot);
+    }
+
     public static renderNpc(player: Player, npcId: number) {
         player.getModel().setRender(Render.NPC);
      	player.getModel().setNPCId(npcId);
@@ -22,5 +30,9 @@ export default class {
     public static clearRender(player: Player) {
         player.getModel().setRender(Render.PLAYER);
  		player.getModel().refresh();
+    }
+
+    public static getPrefixTitle(player: Player): string {
+        return player.getModel().getPrefixTitle();
     }
 }

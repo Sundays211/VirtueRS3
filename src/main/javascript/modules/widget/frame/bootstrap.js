@@ -3,19 +3,14 @@
  */
 module.exports = function (scriptManager) {
 	var modules = [
-	    require('./customisations'),
 		require('./experience-counter'),
-		require('./hero-skill-tab'),
-		require('./hero-widget'),
 		require('./hop-worlds'),
 	    require('./lodestone'),
 	    require('./world-map'),
-		require('./overlay'),
 		require('./ribbon'),
 		require('./minimap'),
 		require('./options'),
 		require('./treasure-hunter'),
-		require('./upgrades-and-extras'),
 		require('./confirm')
 	];
 
