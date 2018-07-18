@@ -22,8 +22,7 @@ function getAllModules () {// jshint ignore:line
 		'skill/prayer',
 		'skill/smithing',
 		'skill/summoning',
-		'trade',
-		'widget/frame'
+		'trade'
 	];
 
 	var ArrayList = Java.type('java.util.ArrayList');

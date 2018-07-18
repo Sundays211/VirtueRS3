@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,15 +41,16 @@ import org.virtue.config.structtype.StructType;
 import org.virtue.config.vartype.constants.BaseVarType;
 import org.virtue.config.vartype.constants.ScriptVarType;
 import org.virtue.engine.script.api.ConfigAPI;
+import org.virtue.game.entity.player.Player;
 
 /**
  * @author Sundays211
  * @since 01/03/2016
  */
 public class VirtueConfigAPI implements ConfigAPI {
-	
+
 	private ConfigProvider configProvider;
-	
+
 	public VirtueConfigAPI (ConfigProvider configProvider) {
 		this.configProvider = configProvider;
 	}
@@ -93,7 +94,7 @@ public class VirtueConfigAPI implements ConfigAPI {
 		if (values == null && dbTable.defaultValues[columnId] != null) {
 			values = dbTable.defaultValues[columnId];
 		}
-		
+
 		ScriptVarType[] dataTypes = dbTable.columnTypes[columnId];
 		List<Object> response;
 		if (values == null) {
@@ -384,6 +385,15 @@ public class VirtueConfigAPI implements ConfigAPI {
 			throw new IllegalArgumentException("Invalid locTypeId: "+locTypeId);
 		}
 		return locType.sizeY;
+	}
+
+	@Override
+	public int locMulti(Player player, int locTypeId) {
+		LocType locType = configProvider.getLocTypes().getMultiLoc(player.getVars(), configProvider, locTypeId);
+		if (locType == null) {
+			throw new IllegalArgumentException("Invalid locTypeId: "+locTypeId);
+		}
+		return locType.myid;
 	}
 
 	@Override

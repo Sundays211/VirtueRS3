@@ -19,44 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('shared/util');
-var widget = require('shared/widget');
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
 
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { closeOverlay, openWidget } from 'shared/widget';
+import { defaultHandler } from 'shared/util';
 
-	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_OPEN, 1446, function (ctx) {
-	widget.setText(ctx.player, 1446, 94, util.getName(ctx.player));
-	widget.setText(ctx.player, 1446, 93, ctx.player.getModel().setPrefixTitle());
-	});
-	scriptManager.bind(EventType.IF_OPEN, 1560, function (ctx) {
-	widget.open(ctx.player, 1560, 16, 1558, true);//
-	widget.open(ctx.player, 1560, 18, 1557, true);//Skills
-	widget.open(ctx.player, 1560, 17, 1559, true);//Combat stats
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1446, function (ctx) {
+_events.bindEventListener(EventType.IF_BUTTON, 1607, (ctx) => {
 	switch (ctx.component) {
-	case 108:
-	widget.openCentral(ctx.player, 1561, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;
+		case 34://Treasure Hunter
+			closeOverlay(ctx.player);
+			openWidget(ctx.player, 1477, 749, 1252, true);
+			openWidget(ctx.player, 1477, 561, 1253, false);
+			return;
+		case 9://Membership
+		case 59://Bonds
+		case 85://Soloman's General Store
+			break;
+		default:
+			defaultHandler(ctx, "upgrades-and-extras");
+			return;
 	}
-	});
-	scriptManager.bind(EventType.IF_BUTTON, 1560, function (ctx) {
-	switch (ctx.component) {
-	case 22:
-	widget.closeOverlaySub(ctx.player, 1024, true);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-widget");
-	return;
-	}
-	});
-	}
-})();
+});
