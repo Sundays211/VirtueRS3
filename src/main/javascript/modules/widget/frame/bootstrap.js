@@ -5,7 +5,6 @@ module.exports = function (scriptManager) {
 	var modules = [
 		require('./experience-counter'),
 		require('./hop-worlds'),
-	    require('./lodestone'),
 	    require('./world-map'),
 		require('./ribbon'),
 		require('./minimap'),
