@@ -319,6 +319,19 @@ public class MapSquare {
 	public Set<Player> getPlayers () {
 		return players;
 	}
+
+	public void clearZone (CoordGrid zoneCoord) {
+		int hash = getZoneHash(zoneCoord);
+		synchronized (zones) {
+			if (zones.containsKey(hash)) {
+				zones.remove(hash);
+			}
+		}
+		for (Player p : players) {
+			p.getDispatcher().sendEvent(ZoneUpdateEventEncoder.class, 
+					new ZoneUpdateEventContext(Collections.emptyList(), zoneCoord, true));
+		}
+	}
 	
 	/**
 	 * Sends a full region update of all items and temporary objects to the specified player

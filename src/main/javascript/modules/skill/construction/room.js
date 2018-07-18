@@ -22,38 +22,18 @@
 
 var coords = require('shared/map/coords');
 
-var Garden = require('./hotspots/garden');
-
 module.exports = {
 	PARLOUR : {
 		objId : 8395,
 		typeId : 1,
 		srcCoord : coords(0,29,79,0,56),
-		doors : [false, true, true, true],
-		hotspots : [
-			[ 8309, 8310, 8311, 8312, 8313, 8314, 8315 ],//Chair #1
-			[ 8309, 8310, 8311, 8312, 8313, 8314, 8315 ],//Chair #2
-			[ 8309, 8310, 8311, 8312, 8313, 8314, 8315 ],//Chair #3
-			[ 8316, 8317, 8318 ],//Rug
-			[ 8319, 8320, 8321 ],//Bookcase
-			[ 8325, 8326, 8327 ],//Fireplace
-			[ 8322, 8323, 8324 ]//Curtains
-		]
+		doors : [false, true, true, true]
 	},
 	GARDEN : {
 		objId : 8415,
 		typeId : 2,
 		doors : [true, true, true, true],
-		srcCoord : coords(0,29,79,0,8),
-		hotspots : [
-			{ coord : coords(0,29,79,3,11), locTypeId : 15361, furnature : Garden.CENTERPIECE },
-			{ coord : coords(0,29,79,1,13), locTypeId : 15362, furnature : Garden.BIG_TREE },
-			{ coord : coords(0,29,79,6,14), locTypeId : 15363, rotation : 1, furnature : Garden.TREE },
-			{ coord : coords(0,29,79,6,8), locTypeId : 15364, furnature : Garden.BIG_PLANT_1 },
-			{ coord : coords(0,29,79,0,8), locTypeId : 15365, furnature : Garden.BIG_PLANT_2 },
-			{ coord : coords(0,29,79,3,9), locTypeId : 15366, furnature : Garden.SMALL_PLANT_1 },
-			{ coord : coords(0,29,79,4,13), locTypeId : 15367, furnature : Garden.SMALL_PLANT_2 }
-		]
+		srcCoord : coords(0,29,79,0,8)
 	},
 	KITCHEN : {
 		objId : 8396,

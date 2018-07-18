@@ -53,3 +53,10 @@ export function getRotatedCoord(
 	}
 	return _coords(zoneCoord, localX, localY, 0);
 }
+
+export function getZoneCoord (node: Node) {
+	var zoneX = _map.getLocalX(node) >> 3;
+	var zoneY = _map.getLocalY(node) >> 3;
+	var level = _map.getLevel(node);
+	return _coords(level, _map.getSquareX(node), _map.getSquareY(node), zoneX << 3, zoneY << 3);
+}

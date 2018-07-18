@@ -70,9 +70,9 @@ public class Item extends Node {
 		if (getType() == null) {
 			throw new IllegalArgumentException("Invalid item ID: "+id);
 		}
-		if (getType().dummyitem != 0) {
+		/*if (getType().dummyitem != 0) {
 			throw new IllegalArgumentException("Can't instantiate a dummy item! Item ID: "+id);
-		}
+		}*/
 		this.amount = count;
 	}
 	

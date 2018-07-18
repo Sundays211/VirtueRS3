@@ -22,13 +22,13 @@
 
 module.exports = (function () {
 	var _rooms = {};
-	
+
 	return {
 		register : register,
 		lookup : lookup
 	};
 	
-	function register (roomObjId, room) {
+	function register (room, roomObjId) {
 		_rooms[roomObjId] = room;
 	}
 	
