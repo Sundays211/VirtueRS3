@@ -1,4 +1,5 @@
 import './emotes-tab';
+import './frame';
 import './hop-worlds';
 import './lodestone';
 import './makex';

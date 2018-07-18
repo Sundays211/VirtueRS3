@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('shared/util');
-
-var overlay = require('shared/widget/overlay');
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
+import { openOverlay } from 'shared/widget';
+import { defaultHandler } from 'shared/util';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -31,43 +31,35 @@ var overlay = require('shared/widget/overlay');
  * @author Sundays211
  * @since 14/01/2016
  */
-module.exports = (function () {
-	return {
-		init : init
-	};
-
-	function init (scriptManager) {
-		scriptManager.bind(EventType.IF_BUTTON, 1431, function (ctx) {
-			var player = ctx.player;
-			switch (ctx.component) {
-			case 7://Hero
-				overlay.open(player, 0);
-				return;
-			case 8://Customisations
-				overlay.open(player, 1);
-				return;
-			case 9://Adventures
-				overlay.open(player, 3);
-				return;
-			case 10://Powers
-				overlay.open(player, 2);
-				return;
-			case 11://Community
-				overlay.open(player, 4);
-				return;
-			case 13://Upgrades & Extras
-				overlay.open(player, 7);
-				return;
-			case 14://RuneMetrics
-				overlay.open(player, 8);
-				return;
-			default:
-				util.defaultHandler(ctx, "ribbon");
-				return;
-			}
-		});
+_events.bindEventListener(EventType.IF_BUTTON, 1431, (ctx) => {
+	var player = ctx.player;
+	switch (ctx.component) {
+		case 7://Hero
+			openOverlay(player, 0);
+			return;
+		case 8://Customisations
+			openOverlay(player, 1);
+			return;
+		case 9://Adventures
+			openOverlay(player, 3);
+			return;
+		case 10://Powers
+			openOverlay(player, 2);
+			return;
+		case 11://Community
+			openOverlay(player, 4);
+			return;
+		case 13://Upgrades & Extras
+			openOverlay(player, 7);
+			return;
+		case 14://RuneMetrics
+			openOverlay(player, 8);
+			return;
+		default:
+			defaultHandler(ctx, "ribbon");
+			return;
 	}
-})();
+});
 /*
 case 7:// Hero
 	player.getVars().setVarBitValue(VarKey.Bit.SELECTED_OVERLAY, 0);
