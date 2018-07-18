@@ -19,52 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
-var util = require('shared/util');
-var widget = require('shared/widget');
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
+import _entity from 'engine/entity';
+import _player from 'engine/player';
 
-module.exports = (function () {
-	return {
-		init : init
-	};
+import { defaultHandler } from 'shared/util';
+import { closeOverlaySub, setWidgetText, openWidget, openCentralWidget } from 'shared/widget';
 
-	function init (scriptManager) {
-	scriptManager.bind(EventType.IF_BUTTON, 1218, function (ctx) {
+_events.bindEventListener(EventType.IF_OPEN, 1446, (ctx) => {
+	setWidgetText(ctx.player, 1446, 94, _entity.getName(ctx.player));
+	setWidgetText(ctx.player, 1446, 93, _player.getPrefixTitle(ctx.player));
+});
+
+_events.bindEventListener(EventType.IF_OPEN, 1560, (ctx) => {
+	openWidget(ctx.player, 1560, 16, 1558, true);//
+	openWidget(ctx.player, 1560, 18, 1557, true);//Skills
+	openWidget(ctx.player, 1560, 17, 1559, true);//Combat stats
+});
+
+_events.bindEventListener(EventType.IF_BUTTON, 1446, (ctx) => {
 	switch (ctx.component) {
-	case 18:
-	case 19:
-	case 20:
-	case 21:
-	case 22:
-	case 23:
-	case 24:
-	case 25:
-	case 26:
-	case 27:
-	case 28:
-	case 29:
-	case 30:
-	case 31:
-	case 32:
-	case 33:
-	case 34:
-	case 35:
-	case 36:
-	case 37:
-	case 38:
-	case 39:
-	case 40:
-	case 41:
-	case 42:
-	case 43:
-	case 102:
-	case 133:
-	widget.open(ctx.player, 1218, 1, 1217, false);
-	break;
-    default:
-	util.defaultHandler(ctx, "hero-skill-tab");
-	return;
+		case 108:
+			openCentralWidget(ctx.player, 1561, false);
+			break;
+		default:
+			defaultHandler(ctx, "hero-widget");
+			return;
 	}
-	});
+});
+
+_events.bindEventListener(EventType.IF_BUTTON, 1560, (ctx) => {
+	switch (ctx.component) {
+		case 22:
+			closeOverlaySub(ctx.player, 1024, true);
+			break;
+		default:
+			defaultHandler(ctx, "hero-widget");
+			return;
 	}
-})();
+});

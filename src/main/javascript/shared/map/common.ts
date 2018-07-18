@@ -13,7 +13,7 @@ export function inZone(from: CoordGrid, to: CoordGrid, coord: CoordGrid): boolea
 	return MAP_ENGINE.inZone(from, to, coord);
 }
 
-export function getCoordHash(coords: number): CoordGrid {
+export function getCoordHash(coords: CoordGrid): number {
 	return ENGINE.getCoordHash(coords);
 }
 

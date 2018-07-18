@@ -30,8 +30,14 @@ export default class {
 		return ENTITY_ENGINE.getName(entity);
 	}
 
-	public static setBas(entity: Entity, basId: number) {//TODO: Move this into the entity api
+	public static setBas(entity: Entity, basId: number) {
+		//TODO: Move this into the entity api
 		ENGINE.setRenderAnim(entity, basId);
+	}
+
+	public static faceCoords(entity: Entity, coords: CoordGrid) {
+		//TODO: Move this into the entity api
+		ENGINE.faceCoords(entity, coords);
 	}
 
 	public static forceMove(

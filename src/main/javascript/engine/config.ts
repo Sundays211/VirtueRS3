@@ -114,6 +114,10 @@ export default class {
 		return CONFIG_ENGINE.locSizeY(locTypeId);
 	}
 
+	public static locMulti(player: Player, baseId: number): number {
+		return CONFIG_ENGINE.locMulti(player, baseId);
+	}
+
 	public static locHasModel(locId: number, modelId: number): boolean {
 		return ENGINE.getLocType(locId).hasMesh(modelId);
 	}

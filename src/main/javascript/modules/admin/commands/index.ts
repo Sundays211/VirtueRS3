@@ -1,4 +1,5 @@
 import './broadcasts';
+import './emotes';
 import './freeze-player';
 import './inv';
 import './misc';
