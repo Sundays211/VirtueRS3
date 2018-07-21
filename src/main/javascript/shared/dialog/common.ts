@@ -21,6 +21,12 @@ export function setResumeHandler (player: Player, onSelect: (value: number | str
 	ENGINE.setInputHandler(player, new Handler());
 }
 
+export function pauseDialog(player: Player): Promise<number | string> {
+    return new Promise(resolve => {
+		setResumeHandler(player, value => resolve(value));
+	});
+}
+
 export function closeModal (player: Player) {
 	closeAllWidgets(player);
 }
