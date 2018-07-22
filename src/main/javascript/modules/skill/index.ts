@@ -1,4 +1,5 @@
 import './agility';
+import './construction';
 import './crafting';
 import './fishing';
 import './fletching';

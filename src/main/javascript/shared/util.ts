@@ -93,6 +93,10 @@ export function getOrDefault <T> (value: T, def: T): T {
 	return value ? def : value;
 }
 
+export function stripValues <T> (array: T[], value: T): T[] {
+	return array.filter(val => val != value);
+}
+
 export function getUserHash (player: Player | string): NodeHash {
 	return ENGINE.getUserHash(player);
 }

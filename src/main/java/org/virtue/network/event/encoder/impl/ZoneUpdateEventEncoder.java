@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,7 +44,7 @@ public class ZoneUpdateEventEncoder implements EventEncoder<ZoneUpdateEventConte
 	@Override
 	public OutboundBuffer encode(Player player, ZoneUpdateEventContext context) {
 		OutboundBuffer buffer = new OutboundBuffer();
-		if (needsZoneChange(player.getViewport().getLastActiveZone(), context.getCoord())) {
+		if (context.isFull() || needsZoneChange(player.getViewport().getLastActiveZone(), context.getCoord())) {
 			buffer.putPacket(context.isFull() ? ServerProtocol.UPDATE_ZONE_FULL_FOLLOWS : ServerProtocol.UPDATE_ZONE_PARTIAL_FOLLOWS, player);
 			int localX = context.getCoord().getLocalX(player.getViewport().getBaseTile());
 			int localY = context.getCoord().getLocalY(player.getViewport().getBaseTile());
@@ -66,7 +66,7 @@ public class ZoneUpdateEventEncoder implements EventEncoder<ZoneUpdateEventConte
 		return buffer;
 	}
 
-	
+
 	private boolean needsZoneChange (CoordGrid lastZone, CoordGrid newZone) {
 		return lastZone == null || lastZone.getLevel() != newZone.getLevel() ||
 				lastZone.getZoneX() != newZone.getZoneX() ||
