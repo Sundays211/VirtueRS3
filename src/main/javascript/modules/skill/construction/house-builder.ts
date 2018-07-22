@@ -46,7 +46,7 @@ export function buildHouse (player: Player, houseSquare: CoordGrid) {
 	}
 	//This is just here to give you an initial room. It will be remove later on, once proper house purchasing is implemented
 	//_map.setZone(houseSquare, 1, 1, 1, RoomType.GARDEN.srcCoord, 0);
-
+	const roomCoords = new Set<string>();
 	for (var roomId=0; roomId<MAX_ROOMS; roomId++) {
 		loadRoomData(player, roomId);
 		var roomTypeId = varbit(player, 1528);
@@ -59,6 +59,11 @@ export function buildHouse (player: Player, houseSquare: CoordGrid) {
 			if (roomObjId === -1) {
 				throw "Unsupported room: "+roomTypeId+" at "+zoneX+", "+zoneY;
 			}
+			const roomCoord = `${zoneX}-${zoneY}-${level}`;
+			if (roomCoords.has(roomCoord)) {
+				sendDebugMessage(player, "Multiple rooms found at "+roomCoord+" (lastRoom="+roomId+")");
+			}
+			roomCoords.add(roomCoord);
 			var room = lookupRoom(roomObjId);
 			if (!room) {
 				sendDebugMessage(player, _config.objName(roomObjId)+" is not yet supported");
