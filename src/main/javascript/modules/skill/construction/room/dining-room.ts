@@ -225,7 +225,7 @@ function buildCurtains (player: Player, zoneCoord: CoordGrid, rotation: number) 
 function buildWallDecorations (player: Player, zoneCoord: CoordGrid, rotation: number) {
 	var locTypeId = wall_decoration_locations[varbit(player, 1534)];
 	if (locTypeId === -1) {
-		locTypeId = 15301;
+		locTypeId = 15303;
 	}
     addZoneLoc(_coords(0,0,0,34,63), zoneCoord, rotation, locTypeId, 5, 1);
     addZoneLoc(_coords(0,0,0,37,63), zoneCoord, rotation, locTypeId, 5, 1);
@@ -234,7 +234,7 @@ function buildWallDecorations (player: Player, zoneCoord: CoordGrid, rotation: n
 function buildBellPull (player: Player, zoneCoord: CoordGrid, rotation: number) {
 	var locTypeId = bell_pull_locations[varbit(player, 1535)];
 	if (locTypeId === -1) {
-		locTypeId = 15301;
+		locTypeId = 15304;
 	}
 	addZoneLoc(_coords(0,0,0,32,56), zoneCoord, rotation, locTypeId, 10, 2);
 }
