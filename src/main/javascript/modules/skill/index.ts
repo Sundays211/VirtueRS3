@@ -5,5 +5,7 @@ import './fletching';
 import './herblore';
 import './mining';
 import './runecrafting';
+import './smithing';
+import './summoning';
 import './thieving';
 import './woodcutting';

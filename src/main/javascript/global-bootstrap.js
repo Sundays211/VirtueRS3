@@ -20,8 +20,6 @@ function getAllModules () {// jshint ignore:line
 		'skill/invention',
 		'skill/magic',
 		'skill/prayer',
-		'skill/smithing',
-		'skill/summoning',
 		'trade'
 	];
 
