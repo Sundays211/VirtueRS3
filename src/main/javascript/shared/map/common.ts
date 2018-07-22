@@ -1,4 +1,4 @@
-import { CoordGrid } from 'engine/models';
+import { CoordGrid, Node } from 'engine/models';
 import _config from 'engine/config';
 import _map from 'engine/map';
 import _coords from './coords';

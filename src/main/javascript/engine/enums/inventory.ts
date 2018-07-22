@@ -82,6 +82,12 @@ export enum Inv {
 	 * Note that there should not be any empty slots in this container between the first item and the last item, so call {@link ItemContainer#shift = boolean) ItemContainer.shift = true)} every time you remove an item.
 	 */
 	BANK = 95,
+
+	/**
+	 * Contains the options for furniture building in a player-owned-house
+	 */
+	HOUSE_FURNITURE_OPTIONS = 398,
+
 	EXCHANGE_OFFER_0 = 517,
 	EXCHANGE_OFFER_1 = 518,
 	EXCHANGE_OFFER_2 = 519,

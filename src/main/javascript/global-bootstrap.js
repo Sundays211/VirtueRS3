@@ -12,7 +12,6 @@ function getAllModules () {// jshint ignore:line
 		'inv',
 		'quest',
 		'skill/common',
-		'skill/construction',
 		'skill/cooking',
 		'skill/dungeoneering',
 		'skill/farming',
