@@ -22,7 +22,7 @@
 import { Player } from "engine/models";
 import { varp, setVarp, varbit } from "engine/var";
 
-export const MAX_ROOMS = 10;
+export const MAX_ROOMS = 15;
 
 export function loadRoom(
 	player: Player,
@@ -84,6 +84,16 @@ function getRoomData(player: Player, roomId: number): number {
 			return varp(player, 493) as number;
 		case 9:
 			return varp(player, 494) as number;
+		case 10:
+			return varp(player, 495) as number;
+		case 11:
+			return varp(player, 496) as number;
+		case 12:
+			return varp(player, 497) as number;
+		case 13:
+			return varp(player, 498) as number;
+		case 14:
+			return varp(player, 499) as number;
 	}
 }
 
@@ -118,6 +128,21 @@ function setRoomData(player: Player, roomId: number, roomData: number) {
 			return;
 		case 9:
 			setVarp(player, 494, roomData);
+			return;
+		case 10:
+			setVarp(player, 495, roomData);
+			return;
+		case 11:
+			setVarp(player, 496, roomData);
+			return;
+		case 12:
+			setVarp(player, 497, roomData);
+			return;
+		case 13:
+			setVarp(player, 498, roomData);
+			return;
+		case 14:
+			setVarp(player, 499, roomData);
 			return;
 	}
 }

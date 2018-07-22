@@ -181,7 +181,9 @@ function buildRoom(player: Player, roomObjId: number) {
 			"Build", () => {
 				takeItem(player, COINS_OBJ, _config.objCost(roomObjId));
 				addRoom(player, roomObjId, zoneX, zoneY, level, rotation);
-			}, "Cancel", () => { });
+			}, "Cancel", () => {
+				_map.clearZone(destCoord);
+			});
 	}
 	rotateRoom(1);
 	showRotate();
