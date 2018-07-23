@@ -19,26 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var varp = require('engine/var/player');
-var varbit = require('engine/var/bit');
+import { Player } from 'engine/models';
+import { varp, varbit, setVarp } from 'engine/var';
 
-var chat = require('shared/chat');
-var dialog = require('shared/dialog');
-var widget = require('shared/widget');
+import { selectProduct, startCrafting } from 'shared/makex'; 
+import { setResumeHandler } from 'shared/dialog';
+import { closeAllWidgets, openCentralWidget } from 'shared/widget';
+import { sendDebugMessage } from 'shared/chat';
 
-var disassembly = require('../invention/disassembly');
-var makex = require('shared/makex');
+import { analyseItem, start } from '../invention/disassembly';
 
-/**
- *
- */
-module.exports = (function () {
-	return {
-		cast : cast,
-		castOnItem : castOnItem
-	};
-
-	function cast (player, spellId) {
+export function cast (player: Player, spellId: number) {
 		//param 2871 = spellbook (0=Normal, 1=Ancient, 2=Lunar, 3=Common, 4=Dungeoneering)
 		//varbit 0 = active spellbook
 		switch (spellId) {
@@ -46,38 +37,37 @@ module.exports = (function () {
 			enchantCrossbowBolts(player);
 			return;
 		case 14875://Home teleport
-			widget.openCentral(player, 1092);
+			openCentralWidget(player, 1092);
 			return;
 		default:
-			chat.sendDebugMessage(player, "Spell not yet implemented: "+spellId);
+			sendDebugMessage(player, "Spell not yet implemented: "+spellId);
 		}
-	}
+}
 
-	function castOnItem (player, spellId, objId, slot) {
-		switch (spellId) {
-		case 32942://Analyse
-			disassembly.analyseItem(player, objId);
-			return;
-		case 32943://Disassemble
-			disassembly.start(player, objId, slot);
-			return;
-		default:
-			chat.sendDebugMessage(player, "Spell not yet implemented: "+spellId);
-			return;
+export function castOnItem (player: Player, spellId: number, objId: number) {
+	switch (spellId) {
+	case 32942://Analyse
+		analyseItem(player, objId);
+		return;
+	case 32943://Disassemble
+		start(player, objId);
+		return;
+	default:
+		sendDebugMessage(player, "Spell not yet implemented: "+spellId);
+		return;
+	}
+}
+
+function enchantCrossbowBolts (player: Player) {
+	selectProduct(player, -1, -1, 6761, -1, "Enchant Bolts");
+	setResumeHandler(player, () => {
+		closeAllWidgets(player);
+		var productId = varp(player, 1170) as number;
+		var amount = varbit(player, 1003);
+		if (amount) {
+			setVarp(player, 1175, productId);
+			var text = "You enchant the bolts.";
+			startCrafting(player, amount, 21670, text);
 		}
-	}
-
-	function enchantCrossbowBolts (player) {
-		makex.selectProduct(player, -1, -1, 6761, -1, "Enchant Bolts");
-		dialog.setResumeHandler(player, function () {
-			widget.closeAll(player);
-			var productId = varp(player, 1170);
-			var amount = varbit(player, 1003);
-			if (amount) {
-				varp(player, 1175, productId);
-				var text = "You enchant the bolts.";
-				makex.startCrafting(player, amount, 21670, text);
-			}
-		});
-	}
-})();
+	});
+}
