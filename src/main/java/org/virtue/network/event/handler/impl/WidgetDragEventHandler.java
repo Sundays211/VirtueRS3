@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,7 +44,7 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 	 * @see org.virtue.network.event.handler.GameEventHandler#handle(org.virtue.game.entity.player.Player, org.virtue.network.event.context.GameEventContext)
 	 */
 	@Override
-	public void handle(Player player, WidgetDragEventContext context) {		
+	public void handle(Player player, WidgetDragEventContext context) {
 		ScriptManager scripts = Virtue.getInstance().getScripts();
 		if (scripts.hasBinding(ScriptEventType.IF_DRAG, context.getSrcHash())) {
 			Map<String, Object> args = new HashMap<>();
@@ -54,21 +54,23 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 			args.put("fromcomponent", context.getSrcComponent());
 			args.put("fromslot", context.getSrcSlot());
 			args.put("fromitem", context.getSrcItem());
+			args.put("fromobj", context.getSrcItem());
 			args.put("toHash", context.getDestHash());
 			args.put("tointerface", context.getDestInterface());
 			args.put("tocomponent", context.getDestComponent());
 			args.put("toslot", context.getDestSlot());
 			args.put("toitem", context.getDestItem());
+			args.put("toobj", context.getSrcItem());
 			scripts.invokeScriptChecked(ScriptEventType.IF_DRAG, context.getSrcHash(), args);
 			return;
 		}
-		
+
 		if (Virtue.getInstance().getWidgetRepository().handleDrag(
-				context.getSrcInterface(), context.getSrcComponent(), context.getSrcSlot(), context.getSrcItem(), 
+				context.getSrcInterface(), context.getSrcComponent(), context.getSrcSlot(), context.getSrcItem(),
 				context.getDestInterface(), context.getDestComponent(), context.getDestSlot(), context.getDestItem(), player)) {
 			return;
 		}
-		
+
 		String message = "Source: id="+context.getSrcInterface()+", comp="+context.getSrcComponent()
 				+", slot="+context.getSrcSlot()+", itemID="+context.getSrcItem()
 				+" Destination: id="+context.getDestInterface()+", comp="+context.getDestComponent()

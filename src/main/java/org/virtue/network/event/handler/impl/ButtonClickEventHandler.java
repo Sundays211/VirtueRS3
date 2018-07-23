@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,9 +45,9 @@ public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEven
 		boolean success = Virtue.getInstance().getWidgetRepository().handle(context.getInterfaceId(), context.getComponentId(), context.getSlot(), context.getItemID(), context.getButton(), player);
 		if (!success) {
 			handleInteraction(player, context);
-		}			
+		}
 	}
-	
+
 	private void handleInteraction (Player player, ButtonClickEventContext context) {
 		ScriptManager scripts = Virtue.getInstance().getScripts();
 		ScriptEventType type;
@@ -92,6 +92,7 @@ public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEven
 			args.put("component", context.getComponentId());
 			args.put("slot", context.getSlot());
 			args.put("itemId", context.getItemID());
+			args.put("objId", context.getItemID());
 			scripts.invokeScriptChecked(type, context.getHash(), args);
 		} else if (scripts.hasBinding(ScriptEventType.IF_BUTTON, context.getInterfaceId())) {
 			Map<String, Object> args = new HashMap<>();
@@ -101,6 +102,7 @@ public class ButtonClickEventHandler implements GameEventHandler<ButtonClickEven
 			args.put("slot", context.getSlot());
 			args.put("button", context.getButton().getId());
 			args.put("itemId", context.getItemID());
+			args.put("objId", context.getItemID());
 			scripts.invokeScriptChecked(ScriptEventType.IF_BUTTON, context.getInterfaceId(), args);
 		} else {
 			String message = "Nothing interesting happens.";
