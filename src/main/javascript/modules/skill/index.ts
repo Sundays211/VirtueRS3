@@ -1,10 +1,14 @@
 import './agility';
 import './construction';
+import './cooking';
 import './crafting';
+import './dungeoneering';
 import './fishing';
 import './fletching';
 import './herblore';
+import './magic';
 import './mining';
+import './prayer';
 import './runecrafting';
 import './smithing';
 import './summoning';
