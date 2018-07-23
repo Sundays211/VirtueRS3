@@ -35,7 +35,7 @@ export default class {
 	 * @param slot The slot to send
 	 */
 	public static resendSlot (player: Player, inv: Inv, slot: number) {
-		ENGINE.sendInv(player, inv);
+		ENGINE.sendInvSlot(player, inv, slot);
 	}
 
 	/**
