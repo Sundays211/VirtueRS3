@@ -9,4 +9,5 @@ import './inventory';
 import './shop';
 import './skill';
 import './npcs';
+import './trade';
 import './widget';

@@ -3,7 +3,7 @@
  */
 import { Player } from 'engine/models';
 
-declare type VarValue = number | string;
+declare type VarValue = number | string | Player;
 
 export function varbit(player: Player, key: number): number {
 	return ENGINE.getVarBit(player, key);

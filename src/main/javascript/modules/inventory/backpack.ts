@@ -25,6 +25,7 @@ import _inv from 'engine/inv';
 import _entity from 'engine/entity';
 import _config from 'engine/config';
 import { varbit, setVarBit, varp } from 'engine/var';
+import { Player, EventContext } from 'engine/models';
 
 import _component from 'shared/widget/component';
 import { openWidget, setWidgetEvents, openCentralWidget, getWidgetId } from 'shared/widget';
@@ -33,13 +34,13 @@ import { updateCoins, examineMoneyPouch, requestWithdrawCoins, addCoins, getCoin
 import { defaultHandler, isAdmin, getId, toFormattedTime, toFormattedString, checkOverflow } from 'shared/util';
 import { COINS_OBJ } from 'shared/const';
 import { sendDebugMessage, sendMessage } from 'shared/chat';
-import { Player, EventContext } from 'engine/models';
 import { mesbox, confirmDialog } from 'shared/dialog';
 import { dropObject } from 'shared/map';
-import { equipItem, takeItem } from 'shared/inv';
+import { equipItem } from 'shared/inv';
+
+import { returnBorrowedItem } from '../trade/loan';
 
 //Legacy imports. TODO: Remove these as their respective modules get converted
-import * as loan from '../trade/loan';
 import * as actionBar from '../combat/widgets/action-bar';
 import * as disassembly from '../skill/invention/disassembly';
 
@@ -427,5 +428,5 @@ async function discardItem(player: Player, slot: number) {
 	}
 	//Destroy immediately, as the player should not still have the item.
 	_inv.clearSlot(player, Inv.BACKPACK, slot);
-	loan.returnBorrowedItem(player);
+	returnBorrowedItem(player);
 }

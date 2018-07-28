@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,12 +44,12 @@ import org.virtue.network.event.context.impl.out.VarpEventContext;
 import org.virtue.network.event.encoder.impl.VarpEventEncoder;
 
 /**
- * 
+ *
  * @author Im Frizzy <skype:kfriz1998>
  * @since Sep 14, 2014
  */
 public class VarRepository implements VarDomain {
-	
+
 	/**
 	 * The {@link Logger} Instance
 	 */
@@ -58,9 +58,9 @@ public class VarRepository implements VarDomain {
 
 	private Player player;
 	private Map<VarType, Object> varValues = new HashMap<>();
-	
+
 	private VarTypeList varTypes;
-	
+
 	private VarBitTypeList varBitTypeList;
 
 	public VarRepository(Player player, Map<Integer, Object> values, VarTypeList varpTypes, VarBitTypeList varBitTypeList) {
@@ -69,7 +69,7 @@ public class VarRepository implements VarDomain {
 		this.varBitTypeList = varBitTypeList;
 		if (defaultVarps == null) {
 			defaultVarps = new Object[varTypes.getCapacity()];
-			DefaultVars.setDefaultVarps(defaultVarps);			
+			DefaultVars.setDefaultVarps(defaultVarps);
 		}
 		for (VarType type : varTypes) {
 			Object value = values.get(type.id);
@@ -81,7 +81,7 @@ public class VarRepository implements VarDomain {
 			}
 		}
 	}
-	
+
 	/**
 	 * Increases the value of a player variable by the specified amount.
 	 * Providing a negative value will decrease the varp value
@@ -91,7 +91,7 @@ public class VarRepository implements VarDomain {
 	public void incrementVarp (VarType varType, int value) {
 		setVarValueInt(varType, getVarValueInt(varType)+value);
 	}
-	
+
 	public void setVarValueInt (int id, int value) {
 		VarType varType = varTypes.list(id);
 		if (varType == null) {
@@ -99,13 +99,13 @@ public class VarRepository implements VarDomain {
 		}
 		setVarValueInt(varType, value);
 	}
-	
+
 	@Override
 	public void setVarValueInt (VarType varType, int value) {
 		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(varType.id, value));
 		setVarValueInner(varType, Integer.valueOf(value));
 	}
-	
+
 	public void setVarBitValue (int key, int value)  {
 		try {
 			setVarBitValue(varBitTypeList.list(key), value);
@@ -113,7 +113,7 @@ public class VarRepository implements VarDomain {
 			logger.error("Failed to set varbit "+key, ex);
 		}
 	}
-	
+
 	public void incrementVarBit (int key, int value)  {
 		try {
 			incrementVarBit(varBitTypeList.list(key), value);
@@ -121,13 +121,13 @@ public class VarRepository implements VarDomain {
 			logger.error("Failed to set varbit "+key, ex);
 		}
 	}
-	
+
 	/**
 	 * Increases the value of a part of a player variable by the specified amount.
 	 * Providing a negative value will decrease the varpbit value
-	 * @param varBitType The var bit 
+	 * @param varBitType The var bit
 	 * @param value The amount to increment by
-	 * @throws VarBitOverflowException 
+	 * @throws VarBitOverflowException
 	 */
 	public void incrementVarBit (VarBitType varBitType, int value) throws VarBitOverflowException  {
 		setVarBitValue(varBitType, this.getVarBitValue(varBitType)+value);
@@ -165,7 +165,7 @@ public class VarRepository implements VarDomain {
 					}
 					break;
 	 			default:
-					
+
 				}
 				if (!(value instanceof Integer)) {
 					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected int, found "+value.getClass());
@@ -180,7 +180,7 @@ public class VarRepository implements VarDomain {
 				if (!(value instanceof String)) {
 					throw new IllegalArgumentException("Invalid value type for var "+varType.id+": expected "+String.class+", found "+value.getClass());
 				}
-				break;		
+				break;
 			}
 			if (value == varType.dataType.getDefaultValue()) {
 				value = null;
@@ -188,8 +188,8 @@ public class VarRepository implements VarDomain {
 		}
 		setVarValueInner(varType, value);
 	}
-	
-	
+
+
 	private void setVarValueInner(VarType varType, Object value) {
 		if (value == null) {
 			varValues.remove(varType);
@@ -207,23 +207,20 @@ public class VarRepository implements VarDomain {
 		if (!varValues.containsKey(varType)) {
 			value = varType.dataType.getDefaultValue();
 		} else {
-			value = translateValue(varValues.get(varType), varType);
-			if (value == null) {
-				value = varType.dataType.getDefaultValue();
-			}
+			value = varValues.get(varType);
 		}
-		return value;
+		return translateValue(value, varType);
 	}
-	
+
 	private Object translateValue (Object value, VarType varType) {
 		switch (varType.dataType) {
 		case PLAYER_UID:
 			return World.getInstance().getPlayers().get((Integer) value);
 		default:
-			return value;			
+			return value;
 		}
 	}
-	
+
 	@Deprecated
 	public Object getVarValueLegacy (int id) {
 		VarType varType = varTypes.list(id);
@@ -232,7 +229,7 @@ public class VarRepository implements VarDomain {
 		}
 		return getVarValue(varType);
 	}
-	
+
 	@Deprecated
 	public int getVarValueInt (int id) {
 		VarType varType = varTypes.list(id);
@@ -241,12 +238,12 @@ public class VarRepository implements VarDomain {
 		}
 		return getVarValueInt(varType);
 	}
-	
+
 	@Deprecated
 	public int getVarBitValue (int key) {
 		return getVarBitValue(varBitTypeList.list(key));
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.virtue.config.vartype.VarDomain#getVarValueInt(org.virtue.config.vartype.VarType)
@@ -286,7 +283,7 @@ public class VarRepository implements VarDomain {
 		}
 		return ((Long) value);
 	}
-	
+
 	public Map<Integer, Object> getPermanantVarps () {
 		Map<Integer, Object> permVars = new HashMap<Integer, Object>();
 		for (VarType type : varTypes) {
@@ -301,7 +298,7 @@ public class VarRepository implements VarDomain {
 		}
 		return permVars;
 	}
-	
+
 	/**
 	 * Updates all varps on the client side to the current server-side values
 	 */
@@ -316,7 +313,7 @@ public class VarRepository implements VarDomain {
 			}
 		}
 	}
-	
+
 	/**
 	 * Processes any variables that need to be checked/processed on login, such as farming timers
 	 * @param lastLoginTime The time, in milliseconds, of the last player login

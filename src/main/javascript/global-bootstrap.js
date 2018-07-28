@@ -14,8 +14,7 @@ function getAllModules () {// jshint ignore:line
 		'skill/common',
 		'skill/farming',
 		'skill/firemaking',
-		'skill/invention',
-		'trade'
+		'skill/invention'
 	];
 
 	var ArrayList = Java.type('java.util.ArrayList');

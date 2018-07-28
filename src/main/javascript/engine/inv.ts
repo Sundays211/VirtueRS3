@@ -48,6 +48,16 @@ export default class {
 	}
 
 	/**
+	 * Sends the specified container to another player. Mainly used for trade.
+	 * @param player The player who owns the container
+	 * @param other The player to send the container to
+	 * @param inv The inventory to send.
+	 */
+	public static sendOther (player: Player, other: Player, inv: Inv) {
+		ENGINE.sendInvTo(player, other, inv);
+	}
+
+	/**
 	 * Replaces the item currently in the specified slot with the specified item
 	 *
 	 * @param player The player to remove the item from
