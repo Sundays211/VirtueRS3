@@ -174,7 +174,7 @@ _events.bindEventListener(EventType.OPHELD4, COINS_OBJ, (ctx) => {
 		return;
 	}
 	addCoins(ctx.player, amount);
-	takeItem(ctx.player, COINS_OBJ, amount, Inv.BACKPACK);
+	_inv.clearSlot(ctx.player, Inv.BACKPACK, ctx.slot);
 });
 
 _events.bindEventListener(EventType.IF_BUTTONT, _component(1473, 34), (ctx) => {

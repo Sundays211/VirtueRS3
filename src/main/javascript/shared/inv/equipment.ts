@@ -49,7 +49,8 @@ export function isWearing(player: Player, objId: number): boolean {
 
 export function equipItem(player: Player, objId: number, slot: number) {
 	//TODO: These engine methods should be moved here
-	if (!player.getEquipment().meetsEquipRequirements(objId)) {
+	const objType = ENGINE.getItemType(objId);
+	if (!player.getEquipment().meetsEquipRequirements(objType)) {
 		return;
 	}
 	if (!player.getEquipment().wearItem(slot)) {

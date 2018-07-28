@@ -60,7 +60,7 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 			args.put("toComponent", context.getDestComponent());
 			args.put("toslot", context.getDestSlot());
 			args.put("toitem", context.getDestItem());
-			args.put("toObjId", context.getSrcItem());
+			args.put("toObjId", context.getDestItem());
 			scripts.invokeScriptChecked(ScriptEventType.IF_DRAG, context.getSrcHash(), args);
 			return;
 		}

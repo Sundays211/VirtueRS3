@@ -63,7 +63,11 @@ export default class {
 		objId: number,
 		count: number = 1
 	) {
-		ENGINE.setInvSlot(player, invId, slot, objId, count);
+		if (objId === -1) {
+			this.clearSlot(player, invId, slot);
+		} else {
+			ENGINE.setInvSlot(player, invId, slot, objId, count);
+		}
 	}
 
 	/**

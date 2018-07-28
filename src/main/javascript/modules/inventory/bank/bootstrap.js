@@ -3,18 +3,12 @@
  */
 var booth = require('./booth');
 
-module.exports = (function () {
-	return {
-		init : init
-	};
-	
-	function init (scriptManager) {
-		var modules = [
-			booth
-		];
-		
-		for (var i in modules) {
-			modules[i].init(scriptManager);
-		}
+module.exports = function (scriptManager) {
+	var modules = [
+		booth
+	];
+
+	for (var i in modules) {
+		modules[i].init(scriptManager);
 	}
-})();
+}
