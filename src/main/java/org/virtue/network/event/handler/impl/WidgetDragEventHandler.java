@@ -50,17 +50,17 @@ public class WidgetDragEventHandler implements GameEventHandler<WidgetDragEventC
 			Map<String, Object> args = new HashMap<>();
 			args.put("player", player);
 			args.put("fromHash", context.getSrcHash());
-			args.put("frominterface", context.getSrcInterface());
-			args.put("fromcomponent", context.getSrcComponent());
+			args.put("fromInterface", context.getSrcInterface());
+			args.put("fromComponent", context.getSrcComponent());
 			args.put("fromslot", context.getSrcSlot());
 			args.put("fromitem", context.getSrcItem());
-			args.put("fromobj", context.getSrcItem());
+			args.put("fromObjId", context.getSrcItem());
 			args.put("toHash", context.getDestHash());
-			args.put("tointerface", context.getDestInterface());
-			args.put("tocomponent", context.getDestComponent());
+			args.put("toInterface", context.getDestInterface());
+			args.put("toComponent", context.getDestComponent());
 			args.put("toslot", context.getDestSlot());
 			args.put("toitem", context.getDestItem());
-			args.put("toobj", context.getSrcItem());
+			args.put("toObjId", context.getSrcItem());
 			scripts.invokeScriptChecked(ScriptEventType.IF_DRAG, context.getSrcHash(), args);
 			return;
 		}

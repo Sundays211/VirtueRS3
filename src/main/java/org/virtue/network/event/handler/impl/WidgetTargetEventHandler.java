@@ -57,7 +57,7 @@ public class WidgetTargetEventHandler implements GameEventHandler<WidgetTargetEv
 			args.put("targetInterface", context.getTargetInterface());
 			args.put("targetComponent", context.getTargetComponent());
 			args.put("targetSlot", context.getTargetSlot());
-			args.put("targetItemId", context.getTargetItem());
+			args.put("targetObjId", context.getTargetItem());
 			scripts.invokeScriptChecked(ScriptEventType.IF_BUTTONT, context.getHash(), args);
 			return;
 		}
