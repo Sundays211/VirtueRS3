@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions\:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -66,15 +66,15 @@ public class LocTargetEventHandler implements GameEventHandler<LocTargetEventCon
 					handle(player, context, location);
 				});
 			}
-		}		
+		}
 	}
-	
-	private void handle(Player player, LocTargetEventContext context, SceneLocation location) {	
+
+	private void handle(Player player, LocTargetEventContext context, SceneLocation location) {
 		ScriptManager scripts = Virtue.getInstance().getScripts();
-		
+
 		int level = location.getCurrentTile().getLevel();
 		CoordGrid clickCoords = new CoordGrid(context.getTargetCoordX(), context.getTargetCoordY(), level);
-		
+
 		if (scripts.hasBinding(ScriptEventType.OPLOCT, context.getHash())) {
 			Map<String, Object> args = new HashMap<>();
 			args.put("player", player);
@@ -82,19 +82,20 @@ public class LocTargetEventHandler implements GameEventHandler<LocTargetEventCon
 			args.put("component", context.getComponent());
 			args.put("slot", context.getSlot());
 			args.put("itemId", context.getItem());
+			args.put("objId", context.getItem());
 			args.put("targetLoc", location);
 			args.put("targetCoords", clickCoords);
 			scripts.invokeScriptChecked(ScriptEventType.OPLOCT, context.getHash(), args);
 			return;
 		}
-		
+
 		if (Virtue.getInstance().getWidgetRepository().handleTarget(
-				context.getInterface(), context.getComponent(), context.getSlot(), context.getItem(), 
+				context.getInterface(), context.getComponent(), context.getSlot(), context.getItem(),
 				location, player)) {
 			return;
 		}
-		
-		String message = "Nothing interesting happens.";		
+
+		String message = "Nothing interesting happens.";
 		if (player.getPrivilegeLevel().getRights() >= 2) {
 			message = "Unhanded location target: Interface: id="+context.getInterface()+", comp="+context.getComponent()
 					+", slot="+context.getSlot()+", item="+context.getItem()

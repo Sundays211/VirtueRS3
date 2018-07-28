@@ -9,7 +9,7 @@
 function getAllModules () {// jshint ignore:line
 	var modules = [
 		'combat',
-		'inv',
+		'inventory/bank',
 		'quest',
 		'skill/common',
 		'skill/farming',
