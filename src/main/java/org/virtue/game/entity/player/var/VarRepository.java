@@ -141,7 +141,7 @@ public class VarRepository implements VarDomain {
 		if (type == null || !VarDomainType.PLAYER.equals(type.getBaseVarDomain())) {
 			return;
 		}
-		setVarValue(type.baseVar, Integer.valueOf(type.setVarbitValue(getVarValueInt(type.baseVar), value)));
+		setVarValueInner(type.baseVar, Integer.valueOf(type.setVarbitValue(getVarValueInt(type.baseVar), value)));
 		player.getDispatcher().sendEvent(VarpEventEncoder.class, new VarpEventContext(type.id, value, true));
 	}
 
@@ -187,6 +187,12 @@ public class VarRepository implements VarDomain {
 			}
 		}
 		setVarValueInner(varType, value);
+		if (varType.dataType.getVarBaseType() == BaseVarType.INTEGER) {
+			player.getDispatcher().sendEvent(
+				VarpEventEncoder.class,
+				new VarpEventContext(varType.id, getVarValueInt(varType))
+			);
+		}
 	}
 
 
@@ -250,9 +256,11 @@ public class VarRepository implements VarDomain {
 	 */
 	@Override
 	public int getVarValueInt (VarType varType) {
-		Object value = getVarValue(varType);
-		if (value == null) {
-			return 0;
+		Object value;
+		if (!varValues.containsKey(varType)) {
+			value = varType.dataType.getDefaultValue();
+		} else {
+			value = varValues.get(varType);
 		}
 		return ((Integer) value);
 	}

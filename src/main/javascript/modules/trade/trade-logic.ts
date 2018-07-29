@@ -44,7 +44,7 @@ export function offerLoanItem (player: Player, objId: number, slot: number) {
 		return;
 	} else if (!isBorrowing(player)) {
 		sendMessage(player, "[TODO:Message]Other player cannot accept lent item");
-	} else if (!invHasSpace(player, Inv.LOAN_OFFER) || !invHasSpace(player, Inv.LOAN_RETURN)) {
+	} else if (!invHasSpace(player, 1, Inv.LOAN_OFFER) || !invHasSpace(player, 1, Inv.LOAN_RETURN)) {
 		sendMessage(player, "You've already lent out an item; you cannot lend out any more items until it's been returned and you've collected it from your Returned Items box.");
 		sendMessage(player, "Most bankers will let you access your Returned Items box.");
 	} else if (_config.objLent(objId) === objId) {

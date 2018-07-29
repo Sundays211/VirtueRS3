@@ -42,7 +42,7 @@ import { CYCLES_PER_MIN } from 'shared/const';
 export function isBorrowing (player: Player) {
 	if (varp(player, 430) > 0) {
 		return false;
-	} else if (varp(player, 428) !== -1) {
+	} else if (varp(player, 428)) {
 		return false;
 	} else {
 		return true;

@@ -49,7 +49,7 @@ _events.bindEventListener(EventType.IF_OPEN, 334, (ctx) => {
 
 	setWidgetText(player, 334, 14, "Are you sure you want to make this trade?");
 	ENGINE.setTradeAccepted(player, false);
-	if (!invHasSpace(player, Inv.LOAN_OFFER)) {
+	if (!invHasSpace(player, 1, Inv.LOAN_OFFER)) {
 		var loanedObjId = _inv.getObject(player, Inv.LOAN_OFFER, 0);
 		const duration = varbit(player, 1046);
 		let durationString;
@@ -78,17 +78,17 @@ _events.bindEventListener(EventType.IF_OPEN, 335, (ctx) => {
 	//api.openWidget(player, 1477, 390, 449, false);
 	runClientScript(player, 8178, []);
 	runClientScript(player, 8865, [1]);
-	setWidgetText(player, 335, 31, "");
+	setWidgetText(player, 335, 33, "");
 	setVarc(player, 2504, _entity.getName(targetPlayer));
-	hideWidget(player, 335, 35, false);
+	hideWidget(player, 335, 37, false);
 
-	hideWidget(player, 335, 38, false);
-	hideWidget(player, 335, 40, false);
+	hideWidget(player, 335, 81, false);
+	hideWidget(player, 335, 42, false);
 
-	runClientScript(player, 150, ["Value<col=ff9040>", "Remove-X<col=ff9040>", "Remove-All<col=ff9040>", "Remove-10<col=ff9040>", "Remove-5<col=ff9040>", "Remove<col=ff9040>", -1, 0, 7, 4, 90, 21954584]);
-	setWidgetEvents(player, 335, 24, 0, 27, 1150);
-	runClientScript(player, 695, ["Value<col=ff9040>", -1, 0, 7, 4, 90, 21954587]);
-	setWidgetEvents(player, 335, 27, 0, 27, 1026);
+	runClientScript(player, 150, ["Value<col=ff9040>", "Remove-X<col=ff9040>", "Remove-All<col=ff9040>", "Remove-10<col=ff9040>", "Remove-5<col=ff9040>", "Remove<col=ff9040>", -1, 0, 7, 4, 90, 21954586]);
+	setWidgetEvents(player, 335, 26, 0, 27, 1150);
+	runClientScript(player, 695, ["Value<col=ff9040>", -1, 0, 7, 4, 90, 21954589]);
+	setWidgetEvents(player, 335, 29, 0, 27, 1026);
 	runClientScript(player, 150, ["Lend<col=ff9040>", "Value<col=ff9040>", "Offer-X<col=ff9040>", "Offer-All<col=ff9040>", "Offer-10<col=ff9040>", "Offer-5<col=ff9040>", "Offer<col=ff9040>", -1, 0, 7, 4, 93, 22020096]);
 	setWidgetEvents(player, 336, 0, 0, 27, 1278);
 	setWidgetEvents(player, 335, 55, -1, -1, 1026);
@@ -138,7 +138,7 @@ _events.bindEventListener(EventType.IF_BUTTON, 335, async (ctx) => {
 	let objId, targetPlayer, count = 0;
 
 	switch (ctx.component) {
-		case 24://Trade screen
+		case 26://Trade screen
 			objId = _inv.getObject(player, Inv.TRADE, ctx.slot);
 			if (objId === -1) {
 				return;
@@ -174,7 +174,7 @@ _events.bindEventListener(EventType.IF_BUTTON, 335, async (ctx) => {
 				refreshTrade(player);
 			}
 			return;
-		case 27://Other player offer
+		case 29://Other player offer
 			targetPlayer = ENGINE.getInteractionTarget(player);
 			if (!targetPlayer) {
 				return;
@@ -191,12 +191,12 @@ _events.bindEventListener(EventType.IF_BUTTON, 335, async (ctx) => {
 				defaultHandler(ctx, "trade");
 			}
 			return;
-		case 38://Add from money pouch
+		case 81://Add from money pouch
 			count = await countDialog(player, "Add how many coins to your offer?");
 			offerCoins(player, count);
 			refreshTrade(player);
 			return;
-		case 51://Other player loan item
+		case 52://Other player loan item
 			targetPlayer = ENGINE.getInteractionTarget(player);
 			if (!targetPlayer) {
 				return;
@@ -206,7 +206,7 @@ _events.bindEventListener(EventType.IF_BUTTON, 335, async (ctx) => {
 				sendMessage(player, _config.objDesc(objId));
 			}
 			return;
-		case 55://Remove loan item
+		case 56://Remove loan item
 			objId = _inv.getObject(targetPlayer, Inv.LOAN_OFFER, 0);
 			if (objId === -1) {
 				return;
@@ -220,13 +220,13 @@ _events.bindEventListener(EventType.IF_BUTTON, 335, async (ctx) => {
 				defaultHandler(ctx, "trade");
 			}
 			return false;
-		case 56://Select loan duration
+		case 57://Select loan duration
 			selectLoanDuration(player);
 			return;
-		case 60://Accept
+		case 61://Accept
 			acceptTrade(player);//For now, trade only has one screen.
 			return;
-		case 66://Decline
+		case 67://Decline
 			//Trade.cancelTrade(player);
 			closeAllWidgets(player);
 			return;
@@ -303,7 +303,7 @@ function refreshTrade(player: Player) {
 		_inv.sendOther(player, targetPlayer, Inv.TRADE);
 		_inv.sendOther(player, targetPlayer, Inv.LOAN_OFFER);
 	}
-	setWidgetText(player, 335, 31, "");
+	setWidgetText(player, 335, 33, "");
 	ENGINE.setTradeAccepted(targetPlayer, false);
 	ENGINE.setTradeAccepted(player, false);//Remove "accept" if the trade is modified
 	var total = 0;
@@ -320,7 +320,7 @@ function refreshTrade(player: Player) {
 	}
 	setVarc(player, 729, total);
 	setVarc(targetPlayer, 697, total);
-	setWidgetText(targetPlayer, 335, 22, "has " + _inv.freeSpace(player, Inv.BACKPACK) + " free inventory slots.");
+	setWidgetText(targetPlayer, 335, 9, "has " + _inv.freeSpace(player, Inv.BACKPACK) + " free inventory slots.");
 }
 
 function showValue(player: Player, objId: number) {
@@ -360,11 +360,11 @@ function acceptTrade(player: Player, isConfirm = false) {
 	if (!targetPlayer) {
 		return;
 	}
-	setWidgetText(targetPlayer, 335, 31, "Other player has accepted.");
+	setWidgetText(targetPlayer, 335, 33, "Other player has accepted.");
 	setWidgetText(targetPlayer, 334, 14, "Other player has accepted.");
 	if (!ENGINE.tradeAccepted(targetPlayer)) {
 		ENGINE.setTradeAccepted(player, true);
-		setWidgetText(player, 335, 31, "Waiting for other player...");
+		setWidgetText(player, 335, 33, "Waiting for other player...");
 		setWidgetText(player, 334, 14, "Waiting for other player...");
 	} else if (isConfirm) {
 		tradeItems(player, targetPlayer);
