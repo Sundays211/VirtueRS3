@@ -23,7 +23,11 @@ export default class {
 		var values = Array.isArray(value) ? value : [value];
 		for (var i in eventTypes) {
 			for (var j in values) {
-				SCRIPT_ENGINE.registerListener(eventTypes[i], values[j], new Listener());
+				if (values[j] !== null) {
+					SCRIPT_ENGINE.registerListener(eventTypes[i], values[j], new Listener());
+				} else {
+					SCRIPT_ENGINE.registerListener(eventTypes[i], new Listener());
+				}
 			}
 		}
 	}

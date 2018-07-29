@@ -28,6 +28,7 @@ import { varp } from 'engine/var';
 import { defaultHandler } from 'shared/util';
 import { sendMessage } from 'shared/chat';
 import { takeItem, giveItem, invHasSpace } from 'shared/inv';
+import { Player } from 'engine/models';
 
 /**
  * @author Im Frizzy <skype:kfriz1998>
@@ -48,10 +49,11 @@ _events.bindEventListener(EventType.IF_BUTTON, 109, (ctx) => {
 	switch (ctx.component) {
 		case 19://Reclaim item
 			if (ctx.button === 1) {
+				const loanedTo = varp(player, 429) as Player;
 				if (varp(player, 431) > 0) {
 					defaultHandler(ctx, "collection box");
 					return;
-				} else if (varp(player, 429) != -1) {
+				} else if (loanedTo !== null) {
 					//Forcefully return
 					//[Name] wants [his/her] item returned now. The item [he/she] lent to you has been returned to [his/her] Returned Items box.
 					defaultHandler(ctx, "collection box");

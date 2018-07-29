@@ -14,8 +14,7 @@ function getAllModules () {// jshint ignore:line
 		'skill/common',
 		'skill/farming',
 		'skill/firemaking',
-		'skill/invention',
-		'trade'
+		'skill/invention'
 	];
 
 	var ArrayList = Java.type('java.util.ArrayList');
@@ -68,47 +67,11 @@ function init (scriptManager, cwd, modules) {// jshint ignore:line
 	var end = new Date().getTime();
 	logger.info(`Loaded ${eventCount} event listeners in ${end-start} milliseconds`);
 
-	registerLoginEvents(scriptManager);
-	registerLogoutEvents(scriptManager);
-
 	//TODO: Method to support legacy skills. Remove once all have been converted
 	return {
 		CraftProcess : require('./shared/makex/progress'),
 		CraftDialog : require('./shared/makex/selection')
 	};
-}
-
-function registerLoginEvents (scriptManager) {
-	var loginModules = [
-		require('./modules/skill/farming/growth-cycle'),
-		require('./modules/trade/loan')
-	];
-
-	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-		invoke : function (eventType, trigger, args) {
-			for (var i in loginModules) {
-				loginModules[i].processLogin(args);
-			}
-		}
-	});
-
-	scriptManager.registerListener(EventType.PLAYER_LOGIN, new Listener());
-}
-
-function registerLogoutEvents (scriptManager) {
-	var logoutModules = [
-		require('./modules/trade/loan')
-	];
-
-	var Listener = Java.extend(Java.type('org.virtue.engine.script.listeners.EventListener'), {
-		invoke : function (eventType, trigger, args) {
-			for (var i in logoutModules) {
-				logoutModules[i].processLogout(args);
-			}
-		}
-	});
-
-	scriptManager.registerListener(EventType.PLAYER_LOGOUT, new Listener());
 }
 
 module.exports = {

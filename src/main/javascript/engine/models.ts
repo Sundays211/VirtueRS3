@@ -97,4 +97,7 @@ export interface EventContext {
 	toHash?: number;
 	fromComponent?: number;
 	toComponent?: number;
+
+	//Login event
+	tickDifference?: number;
 }
