@@ -19,22 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* globals EventType */
+import { EventType } from 'engine/enums';
+import _events from 'engine/events';
+ 
+import { defaultHandler } from 'shared/util'; 
+import { openOverlay } from 'shared/widget';
 
-var util = require('shared/util');
-var widget = require('shared/widget');
-
-module.exports = (function () {
-	return {
-		init : init
-	};
-
-	function init (scriptManager) {
-		scriptManager.bind(EventType.IF_BUTTON, 1466, function (ctx) {
-			switch (ctx.component) {
-			case 7:
-			switch (ctx.slot) {
-			case 0:
+_events.bindEventListener(EventType.IF_BUTTON, 1253, (ctx) => {
+	switch (ctx.component) {
+		case 7:
+		switch (ctx.slot) {
+		    case 0:
 			case 1:
 			case 2:
 			case 3:
@@ -60,18 +55,13 @@ module.exports = (function () {
 			case 24:
 			case 25:
 			case 26:
-				widget.openOverlay(ctx.player, 0);
+				openOverlay(ctx.player, 0);
 				break;
-			}
-			break;
+		}
+		break;
 
-			default:
-				util.defaultHandler(ctx, "skilltab");
-				return;
-			}
-		});
-
-
-
+		default:
+			defaultHandler(ctx, "skill-tab");
+			return;
 	}
-})();
+});

@@ -10,5 +10,6 @@ import './region';
 import './runclientscript';
 import './set-title';
 import './set-var';
+import './skills';
 import './teleport';
 import './test';
