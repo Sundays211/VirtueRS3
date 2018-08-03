@@ -61,19 +61,43 @@ export interface EventContext {
 	event: EventType;
 	trigger: number | string;
 	player: Player;
-	target: Player;
+	target?: Player;
 	npc?: Npc;
 	location?: Location;
+	coords?: CoordGrid;
+
+	//Commands
 	console?: boolean;
 	cmdArgs?: string[];
+	syntax?: string;
+
+	//Interface interaction
 	component?: number;
 	interface?: number;
 	slot?: number;
 	button?: number;
-	fromslot?: number;
-	toslot?: number;
 	objId?: number;
 	useObjId?: number;
 	useslot?: number;
-	syntax?: string;
+
+	//Target events
+	targetInterface?: number;
+	targetComponent?: number;
+	targetSlot?: number;
+	targetObjId?: number;
+	targetLoc?: Location;
+	targetCoords?: CoordGrid;
+
+	//Drag event context
+	fromslot?: number;
+	toslot?: number;
+	fromObjId?: number;
+	toObjId?: number;
+	fromHash?: number;
+	toHash?: number;
+	fromComponent?: number;
+	toComponent?: number;
+
+	//Login event
+	tickDifference?: number;
 }

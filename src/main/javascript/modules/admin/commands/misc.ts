@@ -21,7 +21,6 @@
  */
 import { EventType } from 'engine/enums';
 import _events from 'engine/events';
-import _entity from 'engine/entity';
 import _map from 'engine/map';
 import { setVarc } from 'engine/var';
 
@@ -31,6 +30,7 @@ import { openCentralWidget, openWidget } from 'shared/widget';
 import _coords from 'shared/map/coords';
 import { runAnim } from 'shared/anim';
 import { teleport } from 'shared/map';
+import { lendItem } from '../../trade/loan';
 
 var Virtue = Java.type('org.virtue.Virtue');
 var World = Java.type('org.virtue.game.World');
@@ -42,6 +42,18 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, "root", (ctx) => {
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, ["coords","pos","mypos"], (ctx) => {
     sendCommandResponse(ctx.player, lookupPlayerName(ctx.player) +" "+ _map.getCoords(ctx.player) +" or "+ _map.getCoordX(ctx.player)+" "+ _map.getCoordY(ctx.player), ctx.console);
+});
+
+_events.bindEventListener(EventType.COMMAND_ADMIN, "testloan", (ctx) => {
+	var args = ctx.cmdArgs;
+	var objId = 4151, duration=0;
+	if (args.length > 0) {
+		objId = parseInt(args[0]);
+	}
+	if (args.length > 1) {
+		duration = parseInt(args[1]);
+	}
+	lendItem(ctx.player, ctx.player, objId, duration);
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, [ "inter", "if", "widget" ], (ctx) => {
@@ -89,16 +101,15 @@ _events.bindEventListener(EventType.COMMAND_ADMIN, "adminroom", (ctx) => {
 });
 
 _events.bindEventListener(EventType.COMMAND_ADMIN, "forcetalk", (ctx) => {
-	var player = ctx.player;
 	var args = ctx.cmdArgs;
 	var message = "";
 	for (var i = 0; i < args.length; i++) {
 		message += (i === 0 ? (args[i].substring(0, 1).toUpperCase() + args[i].substring(1)) : args[i]) + (i == args.length - 1 ? "" : " ");
 	}
 	var iterate = World.getInstance().getPlayers().iterator();
-	var players = null;
+	var player = null;
 	while (iterate.hasNext()) {
-		players = iterate.next();
+		player = iterate.next();
 		ENGINE.playerForceSay(player, message, false);
 	}
 });

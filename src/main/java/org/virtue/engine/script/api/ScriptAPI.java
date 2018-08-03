@@ -574,6 +574,8 @@ public interface ScriptAPI {
 	 */
 	public void sendInv (Player player, int invId);
 
+	public void sendInvSlot (Player player, int invId, int slot);
+
 	/**
 	 * Sends the specified container to another player. Mainly used for trade.
 	 * @param player The player who owns the container

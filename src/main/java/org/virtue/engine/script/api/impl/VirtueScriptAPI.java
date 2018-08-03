@@ -979,6 +979,18 @@ public class VirtueScriptAPI implements ScriptAPI {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.virtue.engine.script.ScriptAPI#sendInvSlot(org.virtue.game.entity.player.Player, int, int)
+	 */
+	@Override
+	public void sendInvSlot (Player player, int invId, int slot) {
+		ContainerState state = ContainerState.getById(invId);
+		if (state == null) {
+			throw new IllegalArgumentException("Inventory "+invId+" does not exist!");
+		}
+		player.getInvs().updateContainer(state, slot);
+	}
+
+	/* (non-Javadoc)
 	 * @see org.virtue.engine.script.ScriptAPI#sendPlayerContainer(org.virtue.game.entity.player.Player, org.virtue.game.entity.player.Player, int)
 	 */
 	@Override

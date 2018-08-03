@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,12 +45,12 @@ import org.virtue.network.event.context.impl.in.OptionButton;
  * @since Oct 18, 2014
  */
 public class BankWidget extends Widget {
-	
+
 	/**
 	 * The {@link Logger} instance
 	 */
 	private static Logger logger = LoggerFactory.getLogger(BankWidget.class);
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.virtue.game.entity.player.widget.Widget#open(int, int, int, boolean, org.virtue.game.entity.player.Player)
@@ -60,7 +60,7 @@ public class BankWidget extends Widget {
 		super.open(parentId, parentSlot, widgetId, clickThrough, player);
 		player.getInvs().loadContainer(ContainerState.BANK);
 		player.getInvs().getContainer(ContainerState.BANK).shift(true);//Clean the bank of null or zero items
-		validateTabs(player);//Make sure all tab counts are valid 
+		validateTabs(player);//Make sure all tab counts are valid
 		player.getVars().setVarValueInt(VarKey.Player.BANK_DEPOSIT_AMOUNT, player.getVars().getVarValueInt(VarKey.Player.BANK_WITHDRAW_AMOUNT));
 		player.getInvs().sendContainer(ContainerState.BANK);
 		player.getDispatcher().sendVarc(VarKey.Client.BANK_TOTAL_SLOTS, player.getInvs().getContainer(ContainerState.BANK).getUsedSlots());
@@ -84,7 +84,7 @@ public class BankWidget extends Widget {
 		player.getDispatcher().sendWidgetEvents(762, 290, 0, 1, 2097152);
 		player.getDispatcher().sendVarc(95, 0);//Clear the "Eat" option...
 	}
-	
+
 	/**
 	 * Makes sure each tab fits into the bank correctly and that there are no "gaps" of empty tabs
 	 * If this method finds any problems, it will push items into tab 1
@@ -192,7 +192,7 @@ public class BankWidget extends Widget {
 				int id = player.getInvs().getContainer(ContainerState.BACKPACK).get(slot).getId();
 				amount = player.getInvs().getContainer(ContainerState.BACKPACK).getNumberOf(id);
 				break;
-			case EIGHT://Bank item option				
+			case EIGHT://Bank item option
 				return handleCustomOption(player, slot, item, 1, false);
 			case NINE://Bank item option 2
 				return handleCustomOption(player, slot, item, 2, false);
@@ -247,7 +247,7 @@ public class BankWidget extends Widget {
 		}
 		return false;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.virtue.game.entity.player.widget.Widget#close(int, int, org.virtue.game.entity.player.Player)
@@ -257,7 +257,7 @@ public class BankWidget extends Widget {
 		player.getDispatcher().sendCS2Script(8862, 1, 2);
 		player.getDispatcher().sendCS2Script(8862, 1, 3);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.virtue.game.entity.player.widget.Widget#drag(int, int, int, int, int, int, int, int, org.virtue.game.entity.player.Player)
@@ -279,7 +279,7 @@ public class BankWidget extends Widget {
 				return false;//Item does not exist
 			}
 			switch (component2) {
-			case 243://Swapped items				
+			case 243://Swapped items
 				Item item2 = bank.get(slot2);
 				int actualID2 = (item2 == null) ? -1 : item2.getId();
 				if (item2 == null || actualID2 != itemID1) {
@@ -287,13 +287,13 @@ public class BankWidget extends Widget {
 					return false;//Item does not exist
 				}
 				bank.set(slot2, item);
-				bank.set(slot1, item2);			
+				bank.set(slot1, item2);
 				player.getInvs().updateContainer(ContainerState.BANK, slot1, slot2);
 				return true;
 			case 300://Insert item
 				if (slot2 == -1 || slot2 > bank.getFreeSlot()) {
 					return false;
-				}				
+				}
 				if (slot1 < slot2) {
 					slot2--;
 				}
@@ -346,7 +346,7 @@ public class BankWidget extends Widget {
 		}
 		return false;
 	}
-	
+
 	private boolean handleTabAction (Player player, int tab, OptionButton option) {
 		if (OptionButton.ONE.equals(option)) {
 			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_BANK_TAB, tab);
@@ -355,7 +355,7 @@ public class BankWidget extends Widget {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Shifts an item in the provided slot to the specified tab.
 	 * @param player The player
@@ -373,7 +373,7 @@ public class BankWidget extends Widget {
 		incrementTab(player, fromTab, -1);
 		incrementTab(player, desiredTab, 1);
 	}
-	
+
 	/**
 	 * Finds the tab holding the item in the provided slot
 	 * @param player The player
@@ -390,7 +390,7 @@ public class BankWidget extends Widget {
 		}
 		return 1;
 	}
-	
+
 	private int getTabSize (Player player, int tab) {
 		switch (tab) {
 		case 2:
@@ -413,7 +413,7 @@ public class BankWidget extends Widget {
 			return 0;
 		}
 	}
-	
+
 	private void setTabSize (Player player, int tab, int size) {
 		switch (tab) {
 		case 2:
@@ -442,7 +442,7 @@ public class BankWidget extends Widget {
 			return;
 		}
 	}
-	
+
 	private void incrementTab (Player player, int tab, int amount) {
 		if (tab == 1) {
 			return;//Don't need to do anything for tab 1
@@ -455,7 +455,7 @@ public class BankWidget extends Widget {
 				if (tabSize == 0) {
 					break;
 				}
-			}				
+			}
 			player.getVars().setVarBitValue(VarKey.Bit.SELECTED_BANK_TAB, 1);
 			return;
 		}
@@ -486,7 +486,7 @@ public class BankWidget extends Widget {
 			return;
 		}
 	}
-	
+
 	private boolean handleCustomOption (Player player, int slot, Item item, int option, boolean bank) {
 		ScriptEventType eventType = null;
 		if (option == 1) {
@@ -494,7 +494,7 @@ public class BankWidget extends Widget {
 		} else if (option == 2) {
 			eventType = ScriptEventType.OPBANK2;
 		}
-		
+
 		if (eventType == null) {
 			return false;
 		}
@@ -507,26 +507,26 @@ public class BankWidget extends Widget {
 			args.put("isBank", bank);
 			scripts.invokeScriptChecked(eventType, item.getId(), args);
 		} else if (player.getEquipment().isEquipable(item)) {
-			
+
 			if(Constants.legacyOnly) {
 				if(item.getName().contains("Off-hand")) {
 					player.getDispatcher().sendGameMessage("You cannot equip this item. Pre-EOC style is enabled.");
 					return false;
 				}
 			}
-			
-			if (player.getEquipment().meetsEquipRequirements(item)) {
+
+			if (player.getEquipment().meetsEquipRequirements(item.getType())) {
 				return player.getEquipment().wearItem(slot);
 			} else {
 				return true;//Prevent the debug message from showing anyways
 			}
-			
+
 		} else {
 			player.getDispatcher().sendGameMessage("Unhanded bank item option: item="+item+", slot="+slot+", option="+option);
-		}		
+		}
 		return true;
 	}
-	
+
 	private void depositWithdrawX (final Player player, final boolean deposit, final int slot, final int itemID) {
 		player.getDialogs().requestInteger("Enter amount: ", new InputEnteredHandler () {
 			@Override
@@ -541,10 +541,10 @@ public class BankWidget extends Widget {
 						withdrawItems(player, slot, itemID, amount);
 					}
 				}
-			}			
+			}
 		});
 	}
-	
+
 	/**
 	 * Moves the specified item from the player's bank to their backpack
 	 * @param player The player
@@ -603,7 +603,7 @@ public class BankWidget extends Widget {
 		return true;
 		//System.out.println("Slots="+Arrays.toString(slots)+", backpack"+player.getInvs().getContainer(ContainerState.BACKPACK));
 	}
-	
+
 	/**
 	 * Moves the specified item from the player's backpack to their bank
 	 * @param player The player
@@ -632,17 +632,17 @@ public class BankWidget extends Widget {
 		player.getInvs().sendContainer(ContainerState.BACKPACK);
 		return depositItem(player, Item.create(itemID, amount));
 	}
-	
+
 	private boolean depositItem (Player player, Item item) {
 		boolean contains = player.getInvs().getContainer(ContainerState.BANK).containsOne(item.getId());
 		if (!canDeposit(player, item)) {
 			player.getDispatcher().sendGameMessage("Full bank!");
 			return false;//Full bank
 		}
-		
+
 		if (contains) {
 			int[] slots = player.getInvs().getContainer(ContainerState.BANK).add(item);
-			player.getInvs().updateContainer(ContainerState.BANK, slots);	
+			player.getInvs().updateContainer(ContainerState.BANK, slots);
 		} else {
 			int slot = 0;
 			int selectedTab = player.getVars().getVarBitValue(VarKey.Bit.SELECTED_BANK_TAB);
@@ -660,7 +660,7 @@ public class BankWidget extends Widget {
 		}
 		return true;
 	}
-	
+
 	private void depositBackpack (Player player) {
 		int capacity = player.getInvs().getContainer(ContainerState.BACKPACK).getSize();
 		for (int slot = 0; slot < capacity; slot++) {
@@ -684,7 +684,7 @@ public class BankWidget extends Widget {
 		}
 		player.getInvs().sendContainer(ContainerState.BACKPACK);
 	}
-	
+
 	private void depositWorn (Player player) {
 		int capacity = player.getInvs().getContainer(ContainerState.EQUIPMENT).getSize();
 		for (int slot = 0; slot < capacity; slot++) {
@@ -709,7 +709,7 @@ public class BankWidget extends Widget {
 		player.getInvs().sendContainer(ContainerState.EQUIPMENT);
 		player.getModel().refresh();
 	}
-	
+
 	private void depositMoneyPouch (Player player) {
 		int amount = player.getMoneyPouch().getCoins();
 		if (amount > (Integer.MAX_VALUE - player.getInvs().getContainer(ContainerState.BANK).getNumberOf(995))) {
@@ -724,8 +724,8 @@ public class BankWidget extends Widget {
 		player.getMoneyPouch().removeCoins(amount);
 		depositItem(player, money);
 	}
-	
-	private boolean canDeposit (Player player, Item item) {		
+
+	private boolean canDeposit (Player player, Item item) {
 		return player.getInvs().getContainer(ContainerState.BANK).freeSlots() > 0;
 	}
 
@@ -733,7 +733,7 @@ public class BankWidget extends Widget {
 	 * @see org.virtue.game.entity.player.widget.Widget#getPossibleIds()
 	 */
 	@Override
-	public int[] getStates() {		
+	public int[] getStates() {
 		return new int[] { WidgetState.BANK_WIDGET.getID() };
 	}
 

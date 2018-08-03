@@ -2,7 +2,7 @@
  * Functionality for getting & setting action bar slot statuses
  */
 import { Player } from 'engine/models';
-import { varp, varbit, setVarp, setVarBit } from 'engine/var';
+import { varp, varbit, setVarp, setVarBit, VarValue } from 'engine/var';
 
 type ActionBarDetails = {
 	type: number,
@@ -381,7 +381,7 @@ export function getActionVariables(player: Player, barId: number, slot: number):
 	}
 }
 
-function packResponse(type: number, slot: number, objId: number | string): ActionBarDetails {
+function packResponse(type: number, slot: number, objId: VarValue): ActionBarDetails {
 	return {
 		type,
 		slot,
