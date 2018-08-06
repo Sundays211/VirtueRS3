@@ -23,11 +23,17 @@ import { EventType } from 'engine/enums';
 import _events from 'engine/events';
 import _config from 'engine/config';
 import { Player, Npc } from 'engine/models';
-import { setVarp } from 'engine/var';
+import { varp, setVarp, varbit, setVarBit } from 'engine/var';
 
-import { chatnpc, chatplayer, objbox, multi2, multi4, multi5 } from 'shared/dialog';
-import { giveItem, hasItem } from 'shared/inv';
-
+import { sendMessage } from 'shared/chat';
+import { chatnpc, chatplayer, objbox, multi2, multi4, multi5, mesbox } from 'shared/dialog';
+import { giveItem, hasItem, takeItem } from 'shared/inv';
+//12204{startBit=0, baseVarType=PLAYER, baseVarKey=2493, endBit=0}// maby flour
+//12205{startBit=1, baseVarType=PLAYER, baseVarKey=2493, endBit=1}// maby egg
+//12206{startBit=2, baseVarType=PLAYER, baseVarKey=2493, endBit=2}// maby milk
+//12207{startBit=3, baseVarType=PLAYER, baseVarKey=2493, endBit=3}
+//12208{startBit=4, baseVarType=PLAYER, baseVarKey=2493, endBit=4} // talked to millie miller
+//12209{startBit=5, baseVarType=PLAYER, baseVarKey=2493, endBit=5}
 _events.bindEventListener(EventType.OPNPC1, 278, async (ctx) => {
 	var player = ctx.player;
 	var npc = ctx.npc;
@@ -96,9 +102,66 @@ async function cookStartQuest (player: Player, npc: Npc) {
 	});
 }
 
-function cookStarted (player: Player, npc: Npc) {// jshint ignore:line
-	//TODO: Remove jshint ignore when implemented
-	//TODO: Implement this
+async function cookStarted (player: Player, npc: Npc) {
+	if (hasItem(player, 15413)) {
+	    await objbox(player, 15413, "You give the top-quality milk to the cook.");
+	    setVarBit(player, 12206, 1);
+	    takeItem(player, 15413, 1);
+	    await chatplayer(player, "Here's some top-quality milk.");
+	}
+	if (hasItem(player, 15414)) {
+	    await objbox(player, 15414, "You give the extra fine flour to the cook.");
+	    setVarBit(player, 12204, 1);
+	    takeItem(player, 15414, 1);
+	    await chatplayer(player, "Here's the extra fine flour.");
+	}
+	if (hasItem(player, 15412)) {
+	    await objbox(player, 15412, "You give the super large egg to the cook.");
+	    setVarBit(player, 12205, 1);
+	    takeItem(player, 15412, 1);
+	    await chatplayer(player, "Here's a super large egg.");
+	}
+	if (varp(player, 2493) == 23) {
+		await chatnpc(player, npc, "You've brought me everything I need! I am saved! Thank<br> you!");
+		await chatplayer(player, "So, do I get to go to the Duke's party?");
+		await chatnpc(player, npc, "I'm afraid not. Only the big cheeses get to dine with the<br> Duke.");
+		await chatplayer(player, "Well, maybe one day, I'll be important enough to sit at the Duke's table.");
+	    await chatnpc(player, npc, "Maybe, but I won't be holding my breath.");
+		//quest completed here
+		sendMessage(player, "Congratulations! Quest complete!");
+	} else if (varbit(player, 12204) == 1 || varbit(player, 12205) == 1 || varbit(player, 12206) == 1){
+		await chatnpc(player, npc, "Thanks for the ingredients you have got so far;please get<br> the rest quickly. I'm running out of time! The duke will<br> throw me out onto the street!");
+	    stillneed(player, npc);
+	} else {
+	await chatplayer(player, "I haven't got any of them yet, I'm still looking.");
+	await chatnpc(player, npc, "Please get the ingredients quickkly. I'm running out of time!<br> The duke will throw me out onto the street!");
+	stillneed(player, npc);
+	}
+}
+
+async function stillneed (player: Player, npc: Npc) {
+	if (varbit(player, 12206) == 1) {
+		 var QualityMilk = " ";
+	} else {
+		var QualityMilk = "Some top-quality milk.";	
+	}	
+	
+	if (varbit(player, 12204) == 1) {
+		var FineFlour = " ";
+	} else {
+		 var FineFlour = "Some extra fine flour.";	
+	}
+	
+	if (varbit(player, 12205) == 1) {
+		var LargeEgg = " ";
+	} else {
+		 var LargeEgg = "A super large egg.";	
+	}	
+	await mesbox(player, "You still need to get:<br>"+ QualityMilk +" "+ FineFlour +" "+ LargeEgg);
+	    multi2(player, "SELECT AN OPTION", "I'll get right on it.", async () => {
+		}, "Where can I find the ingredients?", async () => {
+		});	
+	    	
 }
 
 async function cookFinished (player: Player, npc: Npc) {
