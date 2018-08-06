@@ -28,9 +28,9 @@ import { varp, setVarp, varbit, setVarBit } from 'engine/var';
 import { sendMessage } from 'shared/chat';
 import { chatnpc, chatplayer, objbox, multi2, multi4, multi5, mesbox } from 'shared/dialog';
 import { giveItem, hasItem, takeItem } from 'shared/inv';
-//12204{startBit=0, baseVarType=PLAYER, baseVarKey=2493, endBit=0}// maby flour
-//12205{startBit=1, baseVarType=PLAYER, baseVarKey=2493, endBit=1}// maby egg
-//12206{startBit=2, baseVarType=PLAYER, baseVarKey=2493, endBit=2}// maby milk
+//12204{startBit=0, baseVarType=PLAYER, baseVarKey=2493, endBit=0}// flour
+//12205{startBit=1, baseVarType=PLAYER, baseVarKey=2493, endBit=1}// egg
+//12206{startBit=2, baseVarType=PLAYER, baseVarKey=2493, endBit=2}// milk
 //12207{startBit=3, baseVarType=PLAYER, baseVarKey=2493, endBit=3}
 //12208{startBit=4, baseVarType=PLAYER, baseVarKey=2493, endBit=4} // talked to millie miller
 //12209{startBit=5, baseVarType=PLAYER, baseVarKey=2493, endBit=5}
