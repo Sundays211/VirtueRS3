@@ -25,7 +25,7 @@ import _events from 'engine/events';
 import { defaultHandler } from 'shared/util'; 
 import { openOverlay } from 'shared/widget';
 
-_events.bindEventListener(EventType.IF_BUTTON, 1253, (ctx) => {
+_events.bindEventListener(EventType.IF_BUTTON, 1466, (ctx) => {
 	switch (ctx.component) {
 		case 7:
 		switch (ctx.slot) {

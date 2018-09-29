@@ -57,6 +57,13 @@ export class Pickaxe {
 	}
 }
 
+export const DWARVEN_ARMY_PICKAXE = new Pickaxe({
+	objId: 21340,
+	level: 1,
+	speed: 6,
+	bonus: 1,
+	anim: 20822//20822,2831,27042,2789
+});
 export const BRONZE_PICKAXE = new Pickaxe({
 	objId: 1265,
 	level: 1,
@@ -64,7 +71,6 @@ export const BRONZE_PICKAXE = new Pickaxe({
 	bonus: 1,
 	anim: 625
 });
-
 export const IRON_PICKAXE = new Pickaxe({
 	objId: 1267,
 	level: 1,
@@ -100,6 +106,27 @@ export const RUNE_PICKAXE = new Pickaxe({
 	bonus: 10,
 	anim: 624
 });
+export const INFERNO_ADZE_PICKAXE = new Pickaxe({
+	objId: 13661,
+	level: 41,
+	speed: 3,
+	bonus: 10,
+	anim: 10222
+});
+export const SACRED_CLAY_PICKAXE = new Pickaxe({
+	objId: 29662,
+	level: 50,
+	speed: 3,
+	bonus: 10,
+	anim: 11019
+});
+export const VOLATILE_CLAY_PICKAXE = new Pickaxe({
+	objId: 29654,
+	level: 50,
+	speed: 3,
+	bonus: 10,
+	anim: 11019
+});
 export const DRAGON_PICKAXE = new Pickaxe({
 	objId: 15259,
 	level: 61,
@@ -114,16 +141,29 @@ export const CRYSTAL_PICKAXE = new Pickaxe({
 	bonus: 16,
 	anim: 25004
 });
+export const IMCANDO_PICKAXE = new Pickaxe({
+	objId: 29522,
+	level: 81,
+	speed: 3,
+	bonus: 16,
+	anim: 21646
+});
+
 
 const pickaxes = [
+    DWARVEN_ARMY_PICKAXE,
 	BRONZE_PICKAXE,
 	IRON_PICKAXE,
 	STEEL_PICKAXE,
 	MITHRIL_PICKAXE,
 	ADAMANT_PICKAXE,
 	RUNE_PICKAXE,
+	INFERNO_ADZE_PICKAXE,
+	SACRED_CLAY_PICKAXE,
+	VOLATILE_CLAY_PICKAXE,
 	DRAGON_PICKAXE,
-	CRYSTAL_PICKAXE
+	CRYSTAL_PICKAXE,
+	IMCANDO_PICKAXE
 ];
 
 interface PickaxeLookup {
