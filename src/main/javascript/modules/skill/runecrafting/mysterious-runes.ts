@@ -86,11 +86,7 @@ _events.bindEventListener([EventType.OPLOCU, EventType.OPLOC1], 2464, function(c
 
 
 function enterRunes(player: Player, runes: MysteriousRunes, useObjId: number, ctx: EventContext) {
-	if (useObjId !== -1) {
-		if (useObjId !== runes.talisman) {
-			defaultHandler(ctx, "mysterious runes");
-			return;
-		}
+	if (useObjId == runes.talisman) {	
 	} else if (!isWearing(player, runes.tiara) && !isWearing(player, runes.staff)) {
 		sendMessage(player, runes.noAccessMsg);
 		return;

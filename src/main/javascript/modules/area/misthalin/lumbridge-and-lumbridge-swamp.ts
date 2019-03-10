@@ -22,6 +22,7 @@
 import { EventType, Inv } from 'engine/enums';
 import _events from 'engine/events';
 import _entity from 'engine/entity';
+import { varbit, setVarBit } from 'engine/var';
 
 import { mesbox, objbox } from 'shared/dialog'; 
 import { giveItem, hasItem } from 'shared/inv';
@@ -57,12 +58,19 @@ import { sendMessage } from 'shared/chat';
 });
 
  _events.bindEventListener(EventType.OPLOC1, 86431, async (ctx) => {//Old mine entrance(Ham hidout)
-	if(mapMembers()){
-	    await mesbox(ctx.player, "not yet implemented.");
+	if(mapMembers()){	
+		if (varbit(ctx.player, 303) == 1) { 
+		    sendMessage(ctx.player, "You climb down into the mine...");
+			_entity.setCoords(ctx.player, _coords(3149, 9652, 0));
+			sendMessage(ctx.player, "... and enter a dimly lit cavern area.");
+		} else {
+		    sendMessage(ctx.player, "You try to open the mine entrance, but it is locked!");
+		}
     } else {
         await mesbox(ctx.player, "You need to be on a member's world to use this feature.");
     }
 });
+
 
 _events.bindEventListener(EventType.OPLOC1, 91021, async (ctx) => {//dark hole under tree
 	if(mapMembers()){

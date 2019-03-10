@@ -273,11 +273,15 @@ public class Virtue {
 	 * @throws Exception 
 	 */
 	private void loadGame() throws Exception {
-		accountIndex = new XMLAccountIndex(properties);
 		
 		if(Constants.Mysql) {
 		accountIndex = new MySQLAccountIndex(properties);
-		}
+        NewsDataParser.loadmysqlNewsData();
+		}else{
+        accountIndex = new XMLAccountIndex(properties);
+        String newsDataFile = getProperty("news.file", "repository/news.json");
+		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile, properties));
+        }
 		
 		if (accountIndex instanceof CachingParser){
 			cachingParsers.add((CachingParser) accountIndex);
@@ -303,9 +307,6 @@ public class Virtue {
 		controller = new MinigameProcessor();
 		controller.start();
 
-		String newsDataFile = getProperty("news.file", "repository/news.json");
-		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile, properties));
-		
 		SpecialAttackHandler.init();
 		ActionBar.init();
 		AbstractNPC.init();

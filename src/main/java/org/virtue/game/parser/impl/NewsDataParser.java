@@ -28,11 +28,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.sql.ResultSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.virtue.game.world.NewsItem;
 import org.virtue.game.world.NewsItem.Category;
+import org.virtue.Virtue;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -55,6 +57,26 @@ public class NewsDataParser {
 	private static Logger logger = LoggerFactory.getLogger(NewsDataParser.class);
 	
 	public static final List<NewsItem> news = new ArrayList<NewsItem>();
+	
+	
+	public static  void loadmysqlNewsData() throws Exception {
+         ResultSet rs = Virtue.database().executeQuery("SELECT * FROM web_news");	
+         try {         
+         while (rs.next()) {
+	     String title = rs.getString("title");	
+         String description = rs.getString("description");
+	     String date = rs.getString("date");
+         boolean pinned = rs.getBoolean("main_news");
+         Category category = Category.forCode(rs.getInt("category"));
+
+	     NewsItem item = new NewsItem(title, description, category, date, pinned);
+         news.add(item);
+         }
+         Collections.reverse(news);
+	     } catch (Exception ex) {
+	     logger.warn("Error loading myswl news ", ex);
+	     } 
+    }
 	
 	public static void loadJsonNewsData (File path) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
