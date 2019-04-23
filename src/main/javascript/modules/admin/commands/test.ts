@@ -39,6 +39,16 @@ import { runAnim } from 'shared/anim';
 import _coords from 'shared/map/coords';
 import { locationAnim } from 'shared/map/location';
 
+
+
+_events.bindEventListener(EventType.COMMAND_ADMIN, "sound", (ctx) => {
+	var args = ctx.cmdArgs;
+	var player = ctx.player;
+		player.getDispatcher().sendSound(parseInt(args[0]), 255);
+});
+
+
+
  _events.bindEventListener(EventType.COMMAND_ADMIN, "test", (ctx) => {
 	var args = ctx.cmdArgs;
 	var player = ctx.player;

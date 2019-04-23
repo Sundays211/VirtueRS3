@@ -79,7 +79,7 @@ import org.virtue.network.event.EventRepository;
 import org.virtue.utility.FileUtility;
 import org.virtue.utility.text.Huffman;
 import org.virtue.utility.text.QuickChatPhraseTypeList;
-
+import org.virtue.game.parser.impl.GroundItemSpawnParser;
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Aug 8, 2014
@@ -287,6 +287,7 @@ public class Virtue {
 			cachingParsers.add((CachingParser) accountIndex);
 		}
 		
+        GroundItemSpawnParser.loadItems();
 		event = new EventRepository();
 		event.load();
 		parser = new ParserRepository();

@@ -54,6 +54,7 @@ import org.virtue.network.event.encoder.impl.LogoutEventEncoder;
 import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.MessageEventEncoder;
 import org.virtue.network.event.encoder.impl.MusicEventEncoder;
+import org.virtue.network.event.encoder.impl.SoundEventEncoder;
 import org.virtue.network.event.encoder.impl.NpcInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
@@ -189,6 +190,7 @@ public class EventRepository {
 		registerWriteEvent(ClanSettingsDeltaEventEncoder.class);
 		registerWriteEvent(ExchangeEventEncoder.class);
 		registerWriteEvent(MusicEventEncoder.class);
+		registerWriteEvent(SoundEventEncoder.class);
 		registerWriteEvent(CutsceneEventEncoder.class);
 		registerWriteEvent(TelemetryFullEventEncoder.class);
 		logger.info("Registered " + writeEvents.size() + " game write events.");

@@ -440,7 +440,9 @@ public enum ServerProtocol {
 	 */
 	CUTSCENE(92, -2),
 
-	PLAY_MUSIC(-1, 3),
+	PLAY_MUSIC(115, 3),
+	
+	PLAY_SOUND_EFFECT(76, 6),
 	
 	/**
 	 * Sends the full data contained within the player's telemetry (RuneMetrics) grid
