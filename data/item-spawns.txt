@@ -1,0 +1,9 @@
+558 - 3206 3208 0 //mind rune
+882 - 3205 3227 0 //bronze arrow
+946 - 3224 3202 0 //Knife
+946 - 3205 3212 0 //Knife
+1923 - 3208 3214 0 //bowl
+1931 - 3209 3214 0 //empty pot
+1935 - 3211 3212 0 //jug
+15412 - 3227 3299 0 //super large egg quest(cooksAssistant)
+15412 - 3204 3287 0 //super large egg quest(cooksAssistant)

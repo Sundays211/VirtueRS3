@@ -7,5 +7,6 @@ import './overlay';
 import './report';
 import './settings';
 import './skillcape-customiser';
+import './skill-tab';
 import './treasure-hunter';
 import './world-map';

@@ -11,7 +11,6 @@ function getAllModules () {// jshint ignore:line
 		'combat',
 		'inventory/bank',
 		'quest',
-		'skill/common',
 		'skill/farming',
 		'skill/firemaking',
 		'skill/invention'

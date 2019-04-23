@@ -79,7 +79,7 @@ import org.virtue.network.event.EventRepository;
 import org.virtue.utility.FileUtility;
 import org.virtue.utility.text.Huffman;
 import org.virtue.utility.text.QuickChatPhraseTypeList;
-
+import org.virtue.game.parser.impl.GroundItemSpawnParser;
 /**
  * @author Im Frizzy <skype:kfriz1998>
  * @since Aug 8, 2014
@@ -273,16 +273,21 @@ public class Virtue {
 	 * @throws Exception 
 	 */
 	private void loadGame() throws Exception {
-		accountIndex = new XMLAccountIndex(properties);
 		
 		if(Constants.Mysql) {
 		accountIndex = new MySQLAccountIndex(properties);
-		}
+        NewsDataParser.loadmysqlNewsData();
+		}else{
+        accountIndex = new XMLAccountIndex(properties);
+        String newsDataFile = getProperty("news.file", "repository/news.json");
+		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile, properties));
+        }
 		
 		if (accountIndex instanceof CachingParser){
 			cachingParsers.add((CachingParser) accountIndex);
 		}
 		
+        GroundItemSpawnParser.loadItems();
 		event = new EventRepository();
 		event.load();
 		parser = new ParserRepository();
@@ -303,9 +308,6 @@ public class Virtue {
 		controller = new MinigameProcessor();
 		controller.start();
 
-		String newsDataFile = getProperty("news.file", "repository/news.json");
-		NewsDataParser.loadJsonNewsData(FileUtility.parseFilePath(newsDataFile, properties));
-		
 		SpecialAttackHandler.init();
 		ActionBar.init();
 		AbstractNPC.init();

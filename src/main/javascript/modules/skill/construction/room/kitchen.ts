@@ -27,6 +27,10 @@ import { varbit } from 'engine/var';
 import _coords from 'shared/map/coords';
 import { stripValues } from 'shared/util';
 import { addZoneLoc, getZoneCoord } from 'shared/map';
+import { giveItem } from 'shared/inv';
+import { multi2, multi3, multi4, multi5 } from 'shared/dialog';
+import { sendMessage } from 'shared/chat';
+import { runAnim } from 'shared/anim';
 
 import { Room } from './room';
 import { buildFurniture, removeFurniture } from '../furniture';
@@ -49,6 +53,18 @@ const larder_locations = [ -1, 13565, 13566, 13567 ];
 const sink_locations = [ -1, 13559, 13561, 13563 ];
 const table_locations = [ -1, 13577, 13578, 13579 ];
 
+
+_events.bindEventListener(EventType.OPLOCU, 13563, async (ctx) => {//Stove
+	switch (ctx.useObjId) {
+	    case 7688://kettle
+		    runAnim(ctx.player, 3625, function () {
+		        sendMessage(ctx.player, "kettle");
+				runAnim(ctx.player, -1);
+	        });
+	    return;
+	}
+});
+
 //Stove
 _events.bindEventListener(EventType.OPLOC5, 15398, async (ctx) => {
 	const roomCoord = getZoneCoord(ctx.location);
@@ -63,12 +79,189 @@ _events.bindEventListener(EventType.OPLOC5, stripValues(range_locations, -1), as
 	buildStove(ctx.player, roomCoord, varbit(ctx.player, 1527));
 });
 
-//Shelves
+//build Shelves
 _events.bindEventListener(EventType.OPLOC5, [ 15399, 15400 ], async (ctx) => {
 	const roomCoord = getZoneCoord(ctx.location);
 	await buildFurniture(ctx.player, roomCoord, 2, shelves_options);
 	buildShelves(ctx.player, roomCoord, varbit(ctx.player, 1527));
 });
+
+//search Wooden shelves 1
+_events.bindEventListener(EventType.OPLOC1,[ 13545, 13552 ], async (ctx) => {
+	multi3(ctx.player, "SELECT AN OPTION", "Kettle", () => {
+		giveItem(ctx.player, 7688, 1);
+	}, "Teapot", () => {
+		giveItem(ctx.player, 7702, 1);
+	}, "Cup", () => {
+		giveItem(ctx.player, 7728, 1);
+	});
+});
+
+
+//search Wooden shelves 2
+_events.bindEventListener(EventType.OPLOC1,[ 13546, 13553 ], async (ctx) => {
+	multi4(ctx.player, "SELECT AN OPTION", "Kettle", () => {
+		giveItem(ctx.player, 7688, 1);
+	}, "Teapot", () => {
+		giveItem(ctx.player, 7702, 1);
+	}, "Cup", () => {
+		giveItem(ctx.player, 7728, 1);
+	}, "Beer glass", () => {
+		giveItem(ctx.player, 7742, 1);	
+	});
+});
+
+//search Wooden shelves 3
+_events.bindEventListener(EventType.OPLOC1,[ 13547, 13554 ], async (ctx) => {
+	multi5(ctx.player, "SELECT AN OPTION", "Kettle", () => {
+		giveItem(ctx.player, 7688, 1);
+	}, "Teapot", () => {
+		giveItem(ctx.player, 7714, 1);
+	}, "Cup", () => {
+		giveItem(ctx.player, 7732, 1);
+	}, "Beer glass", () => {
+		giveItem(ctx.player, 7742, 1);	
+	}, "Cake tin", () => {
+		giveItem(ctx.player, 1887, 1);	
+	});
+});
+
+//search Oak shelves 1
+_events.bindEventListener(EventType.OPLOC1,[ 13548, 13555 ], async (ctx) => {
+	Oakshelves1(ctx.player);
+});
+
+async function Oakshelves1 (player: Player) {
+	multi5(player, "SELECT AN OPTION", "Kettle", () => {
+		giveItem(player, 7688, 1);
+	}, "Teapot", () => {
+		giveItem(player, 7702, 1);
+	}, "Cup", () => {
+		giveItem(player, 7728, 1);
+	}, "Beer glass", () => {
+		giveItem(player, 7742, 1);	
+	}, "More...", () => {
+		Oakshelves1more(player);
+	});
+}
+
+async function Oakshelves1more (player: Player) {
+	multi3(player, "SELECT AN OPTION", "Cake tin", () => {
+		giveItem(player, 1887, 1);
+	}, "Bowl", () => {
+		giveItem(player, 1923, 1);	
+	}, "More...", () => {
+		Oakshelves1(player);
+	});
+}
+
+
+//search Oak shelves 2
+_events.bindEventListener(EventType.OPLOC1,[ 13549, 13556 ], async (ctx) => {
+	Oakshelves2(ctx.player);
+});
+
+async function Oakshelves2 (player: Player) {
+	multi5(player, "SELECT AN OPTION", "Kettle", () => {
+		giveItem(player, 7688, 1);
+	}, "Teapot", () => {
+		giveItem(player, 7714, 1);
+	}, "Cup", () => {
+		giveItem(player, 7732, 1);
+	}, "Beer glass", () => {
+		giveItem(player, 7742, 1);	
+	}, "More...", () => {
+		Oakshelves2more(player);
+	});
+}
+
+async function Oakshelves2more (player: Player) {
+	multi4(player, "SELECT AN OPTION", "Cake tin", () => {
+		giveItem(player, 1887, 1);
+	}, "Bowl", () => {
+		giveItem(player, 1923, 1);	
+	}, "Pie dish", () => {
+		giveItem(player, 2313, 1);		
+	}, "More...", () => {
+		Oakshelves2(player);
+	});
+}
+
+
+//search Teak shelves 1
+_events.bindEventListener(EventType.OPLOC1,[ 13550, 13557 ], async (ctx) => {
+	Teakshelves1(ctx.player);
+});
+
+async function Teakshelves1 (player: Player) {
+	multi5(player, "SELECT AN OPTION", "Kettle", () => {
+		giveItem(player, 7688, 1);
+	}, "Teapot", () => {
+		giveItem(player, 7714, 1);
+	}, "Cup", () => {
+		giveItem(player, 7732, 1);
+	}, "Beer glass", () => {
+		giveItem(player, 7742, 1);	
+	}, "More...", () => {
+		Teakshelves1more(player);
+	});
+}
+
+async function Teakshelves1more (player: Player) {
+	multi5(player, "SELECT AN OPTION", "Cake tin", () => {
+		giveItem(player, 1887, 1);
+	}, "Bowl", () => {
+		giveItem(player, 1923, 1);	
+	}, "Pie dish", () => {
+		giveItem(player, 2313, 1);	
+    }, "Pot", () => {
+		giveItem(player, 1931, 1);			
+	}, "More...", () => {
+		Teakshelves1(player);
+	});
+}
+
+
+//search Teak shelves 2
+_events.bindEventListener(EventType.OPLOC1,[ 13551, 13558 ], async (ctx) => {
+	Teakshelves2(ctx.player);
+});
+
+async function Teakshelves2 (player: Player) {
+	multi5(player, "SELECT AN OPTION", "Kettle", () => {
+		giveItem(player, 7688, 1);
+	}, "Teapot", () => {
+		giveItem(player, 7726, 1);
+	}, "Cup", () => {
+		giveItem(player, 7735, 1);
+	}, "Beer glass", () => {
+		giveItem(player, 7742, 1);	
+	}, "More...", () => {
+		Teakshelves2more(player);
+	});
+}
+
+async function Teakshelves2more (player: Player) {
+	multi5(player, "SELECT AN OPTION", "Cake tin", () => {
+		giveItem(player, 1887, 1);
+	}, "Bowl", () => {
+		giveItem(player, 1923, 1);	
+	}, "Pie dish", () => {
+		giveItem(player, 2313, 1);	
+    }, "Pot", () => {
+		giveItem(player, 1931, 1);			
+	}, "More...", () => {
+		Teakshelves2moremore(player);
+	});
+}
+
+async function Teakshelves2moremore (player: Player) {
+	multi2(player, "SELECT AN OPTION", "Chef's hat", () => {
+		giveItem(player, 1949, 1);		
+	}, "More...", () => {
+		Teakshelves2(player);
+	});
+}
 
 //Remove Shelves
 _events.bindEventListener(EventType.OPLOC5, stripValues(shelves_locations, -1), async (ctx) => {

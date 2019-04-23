@@ -6,6 +6,7 @@ import './chat';
 import './clan';
 import './exchange';
 import './inventory';
+import './items';
 import './shop';
 import './skill';
 import './npcs';

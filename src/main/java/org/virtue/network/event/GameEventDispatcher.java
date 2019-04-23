@@ -89,6 +89,7 @@ import org.virtue.network.event.encoder.impl.LogoutEventEncoder;
 import org.virtue.network.event.encoder.impl.MapFlagEventEncoder;
 import org.virtue.network.event.encoder.impl.MessageEventEncoder;
 import org.virtue.network.event.encoder.impl.MusicEventEncoder;
+import org.virtue.network.event.encoder.impl.SoundEventEncoder;
 import org.virtue.network.event.encoder.impl.NpcInfoEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerOptionEventEncoder;
 import org.virtue.network.event.encoder.impl.PlayerInfoEventEncoder;
@@ -553,6 +554,15 @@ public class GameEventDispatcher {
 		sendEvent(MusicEventEncoder.class, new MusicEventContext(id, vol));
 	}
 
+	
+	public void sendSound(int id, int vol) {
+		sendEvent(SoundEventEncoder.class, new MusicEventContext(id, vol));
+	}
+    public void sendSound(int sound) {
+		sendEvent(SoundEventEncoder.class, new MusicEventContext(sound, 100));	
+	} 
+	
+	
 	/**
 	 * Sends a EventEncoder over the network
 	 * 

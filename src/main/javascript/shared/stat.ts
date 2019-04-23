@@ -114,7 +114,7 @@ export function giveBonusXp(player: Player, skill: Stat, amount: number) {
 	}
 }
 
-function lookupStat(statName: string): Stat {
+export function lookupStat(statName: string): Stat {
 	return ENGINE.getStatByName(statName);
 }
 
